@@ -1,0 +1,158 @@
+using UnityEngine;
+using UnityEditor;
+
+[CustomEditor(typeof(FPSController))]
+public class FPSControlerCustomInspector : Editor
+{
+    // Foldout states
+    private bool showParameters = true;
+    private bool showUnlockedCapacities = true;
+    private bool showMovement = true;
+    private bool showHeadbob = true;
+    private bool showJump = true;
+    private bool showWallRide = true;
+    private bool showCrouch = true;
+    private bool showSlide = true;
+    private bool showDash = true;
+    private bool showSlopeSlide = true;
+
+    private GUIStyle foldoutStyle;
+
+    private void OnEnable()
+    {
+        foldoutStyle = new GUIStyle(EditorStyles.foldout);
+        foldoutStyle.fontStyle = FontStyle.Bold;
+    }
+
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        DrawSection("References", Color.white, () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("rb"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraTransform"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraTarget"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("playerFeet"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("playerLeftSide"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("playerRightSide"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("bodyRadius"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("playerInput"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerVisual"));
+        }, ref showParameters);
+
+        DrawSection("Parameters", new Color(0.8f, 0.9f, 1f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("landSnap"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dashVerticality"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("clampedMaxAirSpeed"));
+        }, ref showParameters);
+
+        DrawSection("Unlocked Capacities", new Color(1f, 0.85f, 0.6f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideUnlocked"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideUnlocked"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dashUnlocked"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeSlideUnlocked"));
+        }, ref showUnlockedCapacities);
+
+        DrawSection("Movement", new Color(0.6f, 1f, 0.6f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("mouseSensitivity"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("verticalLimit"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("moveSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("groundMomentumFactor"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("sideStepImpulseForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("followSmoothing"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRange"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("walkableSlopeAngle"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
+        }, ref showMovement);
+
+        DrawSection("Headbob", new Color(1f, 0.6f, 1f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("walkingHeadbobAmplitude"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("walkingHeadbobFrequency"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingHeadbobAmplitude"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingHeadbobFrequency"));
+        }, ref showHeadbob);
+
+        DrawSection("Jump", new Color(0.6f, 0.8f, 1f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("airControlForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("maxAirSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("airDrag"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("bufferJumpTime"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteTimeDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("landSnapVelocity"));
+        }, ref showJump);
+
+        DrawSection("Wall Ride", new Color(1f, 0.6f, 0.6f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideDetectionRange"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideCooldown"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("minSpeedToWallRide"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpVerticalForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpHorizontalForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltIntensity"));
+        }, ref showWallRide);
+
+        DrawSection("Crouch", new Color(0.8f, 1f, 0.8f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("crouchSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraOffsetWhenCrouching"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("bodyStandUpCollider"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("topHeightStandUpCollider"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("bodyCrouchedCollider"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("topHeightCrouchedCollider"));
+        }, ref showCrouch);
+
+        DrawSection("Slide", new Color(1f, 1f, 0.6f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideTimeDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideJumpVerticalForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideJumpHorizontalForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideCooldown"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteSlideDuration"));
+        }, ref showSlide);
+
+        DrawSection("Dash", new Color(0.6f, 1f, 1f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dashSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dashTimeDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dashCooldown"));
+        }, ref showDash);
+
+        DrawSection("Slope Slide", new Color(1f, 0.75f, 0.4f), () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("minSlopeAngleToSlopeSlide"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeSlideMaxSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeInfluenceOnRotation"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeInfluenceOnVelocity"));
+        }, ref showSlopeSlide);
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    private void DrawSection(string title, Color color, System.Action drawContent, ref bool foldoutState)
+    {
+        EditorGUILayout.Space(8);
+
+        Color previousColor = GUI.color;
+        GUI.color = color;
+
+        foldoutState = EditorGUILayout.Foldout(foldoutState, title, true, foldoutStyle);
+
+        GUI.color = previousColor;
+
+        if (foldoutState)
+        {
+            EditorGUILayout.Space(3);
+            drawContent.Invoke();
+        }
+    }
+}
