@@ -314,18 +314,24 @@ public class FPSController : NetworkBehaviour
             }
         }
         
-        if (bufferJump && playerInput.actions["Jump"].IsPressed()) Jump();
+        if (grounded)
+        {
+            fellOffWallrinding = false;
+            hasDashed = false;
+        }
+
+        if (bufferJump && playerInput.actions["Jump"].IsPressed())
+        {
+            Jump();
+            return;
+        }
         
         rb.linearVelocity = Vector3.zero;
 
         _playerAnimation.SetMovingAnim(false);
         _playerAnimation.SetShootingIKPos();
 
-        if (grounded)
-        {
-            fellOffWallrinding = false;
-            hasDashed = false;
-        }
+        
 
         if (stateMachine.previousState == stateMachine.GetState(ControlerState.Falling) && landSnap)
             StartCoroutine(FollowSmoothingOnLandingCoroutine());

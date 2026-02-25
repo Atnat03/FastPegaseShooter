@@ -6,7 +6,7 @@ public class Shoot : MonoBehaviour
 {
     #region  Properties
 
-    public GameObject GunVisual => _visualWeapon;
+    public GameObject GunVisual => p_visualWeapon;
     
     #endregion
     
