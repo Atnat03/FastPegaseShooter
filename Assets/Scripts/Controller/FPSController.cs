@@ -295,7 +295,7 @@ public class FPSController : NetworkBehaviour
 
     #endregion
 
-    #region states
+    #region States
 
     #region IdleState
 
@@ -449,7 +449,10 @@ public class FPSController : NetworkBehaviour
 
     void EnterFallingState()
     {
-        _playerAnimation.PlayLandingAnim(true);
+        /* _playerAnimation.SetFallingAnim(false);
+         _playerAnimation.SetGroundedAnim(true);*/
+
+        _playerAnimation.ChangeAirState(false);
         
         if (!hasJumped) 
             StartCoroutine(CoyoteTimeCoroutine());
@@ -459,7 +462,6 @@ public class FPSController : NetworkBehaviour
     {
         if (grounded)
         {
-            _playerAnimation.PlayLandingAnim(false);
             stateMachine.ChangeState(ControlerState.Idle);
         }
 
@@ -471,14 +473,12 @@ public class FPSController : NetworkBehaviour
 
         if (verticalInput > 0.1f && (leftSideAgainstWall || rightSideAgainstWall) && horizontalVelocity.magnitude > minSpeedToWallRide && !grounded && !justWallRided && !fellOffWallrinding && wallRideUnlocked)
         {
-            _playerAnimation.PlayLandingAnim(false);
             if (rb.linearVelocity.y < 0) stateMachine.ChangeState(ControlerState.WallRiding);
             else mustHeadTilt = true;
         }
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            _playerAnimation.PlayLandingAnim(false);
             stateMachine.ChangeState(ControlerState.Dashing);
         }
     }
@@ -544,9 +544,14 @@ public class FPSController : NetworkBehaviour
 
     void ExitFallingState()
     {
+       /* _playerAnimation.SetFallingAnim(false);
+        _playerAnimation.SetGroundedAnim(true);*/
+
+        _playerAnimation.ChangeAirState(true);
+        
         hasJumped = false;
         mustHeadTilt = false;
-        _playerAnimation.PlayLandingAnim(false);
+        _playerAnimation.SetFallingAnim(false);
         StartCoroutine(CoyoteSlideCoroutine());
     }
 
@@ -565,7 +570,6 @@ public class FPSController : NetworkBehaviour
 
     IEnumerator JumpBufferingCoroutine()
     {
-        _playerAnimation.PlayJumpAnim();
         bufferJump = true;
         yield return new WaitForSeconds(bufferJumpTime);
         bufferJump = false;
@@ -1051,9 +1055,11 @@ public class FPSController : NetworkBehaviour
 
     IEnumerator JumpAntiLagCoroutine()
     {
+        _playerAnimation.SetJumpAnim(true);
         justJumped = true;
         yield return new WaitForSeconds(.1f);
         justJumped = false;
+        _playerAnimation.SetJumpAnim(false);
     }
 
     void WallJump(Vector3 wallNormal)
