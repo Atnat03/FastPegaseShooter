@@ -178,6 +178,7 @@ public class FPSController : NetworkBehaviour
 
         stateMachine.Add(new State<ControlerState>(
             ControlerState.Moving,
+            onEnter: OnEnterMovingState,
             onFixedUpdate: MovingFixedUpdate,
             onUpdate: MovingUpdate,
             onLateUpdate: MovingLateUpdate
@@ -333,7 +334,6 @@ public class FPSController : NetworkBehaviour
         if (verticalInput != 0f || horizontalInput != 0f)
         {
             if (verticalInput == 0f) SideStep();
-            _playerAnimation.SetMovingAnim(true);
             stateMachine.ChangeState(ControlerState.Moving);
         }
 
@@ -381,6 +381,11 @@ public class FPSController : NetworkBehaviour
 
     #region MovingState
 
+    void OnEnterMovingState()
+    {
+        _playerAnimation.SetMovingAnim(true);
+    }
+    
     void MovingUpdate()
     {
         if (verticalInput == 0f && horizontalInput == 0f)

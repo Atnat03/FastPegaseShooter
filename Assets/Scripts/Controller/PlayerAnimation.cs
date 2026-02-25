@@ -12,7 +12,6 @@ public class PlayerAnimation : MonoBehaviour
 	
 	#endregion
 
-
 	#region Fonctions
 	
 	public void SetMovingAnim(bool isMoving) => _animator.SetBool("Move", isMoving);
