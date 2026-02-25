@@ -9,11 +9,9 @@ public class SpawnPlayer : NetworkBehaviour
 	#region Variables
 
 	[SerializeField] private NetworkObject _playerPrefab;
-	[SerializeField] private NetworkObject _playerCamera;
 
 	#endregion
-
-
+	
 	#region Fonctions
 
 	public void Awake()
@@ -29,6 +27,8 @@ public class SpawnPlayer : NetworkBehaviour
 	[Server]
 	private void SpawnPlayers(NetworkConnection player, bool DidConnect)
 	{
+		Debug.Log("SpawnPlayers called");
+		
 		NetworkObject playerObj = Instantiate(_playerPrefab);
 		InstanceFinder.ServerManager.Spawn(playerObj, player);
 		
