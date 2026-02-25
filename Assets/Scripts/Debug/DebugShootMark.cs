@@ -3,19 +3,29 @@ using UnityEngine;
 public class DebugShootMark : MonoBehaviour
 {
     public GameObject p_markPrefab;
-    public Transform p_gunTransform;
     private GameObject _currentMark;
+    [SerializeField] private Shoot shoot;
 
-    public void Mark()
+    void OnEnable()
     {
-        if (Physics.Raycast(p_gunTransform.position, p_gunTransform.forward, out RaycastHit hit))
+        shoot.p_shootingAction += Mark;
+    }
+
+    void OnDisable()
+    {
+        shoot.p_shootingAction -= Mark;
+    }
+    
+    private void Mark()
+    {
+        if (Physics.Raycast(shoot.p_visualWeapon.transform.position, shoot.p_visualWeapon.transform.forward, out RaycastHit hit))
         {
             if (_currentMark != null)
             {
                 Destroy(_currentMark);
             }
             
-            _currentMark = Instantiate(p_markPrefab);
+            _currentMark = Instantiate(p_markPrefab, hit.point + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal));
         }
     }
 }

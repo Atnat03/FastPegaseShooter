@@ -15,7 +15,7 @@ public class Shoot : MonoBehaviour
     public MainWeaponsSO p_weaponData; //le serialiser pour l'instant
     public Action p_shootingAction;
 
-    private GameObject _visualWeapon; // utile uniquement pour le feedBack temporaire
+    public GameObject p_visualWeapon; // utile uniquement pour le feedBack temporaire
 
     #endregion
 
@@ -38,7 +38,7 @@ public class Shoot : MonoBehaviour
     {
         p_weaponData = newWeaponSO;
         ClearChildren(_targetPos);
-        _visualWeapon = Instantiate(newWeaponSO.p_weaponVisual, _targetPos.position, Quaternion.identity, _targetPos);
+        p_visualWeapon = Instantiate(newWeaponSO.p_weaponVisual, _targetPos.position, Quaternion.identity, _targetPos);
     }
     
     private void Shooting(InputAction.CallbackContext obj)
@@ -54,8 +54,8 @@ public class Shoot : MonoBehaviour
 
     void BringBackWeapon()// utile uniquement pour le feedBack temporaire
     {
-        _visualWeapon.transform.position = Vector3.Lerp(_visualWeapon.transform.position, _targetPos.position, p_weaponData.p_recoilOffsetCompensation *  Time.deltaTime);
-        _visualWeapon.transform.rotation = Quaternion.Slerp(_visualWeapon.transform.rotation, _targetPos.rotation, p_weaponData.p_recoilTorkCompensation * Time.deltaTime);
+        p_visualWeapon.transform.position = Vector3.Lerp(p_visualWeapon.transform.position, _targetPos.position, p_weaponData.p_recoilOffsetCompensation *  Time.deltaTime);
+        p_visualWeapon.transform.rotation = Quaternion.Slerp(p_visualWeapon.transform.rotation, _targetPos.rotation, p_weaponData.p_recoilTorkCompensation * Time.deltaTime);
     }
 
     private void FeedBackShooting() // FONCTION TEMPORAIRE DE TESTS DE FEEDBACKS
@@ -65,8 +65,8 @@ public class Shoot : MonoBehaviour
 
     private void Recoil()// utile uniquement pour le feedBack temporaire
     {
-        _visualWeapon.transform.position += new Vector3(-p_weaponData.p_recoilOffsetIntensity,0,0);
-        _visualWeapon.transform.localRotation *= Quaternion.Euler( -p_weaponData.p_recoilTorkIntensity, 0f,0f);
+        p_visualWeapon.transform.position += new Vector3(-p_weaponData.p_recoilOffsetIntensity,0,0);
+        p_visualWeapon.transform.localRotation *= Quaternion.Euler( -p_weaponData.p_recoilTorkIntensity, 0f,0f);
     }
     
     void ClearChildren(Transform t)
