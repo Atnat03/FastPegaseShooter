@@ -39,6 +39,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("bodyRadius"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playerInput"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerVisual"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerAnimation"));
         }, ref showParameters);
 
         DrawSection("Parameters", new Color(0.8f, 0.9f, 1f), () =>

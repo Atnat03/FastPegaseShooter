@@ -25,6 +25,7 @@ public class FPSController : NetworkBehaviour
     [SerializeField] float bodyRadius = .6f;
     [SerializeField] PlayerInput playerInput;
     [SerializeField] private GameObject _playerVisual;
+    [SerializeField] private PlayerAnimation _playerAnimation;
 
     [Header("parameters")]
     [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")][SerializeField] private bool landSnap = true;
@@ -37,7 +38,8 @@ public class FPSController : NetworkBehaviour
     public bool dashUnlocked = true;
     public bool slopeSlideUnlocked = true;
     
-    [Header("movement")] [SerializeField] float mouseSensitivity = 2f;
+    [Header("movement")] 
+    [SerializeField] float mouseSensitivity = 2f;
     [SerializeField] float verticalLimit = 80f;
     [SerializeField] float moveSpeed;
     [SerializeField] float groundMomentumFactor = 2f; 
@@ -47,12 +49,11 @@ public class FPSController : NetworkBehaviour
     [SerializeField]float walkableSlopeAngle = 45f; 
     [SerializeField]float maxStepHeight = .2f;
 
-
-    [Header("headbob")] [SerializeField] float walkingHeadbobAmplitude = 0.05f;
+    [Header("headbob")] 
+    [SerializeField] float walkingHeadbobAmplitude = 0.05f;
     [SerializeField] float walkingHeadbobFrequency = 8f;
     [SerializeField] float wallRidingHeadbobAmplitude = 0.1f;
     [SerializeField] float wallRidingHeadbobFrequency = 8f;
-
 
     float yaw;
     float pitch;
@@ -60,8 +61,8 @@ public class FPSController : NetworkBehaviour
     float verticalInput;
     float headbobTimer;
 
-
-    [Header("jump")] [SerializeField] float jumpForce = 7.5f;
+    [Header("jump")] 
+    [SerializeField] float jumpForce = 7.5f;
     [SerializeField] float airControlForce = 2f;
     [SerializeField] float maxAirSpeed = 6f;
     [SerializeField] float airDrag = 2f; 
@@ -70,7 +71,8 @@ public class FPSController : NetworkBehaviour
     [SerializeField] float landSnapVelocity = 50f;
 
 
-    [Header("wallRide")] [SerializeField] float wallRideDetectionRange = .5f;
+    [Header("wallRide")] 
+    [SerializeField] float wallRideDetectionRange = .5f;
     [SerializeField] float wallRidingDuration = 2f;
     [SerializeField] private float wallRideCooldown = .2f;
     [SerializeField] float wallRidingSpeed = 10f;
@@ -79,21 +81,24 @@ public class FPSController : NetworkBehaviour
     [SerializeField] float wallJumpHorizontalForce = 7.5f;
     [SerializeField] float headtiltIntensity = 7f;
 
-    [Header("Crouch")] [SerializeField] float crouchSpeed = 5f;
+    [Header("Crouch")] 
+    [SerializeField] float crouchSpeed = 5f;
     [SerializeField] float cameraOffsetWhenCrouching = 1f;
     [SerializeField] GameObject[] bodyStandUpCollider;
     [SerializeField] Transform topHeightStandUpCollider;
     [SerializeField] GameObject[] bodyCrouchedCollider;
     [SerializeField] Transform topHeightCrouchedCollider;
 
-    [Header("Slide")] [SerializeField] float slideSpeed = 5f;
+    [Header("Slide")] 
+    [SerializeField] float slideSpeed = 5f;
     [SerializeField] float slideTimeDuration = 0.2f;
     [SerializeField] float slideJumpVerticalForce = 6.5f;
     [SerializeField] float slideJumpHorizontalForce = 2f;
     [SerializeField] float slideCooldown = .1f; 
     [SerializeField] float coyoteSlideDuration = .1f;
 
-    [Header("Dash")] [SerializeField] float dashSpeed = 5f;
+    [Header("Dash")] 
+    [SerializeField] float dashSpeed = 5f;
     [SerializeField] float dashTimeDuration = 0.2f;
     [SerializeField] float dashCooldown;
 
@@ -317,6 +322,7 @@ public class FPSController : NetworkBehaviour
         
         rb.linearVelocity = Vector3.zero;
 
+        _playerAnimation.SetMovingAnim(false);
 
         if (grounded)
         {
@@ -333,6 +339,7 @@ public class FPSController : NetworkBehaviour
         if (verticalInput != 0f || horizontalInput != 0f)
         {
             if (verticalInput == 0f) SideStep();
+            _playerAnimation.SetMovingAnim(true);
             stateMachine.ChangeState(ControlerState.Moving);
         }
 
@@ -443,12 +450,19 @@ public class FPSController : NetworkBehaviour
 
     void EnterFallingState()
     {
-        if (!hasJumped) StartCoroutine(CoyoteTimeCoroutine());
+        _playerAnimation.PlayLandingAnim(true);
+        
+        if (!hasJumped) 
+            StartCoroutine(CoyoteTimeCoroutine());
     }
 
     void FallingUpdate()
     {
-        if (grounded) stateMachine.ChangeState(ControlerState.Idle);
+        if (grounded)
+        {
+            _playerAnimation.PlayLandingAnim(false);
+            stateMachine.ChangeState(ControlerState.Idle);
+        }
 
         if (playerInput.actions["Jump"].WasPressedThisFrame())
         {
@@ -458,12 +472,14 @@ public class FPSController : NetworkBehaviour
 
         if (verticalInput > 0.1f && (leftSideAgainstWall || rightSideAgainstWall) && horizontalVelocity.magnitude > minSpeedToWallRide && !grounded && !justWallRided && !fellOffWallrinding && wallRideUnlocked)
         {
+            _playerAnimation.PlayLandingAnim(false);
             if (rb.linearVelocity.y < 0) stateMachine.ChangeState(ControlerState.WallRiding);
             else mustHeadTilt = true;
         }
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
+            _playerAnimation.PlayLandingAnim(false);
             stateMachine.ChangeState(ControlerState.Dashing);
         }
     }
@@ -531,6 +547,7 @@ public class FPSController : NetworkBehaviour
     {
         hasJumped = false;
         mustHeadTilt = false;
+        _playerAnimation.PlayLandingAnim(false);
         StartCoroutine(CoyoteSlideCoroutine());
     }
 
@@ -549,6 +566,7 @@ public class FPSController : NetworkBehaviour
 
     IEnumerator JumpBufferingCoroutine()
     {
+        _playerAnimation.PlayJumpAnim();
         bufferJump = true;
         yield return new WaitForSeconds(bufferJumpTime);
         bufferJump = false;
