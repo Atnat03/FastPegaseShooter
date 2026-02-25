@@ -181,7 +181,8 @@ public class FPSController : NetworkBehaviour
             onEnter: OnEnterMovingState,
             onFixedUpdate: MovingFixedUpdate,
             onUpdate: MovingUpdate,
-            onLateUpdate: MovingLateUpdate
+            onLateUpdate: MovingLateUpdate,
+            onExit : ExitMovingState
         ));
 
         stateMachine.Add(new State<ControlerState>(
@@ -318,6 +319,7 @@ public class FPSController : NetworkBehaviour
         rb.linearVelocity = Vector3.zero;
 
         _playerAnimation.SetMovingAnim(false);
+        _playerAnimation.SetShootingIKPos();
 
         if (grounded)
         {
@@ -380,10 +382,11 @@ public class FPSController : NetworkBehaviour
     #endregion
 
     #region MovingState
-
+    
     void OnEnterMovingState()
     {
         _playerAnimation.SetMovingAnim(true);
+        _playerAnimation.SetRunningIKPos();
     }
     
     void MovingUpdate()
@@ -434,11 +437,15 @@ public class FPSController : NetworkBehaviour
 
         rb.linearVelocity = InterpolateSlope(velocity);
     }
-
-
+    
     void MovingLateUpdate()
     {
         UpdateCameraPositionAndRotation(true, walkingHeadbobAmplitude, walkingHeadbobFrequency);
+    }
+
+    void ExitMovingState()
+    {
+        _playerAnimation.SetShootingIKPos();
     }
 
     #endregion
@@ -449,9 +456,6 @@ public class FPSController : NetworkBehaviour
 
     void EnterFallingState()
     {
-        /* _playerAnimation.SetFallingAnim(false);
-         _playerAnimation.SetGroundedAnim(true);*/
-
         _playerAnimation.ChangeAirState(false);
         
         if (!hasJumped) 
@@ -544,14 +548,10 @@ public class FPSController : NetworkBehaviour
 
     void ExitFallingState()
     {
-       /* _playerAnimation.SetFallingAnim(false);
-        _playerAnimation.SetGroundedAnim(true);*/
-
         _playerAnimation.ChangeAirState(true);
         
         hasJumped = false;
         mustHeadTilt = false;
-        _playerAnimation.SetFallingAnim(false);
         StartCoroutine(CoyoteSlideCoroutine());
     }
 
@@ -1110,6 +1110,10 @@ public class FPSController : NetworkBehaviour
         print("Change layer");
         
         SetLayerRecursively(_playerVisual, LayerMask.NameToLayer("Owner"));
+
+        Shoot shootComponent = GetComponent<Shoot>();
+        
+        //SetLayerRecursively(shootComponent.GunVisual, LayerMask.NameToLayer("Other"));
     }
     
     void SetLayerRecursively(GameObject obj, int newLayer)
