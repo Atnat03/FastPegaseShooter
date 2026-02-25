@@ -71,7 +71,7 @@ public class Shoot : MonoBehaviour
 
     private void Recoil()// utile uniquement pour le feedBack temporaire
     {
-        p_visualWeapon.transform.position += new Vector3(-p_weaponData.p_recoilOffsetIntensity,0,0);
+        p_visualWeapon.transform.Translate(new Vector3( 0f, 0f, -p_weaponData.p_recoilOffsetIntensity), Space.Self);
         p_visualWeapon.transform.localRotation *= Quaternion.Euler( -p_weaponData.p_recoilTorkIntensity, 0f,0f);
     }
     
