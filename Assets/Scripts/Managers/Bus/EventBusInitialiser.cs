@@ -16,6 +16,6 @@ public class EventBusInitialiser : MonoBehaviour
         //Bus Creation
         Bus = new EventBus();
 
-        ShootingService shootingService = new ShootingService(Bus);
+        //ShootingService shootingService = new ShootingService(Bus);
     }
 }
