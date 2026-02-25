@@ -11,11 +11,11 @@ public class Shoot : MonoBehaviour
     [SerializeField] private Transform _playerHandPosWhenStandUp;
     [SerializeField] private Transform _playerHandPosWhenCrouched;
     [SerializeField] private Transform _targetPos;
-    [SerializeField] private Transform _WeaponVisualParent;
     
-    public MainWeaponsSO p_weaponData; //pour le serialiser pour l'instant
-
+    public MainWeaponsSO p_weaponData; //le serialiser pour l'instant
     public Action p_shootingAction;
+
+    private GameObject _visualWeapon;
 
     #endregion
 
@@ -37,8 +37,8 @@ public class Shoot : MonoBehaviour
     void InitNewWeapon(MainWeaponsSO newWeaponSO)
     {
         p_weaponData = newWeaponSO;
-        ClearChildren(_WeaponVisualParent);
-        Instantiate(newWeaponSO.p_weaponVisual, _WeaponVisualParent.position, Quaternion.identity, _WeaponVisualParent);
+        ClearChildren(_targetPos);
+        Instantiate(newWeaponSO.p_weaponVisual, _targetPos.position, _targetPos.rotation, _targetPos);
     }
     
     private void Shooting(InputAction.CallbackContext obj)
