@@ -4,6 +4,12 @@ using UnityEngine.InputSystem;
 
 public class Shoot : MonoBehaviour
 {
+    #region  Properties
+
+    public GameObject GunVisual => _visualWeapon;
+    
+    #endregion
+    
     #region Variables
 
     [Header("references")]

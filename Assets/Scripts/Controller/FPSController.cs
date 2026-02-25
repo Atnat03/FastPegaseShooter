@@ -181,7 +181,8 @@ public class FPSController : NetworkBehaviour
             onEnter: OnEnterMovingState,
             onFixedUpdate: MovingFixedUpdate,
             onUpdate: MovingUpdate,
-            onLateUpdate: MovingLateUpdate
+            onLateUpdate: MovingLateUpdate,
+            onExit : ExitMovingState
         ));
 
         stateMachine.Add(new State<ControlerState>(
@@ -295,7 +296,7 @@ public class FPSController : NetworkBehaviour
 
     #endregion
 
-    #region states
+    #region States
 
     #region IdleState
 
@@ -318,6 +319,7 @@ public class FPSController : NetworkBehaviour
         rb.linearVelocity = Vector3.zero;
 
         _playerAnimation.SetMovingAnim(false);
+        _playerAnimation.SetShootingIKPos();
 
         if (grounded)
         {
@@ -380,10 +382,11 @@ public class FPSController : NetworkBehaviour
     #endregion
 
     #region MovingState
-
+    
     void OnEnterMovingState()
     {
         _playerAnimation.SetMovingAnim(true);
+        _playerAnimation.SetRunningIKPos();
     }
     
     void MovingUpdate()
@@ -434,11 +437,15 @@ public class FPSController : NetworkBehaviour
 
         rb.linearVelocity = InterpolateSlope(velocity);
     }
-
-
+    
     void MovingLateUpdate()
     {
         UpdateCameraPositionAndRotation(true, walkingHeadbobAmplitude, walkingHeadbobFrequency);
+    }
+
+    void ExitMovingState()
+    {
+        _playerAnimation.SetShootingIKPos();
     }
 
     #endregion
@@ -449,7 +456,7 @@ public class FPSController : NetworkBehaviour
 
     void EnterFallingState()
     {
-        _playerAnimation.PlayLandingAnim(true);
+        _playerAnimation.ChangeAirState(false);
         
         if (!hasJumped) 
             StartCoroutine(CoyoteTimeCoroutine());
@@ -459,7 +466,6 @@ public class FPSController : NetworkBehaviour
     {
         if (grounded)
         {
-            _playerAnimation.PlayLandingAnim(false);
             stateMachine.ChangeState(ControlerState.Idle);
         }
 
@@ -471,14 +477,12 @@ public class FPSController : NetworkBehaviour
 
         if (verticalInput > 0.1f && (leftSideAgainstWall || rightSideAgainstWall) && horizontalVelocity.magnitude > minSpeedToWallRide && !grounded && !justWallRided && !fellOffWallrinding && wallRideUnlocked)
         {
-            _playerAnimation.PlayLandingAnim(false);
             if (rb.linearVelocity.y < 0) stateMachine.ChangeState(ControlerState.WallRiding);
             else mustHeadTilt = true;
         }
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            _playerAnimation.PlayLandingAnim(false);
             stateMachine.ChangeState(ControlerState.Dashing);
         }
     }
@@ -544,9 +548,10 @@ public class FPSController : NetworkBehaviour
 
     void ExitFallingState()
     {
+        _playerAnimation.ChangeAirState(true);
+        
         hasJumped = false;
         mustHeadTilt = false;
-        _playerAnimation.PlayLandingAnim(false);
         StartCoroutine(CoyoteSlideCoroutine());
     }
 
@@ -565,7 +570,6 @@ public class FPSController : NetworkBehaviour
 
     IEnumerator JumpBufferingCoroutine()
     {
-        _playerAnimation.PlayJumpAnim();
         bufferJump = true;
         yield return new WaitForSeconds(bufferJumpTime);
         bufferJump = false;
@@ -1051,9 +1055,11 @@ public class FPSController : NetworkBehaviour
 
     IEnumerator JumpAntiLagCoroutine()
     {
+        _playerAnimation.SetJumpAnim(true);
         justJumped = true;
         yield return new WaitForSeconds(.1f);
         justJumped = false;
+        _playerAnimation.SetJumpAnim(false);
     }
 
     void WallJump(Vector3 wallNormal)
@@ -1104,6 +1110,10 @@ public class FPSController : NetworkBehaviour
         print("Change layer");
         
         SetLayerRecursively(_playerVisual, LayerMask.NameToLayer("Owner"));
+
+        Shoot shootComponent = GetComponent<Shoot>();
+        
+        //SetLayerRecursively(shootComponent.GunVisual, LayerMask.NameToLayer("Other"));
     }
     
     void SetLayerRecursively(GameObject obj, int newLayer)
