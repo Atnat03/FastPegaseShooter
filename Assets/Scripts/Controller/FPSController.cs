@@ -239,13 +239,7 @@ public class FPSController : NetworkBehaviour
 
         stateMachine.ChangeState(ControlerState.Idle);
     }
-    
-    public void SetUpLayer()
-    {
-        print("Change layer");
-        
-        _playerVisual.layer = LayerMask.NameToLayer("Owner");
-    }
+
 
     #region Function Calling
 
@@ -1094,6 +1088,27 @@ public class FPSController : NetworkBehaviour
                 cameraTarget.position.z);
         foreach (GameObject col in bodyStandUpCollider) col.SetActive(true);
         foreach (GameObject col in bodyCrouchedCollider) col.SetActive(false);
+    }
+
+    #endregion
+
+    #region Other Fonctions
+        
+    public void SetUpLayer()
+    {
+        print("Change layer");
+        
+        SetLayerRecursively(_playerVisual, LayerMask.NameToLayer("Owner"));
+    }
+    
+    void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
     }
 
     #endregion
