@@ -1,8 +1,9 @@
 using System;
+using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Shoot : MonoBehaviour
+public class Shoot : NetworkBehaviour
 {
     #region  Properties
 
@@ -23,10 +24,14 @@ public class Shoot : MonoBehaviour
 
     public GameObject p_visualWeapon; // utile uniquement pour le feedBack temporaire
 
+    private Transform _camTransform;
+    
     #endregion
 
-    private void Start() // fonction de Debug qui part du principe qu'on renseigne la premiere arme
+    public override void OnStartClient() // fonction de Debug qui part du principe qu'on renseigne la premiere arme
     {
+        base.OnStartClient();
+        _camTransform =  Camera.main.transform;
         InitNewWeapon(p_weaponData);
     }
 
@@ -55,6 +60,7 @@ public class Shoot : MonoBehaviour
 
     void Update() // utile uniquement pour le feedBack temporaire
     {
+        _targetPos.rotation = _camTransform.rotation;
         BringBackWeapon();
     }
 
