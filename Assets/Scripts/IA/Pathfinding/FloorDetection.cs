@@ -84,8 +84,8 @@ public class FloorDetection : MonoBehaviour
     {
         List<int> neighbors = new List<int>();
 
-        int currentX = index % xRaycastAmount;
-        int currentY = index / xRaycastAmount;
+        int currentX = index / zRaycastAmount;
+        int currentY = index % zRaycastAmount;
 
         for (int offsetY = -1; offsetY <= 1; offsetY++)
         {
@@ -99,7 +99,7 @@ public class FloorDetection : MonoBehaviour
                 if (newX < 0 || newX >= xRaycastAmount) continue;
                 if (newY < 0 || newY >= zRaycastAmount) continue;
 
-                int newIndex = newY * xRaycastAmount + newX;
+                int newIndex = newX * zRaycastAmount + newY;
 
                 neighbors.Add(newIndex);
             }
