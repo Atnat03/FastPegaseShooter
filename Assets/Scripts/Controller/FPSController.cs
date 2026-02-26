@@ -121,7 +121,7 @@ public class FPSController : NetworkBehaviour
     
     private Transform _currentGrapplePoint ;
     private Camera _camera;
-    private float _defaultCameraFOV;
+    private float _cameraDefaultFOV;
     
     [HideInInspector] public bool grounded;
     [HideInInspector] public bool leftSideAgainstWall;
@@ -170,7 +170,7 @@ public class FPSController : NetworkBehaviour
         
         cameraTransform = Camera.main.transform;
         _camera = Camera.main;
-        _defaultCameraFOV = _camera.fieldOfView;
+        _cameraDefaultFOV = _camera.fieldOfView;
         
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -866,33 +866,46 @@ public class FPSController : NetworkBehaviour
     IEnumerator SlidingCoroutine()
     {
         mustSlide = true;
+
         float elapsedTime = 0;
+        float startFOV = _camera.fieldOfView;
+
         while (elapsedTime < slideTimeDuration)
         {
             elapsedTime += Time.deltaTime;
+
             if (elapsedTime < 0.1f)
             {
-                _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, CameraSlideFOV, elapsedTime / 0.1f);
+                float t = elapsedTime / 0.1f;
+                _camera.fieldOfView = Mathf.Lerp(startFOV, CameraSlideFOV, t);
             }
-            Debug.Log(elapsedTime);
+
             yield return null;
         }
+
         mustSlide = false;
     }
 
     IEnumerator JustSlidedCoroutine()
     {
         justSlided = true; 
+        
         float elapsedTime = 0;
+        float startFOV = _camera.fieldOfView;
+
         while (elapsedTime < slideCooldown)
         {
             elapsedTime += Time.deltaTime;
+
             if (elapsedTime < 0.1f)
             {
-                _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, _defaultCameraFOV, elapsedTime / 0.1f);
+                float t = elapsedTime / 0.1f;
+                _camera.fieldOfView = Mathf.Lerp(startFOV, _cameraDefaultFOV, t);
             }
+
             yield return null;
         }
+
         justSlided = false;
     }
 
