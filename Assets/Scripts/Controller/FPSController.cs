@@ -142,7 +142,7 @@ public class FPSController : NetworkBehaviour
         SlopeSliding
     }
 
-    public readonly StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
+    public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
     private InputActionMap actionMap;
     
     #endregion
