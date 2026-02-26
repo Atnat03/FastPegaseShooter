@@ -96,6 +96,7 @@ public class FPSController : NetworkBehaviour
     [SerializeField] float slideJumpHorizontalForce = 2f;
     [SerializeField] float slideCooldown = .1f; 
     [SerializeField] float coyoteSlideDuration = .1f;
+    [SerializeField] private float CameraSlideFOV = 50;
 
     [Header("Dash")] 
     [SerializeField] float dashSpeed = 5f;
@@ -119,6 +120,8 @@ public class FPSController : NetworkBehaviour
     #region private variables
     
     private Transform _currentGrapplePoint ;
+    private Camera _camera;
+    private float _defaultCameraFOV;
     
     [HideInInspector] public bool grounded;
     [HideInInspector] public bool leftSideAgainstWall;
@@ -152,7 +155,7 @@ public class FPSController : NetworkBehaviour
     }
 
     public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
-    private InputActionMap actionMap;
+
     
     #endregion
 
@@ -166,8 +169,8 @@ public class FPSController : NetworkBehaviour
         }
         
         cameraTransform = Camera.main.transform;
-        
-        actionMap = playerInput.currentActionMap;
+        _camera = Camera.main;
+        _defaultCameraFOV = _camera.fieldOfView;
         
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -225,7 +228,7 @@ public class FPSController : NetworkBehaviour
             onEnter: EnterSlidingState,
             onUpdate: SlidingUpdate,
             onFixedUpdate: SlidingFixedUpdate,
-            onExit: SlidingExitState,
+            onExit: ExitSlidingState,
             onLateUpdate: SlidingLateUpdate
         ));
 
@@ -848,8 +851,9 @@ public class FPSController : NetworkBehaviour
         rb.linearVelocity = landingDirection;
     }
 
-    void SlidingExitState()
+    void ExitSlidingState()
     {
+        Debug.Log("Sliding exit");
         UnCrouch();
         StartCoroutine(JustSlidedCoroutine());
     }
@@ -862,14 +866,33 @@ public class FPSController : NetworkBehaviour
     IEnumerator SlidingCoroutine()
     {
         mustSlide = true;
-        yield return new WaitForSeconds(slideTimeDuration);
+        float elapsedTime = 0;
+        while (elapsedTime < slideTimeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            if (elapsedTime < 0.1f)
+            {
+                _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, CameraSlideFOV, elapsedTime / 0.1f);
+            }
+            Debug.Log(elapsedTime);
+            yield return null;
+        }
         mustSlide = false;
     }
 
     IEnumerator JustSlidedCoroutine()
     {
         justSlided = true; 
-        yield return new WaitForSeconds(slideCooldown); 
+        float elapsedTime = 0;
+        while (elapsedTime < slideCooldown)
+        {
+            elapsedTime += Time.deltaTime;
+            if (elapsedTime < 0.1f)
+            {
+                _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, _defaultCameraFOV, elapsedTime / 0.1f);
+            }
+            yield return null;
+        }
         justSlided = false;
     }
 
