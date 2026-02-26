@@ -306,11 +306,12 @@ MonoBehaviour:
   - {fileID: 3153661936363678950}
   topHeightCrouchedCollider: {fileID: 4821877748357995787}
   slideSpeed: 12
-  slideTimeDuration: 0.5
+  slideTimeDuration: 10
   slideJumpVerticalForce: 6.5
   slideJumpHorizontalForce: 2
   slideCooldown: 0.1
   coyoteSlideDuration: 0.1
+  CameraSlideFOV: 50
   dashSpeed: 5
   dashTimeDuration: 0.2
   dashCooldown: 0.75
@@ -339,9 +340,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a778b83d061e19647836fad12c46e18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shoot
-  _componentIndexCache: 255
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _playerInputAction: {fileID: 997312506154426130}
   _playerHandPosWhenStandUp: {fileID: 5837807824479606057}
   _playerHandPosWhenCrouched: {fileID: 1045057560242356487}
@@ -404,7 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Transforming.NetworkTransform
-  _componentIndexCache: 1
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _componentConfiguration: 2
@@ -458,6 +459,7 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: 1792326860910464111}
+  - {fileID: 4170606718173402673}
   - {fileID: 6892326474594197254}
   - {fileID: 3402474507132829477}
   InitializedParentNetworkBehaviour: {fileID: 0}
@@ -470,7 +472,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584295714178558160
+  _initializedTimestamp: -8584294831593393745
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -507,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8cac635f24954048aad3a6ff9110beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Animating.NetworkAnimator
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   IgnoredParameters: []
