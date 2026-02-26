@@ -304,12 +304,13 @@ public class FPSController : NetworkBehaviour
         //situation de jeu
 
         grounded = (Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, 0.25f,
-            ~LayerMask.GetMask("Player")) && !justJumped);
+            ~LayerMask.GetMask("Owner")) && !justJumped);
+        
 
         leftSideAgainstWall = Physics.Raycast(playerLeftSide.position, playerLeftSide.forward,
-            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Player"));
+            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"));
         rightSideAgainstWall = Physics.Raycast(playerRightSide.position, playerRightSide.forward,
-            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Player"));
+            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"));
 
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
     }
@@ -800,13 +801,15 @@ public class FPSController : NetworkBehaviour
 
     private bool mustSlide;
     private bool justSlided;
+    private bool mustBeGrounded;
     Vector3 landingDirection;
 
     void EnterSlidingState()
     {
-        landingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+        landingDirection = cameraTransform.forward;
+        landingDirection.y = 0f;
+        landingDirection.Normalize();
         landingDirection *= slideSpeed;
-        landingDirection.y = rb.linearVelocity.y;
 
         Crouch();
         StartCoroutine(SlidingCoroutine());
@@ -814,9 +817,10 @@ public class FPSController : NetworkBehaviour
 
     void SlidingUpdate()
     {
-        if (!grounded)
+        if (!grounded && mustBeGrounded)
         {
             stateMachine.ChangeState(ControlerState.Falling);
+            return;
         }
 
         if (!mustSlide)
@@ -853,7 +857,6 @@ public class FPSController : NetworkBehaviour
 
     void ExitSlidingState()
     {
-        Debug.Log("Sliding exit");
         UnCrouch();
         StartCoroutine(JustSlidedCoroutine());
     }
@@ -867,6 +870,7 @@ public class FPSController : NetworkBehaviour
     {
         mustSlide = true;
 
+        mustBeGrounded = false;
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
 
@@ -879,7 +883,10 @@ public class FPSController : NetworkBehaviour
                 float t = elapsedTime / 0.1f;
                 _camera.fieldOfView = Mathf.Lerp(startFOV, CameraSlideFOV, t);
             }
-
+            else
+            {
+                mustBeGrounded = true;
+            }
             yield return null;
         }
 
@@ -1158,7 +1165,7 @@ public class FPSController : NetworkBehaviour
 
          capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
 
-        if (Physics.CapsuleCast(playerFeet.position, capsuleTop, bodyRadius, currenHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Player")))
+        if (Physics.CapsuleCast(playerFeet.position, capsuleTop, bodyRadius, currenHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
         {
             // Si le contact est bas , pente / sol
             float hitHeight = hit.point.y - playerFeet.position.y;
