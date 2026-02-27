@@ -14,6 +14,6 @@ public class TeleporterGym : MonoBehaviour
         
     private void OnTriggerEnter(Collider other)
     {
-        other.transform.parent.position = p_zoneToTp.position;
+        other.transform.parent.transform.parent.position = p_zoneToTp.position;
     }
 }
