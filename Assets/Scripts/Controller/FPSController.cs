@@ -776,6 +776,9 @@ public class FPSController : NetworkBehaviour
     {
         Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
 
+        horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
+        verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        
         Vector3 velocity = move * crouchSpeed;
         velocity.y = rb.linearVelocity.y;
 
