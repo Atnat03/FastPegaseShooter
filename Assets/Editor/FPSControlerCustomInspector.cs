@@ -15,6 +15,7 @@ public class FPSControlerCustomInspector : Editor
     private bool showSlide = true;
     private bool showDash = true;
     private bool showSlopeSlide = true;
+    private bool showGapple = true;
 
     private GUIStyle foldoutStyle;
 
@@ -39,6 +40,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("bodyRadius"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playerInput"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerVisual"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerAnimation"));
         }, ref showParameters);
 
         DrawSection("Parameters", new Color(0.8f, 0.9f, 1f), () =>
@@ -134,6 +136,14 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeInfluenceOnRotation"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeInfluenceOnVelocity"));
         }, ref showSlopeSlide);
+        
+        DrawSection("Grappling" , Color.aliceBlue, () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_castWidth"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_castMaxDistance"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_grapplingSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_endGrappleImpulseForce"));
+        } , ref showGapple);
 
         serializedObject.ApplyModifiedProperties();
     }
