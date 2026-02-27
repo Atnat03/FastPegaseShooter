@@ -2,12 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering.VirtualTexturing;
 
 [ExecuteAlways]
 public class FloorDetection : MonoBehaviour
 {
-    [SerializeField] private Vector3 detectionExtent;
+    [Header("Bounding box")]
+    [SerializeField] private float boundsHeight = 0.5f;
+    [SerializeField] private List<Vector2> boundsVertices = new List<Vector2>();
+    
+    [Header("Grid Generation Parameters")]
     [SerializeField] private float detectionPrecision = 0.3f;
     [SerializeField] private float maxVerticalDistance = 0.3f;
     [SerializeField] private float agentHeight = 0.5f;
@@ -18,18 +24,24 @@ public class FloorDetection : MonoBehaviour
     private int xRaycastAmount, zRaycastAmount;
     private void Update()
     {
+        if(boundsVertices.Count < 3) return;
+        
         InitializeNodes();
     }
 
     Vector3[] GetRaycastPositions()
     {
-        xRaycastAmount = (int)(detectionExtent.x / detectionPrecision);
-        zRaycastAmount = (int)(detectionExtent.z / detectionPrecision);
+        (Vector2,Vector2) minMaxBoundingBox = GetBoundsBoxMinMax(); 
+        Vector2 boundingBoxExtent = minMaxBoundingBox.Item2 - minMaxBoundingBox.Item1;
+        Vector2 boundingBoxCenter = GetBoundingBoxCenter(minMaxBoundingBox.Item1, minMaxBoundingBox.Item2);
         
-        float xStartOffset = (detectionExtent.x - detectionPrecision * (xRaycastAmount-1))*0.5f;
-        float zStartOffset = (detectionExtent.z - detectionPrecision * (zRaycastAmount-1))*0.5f;
+        xRaycastAmount = (int)(boundingBoxExtent.x / detectionPrecision);
+        zRaycastAmount = (int)(boundingBoxExtent.y / detectionPrecision);
         
-        Vector3 positionOffset = transform.position + new Vector3(-detectionExtent.x*0.5f+xStartOffset, detectionExtent.y*0.5f, -detectionExtent.z*0.5f+zStartOffset);
+        float xStartOffset = (boundingBoxExtent.x - detectionPrecision * (xRaycastAmount-1))*0.5f + boundingBoxCenter.x;
+        float zStartOffset = (boundingBoxExtent.y - detectionPrecision * (zRaycastAmount-1))*0.5f + boundingBoxCenter.y;
+        
+        Vector3 positionOffset = transform.position + new Vector3(-boundingBoxExtent.x*0.5f+xStartOffset, boundsHeight*0.5f, -boundingBoxExtent.y*0.5f+zStartOffset);
         Vector3[] raycastPositions = new Vector3[xRaycastAmount * zRaycastAmount];
         for (int i = 0; i < xRaycastAmount; i++)
         {
@@ -42,6 +54,42 @@ public class FloorDetection : MonoBehaviour
         return raycastPositions;
     }
 
+    (Vector2,Vector2) GetBoundsBoxMinMax()
+    {
+        Vector2 min = new Vector3(float.MaxValue, float.MaxValue);
+        Vector2 max = new Vector3(float.MinValue, float.MinValue);
+        foreach (Vector3 v in boundsVertices)
+        {
+            if(v.x < min.x) min.x = v.x;
+            if(v.y < min.y) min.y = v.y;
+            
+            if (v.x > max.x) max.x = v.x;
+            if (v.y > max.y) max.y = v.y;
+        }
+        return new (min, max);
+    }
+    Vector2 GetBoundingBoxCenter(Vector2 min, Vector2 max) => min + (max - min)*0.5f;
+    bool IsInsideBound(Vector2 pos)
+    {
+        int edgeCross = 0;
+
+        for (int i = 0; i < boundsVertices.Count; i++)
+        {
+            Vector2 p1 = boundsVertices[i];
+            Vector2 p2 = boundsVertices[(i + 1) % boundsVertices.Count];
+
+            if ((p1.y > pos.y) != (p2.y > pos.y))
+            {
+                float x0 = p1.x + (pos.y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+
+                if (pos.x < x0)
+                    edgeCross++;
+            }
+        }
+
+        return edgeCross % 2 != 0;
+    }
+
     void InitializeNodes()
     {
         nodes.Clear();
@@ -52,8 +100,7 @@ public class FloorDetection : MonoBehaviour
 
         for(int i = 0; i < raycastPositions.Length; i++)
         {
-            RaycastHit[] hits = Physics.RaycastAll(raycastPositions[i], Vector3.down, detectionExtent.y);
-            //hits.OrderBy(ray => ray.point.y);
+            RaycastHit[] hits = Physics.RaycastAll(raycastPositions[i], Vector3.down, boundsHeight);
 
             nodesPerCell[i] = new List<PathfindingNode>();
             
@@ -75,8 +122,6 @@ public class FloorDetection : MonoBehaviour
                             obstaclesDebug.Add(hits[j].point);
                             obstaclesDebug.Add(hit.point);
                             obstacles.Add((hit.point.y, hits[j].point.y));
-                            
-                            //hits.RemoveAt(j);
                         }
                     }
                     
@@ -85,10 +130,12 @@ public class FloorDetection : MonoBehaviour
             
             for(int j = 0; j < hits.Length; j++)
             {
+                Vector2 pos = new Vector2(raycastPositions[i].x-transform.position.x, raycastPositions[i].z-transform.position.z);
                 if(!CanAgentWalkUnder(hits[j], hits, obstacles) ||
                    hits[j].collider.gameObject.layer != 8 ||
                    IsInsideObstacle(hits[j], obstacles) ||
-                   hits[j].collider.gameObject.CompareTag("PathFindingObstacle"))
+                   hits[j].collider.gameObject.CompareTag("PathFindingObstacle") ||
+                   !IsInsideBound(pos))
                 {
                     continue;
                 }
@@ -165,14 +212,37 @@ public class FloorDetection : MonoBehaviour
         return false;
     }
     
+    
 
     private void OnDrawGizmos()
     {
+        if(boundsVertices.Count < 3) return;
+        
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, detectionExtent);
-        
-        
+        Handles.color = Color.yellow;
+        for (int i = 0; i < boundsVertices.Count; i++)
+        {
+            Vector2 v1 = boundsVertices[i];
+            Vector2 v2 = boundsVertices[(i + 1)%boundsVertices.Count];
 
+            Vector3 pos1 = new Vector3(v1.x,-boundsHeight*0.5f,v1.y) + transform.position;
+            Vector3 pos2 = new Vector3(v1.x,boundsHeight*0.5f,v1.y) + transform.position;
+            
+            Vector3 pos3 = new Vector3(v2.x,-boundsHeight*0.5f,v2.y) + transform.position;
+            Vector3 pos4 = new Vector3(v2.x,boundsHeight*0.5f,v2.y) + transform.position;
+            
+            Gizmos.DrawLine(pos1, pos2);
+            Handles.Label(pos2 + Vector3.up*0.1f, $"{i}");
+            Gizmos.DrawLine(pos1, pos3);
+            Gizmos.DrawLine(pos2, pos4);
+        }
+        
+        Gizmos.color = new Color(0.9f,0.9f,0.3f);
+        (Vector2, Vector2) BBMinMax = GetBoundsBoxMinMax(); 
+        Vector2 BBExtent = BBMinMax.Item2 - BBMinMax.Item1;
+        Vector2 BBCenter = GetBoundingBoxCenter(BBMinMax.Item1, BBMinMax.Item2);
+        Gizmos.DrawWireCube(transform.position+new Vector3(BBCenter.x,0,BBCenter.y), new Vector3(BBExtent.x, boundsHeight, BBExtent.y));
+        
         Gizmos.color = new Color(0.8f,0.2f,0.2f);
         foreach (PathfindingNode node in nodes)
         {
@@ -183,7 +253,7 @@ public class FloorDetection : MonoBehaviour
             }
         }
         
-        Gizmos.color = new Color(0.9f,0.9f,0.3f);
+        Gizmos.color = new Color(0.7f,0.5f,0.7f);
         foreach (Vector3 v3 in obstaclesDebug)
         {
             Gizmos.DrawSphere(v3, 0.01f);
