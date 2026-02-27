@@ -15,6 +15,7 @@ public class FPSControlerCustomInspector : Editor
     private bool showSlide = true;
     private bool showDash = true;
     private bool showSlopeSlide = true;
+    private bool showGapple = true;
 
     private GUIStyle foldoutStyle;
 
@@ -135,6 +136,14 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeInfluenceOnRotation"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeInfluenceOnVelocity"));
         }, ref showSlopeSlide);
+        
+        DrawSection("Grappling" , Color.aliceBlue, () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_castWidth"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_castMaxDistance"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_grapplingSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_endGrappleImpulseForce"));
+        } , ref showGapple);
 
         serializedObject.ApplyModifiedProperties();
     }

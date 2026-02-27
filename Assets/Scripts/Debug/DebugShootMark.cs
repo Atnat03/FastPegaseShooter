@@ -18,7 +18,7 @@ public class DebugShootMark : MonoBehaviour
     
     private void Mark()
     {
-        if (Physics.Raycast(shoot.p_visualWeapon.transform.position, shoot.p_visualWeapon.transform.forward, out RaycastHit hit))
+        if (Physics.Raycast(shoot.p_visualWeapon.transform.position + shoot.p_visualWeapon.transform.forward * .3f, shoot.p_visualWeapon.transform.forward, out RaycastHit hit, LayerMask.GetMask("Owner")))
         {
             if (_currentMark != null)
             {

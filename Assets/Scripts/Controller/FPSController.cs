@@ -96,6 +96,7 @@ public class FPSController : NetworkBehaviour
     [SerializeField] float slideJumpHorizontalForce = 2f;
     [SerializeField] float slideCooldown = .1f; 
     [SerializeField] float coyoteSlideDuration = .1f;
+    [SerializeField] private float CameraSlideFOV = 50;
 
     [Header("Dash")] 
     [SerializeField] float dashSpeed = 5f;
@@ -108,9 +109,19 @@ public class FPSController : NetworkBehaviour
     [SerializeField] float slopeInfluenceOnRotation = 3f;
     [SerializeField] float slopeInfluenceOnVelocity = .75f;
     
+    [Header("Grapple")]
+    [SerializeField] private float _castWidth = .5f;
+    [SerializeField] private float _castMaxDistance = 100f;
+    [SerializeField] private float _grapplingSpeed = 15;
+    [SerializeField] private float _endGrappleImpulseForce = 3f;
+    
     #endregion
 
     #region private variables
+    
+    private Transform _currentGrapplePoint ;
+    private Camera _camera;
+    private float _cameraDefaultFOV;
     
     [HideInInspector] public bool grounded;
     [HideInInspector] public bool leftSideAgainstWall;
@@ -139,11 +150,12 @@ public class FPSController : NetworkBehaviour
         Crouching,
         Sliding,
         Dashing,
-        SlopeSliding
+        SlopeSliding,
+        Grappling
     }
 
-    public readonly StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
-    private InputActionMap actionMap;
+    public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
+
     
     #endregion
 
@@ -157,8 +169,8 @@ public class FPSController : NetworkBehaviour
         }
         
         cameraTransform = Camera.main.transform;
-        
-        actionMap = playerInput.currentActionMap;
+        _camera = Camera.main;
+        _cameraDefaultFOV = _camera.fieldOfView;
         
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -181,8 +193,7 @@ public class FPSController : NetworkBehaviour
             onEnter: OnEnterMovingState,
             onFixedUpdate: MovingFixedUpdate,
             onUpdate: MovingUpdate,
-            onLateUpdate: MovingLateUpdate,
-            onExit : ExitMovingState
+            onLateUpdate: MovingLateUpdate
         ));
 
         stateMachine.Add(new State<ControlerState>(
@@ -217,7 +228,7 @@ public class FPSController : NetworkBehaviour
             onEnter: EnterSlidingState,
             onUpdate: SlidingUpdate,
             onFixedUpdate: SlidingFixedUpdate,
-            onExit: SlidingExitState,
+            onExit: ExitSlidingState,
             onLateUpdate: SlidingLateUpdate
         ));
 
@@ -237,6 +248,15 @@ public class FPSController : NetworkBehaviour
             onFixedUpdate: SlopeSlidingFixedUpdate,
             onExit: ExitSlopeSlidingState,
             onLateUpdate: SlopeSlidingLateUpdate
+            ));
+        
+        stateMachine.Add(new State<ControlerState>(
+            iD : ControlerState.Grappling,
+            onEnter: EnterGrappleState,
+            onUpdate: GrappleUpdate,
+            onFixedUpdate: GrappleFixedUpdate,
+            onExit: ExitGrappleState,
+            onLateUpdate: GrappleLateUpdate
             ));
 
         stateMachine.ChangeState(ControlerState.Idle);
@@ -284,12 +304,13 @@ public class FPSController : NetworkBehaviour
         //situation de jeu
 
         grounded = (Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, 0.25f,
-            ~LayerMask.GetMask("Player")) && !justJumped);
+            ~LayerMask.GetMask("Owner")) && !justJumped);
+        
 
         leftSideAgainstWall = Physics.Raycast(playerLeftSide.position, playerLeftSide.forward,
-            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Player"));
+            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"));
         rightSideAgainstWall = Physics.Raycast(playerRightSide.position, playerRightSide.forward,
-            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Player"));
+            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"));
 
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
     }
@@ -314,24 +335,17 @@ public class FPSController : NetworkBehaviour
             }
         }
         
+        if (bufferJump && playerInput.actions["Jump"].IsPressed()) Jump();
+        
+        if(stateMachine.previousState != stateMachine.GetState(ControlerState.Grappling)) rb.linearVelocity = Vector3.zero;
+
+        _playerAnimation.SetMovingAnim(false);
+
         if (grounded)
         {
             fellOffWallrinding = false;
             hasDashed = false;
         }
-
-        if (bufferJump && playerInput.actions["Jump"].IsPressed())
-        {
-            Jump();
-            return;
-        }
-        
-        rb.linearVelocity = Vector3.zero;
-
-        _playerAnimation.SetMovingAnim(false);
-        _playerAnimation.SetShootingIKPos();
-
-        
 
         if (stateMachine.previousState == stateMachine.GetState(ControlerState.Falling) && landSnap)
             StartCoroutine(FollowSmoothingOnLandingCoroutine());
@@ -365,6 +379,18 @@ public class FPSController : NetworkBehaviour
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
+
+        if (playerInput.actions["Grapple"].WasPressedThisFrame())
+        {
+            if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+            {
+                if (hit.collider.CompareTag("GrapplePoint"))
+                {
+                    _currentGrapplePoint =  hit.collider.transform;
+                    stateMachine.ChangeState(ControlerState.Grappling);
+                }
+            }
+        }
     }
 
     void IdleFixedUpdate()
@@ -388,11 +414,10 @@ public class FPSController : NetworkBehaviour
     #endregion
 
     #region MovingState
-    
+
     void OnEnterMovingState()
     {
         _playerAnimation.SetMovingAnim(true);
-        _playerAnimation.SetRunningIKPos();
     }
     
     void MovingUpdate()
@@ -425,6 +450,17 @@ public class FPSController : NetworkBehaviour
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
+        
+        if (playerInput.actions["Grapple"].WasPressedThisFrame())
+        {
+            if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+            {
+                if (hit.collider.CompareTag("GrapplePoint"))
+                {
+                    stateMachine.ChangeState(ControlerState.Grappling);
+                }
+            }
+        }
     }
 
     void MovingFixedUpdate()
@@ -443,15 +479,11 @@ public class FPSController : NetworkBehaviour
 
         rb.linearVelocity = InterpolateSlope(velocity);
     }
-    
+
+
     void MovingLateUpdate()
     {
         UpdateCameraPositionAndRotation(true, walkingHeadbobAmplitude, walkingHeadbobFrequency);
-    }
-
-    void ExitMovingState()
-    {
-        _playerAnimation.SetShootingIKPos();
     }
 
     #endregion
@@ -462,6 +494,9 @@ public class FPSController : NetworkBehaviour
 
     void EnterFallingState()
     {
+        /* _playerAnimation.SetFallingAnim(false);
+         _playerAnimation.SetGroundedAnim(true);*/
+
         _playerAnimation.ChangeAirState(false);
         
         if (!hasJumped) 
@@ -490,6 +525,17 @@ public class FPSController : NetworkBehaviour
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
+        }
+        
+        if (playerInput.actions["Grapple"].WasPressedThisFrame())
+        {
+            if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+            {
+                if (hit.collider.CompareTag("GrapplePoint"))
+                {
+                    stateMachine.ChangeState(ControlerState.Grappling);
+                }
+            }
         }
     }
 
@@ -554,10 +600,14 @@ public class FPSController : NetworkBehaviour
 
     void ExitFallingState()
     {
+       /* _playerAnimation.SetFallingAnim(false);
+        _playerAnimation.SetGroundedAnim(true);*/
+
         _playerAnimation.ChangeAirState(true);
         
         hasJumped = false;
         mustHeadTilt = false;
+        _playerAnimation.SetFallingAnim(false);
         StartCoroutine(CoyoteSlideCoroutine());
     }
 
@@ -643,6 +693,17 @@ public class FPSController : NetworkBehaviour
         {
             stateMachine.ChangeState(ControlerState.Idle);
         }
+        
+        if (playerInput.actions["Grapple"].WasPressedThisFrame())
+        {
+            if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+            {
+                if (hit.collider.CompareTag("GrapplePoint"))
+                {
+                    stateMachine.ChangeState(ControlerState.Grappling);
+                }
+            }
+        }
     }
 
     void WallRidingFixedUpdate()
@@ -715,6 +776,9 @@ public class FPSController : NetworkBehaviour
     {
         Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
 
+        horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
+        verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        
         Vector3 velocity = move * crouchSpeed;
         velocity.y = rb.linearVelocity.y;
 
@@ -740,13 +804,15 @@ public class FPSController : NetworkBehaviour
 
     private bool mustSlide;
     private bool justSlided;
+    private bool mustBeGrounded;
     Vector3 landingDirection;
 
     void EnterSlidingState()
     {
-        landingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+        landingDirection = cameraTransform.forward;
+        landingDirection.y = 0f;
+        landingDirection.Normalize();
         landingDirection *= slideSpeed;
-        landingDirection.y = rb.linearVelocity.y;
 
         Crouch();
         StartCoroutine(SlidingCoroutine());
@@ -754,9 +820,10 @@ public class FPSController : NetworkBehaviour
 
     void SlidingUpdate()
     {
-        if (!grounded)
+        if (!grounded && mustBeGrounded)
         {
             stateMachine.ChangeState(ControlerState.Falling);
+            return;
         }
 
         if (!mustSlide)
@@ -791,7 +858,7 @@ public class FPSController : NetworkBehaviour
         rb.linearVelocity = landingDirection;
     }
 
-    void SlidingExitState()
+    void ExitSlidingState()
     {
         UnCrouch();
         StartCoroutine(JustSlidedCoroutine());
@@ -805,14 +872,50 @@ public class FPSController : NetworkBehaviour
     IEnumerator SlidingCoroutine()
     {
         mustSlide = true;
-        yield return new WaitForSeconds(slideTimeDuration);
+
+        mustBeGrounded = false;
+        float elapsedTime = 0;
+        float startFOV = _camera.fieldOfView;
+
+        while (elapsedTime < slideTimeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (elapsedTime < 0.1f)
+            {
+                float t = elapsedTime / 0.1f;
+                _camera.fieldOfView = Mathf.Lerp(startFOV, CameraSlideFOV, t);
+            }
+            else
+            {
+                mustBeGrounded = true;
+            }
+            yield return null;
+        }
+
         mustSlide = false;
     }
 
     IEnumerator JustSlidedCoroutine()
     {
         justSlided = true; 
-        yield return new WaitForSeconds(slideCooldown); 
+        
+        float elapsedTime = 0;
+        float startFOV = _camera.fieldOfView;
+
+        while (elapsedTime < slideCooldown)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (elapsedTime < 0.1f)
+            {
+                float t = elapsedTime / 0.1f;
+                _camera.fieldOfView = Mathf.Lerp(startFOV, _cameraDefaultFOV, t);
+            }
+
+            yield return null;
+        }
+
         justSlided = false;
     }
 
@@ -953,6 +1056,73 @@ public class FPSController : NetworkBehaviour
 
     #endregion
     
+    #region GrappleState
+
+    bool mustGrapple = false;
+    Vector3 grappleDirection;
+    void EnterGrappleState()
+    {
+        if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.CompareTag("GrapplePoint"))
+            {
+                _currentGrapplePoint =  hit.collider.transform;
+            }
+        }
+        else //ne devrait pas etre appelé
+        {
+            stateMachine.ChangeState(ControlerState.Idle);
+        }
+        grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
+        StartCoroutine(GrappleCoroutine());
+    }
+
+    void GrappleUpdate()
+    {
+        if (!mustGrapple)
+        {
+            if (playerInput.actions["Grapple"].IsPressed())
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.AddForce(Vector3.up * _endGrappleImpulseForce, ForceMode.Impulse);
+            }
+            else
+            {
+                rb.AddForce(grappleDirection * _endGrappleImpulseForce,  ForceMode.Impulse);
+            }
+            _currentGrapplePoint = null;
+            stateMachine.ChangeState(ControlerState.Idle);
+        }
+    }
+
+    void GrappleFixedUpdate()
+    {
+        rb.linearVelocity = grappleDirection * _grapplingSpeed;
+    }
+
+    void ExitGrappleState()
+    {
+        
+    }
+
+    void GrappleLateUpdate()
+    {
+        UpdateCameraPositionAndRotation();
+    }
+
+    IEnumerator GrappleCoroutine()
+    {
+        mustGrapple = true;
+        while (Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f &&
+               playerInput.actions["Grapple"].IsPressed())
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        mustGrapple = false;
+    }
+
+    #endregion
+    
     #endregion
 
     #region PlayerActions
@@ -989,34 +1159,27 @@ public class FPSController : NetworkBehaviour
     }
 
 
-    private Vector3 currenHorizontal;
+    private Vector3 currentHorizontal;
     private Vector3 capsuleTop;
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
-        currenHorizontal = new Vector3(velocity.x, 0f, velocity.z);
-        if (currenHorizontal.sqrMagnitude < 0.0001f) return velocity;
+        if (currentHorizontal == Vector3.zero) return velocity;
 
          capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
 
-        if (Physics.CapsuleCast(playerFeet.position, capsuleTop, bodyRadius, currenHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Player")))
+        if (Physics.CapsuleCast(playerFeet.position, capsuleTop, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
         {
             // Si le contact est bas , pente / sol
             float hitHeight = hit.point.y - playerFeet.position.y;
-            if (hitHeight < maxStepHeight)
-            {
-                Vector3 temp = new Vector3(velocity.x, velocity.y + maxStepHeight, velocity.z);
-                return temp;
-            }
-
+            
+            if (hitHeight < maxStepHeight) return new Vector3(velocity.x, velocity.y + maxStepHeight, velocity.z);
+            
             float hitSlopeAngle = Vector3.Angle(hit.normal, Vector3.up);
 
             // Pente marchable , ne pas bloquer
             if (hitSlopeAngle <= walkableSlopeAngle) return velocity;
-
-            //  Vérifier que c’est bien face au mouvement
-            if (Vector3.Dot(currenHorizontal.normalized, -hit.normal) < 0.5f) return velocity;
             
-            Vector3 aligned = Vector3.ProjectOnPlane(currenHorizontal, hit.normal);
+            Vector3 aligned = Vector3.ProjectOnPlane(currentHorizontal, hit.normal);
             return new Vector3(aligned.x, velocity.y, aligned.z);
         }
 
@@ -1116,10 +1279,6 @@ public class FPSController : NetworkBehaviour
         print("Change layer");
         
         SetLayerRecursively(_playerVisual, LayerMask.NameToLayer("Owner"));
-
-        Shoot shootComponent = GetComponent<Shoot>();
-        
-        //SetLayerRecursively(shootComponent.GunVisual, LayerMask.NameToLayer("Other"));
     }
     
     void SetLayerRecursively(GameObject obj, int newLayer)
