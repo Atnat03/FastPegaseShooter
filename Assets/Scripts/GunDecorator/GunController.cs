@@ -9,14 +9,14 @@ namespace GunDecorator
     {
         private IShootModule[] _shootModule;
         private IReloadModule _reloadModule;
-        private INoiseModule _noiseModuleModule;
+        private INoise _noiseModule;
         
         private void Awake()
         {
             //On récupere tout les types de modules possible et potentiellement sur l'arme
             _shootModule = GetComponents<IShootModule>();
             _reloadModule = GetComponent<IReloadModule>();
-            _noiseModuleModule = GetComponent<INoiseModule>();
+            _noiseModule = GetComponent<INoise>();
 
 
             //On initialise tout les modules de l'arme
@@ -32,10 +32,10 @@ namespace GunDecorator
 
             foreach (IShootModule s in _shootModule)
             {
-                s?.TryShoot();
+                s?.Shoot();
             }
             
-            _noiseModuleModule?.ApplyNoise();
+            _noiseModule?.ApplyNoise();
         }
 
         public void Reload()

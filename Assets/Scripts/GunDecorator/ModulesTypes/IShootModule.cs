@@ -2,8 +2,7 @@ namespace GunDecorator
 {
     public interface IShootModule
     {
-        public void TryShoot();
-        public void Shooting();
+        public void Shoot();
     }
     
     public interface IReloadModule
@@ -11,7 +10,7 @@ namespace GunDecorator
         public void Reload();
     }
     
-    public interface INoiseModule
+    public interface INoise
     {
         public void ApplyNoise();
     }
