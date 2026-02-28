@@ -24,7 +24,6 @@ public class GunSwitching : MonoBehaviour
 	[SerializeField] private GameObject _secondaryGunParent;
 	[SerializeField] private Transform _visiblePos;
 	[SerializeField] private Transform _unvisiblePos;
-	[SerializeField] private Transform _targetPos;
 
 	private bool _canSwitch = true;
 	private List<GameObject> _mainGunsList;
@@ -131,17 +130,6 @@ public class GunSwitching : MonoBehaviour
 	
 	private void ChangeCurrentGun_Main(int newIndex) => _currentMainGun = newIndex;
 	private void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun = newIndex;
-
-	private void Update()
-	{
-		BringBackWeapon();
-	}
-	
-	void BringBackWeapon()
-	{
-		transform.position = Vector3.Lerp(transform.localPosition, _targetPos.position, 10 * Time.deltaTime);
-		transform.rotation = Quaternion.Slerp(transform.localRotation, _targetPos.rotation, 10 * Time.deltaTime);
-	}
 
 	#endregion
 }
