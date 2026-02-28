@@ -18,7 +18,9 @@ namespace GunDecorator
 
     public interface ISecondModule
     {
-        public void SetUpModule(IShootModule moduleShoot);
+        public void SetUpModule(IShootModule shootModule);
+        public void SetNext(ISecondModule next);
         public void DoAdditionnalEffect();
+        public void Shooting();
     }
 }
