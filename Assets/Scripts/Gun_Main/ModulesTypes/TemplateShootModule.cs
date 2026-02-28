@@ -13,10 +13,9 @@ namespace GunDecorator
         {
             _additionalEffectModule = new List<ISecondModule>();
             
+            //Set up des modules secondaires
             foreach (MonoBehaviour module in _secondModule)
             {
-                Debug.Log("Set up second module");
-                
                 ISecondModule secondModule = (ISecondModule)module;
 
                 if(secondModule != null)
@@ -29,15 +28,18 @@ namespace GunDecorator
 
         public virtual void TryShoot()
         {
-            if(_secondModule.Length == 0)
-                Shooting();
-            else
+            if (_additionalEffectModule.Count == 0)
             {
-                foreach (ISecondModule secondModule in _additionalEffectModule)
-                {
-                    secondModule?.DoAdditionnalEffect();
-                }
+                Shooting();
+                return;
             }
+
+            for (int i = 0; i < _additionalEffectModule.Count - 1; i++)
+                _additionalEffectModule[i].SetNext(_additionalEffectModule[i + 1]);
+
+            _additionalEffectModule[^1].SetNext(null);
+
+            _additionalEffectModule[0].DoAdditionnalEffect();
         }
 
         public virtual void Shooting()
