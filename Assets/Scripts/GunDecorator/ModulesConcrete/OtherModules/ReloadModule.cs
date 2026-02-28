@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace GunDecorator
 {
-    public class DefaultReloadModule : GunModule, IReloadModule
+    [DisallowMultipleComponent]
+    public class ReloadModule : GunModule, IReloadModule
     {
         [SerializeField] private int _magazineSize = 30;
 
