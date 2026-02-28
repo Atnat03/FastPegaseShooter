@@ -1012,8 +1012,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3363940227932175287}
   - component: {fileID: 2337525631200650867}
-  - component: {fileID: 4500913448817157752}
-  - component: {fileID: 2039122956468381031}
+  - component: {fileID: 4628685078786443891}
+  - component: {fileID: 1383725469633363576}
+  - component: {fileID: 304442803592754037}
   m_Layer: 6
   m_Name: AK47
   m_TagString: Untagged
@@ -1049,7 +1050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.WeaponController
---- !u!114 &4500913448817157752
+--- !u!114 &4628685078786443891
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1058,15 +1059,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5538443510330902857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
+  m_Script: {fileID: 11500000, guid: b2903ca208b8456cb98559f89b49023f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  moduleName: New Module
-  moduleColor: {r: 1, g: 1, b: 1, a: 1}
-  _fireRate: 1
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.BasicShootModule
+  moduleName: BasicShootModule
+  moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
   _secondModule:
-  - {fileID: 2039122956468381031}
---- !u!114 &2039122956468381031
+  - {fileID: 304442803592754037}
+  _damage: 10
+  _fireRate: 0
+--- !u!114 &1383725469633363576
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1075,10 +1077,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 5538443510330902857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75baab7d895046ed9c50b9408405f960, type: 3}
+  m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateSalve
-  numberShootPerSalve: 3
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
+  moduleName: ReloadModule
+  moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
+  _magazineSize: 30
+--- !u!114 &304442803592754037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5538443510330902857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0229fd99490451284b0c20490c917e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.MultipleShootModule
+  moduleName: MultipleShootModule
+  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+  _shapeName: cercle
 --- !u!1 &6856656255395432402
 GameObject:
   m_ObjectHideFlags: 0

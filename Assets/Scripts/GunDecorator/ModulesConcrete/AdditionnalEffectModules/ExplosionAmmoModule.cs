@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace GunDecorator
 {
-    public class TemplateSalve : MonoBehaviour, ISecondModule
+    public class ExplosionAmmoModule : GunModule, ISecondModule
     {
-        public float numberShootPerSalve;
+        public GameObject bulletPrefab;
         private IShootModule _shootModule;
 
         public void SetUpModule(IShootModule shootModule)
@@ -14,10 +14,8 @@ namespace GunDecorator
 
         public void DoAdditionnalEffect()
         {
-            for (int i = 1; i < numberShootPerSalve; i++)
-            {
-                _shootModule.Shoot();
-            }
+            Debug.Log("ExplosionAmmoModule --- DoAdditionnalEffect");
+            Instantiate(bulletPrefab);
         }
     }
 }
