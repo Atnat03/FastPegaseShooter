@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Rendering.VirtualTexturing;
 
 [ExecuteAlways]
-public class FloorDetection : MonoBehaviour
+public class PathfindingGridCreator : MonoBehaviour
 {
     [Header("Bounding box")]
     [SerializeField] private float boundsHeight = 0.5f;
@@ -18,10 +18,18 @@ public class FloorDetection : MonoBehaviour
     [SerializeField] private float maxVerticalDistance = 0.3f;
     [SerializeField] private float agentHeight = 0.5f;
 
-    List<PathfindingNode> nodes = new List<PathfindingNode>();
-    List<Vector3> obstaclesDebug =  new List<Vector3>();
+    [HideInInspector] public List<PathfindingNode> nodes = new List<PathfindingNode>();
 
     private int xRaycastAmount, zRaycastAmount;
+    
+    //Debug Variables
+    List<Vector3> obstaclesDebug =  new List<Vector3>();
+    [HideInInspector] public bool drawBounds = true;
+    [HideInInspector] public bool drawBoundingBox = true;
+    [HideInInspector] public bool drawObstacles = true;
+    [HideInInspector] public bool drawNodes = true;
+    [HideInInspector] public bool drawNodesConnections = true;
+    //
     private void Update()
     {
         if(boundsVertices.Count < 3) return;
@@ -97,7 +105,8 @@ public class FloorDetection : MonoBehaviour
         
         Vector3[] raycastPositions = GetRaycastPositions();
         Dictionary<int, List<PathfindingNode>> nodesPerCell = new();
-
+        int currentNodeIndex = 0;
+        
         for(int i = 0; i < raycastPositions.Length; i++)
         {
             RaycastHit[] hits = Physics.RaycastAll(raycastPositions[i], Vector3.down, boundsHeight);
@@ -140,7 +149,8 @@ public class FloorDetection : MonoBehaviour
                     continue;
                 }
                 
-                PathfindingNode node = new PathfindingNode { position = hits[j].point };
+                PathfindingNode node = new PathfindingNode(currentNodeIndex, hits[j].point);
+                currentNodeIndex++;
                 nodesPerCell[i].Add(node);
                 nodes.Add(node);
             }
@@ -154,7 +164,7 @@ public class FloorDetection : MonoBehaviour
                 {
                     foreach (var neighbor in nodesPerCell[neighborIndex])
                     {
-                        if(Mathf.Abs(node.position.y - neighbor.position.y) <= maxVerticalDistance) node.neighbors.Add(neighbor);
+                        if(Mathf.Abs(node.position.y - neighbor.position.y) <= maxVerticalDistance) node.neighborsIndex.Add(neighbor.index);
                     }
                 }
             }
@@ -211,8 +221,6 @@ public class FloorDetection : MonoBehaviour
         }
         return false;
     }
-    
-    
 
     private void OnDrawGizmos()
     {
@@ -220,7 +228,8 @@ public class FloorDetection : MonoBehaviour
         
         Gizmos.color = Color.yellow;
         Handles.color = Color.yellow;
-        for (int i = 0; i < boundsVertices.Count; i++)
+        if(drawBounds)
+        {for (int i = 0; i < boundsVertices.Count; i++)
         {
             Vector2 v1 = boundsVertices[i];
             Vector2 v2 = boundsVertices[(i + 1)%boundsVertices.Count];
@@ -235,28 +244,44 @@ public class FloorDetection : MonoBehaviour
             Handles.Label(pos2 + Vector3.up*0.1f, $"{i}");
             Gizmos.DrawLine(pos1, pos3);
             Gizmos.DrawLine(pos2, pos4);
-        }
+        }}
         
         Gizmos.color = new Color(0.9f,0.9f,0.3f);
-        (Vector2, Vector2) BBMinMax = GetBoundsBoxMinMax(); 
-        Vector2 BBExtent = BBMinMax.Item2 - BBMinMax.Item1;
-        Vector2 BBCenter = GetBoundingBoxCenter(BBMinMax.Item1, BBMinMax.Item2);
-        Gizmos.DrawWireCube(transform.position+new Vector3(BBCenter.x,0,BBCenter.y), new Vector3(BBExtent.x, boundsHeight, BBExtent.y));
-        
-        Gizmos.color = new Color(0.8f,0.2f,0.2f);
-        foreach (PathfindingNode node in nodes)
+        if(drawNodes)
         {
-            Gizmos.DrawSphere(node.position, 0.02f);
-            foreach (PathfindingNode n in node.neighbors)
+            if (drawBoundingBox)
             {
-                Gizmos.DrawLine(node.position, n.position);
+                (Vector2, Vector2) BBMinMax = GetBoundsBoxMinMax();
+                Vector2 BBExtent = BBMinMax.Item2 - BBMinMax.Item1;
+                Vector2 BBCenter = GetBoundingBoxCenter(BBMinMax.Item1, BBMinMax.Item2);
+                Gizmos.DrawWireCube(transform.position + new Vector3(BBCenter.x, 0, BBCenter.y),
+                    new Vector3(BBExtent.x, boundsHeight, BBExtent.y));
             }
         }
         
-        Gizmos.color = new Color(0.7f,0.5f,0.7f);
-        foreach (Vector3 v3 in obstaclesDebug)
+        Gizmos.color = new Color(0.8f,0.2f,0.2f);
+        if(drawNodes || drawNodesConnections)
         {
-            Gizmos.DrawSphere(v3, 0.01f);
+            foreach (PathfindingNode node in nodes)
+            {
+                if(drawNodes) Gizmos.DrawSphere(node.position, 0.02f);
+                if(drawNodesConnections)
+                {
+                    foreach (int n in node.neighborsIndex)
+                    {
+                        Gizmos.DrawLine(node.position, nodes[n].position);
+                    }
+                }
+            }
+        }
+        
+        Gizmos.color = new Color(0.7f, 0.5f, 0.7f);
+        if(drawObstacles)
+        {
+            foreach (Vector3 v3 in obstaclesDebug)
+            {
+                Gizmos.DrawSphere(v3, 0.01f);
+            }
         }
     }
 }
