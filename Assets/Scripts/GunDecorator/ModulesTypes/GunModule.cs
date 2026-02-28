@@ -7,8 +7,8 @@ namespace  GunDecorator
     {
         protected GunController _gunController;
 
-        [SerializeField] private string moduleName = "";
-        [SerializeField] private Color moduleColor = Color.clear;
+        [SerializeField] private string moduleName = "New Module";
+        [SerializeField] private Color moduleColor = Color.white;
 
         public string ModuleName => moduleName;
         public Color ModuleColor => moduleColor;
@@ -31,33 +31,15 @@ namespace  GunDecorator
         {
             moduleNameProp = serializedObject.FindProperty("moduleName");
             moduleColorProp = serializedObject.FindProperty("moduleColor");
-            
-            Texture2D moduleIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Scripts/GunDecorator/ModuleGun_icon.png");
-            if (moduleIcon != null)
-            {
-                EditorGUIUtility.SetIconForObject(target, moduleIcon);
-            }
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            GunModule module = (GunModule)target;
-            
             Rect rect = EditorGUILayout.GetControlRect(false, 26);
 
             EditorGUI.DrawRect(rect, moduleColorProp.colorValue * 0.6f);
-            
-            if (string.IsNullOrEmpty(moduleNameProp.stringValue))
-            {
-                moduleNameProp.stringValue = target.GetType().Name;
-            }
-
-            if(moduleColorProp.colorValue == Color.clear)
-            { 
-                ChangeColor(module);
-            }
 
             Event e = Event.current;
             if (e.type == EventType.MouseDown && rect.Contains(e.mousePosition))
@@ -84,88 +66,9 @@ namespace  GunDecorator
                 EditorGUILayout.Space(8);
             }
 
-            DrawModuleWarnings(module);
-            
             DrawPropertiesExcluding(serializedObject, "m_Script", "moduleName", "moduleColor");
 
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private void ChangeColor(GunModule module)
-        {
-            if (module is IShootModule)
-            {
-                moduleColorProp.colorValue = Color.dodgerBlue;
-            }
-            else if (module is IReloadModule)
-            {
-                moduleColorProp.colorValue = Color.crimson;
-            }
-            else if (module is INoiseModule)
-            {
-                moduleColorProp.colorValue = Color.wheat;
-            }
-            else if (module is ISecondModule)
-            {
-                moduleColorProp.colorValue = Color.darkGreen;
-            }
-        }
-
-        private void DrawModuleWarnings(GunModule module)
-        {
-            if (module == null) return;
-
-            var go = module.gameObject;
-
-            if (module is ISecondModule)
-            {
-                IShootModule[] shootModules = go.GetComponents<IShootModule>();
-                if (shootModules.Length == 0)
-                {
-                    EditorGUILayout.HelpBox(
-                        "Attention : ce module secondaire ne fonctionnera pas sans module de tir !",
-                        MessageType.Warning
-                    );
-                }
-            }
-
-            if (module is IShootModule)
-            {
-                IReloadModule reloadModules = go.GetComponent<IReloadModule>();
-                if (reloadModules == null)
-                {
-                    EditorGUILayout.HelpBox(
-                        "Attention : ce module de tir n'a pas de module de rechargement associé !",
-                        MessageType.Warning
-                    );
-                }
-            }
-            
-            if (module is INoiseModule)
-            {
-                IShootModule[] shootModules = go.GetComponents<IShootModule>();
-                
-                if (shootModules.Length == 0)
-                {
-                    EditorGUILayout.HelpBox(
-                        "Attention : ce module de noise ne fonctionnera pas sans module de tir !",
-                        MessageType.Warning
-                    );
-                }
-            }
-            
-            if (module is IReloadModule)
-            {
-                IShootModule[] shootModules = go.GetComponents<IShootModule>();
-                
-                if (shootModules.Length == 0)
-                {
-                    EditorGUILayout.HelpBox(
-                        "Attention : ce module de recharge ne fonctionnera pas sans module de tir !",
-                        MessageType.Warning
-                    );
-                }
-            }
-        }
+        }    
     }
 }
