@@ -1258,6 +1258,8 @@ GameObject:
   - component: {fileID: 5329717332355912109}
   - component: {fileID: 8180234660863549844}
   - component: {fileID: 3348653409652570733}
+  - component: {fileID: 9019459943994442329}
+  - component: {fileID: 320482567920953534}
   m_Layer: 6
   m_Name: Pistol
   m_TagString: Untagged
@@ -1307,9 +1309,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.BasicShootModule
   moduleName: BasicShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule: []
-  _damage: 0
-  _fireRate: 0
+  _secondModule:
+  - {fileID: 9019459943994442329}
+  - {fileID: 320482567920953534}
+  _damage: 10
+  _fireRate: 1
 --- !u!114 &3348653409652570733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1325,6 +1329,36 @@ MonoBehaviour:
   moduleName: ReloadModule
   moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
   _magazineSize: 30
+--- !u!114 &9019459943994442329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875098038689886236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75baab7d895046ed9c50b9408405f960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.SalveShootModule
+  moduleName: SalveShootModule
+  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+  numberShootPerSalve: 3
+--- !u!114 &320482567920953534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875098038689886236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f9d4ce71634838a297224128072129, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosionAmmoModule
+  moduleName: ExplosionAmmoModule
+  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+  bulletPrefab: {fileID: 8838029678619249185, guid: 70ad6b350e2d28844a1abd94dd94fb90, type: 3}
 --- !u!1 &8149685527222359090
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,7 +1412,6 @@ MonoBehaviour:
   _secondaryGunParent: {fileID: 2620352974341419778}
   _visiblePos: {fileID: 1645284744279010387}
   _unvisiblePos: {fileID: 2123212912458297552}
-  _targetPos: {fileID: 1439403007567999513}
 --- !u!1 &8802093150539166038
 GameObject:
   m_ObjectHideFlags: 0
