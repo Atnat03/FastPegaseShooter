@@ -776,6 +776,9 @@ public class FPSController : NetworkBehaviour
     {
         Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
 
+        horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
+        verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        
         Vector3 velocity = move * crouchSpeed;
         velocity.y = rb.linearVelocity.y;
 
@@ -1156,34 +1159,27 @@ public class FPSController : NetworkBehaviour
     }
 
 
-    private Vector3 currenHorizontal;
+    private Vector3 currentHorizontal;
     private Vector3 capsuleTop;
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
-        currenHorizontal = new Vector3(velocity.x, 0f, velocity.z);
-        if (currenHorizontal.sqrMagnitude < 0.0001f) return velocity;
+        if (currentHorizontal == Vector3.zero) return velocity;
 
          capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
 
-        if (Physics.CapsuleCast(playerFeet.position, capsuleTop, bodyRadius, currenHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
+        if (Physics.CapsuleCast(playerFeet.position, capsuleTop, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
         {
             // Si le contact est bas , pente / sol
             float hitHeight = hit.point.y - playerFeet.position.y;
-            if (hitHeight < maxStepHeight)
-            {
-                Vector3 temp = new Vector3(velocity.x, velocity.y + maxStepHeight, velocity.z);
-                return temp;
-            }
-
+            
+            if (hitHeight < maxStepHeight) return new Vector3(velocity.x, velocity.y + maxStepHeight, velocity.z);
+            
             float hitSlopeAngle = Vector3.Angle(hit.normal, Vector3.up);
 
             // Pente marchable , ne pas bloquer
             if (hitSlopeAngle <= walkableSlopeAngle) return velocity;
-
-            //  Vérifier que c’est bien face au mouvement
-            if (Vector3.Dot(currenHorizontal.normalized, -hit.normal) < 0.5f) return velocity;
             
-            Vector3 aligned = Vector3.ProjectOnPlane(currenHorizontal, hit.normal);
+            Vector3 aligned = Vector3.ProjectOnPlane(currentHorizontal, hit.normal);
             return new Vector3(aligned.x, velocity.y, aligned.z);
         }
 
