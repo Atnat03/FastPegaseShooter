@@ -50,6 +50,14 @@ namespace GunDecorator
 
         public virtual void Shooting()
         {
+            if (_ammoModule != null)
+            {
+                _ammoModule.SpawnBullet();
+                return;
+            }
+            
+            //Shooting classique
+            
             Debug.Log("Bullet fired");
         }
     }
