@@ -8,6 +8,9 @@ namespace GunDecorator
     {
         [SerializeField] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
+        
+        [SerializeField] MonoBehaviour _ammoType;
+        protected IAmmoModule _ammoModule;
 
         private void Start()
         {
@@ -24,6 +27,9 @@ namespace GunDecorator
                     _additionalEffectModule.Add(secondModule);
                 }
             }
+
+            if(_ammoType != null)
+                _ammoModule = (IAmmoModule)_ammoType;
         }
 
         public virtual void TryShoot()
@@ -44,6 +50,14 @@ namespace GunDecorator
 
         public virtual void Shooting()
         {
+            if (_ammoModule != null)
+            {
+                _ammoModule.SpawnBullet();
+                return;
+            }
+            
+            //Shooting classique
+            
             Debug.Log("Bullet fired");
         }
     }

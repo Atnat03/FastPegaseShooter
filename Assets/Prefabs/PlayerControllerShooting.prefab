@@ -1257,8 +1257,7 @@ GameObject:
   - component: {fileID: 118156608229870968}
   - component: {fileID: 5329717332355912109}
   - component: {fileID: 8675631573166046301}
-  - component: {fileID: 2621270665370452233}
-  - component: {fileID: 4925652957692693891}
+  - component: {fileID: 8977986747039668759}
   m_Layer: 6
   m_Name: Pistol
   m_TagString: Untagged
@@ -1308,11 +1307,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.BasicShootModule
   moduleName: BasicShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule:
-  - {fileID: 4925652957692693891}
+  _secondModule: []
+  _ammoType: {fileID: 0}
   _damage: 0
   _fireRate: 0
---- !u!114 &2621270665370452233
+--- !u!114 &8977986747039668759
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1327,21 +1326,6 @@ MonoBehaviour:
   moduleName: ReloadModule
   moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
   _magazineSize: 30
---- !u!114 &4925652957692693891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7875098038689886236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85f9d4ce71634838a297224128072129, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosionAmmoModule
-  moduleName: ExplosionAmmoModule
-  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
-  bulletPrefab: {fileID: 0}
 --- !u!1 &8149685527222359090
 GameObject:
   m_ObjectHideFlags: 0

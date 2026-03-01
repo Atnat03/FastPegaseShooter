@@ -22,7 +22,7 @@ namespace GunDecorator
         public void Shooting()
         {
             if (_next != null)
-                _next.Shooting();
+                _next.DoAdditionnalEffect();
             else
                 _shootModule.Shooting();
         }
