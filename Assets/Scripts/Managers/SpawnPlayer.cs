@@ -34,12 +34,12 @@ public class SpawnPlayer : NetworkBehaviour
         NetworkObject playerObj = Instantiate(_playerPrefab);
         InstanceFinder.ServerManager.Spawn(playerObj, player);
 		
-        Vector3 randomPos = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
+		Vector3 randomPos = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
 		
-        playerObj.transform.position = randomPos;
+		playerObj.transform.position = randomPos;
 		
-        SetUpLayerTargetRpc(player, playerObj.GetComponent<FPSController>());
-    }
+		SetUpLayerTargetRpc(player, playerObj.GetComponent<FPSController>());
+	}
 
     [TargetRpc]
     private void SetUpLayerTargetRpc(NetworkConnection conn, FPSController fpsController)
