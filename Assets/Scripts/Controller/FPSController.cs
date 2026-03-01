@@ -335,9 +335,10 @@ public class FPSController : NetworkBehaviour
             }
         }
         
-        if (bufferJump && playerInput.actions["Jump"].IsPressed()) Jump();
+        if (bufferJump && playerInput.actions["Jump"].IsPressed() && stateMachine.previousState == stateMachine.GetState(ControlerState.Falling)) Jump();
         
-        if(stateMachine.previousState != stateMachine.GetState(ControlerState.Grappling)) rb.linearVelocity = Vector3.zero;
+        if(stateMachine.previousState != stateMachine.GetState(ControlerState.Grappling) 
+           && stateMachine.previousState != stateMachine.GetState(ControlerState.Falling)) rb.linearVelocity = Vector3.zero;
 
         _playerAnimation.SetMovingAnim(false);
 

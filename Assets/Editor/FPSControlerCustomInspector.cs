@@ -120,6 +120,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideJumpHorizontalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideCooldown"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteSlideDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("CameraSlideFOV"));
         }, ref showSlide);
 
         DrawSection("Dash", new Color(0.6f, 1f, 1f), () =>
