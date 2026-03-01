@@ -32,7 +32,7 @@ namespace  GunDecorator
             moduleNameProp = serializedObject.FindProperty("moduleName");
             moduleColorProp = serializedObject.FindProperty("moduleColor");
             
-            Texture2D moduleIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Scripts/GunDecorator/ModuleGun_icon.png");
+            Texture2D moduleIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Scripts/Gun_Main/ModuleGun_icon.png");
             if (moduleIcon != null)
             {
                 EditorGUIUtility.SetIconForObject(target, moduleIcon);
