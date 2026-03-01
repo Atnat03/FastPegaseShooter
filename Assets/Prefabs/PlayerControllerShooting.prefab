@@ -200,6 +200,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 818621248975274297}
+  - component: {fileID: 5254083796256316284}
+  - component: {fileID: 3057065636430484936}
   m_Layer: 6
   m_Name: ArmeRouge
   m_TagString: Untagged
@@ -223,6 +225,30 @@ Transform:
   - {fileID: 4789381056589349275}
   m_Father: {fileID: 5274388527221481727}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5254083796256316284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2330464592484284573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c4e5bca38e4c284f81816deb0336315, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FreezeEffectSecondaryGun
+--- !u!114 &3057065636430484936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2330464592484284573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bcf555de9cb8d243a9dc0a0de2b7f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SecondaryGun
 --- !u!1 &2620352974341419778
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,9 +754,9 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 0}
-  _currentGunInHand: {fileID: 0}
   _playerInputAction: {fileID: 997312506154426130}
   _gunSwitching: {fileID: 3154577241410043838}
+  _bridgePlayer: {fileID: 300968199624122896}
 --- !u!1 &3153661936363678950
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,6 +1378,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2571651778359029525}
   - component: {fileID: 3154577241410043838}
+  - component: {fileID: 300968199624122896}
   m_Layer: 6
   m_Name: Gun
   m_TagString: Untagged
@@ -1395,6 +1422,19 @@ MonoBehaviour:
   _secondaryGunParent: {fileID: 2620352974341419778}
   _visiblePos: {fileID: 1645284744279010387}
   _unvisiblePos: {fileID: 2123212912458297552}
+--- !u!114 &300968199624122896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8149685527222359090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82a65429ff79430aa97139d9aff98755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Controller.GunBridgePlayer
+  _gunSwitching: {fileID: 3154577241410043838}
 --- !u!1 &8802093150539166038
 GameObject:
   m_ObjectHideFlags: 0
@@ -2134,7 +2174,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 2cf10fa706c7a4d42b5927d8e730f4e2, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: af5d4ed78663fd1429bcd1ec7c9146e1, type: 2}
+      objectReference: {fileID: 2100000, guid: 8e0baed1c7a9fa84592c7b7b2fbe18c1, type: 2}
     - target: {fileID: 919132149155446097, guid: 2cf10fa706c7a4d42b5927d8e730f4e2, type: 3}
       propertyPath: m_Name
       value: Model

@@ -11,7 +11,9 @@ public class GunSwitching : MonoBehaviour
 
 	public bool IsMainGun => _isMainGun;
 	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun];
-	public GameObject CurrentSecondaryGun => _mainGunsList[_currentSecondaryGun];
+	public GameObject CurrentSecondaryGun => _secondaryGunsList[_currentSecondaryGun];
+	
+	public IGun CurrentGun => IsMainGun ? CurrentMainGun.GetComponent<IGun>() : CurrentSecondaryGun.GetComponent<IGun>();
 
 	#endregion
 	
@@ -130,6 +132,6 @@ public class GunSwitching : MonoBehaviour
 	
 	private void ChangeCurrentGun_Main(int newIndex) => _currentMainGun = newIndex;
 	private void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun = newIndex;
-
+	
 	#endregion
 }
