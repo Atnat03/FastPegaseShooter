@@ -49,7 +49,7 @@ public class PathfindingGridCreatorInspector : Editor
                 asset.nodes = new List<PathfindingNode>();
                 foreach (PathfindingNode node in script.nodes)
                 {
-                    PathfindingNode newNode = new PathfindingNode(node.index, node.position);
+                    PathfindingNode newNode = new PathfindingNode(node.index, node.gridPosition, node.position);
                     newNode.neighborsIndex = new List<int>(node.neighborsIndex);
                     asset.nodes.Add(newNode);
                 }

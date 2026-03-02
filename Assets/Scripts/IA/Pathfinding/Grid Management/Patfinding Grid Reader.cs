@@ -69,7 +69,12 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(startingNode.position, 0.025f);
             
-            
+            List<PathfindingNode> path = _aStarAlgorithm.FindPathFromGrid(pathfindingGridSO.nodes, startingNode,  playerNode);
+            Gizmos.color = Color.cyan;
+            for(int i = 0; i < path.Count-1; i++)
+            {
+                Gizmos.DrawLine(path[i].position, path[i+1].position);
+            }
         }
         
     }
