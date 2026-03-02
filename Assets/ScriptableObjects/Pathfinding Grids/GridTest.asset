@@ -1,0 +1,3827 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e50dfabe331a2b44a56549deb3e550a, type: 3}
+  m_Name: GridTest
+  m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridSO
+  nodes:
+  - index: 0
+    gridPosition: {x: 0, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: -1.006}
+    neighborsIndex: 150000000100000016000000
+  - index: 1
+    gridPosition: {x: 1, y: 0}
+    position: {x: -1.6499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: 0000000015000000160000000200000017000000
+  - index: 2
+    gridPosition: {x: 2, y: 0}
+    position: {x: -1.6499999, y: 0.4, z: -0.80600023}
+    neighborsIndex: 0100000016000000170000000300000018000000
+  - index: 3
+    gridPosition: {x: 3, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: -0.7060001}
+    neighborsIndex: 0200000017000000180000000400000019000000
+  - index: 4
+    gridPosition: {x: 4, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: -0.6060002}
+    neighborsIndex: 030000001800000019000000050000001a000000
+  - index: 5
+    gridPosition: {x: 5, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: -0.50600016}
+    neighborsIndex: 04000000190000001a000000060000001b000000
+  - index: 6
+    gridPosition: {x: 6, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: -0.40600014}
+    neighborsIndex: 050000001a0000001b000000070000001c000000
+  - index: 7
+    gridPosition: {x: 7, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: -0.30600023}
+    neighborsIndex: 060000001b0000001c000000080000001d000000
+  - index: 8
+    gridPosition: {x: 8, y: 0}
+    position: {x: -1.6499999, y: 0.4, z: -0.20600021}
+    neighborsIndex: 070000001c0000001d000000090000001e000000
+  - index: 9
+    gridPosition: {x: 9, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: -0.106000125}
+    neighborsIndex: 080000001d0000001e0000000a0000001f000000
+  - index: 10
+    gridPosition: {x: 10, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: -0.006000161}
+    neighborsIndex: 090000001e0000001f0000000b00000020000000
+  - index: 11
+    gridPosition: {x: 11, y: 0}
+    position: {x: -1.6499999, y: 0.4, z: 0.09399986}
+    neighborsIndex: 0a0000001f000000200000000c00000021000000
+  - index: 12
+    gridPosition: {x: 12, y: 0}
+    position: {x: -1.6499999, y: 0.4, z: 0.19399989}
+    neighborsIndex: 0b00000020000000210000000d00000022000000
+  - index: 13
+    gridPosition: {x: 13, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: 0.2939999}
+    neighborsIndex: 0c00000021000000220000000e00000023000000
+  - index: 14
+    gridPosition: {x: 14, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: 0.39399981}
+    neighborsIndex: 0d00000022000000230000000f00000024000000
+  - index: 15
+    gridPosition: {x: 15, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: 0.49399984}
+    neighborsIndex: 0e00000023000000240000001000000025000000
+  - index: 16
+    gridPosition: {x: 16, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: 0.5939998}
+    neighborsIndex: 0f00000024000000250000001100000026000000
+  - index: 17
+    gridPosition: {x: 17, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: 0.6939998}
+    neighborsIndex: 1000000025000000260000001200000027000000
+  - index: 18
+    gridPosition: {x: 18, y: 0}
+    position: {x: -1.6499999, y: 0.4, z: 0.79399985}
+    neighborsIndex: 1100000026000000270000001300000028000000
+  - index: 19
+    gridPosition: {x: 19, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: 0.8939998}
+    neighborsIndex: 1200000027000000280000001400000029000000
+  - index: 20
+    gridPosition: {x: 20, y: 0}
+    position: {x: -1.6500001, y: 0.4, z: 0.99399984}
+    neighborsIndex: 130000002800000029000000
+  - index: 21
+    gridPosition: {x: 0, y: 1}
+    position: {x: -1.55, y: 0.4, z: -1.0060002}
+    neighborsIndex: 000000002a00000001000000160000002b000000
+  - index: 22
+    gridPosition: {x: 1, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.90600014}
+    neighborsIndex: 00000000150000002a000000010000002b00000002000000170000002c000000
+  - index: 23
+    gridPosition: {x: 2, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.80600023}
+    neighborsIndex: 01000000160000002b000000020000002c00000003000000180000002d000000
+  - index: 24
+    gridPosition: {x: 3, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.7060001}
+    neighborsIndex: 02000000170000002c000000030000002d00000004000000190000002e000000
+  - index: 25
+    gridPosition: {x: 4, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.6060002}
+    neighborsIndex: 03000000180000002d000000040000002e000000050000001a0000002f000000
+  - index: 26
+    gridPosition: {x: 5, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.5060003}
+    neighborsIndex: 04000000190000002e000000050000002f000000060000001b00000030000000
+  - index: 27
+    gridPosition: {x: 6, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.40600014}
+    neighborsIndex: 050000001a0000002f0000000600000030000000070000001c00000031000000
+  - index: 28
+    gridPosition: {x: 7, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.3060001}
+    neighborsIndex: 060000001b000000300000000700000031000000080000001d00000032000000
+  - index: 29
+    gridPosition: {x: 8, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.20600015}
+    neighborsIndex: 070000001c000000310000000800000032000000090000001e00000033000000
+  - index: 30
+    gridPosition: {x: 9, y: 1}
+    position: {x: -1.5499997, y: 0.4, z: -0.106000125}
+    neighborsIndex: 080000001d0000003200000009000000330000000a0000001f00000034000000
+  - index: 31
+    gridPosition: {x: 10, y: 1}
+    position: {x: -1.55, y: 0.4, z: -0.006000161}
+    neighborsIndex: 090000001e000000330000000a000000340000000b0000002000000035000000
+  - index: 32
+    gridPosition: {x: 11, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.09399986}
+    neighborsIndex: 0a0000001f000000340000000b000000350000000c0000002100000036000000
+  - index: 33
+    gridPosition: {x: 12, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.19399989}
+    neighborsIndex: 0b00000020000000350000000c000000360000000d0000002200000037000000
+  - index: 34
+    gridPosition: {x: 13, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.2939999}
+    neighborsIndex: 0c00000021000000360000000d000000370000000e0000002300000038000000
+  - index: 35
+    gridPosition: {x: 14, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.39399981}
+    neighborsIndex: 0d00000022000000370000000e000000380000000f0000002400000039000000
+  - index: 36
+    gridPosition: {x: 15, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.49399984}
+    neighborsIndex: 0e00000023000000380000000f0000003900000010000000250000003a000000
+  - index: 37
+    gridPosition: {x: 16, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.5939998}
+    neighborsIndex: 0f0000002400000039000000100000003a00000011000000260000003b000000
+  - index: 38
+    gridPosition: {x: 17, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.6939998}
+    neighborsIndex: 10000000250000003a000000110000003b00000012000000270000003c000000
+  - index: 39
+    gridPosition: {x: 18, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.79399985}
+    neighborsIndex: 11000000260000003b000000120000003c00000013000000280000003d000000
+  - index: 40
+    gridPosition: {x: 19, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.8939998}
+    neighborsIndex: 12000000270000003c000000130000003d00000014000000290000003e000000
+  - index: 41
+    gridPosition: {x: 20, y: 1}
+    position: {x: -1.55, y: 0.4, z: 0.99399984}
+    neighborsIndex: 13000000280000003d000000140000003e0000003f000000
+  - index: 42
+    gridPosition: {x: 0, y: 2}
+    position: {x: -1.45, y: 0.4, z: -1.006}
+    neighborsIndex: 1500000040000000160000002b00000041000000
+  - index: 43
+    gridPosition: {x: 1, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.90600014}
+    neighborsIndex: 150000002a000000400000001600000041000000170000002c00000042000000
+  - index: 44
+    gridPosition: {x: 2, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.80600023}
+    neighborsIndex: 160000002b000000410000001700000042000000180000002d00000043000000
+  - index: 45
+    gridPosition: {x: 3, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.7060001}
+    neighborsIndex: 170000002c000000420000001800000043000000190000002e00000044000000
+  - index: 46
+    gridPosition: {x: 4, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.6060002}
+    neighborsIndex: 180000002d0000004300000019000000440000001a0000002f00000045000000
+  - index: 47
+    gridPosition: {x: 5, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.50600016}
+    neighborsIndex: 190000002e000000440000001a000000450000001b0000003000000046000000
+  - index: 48
+    gridPosition: {x: 6, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.40600014}
+    neighborsIndex: 1a0000002f000000450000001b000000460000001c0000003100000047000000
+  - index: 49
+    gridPosition: {x: 7, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.30600017}
+    neighborsIndex: 1b00000030000000460000001c000000470000001d0000003200000048000000
+  - index: 50
+    gridPosition: {x: 8, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.20600015}
+    neighborsIndex: 1c00000031000000470000001d000000480000001e0000003300000049000000
+  - index: 51
+    gridPosition: {x: 9, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.106000125}
+    neighborsIndex: 1d00000032000000480000001e000000490000001f000000340000004a000000
+  - index: 52
+    gridPosition: {x: 10, y: 2}
+    position: {x: -1.45, y: 0.4, z: -0.006000161}
+    neighborsIndex: 1e00000033000000490000001f0000004a00000020000000350000004b000000
+  - index: 53
+    gridPosition: {x: 11, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.09399983}
+    neighborsIndex: 1f000000340000004a000000200000004b00000021000000360000004c000000
+  - index: 54
+    gridPosition: {x: 12, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.19399986}
+    neighborsIndex: 20000000350000004b000000210000004c00000022000000370000004d000000
+  - index: 55
+    gridPosition: {x: 13, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.2939999}
+    neighborsIndex: 21000000360000004c000000220000004d00000023000000380000004e000000
+  - index: 56
+    gridPosition: {x: 14, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.39399981}
+    neighborsIndex: 22000000370000004d000000230000004e00000024000000390000004f000000
+  - index: 57
+    gridPosition: {x: 15, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.49399984}
+    neighborsIndex: 23000000380000004e000000240000004f000000250000003a00000050000000
+  - index: 58
+    gridPosition: {x: 16, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.5939998}
+    neighborsIndex: 24000000390000004f0000002500000050000000260000003b00000051000000
+  - index: 59
+    gridPosition: {x: 17, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.6939998}
+    neighborsIndex: 250000003a000000500000002600000051000000270000003c00000052000000
+  - index: 60
+    gridPosition: {x: 18, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.79399985}
+    neighborsIndex: 260000003b000000510000002700000052000000280000003d00000053000000
+  - index: 61
+    gridPosition: {x: 19, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.8939998}
+    neighborsIndex: 270000003c000000520000002800000053000000290000003e00000054000000
+  - index: 62
+    gridPosition: {x: 20, y: 2}
+    position: {x: -1.45, y: 0.4, z: 0.99399984}
+    neighborsIndex: 280000003d0000005300000029000000540000003f00000055000000
+  - index: 63
+    gridPosition: {x: 21, y: 2}
+    position: {x: -1.45, y: 0.4, z: 1.0939999}
+    neighborsIndex: 290000003e0000005400000055000000
+  - index: 64
+    gridPosition: {x: 0, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: -1.0060002}
+    neighborsIndex: 2a000000560000002b0000004100000057000000
+  - index: 65
+    gridPosition: {x: 1, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: 2a00000040000000560000002b000000570000002c0000004200000058000000
+  - index: 66
+    gridPosition: {x: 2, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: -0.80600023}
+    neighborsIndex: 2b00000041000000570000002c000000580000002d0000004300000059000000
+  - index: 67
+    gridPosition: {x: 3, y: 3}
+    position: {x: -1.3499997, y: 0.4, z: -0.7060001}
+    neighborsIndex: 2c00000042000000580000002d000000590000002e000000440000005a000000
+  - index: 68
+    gridPosition: {x: 4, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: -0.6060002}
+    neighborsIndex: 2d00000043000000590000002e0000005a0000002f000000450000005b000000
+  - index: 69
+    gridPosition: {x: 5, y: 3}
+    position: {x: -1.3499997, y: 0.4, z: -0.50600016}
+    neighborsIndex: 2e000000440000005a0000002f0000005b00000030000000460000005c000000
+  - index: 70
+    gridPosition: {x: 6, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: -0.40600014}
+    neighborsIndex: 2f000000450000005b000000300000005c00000031000000470000005d000000
+  - index: 71
+    gridPosition: {x: 7, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: -0.30600023}
+    neighborsIndex: 30000000460000005c000000310000005d00000032000000480000005e000000
+  - index: 72
+    gridPosition: {x: 8, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: -0.20600015}
+    neighborsIndex: 31000000470000005d000000320000005e00000033000000490000005f000000
+  - index: 73
+    gridPosition: {x: 9, y: 3}
+    position: {x: -1.3499997, y: 0.4, z: -0.106000125}
+    neighborsIndex: 32000000480000005e000000330000005f000000340000004a00000060000000
+  - index: 74
+    gridPosition: {x: 10, y: 3}
+    position: {x: -1.3499997, y: 0.4, z: -0.006000161}
+    neighborsIndex: 33000000490000005f0000003400000060000000350000004b00000061000000
+  - index: 75
+    gridPosition: {x: 11, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 0.09399986}
+    neighborsIndex: 340000004a000000600000003500000061000000360000004c00000062000000
+  - index: 76
+    gridPosition: {x: 12, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 0.19399989}
+    neighborsIndex: 350000004b000000610000003600000062000000370000004d00000063000000
+  - index: 77
+    gridPosition: {x: 13, y: 3}
+    position: {x: -1.3499997, y: 0.4, z: 0.2939999}
+    neighborsIndex: 360000004c000000620000003700000063000000380000004e00000064000000
+  - index: 78
+    gridPosition: {x: 14, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 0.39399981}
+    neighborsIndex: 370000004d000000630000003800000064000000390000004f00000065000000
+  - index: 79
+    gridPosition: {x: 15, y: 3}
+    position: {x: -1.3499997, y: 0.4, z: 0.49399984}
+    neighborsIndex: 380000004e0000006400000039000000650000003a0000005000000066000000
+  - index: 80
+    gridPosition: {x: 16, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 0.59399986}
+    neighborsIndex: 390000004f000000650000003a000000660000003b0000005100000067000000
+  - index: 81
+    gridPosition: {x: 17, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 0.6939998}
+    neighborsIndex: 3a00000050000000660000003b000000670000003c0000005200000068000000
+  - index: 82
+    gridPosition: {x: 18, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 0.7939999}
+    neighborsIndex: 3b00000051000000670000003c000000680000003d0000005300000069000000
+  - index: 83
+    gridPosition: {x: 19, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 0.8939998}
+    neighborsIndex: 3c00000052000000680000003d000000690000003e000000540000006a000000
+  - index: 84
+    gridPosition: {x: 20, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 0.9939997}
+    neighborsIndex: 3d00000053000000690000003e0000006a0000003f000000550000006b000000
+  - index: 85
+    gridPosition: {x: 21, y: 3}
+    position: {x: -1.3499999, y: 0.4, z: 1.0939999}
+    neighborsIndex: 3e000000540000006a0000003f0000006b000000
+  - index: 86
+    gridPosition: {x: 0, y: 4}
+    position: {x: -1.25, y: 0.4, z: -1.0060002}
+    neighborsIndex: 400000006c00000041000000570000006d000000
+  - index: 87
+    gridPosition: {x: 1, y: 4}
+    position: {x: -1.25, y: 0.4, z: -0.90600014}
+    neighborsIndex: 40000000560000006c000000410000006d00000042000000580000006e000000
+  - index: 88
+    gridPosition: {x: 2, y: 4}
+    position: {x: -1.25, y: 0.4, z: -0.80600023}
+    neighborsIndex: 41000000570000006d000000420000006e00000043000000590000006f000000
+  - index: 89
+    gridPosition: {x: 3, y: 4}
+    position: {x: -1.25, y: 0.4, z: -0.7060001}
+    neighborsIndex: 42000000580000006e000000430000006f000000440000005a00000070000000
+  - index: 90
+    gridPosition: {x: 4, y: 4}
+    position: {x: -1.25, y: 0.4, z: -0.6060002}
+    neighborsIndex: 43000000590000006f0000004400000070000000450000005b00000071000000
+  - index: 91
+    gridPosition: {x: 5, y: 4}
+    position: {x: -1.25, y: 0.4, z: -0.50600016}
+    neighborsIndex: 440000005a000000700000004500000071000000460000005c00000072000000
+  - index: 92
+    gridPosition: {x: 6, y: 4}
+    position: {x: -1.25, y: 0.4, z: -0.40600014}
+    neighborsIndex: 450000005b000000710000004600000072000000470000005d00000073000000
+  - index: 93
+    gridPosition: {x: 7, y: 4}
+    position: {x: -1.25, y: 0.4, z: -0.30600017}
+    neighborsIndex: 460000005c000000720000004700000073000000480000005e00000074000000
+  - index: 94
+    gridPosition: {x: 8, y: 4}
+    position: {x: -1.25, y: 0.4, z: -0.20600015}
+    neighborsIndex: 470000005d000000730000004800000074000000490000005f00000075000000
+  - index: 95
+    gridPosition: {x: 9, y: 4}
+    position: {x: -1.2499998, y: 0.4, z: -0.106000125}
+    neighborsIndex: 480000005e0000007400000049000000750000004a0000006000000076000000
+  - index: 96
+    gridPosition: {x: 10, y: 4}
+    position: {x: -1.2499998, y: 0.4, z: -0.006000161}
+    neighborsIndex: 490000005f000000750000004a000000760000004b0000006100000077000000
+  - index: 97
+    gridPosition: {x: 11, y: 4}
+    position: {x: -1.25, y: 0.4, z: 0.09399986}
+    neighborsIndex: 4a00000060000000760000004b000000770000004c0000006200000078000000
+  - index: 98
+    gridPosition: {x: 12, y: 4}
+    position: {x: -1.25, y: 0.4, z: 0.19399989}
+    neighborsIndex: 4b00000061000000770000004c000000780000004d0000006300000079000000
+  - index: 99
+    gridPosition: {x: 13, y: 4}
+    position: {x: -1.2499998, y: 0.4, z: 0.2939999}
+    neighborsIndex: 4c00000062000000780000004d000000790000004e000000640000007a000000
+  - index: 100
+    gridPosition: {x: 14, y: 4}
+    position: {x: -1.2499998, y: 0.4, z: 0.39399981}
+    neighborsIndex: 4d00000063000000790000004e0000007a0000004f000000650000007b000000
+  - index: 101
+    gridPosition: {x: 15, y: 4}
+    position: {x: -1.25, y: 0.4, z: 0.49399984}
+    neighborsIndex: 4e000000640000007a0000004f0000007b00000050000000660000007c000000
+  - index: 102
+    gridPosition: {x: 16, y: 4}
+    position: {x: -1.25, y: 0.4, z: 0.5939998}
+    neighborsIndex: 4f000000650000007b000000500000007c00000051000000670000007d000000
+  - index: 103
+    gridPosition: {x: 17, y: 4}
+    position: {x: -1.25, y: 0.4, z: 0.6939998}
+    neighborsIndex: 50000000660000007c000000510000007d00000052000000680000007e000000
+  - index: 104
+    gridPosition: {x: 18, y: 4}
+    position: {x: -1.25, y: 0.4, z: 0.7939999}
+    neighborsIndex: 51000000670000007d000000520000007e00000053000000690000007f000000
+  - index: 105
+    gridPosition: {x: 19, y: 4}
+    position: {x: -1.25, y: 0.4, z: 0.8939998}
+    neighborsIndex: 52000000680000007e000000530000007f000000540000006a00000080000000
+  - index: 106
+    gridPosition: {x: 20, y: 4}
+    position: {x: -1.25, y: 0.4, z: 0.9939997}
+    neighborsIndex: 53000000690000007f0000005400000080000000550000006b00000081000000
+  - index: 107
+    gridPosition: {x: 21, y: 4}
+    position: {x: -1.25, y: 0.4, z: 1.0939999}
+    neighborsIndex: 540000006a00000080000000550000008100000082000000
+  - index: 108
+    gridPosition: {x: 0, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -1.0060002}
+    neighborsIndex: 5600000083000000570000006d00000084000000
+  - index: 109
+    gridPosition: {x: 1, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.90600014}
+    neighborsIndex: 560000006c000000830000005700000084000000580000006e00000085000000
+  - index: 110
+    gridPosition: {x: 2, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.80600023}
+    neighborsIndex: 570000006d000000840000005800000085000000590000006f00000086000000
+  - index: 111
+    gridPosition: {x: 3, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.7060001}
+    neighborsIndex: 580000006e0000008500000059000000860000005a0000007000000087000000
+  - index: 112
+    gridPosition: {x: 4, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.6060002}
+    neighborsIndex: 590000006f000000860000005a000000870000005b0000007100000088000000
+  - index: 113
+    gridPosition: {x: 5, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.5060003}
+    neighborsIndex: 5a00000070000000870000005b000000880000005c0000007200000089000000
+  - index: 114
+    gridPosition: {x: 6, y: 5}
+    position: {x: -1.1499999, y: 0.4, z: -0.40600014}
+    neighborsIndex: 5b00000071000000880000005c000000890000005d000000730000008a000000
+  - index: 115
+    gridPosition: {x: 7, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.30600017}
+    neighborsIndex: 5c00000072000000890000005d0000008a0000005e000000740000008b000000
+  - index: 116
+    gridPosition: {x: 8, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.20600009}
+    neighborsIndex: 5d000000730000008a0000005e0000008b0000005f000000750000008c000000
+  - index: 117
+    gridPosition: {x: 9, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.106000125}
+    neighborsIndex: 5e000000740000008b0000005f0000008c00000060000000760000008d000000
+  - index: 118
+    gridPosition: {x: 10, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: -0.006000161}
+    neighborsIndex: 5f000000750000008c000000600000008d00000061000000770000008e000000
+  - index: 119
+    gridPosition: {x: 11, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.09399986}
+    neighborsIndex: 60000000760000008d000000610000008e00000062000000780000008f000000
+  - index: 120
+    gridPosition: {x: 12, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.19399989}
+    neighborsIndex: 61000000770000008e000000620000008f000000630000007900000090000000
+  - index: 121
+    gridPosition: {x: 13, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.2939999}
+    neighborsIndex: 62000000780000008f0000006300000090000000640000007a00000091000000
+  - index: 122
+    gridPosition: {x: 14, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.39399981}
+    neighborsIndex: 6300000079000000900000006400000091000000650000007b00000092000000
+  - index: 123
+    gridPosition: {x: 15, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.49399984}
+    neighborsIndex: 640000007a000000910000006500000092000000660000007c00000093000000
+  - index: 124
+    gridPosition: {x: 16, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.5939998}
+    neighborsIndex: 650000007b000000920000006600000093000000670000007d00000094000000
+  - index: 125
+    gridPosition: {x: 17, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.6939998}
+    neighborsIndex: 660000007c000000930000006700000094000000680000007e00000095000000
+  - index: 126
+    gridPosition: {x: 18, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.7939999}
+    neighborsIndex: 670000007d000000940000006800000095000000690000007f00000096000000
+  - index: 127
+    gridPosition: {x: 19, y: 5}
+    position: {x: -1.1499999, y: 0.4, z: 0.8939998}
+    neighborsIndex: 680000007e0000009500000069000000960000006a0000008000000097000000
+  - index: 128
+    gridPosition: {x: 20, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 0.9939997}
+    neighborsIndex: 690000007f000000960000006a000000970000006b0000008100000098000000
+  - index: 129
+    gridPosition: {x: 21, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 1.0939999}
+    neighborsIndex: 6a00000080000000970000006b000000980000008200000099000000
+  - index: 130
+    gridPosition: {x: 22, y: 5}
+    position: {x: -1.1500001, y: 0.4, z: 1.1939998}
+    neighborsIndex: 6b000000810000009800000099000000
+  - index: 131
+    gridPosition: {x: 0, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: -1.0060002}
+    neighborsIndex: 6c0000009a0000006d000000840000009b000000
+  - index: 132
+    gridPosition: {x: 1, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: -0.90600014}
+    neighborsIndex: 6c000000830000009a0000006d0000009b0000006e000000850000009c000000
+  - index: 133
+    gridPosition: {x: 2, y: 6}
+    position: {x: -1.05, y: 0.4, z: -0.80600023}
+    neighborsIndex: 6d000000840000009b0000006e0000009c0000006f000000860000009d000000
+  - index: 134
+    gridPosition: {x: 3, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: -0.7060001}
+    neighborsIndex: 6e000000850000009c0000006f0000009d00000070000000870000009e000000
+  - index: 135
+    gridPosition: {x: 4, y: 6}
+    position: {x: -1.05, y: 0.4, z: -0.6060002}
+    neighborsIndex: 6f000000860000009d000000700000009e00000071000000880000009f000000
+  - index: 136
+    gridPosition: {x: 5, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: -0.50600016}
+    neighborsIndex: 70000000870000009e000000710000009f0000007200000089000000a0000000
+  - index: 137
+    gridPosition: {x: 6, y: 6}
+    position: {x: -1.05, y: 0.4, z: -0.40600008}
+    neighborsIndex: 71000000880000009f00000072000000a0000000730000008a000000a1000000
+  - index: 138
+    gridPosition: {x: 7, y: 6}
+    position: {x: -1.05, y: 0.4, z: -0.3060001}
+    neighborsIndex: 7200000089000000a000000073000000a1000000740000008b000000a2000000
+  - index: 139
+    gridPosition: {x: 8, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: -0.20600009}
+    neighborsIndex: 730000008a000000a100000074000000a2000000750000008c000000a3000000
+  - index: 140
+    gridPosition: {x: 9, y: 6}
+    position: {x: -1.05, y: 0.4, z: -0.106000066}
+    neighborsIndex: 740000008b000000a200000075000000a3000000760000008d000000a4000000
+  - index: 141
+    gridPosition: {x: 10, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: -0.006000161}
+    neighborsIndex: 750000008c000000a300000076000000a4000000770000008e000000a5000000
+  - index: 142
+    gridPosition: {x: 11, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: 0.09399986}
+    neighborsIndex: 760000008d000000a400000077000000a5000000780000008f000000a6000000
+  - index: 143
+    gridPosition: {x: 12, y: 6}
+    position: {x: -1.05, y: 0.4, z: 0.19399989}
+    neighborsIndex: 770000008e000000a500000078000000a60000007900000090000000a7000000
+  - index: 144
+    gridPosition: {x: 13, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: 0.2939999}
+    neighborsIndex: 780000008f000000a600000079000000a70000007a00000091000000a8000000
+  - index: 145
+    gridPosition: {x: 14, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: 0.39399981}
+    neighborsIndex: 7900000090000000a70000007a000000a80000007b00000092000000a9000000
+  - index: 146
+    gridPosition: {x: 15, y: 6}
+    position: {x: -1.0499997, y: 0.4, z: 0.49399984}
+    neighborsIndex: 7a00000091000000a80000007b000000a90000007c00000093000000aa000000
+  - index: 147
+    gridPosition: {x: 16, y: 6}
+    position: {x: -1.05, y: 0.4, z: 0.5939998}
+    neighborsIndex: 7b00000092000000a90000007c000000aa0000007d00000094000000ab000000
+  - index: 148
+    gridPosition: {x: 17, y: 6}
+    position: {x: -1.05, y: 0.4, z: 0.6939998}
+    neighborsIndex: 7c00000093000000aa0000007d000000ab0000007e00000095000000ac000000
+  - index: 149
+    gridPosition: {x: 18, y: 6}
+    position: {x: -1.05, y: 0.4, z: 0.7939999}
+    neighborsIndex: 7d00000094000000ab0000007e000000ac0000007f00000096000000ad000000
+  - index: 150
+    gridPosition: {x: 19, y: 6}
+    position: {x: -1.05, y: 0.4, z: 0.8939998}
+    neighborsIndex: 7e00000095000000ac0000007f000000ad0000008000000097000000ae000000
+  - index: 151
+    gridPosition: {x: 20, y: 6}
+    position: {x: -1.05, y: 0.4, z: 0.9939997}
+    neighborsIndex: 7f00000096000000ad00000080000000ae0000008100000098000000af000000
+  - index: 152
+    gridPosition: {x: 21, y: 6}
+    position: {x: -1.05, y: 0.4, z: 1.094}
+    neighborsIndex: 8000000097000000ae00000081000000af0000008200000099000000b0000000
+  - index: 153
+    gridPosition: {x: 22, y: 6}
+    position: {x: -1.05, y: 0.4, z: 1.1939998}
+    neighborsIndex: 8100000098000000af00000082000000b0000000b1000000
+  - index: 154
+    gridPosition: {x: 0, y: 7}
+    position: {x: -0.94999987, y: 0.4, z: -1.0060002}
+    neighborsIndex: 83000000b2000000840000009b000000b3000000
+  - index: 155
+    gridPosition: {x: 1, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.90600014}
+    neighborsIndex: 830000009a000000b200000084000000b3000000850000009c000000b4000000
+  - index: 156
+    gridPosition: {x: 2, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.80600023}
+    neighborsIndex: 840000009b000000b300000085000000b4000000860000009d000000b5000000
+  - index: 157
+    gridPosition: {x: 3, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.7060001}
+    neighborsIndex: 850000009c000000b400000086000000b5000000870000009e000000b6000000
+  - index: 158
+    gridPosition: {x: 4, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.6060002}
+    neighborsIndex: 860000009d000000b500000087000000b6000000880000009f000000b7000000
+  - index: 159
+    gridPosition: {x: 5, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.5060003}
+    neighborsIndex: 870000009e000000b600000088000000b700000089000000a0000000b8000000
+  - index: 160
+    gridPosition: {x: 6, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.40600014}
+    neighborsIndex: 880000009f000000b700000089000000b80000008a000000a1000000b9000000
+  - index: 161
+    gridPosition: {x: 7, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.30600017}
+    neighborsIndex: 89000000a0000000b80000008a000000b90000008b000000a2000000ba000000
+  - index: 162
+    gridPosition: {x: 8, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.20600009}
+    neighborsIndex: 8a000000a1000000b90000008b000000ba0000008c000000a3000000bb000000
+  - index: 163
+    gridPosition: {x: 9, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.106000125}
+    neighborsIndex: 8b000000a2000000ba0000008c000000bb0000008d000000a4000000bc000000
+  - index: 164
+    gridPosition: {x: 10, y: 7}
+    position: {x: -0.95, y: 0.4, z: -0.006000161}
+    neighborsIndex: 8c000000a3000000bb0000008d000000bc0000008e000000a5000000bd000000
+  - index: 165
+    gridPosition: {x: 11, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.09399986}
+    neighborsIndex: 8d000000a4000000bc0000008e000000bd0000008f000000a6000000be000000
+  - index: 166
+    gridPosition: {x: 12, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.19399989}
+    neighborsIndex: 8e000000a5000000bd0000008f000000be00000090000000a7000000bf000000
+  - index: 167
+    gridPosition: {x: 13, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.2939999}
+    neighborsIndex: 8f000000a6000000be00000090000000bf00000091000000a8000000c0000000
+  - index: 168
+    gridPosition: {x: 14, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.39399981}
+    neighborsIndex: 90000000a7000000bf00000091000000c000000092000000a9000000c1000000
+  - index: 169
+    gridPosition: {x: 15, y: 7}
+    position: {x: -0.94999987, y: 0.4, z: 0.49399984}
+    neighborsIndex: 91000000a8000000c000000092000000c100000093000000aa000000c2000000
+  - index: 170
+    gridPosition: {x: 16, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.5939998}
+    neighborsIndex: 92000000a9000000c100000093000000c200000094000000ab000000c3000000
+  - index: 171
+    gridPosition: {x: 17, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.6939998}
+    neighborsIndex: 93000000aa000000c200000094000000c300000095000000ac000000c4000000
+  - index: 172
+    gridPosition: {x: 18, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.7939999}
+    neighborsIndex: 94000000ab000000c300000095000000c400000096000000ad000000c5000000
+  - index: 173
+    gridPosition: {x: 19, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.8939998}
+    neighborsIndex: 95000000ac000000c400000096000000c500000097000000ae000000c6000000
+  - index: 174
+    gridPosition: {x: 20, y: 7}
+    position: {x: -0.95, y: 0.4, z: 0.99399984}
+    neighborsIndex: 96000000ad000000c500000097000000c600000098000000af000000c7000000
+  - index: 175
+    gridPosition: {x: 21, y: 7}
+    position: {x: -0.95, y: 0.4, z: 1.0939999}
+    neighborsIndex: 97000000ae000000c600000098000000c700000099000000b0000000c8000000
+  - index: 176
+    gridPosition: {x: 22, y: 7}
+    position: {x: -0.94999987, y: 0.4, z: 1.1939998}
+    neighborsIndex: 98000000af000000c700000099000000c8000000b1000000c9000000
+  - index: 177
+    gridPosition: {x: 23, y: 7}
+    position: {x: -0.94999987, y: 0.4, z: 1.2939997}
+    neighborsIndex: 99000000b0000000c8000000c9000000
+  - index: 178
+    gridPosition: {x: 0, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: -1.0060002}
+    neighborsIndex: 9a000000ca0000009b000000b3000000cb000000
+  - index: 179
+    gridPosition: {x: 1, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: -0.90600014}
+    neighborsIndex: 9a000000b2000000ca0000009b000000cb0000009c000000b4000000cc000000
+  - index: 180
+    gridPosition: {x: 2, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: -0.80600023}
+    neighborsIndex: 9b000000b3000000cb0000009c000000cc0000009d000000b5000000cd000000
+  - index: 181
+    gridPosition: {x: 3, y: 8}
+    position: {x: -0.84999985, y: 0.4, z: -0.7060001}
+    neighborsIndex: 9c000000b4000000cc0000009d000000cd0000009e000000b6000000ce000000
+  - index: 182
+    gridPosition: {x: 4, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: -0.6060002}
+    neighborsIndex: 9d000000b5000000cd0000009e000000ce0000009f000000b7000000cf000000
+  - index: 183
+    gridPosition: {x: 5, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: -0.50600016}
+    neighborsIndex: 9e000000b6000000ce0000009f000000cf000000a0000000b8000000d0000000
+  - index: 184
+    gridPosition: {x: 6, y: 8}
+    position: {x: -0.84999985, y: 0.4, z: -0.40600008}
+    neighborsIndex: 9f000000b7000000cf000000a0000000d0000000a1000000b9000000d1000000
+  - index: 185
+    gridPosition: {x: 7, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: -0.30600023}
+    neighborsIndex: a0000000b8000000d0000000a1000000d1000000a2000000ba000000d2000000
+  - index: 186
+    gridPosition: {x: 8, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: -0.20600009}
+    neighborsIndex: a1000000b9000000d1000000a2000000d2000000a3000000bb000000d3000000
+  - index: 187
+    gridPosition: {x: 9, y: 8}
+    position: {x: -0.84999985, y: 0.4, z: -0.106000125}
+    neighborsIndex: a2000000ba000000d2000000a3000000d3000000a4000000bc000000d4000000
+  - index: 188
+    gridPosition: {x: 10, y: 8}
+    position: {x: -0.84999985, y: 0.4, z: -0.006000161}
+    neighborsIndex: a3000000bb000000d3000000a4000000d4000000a5000000bd000000d5000000
+  - index: 189
+    gridPosition: {x: 11, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 0.09399986}
+    neighborsIndex: a4000000bc000000d4000000a5000000d5000000a6000000be000000d6000000
+  - index: 190
+    gridPosition: {x: 12, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 0.19399989}
+    neighborsIndex: a5000000bd000000d5000000a6000000d6000000a7000000bf000000d7000000
+  - index: 191
+    gridPosition: {x: 13, y: 8}
+    position: {x: -0.84999985, y: 0.4, z: 0.2939999}
+    neighborsIndex: a6000000be000000d6000000a7000000d7000000a8000000c0000000d8000000
+  - index: 192
+    gridPosition: {x: 14, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 0.39399981}
+    neighborsIndex: a7000000bf000000d7000000a8000000d8000000a9000000c1000000d9000000
+  - index: 193
+    gridPosition: {x: 15, y: 8}
+    position: {x: -0.84999985, y: 0.4, z: 0.49399984}
+    neighborsIndex: a8000000c0000000d8000000a9000000d9000000aa000000c2000000da000000
+  - index: 194
+    gridPosition: {x: 16, y: 8}
+    position: {x: -0.8500001, y: 0.4, z: 0.5939998}
+    neighborsIndex: a9000000c1000000d9000000aa000000da000000ab000000c3000000db000000
+  - index: 195
+    gridPosition: {x: 17, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 0.6939998}
+    neighborsIndex: aa000000c2000000da000000ab000000db000000ac000000c4000000dc000000
+  - index: 196
+    gridPosition: {x: 18, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 0.79399985}
+    neighborsIndex: ab000000c3000000db000000ac000000dc000000ad000000c5000000dd000000
+  - index: 197
+    gridPosition: {x: 19, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 0.8939997}
+    neighborsIndex: ac000000c4000000dc000000ad000000dd000000ae000000c6000000de000000
+  - index: 198
+    gridPosition: {x: 20, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 0.9939997}
+    neighborsIndex: ad000000c5000000dd000000ae000000de000000af000000c7000000df000000
+  - index: 199
+    gridPosition: {x: 21, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 1.0939999}
+    neighborsIndex: ae000000c6000000de000000af000000df000000b0000000c8000000e0000000
+  - index: 200
+    gridPosition: {x: 22, y: 8}
+    position: {x: -0.84999996, y: 0.4, z: 1.1939998}
+    neighborsIndex: af000000c7000000df000000b0000000e0000000b1000000c9000000e1000000
+  - index: 201
+    gridPosition: {x: 23, y: 8}
+    position: {x: -0.84999985, y: 0.4, z: 1.2939997}
+    neighborsIndex: b0000000c8000000e0000000b1000000e1000000
+  - index: 202
+    gridPosition: {x: 0, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -1.0060002}
+    neighborsIndex: b2000000e2000000b3000000cb000000e3000000
+  - index: 203
+    gridPosition: {x: 1, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.90600014}
+    neighborsIndex: b2000000ca000000e2000000b3000000e3000000b4000000cc000000e4000000
+  - index: 204
+    gridPosition: {x: 2, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.80600023}
+    neighborsIndex: b3000000cb000000e3000000b4000000e4000000b5000000cd000000e5000000
+  - index: 205
+    gridPosition: {x: 3, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.7060001}
+    neighborsIndex: b4000000cc000000e4000000b5000000e5000000b6000000ce000000e6000000
+  - index: 206
+    gridPosition: {x: 4, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.6060002}
+    neighborsIndex: b5000000cd000000e5000000b6000000e6000000b7000000cf000000e7000000
+  - index: 207
+    gridPosition: {x: 5, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.50600016}
+    neighborsIndex: b6000000ce000000e6000000b7000000e7000000b8000000d0000000e8000000
+  - index: 208
+    gridPosition: {x: 6, y: 9}
+    position: {x: -0.75000006, y: 0.4, z: -0.40600014}
+    neighborsIndex: b7000000cf000000e7000000b8000000e8000000b9000000d1000000e9000000
+  - index: 209
+    gridPosition: {x: 7, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.3060001}
+    neighborsIndex: b8000000d0000000e8000000b9000000e9000000ba000000d2000000ea000000
+  - index: 210
+    gridPosition: {x: 8, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.20600015}
+    neighborsIndex: b9000000d1000000e9000000ba000000ea000000bb000000d3000000eb000000
+  - index: 211
+    gridPosition: {x: 9, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.106000125}
+    neighborsIndex: ba000000d2000000ea000000bb000000eb000000bc000000d4000000ec000000
+  - index: 212
+    gridPosition: {x: 10, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: -0.006000161}
+    neighborsIndex: bb000000d3000000eb000000bc000000ec000000bd000000d5000000ed000000
+  - index: 213
+    gridPosition: {x: 11, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.09399986}
+    neighborsIndex: bc000000d4000000ec000000bd000000ed000000be000000d6000000ee000000
+  - index: 214
+    gridPosition: {x: 12, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.19399989}
+    neighborsIndex: bd000000d5000000ed000000be000000ee000000bf000000d7000000ef000000
+  - index: 215
+    gridPosition: {x: 13, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.2939999}
+    neighborsIndex: be000000d6000000ee000000bf000000ef000000c0000000d8000000f0000000
+  - index: 216
+    gridPosition: {x: 14, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.39399981}
+    neighborsIndex: bf000000d7000000ef000000c0000000f0000000c1000000d9000000f1000000
+  - index: 217
+    gridPosition: {x: 15, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.49399984}
+    neighborsIndex: c0000000d8000000f0000000c1000000f1000000c2000000da000000f2000000
+  - index: 218
+    gridPosition: {x: 16, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.5939998}
+    neighborsIndex: c1000000d9000000f1000000c2000000f2000000c3000000db000000f3000000
+  - index: 219
+    gridPosition: {x: 17, y: 9}
+    position: {x: -0.7499998, y: 0.4, z: 0.6939999}
+    neighborsIndex: c2000000da000000f2000000c3000000f3000000c4000000dc000000f4000000
+  - index: 220
+    gridPosition: {x: 18, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.7939999}
+    neighborsIndex: c3000000db000000f3000000c4000000f4000000c5000000dd000000f5000000
+  - index: 221
+    gridPosition: {x: 19, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.8939998}
+    neighborsIndex: c4000000dc000000f4000000c5000000f5000000c6000000de000000f6000000
+  - index: 222
+    gridPosition: {x: 20, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 0.99399984}
+    neighborsIndex: c5000000dd000000f5000000c6000000f6000000c7000000df000000f7000000
+  - index: 223
+    gridPosition: {x: 21, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 1.0939999}
+    neighborsIndex: c6000000de000000f6000000c7000000f7000000c8000000e0000000f8000000
+  - index: 224
+    gridPosition: {x: 22, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 1.1939999}
+    neighborsIndex: c7000000df000000f7000000c8000000f8000000c9000000e1000000f9000000
+  - index: 225
+    gridPosition: {x: 23, y: 9}
+    position: {x: -0.74999994, y: 0.4, z: 1.2939997}
+    neighborsIndex: c8000000e0000000f8000000c9000000f9000000fa000000
+  - index: 226
+    gridPosition: {x: 0, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -1.0060002}
+    neighborsIndex: ca000000fb000000cb000000e3000000fd000000
+  - index: 227
+    gridPosition: {x: 1, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.90600014}
+    neighborsIndex: ca000000e2000000fb000000cb000000fd000000cc000000e4000000ff000000
+  - index: 228
+    gridPosition: {x: 2, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.80600023}
+    neighborsIndex: cb000000e3000000fd000000cc000000ff000000cd000000e500000000010000
+  - index: 229
+    gridPosition: {x: 3, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.7060001}
+    neighborsIndex: cc000000e4000000ff000000cd00000000010000ce000000e600000001010000
+  - index: 230
+    gridPosition: {x: 4, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.6060002}
+    neighborsIndex: cd000000e500000000010000ce00000001010000cf000000e700000002010000
+  - index: 231
+    gridPosition: {x: 5, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.50600016}
+    neighborsIndex: ce000000e600000001010000cf00000002010000d0000000e800000003010000
+  - index: 232
+    gridPosition: {x: 6, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.40600014}
+    neighborsIndex: cf000000e700000002010000d000000003010000d1000000e900000004010000
+  - index: 233
+    gridPosition: {x: 7, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.30600023}
+    neighborsIndex: d0000000e800000003010000d100000004010000d2000000ea00000005010000
+  - index: 234
+    gridPosition: {x: 8, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.20600009}
+    neighborsIndex: d1000000e900000004010000d200000005010000d3000000eb00000006010000
+  - index: 235
+    gridPosition: {x: 9, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.106000185}
+    neighborsIndex: d2000000ea00000005010000d300000006010000d4000000ec00000007010000
+  - index: 236
+    gridPosition: {x: 10, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: -0.006000161}
+    neighborsIndex: d3000000eb00000006010000d400000007010000d5000000ed00000008010000
+  - index: 237
+    gridPosition: {x: 11, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.09399986}
+    neighborsIndex: d4000000ec00000007010000d500000008010000d6000000ee00000009010000
+  - index: 238
+    gridPosition: {x: 12, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.19399989}
+    neighborsIndex: d5000000ed00000008010000d600000009010000d7000000ef0000000a010000
+  - index: 239
+    gridPosition: {x: 13, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.29399988}
+    neighborsIndex: d6000000ee00000009010000d70000000a010000d8000000f00000000b010000
+  - index: 240
+    gridPosition: {x: 14, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.39399981}
+    neighborsIndex: d7000000ef0000000a010000d80000000b010000d9000000f10000000c010000
+  - index: 241
+    gridPosition: {x: 15, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.49399984}
+    neighborsIndex: d8000000f00000000b010000d90000000c010000da000000f20000000d010000
+  - index: 242
+    gridPosition: {x: 16, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.5939998}
+    neighborsIndex: d9000000f10000000c010000da0000000d010000db000000f30000000e010000
+  - index: 243
+    gridPosition: {x: 17, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.6939998}
+    neighborsIndex: da000000f20000000d010000db0000000e010000dc000000f40000000f010000
+  - index: 244
+    gridPosition: {x: 18, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.7939999}
+    neighborsIndex: db000000f30000000e010000dc0000000f010000dd000000f500000010010000
+  - index: 245
+    gridPosition: {x: 19, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.8939998}
+    neighborsIndex: dc000000f40000000f010000dd00000010010000de000000f600000011010000
+  - index: 246
+    gridPosition: {x: 20, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 0.9939998}
+    neighborsIndex: dd000000f500000010010000de00000011010000df000000f700000012010000
+  - index: 247
+    gridPosition: {x: 21, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 1.0939999}
+    neighborsIndex: de000000f600000011010000df00000012010000e0000000f800000013010000
+  - index: 248
+    gridPosition: {x: 22, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 1.1939998}
+    neighborsIndex: df000000f700000012010000e000000013010000e1000000f900000014010000
+  - index: 249
+    gridPosition: {x: 23, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 1.2939997}
+    neighborsIndex: e0000000f800000013010000e100000014010000fa00000015010000
+  - index: 250
+    gridPosition: {x: 24, y: 10}
+    position: {x: -0.65000004, y: 0.4, z: 1.3939998}
+    neighborsIndex: e1000000f90000001401000015010000
+  - index: 251
+    gridPosition: {x: 0, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -1.0060002}
+    neighborsIndex: e200000016010000e3000000fd00000018010000
+  - index: 252
+    gridPosition: {x: 0, y: 11}
+    position: {x: -0.55, y: 1.2682058, z: -1.0060006}
+    neighborsIndex: 17010000fe00000019010000
+  - index: 253
+    gridPosition: {x: 1, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: e2000000fb00000016010000e300000018010000e4000000ff0000001a010000
+  - index: 254
+    gridPosition: {x: 1, y: 11}
+    position: {x: -0.55000013, y: 1.2391748, z: -0.9060006}
+    neighborsIndex: fc0000001701000019010000
+  - index: 255
+    gridPosition: {x: 2, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.8060001}
+    neighborsIndex: e3000000fd00000018010000e40000001a010000e5000000000100001b010000
+  - index: 256
+    gridPosition: {x: 3, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.7060001}
+    neighborsIndex: e4000000ff0000001a010000e50000001b010000e6000000010100001c010000
+  - index: 257
+    gridPosition: {x: 4, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.6060002}
+    neighborsIndex: e5000000000100001b010000e60000001c010000e7000000020100001d010000
+  - index: 258
+    gridPosition: {x: 5, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.5060003}
+    neighborsIndex: e6000000010100001c010000e70000001d010000e8000000030100001e010000
+  - index: 259
+    gridPosition: {x: 6, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.40600014}
+    neighborsIndex: e7000000020100001d010000e80000001e010000e9000000040100001f010000
+  - index: 260
+    gridPosition: {x: 7, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.30600023}
+    neighborsIndex: e8000000030100001e010000e90000001f010000ea0000000501000020010000
+  - index: 261
+    gridPosition: {x: 8, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.20600015}
+    neighborsIndex: e9000000040100001f010000ea00000020010000eb0000000601000021010000
+  - index: 262
+    gridPosition: {x: 9, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.106000066}
+    neighborsIndex: ea0000000501000020010000eb00000021010000ec0000000701000022010000
+  - index: 263
+    gridPosition: {x: 10, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: -0.006000221}
+    neighborsIndex: eb0000000601000021010000ec00000022010000ed0000000801000023010000
+  - index: 264
+    gridPosition: {x: 11, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.09399986}
+    neighborsIndex: ec0000000701000022010000ed00000023010000ee0000000901000024010000
+  - index: 265
+    gridPosition: {x: 12, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.19399989}
+    neighborsIndex: ed0000000801000023010000ee00000024010000ef0000000a01000025010000
+  - index: 266
+    gridPosition: {x: 13, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.2939999}
+    neighborsIndex: ee0000000901000024010000ef00000025010000f00000000b01000026010000
+  - index: 267
+    gridPosition: {x: 14, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.39399981}
+    neighborsIndex: ef0000000a01000025010000f000000026010000f10000000c01000027010000
+  - index: 268
+    gridPosition: {x: 15, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.49399984}
+    neighborsIndex: f00000000b01000026010000f100000027010000f20000000d01000028010000
+  - index: 269
+    gridPosition: {x: 16, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.5939998}
+    neighborsIndex: f10000000c01000027010000f200000028010000f30000000e01000029010000
+  - index: 270
+    gridPosition: {x: 17, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.6939998}
+    neighborsIndex: f20000000d01000028010000f300000029010000f40000000f0100002a010000
+  - index: 271
+    gridPosition: {x: 18, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.7939999}
+    neighborsIndex: f30000000e01000029010000f40000002a010000f5000000100100002b010000
+  - index: 272
+    gridPosition: {x: 19, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.8939998}
+    neighborsIndex: f40000000f0100002a010000f50000002b010000f6000000110100002c010000
+  - index: 273
+    gridPosition: {x: 20, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 0.9939997}
+    neighborsIndex: f5000000100100002b010000f60000002c010000f7000000120100002d010000
+  - index: 274
+    gridPosition: {x: 21, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 1.0939999}
+    neighborsIndex: f6000000110100002c010000f70000002d010000f8000000130100002e010000
+  - index: 275
+    gridPosition: {x: 22, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 1.1939999}
+    neighborsIndex: f7000000120100002d010000f80000002e010000f9000000140100002f010000
+  - index: 276
+    gridPosition: {x: 23, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 1.2939997}
+    neighborsIndex: f8000000130100002e010000f90000002f010000fa0000001501000030010000
+  - index: 277
+    gridPosition: {x: 24, y: 11}
+    position: {x: -0.5499999, y: 0.4, z: 1.3939998}
+    neighborsIndex: f9000000140100002f010000fa0000003001000031010000
+  - index: 278
+    gridPosition: {x: 0, y: 12}
+    position: {x: -0.45, y: 0.4, z: -1.0060002}
+    neighborsIndex: fb00000032010000fd0000001801000034010000
+  - index: 279
+    gridPosition: {x: 0, y: 12}
+    position: {x: -0.45, y: 1.2406303, z: -1.0060006}
+    neighborsIndex: fc00000033010000fe0000001901000035010000
+  - index: 280
+    gridPosition: {x: 1, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.90600014}
+    neighborsIndex: fb0000001601000032010000fd00000034010000ff0000001a01000036010000
+  - index: 281
+    gridPosition: {x: 1, y: 12}
+    position: {x: -0.45000005, y: 1.2115993, z: -0.9060006}
+    neighborsIndex: fc0000001701000033010000fe0000003501000037010000
+  - index: 282
+    gridPosition: {x: 2, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.80600023}
+    neighborsIndex: fd0000001801000034010000ff00000036010000000100001b01000038010000
+  - index: 283
+    gridPosition: {x: 3, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.7060001}
+    neighborsIndex: ff0000001a010000360100000001000038010000010100001c01000039010000
+  - index: 284
+    gridPosition: {x: 4, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.6060002}
+    neighborsIndex: 000100001b010000380100000101000039010000020100001d0100003a010000
+  - index: 285
+    gridPosition: {x: 5, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.50600016}
+    neighborsIndex: 010100001c01000039010000020100003a010000030100001e0100003b010000
+  - index: 286
+    gridPosition: {x: 6, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.40600014}
+    neighborsIndex: 020100001d0100003a010000030100003b010000040100001f0100003c010000
+  - index: 287
+    gridPosition: {x: 7, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.30600017}
+    neighborsIndex: 030100001e0100003b010000040100003c01000005010000200100003d010000
+  - index: 288
+    gridPosition: {x: 8, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.20600015}
+    neighborsIndex: 040100001f0100003c010000050100003d01000006010000210100003e010000
+  - index: 289
+    gridPosition: {x: 9, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.106000125}
+    neighborsIndex: 05010000200100003d010000060100003e01000007010000220100003f010000
+  - index: 290
+    gridPosition: {x: 10, y: 12}
+    position: {x: -0.45, y: 0.4, z: -0.006000161}
+    neighborsIndex: 06010000210100003e010000070100003f010000080100002301000040010000
+  - index: 291
+    gridPosition: {x: 11, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.09399986}
+    neighborsIndex: 07010000220100003f0100000801000040010000090100002401000041010000
+  - index: 292
+    gridPosition: {x: 12, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.19399992}
+    neighborsIndex: 08010000230100004001000009010000410100000a0100002501000042010000
+  - index: 293
+    gridPosition: {x: 13, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.2939999}
+    neighborsIndex: 0901000024010000410100000a010000420100000b0100002601000043010000
+  - index: 294
+    gridPosition: {x: 14, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.39399981}
+    neighborsIndex: 0a01000025010000420100000b010000430100000c0100002701000044010000
+  - index: 295
+    gridPosition: {x: 15, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.49399984}
+    neighborsIndex: 0b01000026010000430100000c010000440100000d0100002801000045010000
+  - index: 296
+    gridPosition: {x: 16, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.5939998}
+    neighborsIndex: 0c01000027010000440100000d010000450100000e0100002901000046010000
+  - index: 297
+    gridPosition: {x: 17, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.6939998}
+    neighborsIndex: 0d01000028010000450100000e010000460100000f0100002a01000047010000
+  - index: 298
+    gridPosition: {x: 18, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.7939999}
+    neighborsIndex: 0e01000029010000460100000f01000047010000100100002b01000048010000
+  - index: 299
+    gridPosition: {x: 19, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.8939998}
+    neighborsIndex: 0f0100002a010000470100001001000048010000110100002c01000049010000
+  - index: 300
+    gridPosition: {x: 20, y: 12}
+    position: {x: -0.45, y: 0.4, z: 0.99399984}
+    neighborsIndex: 100100002b010000480100001101000049010000120100002d0100004a010000
+  - index: 301
+    gridPosition: {x: 21, y: 12}
+    position: {x: -0.45, y: 0.4, z: 1.0939999}
+    neighborsIndex: 110100002c01000049010000120100004a010000130100002e0100004b010000
+  - index: 302
+    gridPosition: {x: 22, y: 12}
+    position: {x: -0.45, y: 0.4, z: 1.1939998}
+    neighborsIndex: 120100002d0100004a010000130100004b010000140100002f0100004c010000
+  - index: 303
+    gridPosition: {x: 23, y: 12}
+    position: {x: -0.45, y: 0.4, z: 1.2939997}
+    neighborsIndex: 130100002e0100004b010000140100004c01000015010000300100004d010000
+  - index: 304
+    gridPosition: {x: 24, y: 12}
+    position: {x: -0.45, y: 0.4, z: 1.3939999}
+    neighborsIndex: 140100002f0100004c010000150100004d010000310100004e010000
+  - index: 305
+    gridPosition: {x: 25, y: 12}
+    position: {x: -0.45, y: 0.4, z: 1.4939998}
+    neighborsIndex: 15010000300100004d0100004e010000
+  - index: 306
+    gridPosition: {x: 0, y: 13}
+    position: {x: -0.34999985, y: 0.4, z: -1.006}
+    neighborsIndex: 160100004f010000180100003401000051010000
+  - index: 307
+    gridPosition: {x: 0, y: 13}
+    position: {x: -0.3499999, y: 1.2130548, z: -1.0060006}
+    neighborsIndex: 1701000050010000190100003501000052010000
+  - index: 308
+    gridPosition: {x: 1, y: 13}
+    position: {x: -0.3499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: 16010000320100004f01000018010000510100001a0100003601000053010000
+  - index: 309
+    gridPosition: {x: 1, y: 13}
+    position: {x: -0.35000002, y: 1.1840239, z: -0.9060006}
+    neighborsIndex: 17010000330100005001000019010000520100003701000054010000
+  - index: 310
+    gridPosition: {x: 2, y: 13}
+    position: {x: -0.3499999, y: 0.4, z: -0.80600023}
+    neighborsIndex: 1801000034010000510100001a010000530100001b0100003801000055010000
+  - index: 311
+    gridPosition: {x: 2, y: 13}
+    position: {x: -0.35, y: 1.1549929, z: -0.80600053}
+    neighborsIndex: 1901000035010000520100005401000056010000
+  - index: 312
+    gridPosition: {x: 3, y: 13}
+    position: {x: -0.34999985, y: 0.4, z: -0.7060001}
+    neighborsIndex: 1a01000036010000530100001b010000550100001c0100003901000057010000
+  - index: 313
+    gridPosition: {x: 4, y: 13}
+    position: {x: -0.34999985, y: 0.4, z: -0.6060002}
+    neighborsIndex: 1b01000038010000550100001c010000570100001d0100003a01000058010000
+  - index: 314
+    gridPosition: {x: 5, y: 13}
+    position: {x: -0.3499999, y: 0.4, z: -0.50600016}
+    neighborsIndex: 1c01000039010000570100001d010000580100001e0100003b01000059010000
+  - index: 315
+    gridPosition: {x: 6, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: -0.4060002}
+    neighborsIndex: 1d0100003a010000580100001e010000590100001f0100003c0100005a010000
+  - index: 316
+    gridPosition: {x: 7, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: -0.30600023}
+    neighborsIndex: 1e0100003b010000590100001f0100005a010000200100003d0100005b010000
+  - index: 317
+    gridPosition: {x: 8, y: 13}
+    position: {x: -0.3499999, y: 0.4, z: -0.20600015}
+    neighborsIndex: 1f0100003c0100005a010000200100005b010000210100003e0100005c010000
+  - index: 318
+    gridPosition: {x: 9, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: -0.106000185}
+    neighborsIndex: 200100003d0100005b010000210100005c010000220100003f0100005d010000
+  - index: 319
+    gridPosition: {x: 10, y: 13}
+    position: {x: -0.34999985, y: 0.4, z: -0.0060001016}
+    neighborsIndex: 210100003e0100005c010000220100005d01000023010000400100005e010000
+  - index: 320
+    gridPosition: {x: 11, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 0.09399986}
+    neighborsIndex: 220100003f0100005d010000230100005e01000024010000410100005f010000
+  - index: 321
+    gridPosition: {x: 12, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 0.19399989}
+    neighborsIndex: 23010000400100005e010000240100005f010000250100004201000060010000
+  - index: 322
+    gridPosition: {x: 13, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 0.2939999}
+    neighborsIndex: 24010000410100005f0100002501000060010000260100004301000061010000
+  - index: 323
+    gridPosition: {x: 14, y: 13}
+    position: {x: -0.3499999, y: 0.4, z: 0.39399981}
+    neighborsIndex: 2501000042010000600100002601000061010000270100004401000062010000
+  - index: 324
+    gridPosition: {x: 15, y: 13}
+    position: {x: -0.3499999, y: 0.4, z: 0.49399984}
+    neighborsIndex: 2601000043010000610100002701000062010000280100004501000063010000
+  - index: 325
+    gridPosition: {x: 16, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 0.5939998}
+    neighborsIndex: 2701000044010000620100002801000063010000290100004601000064010000
+  - index: 326
+    gridPosition: {x: 17, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 0.6939998}
+    neighborsIndex: 28010000450100006301000029010000640100002a0100004701000065010000
+  - index: 327
+    gridPosition: {x: 18, y: 13}
+    position: {x: -0.3499999, y: 0.4, z: 0.7939999}
+    neighborsIndex: 2901000046010000640100002a010000650100002b0100004801000066010000
+  - index: 328
+    gridPosition: {x: 19, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 0.8939997}
+    neighborsIndex: 2a01000047010000650100002b010000660100002c0100004901000067010000
+  - index: 329
+    gridPosition: {x: 20, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 0.99399984}
+    neighborsIndex: 2b01000048010000660100002c010000670100002d0100004a01000068010000
+  - index: 330
+    gridPosition: {x: 21, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 1.0939999}
+    neighborsIndex: 2c01000049010000670100002d010000680100002e0100004b01000069010000
+  - index: 331
+    gridPosition: {x: 22, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 1.1939998}
+    neighborsIndex: 2d0100004a010000680100002e010000690100002f0100004c0100006a010000
+  - index: 332
+    gridPosition: {x: 23, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 1.2939997}
+    neighborsIndex: 2e0100004b010000690100002f0100006a010000300100004d0100006b010000
+  - index: 333
+    gridPosition: {x: 24, y: 13}
+    position: {x: -0.34999996, y: 0.4, z: 1.3939998}
+    neighborsIndex: 2f0100004c0100006a010000300100006b010000310100004e0100006c010000
+  - index: 334
+    gridPosition: {x: 25, y: 13}
+    position: {x: -0.3499999, y: 0.4, z: 1.4939998}
+    neighborsIndex: 300100004d0100006b010000310100006c0100006d010000
+  - index: 335
+    gridPosition: {x: 0, y: 14}
+    position: {x: -0.24999994, y: 0.4, z: -1.0060002}
+    neighborsIndex: 320100006e010000340100005101000070010000
+  - index: 336
+    gridPosition: {x: 0, y: 14}
+    position: {x: -0.24999997, y: 1.1854794, z: -1.0060006}
+    neighborsIndex: 330100006f010000350100005201000071010000
+  - index: 337
+    gridPosition: {x: 1, y: 14}
+    position: {x: -0.25, y: 0.4, z: -0.90600014}
+    neighborsIndex: 320100004f0100006e0100003401000070010000360100005301000072010000
+  - index: 338
+    gridPosition: {x: 1, y: 14}
+    position: {x: -0.25000006, y: 1.1564484, z: -0.90600055}
+    neighborsIndex: 33010000500100006f0100003501000071010000370100005401000073010000
+  - index: 339
+    gridPosition: {x: 2, y: 14}
+    position: {x: -0.25000006, y: 0.4, z: -0.80600035}
+    neighborsIndex: 3401000051010000700100003601000072010000380100005501000074010000
+  - index: 340
+    gridPosition: {x: 2, y: 14}
+    position: {x: -0.25000003, y: 1.1274174, z: -0.80600053}
+    neighborsIndex: 35010000520100007101000037010000730100005601000075010000
+  - index: 341
+    gridPosition: {x: 3, y: 14}
+    position: {x: -0.24999994, y: 0.4, z: -0.706}
+    neighborsIndex: 3601000053010000720100003801000074010000390100005701000076010000
+  - index: 342
+    gridPosition: {x: 3, y: 14}
+    position: {x: -0.25000012, y: 1.0983865, z: -0.70600057}
+    neighborsIndex: 3701000054010000730100007501000077010000
+  - index: 343
+    gridPosition: {x: 4, y: 14}
+    position: {x: -0.25, y: 0.4, z: -0.6060002}
+    neighborsIndex: 38010000550100007401000039010000760100003a0100005801000078010000
+  - index: 344
+    gridPosition: {x: 5, y: 14}
+    position: {x: -0.25, y: 0.4, z: -0.50600016}
+    neighborsIndex: 3901000057010000760100003a010000780100003b0100005901000079010000
+  - index: 345
+    gridPosition: {x: 6, y: 14}
+    position: {x: -0.24999994, y: 0.4, z: -0.40600008}
+    neighborsIndex: 3a01000058010000780100003b010000790100003c0100005a010000
+  - index: 346
+    gridPosition: {x: 7, y: 14}
+    position: {x: -0.24999994, y: 0.4, z: -0.30600017}
+    neighborsIndex: 3b01000059010000790100003c0100003d0100005b010000
+  - index: 347
+    gridPosition: {x: 8, y: 14}
+    position: {x: -0.25000003, y: 0.6985856, z: -0.20600018}
+    neighborsIndex: 3c0100005a0100007a0100003d0100007b0100003e0100005c0100007c010000
+  - index: 348
+    gridPosition: {x: 9, y: 14}
+    position: {x: -0.25000003, y: 0.6771809, z: -0.10600011}
+    neighborsIndex: 3d0100005b0100007b0100003e0100007c0100003f0100005d0100007d010000
+  - index: 349
+    gridPosition: {x: 10, y: 14}
+    position: {x: -0.24999994, y: 0.4, z: -0.0060001016}
+    neighborsIndex: 3e0100005c0100007c0100003f0100007d010000400100005e0100007e010000
+  - index: 350
+    gridPosition: {x: 11, y: 14}
+    position: {x: -0.24999994, y: 0.4, z: 0.09399986}
+    neighborsIndex: 3f0100005d0100007d010000400100007e010000410100005f0100007f010000
+  - index: 351
+    gridPosition: {x: 12, y: 14}
+    position: {x: -0.25, y: 0.4, z: 0.19399989}
+    neighborsIndex: 400100005e0100007e010000410100007f010000420100006001000080010000
+  - index: 352
+    gridPosition: {x: 13, y: 14}
+    position: {x: -0.25, y: 0.4, z: 0.2939999}
+    neighborsIndex: 410100005f0100007f0100004201000080010000430100006101000081010000
+  - index: 353
+    gridPosition: {x: 14, y: 14}
+    position: {x: -0.25, y: 0.4, z: 0.39399981}
+    neighborsIndex: 4201000060010000800100004301000081010000440100006201000082010000
+  - index: 354
+    gridPosition: {x: 15, y: 14}
+    position: {x: -0.25, y: 0.4, z: 0.49399984}
+    neighborsIndex: 4301000061010000810100004401000082010000450100006301000083010000
+  - index: 355
+    gridPosition: {x: 16, y: 14}
+    position: {x: -0.25, y: 0.4, z: 0.5939998}
+    neighborsIndex: 4401000062010000820100004501000083010000460100006401000084010000
+  - index: 356
+    gridPosition: {x: 17, y: 14}
+    position: {x: -0.25, y: 0.4, z: 0.6939998}
+    neighborsIndex: 4501000063010000830100004601000084010000470100006501000085010000
+  - index: 357
+    gridPosition: {x: 18, y: 14}
+    position: {x: -0.25, y: 0.4, z: 0.7939999}
+    neighborsIndex: 4601000064010000840100004701000085010000480100006601000086010000
+  - index: 358
+    gridPosition: {x: 19, y: 14}
+    position: {x: -0.25000006, y: 0.4, z: 0.8939997}
+    neighborsIndex: 4701000065010000850100004801000086010000490100006701000087010000
+  - index: 359
+    gridPosition: {x: 20, y: 14}
+    position: {x: -0.25000006, y: 0.4, z: 0.99399984}
+    neighborsIndex: 48010000660100008601000049010000870100004a0100006801000088010000
+  - index: 360
+    gridPosition: {x: 21, y: 14}
+    position: {x: -0.25000006, y: 0.4, z: 1.0939999}
+    neighborsIndex: 4901000067010000870100004a010000880100004b0100006901000089010000
+  - index: 361
+    gridPosition: {x: 22, y: 14}
+    position: {x: -0.25000006, y: 0.4, z: 1.1939998}
+    neighborsIndex: 4a01000068010000880100004b010000890100004c0100006a0100008a010000
+  - index: 362
+    gridPosition: {x: 23, y: 14}
+    position: {x: -0.25000006, y: 0.4, z: 1.2939997}
+    neighborsIndex: 4b01000069010000890100004c0100008a0100004d0100006b0100008b010000
+  - index: 363
+    gridPosition: {x: 24, y: 14}
+    position: {x: -0.25000006, y: 0.4, z: 1.3939998}
+    neighborsIndex: 4c0100006a0100008a0100004d0100008b0100004e0100006c0100008c010000
+  - index: 364
+    gridPosition: {x: 25, y: 14}
+    position: {x: -0.25000006, y: 0.4, z: 1.4939998}
+    neighborsIndex: 4d0100006b0100008b0100004e0100008c0100006d0100008d010000
+  - index: 365
+    gridPosition: {x: 26, y: 14}
+    position: {x: -0.25, y: 0.4, z: 1.5939999}
+    neighborsIndex: 4e0100006c0100008c0100008d010000
+  - index: 366
+    gridPosition: {x: 0, y: 15}
+    position: {x: -0.14999998, y: 0.4, z: -1.006}
+    neighborsIndex: 4f0100008e010000510100007001000090010000
+  - index: 367
+    gridPosition: {x: 0, y: 15}
+    position: {x: -0.14999992, y: 1.1579039, z: -1.0060005}
+    neighborsIndex: 500100008f010000520100007101000091010000
+  - index: 368
+    gridPosition: {x: 1, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: -0.90600014}
+    neighborsIndex: 4f0100006e0100008e0100005101000090010000530100007201000092010000
+  - index: 369
+    gridPosition: {x: 1, y: 15}
+    position: {x: -0.14999998, y: 1.1288729, z: -0.90600055}
+    neighborsIndex: 500100006f0100008f0100005201000091010000540100007301000093010000
+  - index: 370
+    gridPosition: {x: 2, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: -0.80600023}
+    neighborsIndex: 5101000070010000900100005301000092010000550100007401000094010000
+  - index: 371
+    gridPosition: {x: 2, y: 15}
+    position: {x: -0.14999995, y: 1.099842, z: -0.8060005}
+    neighborsIndex: 5201000071010000910100005401000093010000560100007501000095010000
+  - index: 372
+    gridPosition: {x: 3, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: -0.7060001}
+    neighborsIndex: 5301000072010000920100005501000094010000570100007601000096010000
+  - index: 373
+    gridPosition: {x: 3, y: 15}
+    position: {x: -0.15000004, y: 1.070811, z: -0.7060005}
+    neighborsIndex: 54010000730100009301000056010000950100007701000097010000
+  - index: 374
+    gridPosition: {x: 4, y: 15}
+    position: {x: -0.14999998, y: 0.4, z: -0.6060002}
+    neighborsIndex: 5501000074010000940100005701000096010000580100007801000098010000
+  - index: 375
+    gridPosition: {x: 4, y: 15}
+    position: {x: -0.15000004, y: 1.0417801, z: -0.6060005}
+    neighborsIndex: 56010000750100009501000097010000
+  - index: 376
+    gridPosition: {x: 5, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: -0.5060003}
+    neighborsIndex: 5701000076010000960100005801000098010000590100007901000099010000
+  - index: 377
+    gridPosition: {x: 6, y: 15}
+    position: {x: -0.14999998, y: 0.4, z: -0.40600014}
+    neighborsIndex: 58010000780100009801000059010000990100005a010000
+  - index: 378
+    gridPosition: {x: 7, y: 15}
+    position: {x: -0.15, y: 0.74228245, z: -0.30600017}
+    neighborsIndex: 9a0100005b0100007b0100009b010000
+  - index: 379
+    gridPosition: {x: 8, y: 15}
+    position: {x: -0.14999998, y: 0.7208777, z: -0.20600016}
+    neighborsIndex: 7a0100009a0100005b0100009b0100005c0100007c0100009c010000
+  - index: 380
+    gridPosition: {x: 9, y: 15}
+    position: {x: -0.15, y: 0.69947296, z: -0.106000096}
+    neighborsIndex: 5b0100007b0100009b0100005c0100009c0100005d0100007d0100009d010000
+  - index: 381
+    gridPosition: {x: 10, y: 15}
+    position: {x: -0.1500001, y: 0.6780682, z: -0.0060000718}
+    neighborsIndex: 5c0100007c0100009c0100005d0100009d0100005e0100007e0100009e010000
+  - index: 382
+    gridPosition: {x: 11, y: 15}
+    position: {x: -0.14999998, y: 0.4, z: 0.09399986}
+    neighborsIndex: 5d0100007d0100005e0100009e0100005f0100007f0100009f010000
+  - index: 383
+    gridPosition: {x: 12, y: 15}
+    position: {x: -0.14999998, y: 0.4, z: 0.19399989}
+    neighborsIndex: 5e0100007e0100009e0100005f0100009f0100006001000080010000a0010000
+  - index: 384
+    gridPosition: {x: 13, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 0.2939999}
+    neighborsIndex: 5f0100007f0100009f01000060010000a00100006101000081010000a1010000
+  - index: 385
+    gridPosition: {x: 14, y: 15}
+    position: {x: -0.14999998, y: 0.4, z: 0.39399981}
+    neighborsIndex: 6001000080010000a001000061010000a10100006201000082010000a2010000
+  - index: 386
+    gridPosition: {x: 15, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 0.49399984}
+    neighborsIndex: 6101000081010000a101000062010000a20100006301000083010000a3010000
+  - index: 387
+    gridPosition: {x: 16, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 0.5939998}
+    neighborsIndex: 6201000082010000a201000063010000a30100006401000084010000a4010000
+  - index: 388
+    gridPosition: {x: 17, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 0.69399977}
+    neighborsIndex: 6301000083010000a301000064010000a40100006501000085010000a5010000
+  - index: 389
+    gridPosition: {x: 18, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 0.79399985}
+    neighborsIndex: 6401000084010000a401000065010000a50100006601000086010000a6010000
+  - index: 390
+    gridPosition: {x: 19, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 0.8939997}
+    neighborsIndex: 6501000085010000a501000066010000a60100006701000087010000a7010000
+  - index: 391
+    gridPosition: {x: 20, y: 15}
+    position: {x: -0.14999998, y: 0.4, z: 0.9939998}
+    neighborsIndex: 6601000086010000a601000067010000a70100006801000088010000a8010000
+  - index: 392
+    gridPosition: {x: 21, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 1.0939999}
+    neighborsIndex: 6701000087010000a701000068010000a80100006901000089010000a9010000
+  - index: 393
+    gridPosition: {x: 22, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 1.1939998}
+    neighborsIndex: 6801000088010000a801000069010000a90100006a0100008a010000aa010000
+  - index: 394
+    gridPosition: {x: 23, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 1.2939997}
+    neighborsIndex: 6901000089010000a90100006a010000aa0100006b0100008b010000ab010000
+  - index: 395
+    gridPosition: {x: 24, y: 15}
+    position: {x: -0.14999998, y: 0.4, z: 1.3939998}
+    neighborsIndex: 6a0100008a010000aa0100006b010000ab0100006c0100008c010000ac010000
+  - index: 396
+    gridPosition: {x: 25, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 1.4939998}
+    neighborsIndex: 6b0100008b010000ab0100006c010000ac0100006d0100008d010000ad010000
+  - index: 397
+    gridPosition: {x: 26, y: 15}
+    position: {x: -0.15000004, y: 0.4, z: 1.5939997}
+    neighborsIndex: 6c0100008c010000ac0100006d010000ad010000
+  - index: 398
+    gridPosition: {x: 0, y: 16}
+    position: {x: -0.049999893, y: 0.4, z: -1.0060002}
+    neighborsIndex: 6e010000ae0100007001000090010000b0010000
+  - index: 399
+    gridPosition: {x: 0, y: 16}
+    position: {x: -0.049999863, y: 1.1303284, z: -1.0060006}
+    neighborsIndex: 6f010000af0100007101000091010000b1010000
+  - index: 400
+    gridPosition: {x: 1, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: -0.90600014}
+    neighborsIndex: 6e0100008e010000ae01000070010000b00100007201000092010000b2010000
+  - index: 401
+    gridPosition: {x: 1, y: 16}
+    position: {x: -0.049999975, y: 1.1012975, z: -0.90600055}
+    neighborsIndex: 6f0100008f010000af01000071010000b10100007301000093010000b3010000
+  - index: 402
+    gridPosition: {x: 2, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: -0.80600023}
+    neighborsIndex: 7001000090010000b001000072010000b20100007401000094010000b4010000
+  - index: 403
+    gridPosition: {x: 2, y: 16}
+    position: {x: -0.04999993, y: 1.0722665, z: -0.8060005}
+    neighborsIndex: 7101000091010000b101000073010000b30100007501000095010000b5010000
+  - index: 404
+    gridPosition: {x: 3, y: 16}
+    position: {x: -0.049999893, y: 0.4, z: -0.7060001}
+    neighborsIndex: 7201000092010000b201000074010000b40100007601000096010000b6010000
+  - index: 405
+    gridPosition: {x: 3, y: 16}
+    position: {x: -0.050000012, y: 1.0432355, z: -0.7060005}
+    neighborsIndex: 7301000093010000b301000075010000b50100007701000097010000b7010000
+  - index: 406
+    gridPosition: {x: 4, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: -0.6060002}
+    neighborsIndex: 7401000094010000b401000076010000b60100007801000098010000b8010000
+  - index: 407
+    gridPosition: {x: 4, y: 16}
+    position: {x: -0.050000012, y: 1.0142046, z: -0.60600054}
+    neighborsIndex: 7501000095010000b501000077010000b7010000b9010000
+  - index: 408
+    gridPosition: {x: 5, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: -0.50600016}
+    neighborsIndex: 7601000096010000b601000078010000b80100007901000099010000ba010000
+  - index: 409
+    gridPosition: {x: 6, y: 16}
+    position: {x: -0.049999893, y: 0.4, z: -0.40600014}
+    neighborsIndex: 7801000098010000b801000079010000ba010000
+  - index: 410
+    gridPosition: {x: 7, y: 16}
+    position: {x: -0.049999923, y: 0.7645745, z: -0.3060002}
+    neighborsIndex: bb0100007a010000bc0100007b0100009b010000bd010000
+  - index: 411
+    gridPosition: {x: 8, y: 16}
+    position: {x: -0.049999952, y: 0.7431698, z: -0.20600015}
+    neighborsIndex: 7a0100009a010000bc0100007b010000bd0100007c0100009c010000be010000
+  - index: 412
+    gridPosition: {x: 9, y: 16}
+    position: {x: -0.049999952, y: 0.72176504, z: -0.106000066}
+    neighborsIndex: 7b0100009b010000bd0100007c010000be0100007d0100009d010000bf010000
+  - index: 413
+    gridPosition: {x: 10, y: 16}
+    position: {x: -0.050000012, y: 0.7003603, z: -0.0060000718}
+    neighborsIndex: 7c0100009c010000be0100007d010000bf0100009e010000c0010000
+  - index: 414
+    gridPosition: {x: 11, y: 16}
+    position: {x: -0.050000012, y: 0.67895555, z: 0.09399998}
+    neighborsIndex: 7d0100009d010000bf0100007e010000c00100007f0100009f010000c1010000
+  - index: 415
+    gridPosition: {x: 12, y: 16}
+    position: {x: -0.049999893, y: 0.4, z: 0.19399989}
+    neighborsIndex: 7e0100009e0100007f010000c101000080010000a0010000c2010000
+  - index: 416
+    gridPosition: {x: 13, y: 16}
+    position: {x: -0.049999893, y: 0.4, z: 0.2939999}
+    neighborsIndex: 7f0100009f010000c101000080010000c201000081010000a1010000c3010000
+  - index: 417
+    gridPosition: {x: 14, y: 16}
+    position: {x: -0.049999893, y: 0.4, z: 0.39399981}
+    neighborsIndex: 80010000a0010000c201000081010000c301000082010000a2010000c4010000
+  - index: 418
+    gridPosition: {x: 15, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 0.49399984}
+    neighborsIndex: 81010000a1010000c301000082010000c401000083010000a3010000c5010000
+  - index: 419
+    gridPosition: {x: 16, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 0.5939998}
+    neighborsIndex: 82010000a2010000c401000083010000c501000084010000a4010000c6010000
+  - index: 420
+    gridPosition: {x: 17, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 0.6939998}
+    neighborsIndex: 83010000a3010000c501000084010000c601000085010000a5010000c7010000
+  - index: 421
+    gridPosition: {x: 18, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 0.79399985}
+    neighborsIndex: 84010000a4010000c601000085010000c701000086010000a6010000c8010000
+  - index: 422
+    gridPosition: {x: 19, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 0.8939997}
+    neighborsIndex: 85010000a5010000c701000086010000c801000087010000a7010000c9010000
+  - index: 423
+    gridPosition: {x: 20, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 0.99399984}
+    neighborsIndex: 86010000a6010000c801000087010000c901000088010000a8010000ca010000
+  - index: 424
+    gridPosition: {x: 21, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 1.0939999}
+    neighborsIndex: 87010000a7010000c901000088010000ca01000089010000a9010000cb010000
+  - index: 425
+    gridPosition: {x: 22, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 1.1939998}
+    neighborsIndex: 88010000a8010000ca01000089010000cb0100008a010000aa010000cc010000
+  - index: 426
+    gridPosition: {x: 23, y: 16}
+    position: {x: -0.050000012, y: 0.4, z: 1.2939997}
+    neighborsIndex: 89010000a9010000cb0100008a010000cc0100008b010000ab010000cd010000
+  - index: 427
+    gridPosition: {x: 24, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 1.3939998}
+    neighborsIndex: 8a010000aa010000cc0100008b010000cd0100008c010000ac010000ce010000
+  - index: 428
+    gridPosition: {x: 25, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 1.4939998}
+    neighborsIndex: 8b010000ab010000cd0100008c010000ce0100008d010000ad010000cf010000
+  - index: 429
+    gridPosition: {x: 26, y: 16}
+    position: {x: -0.049999952, y: 0.4, z: 1.5939997}
+    neighborsIndex: 8c010000ac010000ce0100008d010000cf010000d0010000
+  - index: 430
+    gridPosition: {x: 0, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: -1.006}
+    neighborsIndex: 8e010000d101000090010000b0010000d2010000
+  - index: 431
+    gridPosition: {x: 0, y: 17}
+    position: {x: 0.050000176, y: 1.1027529, z: -1.0060005}
+    neighborsIndex: 8f01000091010000b1010000d3010000
+  - index: 432
+    gridPosition: {x: 1, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: -0.90600014}
+    neighborsIndex: 8e010000ae010000d101000090010000d201000092010000b2010000d4010000
+  - index: 433
+    gridPosition: {x: 1, y: 17}
+    position: {x: 0.050000086, y: 1.073722, z: -0.90600055}
+    neighborsIndex: 8f010000af01000091010000d301000093010000b3010000d5010000
+  - index: 434
+    gridPosition: {x: 2, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: -0.80600023}
+    neighborsIndex: 90010000b0010000d201000092010000d401000094010000b4010000d6010000
+  - index: 435
+    gridPosition: {x: 2, y: 17}
+    position: {x: 0.050000116, y: 1.044691, z: -0.8060005}
+    neighborsIndex: 91010000b1010000d301000093010000d501000095010000b5010000d7010000
+  - index: 436
+    gridPosition: {x: 3, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: -0.706}
+    neighborsIndex: 92010000b2010000d401000094010000d601000096010000b6010000d8010000
+  - index: 437
+    gridPosition: {x: 3, y: 17}
+    position: {x: 0.050000012, y: 1.0156602, z: -0.70600057}
+    neighborsIndex: 93010000b3010000d501000095010000d701000097010000b7010000d9010000
+  - index: 438
+    gridPosition: {x: 4, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: -0.6060002}
+    neighborsIndex: 94010000b4010000d601000096010000d801000098010000b8010000da010000
+  - index: 439
+    gridPosition: {x: 4, y: 17}
+    position: {x: 0.05000004, y: 0.9866291, z: -0.6060004}
+    neighborsIndex: 95010000b5010000d701000097010000d9010000b9010000db010000
+  - index: 440
+    gridPosition: {x: 5, y: 17}
+    position: {x: 0.050000012, y: 0.4, z: -0.5060003}
+    neighborsIndex: 96010000b6010000d801000098010000da01000099010000ba010000dc010000
+  - index: 441
+    gridPosition: {x: 5, y: 17}
+    position: {x: 0.049999997, y: 0.9575982, z: -0.5060004}
+    neighborsIndex: 97010000b7010000d9010000db010000bb010000dd010000
+  - index: 442
+    gridPosition: {x: 6, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: -0.40600014}
+    neighborsIndex: 98010000b8010000da01000099010000dc010000de010000
+  - index: 443
+    gridPosition: {x: 6, y: 17}
+    position: {x: 0.050000057, y: 0.8082713, z: -0.4060001}
+    neighborsIndex: b9010000db010000dd0100009a010000bc010000df010000
+  - index: 444
+    gridPosition: {x: 7, y: 17}
+    position: {x: 0.050000116, y: 0.78686655, z: -0.30600017}
+    neighborsIndex: bb010000dd0100009a010000df0100009b010000bd010000e0010000
+  - index: 445
+    gridPosition: {x: 8, y: 17}
+    position: {x: 0.050000086, y: 0.7654618, z: -0.2060001}
+    neighborsIndex: 9a010000bc010000df0100009b010000e00100009c010000be010000e1010000
+  - index: 446
+    gridPosition: {x: 9, y: 17}
+    position: {x: 0.050000116, y: 0.7440571, z: -0.106000096}
+    neighborsIndex: 9b010000bd010000e00100009c010000e10100009d010000bf010000e2010000
+  - index: 447
+    gridPosition: {x: 10, y: 17}
+    position: {x: 0.050000086, y: 0.7226524, z: -0.0060000718}
+    neighborsIndex: 9c010000be010000e10100009d010000e20100009e010000c0010000e3010000
+  - index: 448
+    gridPosition: {x: 11, y: 17}
+    position: {x: 0.050000012, y: 0.70124763, z: 0.09400004}
+    neighborsIndex: 9d010000bf010000e20100009e010000e3010000
+  - index: 449
+    gridPosition: {x: 12, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 0.19399989}
+    neighborsIndex: 9e0100009f010000e4010000a0010000c2010000e5010000
+  - index: 450
+    gridPosition: {x: 13, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 0.2939999}
+    neighborsIndex: 9f010000c1010000e4010000a0010000e5010000a1010000c3010000e6010000
+  - index: 451
+    gridPosition: {x: 14, y: 17}
+    position: {x: 0.05000013, y: 0.4, z: 0.39399981}
+    neighborsIndex: a0010000c2010000e5010000a1010000e6010000a2010000c4010000e7010000
+  - index: 452
+    gridPosition: {x: 15, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 0.49399984}
+    neighborsIndex: a1010000c3010000e6010000a2010000e7010000a3010000c5010000e8010000
+  - index: 453
+    gridPosition: {x: 16, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 0.5939998}
+    neighborsIndex: a2010000c4010000e7010000a3010000e8010000a4010000c6010000e9010000
+  - index: 454
+    gridPosition: {x: 17, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 0.6939998}
+    neighborsIndex: a3010000c5010000e8010000a4010000e9010000a5010000c7010000ea010000
+  - index: 455
+    gridPosition: {x: 18, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 0.79399985}
+    neighborsIndex: a4010000c6010000e9010000a5010000ea010000a6010000c8010000eb010000
+  - index: 456
+    gridPosition: {x: 19, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 0.8939997}
+    neighborsIndex: a5010000c7010000ea010000a6010000eb010000a7010000c9010000ec010000
+  - index: 457
+    gridPosition: {x: 20, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 0.99399984}
+    neighborsIndex: a6010000c8010000eb010000a7010000ec010000a8010000ca010000ed010000
+  - index: 458
+    gridPosition: {x: 21, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 1.0939999}
+    neighborsIndex: a7010000c9010000ec010000a8010000ed010000a9010000cb010000ee010000
+  - index: 459
+    gridPosition: {x: 22, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 1.1939999}
+    neighborsIndex: a8010000ca010000ed010000a9010000ee010000aa010000cc010000ef010000
+  - index: 460
+    gridPosition: {x: 23, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 1.2939997}
+    neighborsIndex: a9010000cb010000ee010000aa010000ef010000ab010000cd010000f0010000
+  - index: 461
+    gridPosition: {x: 24, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 1.3939998}
+    neighborsIndex: aa010000cc010000ef010000ab010000f0010000ac010000ce010000f1010000
+  - index: 462
+    gridPosition: {x: 25, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 1.4939998}
+    neighborsIndex: ab010000cd010000f0010000ac010000f1010000ad010000cf010000f2010000
+  - index: 463
+    gridPosition: {x: 26, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 1.5939999}
+    neighborsIndex: ac010000ce010000f1010000ad010000f2010000d0010000f3010000
+  - index: 464
+    gridPosition: {x: 27, y: 17}
+    position: {x: 0.05000007, y: 0.4, z: 1.6939996}
+    neighborsIndex: ad010000cf010000f2010000f3010000
+  - index: 465
+    gridPosition: {x: 0, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: -1.006}
+    neighborsIndex: ae010000f4010000b0010000d2010000f5010000
+  - index: 466
+    gridPosition: {x: 1, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: -0.90600014}
+    neighborsIndex: ae010000d1010000f4010000b0010000f5010000b2010000d4010000f7010000
+  - index: 467
+    gridPosition: {x: 1, y: 18}
+    position: {x: 0.15000011, y: 1.0461465, z: -0.90600055}
+    neighborsIndex: af010000b1010000f6010000b3010000d5010000f8010000
+  - index: 468
+    gridPosition: {x: 2, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: -0.80600023}
+    neighborsIndex: b0010000d2010000f5010000b2010000f7010000b4010000d6010000f9010000
+  - index: 469
+    gridPosition: {x: 2, y: 18}
+    position: {x: 0.15000011, y: 1.0171156, z: -0.80600053}
+    neighborsIndex: b1010000d3010000f6010000b3010000f8010000b5010000d7010000fa010000
+  - index: 470
+    gridPosition: {x: 3, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: -0.706}
+    neighborsIndex: b2010000d4010000f7010000b4010000f9010000b6010000d8010000fb010000
+  - index: 471
+    gridPosition: {x: 3, y: 18}
+    position: {x: 0.15000005, y: 0.9880847, z: -0.7060005}
+    neighborsIndex: b3010000d5010000f8010000b5010000fa010000b7010000d9010000fc010000
+  - index: 472
+    gridPosition: {x: 4, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: -0.6060002}
+    neighborsIndex: b4010000d6010000f9010000b6010000fb010000b8010000da010000fd010000
+  - index: 473
+    gridPosition: {x: 4, y: 18}
+    position: {x: 0.15000008, y: 0.9590537, z: -0.6060005}
+    neighborsIndex: b5010000d7010000fa010000b7010000fc010000b9010000db010000fe010000
+  - index: 474
+    gridPosition: {x: 5, y: 18}
+    position: {x: 0.15000013, y: 0.4, z: -0.50600016}
+    neighborsIndex: b6010000d8010000fb010000b8010000fd010000ba010000dc010000ff010000
+  - index: 475
+    gridPosition: {x: 5, y: 18}
+    position: {x: 0.14999999, y: 0.9300228, z: -0.5060005}
+    neighborsIndex: b7010000d9010000fc010000b9010000fe010000bb010000dd01000000020000
+  - index: 476
+    gridPosition: {x: 6, y: 18}
+    position: {x: 0.15000013, y: 0.4, z: -0.40600014}
+    neighborsIndex: b8010000da010000fd010000ba010000ff010000de01000001020000
+  - index: 477
+    gridPosition: {x: 6, y: 18}
+    position: {x: 0.1500001, y: 0.8305633, z: -0.40600008}
+    neighborsIndex: b9010000db010000fe010000bb01000000020000bc010000df01000002020000
+  - index: 478
+    gridPosition: {x: 7, y: 18}
+    position: {x: 0.15000013, y: 0.4, z: -0.30600023}
+    neighborsIndex: ba010000dc010000ff0100000102000003020000
+  - index: 479
+    gridPosition: {x: 7, y: 18}
+    position: {x: 0.15000015, y: 0.8091586, z: -0.3060001}
+    neighborsIndex: bb010000dd01000000020000bc01000002020000bd010000e001000004020000
+  - index: 480
+    gridPosition: {x: 8, y: 18}
+    position: {x: 0.15000018, y: 0.78775394, z: -0.20600009}
+    neighborsIndex: bc010000df01000002020000bd01000004020000be010000e101000005020000
+  - index: 481
+    gridPosition: {x: 9, y: 18}
+    position: {x: 0.15000015, y: 0.7663492, z: -0.106000066}
+    neighborsIndex: bd010000e001000004020000be01000005020000bf010000e201000006020000
+  - index: 482
+    gridPosition: {x: 10, y: 18}
+    position: {x: 0.15000011, y: 0.74494445, z: -0.0060000718}
+    neighborsIndex: be010000e101000005020000bf01000006020000c0010000e3010000
+  - index: 483
+    gridPosition: {x: 11, y: 18}
+    position: {x: 0.15000008, y: 0.7235397, z: 0.09400004}
+    neighborsIndex: bf010000e201000006020000c0010000
+  - index: 484
+    gridPosition: {x: 12, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 0.19399989}
+    neighborsIndex: 07020000c101000008020000c2010000e501000009020000
+  - index: 485
+    gridPosition: {x: 13, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 0.2939999}
+    neighborsIndex: c1010000e401000008020000c201000009020000c3010000e60100000a020000
+  - index: 486
+    gridPosition: {x: 14, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 0.39399981}
+    neighborsIndex: c2010000e501000009020000c30100000a020000c4010000e70100000b020000
+  - index: 487
+    gridPosition: {x: 15, y: 18}
+    position: {x: 0.15000013, y: 0.4, z: 0.49399984}
+    neighborsIndex: c3010000e60100000a020000c40100000b020000c5010000e80100000c020000
+  - index: 488
+    gridPosition: {x: 16, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 0.5939998}
+    neighborsIndex: c4010000e70100000b020000c50100000c020000c6010000e90100000d020000
+  - index: 489
+    gridPosition: {x: 17, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 0.69399977}
+    neighborsIndex: c5010000e80100000c020000c60100000d020000c7010000ea0100000e020000
+  - index: 490
+    gridPosition: {x: 18, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 0.79399985}
+    neighborsIndex: c6010000e90100000d020000c70100000e020000c8010000eb0100000f020000
+  - index: 491
+    gridPosition: {x: 19, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 0.89399976}
+    neighborsIndex: c7010000ea0100000e020000c80100000f020000c9010000ec01000010020000
+  - index: 492
+    gridPosition: {x: 20, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 0.99399984}
+    neighborsIndex: c8010000eb0100000f020000c901000010020000ca010000ed01000011020000
+  - index: 493
+    gridPosition: {x: 21, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 1.0939999}
+    neighborsIndex: c9010000ec01000010020000ca01000011020000cb010000ee01000012020000
+  - index: 494
+    gridPosition: {x: 22, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 1.1939998}
+    neighborsIndex: ca010000ed01000011020000cb01000012020000cc010000ef01000013020000
+  - index: 495
+    gridPosition: {x: 23, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 1.2939997}
+    neighborsIndex: cb010000ee01000012020000cc01000013020000cd010000f001000014020000
+  - index: 496
+    gridPosition: {x: 24, y: 18}
+    position: {x: 0.15000007, y: 0.4, z: 1.3939998}
+    neighborsIndex: cc010000ef01000013020000cd01000014020000ce010000f101000015020000
+  - index: 497
+    gridPosition: {x: 25, y: 18}
+    position: {x: 0.15000007, y: 0.4, z: 1.4939997}
+    neighborsIndex: cd010000f001000014020000ce01000015020000cf010000f201000016020000
+  - index: 498
+    gridPosition: {x: 26, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 1.5939999}
+    neighborsIndex: ce010000f101000015020000cf01000016020000d0010000f301000017020000
+  - index: 499
+    gridPosition: {x: 27, y: 18}
+    position: {x: 0.1500001, y: 0.4, z: 1.6939999}
+    neighborsIndex: cf010000f201000016020000d00100001702000018020000
+  - index: 500
+    gridPosition: {x: 0, y: 19}
+    position: {x: 0.25, y: 0.4, z: -1.006}
+    neighborsIndex: d101000019020000d2010000f50100001a020000
+  - index: 501
+    gridPosition: {x: 1, y: 19}
+    position: {x: 0.25, y: 0.4, z: -0.90600014}
+    neighborsIndex: d1010000f401000019020000d20100001a020000d4010000f70100001b020000
+  - index: 502
+    gridPosition: {x: 1, y: 19}
+    position: {x: 0.25000006, y: 1.018571, z: -0.9060005}
+    neighborsIndex: d3010000d5010000f80100001c020000
+  - index: 503
+    gridPosition: {x: 2, y: 19}
+    position: {x: 0.25, y: 0.4, z: -0.80600023}
+    neighborsIndex: d2010000f50100001a020000d40100001b020000d6010000f90100001d020000
+  - index: 504
+    gridPosition: {x: 2, y: 19}
+    position: {x: 0.25000012, y: 0.9895401, z: -0.8060004}
+    neighborsIndex: d3010000f6010000d50100001c020000d7010000fa0100001e020000
+  - index: 505
+    gridPosition: {x: 3, y: 19}
+    position: {x: 0.25, y: 0.4, z: -0.7060001}
+    neighborsIndex: d4010000f70100001b020000d60100001d020000d8010000fb0100001f020000
+  - index: 506
+    gridPosition: {x: 3, y: 19}
+    position: {x: 0.24999999, y: 0.9605092, z: -0.70600045}
+    neighborsIndex: d5010000f80100001c020000d70100001e020000d9010000fc01000020020000
+  - index: 507
+    gridPosition: {x: 4, y: 19}
+    position: {x: 0.25, y: 0.4, z: -0.6060002}
+    neighborsIndex: d6010000f90100001d020000d80100001f020000da010000fd01000021020000
+  - index: 508
+    gridPosition: {x: 4, y: 19}
+    position: {x: 0.25000006, y: 0.8956648, z: -0.6060001}
+    neighborsIndex: d7010000fa0100001e020000d901000020020000db010000fe01000022020000
+  - index: 509
+    gridPosition: {x: 5, y: 19}
+    position: {x: 0.25, y: 0.4, z: -0.5060003}
+    neighborsIndex: d8010000fb0100001f020000da01000021020000dc010000ff01000023020000
+  - index: 510
+    gridPosition: {x: 5, y: 19}
+    position: {x: 0.25000012, y: 0.8742601, z: -0.50600016}
+    neighborsIndex: d9010000fc01000020020000db01000022020000dd0100000002000024020000
+  - index: 511
+    gridPosition: {x: 6, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: -0.40600026}
+    neighborsIndex: da010000fd01000021020000dc01000023020000de0100000102000025020000
+  - index: 512
+    gridPosition: {x: 6, y: 19}
+    position: {x: 0.25000003, y: 0.8528554, z: -0.40600008}
+    neighborsIndex: db010000fe01000022020000dd01000024020000df0100000202000026020000
+  - index: 513
+    gridPosition: {x: 7, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: -0.30600023}
+    neighborsIndex: dc010000ff01000023020000de010000250200000302000027020000
+  - index: 514
+    gridPosition: {x: 7, y: 19}
+    position: {x: 0.25000006, y: 0.83145064, z: -0.3060001}
+    neighborsIndex: dd0100000002000024020000df01000026020000e00100000402000028020000
+  - index: 515
+    gridPosition: {x: 8, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: -0.20600021}
+    neighborsIndex: de01000001020000250200002702000029020000
+  - index: 516
+    gridPosition: {x: 8, y: 19}
+    position: {x: 0.2500001, y: 0.81004596, z: -0.20600007}
+    neighborsIndex: df0100000202000026020000e001000028020000e1010000050200002a020000
+  - index: 517
+    gridPosition: {x: 9, y: 19}
+    position: {x: 0.25000006, y: 0.7886412, z: -0.10600002}
+    neighborsIndex: e00100000402000028020000e10100002a020000e201000006020000
+  - index: 518
+    gridPosition: {x: 10, y: 19}
+    position: {x: 0.25000006, y: 0.7672365, z: -0.006000012}
+    neighborsIndex: e1010000050200002a020000e2010000e3010000
+  - index: 519
+    gridPosition: {x: 11, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 0.09399986}
+    neighborsIndex: 2b0200002c020000e4010000080200002d020000
+  - index: 520
+    gridPosition: {x: 12, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 0.19399986}
+    neighborsIndex: 070200002c020000e40100002d020000e5010000090200002e020000
+  - index: 521
+    gridPosition: {x: 13, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 0.2939999}
+    neighborsIndex: e4010000080200002d020000e50100002e020000e60100000a0200002f020000
+  - index: 522
+    gridPosition: {x: 14, y: 19}
+    position: {x: 0.25, y: 0.4, z: 0.39399981}
+    neighborsIndex: e5010000090200002e020000e60100002f020000e70100000b02000030020000
+  - index: 523
+    gridPosition: {x: 15, y: 19}
+    position: {x: 0.25, y: 0.4, z: 0.49399984}
+    neighborsIndex: e60100000a0200002f020000e701000030020000e80100000c020000
+  - index: 524
+    gridPosition: {x: 16, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 0.5939998}
+    neighborsIndex: e70100000b02000030020000e8010000e90100000d020000
+  - index: 525
+    gridPosition: {x: 17, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 0.6939998}
+    neighborsIndex: e80100000c020000e9010000ea0100000e020000
+  - index: 526
+    gridPosition: {x: 18, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 0.7939999}
+    neighborsIndex: e90100000d020000ea010000eb0100000f020000
+  - index: 527
+    gridPosition: {x: 19, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 0.8939997}
+    neighborsIndex: ea0100000e020000eb010000ec01000010020000
+  - index: 528
+    gridPosition: {x: 20, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 0.99399984}
+    neighborsIndex: eb0100000f020000ec010000ed0100001102000031020000
+  - index: 529
+    gridPosition: {x: 21, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 1.0939999}
+    neighborsIndex: ec01000010020000ed01000031020000ee0100001202000032020000
+  - index: 530
+    gridPosition: {x: 22, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 1.1939998}
+    neighborsIndex: ed0100001102000031020000ee01000032020000ef0100001302000033020000
+  - index: 531
+    gridPosition: {x: 23, y: 19}
+    position: {x: 0.25, y: 0.4, z: 1.2939997}
+    neighborsIndex: ee0100001202000032020000ef01000033020000f00100001402000034020000
+  - index: 532
+    gridPosition: {x: 24, y: 19}
+    position: {x: 0.25, y: 0.4, z: 1.3939998}
+    neighborsIndex: ef0100001302000033020000f001000034020000f10100001502000035020000
+  - index: 533
+    gridPosition: {x: 25, y: 19}
+    position: {x: 0.25, y: 0.4, z: 1.4939998}
+    neighborsIndex: f00100001402000034020000f101000035020000f20100001602000036020000
+  - index: 534
+    gridPosition: {x: 26, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 1.5939999}
+    neighborsIndex: f10100001502000035020000f201000036020000f30100001702000037020000
+  - index: 535
+    gridPosition: {x: 27, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 1.6939998}
+    neighborsIndex: f20100001602000036020000f3010000370200001802000038020000
+  - index: 536
+    gridPosition: {x: 28, y: 19}
+    position: {x: 0.24999997, y: 0.4, z: 1.7939997}
+    neighborsIndex: f3010000170200003702000038020000
+  - index: 537
+    gridPosition: {x: 0, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -1.0060002}
+    neighborsIndex: f401000039020000f50100001a0200003a020000
+  - index: 538
+    gridPosition: {x: 1, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.90600014}
+    neighborsIndex: f40100001902000039020000f50100003a020000f70100001b0200003b020000
+  - index: 539
+    gridPosition: {x: 2, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.80600023}
+    neighborsIndex: f50100001a0200003a020000f70100003b020000f90100001d0200003c020000
+  - index: 540
+    gridPosition: {x: 2, y: 20}
+    position: {x: 0.35000014, y: 0.9619646, z: -0.80600053}
+    neighborsIndex: f6010000f8010000fa0100001e0200003d020000
+  - index: 541
+    gridPosition: {x: 3, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.7060001}
+    neighborsIndex: f70100001b0200003b020000f90100003c020000fb0100001f0200003e020000
+  - index: 542
+    gridPosition: {x: 3, y: 20}
+    position: {x: 0.3500002, y: 0.93936163, z: -0.70600015}
+    neighborsIndex: f80100001c020000fa0100003d020000fc010000200200003f020000
+  - index: 543
+    gridPosition: {x: 4, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.6060002}
+    neighborsIndex: f90100001d0200003c020000fb0100003e020000fd0100002102000040020000
+  - index: 544
+    gridPosition: {x: 4, y: 20}
+    position: {x: 0.35000014, y: 0.9179569, z: -0.6060001}
+    neighborsIndex: fa0100001e0200003d020000fc0100003f020000fe0100002202000041020000
+  - index: 545
+    gridPosition: {x: 5, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.50600016}
+    neighborsIndex: fb0100001f0200003e020000fd01000040020000ff0100002302000042020000
+  - index: 546
+    gridPosition: {x: 5, y: 20}
+    position: {x: 0.35000014, y: 0.8965522, z: -0.5060001}
+    neighborsIndex: fc010000200200003f020000fe01000041020000000200002402000043020000
+  - index: 547
+    gridPosition: {x: 6, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.40600014}
+    neighborsIndex: fd0100002102000040020000ff01000042020000010200002502000044020000
+  - index: 548
+    gridPosition: {x: 6, y: 20}
+    position: {x: 0.3500001, y: 0.87514746, z: -0.40600002}
+    neighborsIndex: fe01000022020000410200000002000043020000020200002602000045020000
+  - index: 549
+    gridPosition: {x: 7, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.30600023}
+    neighborsIndex: ff01000023020000420200000102000044020000030200002702000046020000
+  - index: 550
+    gridPosition: {x: 7, y: 20}
+    position: {x: 0.3500001, y: 0.8537427, z: -0.3060001}
+    neighborsIndex: 0002000024020000430200000202000045020000040200002802000047020000
+  - index: 551
+    gridPosition: {x: 8, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.20600015}
+    neighborsIndex: 01020000250200004402000003020000460200002902000048020000
+  - index: 552
+    gridPosition: {x: 8, y: 20}
+    position: {x: 0.35000014, y: 0.83233804, z: -0.20600009}
+    neighborsIndex: 0202000026020000450200000402000047020000050200002a020000
+  - index: 553
+    gridPosition: {x: 9, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.106000185}
+    neighborsIndex: 030200002702000046020000480200002b02000049020000
+  - index: 554
+    gridPosition: {x: 9, y: 20}
+    position: {x: 0.3500001, y: 0.8109333, z: -0.106000036}
+    neighborsIndex: 0402000028020000470200000502000006020000
+  - index: 555
+    gridPosition: {x: 10, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: -0.006000161}
+    neighborsIndex: 290200004802000049020000070200002c0200004a020000
+  - index: 556
+    gridPosition: {x: 11, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 0.09399986}
+    neighborsIndex: 2b02000049020000070200004a020000080200002d0200004b020000
+  - index: 557
+    gridPosition: {x: 12, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 0.19399989}
+    neighborsIndex: 070200002c0200004a020000080200004b020000090200002e0200004c020000
+  - index: 558
+    gridPosition: {x: 13, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 0.2939999}
+    neighborsIndex: 080200002d0200004b020000090200004c0200000a0200002f0200004d020000
+  - index: 559
+    gridPosition: {x: 14, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 0.39399981}
+    neighborsIndex: 090200002e0200004c0200000a0200004d0200000b020000300200004e020000
+  - index: 560
+    gridPosition: {x: 15, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 0.49399984}
+    neighborsIndex: 0a0200002f0200004d0200000b0200004e0200000c020000
+  - index: 561
+    gridPosition: {x: 21, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 1.0939999}
+    neighborsIndex: 10020000110200004f020000120200003202000050020000
+  - index: 562
+    gridPosition: {x: 22, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 1.1939998}
+    neighborsIndex: 11020000310200004f0200001202000050020000130200003302000051020000
+  - index: 563
+    gridPosition: {x: 23, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 1.2939998}
+    neighborsIndex: 1202000032020000500200001302000051020000140200003402000052020000
+  - index: 564
+    gridPosition: {x: 24, y: 20}
+    position: {x: 0.35, y: 0.4, z: 1.3939998}
+    neighborsIndex: 1302000033020000510200001402000052020000150200003502000053020000
+  - index: 565
+    gridPosition: {x: 25, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 1.4939998}
+    neighborsIndex: 1402000034020000520200001502000053020000160200003602000054020000
+  - index: 566
+    gridPosition: {x: 26, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 1.594}
+    neighborsIndex: 1502000035020000530200001602000054020000170200003702000055020000
+  - index: 567
+    gridPosition: {x: 27, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 1.6939998}
+    neighborsIndex: 1602000036020000540200001702000055020000180200003802000056020000
+  - index: 568
+    gridPosition: {x: 28, y: 20}
+    position: {x: 0.35000002, y: 0.4, z: 1.7939997}
+    neighborsIndex: 1702000037020000550200001802000056020000
+  - index: 569
+    gridPosition: {x: 0, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -1.0060002}
+    neighborsIndex: 19020000570200001a0200003a02000058020000
+  - index: 570
+    gridPosition: {x: 1, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.90600014}
+    neighborsIndex: 1902000039020000570200001a020000580200001b0200003b02000059020000
+  - index: 571
+    gridPosition: {x: 2, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.80600023}
+    neighborsIndex: 1a0200003a020000580200001b020000590200001d0200003c0200005a020000
+  - index: 572
+    gridPosition: {x: 3, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.7060001}
+    neighborsIndex: 1b0200003b020000590200001d0200005a0200001f0200003e0200005b020000
+  - index: 573
+    gridPosition: {x: 3, y: 21}
+    position: {x: 0.45000032, y: 0.9616537, z: -0.7060001}
+    neighborsIndex: 1c0200001e020000200200003f0200005c020000
+  - index: 574
+    gridPosition: {x: 4, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.6060002}
+    neighborsIndex: 1d0200003c0200005a0200001f0200005b02000021020000400200005d020000
+  - index: 575
+    gridPosition: {x: 4, y: 21}
+    position: {x: 0.4500003, y: 0.94024897, z: -0.60600007}
+    neighborsIndex: 1e0200003d020000200200005c02000022020000410200005e020000
+  - index: 576
+    gridPosition: {x: 5, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.50600016}
+    neighborsIndex: 1f0200003e0200005b020000210200005d02000023020000420200005f020000
+  - index: 577
+    gridPosition: {x: 5, y: 21}
+    position: {x: 0.45000035, y: 0.9188443, z: -0.50600016}
+    neighborsIndex: 200200003f0200005c020000220200005e020000240200004302000060020000
+  - index: 578
+    gridPosition: {x: 6, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.40600008}
+    neighborsIndex: 21020000400200005d020000230200005f020000250200004402000061020000
+  - index: 579
+    gridPosition: {x: 6, y: 21}
+    position: {x: 0.45000026, y: 0.89743954, z: -0.40600002}
+    neighborsIndex: 22020000410200005e0200002402000060020000260200004502000062020000
+  - index: 580
+    gridPosition: {x: 7, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.30600023}
+    neighborsIndex: 23020000420200005f0200002502000061020000270200004602000063020000
+  - index: 581
+    gridPosition: {x: 7, y: 21}
+    position: {x: 0.4500003, y: 0.8760348, z: -0.30600005}
+    neighborsIndex: 24020000430200006002000026020000620200002802000047020000
+  - index: 582
+    gridPosition: {x: 8, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.20600015}
+    neighborsIndex: 2502000044020000610200002702000063020000290200004802000064020000
+  - index: 583
+    gridPosition: {x: 8, y: 21}
+    position: {x: 0.4500003, y: 0.8546301, z: -0.20600003}
+    neighborsIndex: 260200004502000062020000280200002a020000
+  - index: 584
+    gridPosition: {x: 9, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.106000125}
+    neighborsIndex: 27020000460200006302000029020000640200002b0200004902000065020000
+  - index: 585
+    gridPosition: {x: 10, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: -0.006000161}
+    neighborsIndex: 2902000048020000640200002b020000650200002c0200004a02000066020000
+  - index: 586
+    gridPosition: {x: 11, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 0.09399986}
+    neighborsIndex: 2b02000049020000650200002c020000660200002d0200004b02000067020000
+  - index: 587
+    gridPosition: {x: 12, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 0.19399989}
+    neighborsIndex: 2c0200004a020000660200002d020000670200002e0200004c02000068020000
+  - index: 588
+    gridPosition: {x: 13, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 0.2939999}
+    neighborsIndex: 2d0200004b020000670200002e020000680200002f0200004d02000069020000
+  - index: 589
+    gridPosition: {x: 14, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 0.39399981}
+    neighborsIndex: 2e0200004c020000680200002f02000069020000300200004e0200006a020000
+  - index: 590
+    gridPosition: {x: 15, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 0.49399984}
+    neighborsIndex: 2f0200004d02000069020000300200006a020000
+  - index: 591
+    gridPosition: {x: 21, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 1.0939999}
+    neighborsIndex: 310200006b02000032020000500200006c020000
+  - index: 592
+    gridPosition: {x: 22, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 1.1939998}
+    neighborsIndex: 310200004f0200006b020000320200006c02000033020000510200006d020000
+  - index: 593
+    gridPosition: {x: 23, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 1.2939997}
+    neighborsIndex: 32020000500200006c020000330200006d02000034020000520200006e020000
+  - index: 594
+    gridPosition: {x: 24, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 1.3939998}
+    neighborsIndex: 33020000510200006d020000340200006e02000035020000530200006f020000
+  - index: 595
+    gridPosition: {x: 25, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 1.4939998}
+    neighborsIndex: 34020000520200006e020000350200006f020000360200005402000070020000
+  - index: 596
+    gridPosition: {x: 26, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 1.5939999}
+    neighborsIndex: 35020000530200006f0200003602000070020000370200005502000071020000
+  - index: 597
+    gridPosition: {x: 27, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 1.6939998}
+    neighborsIndex: 3602000054020000700200003702000071020000380200005602000072020000
+  - index: 598
+    gridPosition: {x: 28, y: 21}
+    position: {x: 0.45000017, y: 0.4, z: 1.7939997}
+    neighborsIndex: 370200005502000071020000380200007202000073020000
+  - index: 599
+    gridPosition: {x: 0, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -1.006}
+    neighborsIndex: 39020000740200003a0200005802000075020000
+  - index: 600
+    gridPosition: {x: 1, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.90600014}
+    neighborsIndex: 3902000057020000740200003a020000750200003b0200005902000076020000
+  - index: 601
+    gridPosition: {x: 2, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.80600023}
+    neighborsIndex: 3a02000058020000750200003b020000760200003c0200005a02000077020000
+  - index: 602
+    gridPosition: {x: 3, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.7060001}
+    neighborsIndex: 3b02000059020000760200003c020000770200003e0200005b02000078020000
+  - index: 603
+    gridPosition: {x: 4, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.6060002}
+    neighborsIndex: 3c0200005a020000770200003e02000078020000400200005d02000079020000
+  - index: 604
+    gridPosition: {x: 4, y: 22}
+    position: {x: 0.5500003, y: 0.96254104, z: -0.60600007}
+    neighborsIndex: 3d0200003f020000410200005e0200007a020000
+  - index: 605
+    gridPosition: {x: 5, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.50600016}
+    neighborsIndex: 3e0200005b020000780200004002000079020000420200005f0200007b020000
+  - index: 606
+    gridPosition: {x: 5, y: 22}
+    position: {x: 0.5500003, y: 0.94113636, z: -0.5060001}
+    neighborsIndex: 3f0200005c020000410200007a02000043020000600200007c020000
+  - index: 607
+    gridPosition: {x: 6, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.40600014}
+    neighborsIndex: 400200005d02000079020000420200007b02000044020000610200007d020000
+  - index: 608
+    gridPosition: {x: 6, y: 22}
+    position: {x: 0.5500002, y: 0.9197316, z: -0.40600005}
+    neighborsIndex: 410200005e0200007a020000430200007c0200004502000062020000
+  - index: 609
+    gridPosition: {x: 7, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.30600017}
+    neighborsIndex: 420200005f0200007b020000440200007d02000046020000630200007e020000
+  - index: 610
+    gridPosition: {x: 7, y: 22}
+    position: {x: 0.5500002, y: 0.8983269, z: -0.30600008}
+    neighborsIndex: 43020000600200007c0200004502000047020000
+  - index: 611
+    gridPosition: {x: 8, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.20600015}
+    neighborsIndex: 44020000610200007d020000460200007e02000048020000640200007f020000
+  - index: 612
+    gridPosition: {x: 9, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.106000185}
+    neighborsIndex: 46020000630200007e020000480200007f020000490200006502000080020000
+  - index: 613
+    gridPosition: {x: 10, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: -0.006000161}
+    neighborsIndex: 48020000640200007f02000049020000800200004a0200006602000081020000
+  - index: 614
+    gridPosition: {x: 11, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 0.09399983}
+    neighborsIndex: 4902000065020000800200004a020000810200004b0200006702000082020000
+  - index: 615
+    gridPosition: {x: 12, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 0.19399989}
+    neighborsIndex: 4a02000066020000810200004b020000820200004c0200006802000083020000
+  - index: 616
+    gridPosition: {x: 13, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 0.2939999}
+    neighborsIndex: 4b02000067020000820200004c020000830200004d0200006902000084020000
+  - index: 617
+    gridPosition: {x: 14, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 0.39399981}
+    neighborsIndex: 4c02000068020000830200004d020000840200004e0200006a02000085020000
+  - index: 618
+    gridPosition: {x: 15, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 0.49399984}
+    neighborsIndex: 4d02000069020000840200004e0200008502000086020000
+  - index: 619
+    gridPosition: {x: 21, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.0939999}
+    neighborsIndex: 8a0200004f0200008b020000500200006c0200008c020000
+  - index: 620
+    gridPosition: {x: 22, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.1939998}
+    neighborsIndex: 4f0200006b0200008b020000500200008c020000510200006d0200008d020000
+  - index: 621
+    gridPosition: {x: 23, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.2939998}
+    neighborsIndex: 500200006c0200008c020000510200008d020000520200006e0200008e020000
+  - index: 622
+    gridPosition: {x: 24, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.3939999}
+    neighborsIndex: 510200006d0200008d020000520200008e020000530200006f0200008f020000
+  - index: 623
+    gridPosition: {x: 25, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.4939998}
+    neighborsIndex: 520200006e0200008e020000530200008f020000540200007002000090020000
+  - index: 624
+    gridPosition: {x: 26, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.594}
+    neighborsIndex: 530200006f0200008f0200005402000090020000550200007102000091020000
+  - index: 625
+    gridPosition: {x: 27, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.6939998}
+    neighborsIndex: 5402000070020000900200005502000091020000560200007202000092020000
+  - index: 626
+    gridPosition: {x: 28, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.7939998}
+    neighborsIndex: 55020000710200009102000056020000920200007302000093020000
+  - index: 627
+    gridPosition: {x: 29, y: 22}
+    position: {x: 0.5500001, y: 0.4, z: 1.8939998}
+    neighborsIndex: 56020000720200009202000093020000
+  - index: 628
+    gridPosition: {x: 0, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: -1.0060002}
+    neighborsIndex: 5702000094020000580200007502000095020000
+  - index: 629
+    gridPosition: {x: 1, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: 5702000074020000940200005802000095020000590200007602000096020000
+  - index: 630
+    gridPosition: {x: 2, y: 23}
+    position: {x: 0.65000004, y: 0.4, z: -0.80600023}
+    neighborsIndex: 58020000750200009502000059020000960200005a0200007702000097020000
+  - index: 631
+    gridPosition: {x: 3, y: 23}
+    position: {x: 0.65, y: 0.4, z: -0.7060001}
+    neighborsIndex: 5902000076020000960200005a020000970200005b0200007802000098020000
+  - index: 632
+    gridPosition: {x: 4, y: 23}
+    position: {x: 0.65, y: 0.4, z: -0.6060003}
+    neighborsIndex: 5a02000077020000970200005b020000980200005d0200007902000099020000
+  - index: 633
+    gridPosition: {x: 5, y: 23}
+    position: {x: 0.65, y: 0.4, z: -0.50600016}
+    neighborsIndex: 5b02000078020000980200005d020000990200005f0200007b0200009a020000
+  - index: 634
+    gridPosition: {x: 5, y: 23}
+    position: {x: 0.6500002, y: 0.9634284, z: -0.5060002}
+    neighborsIndex: 5c0200005e020000600200007c020000
+  - index: 635
+    gridPosition: {x: 6, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: -0.4060002}
+    neighborsIndex: 5d02000079020000990200005f0200009a020000610200007d0200009b020000
+  - index: 636
+    gridPosition: {x: 6, y: 23}
+    position: {x: 0.65000004, y: 0.94202363, z: -0.40600002}
+    neighborsIndex: 5e0200007a0200006002000062020000
+  - index: 637
+    gridPosition: {x: 7, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: -0.30600023}
+    neighborsIndex: 5f0200007b0200009a020000610200009b020000630200007e0200009c020000
+  - index: 638
+    gridPosition: {x: 8, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: -0.20600015}
+    neighborsIndex: 610200007d0200009b020000630200009c020000640200007f0200009d020000
+  - index: 639
+    gridPosition: {x: 9, y: 23}
+    position: {x: 0.64999986, y: 0.4, z: -0.106000185}
+    neighborsIndex: 630200007e0200009c020000640200009d02000065020000800200009e020000
+  - index: 640
+    gridPosition: {x: 10, y: 23}
+    position: {x: 0.64999986, y: 0.4, z: -0.006000161}
+    neighborsIndex: 640200007f0200009d020000650200009e02000066020000810200009f020000
+  - index: 641
+    gridPosition: {x: 11, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: 0.09399983}
+    neighborsIndex: 65020000800200009e020000660200009f0200006702000082020000a0020000
+  - index: 642
+    gridPosition: {x: 12, y: 23}
+    position: {x: 0.65, y: 0.4, z: 0.19399989}
+    neighborsIndex: 66020000810200009f02000067020000a00200006802000083020000a1020000
+  - index: 643
+    gridPosition: {x: 13, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: 0.2939999}
+    neighborsIndex: 6702000082020000a002000068020000a10200006902000084020000a2020000
+  - index: 644
+    gridPosition: {x: 14, y: 23}
+    position: {x: 0.64999986, y: 0.4, z: 0.39399981}
+    neighborsIndex: 6802000083020000a102000069020000a20200006a02000085020000a3020000
+  - index: 645
+    gridPosition: {x: 15, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: 0.49399984}
+    neighborsIndex: 6902000084020000a20200006a020000a302000086020000a4020000
+  - index: 646
+    gridPosition: {x: 16, y: 23}
+    position: {x: 0.65, y: 0.4, z: 0.59399986}
+    neighborsIndex: 6a02000085020000a3020000a402000087020000a5020000
+  - index: 647
+    gridPosition: {x: 17, y: 23}
+    position: {x: 0.65, y: 0.4, z: 0.6939999}
+    neighborsIndex: 86020000a4020000a502000088020000a6020000
+  - index: 648
+    gridPosition: {x: 18, y: 23}
+    position: {x: 0.65, y: 0.4, z: 0.7939999}
+    neighborsIndex: 87020000a5020000a602000089020000a7020000
+  - index: 649
+    gridPosition: {x: 19, y: 23}
+    position: {x: 0.65, y: 0.4, z: 0.8939998}
+    neighborsIndex: 88020000a6020000a70200008a020000a8020000
+  - index: 650
+    gridPosition: {x: 20, y: 23}
+    position: {x: 0.65, y: 0.4, z: 0.99399984}
+    neighborsIndex: 89020000a7020000a80200006b0200008b020000a9020000
+  - index: 651
+    gridPosition: {x: 21, y: 23}
+    position: {x: 0.6499999, y: 0.4, z: 1.0939999}
+    neighborsIndex: 8a020000a80200006b020000a90200006c0200008c020000aa020000
+  - index: 652
+    gridPosition: {x: 22, y: 23}
+    position: {x: 0.65, y: 0.4, z: 1.1939998}
+    neighborsIndex: 6b0200008b020000a90200006c020000aa0200006d0200008d020000ab020000
+  - index: 653
+    gridPosition: {x: 23, y: 23}
+    position: {x: 0.65000004, y: 0.4, z: 1.2939998}
+    neighborsIndex: 6c0200008c020000aa0200006d020000ab0200006e0200008e020000ac020000
+  - index: 654
+    gridPosition: {x: 24, y: 23}
+    position: {x: 0.65000004, y: 0.4, z: 1.3939999}
+    neighborsIndex: 6d0200008d020000ab0200006e020000ac0200006f0200008f020000ad020000
+  - index: 655
+    gridPosition: {x: 25, y: 23}
+    position: {x: 0.65, y: 0.4, z: 1.4939998}
+    neighborsIndex: 6e0200008e020000ac0200006f020000ad0200007002000090020000ae020000
+  - index: 656
+    gridPosition: {x: 26, y: 23}
+    position: {x: 0.65, y: 0.4, z: 1.594}
+    neighborsIndex: 6f0200008f020000ad02000070020000ae0200007102000091020000af020000
+  - index: 657
+    gridPosition: {x: 27, y: 23}
+    position: {x: 0.65, y: 0.4, z: 1.6939999}
+    neighborsIndex: 7002000090020000ae02000071020000af0200007202000092020000b0020000
+  - index: 658
+    gridPosition: {x: 28, y: 23}
+    position: {x: 0.65, y: 0.4, z: 1.7939998}
+    neighborsIndex: 7102000091020000af02000072020000b00200007302000093020000b1020000
+  - index: 659
+    gridPosition: {x: 29, y: 23}
+    position: {x: 0.65, y: 0.4, z: 1.8939999}
+    neighborsIndex: 7202000092020000b002000073020000b1020000b2020000
+  - index: 660
+    gridPosition: {x: 0, y: 24}
+    position: {x: 0.75000006, y: 0.4, z: -1.006}
+    neighborsIndex: 74020000b30200007502000095020000b4020000
+  - index: 661
+    gridPosition: {x: 1, y: 24}
+    position: {x: 0.75, y: 0.4, z: -0.90600014}
+    neighborsIndex: 7402000094020000b302000075020000b40200007602000096020000b5020000
+  - index: 662
+    gridPosition: {x: 2, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: -0.80600035}
+    neighborsIndex: 7502000095020000b402000076020000b50200007702000097020000b6020000
+  - index: 663
+    gridPosition: {x: 3, y: 24}
+    position: {x: 0.75000006, y: 0.4, z: -0.706}
+    neighborsIndex: 7602000096020000b502000077020000b60200007802000098020000b7020000
+  - index: 664
+    gridPosition: {x: 4, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: -0.6060002}
+    neighborsIndex: 7702000097020000b602000078020000b70200007902000099020000b8020000
+  - index: 665
+    gridPosition: {x: 5, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: -0.50600016}
+    neighborsIndex: 7802000098020000b702000079020000b80200007b0200009a020000b9020000
+  - index: 666
+    gridPosition: {x: 6, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: -0.40600014}
+    neighborsIndex: 7902000099020000b80200007b020000b90200007d0200009b020000ba020000
+  - index: 667
+    gridPosition: {x: 7, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: -0.30600017}
+    neighborsIndex: 7b0200009a020000b90200007d020000ba0200007e0200009c020000bb020000
+  - index: 668
+    gridPosition: {x: 8, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: -0.20600015}
+    neighborsIndex: 7d0200009b020000ba0200007e020000bb0200007f0200009d020000bc020000
+  - index: 669
+    gridPosition: {x: 9, y: 24}
+    position: {x: 0.75000006, y: 0.4, z: -0.106000185}
+    neighborsIndex: 7e0200009c020000bb0200007f020000bc020000800200009e020000bd020000
+  - index: 670
+    gridPosition: {x: 10, y: 24}
+    position: {x: 0.75000006, y: 0.4, z: -0.006000161}
+    neighborsIndex: 7f0200009d020000bc02000080020000bd020000810200009f020000be020000
+  - index: 671
+    gridPosition: {x: 11, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 0.09399983}
+    neighborsIndex: 800200009e020000bd02000081020000be02000082020000a0020000bf020000
+  - index: 672
+    gridPosition: {x: 12, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 0.19399989}
+    neighborsIndex: 810200009f020000be02000082020000bf02000083020000a1020000c0020000
+  - index: 673
+    gridPosition: {x: 13, y: 24}
+    position: {x: 0.75000006, y: 0.4, z: 0.2939999}
+    neighborsIndex: 82020000a0020000bf02000083020000c002000084020000a2020000c1020000
+  - index: 674
+    gridPosition: {x: 14, y: 24}
+    position: {x: 0.75000006, y: 0.4, z: 0.39399981}
+    neighborsIndex: 83020000a1020000c002000084020000c102000085020000a3020000c2020000
+  - index: 675
+    gridPosition: {x: 15, y: 24}
+    position: {x: 0.75000006, y: 0.4, z: 0.49399984}
+    neighborsIndex: 84020000a2020000c102000085020000c202000086020000a4020000c3020000
+  - index: 676
+    gridPosition: {x: 16, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 0.59399986}
+    neighborsIndex: 85020000a3020000c202000086020000c302000087020000a5020000c4020000
+  - index: 677
+    gridPosition: {x: 17, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 0.6939999}
+    neighborsIndex: 86020000a4020000c302000087020000c402000088020000a6020000c5020000
+  - index: 678
+    gridPosition: {x: 18, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 0.7939999}
+    neighborsIndex: 87020000a5020000c402000088020000c502000089020000a7020000c6020000
+  - index: 679
+    gridPosition: {x: 19, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 0.8939998}
+    neighborsIndex: 88020000a6020000c502000089020000c60200008a020000a8020000c7020000
+  - index: 680
+    gridPosition: {x: 20, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 0.99399984}
+    neighborsIndex: 89020000a7020000c60200008a020000c70200008b020000a9020000c8020000
+  - index: 681
+    gridPosition: {x: 21, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 1.0939999}
+    neighborsIndex: 8a020000a8020000c70200008b020000c80200008c020000aa020000c9020000
+  - index: 682
+    gridPosition: {x: 22, y: 24}
+    position: {x: 0.75000006, y: 0.4, z: 1.1939998}
+    neighborsIndex: 8b020000a9020000c80200008c020000c90200008d020000ab020000ca020000
+  - index: 683
+    gridPosition: {x: 23, y: 24}
+    position: {x: 0.7500002, y: 0.4, z: 1.2939998}
+    neighborsIndex: 8c020000aa020000c90200008d020000ca0200008e020000ac020000cb020000
+  - index: 684
+    gridPosition: {x: 24, y: 24}
+    position: {x: 0.7500002, y: 0.4, z: 1.3939999}
+    neighborsIndex: 8d020000ab020000ca0200008e020000cb0200008f020000ad020000cc020000
+  - index: 685
+    gridPosition: {x: 25, y: 24}
+    position: {x: 0.7500002, y: 0.4, z: 1.4939998}
+    neighborsIndex: 8e020000ac020000cb0200008f020000cc02000090020000ae020000cd020000
+  - index: 686
+    gridPosition: {x: 26, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 1.594}
+    neighborsIndex: 8f020000ad020000cc02000090020000cd02000091020000af020000ce020000
+  - index: 687
+    gridPosition: {x: 27, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 1.6939999}
+    neighborsIndex: 90020000ae020000cd02000091020000ce02000092020000b0020000cf020000
+  - index: 688
+    gridPosition: {x: 28, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 1.7939998}
+    neighborsIndex: 91020000af020000ce02000092020000cf02000093020000b1020000d0020000
+  - index: 689
+    gridPosition: {x: 29, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 1.8939999}
+    neighborsIndex: 92020000b0020000cf02000093020000d0020000b2020000d1020000
+  - index: 690
+    gridPosition: {x: 30, y: 24}
+    position: {x: 0.7500001, y: 0.4, z: 1.9939998}
+    neighborsIndex: 93020000b1020000d0020000d1020000
+  - index: 691
+    gridPosition: {x: 0, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: -1.006}
+    neighborsIndex: 94020000d202000095020000b4020000d3020000
+  - index: 692
+    gridPosition: {x: 1, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: 94020000b3020000d202000095020000d302000096020000b5020000d4020000
+  - index: 693
+    gridPosition: {x: 2, y: 25}
+    position: {x: 0.84999996, y: 0.4, z: -0.80600035}
+    neighborsIndex: 95020000b4020000d302000096020000d402000097020000b6020000d5020000
+  - index: 694
+    gridPosition: {x: 3, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: -0.7060001}
+    neighborsIndex: 96020000b5020000d402000097020000d502000098020000b7020000d6020000
+  - index: 695
+    gridPosition: {x: 4, y: 25}
+    position: {x: 0.85, y: 0.4, z: -0.6060002}
+    neighborsIndex: 97020000b6020000d502000098020000d602000099020000b8020000d7020000
+  - index: 696
+    gridPosition: {x: 5, y: 25}
+    position: {x: 0.85, y: 0.4, z: -0.5060003}
+    neighborsIndex: 98020000b7020000d602000099020000d70200009a020000b9020000d8020000
+  - index: 697
+    gridPosition: {x: 6, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: -0.40600026}
+    neighborsIndex: 99020000b8020000d70200009a020000d80200009b020000ba020000d9020000
+  - index: 698
+    gridPosition: {x: 7, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: -0.30600023}
+    neighborsIndex: 9a020000b9020000d80200009b020000d90200009c020000bb020000da020000
+  - index: 699
+    gridPosition: {x: 8, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: -0.20600021}
+    neighborsIndex: 9b020000ba020000d90200009c020000da0200009d020000bc020000db020000
+  - index: 700
+    gridPosition: {x: 9, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: -0.106000185}
+    neighborsIndex: 9c020000bb020000da0200009d020000db0200009e020000bd020000dc020000
+  - index: 701
+    gridPosition: {x: 10, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: -0.006000161}
+    neighborsIndex: 9d020000bc020000db0200009e020000dc0200009f020000be020000dd020000
+  - index: 702
+    gridPosition: {x: 11, y: 25}
+    position: {x: 0.85, y: 0.4, z: 0.09399983}
+    neighborsIndex: 9e020000bd020000dc0200009f020000dd020000a0020000bf020000de020000
+  - index: 703
+    gridPosition: {x: 12, y: 25}
+    position: {x: 0.85, y: 0.4, z: 0.19399989}
+    neighborsIndex: 9f020000be020000dd020000a0020000de020000a1020000c0020000df020000
+  - index: 704
+    gridPosition: {x: 13, y: 25}
+    position: {x: 0.84999996, y: 0.4, z: 0.2939999}
+    neighborsIndex: a0020000bf020000de020000a1020000df020000a2020000c1020000e0020000
+  - index: 705
+    gridPosition: {x: 14, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: 0.39399981}
+    neighborsIndex: a1020000c0020000df020000a2020000e0020000a3020000c2020000e1020000
+  - index: 706
+    gridPosition: {x: 15, y: 25}
+    position: {x: 0.8499999, y: 0.4, z: 0.49399984}
+    neighborsIndex: a2020000c1020000e0020000a3020000e1020000a4020000c3020000e2020000
+  - index: 707
+    gridPosition: {x: 16, y: 25}
+    position: {x: 0.85, y: 0.4, z: 0.59399986}
+    neighborsIndex: a3020000c2020000e1020000a4020000e2020000a5020000c4020000e3020000
+  - index: 708
+    gridPosition: {x: 17, y: 25}
+    position: {x: 0.8500001, y: 0.4, z: 0.69399995}
+    neighborsIndex: a4020000c3020000e2020000a5020000e3020000a6020000c5020000e4020000
+  - index: 709
+    gridPosition: {x: 18, y: 25}
+    position: {x: 0.8500001, y: 0.4, z: 0.79399997}
+    neighborsIndex: a5020000c4020000e3020000a6020000e4020000a7020000c6020000e5020000
+  - index: 710
+    gridPosition: {x: 19, y: 25}
+    position: {x: 0.85, y: 0.4, z: 0.8939998}
+    neighborsIndex: a6020000c5020000e4020000a7020000e5020000a8020000c7020000e6020000
+  - index: 711
+    gridPosition: {x: 20, y: 25}
+    position: {x: 0.85, y: 0.4, z: 0.99399984}
+    neighborsIndex: a7020000c6020000e5020000a8020000e6020000a9020000c8020000e7020000
+  - index: 712
+    gridPosition: {x: 21, y: 25}
+    position: {x: 0.85, y: 0.4, z: 1.0939999}
+    neighborsIndex: a8020000c7020000e6020000a9020000e7020000aa020000c9020000e8020000
+  - index: 713
+    gridPosition: {x: 22, y: 25}
+    position: {x: 0.85, y: 0.4, z: 1.1939998}
+    neighborsIndex: a9020000c8020000e7020000aa020000e8020000ab020000ca020000e9020000
+  - index: 714
+    gridPosition: {x: 23, y: 25}
+    position: {x: 0.85, y: 0.4, z: 1.2939998}
+    neighborsIndex: aa020000c9020000e8020000ab020000e9020000ac020000cb020000ea020000
+  - index: 715
+    gridPosition: {x: 24, y: 25}
+    position: {x: 0.85, y: 0.4, z: 1.3939999}
+    neighborsIndex: ab020000ca020000e9020000ac020000ea020000ad020000cc020000eb020000
+  - index: 716
+    gridPosition: {x: 25, y: 25}
+    position: {x: 0.85, y: 0.4, z: 1.4939998}
+    neighborsIndex: ac020000cb020000ea020000ad020000eb020000ae020000cd020000ec020000
+  - index: 717
+    gridPosition: {x: 26, y: 25}
+    position: {x: 0.8500001, y: 0.4, z: 1.594}
+    neighborsIndex: ad020000cc020000eb020000ae020000ec020000af020000ce020000ed020000
+  - index: 718
+    gridPosition: {x: 27, y: 25}
+    position: {x: 0.8500001, y: 0.4, z: 1.6939999}
+    neighborsIndex: ae020000cd020000ec020000af020000ed020000b0020000cf020000ee020000
+  - index: 719
+    gridPosition: {x: 28, y: 25}
+    position: {x: 0.8500001, y: 0.4, z: 1.7939998}
+    neighborsIndex: af020000ce020000ed020000b0020000ee020000b1020000d0020000ef020000
+  - index: 720
+    gridPosition: {x: 29, y: 25}
+    position: {x: 0.85, y: 0.4, z: 1.8939999}
+    neighborsIndex: b0020000cf020000ee020000b1020000ef020000b2020000d1020000
+  - index: 721
+    gridPosition: {x: 30, y: 25}
+    position: {x: 0.85, y: 0.4, z: 1.9939998}
+    neighborsIndex: b1020000d0020000ef020000b2020000
+  - index: 722
+    gridPosition: {x: 0, y: 26}
+    position: {x: 0.9500001, y: 0.4, z: -1.0060002}
+    neighborsIndex: b3020000f0020000b4020000d3020000f1020000
+  - index: 723
+    gridPosition: {x: 1, y: 26}
+    position: {x: 0.95000005, y: 0.4, z: -0.90600014}
+    neighborsIndex: b3020000d2020000f0020000b4020000f1020000b5020000d4020000f2020000
+  - index: 724
+    gridPosition: {x: 2, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: -0.80600023}
+    neighborsIndex: b4020000d3020000f1020000b5020000f2020000b6020000d5020000f3020000
+  - index: 725
+    gridPosition: {x: 3, y: 26}
+    position: {x: 0.9500001, y: 0.4, z: -0.7060001}
+    neighborsIndex: b5020000d4020000f2020000b6020000f3020000b7020000d6020000f4020000
+  - index: 726
+    gridPosition: {x: 4, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: -0.6060002}
+    neighborsIndex: b6020000d5020000f3020000b7020000f4020000b8020000d7020000f5020000
+  - index: 727
+    gridPosition: {x: 5, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: -0.50600016}
+    neighborsIndex: b7020000d6020000f4020000b8020000f5020000b9020000d8020000f6020000
+  - index: 728
+    gridPosition: {x: 6, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: -0.4060002}
+    neighborsIndex: b8020000d7020000f5020000b9020000f6020000ba020000d9020000f7020000
+  - index: 729
+    gridPosition: {x: 7, y: 26}
+    position: {x: 0.9500001, y: 0.4, z: -0.30600023}
+    neighborsIndex: b9020000d8020000f6020000ba020000f7020000bb020000da020000f8020000
+  - index: 730
+    gridPosition: {x: 8, y: 26}
+    position: {x: 0.9500001, y: 0.4, z: -0.20600015}
+    neighborsIndex: ba020000d9020000f7020000bb020000f8020000bc020000db020000f9020000
+  - index: 731
+    gridPosition: {x: 9, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: -0.106000125}
+    neighborsIndex: bb020000da020000f8020000bc020000f9020000bd020000dc020000fa020000
+  - index: 732
+    gridPosition: {x: 10, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: -0.006000161}
+    neighborsIndex: bc020000db020000f9020000bd020000fa020000be020000dd020000fb020000
+  - index: 733
+    gridPosition: {x: 11, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.09399983}
+    neighborsIndex: bd020000dc020000fa020000be020000fb020000bf020000de020000fc020000
+  - index: 734
+    gridPosition: {x: 12, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.19399989}
+    neighborsIndex: be020000dd020000fb020000bf020000fc020000c0020000df020000fd020000
+  - index: 735
+    gridPosition: {x: 13, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.2939999}
+    neighborsIndex: bf020000de020000fc020000c0020000fd020000c1020000e0020000fe020000
+  - index: 736
+    gridPosition: {x: 14, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.39399981}
+    neighborsIndex: c0020000df020000fd020000c1020000fe020000c2020000e1020000ff020000
+  - index: 737
+    gridPosition: {x: 15, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.49399984}
+    neighborsIndex: c1020000e0020000fe020000c2020000ff020000c3020000e202000000030000
+  - index: 738
+    gridPosition: {x: 16, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.59399986}
+    neighborsIndex: c2020000e1020000ff020000c302000000030000c4020000e302000001030000
+  - index: 739
+    gridPosition: {x: 17, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.6939999}
+    neighborsIndex: c3020000e202000000030000c402000001030000c5020000e402000002030000
+  - index: 740
+    gridPosition: {x: 18, y: 26}
+    position: {x: 0.9500002, y: 0.4, z: 0.79399997}
+    neighborsIndex: c4020000e302000001030000c502000002030000c6020000e502000003030000
+  - index: 741
+    gridPosition: {x: 19, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.8939998}
+    neighborsIndex: c5020000e402000002030000c602000003030000c7020000e602000004030000
+  - index: 742
+    gridPosition: {x: 20, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 0.99399984}
+    neighborsIndex: c6020000e502000003030000c702000004030000c8020000e702000005030000
+  - index: 743
+    gridPosition: {x: 21, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 1.0939999}
+    neighborsIndex: c7020000e602000004030000c802000005030000c9020000e802000006030000
+  - index: 744
+    gridPosition: {x: 22, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 1.1939998}
+    neighborsIndex: c8020000e702000005030000c902000006030000ca020000e902000007030000
+  - index: 745
+    gridPosition: {x: 23, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 1.2939998}
+    neighborsIndex: c9020000e802000006030000ca02000007030000cb020000ea02000008030000
+  - index: 746
+    gridPosition: {x: 24, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 1.3939999}
+    neighborsIndex: ca020000e902000007030000cb02000008030000cc020000eb02000009030000
+  - index: 747
+    gridPosition: {x: 25, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 1.4939998}
+    neighborsIndex: cb020000ea02000008030000cc02000009030000cd020000ec0200000a030000
+  - index: 748
+    gridPosition: {x: 26, y: 26}
+    position: {x: 0.9500002, y: 0.4, z: 1.594}
+    neighborsIndex: cc020000eb02000009030000cd0200000a030000ce020000ed020000
+  - index: 749
+    gridPosition: {x: 27, y: 26}
+    position: {x: 0.9500002, y: 0.4, z: 1.6939999}
+    neighborsIndex: cd020000ec0200000a030000ce020000cf020000ee020000
+  - index: 750
+    gridPosition: {x: 28, y: 26}
+    position: {x: 0.9500002, y: 0.4, z: 1.7939998}
+    neighborsIndex: ce020000ed020000cf020000d0020000ef020000
+  - index: 751
+    gridPosition: {x: 29, y: 26}
+    position: {x: 0.95000017, y: 0.4, z: 1.8939999}
+    neighborsIndex: cf020000ee020000d0020000d1020000
+  - index: 752
+    gridPosition: {x: 0, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: -1.006}
+    neighborsIndex: d20200000b030000d3020000f10200000c030000
+  - index: 753
+    gridPosition: {x: 1, y: 27}
+    position: {x: 1.05, y: 0.4, z: -0.90600014}
+    neighborsIndex: d2020000f00200000b030000d30200000c030000d4020000f20200000d030000
+  - index: 754
+    gridPosition: {x: 2, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: -0.80600023}
+    neighborsIndex: d3020000f10200000c030000d40200000d030000d5020000f30200000e030000
+  - index: 755
+    gridPosition: {x: 3, y: 27}
+    position: {x: 1.05, y: 0.4, z: -0.706}
+    neighborsIndex: d4020000f20200000d030000d50200000e030000d6020000f40200000f030000
+  - index: 756
+    gridPosition: {x: 4, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: -0.6060002}
+    neighborsIndex: d5020000f30200000e030000d60200000f030000d7020000f502000010030000
+  - index: 757
+    gridPosition: {x: 5, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: -0.50600016}
+    neighborsIndex: d6020000f40200000f030000d702000010030000d8020000f602000011030000
+  - index: 758
+    gridPosition: {x: 6, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: -0.4060002}
+    neighborsIndex: d7020000f502000010030000d802000011030000d9020000f702000012030000
+  - index: 759
+    gridPosition: {x: 7, y: 27}
+    position: {x: 1.05, y: 0.4, z: -0.30600023}
+    neighborsIndex: d8020000f602000011030000d902000012030000da020000f802000013030000
+  - index: 760
+    gridPosition: {x: 8, y: 27}
+    position: {x: 1.05, y: 0.4, z: -0.20600021}
+    neighborsIndex: d9020000f702000012030000da02000013030000db020000f902000014030000
+  - index: 761
+    gridPosition: {x: 9, y: 27}
+    position: {x: 1.05, y: 0.4, z: -0.106000125}
+    neighborsIndex: da020000f802000013030000db02000014030000dc020000fa02000015030000
+  - index: 762
+    gridPosition: {x: 10, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: -0.006000161}
+    neighborsIndex: db020000f902000014030000dc02000015030000dd020000fb02000016030000
+  - index: 763
+    gridPosition: {x: 11, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.09399983}
+    neighborsIndex: dc020000fa02000015030000dd02000016030000de020000fc02000017030000
+  - index: 764
+    gridPosition: {x: 12, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.19399989}
+    neighborsIndex: dd020000fb02000016030000de02000017030000df020000fd02000018030000
+  - index: 765
+    gridPosition: {x: 13, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.2939999}
+    neighborsIndex: de020000fc02000017030000df02000018030000e0020000fe02000019030000
+  - index: 766
+    gridPosition: {x: 14, y: 27}
+    position: {x: 1.05, y: 0.4, z: 0.39399981}
+    neighborsIndex: df020000fd02000018030000e002000019030000e1020000ff0200001a030000
+  - index: 767
+    gridPosition: {x: 15, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.49399984}
+    neighborsIndex: e0020000fe02000019030000e10200001a030000e2020000000300001b030000
+  - index: 768
+    gridPosition: {x: 16, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.59399986}
+    neighborsIndex: e1020000ff0200001a030000e20200001b030000e3020000010300001c030000
+  - index: 769
+    gridPosition: {x: 17, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.6939999}
+    neighborsIndex: e2020000000300001b030000e30200001c030000e4020000020300001d030000
+  - index: 770
+    gridPosition: {x: 18, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.7939999}
+    neighborsIndex: e3020000010300001c030000e40200001d030000e5020000030300001e030000
+  - index: 771
+    gridPosition: {x: 19, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.8939998}
+    neighborsIndex: e4020000020300001d030000e50200001e030000e6020000040300001f030000
+  - index: 772
+    gridPosition: {x: 20, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 0.99399984}
+    neighborsIndex: e5020000030300001e030000e60200001f030000e70200000503000020030000
+  - index: 773
+    gridPosition: {x: 21, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 1.094}
+    neighborsIndex: e6020000040300001f030000e702000020030000e80200000603000021030000
+  - index: 774
+    gridPosition: {x: 22, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 1.1939998}
+    neighborsIndex: e70200000503000020030000e802000021030000e90200000703000022030000
+  - index: 775
+    gridPosition: {x: 23, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 1.2939998}
+    neighborsIndex: e80200000603000021030000e902000022030000ea0200000803000023030000
+  - index: 776
+    gridPosition: {x: 24, y: 27}
+    position: {x: 1.0500002, y: 0.4, z: 1.3939999}
+    neighborsIndex: e90200000703000022030000ea02000023030000eb02000009030000
+  - index: 777
+    gridPosition: {x: 25, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 1.4939998}
+    neighborsIndex: ea0200000803000023030000eb020000ec0200000a030000
+  - index: 778
+    gridPosition: {x: 26, y: 27}
+    position: {x: 1.0500001, y: 0.4, z: 1.594}
+    neighborsIndex: eb02000009030000ec020000ed020000
+  - index: 779
+    gridPosition: {x: 0, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: -1.0060002}
+    neighborsIndex: f002000024030000f10200000c03000025030000
+  - index: 780
+    gridPosition: {x: 1, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: f00200000b03000024030000f102000025030000f20200000d03000026030000
+  - index: 781
+    gridPosition: {x: 2, y: 28}
+    position: {x: 1.15, y: 0.4, z: -0.80600023}
+    neighborsIndex: f10200000c03000025030000f202000026030000f30200000e03000027030000
+  - index: 782
+    gridPosition: {x: 3, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: -0.7060001}
+    neighborsIndex: f20200000d03000026030000f302000027030000f40200000f03000028030000
+  - index: 783
+    gridPosition: {x: 4, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: -0.6060002}
+    neighborsIndex: f30200000e03000027030000f402000028030000f50200001003000029030000
+  - index: 784
+    gridPosition: {x: 5, y: 28}
+    position: {x: 1.15, y: 0.4, z: -0.5060003}
+    neighborsIndex: f40200000f03000028030000f502000029030000f6020000110300002a030000
+  - index: 785
+    gridPosition: {x: 6, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: -0.4060002}
+    neighborsIndex: f50200001003000029030000f60200002a030000f7020000120300002b030000
+  - index: 786
+    gridPosition: {x: 7, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: -0.30600023}
+    neighborsIndex: f6020000110300002a030000f70200002b030000f8020000130300002c030000
+  - index: 787
+    gridPosition: {x: 8, y: 28}
+    position: {x: 1.15, y: 0.4, z: -0.20600021}
+    neighborsIndex: f7020000120300002b030000f80200002c030000f9020000140300002d030000
+  - index: 788
+    gridPosition: {x: 9, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: -0.106000125}
+    neighborsIndex: f8020000130300002c030000f90200002d030000fa020000150300002e030000
+  - index: 789
+    gridPosition: {x: 10, y: 28}
+    position: {x: 1.15, y: 0.4, z: -0.006000161}
+    neighborsIndex: f9020000140300002d030000fa0200002e030000fb020000160300002f030000
+  - index: 790
+    gridPosition: {x: 11, y: 28}
+    position: {x: 1.15, y: 0.4, z: 0.09399986}
+    neighborsIndex: fa020000150300002e030000fb0200002f030000fc0200001703000030030000
+  - index: 791
+    gridPosition: {x: 12, y: 28}
+    position: {x: 1.15, y: 0.4, z: 0.19399989}
+    neighborsIndex: fb020000160300002f030000fc02000030030000fd0200001803000031030000
+  - index: 792
+    gridPosition: {x: 13, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 0.2939999}
+    neighborsIndex: fc0200001703000030030000fd02000031030000fe0200001903000032030000
+  - index: 793
+    gridPosition: {x: 14, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 0.39399981}
+    neighborsIndex: fd0200001803000031030000fe02000032030000ff0200001a03000033030000
+  - index: 794
+    gridPosition: {x: 15, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 0.49399984}
+    neighborsIndex: fe0200001903000032030000ff02000033030000000300001b03000034030000
+  - index: 795
+    gridPosition: {x: 16, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 0.59399986}
+    neighborsIndex: ff0200001a030000330300000003000034030000010300001c03000035030000
+  - index: 796
+    gridPosition: {x: 17, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 0.6939998}
+    neighborsIndex: 000300001b030000340300000103000035030000020300001d03000036030000
+  - index: 797
+    gridPosition: {x: 18, y: 28}
+    position: {x: 1.15, y: 0.4, z: 0.7939999}
+    neighborsIndex: 010300001c030000350300000203000036030000030300001e03000037030000
+  - index: 798
+    gridPosition: {x: 19, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 0.8939998}
+    neighborsIndex: 020300001d030000360300000303000037030000040300001f03000038030000
+  - index: 799
+    gridPosition: {x: 20, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 0.99399984}
+    neighborsIndex: 030300001e030000370300000403000038030000050300002003000039030000
+  - index: 800
+    gridPosition: {x: 21, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 1.0939999}
+    neighborsIndex: 040300001f0300003803000005030000390300000603000021030000
+  - index: 801
+    gridPosition: {x: 22, y: 28}
+    position: {x: 1.1499999, y: 0.4, z: 1.1939998}
+    neighborsIndex: 050300002003000039030000060300000703000022030000
+  - index: 802
+    gridPosition: {x: 23, y: 28}
+    position: {x: 1.15, y: 0.4, z: 1.2939998}
+    neighborsIndex: 0603000021030000070300000803000023030000
+  - index: 803
+    gridPosition: {x: 24, y: 28}
+    position: {x: 1.15, y: 0.4, z: 1.3939999}
+    neighborsIndex: 07030000220300000803000009030000
+  - index: 804
+    gridPosition: {x: 0, y: 29}
+    position: {x: 1.25, y: 0.4, z: -1.006}
+    neighborsIndex: 0b0300003a0300000c030000250300003b030000
+  - index: 805
+    gridPosition: {x: 1, y: 29}
+    position: {x: 1.25, y: 0.4, z: -0.90600014}
+    neighborsIndex: 0b030000240300003a0300000c0300003b0300000d030000260300003c030000
+  - index: 806
+    gridPosition: {x: 2, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: -0.80600023}
+    neighborsIndex: 0c030000250300003b0300000d0300003c0300000e030000270300003d030000
+  - index: 807
+    gridPosition: {x: 3, y: 29}
+    position: {x: 1.25, y: 0.4, z: -0.7060001}
+    neighborsIndex: 0d030000260300003c0300000e0300003d0300000f030000280300003e030000
+  - index: 808
+    gridPosition: {x: 4, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: -0.6060002}
+    neighborsIndex: 0e030000270300003d0300000f0300003e03000010030000290300003f030000
+  - index: 809
+    gridPosition: {x: 5, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: -0.5060003}
+    neighborsIndex: 0f030000280300003e030000100300003f030000110300002a03000040030000
+  - index: 810
+    gridPosition: {x: 6, y: 29}
+    position: {x: 1.25, y: 0.4, z: -0.40600026}
+    neighborsIndex: 10030000290300003f0300001103000040030000120300002b03000041030000
+  - index: 811
+    gridPosition: {x: 7, y: 29}
+    position: {x: 1.25, y: 0.4, z: -0.30600023}
+    neighborsIndex: 110300002a030000400300001203000041030000130300002c03000042030000
+  - index: 812
+    gridPosition: {x: 8, y: 29}
+    position: {x: 1.25, y: 0.4, z: -0.20600021}
+    neighborsIndex: 120300002b030000410300001303000042030000140300002d03000043030000
+  - index: 813
+    gridPosition: {x: 9, y: 29}
+    position: {x: 1.25, y: 0.4, z: -0.106000185}
+    neighborsIndex: 130300002c030000420300001403000043030000150300002e03000044030000
+  - index: 814
+    gridPosition: {x: 10, y: 29}
+    position: {x: 1.25, y: 0.4, z: -0.006000161}
+    neighborsIndex: 140300002d030000430300001503000044030000160300002f03000045030000
+  - index: 815
+    gridPosition: {x: 11, y: 29}
+    position: {x: 1.25, y: 0.4, z: 0.0939998}
+    neighborsIndex: 150300002e030000440300001603000045030000170300003003000046030000
+  - index: 816
+    gridPosition: {x: 12, y: 29}
+    position: {x: 1.25, y: 0.4, z: 0.19399986}
+    neighborsIndex: 160300002f030000450300001703000046030000180300003103000047030000
+  - index: 817
+    gridPosition: {x: 13, y: 29}
+    position: {x: 1.25, y: 0.4, z: 0.2939999}
+    neighborsIndex: 1703000030030000460300001803000047030000190300003203000048030000
+  - index: 818
+    gridPosition: {x: 14, y: 29}
+    position: {x: 1.25, y: 0.4, z: 0.39399981}
+    neighborsIndex: 18030000310300004703000019030000480300001a0300003303000049030000
+  - index: 819
+    gridPosition: {x: 15, y: 29}
+    position: {x: 1.25, y: 0.4, z: 0.49399984}
+    neighborsIndex: 1903000032030000480300001a030000490300001b030000340300004a030000
+  - index: 820
+    gridPosition: {x: 16, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: 0.5939999}
+    neighborsIndex: 1a03000033030000490300001b0300004a0300001c030000350300004b030000
+  - index: 821
+    gridPosition: {x: 17, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: 0.69399995}
+    neighborsIndex: 1b030000340300004a0300001c0300004b0300001d030000360300004c030000
+  - index: 822
+    gridPosition: {x: 18, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: 0.7939999}
+    neighborsIndex: 1c030000350300004b0300001d0300004c0300001e030000370300004d030000
+  - index: 823
+    gridPosition: {x: 19, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: 0.8939998}
+    neighborsIndex: 1d030000360300004c0300001e0300004d0300001f03000038030000
+  - index: 824
+    gridPosition: {x: 20, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: 0.99399984}
+    neighborsIndex: 1e030000370300004d0300001f0300002003000039030000
+  - index: 825
+    gridPosition: {x: 21, y: 29}
+    position: {x: 1.2500001, y: 0.4, z: 1.094}
+    neighborsIndex: 1f030000380300002003000021030000
+  - index: 826
+    gridPosition: {x: 0, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: -1.0060002}
+    neighborsIndex: 240300004e030000250300003b0300004f030000
+  - index: 827
+    gridPosition: {x: 1, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: 240300003a0300004e030000250300004f030000260300003c03000050030000
+  - index: 828
+    gridPosition: {x: 2, y: 30}
+    position: {x: 1.35, y: 0.4, z: -0.80600023}
+    neighborsIndex: 250300003b0300004f0300002603000050030000270300003d03000051030000
+  - index: 829
+    gridPosition: {x: 3, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: -0.7060001}
+    neighborsIndex: 260300003c030000500300002703000051030000280300003e03000052030000
+  - index: 830
+    gridPosition: {x: 4, y: 30}
+    position: {x: 1.35, y: 0.4, z: -0.6060002}
+    neighborsIndex: 270300003d030000510300002803000052030000290300003f03000053030000
+  - index: 831
+    gridPosition: {x: 5, y: 30}
+    position: {x: 1.35, y: 0.4, z: -0.50600016}
+    neighborsIndex: 280300003e0300005203000029030000530300002a0300004003000054030000
+  - index: 832
+    gridPosition: {x: 6, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: -0.40600014}
+    neighborsIndex: 290300003f030000530300002a030000540300002b0300004103000055030000
+  - index: 833
+    gridPosition: {x: 7, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: -0.30600023}
+    neighborsIndex: 2a03000040030000540300002b030000550300002c0300004203000056030000
+  - index: 834
+    gridPosition: {x: 8, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: -0.20600021}
+    neighborsIndex: 2b03000041030000550300002c030000560300002d0300004303000057030000
+  - index: 835
+    gridPosition: {x: 9, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: -0.106000185}
+    neighborsIndex: 2c03000042030000560300002d030000570300002e0300004403000058030000
+  - index: 836
+    gridPosition: {x: 10, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: -0.006000161}
+    neighborsIndex: 2d03000043030000570300002e030000580300002f0300004503000059030000
+  - index: 837
+    gridPosition: {x: 11, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: 0.09399983}
+    neighborsIndex: 2e03000044030000580300002f0300005903000030030000460300005a030000
+  - index: 838
+    gridPosition: {x: 12, y: 30}
+    position: {x: 1.35, y: 0.4, z: 0.19399989}
+    neighborsIndex: 2f0300004503000059030000300300005a03000031030000470300005b030000
+  - index: 839
+    gridPosition: {x: 13, y: 30}
+    position: {x: 1.35, y: 0.4, z: 0.2939999}
+    neighborsIndex: 30030000460300005a030000310300005b03000032030000480300005c030000
+  - index: 840
+    gridPosition: {x: 14, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: 0.39399981}
+    neighborsIndex: 31030000470300005b030000320300005c03000033030000490300005d030000
+  - index: 841
+    gridPosition: {x: 15, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: 0.49399984}
+    neighborsIndex: 32030000480300005c030000330300005d030000340300004a0300005e030000
+  - index: 842
+    gridPosition: {x: 16, y: 30}
+    position: {x: 1.35, y: 0.4, z: 0.59399986}
+    neighborsIndex: 33030000490300005d030000340300005e030000350300004b030000
+  - index: 843
+    gridPosition: {x: 17, y: 30}
+    position: {x: 1.35, y: 0.4, z: 0.69399995}
+    neighborsIndex: 340300004a0300005e03000035030000360300004c030000
+  - index: 844
+    gridPosition: {x: 18, y: 30}
+    position: {x: 1.3499999, y: 0.4, z: 0.7939999}
+    neighborsIndex: 350300004b03000036030000370300004d030000
+  - index: 845
+    gridPosition: {x: 19, y: 30}
+    position: {x: 1.35, y: 0.4, z: 0.8939998}
+    neighborsIndex: 360300004c0300003703000038030000
+  - index: 846
+    gridPosition: {x: 0, y: 31}
+    position: {x: 1.45, y: 0.4, z: -1.0060002}
+    neighborsIndex: 3a0300005f0300003b0300004f03000060030000
+  - index: 847
+    gridPosition: {x: 1, y: 31}
+    position: {x: 1.45, y: 0.4, z: -0.90600014}
+    neighborsIndex: 3a0300004e0300005f0300003b030000600300003c0300005003000061030000
+  - index: 848
+    gridPosition: {x: 2, y: 31}
+    position: {x: 1.45, y: 0.4, z: -0.80600023}
+    neighborsIndex: 3b0300004f030000600300003c030000610300003d0300005103000062030000
+  - index: 849
+    gridPosition: {x: 3, y: 31}
+    position: {x: 1.45, y: 0.4, z: -0.7060001}
+    neighborsIndex: 3c03000050030000610300003d030000620300003e0300005203000063030000
+  - index: 850
+    gridPosition: {x: 4, y: 31}
+    position: {x: 1.4500002, y: 0.4, z: -0.6060002}
+    neighborsIndex: 3d03000051030000620300003e030000630300003f0300005303000064030000
+  - index: 851
+    gridPosition: {x: 5, y: 31}
+    position: {x: 1.4500002, y: 0.4, z: -0.50600016}
+    neighborsIndex: 3e03000052030000630300003f03000064030000400300005403000065030000
+  - index: 852
+    gridPosition: {x: 6, y: 31}
+    position: {x: 1.4500002, y: 0.4, z: -0.40600014}
+    neighborsIndex: 3f03000053030000640300004003000065030000410300005503000066030000
+  - index: 853
+    gridPosition: {x: 7, y: 31}
+    position: {x: 1.4500002, y: 0.4, z: -0.30600023}
+    neighborsIndex: 4003000054030000650300004103000066030000420300005603000067030000
+  - index: 854
+    gridPosition: {x: 8, y: 31}
+    position: {x: 1.45, y: 0.4, z: -0.20600027}
+    neighborsIndex: 4103000055030000660300004203000067030000430300005703000068030000
+  - index: 855
+    gridPosition: {x: 9, y: 31}
+    position: {x: 1.45, y: 0.4, z: -0.106000185}
+    neighborsIndex: 4203000056030000670300004303000068030000440300005803000069030000
+  - index: 856
+    gridPosition: {x: 10, y: 31}
+    position: {x: 1.45, y: 0.4, z: -0.006000161}
+    neighborsIndex: 430300005703000068030000440300006903000045030000590300006a030000
+  - index: 857
+    gridPosition: {x: 11, y: 31}
+    position: {x: 1.4500002, y: 0.4, z: 0.0939998}
+    neighborsIndex: 440300005803000069030000450300006a030000460300005a0300006b030000
+  - index: 858
+    gridPosition: {x: 12, y: 31}
+    position: {x: 1.4500002, y: 0.4, z: 0.19399989}
+    neighborsIndex: 45030000590300006a030000460300006b030000470300005b0300006c030000
+  - index: 859
+    gridPosition: {x: 13, y: 31}
+    position: {x: 1.45, y: 0.4, z: 0.2939999}
+    neighborsIndex: 460300005a0300006b030000470300006c030000480300005c0300006d030000
+  - index: 860
+    gridPosition: {x: 14, y: 31}
+    position: {x: 1.4500002, y: 0.4, z: 0.39399981}
+    neighborsIndex: 470300005b0300006c030000480300006d030000490300005d030000
+  - index: 861
+    gridPosition: {x: 15, y: 31}
+    position: {x: 1.45, y: 0.4, z: 0.49399984}
+    neighborsIndex: 480300005c0300006d030000490300004a0300005e030000
+  - index: 862
+    gridPosition: {x: 16, y: 31}
+    position: {x: 1.4500002, y: 0.4, z: 0.59399986}
+    neighborsIndex: 490300005d0300004a0300004b030000
+  - index: 863
+    gridPosition: {x: 0, y: 32}
+    position: {x: 1.55, y: 0.4, z: -1.006}
+    neighborsIndex: 4e0300006e0300004f030000600300006f030000
+  - index: 864
+    gridPosition: {x: 1, y: 32}
+    position: {x: 1.55, y: 0.4, z: -0.90600014}
+    neighborsIndex: 4e0300005f0300006e0300004f0300006f030000500300006103000070030000
+  - index: 865
+    gridPosition: {x: 2, y: 32}
+    position: {x: 1.5500001, y: 0.4, z: -0.80600023}
+    neighborsIndex: 4f030000600300006f0300005003000070030000510300006203000071030000
+  - index: 866
+    gridPosition: {x: 3, y: 32}
+    position: {x: 1.55, y: 0.4, z: -0.7060001}
+    neighborsIndex: 5003000061030000700300005103000071030000520300006303000072030000
+  - index: 867
+    gridPosition: {x: 4, y: 32}
+    position: {x: 1.5500001, y: 0.4, z: -0.6060002}
+    neighborsIndex: 5103000062030000710300005203000072030000530300006403000073030000
+  - index: 868
+    gridPosition: {x: 5, y: 32}
+    position: {x: 1.5500001, y: 0.4, z: -0.50600016}
+    neighborsIndex: 5203000063030000720300005303000073030000540300006503000074030000
+  - index: 869
+    gridPosition: {x: 6, y: 32}
+    position: {x: 1.5500001, y: 0.4, z: -0.4060002}
+    neighborsIndex: 5303000064030000730300005403000074030000550300006603000075030000
+  - index: 870
+    gridPosition: {x: 7, y: 32}
+    position: {x: 1.5500001, y: 0.4, z: -0.30600017}
+    neighborsIndex: 5403000065030000740300005503000075030000560300006703000076030000
+  - index: 871
+    gridPosition: {x: 8, y: 32}
+    position: {x: 1.5500001, y: 0.4, z: -0.20600015}
+    neighborsIndex: 5503000066030000750300005603000076030000570300006803000077030000
+  - index: 872
+    gridPosition: {x: 9, y: 32}
+    position: {x: 1.55, y: 0.4, z: -0.106000185}
+    neighborsIndex: 5603000067030000760300005703000077030000580300006903000078030000
+  - index: 873
+    gridPosition: {x: 10, y: 32}
+    position: {x: 1.55, y: 0.4, z: -0.006000161}
+    neighborsIndex: 5703000068030000770300005803000078030000590300006a03000079030000
+  - index: 874
+    gridPosition: {x: 11, y: 32}
+    position: {x: 1.5500001, y: 0.4, z: 0.09399983}
+    neighborsIndex: 58030000690300007803000059030000790300005a0300006b030000
+  - index: 875
+    gridPosition: {x: 12, y: 32}
+    position: {x: 1.55, y: 0.4, z: 0.19399986}
+    neighborsIndex: 590300006a030000790300005a0300005b0300006c030000
+  - index: 876
+    gridPosition: {x: 13, y: 32}
+    position: {x: 1.55, y: 0.4, z: 0.2939999}
+    neighborsIndex: 5a0300006b0300005b0300005c0300006d030000
+  - index: 877
+    gridPosition: {x: 14, y: 32}
+    position: {x: 1.55, y: 0.4, z: 0.39399981}
+    neighborsIndex: 5b0300006c0300005c0300005d030000
+  - index: 878
+    gridPosition: {x: 0, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -1.0060002}
+    neighborsIndex: 5f0300007a030000600300006f0300007b030000
+  - index: 879
+    gridPosition: {x: 1, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.90600014}
+    neighborsIndex: 5f0300006e0300007a030000600300007b03000061030000700300007c030000
+  - index: 880
+    gridPosition: {x: 2, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.80600023}
+    neighborsIndex: 600300006f0300007b030000610300007c03000062030000710300007d030000
+  - index: 881
+    gridPosition: {x: 3, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.7060001}
+    neighborsIndex: 61030000700300007c030000620300007d03000063030000720300007e030000
+  - index: 882
+    gridPosition: {x: 4, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.6060003}
+    neighborsIndex: 62030000710300007d030000630300007e03000064030000730300007f030000
+  - index: 883
+    gridPosition: {x: 5, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.50600016}
+    neighborsIndex: 63030000720300007e030000640300007f030000650300007403000080030000
+  - index: 884
+    gridPosition: {x: 6, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.4060002}
+    neighborsIndex: 64030000730300007f0300006503000080030000660300007503000081030000
+  - index: 885
+    gridPosition: {x: 7, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.30600023}
+    neighborsIndex: 6503000074030000800300006603000081030000670300007603000082030000
+  - index: 886
+    gridPosition: {x: 8, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.20600015}
+    neighborsIndex: 6603000075030000810300006703000082030000680300007703000083030000
+  - index: 887
+    gridPosition: {x: 9, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.106000185}
+    neighborsIndex: 67030000760300008203000068030000830300006903000078030000
+  - index: 888
+    gridPosition: {x: 10, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: -0.006000161}
+    neighborsIndex: 680300007703000083030000690300006a03000079030000
+  - index: 889
+    gridPosition: {x: 11, y: 33}
+    position: {x: 1.6499999, y: 0.4, z: 0.09399983}
+    neighborsIndex: 69030000780300006a0300006b030000
+  - index: 890
+    gridPosition: {x: 0, y: 34}
+    position: {x: 1.75, y: 0.4, z: -1.006}
+    neighborsIndex: 6e030000840300006f0300007b03000085030000
+  - index: 891
+    gridPosition: {x: 1, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.90600014}
+    neighborsIndex: 6e0300007a030000840300006f03000085030000700300007c03000086030000
+  - index: 892
+    gridPosition: {x: 2, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.80600035}
+    neighborsIndex: 6f0300007b030000850300007003000086030000710300007d03000087030000
+  - index: 893
+    gridPosition: {x: 3, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.706}
+    neighborsIndex: 700300007c030000860300007103000087030000720300007e03000088030000
+  - index: 894
+    gridPosition: {x: 4, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.6060002}
+    neighborsIndex: 710300007d030000870300007203000088030000730300007f03000089030000
+  - index: 895
+    gridPosition: {x: 5, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.50600016}
+    neighborsIndex: 720300007e03000088030000730300008903000074030000800300008a030000
+  - index: 896
+    gridPosition: {x: 6, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.40600014}
+    neighborsIndex: 730300007f03000089030000740300008a03000075030000810300008b030000
+  - index: 897
+    gridPosition: {x: 7, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.30600017}
+    neighborsIndex: 74030000800300008a030000750300008b03000076030000820300008c030000
+  - index: 898
+    gridPosition: {x: 8, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.20600015}
+    neighborsIndex: 75030000810300008b030000760300008c0300007703000083030000
+  - index: 899
+    gridPosition: {x: 9, y: 34}
+    position: {x: 1.75, y: 0.4, z: -0.106000185}
+    neighborsIndex: 76030000820300008c0300007703000078030000
+  - index: 900
+    gridPosition: {x: 0, y: 35}
+    position: {x: 1.8499999, y: 0.4, z: -1.006}
+    neighborsIndex: 7a0300008d0300007b030000850300008e030000
+  - index: 901
+    gridPosition: {x: 1, y: 35}
+    position: {x: 1.8499997, y: 0.4, z: -0.90600014}
+    neighborsIndex: 7a030000840300008d0300007b0300008e0300007c030000860300008f030000
+  - index: 902
+    gridPosition: {x: 2, y: 35}
+    position: {x: 1.8499999, y: 0.4, z: -0.80600035}
+    neighborsIndex: 7b030000850300008e0300007c0300008f0300007d0300008703000090030000
+  - index: 903
+    gridPosition: {x: 3, y: 35}
+    position: {x: 1.8499997, y: 0.4, z: -0.7060001}
+    neighborsIndex: 7c030000860300008f0300007d030000900300007e0300008803000091030000
+  - index: 904
+    gridPosition: {x: 4, y: 35}
+    position: {x: 1.8499999, y: 0.4, z: -0.6060002}
+    neighborsIndex: 7d03000087030000900300007e030000910300007f0300008903000092030000
+  - index: 905
+    gridPosition: {x: 5, y: 35}
+    position: {x: 1.8499999, y: 0.4, z: -0.5060003}
+    neighborsIndex: 7e03000088030000910300007f03000092030000800300008a03000093030000
+  - index: 906
+    gridPosition: {x: 6, y: 35}
+    position: {x: 1.8499997, y: 0.4, z: -0.40600026}
+    neighborsIndex: 7f03000089030000920300008003000093030000810300008b03000094030000
+  - index: 907
+    gridPosition: {x: 7, y: 35}
+    position: {x: 1.8499999, y: 0.4, z: -0.30600023}
+    neighborsIndex: 800300008a030000930300008103000094030000820300008c030000
+  - index: 908
+    gridPosition: {x: 8, y: 35}
+    position: {x: 1.8499999, y: 0.4, z: -0.20600021}
+    neighborsIndex: 810300008b030000940300008203000083030000
+  - index: 909
+    gridPosition: {x: 0, y: 36}
+    position: {x: 1.95, y: 0.4, z: -1.0060002}
+    neighborsIndex: 8403000095030000850300008e03000096030000
+  - index: 910
+    gridPosition: {x: 1, y: 36}
+    position: {x: 1.9499998, y: 0.4, z: -0.90600014}
+    neighborsIndex: 840300008d030000950300008503000096030000860300008f03000097030000
+  - index: 911
+    gridPosition: {x: 2, y: 36}
+    position: {x: 1.95, y: 0.4, z: -0.80600023}
+    neighborsIndex: 850300008e030000960300008603000097030000870300009003000098030000
+  - index: 912
+    gridPosition: {x: 3, y: 36}
+    position: {x: 1.95, y: 0.4, z: -0.7060001}
+    neighborsIndex: 860300008f030000970300008703000098030000880300009103000099030000
+  - index: 913
+    gridPosition: {x: 4, y: 36}
+    position: {x: 1.95, y: 0.4, z: -0.6060002}
+    neighborsIndex: 870300009003000098030000880300009903000089030000920300009a030000
+  - index: 914
+    gridPosition: {x: 5, y: 36}
+    position: {x: 1.95, y: 0.4, z: -0.50600016}
+    neighborsIndex: 880300009103000099030000890300009a0300008a030000930300009b030000
+  - index: 915
+    gridPosition: {x: 6, y: 36}
+    position: {x: 1.95, y: 0.4, z: -0.4060002}
+    neighborsIndex: 89030000920300009a0300008a0300009b0300008b030000940300009c030000
+  - index: 916
+    gridPosition: {x: 7, y: 36}
+    position: {x: 1.95, y: 0.4, z: -0.30600023}
+    neighborsIndex: 8a030000930300009b0300008b0300009c0300008c030000
+  - index: 917
+    gridPosition: {x: 0, y: 37}
+    position: {x: 2.0500002, y: 0.4, z: -1.006}
+    neighborsIndex: 8d0300009d0300008e030000960300009e030000
+  - index: 918
+    gridPosition: {x: 1, y: 37}
+    position: {x: 2.0500002, y: 0.4, z: -0.90600014}
+    neighborsIndex: 8d030000950300009d0300008e0300009e0300008f030000970300009f030000
+  - index: 919
+    gridPosition: {x: 2, y: 37}
+    position: {x: 2.0500002, y: 0.4, z: -0.80600023}
+    neighborsIndex: 8e030000960300009e0300008f0300009f0300009003000098030000a0030000
+  - index: 920
+    gridPosition: {x: 3, y: 37}
+    position: {x: 2.0500002, y: 0.4, z: -0.706}
+    neighborsIndex: 8f030000970300009f03000090030000a00300009103000099030000a1030000
+  - index: 921
+    gridPosition: {x: 4, y: 37}
+    position: {x: 2.0500002, y: 0.4, z: -0.6060002}
+    neighborsIndex: 9003000098030000a003000091030000a1030000920300009a030000a2030000
+  - index: 922
+    gridPosition: {x: 5, y: 37}
+    position: {x: 2.0500002, y: 0.4, z: -0.50600016}
+    neighborsIndex: 9103000099030000a103000092030000a2030000930300009b030000a3030000
+  - index: 923
+    gridPosition: {x: 6, y: 37}
+    position: {x: 2.0500002, y: 0.4, z: -0.4060002}
+    neighborsIndex: 920300009a030000a203000093030000a3030000940300009c030000
+  - index: 924
+    gridPosition: {x: 7, y: 37}
+    position: {x: 2.0500002, y: 0.4, z: -0.30600023}
+    neighborsIndex: 930300009b030000a303000094030000
+  - index: 925
+    gridPosition: {x: 0, y: 38}
+    position: {x: 2.15, y: 0.4, z: -1.0060002}
+    neighborsIndex: 95030000a4030000960300009e030000a5030000
+  - index: 926
+    gridPosition: {x: 1, y: 38}
+    position: {x: 2.15, y: 0.4, z: -0.90600014}
+    neighborsIndex: 950300009d030000a403000096030000a5030000970300009f030000a6030000
+  - index: 927
+    gridPosition: {x: 2, y: 38}
+    position: {x: 2.15, y: 0.4, z: -0.80600023}
+    neighborsIndex: 960300009e030000a503000097030000a603000098030000a0030000a7030000
+  - index: 928
+    gridPosition: {x: 3, y: 38}
+    position: {x: 2.15, y: 0.4, z: -0.7060001}
+    neighborsIndex: 970300009f030000a603000098030000a703000099030000a1030000a8030000
+  - index: 929
+    gridPosition: {x: 4, y: 38}
+    position: {x: 2.15, y: 0.4, z: -0.6060002}
+    neighborsIndex: 98030000a0030000a703000099030000a80300009a030000a2030000a9030000
+  - index: 930
+    gridPosition: {x: 5, y: 38}
+    position: {x: 2.15, y: 0.4, z: -0.5060003}
+    neighborsIndex: 99030000a1030000a80300009a030000a90300009b030000a3030000
+  - index: 931
+    gridPosition: {x: 6, y: 38}
+    position: {x: 2.15, y: 0.4, z: -0.4060002}
+    neighborsIndex: 9a030000a2030000a90300009b0300009c030000
+  - index: 932
+    gridPosition: {x: 0, y: 39}
+    position: {x: 2.25, y: 0.4, z: -1.006}
+    neighborsIndex: 9d030000aa0300009e030000a5030000ab030000
+  - index: 933
+    gridPosition: {x: 1, y: 39}
+    position: {x: 2.2499998, y: 0.4, z: -0.90600014}
+    neighborsIndex: 9d030000a4030000aa0300009e030000ab0300009f030000a6030000ac030000
+  - index: 934
+    gridPosition: {x: 2, y: 39}
+    position: {x: 2.25, y: 0.4, z: -0.80600023}
+    neighborsIndex: 9e030000a5030000ab0300009f030000ac030000a0030000a7030000ad030000
+  - index: 935
+    gridPosition: {x: 3, y: 39}
+    position: {x: 2.25, y: 0.4, z: -0.7060001}
+    neighborsIndex: 9f030000a6030000ac030000a0030000ad030000a1030000a8030000ae030000
+  - index: 936
+    gridPosition: {x: 4, y: 39}
+    position: {x: 2.25, y: 0.4, z: -0.6060002}
+    neighborsIndex: a0030000a7030000ad030000a1030000ae030000a2030000a9030000
+  - index: 937
+    gridPosition: {x: 5, y: 39}
+    position: {x: 2.25, y: 0.4, z: -0.5060003}
+    neighborsIndex: a1030000a8030000ae030000a2030000a3030000
+  - index: 938
+    gridPosition: {x: 0, y: 40}
+    position: {x: 2.35, y: 0.4, z: -1.0060002}
+    neighborsIndex: a4030000af030000a5030000ab030000b0030000
+  - index: 939
+    gridPosition: {x: 1, y: 40}
+    position: {x: 2.3499997, y: 0.4, z: -0.90600014}
+    neighborsIndex: a4030000aa030000af030000a5030000b0030000a6030000ac030000b1030000
+  - index: 940
+    gridPosition: {x: 2, y: 40}
+    position: {x: 2.35, y: 0.4, z: -0.80600023}
+    neighborsIndex: a5030000ab030000b0030000a6030000b1030000a7030000ad030000b2030000
+  - index: 941
+    gridPosition: {x: 3, y: 40}
+    position: {x: 2.35, y: 0.4, z: -0.7060001}
+    neighborsIndex: a6030000ac030000b1030000a7030000b2030000a8030000ae030000
+  - index: 942
+    gridPosition: {x: 4, y: 40}
+    position: {x: 2.35, y: 0.4, z: -0.6060002}
+    neighborsIndex: a7030000ad030000b2030000a8030000a9030000
+  - index: 943
+    gridPosition: {x: 0, y: 41}
+    position: {x: 2.4499998, y: 0.4, z: -1.0060002}
+    neighborsIndex: aa030000b3030000ab030000b0030000b4030000
+  - index: 944
+    gridPosition: {x: 1, y: 41}
+    position: {x: 2.4499998, y: 0.4, z: -0.90600014}
+    neighborsIndex: aa030000af030000b3030000ab030000b4030000ac030000b1030000b5030000
+  - index: 945
+    gridPosition: {x: 2, y: 41}
+    position: {x: 2.4499998, y: 0.4, z: -0.80600023}
+    neighborsIndex: ab030000b0030000b4030000ac030000b5030000ad030000b2030000
+  - index: 946
+    gridPosition: {x: 3, y: 41}
+    position: {x: 2.4499998, y: 0.4, z: -0.7060001}
+    neighborsIndex: ac030000b1030000b5030000ad030000ae030000
+  - index: 947
+    gridPosition: {x: 0, y: 42}
+    position: {x: 2.5500002, y: 0.4, z: -1.006}
+    neighborsIndex: af030000b6030000b0030000b4030000b7030000
+  - index: 948
+    gridPosition: {x: 1, y: 42}
+    position: {x: 2.5500002, y: 0.4, z: -0.90600014}
+    neighborsIndex: af030000b3030000b6030000b0030000b7030000b1030000b5030000
+  - index: 949
+    gridPosition: {x: 2, y: 42}
+    position: {x: 2.5500002, y: 0.4, z: -0.80600023}
+    neighborsIndex: b0030000b4030000b7030000b1030000b2030000
+  - index: 950
+    gridPosition: {x: 0, y: 43}
+    position: {x: 2.65, y: 0.4, z: -1.006}
+    neighborsIndex: b3030000b8030000b4030000b7030000
+  - index: 951
+    gridPosition: {x: 1, y: 43}
+    position: {x: 2.65, y: 0.4, z: -0.90600014}
+    neighborsIndex: b3030000b6030000b8030000b4030000b5030000
+  - index: 952
+    gridPosition: {x: 0, y: 44}
+    position: {x: 2.75, y: 0.4, z: -1.006}
+    neighborsIndex: b6030000b7030000

@@ -30,7 +30,8 @@ public class FPSController : NetworkBehaviour
     [Header("parameters")]
     [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")][SerializeField] private bool landSnap = true;
     [Tooltip("permet de gérer le dash en fonction de l'orientation de la camera, verticalité comprise")][SerializeField] private bool dashVerticality = false;
-    [Tooltip("empeche le player de dépasser la maxAirSpeed, le controller ne prend plus en compte le airDrag")][SerializeField] private bool clampedMaxAirSpeed = false; 
+    [Tooltip("empeche le player de dépasser la maxAirSpeed, le controller ne prend plus en compte le airDrag")][SerializeField] private bool clampedMaxAirSpeed = false;
+    [Tooltip("est ce que le joueur doit attendre la fin du slide avant de JumpSlide")][SerializeField] private bool jumpSlideOnEndOfSlide = false;
 
     [Header("UnlockedCapacities")] 
     public bool wallRideUnlocked = true;
@@ -131,7 +132,7 @@ public class FPSController : NetworkBehaviour
     RaycastHit groundedHit;
     [HideInInspector] public bool fellOffWallrinding;
 
-    private Vector3 horizontalVelocity;
+    [HideInInspector] public Vector3 horizontalVelocity; //public uniquement pour le debugCanvas
 
     private bool justJumped;
     bool hasJumped;
@@ -335,9 +336,16 @@ public class FPSController : NetworkBehaviour
             }
         }
         
-        if (bufferJump && playerInput.actions["Jump"].IsPressed()) Jump();
-        
-        if(stateMachine.previousState != stateMachine.GetState(ControlerState.Grappling)) rb.linearVelocity = Vector3.zero;
+        if (bufferJump && playerInput.actions["Jump"].IsPressed() && stateMachine.previousState == stateMachine.GetState(ControlerState.Falling)) Jump();
+
+        if (stateMachine.previousState != stateMachine.GetState(ControlerState.Grappling))
+        {
+            if(!(stateMachine.previousState == stateMachine.GetState(ControlerState.Falling) && (verticalInput != 0f || horizontalInput != 0f)))
+            {
+                rb.linearVelocity = Vector3.zero;
+            }
+        }
+           
 
         _playerAnimation.SetMovingAnim(false);
 
@@ -823,6 +831,13 @@ public class FPSController : NetworkBehaviour
         if (!grounded && mustBeGrounded)
         {
             stateMachine.ChangeState(ControlerState.Falling);
+            return;
+        }
+
+        if (playerInput.actions["Jump"].WasPressedThisFrame() && !jumpSlideOnEndOfSlide)
+        {
+            SlideJump();
+            stateMachine.ChangeState(ControlerState.Idle);
             return;
         }
 
