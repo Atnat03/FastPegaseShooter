@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
+public interface IGun
+{
+    public void TryFire();
+}
+
 namespace GunDecorator
 {
-    public class GunController : MonoBehaviour
+    public class GunController : MonoBehaviour, IGun
     {
         private IShootModule[] _shootModule;
         private IReloadModule _reloadModule;
