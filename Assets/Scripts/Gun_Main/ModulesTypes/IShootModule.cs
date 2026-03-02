@@ -12,10 +12,10 @@ namespace GunDecorator
     {
         public void Reload();
     }
-    
-    public interface INoiseModule
+
+    public interface IRecoilModule
     {
-        public void ApplyNoise();
+        public void Recoil();
     }
 
     public interface IAmmoModule

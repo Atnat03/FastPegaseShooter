@@ -85,7 +85,7 @@ public class GunModuleCustomInspector : Editor
             {
                 moduleColorProp.colorValue = Color.crimson;
             }
-            else if (module is INoiseModule)
+            else if (module is IRecoilModule)
             {
                 moduleColorProp.colorValue = Color.wheat;
             }
@@ -129,7 +129,7 @@ public class GunModuleCustomInspector : Editor
                 }
             }
             
-            if (module is INoiseModule)
+            if (module is IRecoilModule)
             {
                 IShootModule[] shootModules = go.GetComponents<IShootModule>();
                 

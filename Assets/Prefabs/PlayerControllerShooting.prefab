@@ -388,6 +388,7 @@ MonoBehaviour:
   landSnap: 0
   dashVerticality: 0
   clampedMaxAirSpeed: 0
+  jumpSlideOnEndOfSlide: 0
   wallRideUnlocked: 1
   slideUnlocked: 1
   dashUnlocked: 1
@@ -450,6 +451,7 @@ MonoBehaviour:
   leftSideAgainstWall: 0
   rightSideAgainstWall: 0
   fellOffWallrinding: 0
+  horizontalVelocity: {x: 0, y: 0, z: 0}
   justWallRided: 0
 --- !u!114 &1282941799053182666
 MonoBehaviour:
@@ -1284,7 +1286,7 @@ GameObject:
   - component: {fileID: 5329717332355912109}
   - component: {fileID: 8675631573166046301}
   - component: {fileID: 8977986747039668759}
-  - component: {fileID: 2699203357301221378}
+  - component: {fileID: 6651845242360554492}
   m_Layer: 6
   m_Name: Pistol
   m_TagString: Untagged
@@ -1337,7 +1339,6 @@ MonoBehaviour:
   _secondModule: []
   _ammoType: {fileID: 0}
   _damage: 0
-  _fireRate: 0
 --- !u!114 &8977986747039668759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1353,7 +1354,7 @@ MonoBehaviour:
   moduleName: ReloadModule
   moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
   _magazineSize: 30
---- !u!114 &2699203357301221378
+--- !u!114 &6651845242360554492
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1362,12 +1363,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7875098038689886236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6b0bb26784b4670a9ba4c480a16424c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.ExplosifAmmoModule
-  moduleName: ExplosifAmmoModule
-  moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  _ammoPrefab: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
+  moduleName: RecoilModule
+  moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
+  targetPosition: {fileID: 1439403007567999513}
 --- !u!1 &8149685527222359090
 GameObject:
   m_ObjectHideFlags: 0
@@ -1459,8 +1460,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8802093150539166038}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.043619405, z: -0, w: 0.9990483}
+  m_LocalPosition: {x: 0.296, y: 0.384, z: 0.211}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
