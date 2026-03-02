@@ -8,6 +8,7 @@ public class DebugCanva : MonoBehaviour
     [SerializeField] TextMeshProUGUI controllerGrounded;
     [SerializeField] TextMeshProUGUI controllerSidesDetection;
     [SerializeField] TextMeshProUGUI canWallRide;
+    [SerializeField] TextMeshProUGUI CurrentVelocity;
     
     [Header("Ingame objects")]
     [SerializeField] FPSController mainFPSController;
@@ -39,9 +40,11 @@ public class DebugCanva : MonoBehaviour
         }
 
         canWallRide.text = (mainFPSController.fellOffWallrinding || mainFPSController.justWallRided) ? "Cannot wallride" : "Can wallride";
+
+        CurrentVelocity.text = "Current velocity :" + mainFPSController.horizontalVelocity.magnitude;
     }
 
-    void LateUpdate()
+    /*void LateUpdate()
     {
         if (TPSCamera.activeSelf)
         {
@@ -54,5 +57,5 @@ public class DebugCanva : MonoBehaviour
             TPSCamera.transform.LookAt(mainFPSController.transform.position);
         }
         
-    }
+    }*/
 }
