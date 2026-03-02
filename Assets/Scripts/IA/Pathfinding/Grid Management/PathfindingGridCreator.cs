@@ -17,6 +17,13 @@ public class PathfindingGridCreator : MonoBehaviour
     [SerializeField] private float detectionPrecision = 0.3f;
     [SerializeField] private float maxVerticalDistance = 0.3f;
     [SerializeField] private float agentHeight = 0.5f;
+    
+    [Header("Node Parameters")]
+    [SerializeField] private int wallAvoidanceDistance = 3;
+    
+    [Header("Debug")]
+    [SerializeField] private float nodeSize = 0.025f;
+    [SerializeField] private Gradient wallAvoidanceGradient = new Gradient();
 
     [HideInInspector] public List<PathfindingNode> nodes = new List<PathfindingNode>();
 
@@ -152,24 +159,54 @@ public class PathfindingGridCreator : MonoBehaviour
                 PathfindingNode node = new PathfindingNode(
                     currentNodeIndex,
                     new Vector2Int(i%zRaycastAmount, i/zRaycastAmount),
-                    hits[j].point);
+                    hits[j].point,
+                    0);
                 currentNodeIndex++;
                 nodesPerCell[i].Add(node);
                 nodes.Add(node);
             }
         }
 
-        for (int i = 0; i < raycastPositions.Length; i++)
+        List<int> borderNodes = new List<int>();
+        //Neighbor attribution
+        for (int i = 0; i < raycastPositions.Length; i++)//raycast positions
         {
-            foreach (int neighborIndex in GetNeighborsIndex(i))
+            foreach (int neighborIndex in GetNeighborsIndex(i))//neighboring raycasts' positions
             {
-                foreach (var node in nodesPerCell[i])
+                foreach (PathfindingNode node in nodesPerCell[i])//nodes by raycast's position
                 {
-                    foreach (var neighbor in nodesPerCell[neighborIndex])
+                    foreach (var neighbor in nodesPerCell[neighborIndex])//nodes' neighbors by raycasts' positions
                     {
                         if(Mathf.Abs(node.position.y - neighbor.position.y) <= maxVerticalDistance) node.neighborsIndex.Add(neighbor.index);
                     }
                 }
+            }
+        }
+        for(int i = 0; i < nodes.Count; i++)
+        {
+            if (nodes[i].neighborsIndex.Count < 8)
+            {
+                nodes[i].wallAvoidance = wallAvoidanceDistance;
+                borderNodes.Add(i);
+            }
+        }
+        
+        //WallAvoidance
+        foreach (int borderNode in borderNodes)
+        {
+            UpdateNeighboringNodesWallValue(borderNode, wallAvoidanceDistance);
+        }
+    }
+    void UpdateNeighboringNodesWallValue(int node, int wallAvoidanceValue)
+    {
+        if (wallAvoidanceValue < 0)return;
+        
+        foreach (int neighbor in nodes[node].neighborsIndex)
+        {
+            if(nodes[neighbor].wallAvoidance < wallAvoidanceValue-1)
+            {
+                nodes[neighbor].wallAvoidance = wallAvoidanceValue - 1;
+                UpdateNeighboringNodesWallValue(neighbor, wallAvoidanceValue - 1);
             }
         }
     }
@@ -262,16 +299,19 @@ public class PathfindingGridCreator : MonoBehaviour
             }
         }
         
-        Gizmos.color = new Color(0.8f,0.2f,0.2f);
         if(drawNodes || drawNodesConnections)
         {
             foreach (PathfindingNode node in nodes)
             {
-                if(drawNodes) Gizmos.DrawSphere(node.position, 0.02f);
+                Gizmos.color = wallAvoidanceGradient.Evaluate(wallAvoidanceDistance == 0 ? 0 : (node.wallAvoidance / (float)wallAvoidanceDistance)); 
+                if(drawNodes) Gizmos.DrawSphere(node.position, nodeSize);
+                
                 if(drawNodesConnections)
                 {
                     foreach (int n in node.neighborsIndex)
                     {
+                        float t = wallAvoidanceDistance == 0 ? 0 : Mathf.Min(node.wallAvoidance, nodes[n].wallAvoidance) / (float)wallAvoidanceDistance; 
+                        Gizmos.color = wallAvoidanceGradient.Evaluate(t);
                         Gizmos.DrawLine(node.position, nodes[n].position);
                     }
                 }
