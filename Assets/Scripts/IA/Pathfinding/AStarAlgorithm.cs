@@ -28,11 +28,11 @@ public class AStarAlgorithm : MonoBehaviour
             if (currentNode.Node == targetNode)
             {
                 AStarNode currentPathTile = currentNode;
-                List<PathfindingNode> path = new List<PathfindingNode>();
+                List<PathfindingNode> path = new List<PathfindingNode>() {currentPathTile.Node};
                 while (currentPathTile.Node != startNode)
                 {
-                    path.Add(currentPathTile.Node);
                     currentPathTile = currentPathTile.toStart;
+                    path.Add(currentPathTile.Node);
                 }
                 return path;
             }
@@ -40,26 +40,31 @@ public class AStarAlgorithm : MonoBehaviour
             //Check for walkability here by only selecting walkable nodes
             foreach (int neighbor in currentNode.Node.neighborsIndex)
             {
+                if(DoContainNode(searched, grid[neighbor]).Item1) continue;
+                
                 bool inSearch = DoContainNode(toSearch, grid[neighbor]).Item1;
-                int costToNeighbor = currentNode.G + GetDistance(currentNode.Node, targetNode);
+                int costToNeighbor = currentNode.G + GetDistance(currentNode.Node, grid[neighbor]);
                 
                 (bool, AStarNode) doContains = DoContainNode(toSearch, grid[neighbor]);
                 if (!inSearch || (doContains.Item1 && costToNeighbor < doContains.Item2.G))
                 {
                     if (!inSearch)
                     {
+                        int distToTarget = GetDistance(grid[neighbor], targetNode);
                         AStarNode newNode = new AStarNode
                         {
                             Node = grid[neighbor],
                             toStart = currentNode,
-                            G = currentNode.G + costToNeighbor,
-                            H = GetDistance(grid[neighbor], targetNode)
+                            G = costToNeighbor,
+                            H = distToTarget,
+                            F = costToNeighbor + distToTarget
                         };
                         toSearch.Add(newNode);
                     }
                     else
                     {
-                        doContains.Item2.G = currentNode.G + costToNeighbor;
+                        doContains.Item2.G = costToNeighbor;
+                        doContains.Item2.F = doContains.Item2.G + doContains.Item2.H; 
                         doContains.Item2.toStart = currentNode;
                     }
                 }
@@ -75,8 +80,19 @@ public class AStarAlgorithm : MonoBehaviour
         
         return (false, new AStarNode());
     }
+    
+    int GetDistance(PathfindingNode nodeA, PathfindingNode nodeB)
+    {
+        const int diagonalCost = 14;
+        const int straightCost = 10;
 
-    int GetDistance(PathfindingNode a, PathfindingNode b) => Mathf.FloorToInt((a.position-b.position).sqrMagnitude);
+        int distX = Mathf.Abs(nodeA.gridPosition.x - nodeB.gridPosition.x);
+        int distY = Mathf.Abs(nodeA.gridPosition.y - nodeB.gridPosition.y);
+
+        return distX > distY
+            ? diagonalCost * distY + straightCost * (distX - distY)
+            : diagonalCost * distX + straightCost * (distY - distX);
+    }
 
     public class AStarNode
     {
