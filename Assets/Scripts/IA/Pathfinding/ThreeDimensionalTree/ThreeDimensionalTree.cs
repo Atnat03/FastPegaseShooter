@@ -1,28 +1,35 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class ThreeDimensionalTree
 {
     ThreeDimensionalNode root;
 
-    public void Populate(List<Vector3> values)
+    public void Populate(List<PathfindingNode> values)
     {
         root = Build(values, 0, null);
     }
-    ThreeDimensionalNode Build(List<Vector3> points, int depth, ThreeDimensionalNode parent)
+    ThreeDimensionalNode Build(List<PathfindingNode> points, int depth, ThreeDimensionalNode parent)
     {
         if (points == null || points.Count == 0)
             return null;
 
         int axis = depth % 3;
         
-        points.Sort((a, b) => a[axis].CompareTo(b[axis]));
-        int medianIndex = points.Count / 2;
-        ThreeDimensionalNode node = new ThreeDimensionalNode(parent, points[medianIndex], depth);
+        List<PathfindingNode> pointsCopy = new List<PathfindingNode>();
+        foreach (PathfindingNode pfNode in points)
+        {
+            pointsCopy.Add(pfNode);
+        }
+        pointsCopy.Sort((a, b) => a.position[axis].CompareTo(b.position[axis]));
+        
+        int medianIndex = pointsCopy.Count / 2;
+        ThreeDimensionalNode node = new ThreeDimensionalNode(parent, pointsCopy[medianIndex], depth);
 
-        List<Vector3> leftPoints = points.GetRange(0, medianIndex);
-        List<Vector3> rightPoints = points.GetRange(medianIndex + 1, points.Count - medianIndex - 1);
+        List<PathfindingNode> leftPoints = pointsCopy.GetRange(0, medianIndex);
+        List<PathfindingNode> rightPoints = pointsCopy.GetRange(medianIndex + 1, pointsCopy.Count - medianIndex - 1);
 
         node.left = Build(leftPoints, depth + 1, node);
         node.right = Build(rightPoints, depth + 1, node);
@@ -30,7 +37,7 @@ public class ThreeDimensionalTree
         return node;
     }
 
-    public bool Add(Vector3 value)
+    public bool Add(PathfindingNode value)
     {
         if(root == null)
         {
@@ -40,9 +47,9 @@ public class ThreeDimensionalTree
         
         return Add(value, root);
     }
-    bool Add(Vector3 value, ThreeDimensionalNode n)
+    bool Add(PathfindingNode value, ThreeDimensionalNode n)
     {
-        float comparisonResult = n.Compare(value);
+        float comparisonResult = n.Compare(value.position);
         if(Mathf.Abs(comparisonResult) < 1e-6f) return false;//Value already in the tree
 
         if (comparisonResult < 0)
@@ -85,7 +92,7 @@ public class ThreeDimensionalTree
         
         if(ExistSimilar(value, threshold, primaryBranch)) return true;
         
-        float axisDiff = Mathf.Abs(value[n.deepth%3] - n.value[n.deepth%3]);
+        float axisDiff = Mathf.Abs(value[n.deepth%3] - n.node.position[n.deepth%3]);
         
         if(axisDiff <= threshold)
             if(ExistSimilar(value, threshold, secondaryBranch)) return true;
@@ -102,18 +109,18 @@ public class ThreeDimensionalTree
         if(n == null) return null;
 
         ThreeDimensionalNode bestNode = n;
-        float bestDistance = (value - n.value).sqrMagnitude;
+        float bestDistance = (value - n.node.position).sqrMagnitude;
 
         int axis = n.deepth % 3;
 
-        ThreeDimensionalNode primary = value[axis] < n.value[axis] ? n.left : n.right;
-        ThreeDimensionalNode secondary = value[axis] < n.value[axis] ? n.right : n.left;
+        ThreeDimensionalNode primary = value[axis] < n.node.position[axis] ? n.left : n.right;
+        ThreeDimensionalNode secondary = value[axis] < n.node.position[axis] ? n.right : n.left;
 
         // 1. explorer primaire
         if(primary != null)
         {
             ThreeDimensionalNode candidate = FindClosest(value, primary);
-            float dist = (value - candidate.value).sqrMagnitude;
+            float dist = (value - candidate.node.position).sqrMagnitude;
 
             if(dist < bestDistance)
             {
@@ -123,13 +130,13 @@ public class ThreeDimensionalTree
         }
 
         // 2. tester si on doit explorer secondaire
-        float axisDiff = value[axis] - n.value[axis];
+        float axisDiff = value[axis] - n.node.position[axis];
         if(axisDiff * axisDiff < bestDistance)
         {
             if(secondary != null)
             {
                 ThreeDimensionalNode candidate = FindClosest(value, secondary);
-                float dist = (value - candidate.value).sqrMagnitude;
+                float dist = (value - candidate.node.position).sqrMagnitude;
 
                 if(dist < bestDistance)
                 {

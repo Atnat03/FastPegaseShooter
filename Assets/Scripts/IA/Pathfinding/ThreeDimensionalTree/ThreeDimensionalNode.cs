@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ThreeDimensionalNode
 {
-    public Vector3 value;
+    public PathfindingNode node;
     public int deepth;
 
     public ThreeDimensionalNode parent;
@@ -12,10 +12,10 @@ public class ThreeDimensionalNode
     public ThreeDimensionalNode left;
     public ThreeDimensionalNode right;
 
-    public ThreeDimensionalNode(ThreeDimensionalNode parent, Vector3 value, int deepth)
+    public ThreeDimensionalNode(ThreeDimensionalNode parent, PathfindingNode node, int deepth)
     {
         this.parent = parent;
-        this.value = value;
+        this.node = node;
         this.deepth = deepth;
     }
     
@@ -30,7 +30,7 @@ public class ThreeDimensionalNode
         return this;
     }
 
-    public float Compare(Vector3 otherValue) => otherValue[deepth % 3] - value[deepth % 3];
+    public float Compare(Vector3 otherValue) => otherValue[deepth % 3] - node.position[deepth % 3];
 
-    public bool IsSimilar(Vector3 otherValue, float threshold) => Vector3.Distance(otherValue, value) <= threshold;
+    public bool IsSimilar(Vector3 otherValue, float threshold) => Vector3.Distance(otherValue, node.position) <= threshold;
 }

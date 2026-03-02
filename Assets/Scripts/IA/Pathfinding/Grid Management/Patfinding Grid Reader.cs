@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Profiling;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
 {
     public PathfindingGridSO pathfindingGridSO;
 
     public ThreeDimensionalTree searchTree;
+
+    [SerializeField] private AStarAlgorithm _aStarAlgorithm;
     
     //Debug Variables
+    [SerializeField] private Transform starTransform;
     [HideInInspector] public bool drawNodes = true;
     [HideInInspector] public bool drawNodesConnections = true;
     Vector3 playerPosition;
@@ -22,7 +24,7 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
     {
         searchTree = new ThreeDimensionalTree();
         List<Vector3> values = pathfindingGridSO.nodes.Select(n => n.position).ToList();
-        searchTree.Populate(values);
+        searchTree.Populate(pathfindingGridSO.nodes);
     }
 
     private void FixedUpdate()
@@ -55,14 +57,26 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
 
         if (searchTree != null)
         {
-            Gizmos.color = Color.blue;
-            Vector3 position = Vector3.zero;
+            PathfindingNode playerNode = null;
+            PathfindingNode startingNode = null;
             using (findClosestNodeMarker.Auto())
             {
-                position = searchTree.FindClosest(playerPosition).value;
+                playerNode = searchTree.FindClosest(playerPosition).node;
+                startingNode = searchTree.FindClosest(starTransform.position).node;
             }
-            Gizmos.DrawSphere(position, 0.025f);
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(playerNode.position, 0.025f);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(startingNode.position, 0.025f);
+            
+            List<PathfindingNode> path = _aStarAlgorithm.FindPathFromGrid(pathfindingGridSO.nodes, startingNode,  playerNode);
+            Gizmos.color = Color.cyan;
+            for(int i = 0; i < path.Count-1; i++)
+            {
+                Gizmos.DrawLine(path[i].position, path[i+1].position);
+            }
         }
+        
     }
 
     public void OnPlayerMoving(Vector3 playerPos)
