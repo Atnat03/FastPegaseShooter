@@ -4,6 +4,7 @@ using FishNet;
 using FishNet.Managing;
 using UnityEngine;
 using FishNet.Discovery;
+using FishNet.Transporting;
 
 namespace Network.Lobby
 {
@@ -26,8 +27,20 @@ namespace Network.Lobby
             if (_discovery == null) return;
 
             _discovery.ServerFoundCallback += OnServerFound;
+            _networkManager.ServerManager.OnServerConnectionState += OnServerState;
 
             _lobbyUI.SetLobbyManager(this);
+        }
+        
+        private void OnServerState(ServerConnectionStateArgs args)
+        {
+            Debug.Log("Server state : " + args.ConnectionState);
+
+            if (args.ConnectionState == LocalConnectionState.Started)
+            {
+                Debug.Log("START ADVERTISE");
+                _discovery.AdvertiseServer();
+            }
         }
 
         private void OnEnable()
@@ -41,9 +54,10 @@ namespace Network.Lobby
         private void OnDisable()
         {
             if (_discovery != null)
-            {
                 _discovery.ServerFoundCallback -= OnServerFound;
-            }
+
+            if (_networkManager != null)
+                _networkManager.ServerManager.OnServerConnectionState -= OnServerState;
         }
 
         private void OnServerFound(IPEndPoint endPoint)
@@ -90,12 +104,8 @@ namespace Network.Lobby
 
             _networkManager.ServerManager.StartConnection();
             _networkManager.ClientManager.StartConnection();
-
-            // Advertise SEULEMENT si on est serveur (host)
-            if (_networkManager.IsServerStarted && !_discovery.IsAdvertising)
-            {
-                _discovery.AdvertiseServer();
-            }
+            
+            _lobbyUI.DesactivateUI();
         }
 
         // Pour rejoindre (appelée depuis LobbyInfoUI)

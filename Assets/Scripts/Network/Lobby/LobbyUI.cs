@@ -9,6 +9,7 @@ namespace Network.Lobby
     {
         [SerializeField] private Transform _parentList;
         [SerializeField] private LobbyInfoUI _lobbyInfoPrefab;
+        [SerializeField] private GameObject _parent;
         
         private LobbyManager _lobbyManager;
 
@@ -19,6 +20,8 @@ namespace Network.Lobby
         
         public void UpdateUIList(List<string> list)
         {
+            print("update list " +  list.Count);
+            
             foreach (Transform child in _parentList)
             {
                 Destroy(child.gameObject);
@@ -29,6 +32,11 @@ namespace Network.Lobby
                 LobbyInfoUI lobbyInfo = Instantiate(_lobbyInfoPrefab, _parentList);
                 lobbyInfo.Initialize(lobbyTitle, () => _lobbyManager.JoinGame(lobbyTitle));
             }
+        }
+
+        public void DesactivateUI()
+        {
+            _parent.SetActive(false);
         }
     }
 }
