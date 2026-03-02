@@ -23,6 +23,7 @@ public class RecoilModule : GunModule, IRecoilModule
     {
         transform.Translate(new Vector3( 0f, 0f, -_recoilOffsetIntensity), Space.Self);
         transform.localRotation *= Quaternion.Euler( -_recoilTorkIntensity, 0f,0f);
+        _camTransform.localRotation *= Quaternion.Euler( -_recoilTorkIntensity / 5, 0f,0f); // ignoble
     }
 
     public void OnEnable()
@@ -43,7 +44,7 @@ public class RecoilModule : GunModule, IRecoilModule
     
     void BringBackWeapon()
     {
-        transform.transform.position = Vector3.Lerp(transform.transform.position, _targetPosition.position, _recoilOffsetCompensationSpeed *  Time.deltaTime);
-        transform.transform.rotation = Quaternion.Slerp(transform.transform.rotation, _targetPosition.rotation, _recoilTorkCompensationSpeed * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.transform.position, _targetPosition.position, _recoilOffsetCompensationSpeed *  Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _targetPosition.rotation, _recoilTorkCompensationSpeed * Time.deltaTime);
     }
 }

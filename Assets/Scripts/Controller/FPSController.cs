@@ -122,6 +122,7 @@ public class FPSController : NetworkBehaviour
     
     private Transform _currentGrapplePoint ;
     private Camera _camera;
+    private Quaternion cameraTargetRotation;
     private float _cameraDefaultFOV;
     
     [HideInInspector] public bool grounded;
@@ -314,6 +315,8 @@ public class FPSController : NetworkBehaviour
             out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"));
 
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        
+        cameraTargetRotation =  Quaternion.Euler(pitch, yaw, currentRoll);
     }
 
     #endregion
@@ -1151,7 +1154,7 @@ public class FPSController : NetworkBehaviour
         float targetRoll = cameraTarget.eulerAngles.z;
         currentRoll = Mathf.LerpAngle(currentRoll, targetRoll, followSmoothing * Time.deltaTime);
 
-        cameraTransform.rotation = Quaternion.Euler(pitch, yaw, currentRoll);
+        cameraTransform.rotation = Quaternion.Slerp(cameraTransform.rotation, cameraTargetRotation, 10 * Time.deltaTime);
 
         Vector3 targetPos = cameraTarget.position;
 
