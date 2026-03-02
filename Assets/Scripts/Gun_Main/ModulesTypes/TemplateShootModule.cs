@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GunDecorator
 {
-    public abstract class TemplateShootModule : GunModule, IShootModule
+    public class TemplateShootModule : GunModule, IShootModule
     {
         [SerializeField] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
@@ -55,8 +55,6 @@ namespace GunDecorator
                 _ammoModule.SpawnBullet();
                 return;
             }
-            
-            //Shooting classique
             
             Debug.Log("Bullet fired");
         }

@@ -20,7 +20,6 @@ namespace GunDecorator
 
     public interface IAmmoModule
     {
-        public GameObject AmmoPrefab { get; }
         public void SpawnBullet();
     }
 
