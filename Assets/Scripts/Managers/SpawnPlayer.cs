@@ -37,6 +37,7 @@ public class SpawnPlayer : NetworkBehaviour
 		Vector3 randomPos = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
 		
 		playerObj.transform.position = randomPos;
+		playerObj.transform.name = "Player " + player.ClientId;
 		
 		SetUpLayerTargetRpc(player, playerObj.GetComponent<FPSController>());
 	}

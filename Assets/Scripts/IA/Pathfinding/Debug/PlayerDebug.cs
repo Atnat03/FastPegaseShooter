@@ -1,4 +1,5 @@
 using System;
+using FishNet.Object;
 using UnityEngine;
 
 public class PlayerDebug : MonoBehaviour
@@ -13,7 +14,8 @@ public class PlayerDebug : MonoBehaviour
     }
 }
 
-public struct PlayerPosRequestEvent
+public struct PlayerPosRequestEvent : INetworkEvent
 {
     public IPlayerPositionListener positionListener;
+    public NetworkObject player { get; set; }
 }
