@@ -5,8 +5,6 @@ namespace GunDecorator
     public class BasicShootModule : TemplateShootModule
     {
         [SerializeField] private int _damage;
-        [SerializeField] private float _fireRate;
-        
 
         public override void Shooting()
         {
