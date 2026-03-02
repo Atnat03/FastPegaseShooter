@@ -25,6 +25,15 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
         searchTree = new ThreeDimensionalTree();
         List<Vector3> values = pathfindingGridSO.nodes.Select(n => n.position).ToList();
         searchTree.Populate(pathfindingGridSO.nodes);
+
+        EventBusInitialiser.instance.Bus.Subscribe((PathRequestEvent PRE) =>
+        {
+            PRE.requester.RequestPath(
+                _aStarAlgorithm.FindPathFromGrid(
+                    pathfindingGridSO.nodes,
+                    searchTree.FindClosest(PRE.position).node,
+                    searchTree.FindClosest(playerPosition).node));
+        });
     }
 
     private void FixedUpdate()
