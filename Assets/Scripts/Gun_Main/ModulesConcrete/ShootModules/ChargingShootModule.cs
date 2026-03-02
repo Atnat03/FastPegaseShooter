@@ -14,16 +14,7 @@ namespace GunDecorator
             base.Shooting();
             
             Debug.Log("Charging Shoot Module : " + _damage);
-        }
-        
-        //Empecher d'ajouter le component si il y a deja un autre component particulier 
-        private void OnValidate()
-        {
-            INoiseModule[] shootModules = GetComponents<MonoBehaviour>().OfType<INoiseModule>().ToArray();
-            if (shootModules.Length > 0)
-            {
-                Debug.LogError("Vous ne pouvez pas ajouté un module de --Noise-- car il y a déja un module de --FragShoot-- !");
-            }
+
         }
     }
 }

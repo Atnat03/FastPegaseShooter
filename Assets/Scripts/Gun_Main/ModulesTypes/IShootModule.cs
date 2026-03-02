@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace GunDecorator
 {
     public interface IShootModule
@@ -14,6 +16,12 @@ namespace GunDecorator
     public interface INoiseModule
     {
         public void ApplyNoise();
+    }
+
+    public interface IAmmoModule
+    {
+        public GameObject AmmoPrefab { get; }
+        public void SpawnBullet();
     }
 
     public interface ISecondModule

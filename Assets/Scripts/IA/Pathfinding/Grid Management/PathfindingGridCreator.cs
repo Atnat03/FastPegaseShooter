@@ -149,7 +149,10 @@ public class PathfindingGridCreator : MonoBehaviour
                     continue;
                 }
                 
-                PathfindingNode node = new PathfindingNode(currentNodeIndex, hits[j].point);
+                PathfindingNode node = new PathfindingNode(
+                    currentNodeIndex,
+                    new Vector2Int(i%zRaycastAmount, i/zRaycastAmount),
+                    hits[j].point);
                 currentNodeIndex++;
                 nodesPerCell[i].Add(node);
                 nodes.Add(node);

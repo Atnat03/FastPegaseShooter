@@ -200,6 +200,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 818621248975274297}
+  - component: {fileID: 5254083796256316284}
+  - component: {fileID: 3057065636430484936}
   m_Layer: 6
   m_Name: ArmeRouge
   m_TagString: Untagged
@@ -223,6 +225,30 @@ Transform:
   - {fileID: 4789381056589349275}
   m_Father: {fileID: 5274388527221481727}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5254083796256316284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2330464592484284573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c4e5bca38e4c284f81816deb0336315, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FreezeEffectSecondaryGun
+--- !u!114 &3057065636430484936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2330464592484284573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bcf555de9cb8d243a9dc0a0de2b7f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SecondaryGun
 --- !u!1 &2620352974341419778
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,9 +754,9 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 0}
-  _currentGunInHand: {fileID: 0}
   _playerInputAction: {fileID: 997312506154426130}
   _gunSwitching: {fileID: 3154577241410043838}
+  _bridgePlayer: {fileID: 300968199624122896}
 --- !u!1 &3153661936363678950
 GameObject:
   m_ObjectHideFlags: 0
@@ -1256,10 +1282,9 @@ GameObject:
   m_Component:
   - component: {fileID: 118156608229870968}
   - component: {fileID: 5329717332355912109}
-  - component: {fileID: 8180234660863549844}
-  - component: {fileID: 3348653409652570733}
-  - component: {fileID: 9019459943994442329}
-  - component: {fileID: 320482567920953534}
+  - component: {fileID: 8675631573166046301}
+  - component: {fileID: 8977986747039668759}
+  - component: {fileID: 2699203357301221378}
   m_Layer: 6
   m_Name: Pistol
   m_TagString: Untagged
@@ -1295,7 +1320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
---- !u!114 &8180234660863549844
+--- !u!114 &8675631573166046301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1309,12 +1334,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.BasicShootModule
   moduleName: BasicShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule:
-  - {fileID: 9019459943994442329}
-  - {fileID: 320482567920953534}
-  _damage: 10
-  _fireRate: 1
---- !u!114 &3348653409652570733
+  _secondModule: []
+  _ammoType: {fileID: 0}
+  _damage: 0
+  _fireRate: 0
+--- !u!114 &8977986747039668759
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1329,7 +1353,7 @@ MonoBehaviour:
   moduleName: ReloadModule
   moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
   _magazineSize: 30
---- !u!114 &9019459943994442329
+--- !u!114 &2699203357301221378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1338,27 +1362,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7875098038689886236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75baab7d895046ed9c50b9408405f960, type: 3}
+  m_Script: {fileID: 11500000, guid: b6b0bb26784b4670a9ba4c480a16424c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.SalveShootModule
-  moduleName: SalveShootModule
-  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
-  numberShootPerSalve: 3
---- !u!114 &320482567920953534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7875098038689886236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85f9d4ce71634838a297224128072129, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosionAmmoModule
-  moduleName: ExplosionAmmoModule
-  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
-  bulletPrefab: {fileID: 8838029678619249185, guid: 70ad6b350e2d28844a1abd94dd94fb90, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.ExplosifAmmoModule
+  moduleName: ExplosifAmmoModule
+  moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _ammoPrefab: {fileID: 0}
 --- !u!1 &8149685527222359090
 GameObject:
   m_ObjectHideFlags: 0
@@ -1369,6 +1378,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2571651778359029525}
   - component: {fileID: 3154577241410043838}
+  - component: {fileID: 300968199624122896}
   m_Layer: 6
   m_Name: Gun
   m_TagString: Untagged
@@ -1412,6 +1422,19 @@ MonoBehaviour:
   _secondaryGunParent: {fileID: 2620352974341419778}
   _visiblePos: {fileID: 1645284744279010387}
   _unvisiblePos: {fileID: 2123212912458297552}
+--- !u!114 &300968199624122896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8149685527222359090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82a65429ff79430aa97139d9aff98755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Controller.GunBridgePlayer
+  _gunSwitching: {fileID: 3154577241410043838}
 --- !u!1 &8802093150539166038
 GameObject:
   m_ObjectHideFlags: 0
@@ -2151,7 +2174,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 2cf10fa706c7a4d42b5927d8e730f4e2, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: af5d4ed78663fd1429bcd1ec7c9146e1, type: 2}
+      objectReference: {fileID: 2100000, guid: 8e0baed1c7a9fa84592c7b7b2fbe18c1, type: 2}
     - target: {fileID: 919132149155446097, guid: 2cf10fa706c7a4d42b5927d8e730f4e2, type: 3}
       propertyPath: m_Name
       value: Model

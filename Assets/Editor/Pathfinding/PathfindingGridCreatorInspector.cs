@@ -46,8 +46,14 @@ public class PathfindingGridCreatorInspector : Editor
                 PathfindingGridSO asset = ScriptableObject.CreateInstance<PathfindingGridSO>();
                 
                 AssetDatabase.CreateAsset(asset, relativePath);
-                asset.nodes = script.nodes;
-                script.nodes = new List<PathfindingNode>();
+                asset.nodes = new List<PathfindingNode>();
+                foreach (PathfindingNode node in script.nodes)
+                {
+                    PathfindingNode newNode = new PathfindingNode(node.index, node.gridPosition, node.position);
+                    newNode.neighborsIndex = new List<int>(node.neighborsIndex);
+                    asset.nodes.Add(newNode);
+                }
+                EditorUtility.SetDirty(asset);
                 AssetDatabase.SaveAssets();
                 CustomLogger.ImportantLog($"Created asset at : {relativePath}");
             }

@@ -4,49 +4,50 @@ using GunDecorator;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerShooting : NetworkBehaviour
+namespace Controller
 {
-	#region Variables
-
-	[SerializeField] private GunController _currentGunInHand;
-	[SerializeField] private PlayerInput _playerInputAction;
-	[SerializeField] private GunSwitching _gunSwitching;
-	
-	#endregion
-	
-	#region Fonctions
-
-	public override void OnStartClient()
+	public class PlayerShooting : NetworkBehaviour
 	{
-		base.OnStartClient();
+		#region Variables
 
-		_gunSwitching.Initialize();
+		[SerializeField] private PlayerInput _playerInputAction;
+		[SerializeField] private GunSwitching _gunSwitching;
+		[SerializeField] private GunBridgePlayer _bridgePlayer;
 		
-		_currentGunInHand = _gunSwitching.CurrentMainGun.GetComponent<GunController>();
-	}
-	
-	private void Shooting(InputAction.CallbackContext obj)
-	{
-		if(_currentGunInHand != null && _gunSwitching.IsMainGun)
-			_currentGunInHand.TryFire();
-	}
+		#endregion
+		
+		#region Fonctions
 
-	private void SwitchGunType(InputAction.CallbackContext obj)
-	{
-		_gunSwitching.SwitchGunType();
-	}
-	
-	void OnEnable()
-	{
-		_playerInputAction.actions["Shoot"].performed += Shooting;
-		_playerInputAction.actions["SwitchGunType"].performed += SwitchGunType;
-	}
+		public override void OnStartClient()
+		{
+			base.OnStartClient();
 
-	void OnDisable()
-	{
-		_playerInputAction.actions["Shoot"].performed -= Shooting;
-		_playerInputAction.actions["SwitchGunType"].performed -= SwitchGunType;
-	}
+			_gunSwitching.Initialize();
+		}
+		
+		private void Shooting(InputAction.CallbackContext obj)
+		{
+			if(_bridgePlayer != null)
+				_bridgePlayer.TryShootWithCurrentGun();
+		}
 
-	#endregion
+		private void SwitchGunType(InputAction.CallbackContext obj)
+		{
+			_gunSwitching.SwitchGunType();
+		}
+		
+		void OnEnable()
+		{
+			_playerInputAction.actions["Shoot"].performed += Shooting;
+			_playerInputAction.actions["SwitchGunType"].performed += SwitchGunType;
+		}
+
+		void OnDisable()
+		{
+			_playerInputAction.actions["Shoot"].performed -= Shooting;
+			_playerInputAction.actions["SwitchGunType"].performed -= SwitchGunType;
+		}
+
+		#endregion
+	}
 }
