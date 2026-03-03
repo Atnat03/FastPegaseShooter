@@ -1198,7 +1198,7 @@ public class FPSController : NetworkBehaviour
     
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
-        if (currentHorizontal == Vector3.zero) return velocity;
+        if (currentHorizontal.sqrMagnitude  > 0.1f) return velocity;
 
          capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
          
@@ -1206,6 +1206,14 @@ public class FPSController : NetworkBehaviour
         point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
         point2 = playerFeet.position  + Vector3.up * bodyRadius;
 
+        string toDebug = new string("overlaps : ");
+        Collider[] overlaps = Physics.OverlapCapsule(point1, point2, bodyRadius);
+        foreach (Collider collider in overlaps)
+        {
+            toDebug += $"{collider.name} , ";
+        }
+        Debug.Log(toDebug);
+        
         if (Physics.CapsuleCast(point1, point2, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
         {
             Debug.Log("wall detected");
@@ -1343,5 +1351,8 @@ public class FPSController : NetworkBehaviour
             playerLeftSide.position + playerLeftSide.forward * wallRideDetectionRange);
         Gizmos.DrawLine(playerRightSide.position,
             playerRightSide.position + playerRightSide.forward * wallRideDetectionRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(point1, bodyRadius);
+        Gizmos.DrawWireSphere(point2, bodyRadius);
     }
 }
