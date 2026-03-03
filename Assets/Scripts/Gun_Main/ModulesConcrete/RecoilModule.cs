@@ -1,50 +1,45 @@
 using System;
 using GunDecorator;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class RecoilModule : GunModule, IRecoilModule
 {
     #region variables
 
-    [Header("References")]
-    [SerializeField] Transform _targetPosition;
-    private Transform _camTransform;
+    // serializable variables
+    [Header("References")] [SerializeField]
+    private Transform _recoilTransform;
 
     [Header("Settings")] 
-    [SerializeField] float _recoilOffsetIntensity = 0.6f;
-    [SerializeField] float _recoilTorkIntensity = 45f;
+    [SerializeField]private float _recoilX;
+    [SerializeField]private float _recoilY;
+    [SerializeField]private float _recoilZ;
     
-    [SerializeField] private float _recoilOffsetCompensationSpeed = 10f;
-    [SerializeField] private float _recoilTorkCompensationSpeed = 10f;
+    [SerializeField] private float _returnSpeed = 10f;
+    [SerializeField] private float _snapiness = 10f;
+    
+    
+    //privates variables
+    private Vector3 _currentRotation;
+    private Vector3 _targetRotation;
 
     #endregion
     
     public void Recoil()
     {
-        transform.Translate(new Vector3( 0f, 0f, -_recoilOffsetIntensity), Space.Self);
-        transform.localRotation *= Quaternion.Euler( -_recoilTorkIntensity, 0f,0f);
-        _camTransform.localRotation *= Quaternion.Euler( -_recoilTorkIntensity / 5, 0f,0f); // ignoble
+        _targetRotation +=  new Vector3(_recoilX, Random.Range(-_recoilY, _recoilY) , Random.Range(-_recoilZ, _recoilZ));
     }
 
-    public void OnEnable()
+    void Update()
     {
-        transform.position = _targetPosition.position;
-    }
-
-    public void Start()
-    {
-        _camTransform =  Camera.main.transform;
-    }
-
-    void Update() // utile uniquement pour le feedBack temporaire
-    {
-        _targetPosition.rotation = _camTransform.rotation;
         BringBackWeapon();
     }
     
     void BringBackWeapon()
     {
-        transform.position = Vector3.Lerp(transform.transform.position, _targetPosition.position, _recoilOffsetCompensationSpeed *  Time.deltaTime);
-        transform.rotation = Quaternion.Slerp(transform.rotation, _targetPosition.rotation, _recoilTorkCompensationSpeed * Time.deltaTime);
+        _targetRotation = Vector3.Lerp(_targetRotation, Vector3.zero, _returnSpeed * Time.deltaTime);
+        _currentRotation = Vector3.Slerp(_currentRotation, _targetRotation, _snapiness * Time.deltaTime);
+        transform.localRotation = Quaternion.Euler(_currentRotation);
     }
 }
