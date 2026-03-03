@@ -4,7 +4,7 @@ using System.Linq;
 using Unity.Profiling;
 using UnityEngine;
 
-public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
+public class PathfindingGridReader : MonoBehaviour
 {
     public PathfindingGridSO pathfindingGridSO;
 
@@ -16,8 +16,6 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
     [SerializeField] private Transform starTransform;
     [HideInInspector] public bool drawNodes = true;
     [HideInInspector] public bool drawNodesConnections = true;
-    Vector3 playerPosition;
-    static ProfilerMarker findClosestNodeMarker = new ProfilerMarker("FindClosestNode");
     //
 
     private void Start()
@@ -28,19 +26,11 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
 
         EventBusInitialiser.instance.Bus.Subscribe((PathRequestEvent PRE) =>
         {
-            PRE.requester.RequestPath(
+            PRE.p_requester.RequestPath(
                 _aStarAlgorithm.FindPathFromGrid(
                     pathfindingGridSO.nodes,
-                    searchTree.FindClosest(PRE.position).node,
-                    searchTree.FindClosest(playerPosition).node));
-        });
-    }
-
-    private void FixedUpdate()
-    {
-        EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerPosRequestEvent
-        {
-            positionListener = this
+                    searchTree.FindClosest(PRE.p_startPosition).node,
+                    searchTree.FindClosest(PRE.p_endPosition).node));
         });
     }
 
@@ -63,33 +53,5 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
                 }
             }
         }
-
-        if (searchTree != null)
-        {
-            PathfindingNode playerNode = null;
-            PathfindingNode startingNode = null;
-            using (findClosestNodeMarker.Auto())
-            {
-                playerNode = searchTree.FindClosest(playerPosition).node;
-                startingNode = searchTree.FindClosest(starTransform.position).node;
-            }
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(playerNode.position, 0.025f);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(startingNode.position, 0.025f);
-            
-            List<PathfindingNode> path = _aStarAlgorithm.FindPathFromGrid(pathfindingGridSO.nodes, startingNode,  playerNode);
-            Gizmos.color = Color.cyan;
-            for(int i = 0; i < path.Count-1; i++)
-            {
-                Gizmos.DrawLine(path[i].position, path[i+1].position);
-            }
-        }
-        
-    }
-
-    public void OnPlayerMoving(Vector3 playerPos)
-    {
-        playerPosition = playerPos;
     }
 }
