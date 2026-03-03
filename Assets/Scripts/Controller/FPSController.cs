@@ -27,6 +27,8 @@ public class FPSController : NetworkBehaviour
     [SerializeField] PlayerInput playerInput;
     [SerializeField] private GameObject _playerVisual;
     [SerializeField] private PlayerAnimation _playerAnimation;
+    [SerializeField] CapsuleCollider _capsuleColliderStandUp;
+    [SerializeField] CapsuleCollider _capsuleColliderCrouched;
 
     [Header("parameters")]
     [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")][SerializeField] private bool landSnap = true;
@@ -266,6 +268,15 @@ public class FPSController : NetworkBehaviour
             ));
 
         stateMachine.ChangeState(ControlerState.Idle);
+        
+        
+        
+        //debug
+        
+        capsuleTop = topHeightStandUpCollider.position;
+        height = Vector3.Distance(capsuleTop, playerFeet.position);
+        point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
+        point2 = playerFeet.position  + Vector3.up * bodyRadius;
     }
 
 
@@ -1195,42 +1206,38 @@ public class FPSController : NetworkBehaviour
     private float height;
     private Vector3 point1;
     private Vector3 point2;
+    private CapsuleCollider capsule;
     
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
-        if (currentHorizontal.sqrMagnitude  > 0.1f) return velocity;
-
-         capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
-         
+        capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
         height = Vector3.Distance(capsuleTop, playerFeet.position);
         point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
         point2 = playerFeet.position  + Vector3.up * bodyRadius;
-
-        string toDebug = new string("overlaps : ");
-        Collider[] overlaps = Physics.OverlapCapsule(point1, point2, bodyRadius);
-        foreach (Collider collider in overlaps)
-        {
-            toDebug += $"{collider.name} , ";
-        }
-        Debug.Log(toDebug);
         
-        if (Physics.CapsuleCast(point1, point2, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
+        capsule = crouched ? _capsuleColliderCrouched :  _capsuleColliderStandUp;
+         
+        Collider[] overlaps = Physics.OverlapCapsule(point1, point2, bodyRadius, ~LayerMask.GetMask("Owner"));
+        foreach (Collider col in overlaps)
         {
-            Debug.Log("wall detected");
+            if (col.transform == transform) continue;
             
-            // Si le contact est bas , pente / sol
-            float hitHeight = hit.point.y - playerFeet.position.y;
-            
-            if (hitHeight < maxStepHeight) return new Vector3(velocity.x, velocity.y + (maxStepHeight - hitHeight), velocity.z);
-            
-            float hitSlopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            if (Physics.ComputePenetration(
+                    col, col.transform.position, col.transform.rotation,
+                    capsule, transform.position, transform.rotation,
+                    out Vector3 direction, out float distance))
+            {
+                
+                Vector3 wallNormal = -direction;
 
-            // Pente marchable , ne pas bloquer
-            if (hitSlopeAngle <= walkableSlopeAngle) return velocity;
-            
-            Vector3 aligned = Vector3.ProjectOnPlane(currentHorizontal, hit.normal);
-            
-            return new Vector3(aligned.x, velocity.y, aligned.z);
+                float slopeAngle = Vector3.Angle(wallNormal, Vector3.up);
+                
+                if (slopeAngle <= walkableSlopeAngle) return velocity;
+                
+                Vector3 aligned = Vector3.ProjectOnPlane(currentHorizontal, wallNormal);
+
+                return new Vector3(aligned.x, velocity.y, aligned.z);
+            }
         }
 
         return velocity;
