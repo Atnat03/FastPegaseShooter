@@ -1,15 +1,20 @@
 using System.Collections.Generic;
 using System.Net;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Managing;
+using FishNet.Managing.Scened;
 using UnityEngine;
 using FishNet.Discovery;
+using FishNet.Object;
 using FishNet.Transporting;
 
 namespace Network.Lobby
 {
     public class LobbyManager : MonoBehaviour
     {
+        private const int MINI_PLAYER_TO_START = 2;
+        
         [SerializeField] private LobbyUI _lobbyUI;
         
         private NetworkDiscovery _discovery;
@@ -18,6 +23,8 @@ namespace Network.Lobby
         private readonly List<string> _foundServers = new List<string>();
 
         public bool forceLocalhostForTesting = true;
+        
+        private readonly List<NetworkConnection> _lobbyPlayers = new List<NetworkConnection>();
 
         private void Awake()
         {
@@ -28,6 +35,7 @@ namespace Network.Lobby
 
             _discovery.ServerFoundCallback += OnServerFound;
             _networkManager.ServerManager.OnServerConnectionState += OnServerState;
+            _networkManager.ServerManager.OnRemoteConnectionState += OnPlayerConnectionState;
 
             _lobbyUI.SetLobbyManager(this);
         }
@@ -57,8 +65,44 @@ namespace Network.Lobby
                 _discovery.ServerFoundCallback -= OnServerFound;
 
             if (_networkManager != null)
+            {
                 _networkManager.ServerManager.OnServerConnectionState -= OnServerState;
+                _networkManager.ServerManager.OnRemoteConnectionState -= OnPlayerConnectionState;
+            }
         }
+
+        private void OnPlayerConnectionState(NetworkConnection conn, RemoteConnectionStateArgs args)
+        {
+            if (args.ConnectionState == RemoteConnectionState.Started)
+            {
+                _lobbyPlayers.Add(conn);
+                Debug.Log($"Joueur connecté au lobby : {conn.ClientId}");
+
+                UpdateLobbyUI();
+
+                if (_lobbyPlayers.Count >= MINI_PLAYER_TO_START)
+                {
+                    StartGame();
+                }
+            }
+
+            else if (args.ConnectionState == RemoteConnectionState.Stopped)
+            {
+                _lobbyPlayers.Remove(conn);
+                UpdateLobbyUI();
+            }
+        }
+
+        private void StartGame()
+        {
+            Debug.Log("Tous les joueurs sont prêts, chargement de la scène de jeu...");
+
+            SceneLoadData scene = new SceneLoadData("Lobby");
+            scene.ReplaceScenes = ReplaceOption.All;
+            
+            _networkManager.SceneManager.LoadGlobalScenes(scene);
+        }
+
 
         private void OnServerFound(IPEndPoint endPoint)
         {
@@ -108,13 +152,11 @@ namespace Network.Lobby
             _lobbyUI.DesactivateUI();
         }
 
-        // Pour rejoindre (appelée depuis LobbyInfoUI)
+        
+        //[ObserversRpc]
         public void JoinGame(string ip)
         {
-            // Le port de connexion FishNet est celui de ton transport (souvent 7770 par défaut)
-            // Pas le port discovery (7777 par ex.)
-            InstanceFinder.ClientManager.StartConnection(ip);  // Port par défaut
-            // Ou avec port explicite : StartConnection(ip, 7770);
+            InstanceFinder.ClientManager.StartConnection(ip);
         }
     }
 }

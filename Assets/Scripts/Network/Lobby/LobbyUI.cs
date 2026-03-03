@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using FishNet;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Network.Lobby
 {
@@ -11,7 +13,24 @@ namespace Network.Lobby
         [SerializeField] private LobbyInfoUI _lobbyInfoPrefab;
         [SerializeField] private GameObject _parent;
         
+        [Header("Create Game")]
+        [SerializeField] private GameObject _createGamePannel;
+        [SerializeField] private Button _createGameButton;
+        [SerializeField] private Button _backButton;
+        [SerializeField] private TMP_InputField _inputFieldPartyName;
+        
         private LobbyManager _lobbyManager;
+
+        private void Awake()
+        {
+            _createGameButton.onClick.AddListener(() => ActivateCreateGameUI(true));
+            _backButton.onClick.AddListener(() => ActivateCreateGameUI(false));
+        }
+
+        private void Start()
+        {
+            ActivateCreateGameUI(false);
+        }
 
         public void SetLobbyManager(LobbyManager lobbyManager)
         {
@@ -27,10 +46,10 @@ namespace Network.Lobby
                 Destroy(child.gameObject);
             }
 
-            foreach (string lobbyTitle in list)
+            foreach (string lobbyData in list)
             {
                 LobbyInfoUI lobbyInfo = Instantiate(_lobbyInfoPrefab, _parentList);
-                lobbyInfo.Initialize(lobbyTitle, () => _lobbyManager.JoinGame(lobbyTitle));
+                lobbyInfo.Initialize(lobbyData, () => _lobbyManager.JoinGame(lobbyData));
             }
         }
 
@@ -38,5 +57,11 @@ namespace Network.Lobby
         {
             _parent.SetActive(false);
         }
+
+        #region Create Game
+        
+        public void ActivateCreateGameUI(bool state) => _createGamePannel.SetActive(state);
+
+        #endregion
     }
 }
