@@ -9,6 +9,8 @@ public class FPSController : NetworkBehaviour
     
     // refaire un followSmoothing vu que la camera est maintenant enfant du player
     
+    // faire mieux le Grappling
+    
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
     
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
