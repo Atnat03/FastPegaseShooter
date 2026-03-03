@@ -172,6 +172,7 @@ GameObject:
   - component: {fileID: 1792326860910464111}
   - component: {fileID: 4170606718173402673}
   - component: {fileID: 356511505275305057}
+  - component: {fileID: 1282941799053182666}
   - component: {fileID: 997312506154426130}
   - component: {fileID: 6892326474594197254}
   - component: {fileID: 7927807153383519047}
@@ -179,6 +180,7 @@ GameObject:
   - component: {fileID: 1377757618183773649}
   - component: {fileID: 979089028696654715}
   - component: {fileID: 6607835272460448153}
+  - component: {fileID: 3485912905427261247}
   m_Layer: 6
   m_Name: PlayerController
   m_TagString: Player
@@ -265,6 +267,7 @@ MonoBehaviour:
   landSnap: 0
   dashVerticality: 0
   clampedMaxAirSpeed: 0
+  jumpSlideOnEndOfSlide: 0
   wallRideUnlocked: 1
   slideUnlocked: 1
   dashUnlocked: 1
@@ -327,6 +330,7 @@ MonoBehaviour:
   leftSideAgainstWall: 0
   rightSideAgainstWall: 0
   fellOffWallrinding: 0
+  horizontalVelocity: {x: 0, y: 0, z: 0}
   justWallRided: 0
 --- !u!114 &4170606718173402673
 MonoBehaviour:
@@ -363,6 +367,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DebugShootMark
   p_markPrefab: {fileID: 963067351685044417, guid: 1d9c92197d26f4945a16b966caa07f11, type: 3}
   shoot: {fileID: 4170606718173402673}
+--- !u!114 &1282941799053182666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2624057951769441985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39251be4eb517f5418867bcdc08c4ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grapple
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  playerInput: {fileID: 997312506154426130}
+  rb: {fileID: 5777719286037595758}
+  _castWidth: 0.5
+  _castMaxDistance: 100
+  _grapplingSpeed: 15
+  _endGrappleImpulseForce: 10
 --- !u!114 &997312506154426130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,6 +655,24 @@ MonoBehaviour:
   - {fileID: 7886570924545883048}
   - {fileID: 2263366704080047129}
   - {fileID: 980286734671638925}
+--- !u!114 &3485912905427261247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2624057951769441985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68eaf2ffb56bbab46a3e5e5b88a80db3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  _playerInputAction: {fileID: 997312506154426130}
+  _gunSwitching: {fileID: 0}
+  _bridgePlayer: {fileID: 0}
 --- !u!1 &3153661936363678950
 GameObject:
   m_ObjectHideFlags: 0

@@ -62,7 +62,7 @@ public class SpawnPlayer : NetworkBehaviour
         NetworkObject playerObj = Instantiate(_playerPrefab);
         InstanceFinder.ServerManager.Spawn(playerObj, player);
 		
-        Vector3 randomPos = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
+		Vector3 randomPos = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
 		
         playerObj.transform.position = randomPos;
 

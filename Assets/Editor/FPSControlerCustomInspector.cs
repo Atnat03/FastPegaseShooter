@@ -32,7 +32,7 @@ public class FPSControlerCustomInspector : Editor
         DrawSection("References", Color.white, () =>
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("rb"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraTransform"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraParentTransform"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraTarget"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playerFeet"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playerLeftSide"));
@@ -48,6 +48,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("landSnap"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashVerticality"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("clampedMaxAirSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpSlideOnEndOfSlide"));
         }, ref showParameters);
 
         DrawSection("Unlocked Capacities", new Color(1f, 0.85f, 0.6f), () =>
@@ -120,6 +121,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideJumpHorizontalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideCooldown"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteSlideDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("CameraSlideFOV"));
         }, ref showSlide);
 
         DrawSection("Dash", new Color(0.6f, 1f, 1f), () =>
