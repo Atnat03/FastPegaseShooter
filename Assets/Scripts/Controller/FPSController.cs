@@ -771,16 +771,19 @@ public class FPSController : NetworkBehaviour
             stateMachine.ChangeState(ControlerState.Falling);
         }
 
-        if (playerInput.actions["Crouch"].WasReleasedThisFrame())
+        if (!playerInput.actions["Crouch"].IsPressed())
         {
-            if (verticalInput != 0f || horizontalInput != 0f)
+            if (!Physics.Raycast(topHeightCrouchedCollider.position, Vector3.up, Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
             {
-                stateMachine.ChangeState(ControlerState.Moving);
-            }
+                if (verticalInput != 0f || horizontalInput != 0f)
+                {
+                    stateMachine.ChangeState(ControlerState.Moving);
+                }
 
-            else
-            {
-                stateMachine.ChangeState(ControlerState.Idle);
+                else
+                {
+                    stateMachine.ChangeState(ControlerState.Idle);
+                }
             }
         }
     }
@@ -848,25 +851,30 @@ public class FPSController : NetworkBehaviour
 
         if (!mustSlide)
         {
-            if (playerInput.actions["Jump"].IsPressed())
+            if (!Physics.Raycast(topHeightCrouchedCollider.position, Vector3.up,
+                    Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
             {
-                SlideJump();
-                stateMachine.ChangeState(ControlerState.Idle);
-            }
+                
+                if (playerInput.actions["Jump"].IsPressed())
+                {
+                    SlideJump();
+                    stateMachine.ChangeState(ControlerState.Idle);
+                }
 
-            else if (playerInput.actions["Crouch"].IsPressed())
-            {
-                stateMachine.ChangeState(ControlerState.Crouching);
-            }
+                else if (playerInput.actions["Crouch"].IsPressed())
+                {
+                    stateMachine.ChangeState(ControlerState.Crouching);
+                }
 
-            else if (verticalInput != 0f || horizontalInput != 0f)
-            {
-                stateMachine.ChangeState(ControlerState.Moving);
-            }
+                else if (verticalInput != 0f || horizontalInput != 0f)
+                {
+                    stateMachine.ChangeState(ControlerState.Moving);
+                }
 
-            else
-            {
-                stateMachine.ChangeState(ControlerState.Idle);
+                else
+                {
+                    stateMachine.ChangeState(ControlerState.Idle);
+                }
             }
         }
     }
@@ -1029,9 +1037,12 @@ public class FPSController : NetworkBehaviour
     void SlopeSlidingUpdate()
     {
         if(!grounded) stateMachine.ChangeState(ControlerState.Falling);
-        if (playerInput.actions["Crouch"].WasReleasedThisFrame()) stateMachine.ChangeState(ControlerState.Idle);
-        if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(); // au besoin, faire une autre fonction
-        if(Vector3.Angle(groundedHit.normal, Vector3.up) < minSlopeAngleToSlopeSlide) stateMachine.ChangeState(ControlerState.Idle);
+        if (!Physics.Raycast(topHeightCrouchedCollider.position, Vector3.up, Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
+        {
+            if (playerInput.actions["Crouch"].WasReleasedThisFrame()) stateMachine.ChangeState(ControlerState.Idle);
+            if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(); // au besoin, faire une autre fonction
+            if(Vector3.Angle(groundedHit.normal, Vector3.up) < minSlopeAngleToSlopeSlide) stateMachine.ChangeState(ControlerState.Idle);
+        }
     }
 
     void SlopeSlidingFixedUpdate()
@@ -1181,18 +1192,28 @@ public class FPSController : NetworkBehaviour
 
     private Vector3 currentHorizontal;
     private Vector3 capsuleTop;
+    private float height;
+    private Vector3 point1;
+    private Vector3 point2;
+    
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
         if (currentHorizontal == Vector3.zero) return velocity;
 
          capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
+         
+        height = Vector3.Distance(capsuleTop, playerFeet.position);
+        point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
+        point2 = playerFeet.position  + Vector3.up * bodyRadius;
 
-        if (Physics.CapsuleCast(playerFeet.position, capsuleTop, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
+        if (Physics.CapsuleCast(point1, point2, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
         {
+            Debug.Log("wall detected");
+            
             // Si le contact est bas , pente / sol
             float hitHeight = hit.point.y - playerFeet.position.y;
             
-            if (hitHeight < maxStepHeight) return new Vector3(velocity.x, velocity.y + maxStepHeight, velocity.z);
+            if (hitHeight < maxStepHeight) return new Vector3(velocity.x, velocity.y + (maxStepHeight - hitHeight), velocity.z);
             
             float hitSlopeAngle = Vector3.Angle(hit.normal, Vector3.up);
 
@@ -1200,6 +1221,7 @@ public class FPSController : NetworkBehaviour
             if (hitSlopeAngle <= walkableSlopeAngle) return velocity;
             
             Vector3 aligned = Vector3.ProjectOnPlane(currentHorizontal, hit.normal);
+            
             return new Vector3(aligned.x, velocity.y, aligned.z);
         }
 
