@@ -10,6 +10,10 @@ namespace GunDecorator.AmmoModules
     {
         #region variables
 
+        [Header("parametres")]
+        [SerializeField] private float _maxDistance;
+        
+        [Header("Debug")]
         public GameObject p_markPrefab;
         private GameObject _currentMark;
         private Transform _camTransform;
@@ -24,7 +28,7 @@ namespace GunDecorator.AmmoModules
         
         public void SpawnBullet()
         {
-            if (Physics.Raycast(_camTransform.position + transform.forward * .3f, transform.forward, out RaycastHit hit, LayerMask.GetMask("Owner")))
+            if (Physics.Raycast(_camTransform.position + transform.forward * .3f, transform.forward, out RaycastHit hit,_maxDistance, ~LayerMask.GetMask("Owner")))
             {
                 if (_currentMark != null)
                 {
