@@ -28,7 +28,7 @@ public class RecoilModule : GunModule, IRecoilModule
     
     public void Recoil()
     {
-        _targetRotation +=  new Vector3(_recoilX, Random.Range(-_recoilY, _recoilY) , Random.Range(-_recoilZ, _recoilZ));
+        _targetRotation +=  new Vector3( -_recoilX, Random.Range(-_recoilY, _recoilY) , Random.Range(-_recoilZ, _recoilZ));
     }
 
     void Update()
@@ -40,6 +40,6 @@ public class RecoilModule : GunModule, IRecoilModule
     {
         _targetRotation = Vector3.Lerp(_targetRotation, Vector3.zero, _returnSpeed * Time.deltaTime);
         _currentRotation = Vector3.Slerp(_currentRotation, _targetRotation, _snapiness * Time.deltaTime);
-        transform.localRotation = Quaternion.Euler(_currentRotation);
+        _recoilTransform.localRotation = Quaternion.Euler(_currentRotation);
     }
 }
