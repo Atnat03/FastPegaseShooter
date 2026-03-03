@@ -22,18 +22,11 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     
     private void OnLifeChanged(int prev, int next, bool asServer)
     {
-        Debug.Log($"OnChange called | prev={prev} next={next} asServer={asServer}");
-
         if (next <= 0)
         {
             if (asServer)
             {
-                CustomLogger.ImportantLog("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 Death(); // serveur uniquement
-            }
-            else
-            {
-                // client : VFX, UI, etc.
             }
         }
     }
@@ -42,7 +35,6 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     public void TakeDamage(int damageAmount)
     {
         p_life.Value -= damageAmount;
-        CustomLogger.ImportantLog($"Hit : {p_life.Value}, damage : {damageAmount}");
     }
 
     [Server]
