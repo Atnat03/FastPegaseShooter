@@ -5,6 +5,7 @@ using CustomConsole.Runtime.Console;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnZone : NetworkBehaviour
 {
@@ -20,7 +21,7 @@ public class SpawnZone : NetworkBehaviour
     [SerializeField] private float spawnDelay;
     [SerializeField] private List<MobSpawnSO> spawnMobs = new List<MobSpawnSO>();
 
-    [SerializeField] private List<Transform> spawnPoints = new List<Transform>();
+    [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     
     
     [ServerRpc(RequireOwnership = false)]
@@ -41,9 +42,10 @@ public class SpawnZone : NetworkBehaviour
     [Server]
     public void SpawnEnemy(GameObject enemyPrefab)
     {
-        GameObject enemy = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity);
+        GameObject enemy = Instantiate(enemyPrefab, GetValidSpawnPoint().position, Quaternion.identity, transform);
         InstanceFinder.ServerManager.Spawn(enemy);
     }
+    Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];
 
     [Server]
     async Task SpawnFirstWave()
