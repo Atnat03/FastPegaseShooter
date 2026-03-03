@@ -50,8 +50,6 @@ public class BasicEnemy : MonoBehaviour, IPathRequester
 
     public void RequestPath(List<PathfindingNode> path)
     {
-        CustomLogger.ImportantLog("Requesting new path");
-        
         _path = path;
         _lastPos = _transform.position;
         _t = 0;

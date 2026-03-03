@@ -4,16 +4,16 @@ using System.Linq;
 using Unity.Profiling;
 using UnityEngine;
 
+[RequireComponent(typeof(AStarAlgorithm))]
 public class PathfindingGridReader : MonoBehaviour
 {
     public PathfindingGridSO pathfindingGridSO;
 
     public ThreeDimensionalTree searchTree;
 
-    [SerializeField] private AStarAlgorithm _aStarAlgorithm;
+    private AStarAlgorithm _aStarAlgorithm;
     
     //Debug Variables
-    [SerializeField] private Transform starTransform;
     [HideInInspector] public bool drawNodes = true;
     [HideInInspector] public bool drawNodesConnections = true;
     //
@@ -32,6 +32,8 @@ public class PathfindingGridReader : MonoBehaviour
                     searchTree.FindClosest(PRE.p_startPosition).node,
                     searchTree.FindClosest(PRE.p_endPosition).node));
         });
+
+        _aStarAlgorithm = GetComponent<AStarAlgorithm>();
     }
 
     private void OnDrawGizmos()
