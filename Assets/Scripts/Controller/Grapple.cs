@@ -24,7 +24,7 @@ public class Grapple : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-        _camTransform = Camera.main.transform;
+        _camTransform = GetComponent<FPSController>().Camera.transform;
     }
 
     void OnEnable()

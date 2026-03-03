@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using GunDecorator;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GunSwitching : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class GunSwitching : MonoBehaviour
 	public bool IsMainGun => _isMainGun;
 	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun];
 	public GameObject CurrentSecondaryGun => _secondaryGunsList[_currentSecondaryGun];
+
+	public int CurrentMainGunIndex => _currentMainGun;
 	
 	public IGun CurrentGun => IsMainGun ? CurrentMainGun.GetComponent<IGun>() : CurrentSecondaryGun.GetComponent<IGun>();
 
@@ -37,7 +41,7 @@ public class GunSwitching : MonoBehaviour
 
 	#region Fonctions
 
-	public void Initialize()
+	public void Initialize(int startIndex)
 	{
 		_mainGunsList = new List<GameObject>();
 		_secondaryGunsList = new List<GameObject>();
@@ -51,6 +55,8 @@ public class GunSwitching : MonoBehaviour
 		{
 			_secondaryGunsList.Add(gun.gameObject);
 		}
+		
+		_currentMainGun = startIndex;
 		
 		UpdateVisual();
 	}
@@ -129,9 +135,22 @@ public class GunSwitching : MonoBehaviour
 				list[i].gameObject.SetActive(false);
 		}
 	}
-	
-	private void ChangeCurrentGun_Main(int newIndex) => _currentMainGun = newIndex;
-	private void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun = newIndex;
+
+	public void DesactivateAllMainGun()
+	{
+		foreach (GameObject t in _mainGunsList)
+		{
+			t.gameObject.SetActive(false);
+		}
+	}
+
+	public void ChangeCurrentGun_Main(int newIndex)
+	{
+		_currentMainGun = newIndex;
+
+		ActivateCurrentGun(_mainGunsList, _currentMainGun);
+	}
+	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun = newIndex;
 	
 	#endregion
 }

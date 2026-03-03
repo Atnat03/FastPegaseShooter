@@ -34,6 +34,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("rb"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraParentTransform"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraTarget"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_camera"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playerFeet"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playerLeftSide"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playerRightSide"));
