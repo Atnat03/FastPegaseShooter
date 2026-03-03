@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
-public class BasicEnemy : MonoBehaviour, IPathRequester
+public class BasicEnemyMovements : MonoBehaviour, IPathRequester
 {
     [SerializeField] private float _speed;
     
