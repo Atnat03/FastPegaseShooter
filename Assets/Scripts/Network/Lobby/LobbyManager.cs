@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using FishNet;
 using FishNet.Connection;
@@ -8,6 +9,9 @@ using UnityEngine;
 using FishNet.Discovery;
 using FishNet.Object;
 using FishNet.Transporting;
+using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
+using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace Network.Lobby
 {
@@ -42,11 +46,8 @@ namespace Network.Lobby
         
         private void OnServerState(ServerConnectionStateArgs args)
         {
-            Debug.Log("Server state : " + args.ConnectionState);
-
             if (args.ConnectionState == LocalConnectionState.Started)
             {
-                Debug.Log("START ADVERTISE");
                 _discovery.AdvertiseServer();
             }
         }
@@ -82,7 +83,7 @@ namespace Network.Lobby
 
                 if (_lobbyPlayers.Count >= MINI_PLAYER_TO_START)
                 {
-                    StartGame();
+                    //StartGame();
                 }
             }
 
@@ -93,21 +94,19 @@ namespace Network.Lobby
             }
         }
 
+        [Server]
         private void StartGame()
         {
             Debug.Log("Tous les joueurs sont prêts, chargement de la scène de jeu...");
-
-            SceneLoadData scene = new SceneLoadData("Lobby");
-            scene.ReplaceScenes = ReplaceOption.All;
             
-            _networkManager.SceneManager.LoadGlobalScenes(scene);
+            SceneLoadData scene =  new SceneLoadData("GameTest");
+            scene.ReplaceScenes = ReplaceOption.All;
+            InstanceFinder.SceneManager.LoadConnectionScenes(scene);
         }
-
 
         private void OnServerFound(IPEndPoint endPoint)
         {
             string ip = endPoint.Address.ToString();
-            string display = $"Partie sur {ip}";
 
             lock (_foundServers)
             {
@@ -149,11 +148,13 @@ namespace Network.Lobby
             _networkManager.ServerManager.StartConnection();
             _networkManager.ClientManager.StartConnection();
             
+            _lobbyPlayers.Add(_networkManager.ServerManager.Clients[0]);
+            UpdateLobbyUI();
+            
             _lobbyUI.DesactivateUI();
         }
 
         
-        //[ObserversRpc]
         public void JoinGame(string ip)
         {
             InstanceFinder.ClientManager.StartConnection(ip);
