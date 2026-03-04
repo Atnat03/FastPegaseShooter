@@ -42,8 +42,11 @@ public class SpawnZone : NetworkBehaviour
     [Server]
     public void SpawnEnemy(GameObject enemyPrefab)
     {
-        GameObject enemy = Instantiate(enemyPrefab, GetValidSpawnPoint().position, Quaternion.identity, transform);
+        Vector3 position = GetValidSpawnPoint().position;
+        GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity, transform);
         InstanceFinder.ServerManager.Spawn(enemy);
+        
+        enemy.GetComponent<BasicEnemyMovements>().UpdatePositionObserverRPC(position);
     }
     Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];
 

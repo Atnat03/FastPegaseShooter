@@ -105,7 +105,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
 
     #region Client Side
     [ObserversRpc]
-    void UpdatePositionObserverRPC(Vector3 serverPosition)
+    public void UpdatePositionObserverRPC(Vector3 serverPosition)
     {
         UpdatePosition(serverPosition);
     }
