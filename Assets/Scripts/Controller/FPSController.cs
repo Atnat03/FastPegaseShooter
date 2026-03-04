@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
@@ -1210,6 +1211,7 @@ public class FPSController : NetworkBehaviour
     
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
+        if (velocity.sqrMagnitude < .1f) return velocity;
         capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
         height = Vector3.Distance(capsuleTop, playerFeet.position);
         point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
@@ -1217,31 +1219,28 @@ public class FPSController : NetworkBehaviour
         
         capsule = crouched ? _capsuleColliderCrouched :  _capsuleColliderStandUp;
          
-        Collider[] overlaps = Physics.OverlapCapsule(point1, point2, bodyRadius, ~LayerMask.GetMask("Owner"));
-        foreach (Collider col in overlaps)
+        currentHorizontal = new Vector3(velocity.x, 0, velocity.z);
+        if (Physics.CapsuleCast(point1, point2, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
         {
-            if (col.transform == transform) continue;
             
-            if (Physics.ComputePenetration(
-                    col, col.transform.position, col.transform.rotation,
-                    capsule, transform.position, transform.rotation,
-                    out Vector3 direction, out float distance))
-            {
-                
-                Vector3 wallNormal = -direction;
+            // Si le contact est bas , pente / sol
+            float hitHeight = hit.point.y - playerFeet.position.y;
+            
+            if (hitHeight < maxStepHeight) return new Vector3(velocity.x, velocity.y + (maxStepHeight - hitHeight), velocity.z);
+            
+            float hitSlopeAngle = Vector3.Angle(hit.normal, Vector3.up);
 
-                float slopeAngle = Vector3.Angle(wallNormal, Vector3.up);
-                
-                if (slopeAngle <= walkableSlopeAngle) return velocity;
-                
-                Vector3 aligned = Vector3.ProjectOnPlane(currentHorizontal, wallNormal);
-
-                return new Vector3(aligned.x, velocity.y, aligned.z);
-            }
+            // Pente marchable , ne pas bloquer
+            if (hitSlopeAngle <= walkableSlopeAngle) return velocity;
+            
+            Vector3 aligned = Vector3.ProjectOnPlane(currentHorizontal, hit.normal);
+            
+            return new Vector3(aligned.x, velocity.y, aligned.z);
         }
 
         return velocity;
     }
+    
     
     Vector3 InterpolateSlope(Vector3 velocity)
     {
