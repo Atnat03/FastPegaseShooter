@@ -15,7 +15,7 @@ namespace GunDecorator.AmmoModules
 
         [Header("parametres")]
         [SerializeField] private float _maxDistance;
-        [SerializeField] private int _damages;//Debug
+        [SerializeField] private float _damages;//Debug
         
         [Header("Debug")]
         public GameObject p_markPrefab;
@@ -40,14 +40,19 @@ namespace GunDecorator.AmmoModules
                 {
                     Destroy(_currentMark);
                 }
-            
+                
                 _currentMark = Instantiate(p_markPrefab, hit.point + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal));
                 if (hit.collider.TryGetComponent<IDamagable>(out IDamagable iDamagable))
                 {
                     CustomLogger.ImportantLog($"Shoot : {_damages}");
-                    iDamagable.TakeDamage(_damages);
+                    iDamagable.TakeDamage((int)_damages);
                 }
             }
+        }
+
+        public void SetDamage(float multiplierDmg)
+        {
+            _damages *= multiplierDmg;
         }
     }
 }

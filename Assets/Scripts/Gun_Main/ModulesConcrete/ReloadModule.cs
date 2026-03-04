@@ -5,8 +5,11 @@ namespace GunDecorator
     [DisallowMultipleComponent]
     public class ReloadModule : GunModule, IReloadModule
     {
-        [SerializeField] private int _magazineSize = 30;
+        public int CurrentAmmo => _currentAmmo;
 
+        [SerializeField] private int _magazineSize = 30;
+        private int _currentAmmo = 0;
+        
         public override void Initialize(GunController gun)
         {
             base.Initialize(gun);
@@ -16,6 +19,12 @@ namespace GunDecorator
         public void Reload()
         {
             Debug.Log("Reloading");
+            SetAmmo(_magazineSize);
+        }
+        
+        public void SetAmmo(int value)
+        {
+            _currentAmmo = value;
         }
     }
 }

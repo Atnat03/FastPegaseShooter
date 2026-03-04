@@ -19,6 +19,8 @@ public class GunSwitching : MonoBehaviour
 	
 	public IGun CurrentGun => IsMainGun ? CurrentMainGun.GetComponent<IGun>() : CurrentSecondaryGun.GetComponent<IGun>();
 
+	//public ISurcharge CurrentMainSurchargeGun => CurrentMainGun.GetComponent<ISurcharge>();
+
 	#endregion
 	
 	#region Variables

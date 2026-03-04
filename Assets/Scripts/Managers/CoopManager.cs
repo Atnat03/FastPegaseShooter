@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Controller;
 using FishNet;
 using FishNet.Connection;
@@ -15,12 +16,15 @@ namespace Managers
         private readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
         [SerializeField] private float _swapingTime;
         
+        [SerializeField] private List<SyncVar<float>> _damageSurchargeList = new List<SyncVar<float>>();
+        
         [Header("UI")]
         [SerializeField] private GameObject _barUI;
         [SerializeField] private Image _valueImage;
         
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
+        private int _firstGunAmmo = -1;
         private float _displayedTime = 0f;
         private float _targetTime = 0f;
         
@@ -58,6 +62,14 @@ namespace Managers
                         ResetTimer();
                 }
             }
+            
+            if (_displayedTime > 0)
+            {
+                _displayedTime -= Time.deltaTime;
+                if (_displayedTime < 0) _displayedTime = 0;
+            }
+        
+            _valueImage.fillAmount = _displayedTime / _timeToAcceptSwap;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -67,12 +79,13 @@ namespace Managers
 
             if (_elapsedTime.Value > 0)
             {
-                NotifySwapTargetRpc(_player.Owner, data.gunIndex);      
-                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex); 
+                NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
+                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo); 
                 ResetTimer();
             }
             else
             {
+                _firstGunAmmo = data.currentAmmo;
                 _elapsedTime.Value = _timeToAcceptSwap;
                 _player = data.player;
                 _firstGunIndex = data.gunIndex;
@@ -80,17 +93,23 @@ namespace Managers
         }
         
         [TargetRpc]
-        private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex)
+        private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo)
         {
             _bus.InvokeEvent(new SwapingGunEvent
             {
                 gunIndex = newIndex,
-                timeToSwap = _swapingTime
+                timeToSwap = _swapingTime,
+                currentAmmo = currentAmmo
             });
         }
 
         void ResetTimer()
         {
+            _bus.InvokeEvent(new EndTimerSwapEvent()
+            {
+                player = _player
+            });
+            
             _player = null;
             _elapsedTime.Value = 0;
             _firstGunIndex = -1;
@@ -98,8 +117,11 @@ namespace Managers
         
         private void OnElapsedTimeChanged(float prev, float next, bool asServer)
         {
-            _valueImage.fillAmount = next / _timeToAcceptSwap;
+            _targetTime = next;
             _barUI.SetActive(next > 0);
+    
+            if (next > prev)
+                _displayedTime = next;
         }
     }
 }
