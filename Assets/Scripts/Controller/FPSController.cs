@@ -1,15 +1,14 @@
 using System.Collections;
-using FishNet;
-using FishNet.Connection;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.UI;
 using FishNet.Object;
 
 public class FPSController : NetworkBehaviour
 { 
+    // réparer allignVelocityToWall
+    
+    // refaire un followSmoothing vu que la camera est maintenant enfant du player
+    
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
     
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
@@ -17,7 +16,7 @@ public class FPSController : NetworkBehaviour
     #region public variables
     
     [SerializeField] Rigidbody rb;
-    [SerializeField] Transform cameraTransform;
+    [SerializeField] Transform cameraParentTransform;
     [SerializeField] Transform cameraTarget;
     [SerializeField] Transform playerFeet;
     [SerializeField] Transform playerLeftSide;
@@ -120,6 +119,8 @@ public class FPSController : NetworkBehaviour
 
     #region private variables
     
+    private Transform _camTransform;
+    
     private Transform _currentGrapplePoint ;
     private Camera _camera;
     private float _cameraDefaultFOV;
@@ -169,14 +170,16 @@ public class FPSController : NetworkBehaviour
             SetUpLayer();
         }
         
-        cameraTransform = Camera.main.transform;
+        _camTransform = Camera.main.transform;
         _camera = Camera.main;
         _cameraDefaultFOV = _camera.fieldOfView;
+        _camTransform.SetParent(cameraParentTransform.GetChild(0)); // si changement de la hierarchie, mettre a jour
+        _camTransform.localPosition = Vector3.zero;
         
         Cursor.lockState = CursorLockMode.Locked;
 
         yaw = transform.eulerAngles.y;
-        pitch = cameraTransform.localEulerAngles.x;
+        pitch = cameraParentTransform.localEulerAngles.x;
 
         foreach (GameObject col in bodyStandUpCollider) col.SetActive(true);
         foreach (GameObject col in bodyCrouchedCollider) col.SetActive(false);
@@ -390,7 +393,7 @@ public class FPSController : NetworkBehaviour
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+            if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.CompareTag("GrapplePoint"))
                 {
@@ -461,7 +464,7 @@ public class FPSController : NetworkBehaviour
         
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+            if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.CompareTag("GrapplePoint"))
                 {
@@ -537,7 +540,7 @@ public class FPSController : NetworkBehaviour
         
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+            if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.CompareTag("GrapplePoint"))
                 {
@@ -672,14 +675,14 @@ public class FPSController : NetworkBehaviour
             wallRidingDirection = Vector3.Dot(Vector3.Cross(leftSideHit.normal, Vector3.up), rb.linearVelocity) *
                                   Vector3.Cross(leftSideHit.normal, Vector3.up);
             currentWallHit = leftSideHit;
-            cameraTarget.rotation = cameraTransform.rotation = Quaternion.Euler(pitch, yaw, -headtiltIntensity);
+            cameraTarget.rotation = cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, -headtiltIntensity);
         }
         else
         {
             wallRidingDirection = Vector3.Dot(Vector3.Cross(rightSideHit.normal, Vector3.up), rb.linearVelocity) *
                                   Vector3.Cross(rightSideHit.normal, Vector3.up);
             currentWallHit = rightSideHit;
-            cameraTarget.rotation = cameraTransform.rotation = Quaternion.Euler(pitch, yaw, headtiltIntensity);
+            cameraTarget.rotation = cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, headtiltIntensity);
         }
 
         wallRidingCoroutine = StartCoroutine(WallRidingDurationCoroutine());
@@ -704,7 +707,7 @@ public class FPSController : NetworkBehaviour
         
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+            if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.CompareTag("GrapplePoint"))
                 {
@@ -817,7 +820,7 @@ public class FPSController : NetworkBehaviour
 
     void EnterSlidingState()
     {
-        landingDirection = cameraTransform.forward;
+        landingDirection = cameraParentTransform.forward;
         landingDirection.y = 0f;
         landingDirection.Normalize();
         landingDirection *= slideSpeed;
@@ -946,7 +949,7 @@ public class FPSController : NetworkBehaviour
     {
         if (dashVerticality)
         {
-            dashingDirection = cameraTransform.forward;
+            dashingDirection = cameraParentTransform.forward;
         }
         else
         {
@@ -1077,7 +1080,7 @@ public class FPSController : NetworkBehaviour
     Vector3 grappleDirection;
     void EnterGrappleState()
     {
-        if (Physics.SphereCast(cameraTransform.position, _castWidth, cameraTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+        if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
         {
             if (hit.collider.CompareTag("GrapplePoint"))
             {
@@ -1151,7 +1154,7 @@ public class FPSController : NetworkBehaviour
         float targetRoll = cameraTarget.eulerAngles.z;
         currentRoll = Mathf.LerpAngle(currentRoll, targetRoll, followSmoothing * Time.deltaTime);
 
-        cameraTransform.rotation = Quaternion.Euler(pitch, yaw, currentRoll);
+        cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, currentRoll);
 
         Vector3 targetPos = cameraTarget.position;
 
@@ -1162,15 +1165,15 @@ public class FPSController : NetworkBehaviour
             float bobY = Mathf.Sin(headbobTimer) * headbobAmplitude;
             float bobX = Mathf.Cos(headbobTimer * 0.5f) * headbobAmplitude * 0.5f;
 
-            targetPos += cameraTransform.up * bobY;
-            targetPos += cameraTransform.right * bobX;
+            targetPos += cameraParentTransform.up * bobY;
+            targetPos += cameraParentTransform.right * bobX;
         }
         else
         {
             headbobTimer = 0f;
         }
 
-        cameraTransform.position = Vector3.Lerp(cameraTransform.position, targetPos, followSmoothing * Time.deltaTime);
+        cameraParentTransform.position = Vector3.Lerp(cameraParentTransform.position, targetPos, followSmoothing * Time.deltaTime);
     }
 
 
