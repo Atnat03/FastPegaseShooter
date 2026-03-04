@@ -6,8 +6,6 @@ using FishNet.Object;
 
 public class FPSController : NetworkBehaviour
 { 
-    // réparer allignVelocityToWall
-    
     // refaire un followSmoothing vu que la camera est maintenant enfant du player
     
     // faire mieux le Grappling
@@ -31,8 +29,6 @@ public class FPSController : NetworkBehaviour
     [SerializeField] PlayerInput playerInput;
     [SerializeField] private GameObject _playerVisual;
     [SerializeField] private PlayerAnimation _playerAnimation;
-    [SerializeField] CapsuleCollider _capsuleColliderStandUp;
-    [SerializeField] CapsuleCollider _capsuleColliderCrouched;
 
     [Header("parameters")]
     [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")][SerializeField] private bool landSnap = true;
@@ -1220,8 +1216,6 @@ public class FPSController : NetworkBehaviour
         height = Vector3.Distance(capsuleTop, playerFeet.position);
         point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
         point2 = playerFeet.position  + Vector3.up * bodyRadius;
-        
-        capsule = crouched ? _capsuleColliderCrouched :  _capsuleColliderStandUp;
          
         currentHorizontal = new Vector3(velocity.x, 0, velocity.z);
         if (Physics.CapsuleCast(point1, point2, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
