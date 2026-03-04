@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using CustomConsole.Runtime.Logger;
+using FishNet.Object;
 using UnityEngine;
 
-public class BasicEnemyMovements : MonoBehaviour, IPathRequester
+public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
 {
     [SerializeField] private float _speed;
     
@@ -12,15 +13,28 @@ public class BasicEnemyMovements : MonoBehaviour, IPathRequester
     private EventBus _bus;
     
     private Transform _transform;
-    
-    //path related variables
+
+
+    //server side variables
+    [SerializeField] private float _syncRate = 0.5f;
+    private float _visualSyncingTimer;
+        //path related variables 
     private List<PathfindingNode> _path = new List<PathfindingNode>();
     private Vector3 _lastPos;
     private float _t;
-    void Start()
+    
+    //movement related variables (client side)
+    private Vector3 _targetPosition;
+    
+    #region Server Side
+
+    public override void OnStartClient()
     {
         _transform = transform;
-        
+    }
+
+    public override void OnStartServer()
+    {
         _bus = EventBusInitialiser.instance.Bus;
         _bus.Subscribe((PlayerPositionUpdate PPU) =>
         {
@@ -30,11 +44,32 @@ public class BasicEnemyMovements : MonoBehaviour, IPathRequester
 
     private void FixedUpdate()
     {
-        if(_path.Count > 1) FollowPath();
+        if(IsServerInitialized)
+        {
+            //only the server can determine the enemies positions
+            if (_path.Count > 1)
+            {
+                FollowPath();
+                
+                _visualSyncingTimer += Time.deltaTime;
+                if(_visualSyncingTimer >= _syncRate)
+                {
+                    Debug.Log("Syncing visuals");
+                    _visualSyncingTimer = 0;
+                    UpdatePositionObserverRPC(transform.position);
+                }
+            }
+        }
+        else
+        {
+            //smoothing movements on client side
+            transform.position = Vector3.Lerp(transform.position, _targetPosition, 10f * Time.deltaTime);
+        }
     }
 
     void OnPlayerMoving(int playerId, Vector3 playerPosition)
     {
+        Debug.Log("test");
         if (IsTargetPlayer(playerId) || IsPlayerCloser(playerPosition))
         {
             _targetedPlayerId = playerId;
@@ -66,6 +101,23 @@ public class BasicEnemyMovements : MonoBehaviour, IPathRequester
             if(_path.Count > 0) _lastPos = _path[^1].position;
         }
     }
+    #endregion
+
+    #region Client Side
+    [ObserversRpc]
+    void UpdatePositionObserverRPC(Vector3 serverPosition)
+    {
+        UpdatePosition(serverPosition);
+    }
+
+    void UpdatePosition(Vector3 newPosition)
+    {
+        if (!IsServerInitialized)
+        {
+            _targetPosition = newPosition;
+        }
+    }
+    #endregion
 }
 public struct PathRequestEvent
 {
