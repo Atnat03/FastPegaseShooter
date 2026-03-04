@@ -13,5 +13,8 @@ namespace GunDecorator.AmmoModules
             Debug.Log("Bullet fired");
             Instantiate(AmmoPrefab, transform.position, Quaternion.identity);
         }
+
+        public void SetDamage(float multiplierDmg)
+        { }
     }
 }

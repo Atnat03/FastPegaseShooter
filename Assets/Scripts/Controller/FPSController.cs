@@ -1,11 +1,6 @@
 using System.Collections;
-using FishNet;
-using FishNet.Connection;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.UI;
 using FishNet.Object;
 
 public class FPSController : NetworkBehaviour
@@ -17,12 +12,15 @@ public class FPSController : NetworkBehaviour
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
     
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
+
+    public Camera Camera => _camera;
     
     #region public variables
     
     [SerializeField] Rigidbody rb;
     [SerializeField] Transform cameraParentTransform;
     [SerializeField] Transform cameraTarget;
+    [SerializeField] private Camera _camera;
     [SerializeField] Transform playerFeet;
     [SerializeField] Transform playerLeftSide;
     [SerializeField] Transform playerRightSide;
@@ -127,7 +125,6 @@ public class FPSController : NetworkBehaviour
     private Transform _camTransform;
     
     private Transform _currentGrapplePoint ;
-    private Camera _camera;
     private float _cameraDefaultFOV;
     
     [HideInInspector] public bool grounded;
@@ -173,13 +170,15 @@ public class FPSController : NetworkBehaviour
         if(IsOwner)
         {
             SetUpLayer();
+            
+            _camTransform = _camera.transform;
+            _cameraDefaultFOV = _camera.fieldOfView;
+            _camTransform.localPosition = Vector3.zero;
         }
-        
-        _camTransform = Camera.main.transform;
-        _camera = Camera.main;
-        _cameraDefaultFOV = _camera.fieldOfView;
-        _camTransform.SetParent(cameraParentTransform.GetChild(0)); // si changement de la hierarchie, mettre a jour
-        _camTransform.localPosition = Vector3.zero;
+        else
+        {
+            _camera.gameObject.SetActive(false);
+        }
         
         Cursor.lockState = CursorLockMode.Locked;
 

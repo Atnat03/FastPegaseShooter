@@ -11,7 +11,7 @@ namespace GunDecorator
         
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
-
+        
         private void Start()
         {
             _additionalEffectModule = new List<ISecondModule>();
@@ -52,6 +52,9 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
+                if(_gunController.IsOverload)
+                    _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
+                
                 _ammoModule.SpawnBullet();
                 return;
             }

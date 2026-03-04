@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
-public class DumbEnemy : MonoBehaviour, IPlayerPositionListener, IPathRequester
+//##########
+//Script Broken by removal of "IPlayerPositionListener" interface
+//##########
+public class DumbEnemy : MonoBehaviour, /*IPlayerPositionListener,*/ IPathRequester
 {
     [SerializeField] private float playerPositionUpdateThreshold;
     [SerializeField] private float _speed;
@@ -19,20 +23,28 @@ public class DumbEnemy : MonoBehaviour, IPlayerPositionListener, IPathRequester
         _bus = EventBusInitialiser.instance.Bus;
     }
 
-    private void Update()
+    //##########
+    //Function Broken by removal of "PlayerPosRequestEvent" struct
+    //##########
+    private void FixedUpdate()
     {
-        _bus.InvokeEvent(new PlayerPosRequestEvent{positionListener = this});
-        if(_path.Count > 1) FollowPlayer();
+        /*_bus.InvokeEvent(new PlayerPosRequestEvent{positionListener = this});
+        if(_path.Count > 1) FollowPlayer();*/
+        CustomLogger.CCErrorLog($"The script {typeof(DumbEnemy)} attached to {transform.name} isn't valid anymore. No behaviour remaining");
     }
 
     public void OnPlayerMoving(Vector3 playerPosition)
     {
-        if((playerPosition - _playerPosition).sqrMagnitude > playerPositionUpdateThreshold * playerPositionUpdateThreshold)
+        //##########
+        //Script Broken by changement in Struct "PathRequestEvent" signature
+        //##########
+        
+        /*if((playerPosition - _playerPosition).sqrMagnitude > playerPositionUpdateThreshold * playerPositionUpdateThreshold)
         {
             _playerPosition = playerPosition;
             //requesting for new path
             _bus.InvokeEvent(new PathRequestEvent(this, transform.position));
-        }
+        }*/
     }
 
     void FollowPlayer()
@@ -52,17 +64,5 @@ public class DumbEnemy : MonoBehaviour, IPlayerPositionListener, IPathRequester
         _path = path;
         _lastPos = transform.position;
         _t = 0;
-    }
-}
-
-public struct PathRequestEvent
-{
-    public IPathRequester requester;
-    public Vector3 position;
-
-    public PathRequestEvent(IPathRequester requester, Vector3 position)
-    {
-        this.requester = requester;
-        this.position = position;
     }
 }
