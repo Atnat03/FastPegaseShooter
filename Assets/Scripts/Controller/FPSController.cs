@@ -1,15 +1,14 @@
 using System.Collections;
-using FishNet;
-using FishNet.Connection;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.UI;
 using FishNet.Object;
 
 public class FPSController : NetworkBehaviour
 { 
+    // réparer allignVelocityToWall
+    
+    // refaire un followSmoothing vu que la camera est maintenant enfant du player
+    
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
     
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
