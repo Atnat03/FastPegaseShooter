@@ -20,6 +20,10 @@ public class TirNul : MonoBehaviour
 
     #region Unity Methods
 
+    public void Start()
+    {
+        _playerCamera = Camera.main;
+    }
     private void OnEnable()
     {
         _playerInput.actions["Shoot"].performed += Shoot;
