@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 979089028696654715}
   - component: {fileID: 6607835272460448153}
   - component: {fileID: 3485912905427261247}
+  - component: {fileID: 2075103370322874945}
   m_Layer: 6
   m_Name: PlayerController
   m_TagString: Player
@@ -255,7 +256,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   rb: {fileID: 5777719286037595758}
-  cameraTransform: {fileID: 0}
+  cameraParentTransform: {fileID: 0}
   cameraTarget: {fileID: 5635335992715781554}
   playerFeet: {fileID: 3094173869688485860}
   playerLeftSide: {fileID: 6060067213430410933}
@@ -379,9 +380,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39251be4eb517f5418867bcdc08c4ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grapple
-  _componentIndexCache: 255
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   playerInput: {fileID: 997312506154426130}
   rb: {fileID: 5777719286037595758}
   _castWidth: 0.5
@@ -430,7 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Transforming.NetworkTransform
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _componentConfiguration: 2
@@ -485,8 +486,10 @@ MonoBehaviour:
   NetworkBehaviours:
   - {fileID: 1792326860910464111}
   - {fileID: 4170606718173402673}
+  - {fileID: 1282941799053182666}
   - {fileID: 6892326474594197254}
   - {fileID: 3402474507132829477}
+  - {fileID: 3485912905427261247}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -497,7 +500,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584293200652824807
+  _initializedTimestamp: -8584289897327120006
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -513,7 +516,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 0
+  <PrefabId>k__BackingField: 2
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 4833678033195686141
   SceneId: 0
@@ -534,7 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8cac635f24954048aad3a6ff9110beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Animating.NetworkAnimator
-  _componentIndexCache: 3
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   IgnoredParameters: []
@@ -667,12 +670,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68eaf2ffb56bbab46a3e5e5b88a80db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
-  _componentIndexCache: 255
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _playerInputAction: {fileID: 997312506154426130}
   _gunSwitching: {fileID: 0}
   _bridgePlayer: {fileID: 0}
+--- !u!114 &2075103370322874945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2624057951769441985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9878ff0a3f910b4da9fa7d13cf3f0cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TirNul
+  _playerInput: {fileID: 0}
+  _playerCamera: {fileID: 0}
+  _firePoint: {fileID: 0}
+  _bulletPrefab: {fileID: 0}
+  _fireRate: 0.2
 --- !u!1 &3153661936363678950
 GameObject:
   m_ObjectHideFlags: 0
