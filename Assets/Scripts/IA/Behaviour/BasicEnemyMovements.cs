@@ -51,13 +51,13 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             {
                 FollowPath();
                 
-                /*_visualSyncingTimer += Time.deltaTime;
+                _visualSyncingTimer += Time.deltaTime;
                 if(_visualSyncingTimer >= _syncRate)
                 {
                     Debug.Log("Syncing visuals");
                     _visualSyncingTimer = 0;
                     UpdatePositionObserverRPC(transform.position);
-                }*/
+                }
             }
         }
         else
@@ -103,7 +103,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     }
     #endregion
 
-    /*#region Client Side
+    #region Client Side
     [ObserversRpc]
     public void UpdatePositionObserverRPC(Vector3 serverPosition)
     {
@@ -117,7 +117,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             _targetPosition = newPosition;
         }
     }
-    #endregion*/
+    #endregion
 }
 public struct PathRequestEvent
 {
