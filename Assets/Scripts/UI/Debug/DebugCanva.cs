@@ -20,7 +20,7 @@ public class DebugCanva : MonoBehaviour
     
     void Update()
     {
-        controllerCurrentState.text = mainFPSController.stateMachine.currentState.iD.ToString();
+        controllerCurrentState.text = mainFPSController.stateMachine?.currentState.iD.ToString();
         controllerGrounded.text = mainFPSController.grounded? "Grounded" : "Not grounded";
         if (mainFPSController.leftSideAgainstWall && mainFPSController.rightSideAgainstWall)
         {
@@ -44,7 +44,7 @@ public class DebugCanva : MonoBehaviour
         CurrentVelocity.text = "Current velocity :" + mainFPSController.horizontalVelocity.magnitude;
     }
 
-    /*void LateUpdate()
+    void LateUpdate()
     {
         if (TPSCamera.activeSelf)
         {
@@ -57,5 +57,5 @@ public class DebugCanva : MonoBehaviour
             TPSCamera.transform.LookAt(mainFPSController.transform.position);
         }
         
-    }*/
+    }
 }
