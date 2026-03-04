@@ -518,10 +518,12 @@ MonoBehaviour:
   playerFeet: {fileID: 3094173869688485860}
   playerLeftSide: {fileID: 6060067213430410933}
   playerRightSide: {fileID: 4679784800279815862}
-  bodyRadius: 1
+  bodyRadius: 0.6
   playerInput: {fileID: 997312506154426130}
   _playerVisual: {fileID: 4615614786451762460}
   _playerAnimation: {fileID: 3465261579877272972}
+  _capsuleColliderStandUp: {fileID: 6664158444492377981}
+  _capsuleColliderCrouched: {fileID: 3576913710045463952}
   landSnap: 0
   dashVerticality: 0
   clampedMaxAirSpeed: 0
@@ -536,7 +538,7 @@ MonoBehaviour:
   groundMomentumFactor: 2
   sideStepImpulseForce: 3
   followSmoothing: 15
-  wallDetectionRange: 0
+  wallDetectionRange: 10
   walkableSlopeAngle: 45
   maxStepHeight: 0.2
   walkingHeadbobAmplitude: 0.075
@@ -602,9 +604,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39251be4eb517f5418867bcdc08c4ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grapple
-  _componentIndexCache: 255
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   playerInput: {fileID: 997312506154426130}
   rb: {fileID: 5777719286037595758}
   _castWidth: 0.5
@@ -707,9 +709,10 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: 1792326860910464111}
-  - {fileID: 0}
+  - {fileID: 1282941799053182666}
   - {fileID: 6892326474594197254}
   - {fileID: 3402474507132829477}
+  - {fileID: 5591131352198270852}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -720,7 +723,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584294814419827433
+  _initializedTimestamp: -8584290388988677385
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -736,7 +739,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 0
+  <PrefabId>k__BackingField: 2
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 5360620377555402393
   SceneId: 0
@@ -890,9 +893,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68eaf2ffb56bbab46a3e5e5b88a80db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
-  _componentIndexCache: 255
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _playerInputAction: {fileID: 997312506154426130}
   _gunSwitching: {fileID: 3154577241410043838}
   _bridgePlayer: {fileID: 300968199624122896}

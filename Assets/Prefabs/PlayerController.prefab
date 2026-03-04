@@ -255,15 +255,17 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   rb: {fileID: 5777719286037595758}
-  cameraTransform: {fileID: 0}
+  cameraParentTransform: {fileID: 0}
   cameraTarget: {fileID: 5635335992715781554}
   playerFeet: {fileID: 3094173869688485860}
   playerLeftSide: {fileID: 6060067213430410933}
   playerRightSide: {fileID: 4679784800279815862}
-  bodyRadius: 1
+  bodyRadius: 0.5
   playerInput: {fileID: 997312506154426130}
   _playerVisual: {fileID: 4615614786451762460}
   _playerAnimation: {fileID: 3465261579877272972}
+  _capsuleColliderStandUp: {fileID: 6664158444492377981}
+  _capsuleColliderCrouched: {fileID: 3576913710045463952}
   landSnap: 0
   dashVerticality: 0
   clampedMaxAirSpeed: 0
@@ -278,7 +280,7 @@ MonoBehaviour:
   groundMomentumFactor: 2
   sideStepImpulseForce: 3
   followSmoothing: 15
-  wallDetectionRange: 0
+  wallDetectionRange: 1
   walkableSlopeAngle: 45
   maxStepHeight: 0.2
   walkingHeadbobAmplitude: 0.075
