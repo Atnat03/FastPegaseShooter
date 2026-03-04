@@ -23,7 +23,7 @@ namespace Controller
 
 			if (_bridgePlayer != null)
 			{
-				//_bridgePlayer.TryShootWithCurrentGun();
+				_bridgePlayer.TryShootWithCurrentGun();
 			}
 		}
 

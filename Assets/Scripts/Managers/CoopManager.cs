@@ -10,13 +10,29 @@ using UnityEngine.UI;
 
 namespace Managers
 {
+    [Serializable]
+    public struct SurchargeData
+    {
+        public float damageMultiplier;
+        public float cadenceMultiplier;
+        public float overloadDuration;
+        public float timeToCombo;
+        public Color colorJauge;
+    }
+    
     public class CoopManager : NetworkBehaviour
     {
         [SerializeField] private float _timeToAcceptSwap = 2f;
         private readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
         [SerializeField] private float _swapingTime;
         
-        [SerializeField] private List<SyncVar<float>> _damageSurchargeList = new List<SyncVar<float>>();
+        [SerializeField] private List<SurchargeData> _damageSurchargeData = new List<SurchargeData>();
+        private readonly SyncVar<int> _currentSurchargeLevel = new SyncVar<int>();
+        
+        [Header("Combo")]
+        [SerializeField] private bool _isCombo = false;
+        [SerializeField] private Image _infoCombo;
+        private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
         
         [Header("UI")]
         [SerializeField] private GameObject _barUI;
@@ -34,8 +50,12 @@ namespace Managers
         {
             base.OnStartServer();
 
+            _elapsedTimeForCombo.Value = 0;
+            _elapsedTime.Value = 0;
+            
             InitBus();
             _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
+            _bus.Subscribe((EndOVerload data) => _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo);
         }
 
         public override void OnStartClient()
@@ -44,6 +64,7 @@ namespace Managers
             
             InitBus();
             _elapsedTime.OnChange += OnElapsedTimeChanged;
+            _elapsedTimeForCombo.OnChange += OnElapsedComboTimeChanged;
         }
         
         private void InitBus()
@@ -60,6 +81,14 @@ namespace Managers
                     _elapsedTime.Value -= Time.deltaTime;
                     if (_elapsedTime.Value <= 0)
                         ResetTimer();
+                }
+                
+                if (_elapsedTimeForCombo.Value > 0)
+                {
+                    _elapsedTimeForCombo.Value -= Time.deltaTime;
+                    _isCombo = true;
+                    if (_elapsedTimeForCombo.Value <= 0)
+                        _isCombo = false;
                 }
             }
             
@@ -79,8 +108,19 @@ namespace Managers
 
             if (_elapsedTime.Value > 0)
             {
+                if (_isCombo)
+                {
+                    _currentSurchargeLevel.Value++;
+                }
+                else
+                {
+                    _currentSurchargeLevel.Value = 0;
+                }
+
+                _elapsedTimeForCombo.Value = 0;
+                
                 NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
-                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo); 
+                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo);
                 ResetTimer();
             }
             else
@@ -97,6 +137,7 @@ namespace Managers
         {
             _bus.InvokeEvent(new SwapingGunEvent
             {
+                dataSurcharge = _damageSurchargeData[_currentSurchargeLevel.Value],
                 gunIndex = newIndex,
                 timeToSwap = _swapingTime,
                 currentAmmo = currentAmmo
@@ -122,6 +163,12 @@ namespace Managers
     
             if (next > prev)
                 _displayedTime = next;
+        }
+        
+        private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
+        {
+            _infoCombo.color = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
+            _infoCombo.gameObject.SetActive(next > 0);
         }
     }
 }

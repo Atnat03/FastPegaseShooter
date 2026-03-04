@@ -16,6 +16,7 @@ namespace GunDecorator.AmmoModules
         [Header("parametres")]
         [SerializeField] private float _maxDistance;
         [SerializeField] private float _damages;//Debug
+        [SerializeField] private Camera _camera;
         
         [Header("Debug")]
         public GameObject p_markPrefab;
@@ -28,7 +29,7 @@ namespace GunDecorator.AmmoModules
 
         void Start()
         {
-            _camTransform = Camera.main.transform;
+            _camTransform = _camera.transform;
             _ps = GetComponentInParent<PlayerShooting>();
         }
         

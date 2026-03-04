@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using Managers;
 using UnityEngine;
 
 namespace Controller
@@ -9,9 +10,14 @@ namespace Controller
     public class GunBridgePlayer : NetworkBehaviour
     {
         public int GetCurrentMainIndex => _gunSwitching.CurrentMainGunIndex;
-        //public int GetCurrentAmmo => _gunSwitching.CurrentMainSurchargeGun.GetCurrentAmmo();
+        public int GetCurrentAmmo => CurrentMainSurchargeGun.GetCurrentAmmo();
+        
+        public IGun CurrentGun => _gunSwitching.IsMainGun ? _gunSwitching.CurrentMainGun.GetComponent<IGun>() : _gunSwitching.CurrentSecondaryGun.GetComponent<IGun>();
+
+        public ISurcharge CurrentMainSurchargeGun => _gunSwitching.CurrentMainGun.GetComponent<ISurcharge>();
         
         [SerializeField] private GunSwitching _gunSwitching;
+        [SerializeField] private GunSurcharge _gunSurcharge;
         
         private readonly SyncVar<bool> _wantToSwitch = new SyncVar<bool>();
         private bool _localWantToSwitch = false;
@@ -38,7 +44,7 @@ namespace Controller
 
         public void TryShootWithCurrentGun()
         { 
-            _gunSwitching.CurrentGun.TryFire();
+            CurrentGun.TryFire();
         }
         
         public void SwitchGunType()
@@ -78,9 +84,8 @@ namespace Controller
             yield return new WaitForSeconds(data.timeToSwap);
             
             _gunSwitching.ChangeCurrentGun_Main(data.gunIndex);
-            //_gunSwitching.CurrentMainSurchargeGun.SetAmmo(data.currentAmmo);
-            
-            //_gunSwitching.CurrentMainSurchargeGun.SetSurchargeStat(true, 2, 2);
+
+            _gunSurcharge.SetOverloadStats(true, 2, 2, 2, data.currentAmmo);
         }
 
         private void EndTimerSwap(EndTimerSwapEvent data)
@@ -108,6 +113,7 @@ namespace Controller
     //Swap accepté et envoyé au joueux
     public struct SwapingGunEvent
     {
+        public SurchargeData dataSurcharge;
         public int gunIndex;
         public float timeToSwap;
         public int currentAmmo;

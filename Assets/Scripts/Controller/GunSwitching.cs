@@ -17,9 +17,6 @@ public class GunSwitching : MonoBehaviour
 
 	public int CurrentMainGunIndex => _currentMainGun;
 	
-	public IGun CurrentGun => IsMainGun ? CurrentMainGun.GetComponent<IGun>() : CurrentSecondaryGun.GetComponent<IGun>();
-
-	//public ISurcharge CurrentMainSurchargeGun => CurrentMainGun.GetComponent<ISurcharge>();
 
 	#endregion
 	

@@ -10,18 +10,18 @@ public interface IGun
     public void TryFire();
 }
 
-/*
+
 public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value);
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
     public bool IsOverload { get; }
-}*/
+}
 
 namespace GunDecorator
 {
-    public class GunController : NetworkBehaviour, IGun
+    public class GunController : NetworkBehaviour, IGun, ISurcharge
     {
         public bool IsOverload => _isOverload.Value;
         
