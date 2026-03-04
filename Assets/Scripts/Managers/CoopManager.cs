@@ -88,7 +88,10 @@ namespace Managers
                     _elapsedTimeForCombo.Value -= Time.deltaTime;
                     _isCombo = true;
                     if (_elapsedTimeForCombo.Value <= 0)
+                    {
                         _isCombo = false;
+                        _currentSurchargeLevel.Value = 0;
+                    }
                 }
             }
             
@@ -111,6 +114,13 @@ namespace Managers
                 if (_isCombo)
                 {
                     _currentSurchargeLevel.Value++;
+                    
+                    if(_currentSurchargeLevel.Value > _damageSurchargeData.Count)
+                    {
+                        _currentSurchargeLevel.Value = 0;
+                        Debug.Log("Vous etes arrivez au bout du nombre maximal de combo");
+                        return;
+                    }
                 }
                 else
                 {
