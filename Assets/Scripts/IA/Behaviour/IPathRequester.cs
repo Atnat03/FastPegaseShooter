@@ -3,5 +3,5 @@ using UnityEngine;
 
 public interface IPathRequester
 {
-    public void RequestPath(List<PathfindingNode> path);
+    public void OnPathAnswer(List<PathfindingNode> path);
 }

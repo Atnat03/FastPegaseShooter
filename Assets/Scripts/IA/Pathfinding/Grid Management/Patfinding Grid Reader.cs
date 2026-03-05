@@ -28,7 +28,7 @@ public class PathfindingGridReader : MonoBehaviour
         EventBusInitialiser.instance.Bus.Subscribe((PathRequestEvent PRE) =>
         {
             if(PRE.p_gridReaderId != p_id) return;
-            PRE.p_requester.RequestPath(
+            PRE.p_requester.OnPathAnswer(
                 _aStarAlgorithm.FindPathFromGrid(
                     pathfindingGridSO.nodes,
                     searchTree.FindClosest(PRE.p_startPosition).node,

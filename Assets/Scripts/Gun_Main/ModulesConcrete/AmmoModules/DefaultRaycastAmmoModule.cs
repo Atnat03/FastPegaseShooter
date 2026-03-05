@@ -35,7 +35,7 @@ namespace GunDecorator.AmmoModules
         public void SpawnBullet()
         {
             _spawnPos = _camTransform.position + transform.forward * .3f;
-            if (Physics.Raycast(_spawnPos, _camTransform.forward, out RaycastHit hit,_maxDistance, ~LayerMask.GetMask("Owner")))
+            if (Physics.Raycast(_spawnPos, _camTransform.forward, out RaycastHit hit,_maxDistance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
             {
                 if (_currentMark != null)
                 {

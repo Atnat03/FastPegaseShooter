@@ -36,6 +36,11 @@ public class SecondaryGun : MonoBehaviour, IGun
 		_effect.ApplyEffect();
 	}
 
+	public void TryReload()
+	{
+		throw new NotImplementedException();
+	}
+
 	public int GetCurrentAmmo()
 	{
 		return 0;
