@@ -1,10 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TriggerZone : MonoBehaviour
 {
+    [SerializeField] private UnityEvent _events;
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
+        if (other.CompareTag("Player"))
+        {
+            _events?.Invoke();
+        }
     }
 }

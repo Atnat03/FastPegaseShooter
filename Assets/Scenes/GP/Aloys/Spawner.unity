@@ -150,6 +150,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1425883633}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &258499115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 258499116}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &258499116
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258499115}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.08, y: 2.36, z: -1.95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1956623978}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &269641008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1880,6 +1911,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b372314c9d1f77459a78ed7ea1c0821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TriggerZone
+  _events:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &940403626
 Transform:
   m_ObjectHideFlags: 0
@@ -2000,6 +2034,8 @@ GameObject:
   - component: {fileID: 1196793987}
   - component: {fileID: 1196793986}
   - component: {fileID: 1196793983}
+  - component: {fileID: 1196793989}
+  - component: {fileID: 1196793988}
   m_Layer: 0
   m_Name: Spawn Zone
   m_TagString: Untagged
@@ -2109,7 +2145,7 @@ Transform:
   m_GameObject: {fileID: 1196793982}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.57, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2143,6 +2179,54 @@ MonoBehaviour:
   pathfindingGridSO: {fileID: 11400000, guid: 397ff26f69b8c5a47865cb29b96bba11, type: 2}
   drawNodes: 1
   drawNodesConnections: 1
+--- !u!114 &1196793988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196793982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b372314c9d1f77459a78ed7ea1c0821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerZone
+  _events:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1196793984}
+        m_TargetAssemblyTypeName: SpawnZone, Assembly-CSharp
+        m_MethodName: TriggerZone
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!65 &1196793989
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196793982}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.5, y: 1, z: 3.5}
+  m_Center: {x: 1.5, y: 0, z: 2.05}
 --- !u!1 &1348873146
 GameObject:
   m_ObjectHideFlags: 0
@@ -2877,8 +2961,9 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 1956623976}
   _networkObjectCache: {fileID: 0}
   _sceneToDisable: 
-  _playerPrefab: {fileID: 7927807153383519047, guid: d8776ce3e17262946927e321036afd90, type: 3}
-  _spawnPoints: []
+  _playerPrefab: {fileID: 7927807153383519047, guid: 1eeb20e38336343449c453e336beb2fa, type: 3}
+  _spawnPoints:
+  - {fileID: 258499116}
 --- !u!4 &1956623978
 Transform:
   m_ObjectHideFlags: 0
@@ -2888,10 +2973,11 @@ Transform:
   m_GameObject: {fileID: 1956623975}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 139.89883, y: 763.24536, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 258499116}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
