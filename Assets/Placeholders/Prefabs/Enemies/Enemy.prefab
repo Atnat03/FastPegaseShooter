@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4856717765235199756}
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
+  - component: {fileID: 6176439864006220930}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -48,14 +49,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3141c02e2afe434e8d51531588cbb6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyLife
-  _componentIndexCache: 255
+  _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 8280671740658429549}
   _life: 10
-  p_life:
-    NetworkManager: {fileID: 0}
-    NetworkBehaviour: {fileID: 0}
-    _value: 0
 --- !u!114 &4856717765235199756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +65,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5492ed17c451d4885c1b50d3efafe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
-  _speed: 3
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
+  _speed: 1
+  _syncRate: 0.1
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -110,7 +111,10 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
-  NetworkBehaviours: []
+  NetworkBehaviours:
+  - {fileID: 4639033686446523756}
+  - {fileID: 4856717765235199756}
+  - {fileID: 0}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -121,7 +125,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: 0
+  _initializedTimestamp: -8584289616588347222
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -137,15 +141,61 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 65535
+  <PrefabId>k__BackingField: 4
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 8577870898343070959
+  <AssetPathHash>k__BackingField: 17158645317297001745
   SceneId: 0
   SerializedTransformProperties:
-    Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0, w: 0}
-    Scale: {x: 0, y: 0, z: 0}
-    IsValid: 0
+    Position: {x: 1.94671, y: 0.0011500008, z: 4.24618}
+    Rotation: {x: -0, y: -0, z: -0, w: 1}
+    Scale: {x: 1, y: 1, z: 1}
+    IsValid: 1
+--- !u!114 &6176439864006220930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Transforming.NetworkTransform
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 0}
+  _componentConfiguration: 0
+  _synchronizeParent: 0
+  _packing:
+    Position: 1
+    Rotation: 1
+    Scale: 0
+  _useScaledTime: 1
+  _interpolation: 2
+  _extrapolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  _clientAuthoritative: 1
+  _sendToOwner: 1
+  _interval: 1
+  _synchronizePosition: 1
+  _positionSensitivity: 0.001
+  _positionSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeRotation: 1
+  _rotationSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeScale: 1
+  _scaleSensitivity: 0.001
+  _scaleSnapping:
+    X: 0
+    Y: 0
+    Z: 0
 --- !u!1 &6364117521231957157
 GameObject:
   m_ObjectHideFlags: 0

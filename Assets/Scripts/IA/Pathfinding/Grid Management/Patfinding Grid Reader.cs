@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(AStarAlgorithm))]
 public class PathfindingGridReader : MonoBehaviour
 {
+    public Guid p_id;
     public PathfindingGridSO pathfindingGridSO;
 
     public ThreeDimensionalTree searchTree;
@@ -26,6 +27,7 @@ public class PathfindingGridReader : MonoBehaviour
 
         EventBusInitialiser.instance.Bus.Subscribe((PathRequestEvent PRE) =>
         {
+            if(PRE.p_gridReaderId != p_id) return;
             PRE.p_requester.RequestPath(
                 _aStarAlgorithm.FindPathFromGrid(
                     pathfindingGridSO.nodes,
@@ -56,4 +58,30 @@ public class PathfindingGridReader : MonoBehaviour
             }
         }
     }
+    
+    #region Id
+    #if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (Application.isPlaying) return;
+        
+        if (p_id == Guid.Empty || IsGuidInScene(this))
+        {
+            p_id = GenerateNewGuid();
+        }
+    }
+    
+    Guid GenerateNewGuid() => Guid.NewGuid();
+
+    bool IsGuidInScene(PathfindingGridReader self)
+    {
+        PathfindingGridReader[] spawnZones = FindObjectsByType<PathfindingGridReader>(FindObjectsSortMode.None);
+        foreach (PathfindingGridReader gridReader in spawnZones)
+        {
+            if(gridReader != self && gridReader.p_id == self.p_id) return true;
+        }
+        return false;
+    }
+    #endif
+    #endregion
 }
