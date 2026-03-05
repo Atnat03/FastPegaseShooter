@@ -22,20 +22,24 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     private Vector3 _lastPos;
     private float _t;
 
-    public int p_enemySpawnCost;
-
+    private Action _unsubscribePPU;
     public override void OnStartClient()
     {
-        _transform = transform;
     }
 
     public override void OnStartServer()
     {
+        _transform = transform;
         _bus = EventBusInitialiser.instance.Bus;
-        _bus.Subscribe((PlayerPositionUpdate PPU) =>
+        _unsubscribePPU = _bus.Subscribe((PlayerPositionUpdate PPU) =>
         {
             OnPlayerMoving(PPU.p_playerId, PPU.p_playerPosition);
         });
+    }
+
+    public override void OnStopServer()
+    {
+        _unsubscribePPU?.Invoke();
     }
     
     public void SetGridReaderGuid(Guid gridReaderId) => _gridReaderId = gridReaderId;
@@ -44,6 +48,8 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     {
         if(IsServerInitialized)
         {
+            
+            
             //only the server can determine the enemies positions
             if (_path.Count > 1)
             {
@@ -60,6 +66,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             _lastPlayerPosition = playerPosition;
             
             //Updating Pathfinding
+            CustomLogger.ImportantLog($"this : {this == null}, gridId { _gridReaderId == null}, transform {_transform == null}");
             _bus.InvokeEvent(new PathRequestEvent(this, _gridReaderId, _transform.position, _lastPlayerPosition));
         }
     }
@@ -67,7 +74,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     bool IsTargetPlayer(int playerId) => playerId == _targetedPlayerId;
     bool IsPlayerCloser(Vector3 playerPosition) => (transform.position - playerPosition).sqrMagnitude < (transform.position - _lastPlayerPosition).sqrMagnitude;
 
-    public void RequestPath(List<PathfindingNode> path)
+    public void OnPathAnswer(List<PathfindingNode> path)
     {
         _path = path;
         _lastPos = _transform.position;

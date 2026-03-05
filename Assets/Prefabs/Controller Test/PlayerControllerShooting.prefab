@@ -2202,7 +2202,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
   moduleName: ReloadModule
   moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
+  _autoReload: 1
   _magazineSize: 30
+  reloadDuration: 3
 --- !u!114 &17982176900637114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2917,6 +2919,7 @@ GameObject:
   - component: {fileID: 8977986747039668759}
   - component: {fileID: 6651845242360554492}
   - component: {fileID: 6774984910909853302}
+  - component: {fileID: 3931227336118792554}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -2969,7 +2972,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
   moduleName: TemplateShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule: []
+  _secondModule:
+  - {fileID: 3931227336118792554}
   _ammoType: {fileID: 6774984910909853302}
 --- !u!114 &8977986747039668759
 MonoBehaviour:
@@ -2985,7 +2989,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
   moduleName: ReloadModule
   moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
+  _autoReload: 1
   _magazineSize: 30
+  reloadDuration: 3
 --- !u!114 &6651845242360554492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3026,6 +3032,23 @@ MonoBehaviour:
   _damages: 5
   _BulletSpeed: 50
   p_markPrefab: {fileID: 963067351685044417, guid: 1d9c92197d26f4945a16b966caa07f11, type: 3}
+--- !u!114 &3931227336118792554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875098038689886236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75baab7d895046ed9c50b9408405f960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.SalveShootModule
+  moduleName: SalveShootModule
+  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+  _recoilModule: {fileID: 6651845242360554492}
+  _numberShootPerSalve: 3
+  _intervalDuration: 0.1
 --- !u!1 &8092588949798224835
 GameObject:
   m_ObjectHideFlags: 0

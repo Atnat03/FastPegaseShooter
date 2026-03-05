@@ -27,8 +27,6 @@ public class GunSwitching : MonoBehaviour
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
 	[SerializeField] private GameObject _secondaryGunParent;
-	[SerializeField] private Transform _visiblePos;
-	[SerializeField] private Transform _unvisiblePos;
 
 	private bool _canSwitch = true;
 	private List<GameObject> _mainGunsList;
@@ -72,57 +70,30 @@ public class GunSwitching : MonoBehaviour
 	{
 		if (_isMainGun)
 		{
-			StartCoroutine(SwitchAnimatedWeapon(_mainGunsList, _currentMainGun));
+			SwitchAnimatedWeapon(_mainGunsList, _currentMainGun);
 		}
 		else
 		{
-			StartCoroutine(SwitchAnimatedWeapon(_secondaryGunsList, _currentSecondaryGun));
+			SwitchAnimatedWeapon(_secondaryGunsList, _currentSecondaryGun);
 		}
 	}
 
-	IEnumerator SwitchAnimatedWeapon(List<GameObject> list, int index)
+	
+	
+	void SwitchAnimatedWeapon(List<GameObject> list, int index)
 	{
-		_mainGunParent.SetActive(true);
-		_secondaryGunParent.SetActive(true);
+		_mainGunParent.SetActive(false);
+		_secondaryGunParent.SetActive(false);
 		
-		Vector3 mainFinalPos = IsMainGun ? _visiblePos.position : _unvisiblePos.position;
-		Vector3 secondaryFinalPos = IsMainGun ? _unvisiblePos.position : _visiblePos.position;
-		
-		Quaternion mainFinalRot = IsMainGun ? _visiblePos.rotation : _unvisiblePos.rotation;
-		Quaternion secondaryFinalRot = IsMainGun ? _unvisiblePos.rotation : _visiblePos.rotation;
-
-		float duration = 0.5f;
-		float elapsedTime = 0;
-
 		_canSwitch = false;
-		
-		while (elapsedTime < duration)
-		{
-			elapsedTime += Time.deltaTime;
-			
-			_mainGunParent.transform.position = Vector3.Lerp(_mainGunParent.transform.position, mainFinalPos, elapsedTime / duration);
-			_secondaryGunParent.transform.position = Vector3.Lerp(_secondaryGunParent.transform.position, secondaryFinalPos, elapsedTime / duration);
-			
-			_mainGunParent.transform.rotation = Quaternion.Lerp(_mainGunParent.transform.rotation, mainFinalRot, elapsedTime / duration);
-			_secondaryGunParent.transform.rotation = Quaternion.Lerp(_secondaryGunParent.transform.rotation, secondaryFinalRot, elapsedTime / duration);
-			
-			yield return null;
-		}
 		
 		_mainGunParent.SetActive(_isMainGun);
 		_secondaryGunParent.SetActive(!_isMainGun);
-		
-		_mainGunParent.transform.position = mainFinalPos;
-		_secondaryGunParent.transform.position = secondaryFinalPos;
-		
-		_mainGunParent.transform.rotation = mainFinalRot;
-		_secondaryGunParent.transform.rotation = secondaryFinalRot;
 
 		_canSwitch = true;
 		
 		ActivateCurrentGun(list, index);
 	}
-	
 	
 	private void ActivateCurrentGun(List<GameObject> list, int index)
 	{
