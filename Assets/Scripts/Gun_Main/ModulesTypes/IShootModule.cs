@@ -13,6 +13,8 @@ namespace GunDecorator
         public void Reload();
         public int CurrentAmmo { get; }
         public bool AutoReload { get; }
+        
+        public bool IsReloading { get; }
         public void SetAmmo(int value);
     }
 

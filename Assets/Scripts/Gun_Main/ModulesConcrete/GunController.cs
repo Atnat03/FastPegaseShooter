@@ -53,7 +53,7 @@ namespace GunDecorator
         {
             //On appele la fonction shoot du module de shoot actuellement équipé
 
-            if (GetCurrentAmmo() > 0)
+            if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
                 foreach (IShootModule s in _shootModule)
                 {
