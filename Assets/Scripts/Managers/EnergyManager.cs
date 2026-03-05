@@ -159,6 +159,7 @@ public class EnergyManager : NetworkBehaviour
 	[Server]
 	public void AddEnergy(float amount)
 	{
+		Debug.Log("Add Energy");
 		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + amount, 0f, _energyMax);
 	}
 

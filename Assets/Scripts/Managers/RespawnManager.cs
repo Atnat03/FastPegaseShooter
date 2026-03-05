@@ -62,6 +62,11 @@ public class RespawnManager : NetworkBehaviour
 		}
 	}
 
+	public void Quit()
+	{
+		Application.Quit();
+	}
+
 
 	#endregion
 }

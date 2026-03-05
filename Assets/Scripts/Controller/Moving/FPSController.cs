@@ -158,7 +158,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     bool hasDashed = false;
     bool coyoteSlide = false;
     bool enoughtEnegyToDash = false;
-
+    private bool isDead = false;
 
     public enum ControlerState
     {
@@ -196,6 +196,24 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             _bus.Subscribe((RequestEnergyResponseEvent data) => 
             {
                 enoughtEnegyToDash = data.energy >= dashEnergyCost;
+            });
+            
+            _bus.Subscribe((OnPlayerDeathEvent data) => 
+            {
+                if(data.playerN == NetworkObject) 
+                    isDead = true;
+            });
+            
+            _bus.Subscribe((OnPlayerDeathEvent data) => 
+            {
+                if(data.playerN == NetworkObject) 
+                    isDead = true;
+            });
+            
+            _bus.Subscribe((OnPlayerRespawnEvent data) => 
+            {
+                if(data.playerN == NetworkObject) 
+                    isDead = false;
             });
         }
         else
@@ -306,6 +324,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     void Update()
     {
         if (!IsOwner) return;
+
+        if (isDead) return;
         
         UpdateInputs();
         stateMachine?.Update();
