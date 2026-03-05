@@ -11,6 +11,8 @@ namespace GunDecorator
     public interface IReloadModule
     {
         public void Reload();
+        public int CurrentAmmo { get; }
+        public void SetAmmo(int value);
     }
 
     public interface IRecoilModule
@@ -21,6 +23,7 @@ namespace GunDecorator
     public interface IAmmoModule
     {
         public void SpawnBullet();
+        public void SetDamage(float multiplierDmg);
     }
 
     public interface ISecondModule
