@@ -48,6 +48,8 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     {
         if(IsServerInitialized)
         {
+            
+            
             //only the server can determine the enemies positions
             if (_path.Count > 1)
             {

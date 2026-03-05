@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ScriptableObjectsDefinitions;
 using UnityEngine;
 
 namespace GunDecorator
@@ -11,12 +12,11 @@ namespace GunDecorator
         
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
-
+        
         private void Start()
         {
             _additionalEffectModule = new List<ISecondModule>();
             
-            //Set up des modules secondaires
             foreach (MonoBehaviour module in _secondModule)
             {
                 ISecondModule secondModule = (ISecondModule)module;
@@ -52,7 +52,14 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
+                if(_gunController.IsOverload)
+                    _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
+                
                 _ammoModule.SpawnBullet();
+                
+                AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
+                SoundManager.PlaySound(clip, _gunController._source);
+                
                 return;
             }
             
