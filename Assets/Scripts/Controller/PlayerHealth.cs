@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
+using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using ScriptableObjectsDefinitions;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -32,6 +35,9 @@ public class PlayerHealth : NetworkBehaviour
 	[SerializeField] private Image _deathImage;
 	private float _targetHealthFill;
 	
+	[SerializeField] private SoundsDataSO _soundsData;
+	private AudioSource _audioSource;
+	
 	private EventBus _bus;
 
 	#endregion
@@ -44,7 +50,7 @@ public class PlayerHealth : NetworkBehaviour
 		_currentHealth.Value = _healthBase;
 		
 		_bus = EventBusInitialiser.instance.Bus;
-		_bus.Subscribe((PlayerChangeHealthEvent data) => TakeDamage(data));
+		_bus.Subscribe((PlayerTakeDamageEvent data) => TakeDamage(data));
 		_bus.Subscribe((AddHealthFromBarEvent data) => AddHealth(data));
 	}
 
@@ -56,6 +62,8 @@ public class PlayerHealth : NetworkBehaviour
 		
 		_respawnPosition = transform.position;
 		_respawnRotation = transform.rotation;
+		
+		_audioSource = GetComponent<AudioSource>();
 		
 		_deathImage.gameObject.SetActive(false);
 	}
@@ -81,13 +89,16 @@ public class PlayerHealth : NetworkBehaviour
 	}
 
 	[Server]
-	void TakeDamage(PlayerChangeHealthEvent data)
+	void TakeDamage(PlayerTakeDamageEvent data)
 	{
 		if (data.playerN.ObjectId != NetworkObject.ObjectId) return;
 		
 		if (_isDead.Value) return;
 		
 		float newHealth = _currentHealth.Value - data.value;
+
+		AudioClip clip = SoundManager.GetAudioClip(_soundsData, "Hurt");
+		SoundManager.PlaySound(clip, _audioSource);
 
 		if (newHealth <= 0)
 		{
@@ -160,7 +171,7 @@ public class PlayerHealth : NetworkBehaviour
 	}
 }
 
-public struct PlayerChangeHealthEvent
+public struct PlayerTakeDamageEvent
 {
 	public NetworkObject playerN;
 	public float value;

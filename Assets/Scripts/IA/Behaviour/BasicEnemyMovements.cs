@@ -21,9 +21,6 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     private List<PathfindingNode> _path = new List<PathfindingNode>();
     private Vector3 _lastPos;
     private float _t;
-
-    public int p_enemySpawnCost;
-
     public override void OnStartClient()
     {
         _transform = transform;
@@ -44,6 +41,8 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     {
         if(IsServerInitialized)
         {
+            
+            
             //only the server can determine the enemies positions
             if (_path.Count > 1)
             {
@@ -67,7 +66,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     bool IsTargetPlayer(int playerId) => playerId == _targetedPlayerId;
     bool IsPlayerCloser(Vector3 playerPosition) => (transform.position - playerPosition).sqrMagnitude < (transform.position - _lastPlayerPosition).sqrMagnitude;
 
-    public void RequestPath(List<PathfindingNode> path)
+    public void OnPathAnswer(List<PathfindingNode> path)
     {
         _path = path;
         _lastPos = _transform.position;

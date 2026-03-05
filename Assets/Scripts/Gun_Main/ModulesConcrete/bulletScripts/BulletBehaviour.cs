@@ -21,7 +21,8 @@ public class BulletBehaviour : MonoBehaviour
 
     private void DetectCollision()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, (p_speed * Time.fixedDeltaTime)))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 
+                (p_speed * Time.fixedDeltaTime), ~LayerMask.NameToLayer("Owner"), QueryTriggerInteraction.Ignore))
         {
             HitTarget(hit);
         }

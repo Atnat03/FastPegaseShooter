@@ -54,7 +54,7 @@ public class Lave : NetworkBehaviour
 		
 		Debug.Log("Apply player dmg");
 
-		_bus.InvokeEvent(new PlayerChangeHealthEvent
+		_bus.InvokeEvent(new PlayerTakeDamageEvent
 		{
 			playerN = playerCollision,
 			value = _damage

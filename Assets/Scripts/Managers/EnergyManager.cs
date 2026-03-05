@@ -5,6 +5,11 @@ using FishNet.Object.Synchronizing;
 using UnityEngine;
 using UnityEngine.UI;
 
+public interface IEnergyRequest
+{
+	public void OnGetEnergy(float energy);
+}
+
 public class EnergyManager : NetworkBehaviour
 {
 	#region Properties
@@ -53,6 +58,11 @@ public class EnergyManager : NetworkBehaviour
 	public override void OnStartClient()
 	{
 		_bus = EventBusInitialiser.instance.Bus;
+		_bus.Subscribe((OnModifyEnergyEvent data) => ModifyEnergyServerRpc(data.value));
+		_bus.Subscribe((RequestEnergyEvent data) => 
+		{
+			_bus.InvokeEvent(new RequestEnergyResponseEvent { energy = _currentEnergy.Value });
+		});
 		
 		_totalBars = Mathf.CeilToInt(_energyMax / _valueOneBar);
 
@@ -86,12 +96,19 @@ public class EnergyManager : NetworkBehaviour
 		UpdateVisualBars(_displayedEnergy);
 	}
 	
+	[ServerRpc(RequireOwnership = false)]
+	private void ModifyEnergyServerRpc(float amount)
+	{
+		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + amount, 0f, _energyMax);
+	}
+	
 	private void OnEnergyChanged(float prev, float next, bool asServer)
 	{
 		if (asServer) return;
 
 		_targetEnergy = next;
 		_isLerping = true;
+		_bus.InvokeEvent(new RequestEnergyResponseEvent { energy = next });
 	}
 
 	private void UpdateVisualBars(float energy)
@@ -165,6 +182,11 @@ public class EnergyManager : NetworkBehaviour
 }
 
 public struct AddHealthFromBarEvent
+{
+	public float value;
+}
+
+public struct OnModifyEnergyEvent
 {
 	public float value;
 }

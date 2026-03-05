@@ -59,7 +59,7 @@ public class DumbEnemy : MonoBehaviour, /*IPlayerPositionListener,*/ IPathReques
         }
     }
 
-    public void RequestPath(List<PathfindingNode> path)
+    public void OnPathAnswer(List<PathfindingNode> path)
     {
         _path = path;
         _lastPos = transform.position;
