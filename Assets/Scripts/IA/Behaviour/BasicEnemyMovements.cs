@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using CustomConsole.Runtime.Logger;
+using FishNet.Object;
 using UnityEngine;
 
-public class BasicEnemyMovements : MonoBehaviour, IPathRequester
+public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
 {
     [SerializeField] private float _speed;
     
@@ -12,25 +13,40 @@ public class BasicEnemyMovements : MonoBehaviour, IPathRequester
     private EventBus _bus;
     
     private Transform _transform;
-    
+
+
+    //server side variables
     //path related variables
+    private Guid _gridReaderId;
     private List<PathfindingNode> _path = new List<PathfindingNode>();
     private Vector3 _lastPos;
     private float _t;
-    void Start()
+    public override void OnStartClient()
     {
         _transform = transform;
-        
+    }
+
+    public override void OnStartServer()
+    {
         _bus = EventBusInitialiser.instance.Bus;
         _bus.Subscribe((PlayerPositionUpdate PPU) =>
         {
             OnPlayerMoving(PPU.p_playerId, PPU.p_playerPosition);
         });
     }
+    
+    public void SetGridReaderGuid(Guid gridReaderId) => _gridReaderId = gridReaderId;
 
     private void FixedUpdate()
     {
-        if(_path.Count > 1) FollowPath();
+        if(IsServerInitialized)
+        {
+            //only the server can determine the enemies positions
+            if (_path.Count > 1)
+            {
+                FollowPath();
+            }
+        }
     }
 
     void OnPlayerMoving(int playerId, Vector3 playerPosition)
@@ -41,14 +57,14 @@ public class BasicEnemyMovements : MonoBehaviour, IPathRequester
             _lastPlayerPosition = playerPosition;
             
             //Updating Pathfinding
-            _bus.InvokeEvent(new PathRequestEvent(this, _transform.position, _lastPlayerPosition));
+            _bus.InvokeEvent(new PathRequestEvent(this, _gridReaderId, _transform.position, _lastPlayerPosition));
         }
     }
 
     bool IsTargetPlayer(int playerId) => playerId == _targetedPlayerId;
     bool IsPlayerCloser(Vector3 playerPosition) => (transform.position - playerPosition).sqrMagnitude < (transform.position - _lastPlayerPosition).sqrMagnitude;
 
-    public void RequestPath(List<PathfindingNode> path)
+    public void OnPathAnswer(List<PathfindingNode> path)
     {
         _path = path;
         _lastPos = _transform.position;
@@ -70,12 +86,14 @@ public class BasicEnemyMovements : MonoBehaviour, IPathRequester
 public struct PathRequestEvent
 {
     public IPathRequester p_requester;
+    public Guid p_gridReaderId;
     public Vector3 p_startPosition;
     public Vector3 p_endPosition;
 
-    public PathRequestEvent(IPathRequester requester, Vector3 startPosition, Vector3 endPosition)
+    public PathRequestEvent(IPathRequester requester, Guid gridReaderId, Vector3 startPosition, Vector3 endPosition)
     {
         p_requester = requester;
+        p_gridReaderId = gridReaderId;
         p_startPosition = startPosition;
         p_endPosition = endPosition;
     }
