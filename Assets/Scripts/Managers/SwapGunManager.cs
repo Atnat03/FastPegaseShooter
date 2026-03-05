@@ -20,7 +20,7 @@ namespace Managers
         public Color colorJauge;
     }
     
-    public class CoopManager : NetworkBehaviour
+    public class SwapGunManager : NetworkBehaviour
     {
         [SerializeField] private float _timeToAcceptSwap = 2f;
         private readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
