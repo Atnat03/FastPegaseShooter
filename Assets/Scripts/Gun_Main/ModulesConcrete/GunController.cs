@@ -8,6 +8,7 @@ using UnityEngine;
 public interface IGun
 {
     public void TryFire();
+    public void TryReload();
 }
 
 
@@ -24,16 +25,16 @@ namespace GunDecorator
     public class GunController : NetworkBehaviour, IGun, ISurcharge
     {
         public bool IsOverload => _isOverload.Value;
-        
+
         public float SurchargeMultiplierDamage { get; set; }
-        public float SurchargeMultiplierRate{ get; set; }
-        
+        public float SurchargeMultiplierRate { get; set; }
+
         private IShootModule[] _shootModule;
         private IReloadModule _reloadModule;
         private IRecoilModule _recoilModule;
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
-        
+
         private void Awake()
         {
             //On récupere tout les types de modules possible et potentiellement sur l'arme
@@ -52,22 +53,29 @@ namespace GunDecorator
         {
             //On appele la fonction shoot du module de shoot actuellement équipé
 
-            foreach (IShootModule s in _shootModule)
+            if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
-                s?.TryShoot();
+                foreach (IShootModule s in _shootModule)
+                {
+                    s?.TryShoot();
+                }
+
+                SetAmmo(GetCurrentAmmo() - 1);
+                _recoilModule?.Recoil();
             }
-            _recoilModule?.Recoil();
+
+            if (GetCurrentAmmo() <= 0)
+            {
+                if (_reloadModule.AutoReload)
+                {
+                    TryReload();
+                }
+            }
         }
 
-        public int GetCurrentAmmo()
-        {
-            return _reloadModule.CurrentAmmo;
-        }
+        public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
 
-        public void SetAmmo(int value)
-        {
-            _reloadModule.SetAmmo(value);
-        }
+        public void SetAmmo(int value) => _reloadModule.SetAmmo(value);
 
         public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
         {
@@ -76,10 +84,7 @@ namespace GunDecorator
             SurchargeMultiplierRate = cadenceMultiplicator;
         }
 
-        public void Reload()
-        {
-            //On appele la fonction reload du module de reload actuellement équipé
-            _reloadModule?.Reload();
-        }
+        public void TryReload() => _reloadModule?.Reload();
+        
     }
 }

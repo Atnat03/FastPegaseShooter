@@ -46,6 +46,11 @@ namespace Controller
         { 
             CurrentGun.TryFire();
         }
+
+        public void TryReload()
+        {
+            CurrentGun.TryReload();
+        }
         
         public void SwitchGunType()
         {
