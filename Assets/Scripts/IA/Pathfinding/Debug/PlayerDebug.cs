@@ -1,21 +1,30 @@
 using System;
-using FishNet.Object;
+using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
 public class PlayerDebug : MonoBehaviour
 {
-    public void Start()
+    //##########
+    //Script Broken by removal of "PlayerPosRequestEvent" struct
+    //##########
+    /*public void Start()
     {
         EventBusInitialiser.instance.Bus.Subscribe(
             (PlayerPosRequestEvent PPRE) =>
             {
                 PPRE.positionListener.OnPlayerMoving(transform.position);
             });
+    }*/
+    private void FixedUpdate()
+    {
+        CustomLogger.CCErrorLog($"The script {typeof(PlayerDebug)} attached to {transform.name} isn't valid anymore. No behaviour remaining");
     }
 }
 
-public struct PlayerPosRequestEvent : INetworkEvent
+//##########
+//Struct Broken by removal of "IPlayerPositionListener" interface
+//##########
+/*public struct PlayerPosRequestEvent
 {
     public IPlayerPositionListener positionListener;
-    public NetworkObject player { get; set; }
-}
+}*/

@@ -18,6 +18,7 @@ public class PlayerAnimation : MonoBehaviour
 	public void SetJumpAnim(bool isJumping) => _animator.SetBool("Jump", isJumping);
 	public void SetFallingAnim(bool isFalling) => _animator.SetBool("Falling", isFalling);
 	public void SetGroundedAnim(bool isGrounded) => _animator.SetBool("Grounded", isGrounded);
+	public void SetDeadAnim(bool isDead) => _animator.SetBool("Dead", isDead);
 
 	public void ChangeAirState(bool isGrounded)
 	{

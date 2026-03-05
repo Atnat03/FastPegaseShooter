@@ -4,20 +4,19 @@ using System.Linq;
 using Unity.Profiling;
 using UnityEngine;
 
-public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
+[RequireComponent(typeof(AStarAlgorithm))]
+public class PathfindingGridReader : MonoBehaviour
 {
+    public Guid p_id;
     public PathfindingGridSO pathfindingGridSO;
 
     public ThreeDimensionalTree searchTree;
 
-    [SerializeField] private AStarAlgorithm _aStarAlgorithm;
+    private AStarAlgorithm _aStarAlgorithm;
     
     //Debug Variables
-    [SerializeField] private Transform starTransform;
     [HideInInspector] public bool drawNodes = true;
     [HideInInspector] public bool drawNodesConnections = true;
-    Vector3 playerPosition;
-    static ProfilerMarker findClosestNodeMarker = new ProfilerMarker("FindClosestNode");
     //
 
     private void Start()
@@ -25,14 +24,18 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
         searchTree = new ThreeDimensionalTree();
         List<Vector3> values = pathfindingGridSO.nodes.Select(n => n.position).ToList();
         searchTree.Populate(pathfindingGridSO.nodes);
-    }
 
-    private void FixedUpdate()
-    {
-        EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerPosRequestEvent
+        EventBusInitialiser.instance.Bus.Subscribe((PathRequestEvent PRE) =>
         {
-            positionListener = this
+            if(PRE.p_gridReaderId != p_id) return;
+            PRE.p_requester.RequestPath(
+                _aStarAlgorithm.FindPathFromGrid(
+                    pathfindingGridSO.nodes,
+                    searchTree.FindClosest(PRE.p_startPosition).node,
+                    searchTree.FindClosest(PRE.p_endPosition).node));
         });
+
+        _aStarAlgorithm = GetComponent<AStarAlgorithm>();
     }
 
     private void OnDrawGizmos()
@@ -54,33 +57,31 @@ public class PathfindingGridReader : MonoBehaviour, IPlayerPositionListener
                 }
             }
         }
-
-        if (searchTree != null)
-        {
-            PathfindingNode playerNode = null;
-            PathfindingNode startingNode = null;
-            using (findClosestNodeMarker.Auto())
-            {
-                playerNode = searchTree.FindClosest(playerPosition).node;
-                startingNode = searchTree.FindClosest(starTransform.position).node;
-            }
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(playerNode.position, 0.025f);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(startingNode.position, 0.025f);
-            
-            List<PathfindingNode> path = _aStarAlgorithm.FindPathFromGrid(pathfindingGridSO.nodes, startingNode,  playerNode);
-            Gizmos.color = Color.cyan;
-            for(int i = 0; i < path.Count-1; i++)
-            {
-                Gizmos.DrawLine(path[i].position, path[i+1].position);
-            }
-        }
-        
     }
-
-    public void OnPlayerMoving(Vector3 playerPos)
+    
+    #region Id
+    #if UNITY_EDITOR
+    private void OnValidate()
     {
-        playerPosition = playerPos;
+        if (Application.isPlaying) return;
+        
+        if (p_id == Guid.Empty || IsGuidInScene(this))
+        {
+            p_id = GenerateNewGuid();
+        }
     }
+    
+    Guid GenerateNewGuid() => Guid.NewGuid();
+
+    bool IsGuidInScene(PathfindingGridReader self)
+    {
+        PathfindingGridReader[] spawnZones = FindObjectsByType<PathfindingGridReader>(FindObjectsSortMode.None);
+        foreach (PathfindingGridReader gridReader in spawnZones)
+        {
+            if(gridReader != self && gridReader.p_id == self.p_id) return true;
+        }
+        return false;
+    }
+    #endif
+    #endregion
 }

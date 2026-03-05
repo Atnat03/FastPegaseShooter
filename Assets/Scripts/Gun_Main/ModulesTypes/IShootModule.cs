@@ -11,17 +11,19 @@ namespace GunDecorator
     public interface IReloadModule
     {
         public void Reload();
+        public int CurrentAmmo { get; }
+        public void SetAmmo(int value);
     }
-    
-    public interface INoiseModule
+
+    public interface IRecoilModule
     {
-        public void ApplyNoise();
+        public void Recoil();
     }
 
     public interface IAmmoModule
     {
-        public GameObject AmmoPrefab { get; }
         public void SpawnBullet();
+        public void SetDamage(float multiplierDmg);
     }
 
     public interface ISecondModule

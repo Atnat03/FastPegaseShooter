@@ -36,5 +36,13 @@ public class SecondaryGun : MonoBehaviour, IGun
 		_effect.ApplyEffect();
 	}
 
+	public int GetCurrentAmmo()
+	{
+		return 0;
+	}
+
+	public void SetAmmo(int value)
+	{ }
+
 	#endregion
 }
