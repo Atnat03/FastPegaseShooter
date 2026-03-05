@@ -13,9 +13,6 @@ namespace GunDecorator
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
         
-        [SerializeField] private AudioSource _source;
-        [SerializeField] private SoundsDataSO _soundData;
-        
         private void Start()
         {
             _additionalEffectModule = new List<ISecondModule>();
@@ -60,8 +57,8 @@ namespace GunDecorator
                 
                 _ammoModule.SpawnBullet();
                 
-                AudioClip clip = SoundManager.GetAudioClip(_soundData, "Shoot");
-                SoundManager.PlaySound(clip, _source);
+                AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
+                SoundManager.PlaySound(clip, _gunController._source);
                 
                 return;
             }

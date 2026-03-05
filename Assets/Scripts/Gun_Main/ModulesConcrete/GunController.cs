@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using ScriptableObjectsDefinitions;
 using UnityEngine;
 
 public interface IGun
@@ -34,6 +35,9 @@ namespace GunDecorator
         private IRecoilModule _recoilModule;
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
+        
+        [SerializeField] public AudioSource _source;
+        [SerializeField] public SoundsDataSO _soundData;
 
         private void Awake()
         {
@@ -84,7 +88,15 @@ namespace GunDecorator
             SurchargeMultiplierRate = cadenceMultiplicator;
         }
 
-        public void TryReload() => _reloadModule?.Reload();
+        public void TryReload()
+        {
+            if (_reloadModule.IsReloading) return;
+            
+            _reloadModule?.Reload();
+            
+            AudioClip clip = SoundManager.GetAudioClip(_soundData, "Reload");
+            SoundManager.PlaySound(clip, _source);
+        }
         
     }
 }
