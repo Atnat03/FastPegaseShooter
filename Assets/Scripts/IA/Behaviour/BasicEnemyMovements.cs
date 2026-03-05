@@ -16,17 +16,13 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
 
 
     //server side variables
-    [SerializeField] private float _syncRate = 0.5f;
-    private float _visualSyncingTimer;
-        //path related variables 
+    //path related variables
+    private Guid _gridReaderId;
     private List<PathfindingNode> _path = new List<PathfindingNode>();
     private Vector3 _lastPos;
     private float _t;
-    
-    //movement related variables (client side)
-    private Vector3 _targetPosition;
-    
-    #region Server Side
+
+    public int p_enemySpawnCost;
 
     public override void OnStartClient()
     {
@@ -41,6 +37,8 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             OnPlayerMoving(PPU.p_playerId, PPU.p_playerPosition);
         });
     }
+    
+    public void SetGridReaderGuid(Guid gridReaderId) => _gridReaderId = gridReaderId;
 
     private void FixedUpdate()
     {
@@ -50,33 +48,19 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             if (_path.Count > 1)
             {
                 FollowPath();
-                
-                _visualSyncingTimer += Time.deltaTime;
-                if(_visualSyncingTimer >= _syncRate)
-                {
-                    Debug.Log("Syncing visuals");
-                    _visualSyncingTimer = 0;
-                    UpdatePositionObserverRPC(transform.position);
-                }
             }
-        }
-        else
-        {
-            //smoothing movements on client side
-            transform.position = Vector3.Lerp(transform.position, _targetPosition, 10f * Time.deltaTime);
         }
     }
 
     void OnPlayerMoving(int playerId, Vector3 playerPosition)
     {
-        Debug.Log("test");
         if (IsTargetPlayer(playerId) || IsPlayerCloser(playerPosition))
         {
             _targetedPlayerId = playerId;
             _lastPlayerPosition = playerPosition;
             
             //Updating Pathfinding
-            _bus.InvokeEvent(new PathRequestEvent(this, _transform.position, _lastPlayerPosition));
+            _bus.InvokeEvent(new PathRequestEvent(this, _gridReaderId, _transform.position, _lastPlayerPosition));
         }
     }
 
@@ -101,33 +85,18 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             if(_path.Count > 0) _lastPos = _path[^1].position;
         }
     }
-    #endregion
-
-    #region Client Side
-    [ObserversRpc]
-    public void UpdatePositionObserverRPC(Vector3 serverPosition)
-    {
-        UpdatePosition(serverPosition);
-    }
-
-    void UpdatePosition(Vector3 newPosition)
-    {
-        if (!IsServerInitialized)
-        {
-            _targetPosition = newPosition;
-        }
-    }
-    #endregion
 }
 public struct PathRequestEvent
 {
     public IPathRequester p_requester;
+    public Guid p_gridReaderId;
     public Vector3 p_startPosition;
     public Vector3 p_endPosition;
 
-    public PathRequestEvent(IPathRequester requester, Vector3 startPosition, Vector3 endPosition)
+    public PathRequestEvent(IPathRequester requester, Guid gridReaderId, Vector3 startPosition, Vector3 endPosition)
     {
         p_requester = requester;
+        p_gridReaderId = gridReaderId;
         p_startPosition = startPosition;
         p_endPosition = endPosition;
     }

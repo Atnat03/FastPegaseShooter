@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomConsole.Runtime.Console;
+using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(PathfindingGridReader))]
 public class SpawnZone : NetworkBehaviour
 {
     [SerializeField] private int _budgetMin;
@@ -23,11 +25,20 @@ public class SpawnZone : NetworkBehaviour
 
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     
-    
+    private PathfindingGridReader _gridReader;
+
+    public override void OnStartServer()
+    {
+        CustomLogger.HighlightLog("OnServerInitialized SpawnZone");
+        _gridReader = GetComponent<PathfindingGridReader>();
+    }
+
     [ServerRpc(RequireOwnership = false)]
     [CallableFunction("Trigger Zone")]
     public void TriggerZone()
     {
+        if(_zoneActivated) return;
+        
         _zoneActivated = true;
         StartSpawning();
     }
@@ -40,13 +51,14 @@ public class SpawnZone : NetworkBehaviour
     }
     
     [Server]
-    public void SpawnEnemy(GameObject enemyPrefab)
+    public void SpawnEnemy(GameObject enemyPrefab, int enemyCost)
     {
         Vector3 position = GetValidSpawnPoint().position;
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity, transform);
+        BasicEnemyMovements enemyMovement =  enemy.GetComponent<BasicEnemyMovements>();
+        enemyMovement.SetGridReaderGuid(_gridReader.p_id);
+        enemyMovement.p_enemySpawnCost = enemyCost;
         InstanceFinder.ServerManager.Spawn(enemy);
-        
-        enemy.GetComponent<BasicEnemyMovements>().UpdatePositionObserverRPC(position);
     }
     Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];
 
@@ -57,7 +69,7 @@ public class SpawnZone : NetworkBehaviour
         {
             MobSpawnSO mobSpawnSo = spawnMobsFirstWave[0];
             spawnMobsFirstWave.RemoveAt(0);
-            SpawnEnemy(mobSpawnSo.p_prefab);
+            SpawnEnemy(mobSpawnSo.p_prefab, mobSpawnSo.p_cost);
             _currentBudget += mobSpawnSo.p_cost;
             
             await Task.Delay((int)(spawnDelayFirstWave * 1000));
@@ -86,7 +98,7 @@ public class SpawnZone : NetworkBehaviour
             {
                 MobSpawnSO mobSpawnSo = spawnMobs[0];
                 spawnMobs.RemoveAt(0);
-                SpawnEnemy(mobSpawnSo.p_prefab);
+                SpawnEnemy(mobSpawnSo.p_prefab, mobSpawnSo.p_cost);
                 _currentBudget += mobSpawnSo.p_cost;
                 
                 remainingTime = (int)(spawnDelay * 1000);
@@ -98,7 +110,7 @@ public class SpawnZone : NetworkBehaviour
             {
                 MobSpawnSO mobSpawnSo = spawnMobs[0];
                 spawnMobs.RemoveAt(0);
-                SpawnEnemy(mobSpawnSo.p_prefab);
+                SpawnEnemy(mobSpawnSo.p_prefab, mobSpawnSo.p_cost);
                 _currentBudget += mobSpawnSo.p_cost;
                 
                 remainingTime = (int)(spawnDelay * 1000);
