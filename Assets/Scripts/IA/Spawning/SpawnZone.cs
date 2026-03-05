@@ -29,14 +29,12 @@ public class SpawnZone : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        CustomLogger.HighlightLog("OnServerInitialized SpawnZone");
         _gridReader = GetComponent<PathfindingGridReader>();
         
         EventBusInitialiser.instance.Bus.Subscribe((EnemyDyingEvent EDE) =>
         {
             if (EDE.p_gridReaderId == _gridReader.p_id)
             {
-                CustomLogger.HighlightLog("Received info enemy died");
                 _currentBudget -= EDE.p_enemySpawnCost;
             }
         });
