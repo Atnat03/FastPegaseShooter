@@ -25,11 +25,11 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     private Action _unsubscribePPU;
     public override void OnStartClient()
     {
-        _transform = transform;
     }
 
     public override void OnStartServer()
     {
+        _transform = transform;
         _bus = EventBusInitialiser.instance.Bus;
         _unsubscribePPU = _bus.Subscribe((PlayerPositionUpdate PPU) =>
         {
@@ -66,6 +66,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             _lastPlayerPosition = playerPosition;
             
             //Updating Pathfinding
+            CustomLogger.ImportantLog($"this : {this == null}, gridId { _gridReaderId == null}, transform {_transform == null}");
             _bus.InvokeEvent(new PathRequestEvent(this, _gridReaderId, _transform.position, _lastPlayerPosition));
         }
     }
