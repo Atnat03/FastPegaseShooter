@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using ScriptableObjectsDefinitions;

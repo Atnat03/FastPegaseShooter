@@ -956,6 +956,7 @@ Transform:
   - {fileID: 4679784800279815862}
   - {fileID: 8164507018523247017}
   - {fileID: 7218313039823865412}
+  - {fileID: 8502538188800490498}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5777719286037595758
@@ -1407,6 +1408,7 @@ MonoBehaviour:
   _timeToRespawn: 5
   _healthBar: {fileID: 8595574569810004968}
   _deathImage: {fileID: 8235982739118108901}
+  _soundsData: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}
 --- !u!114 &8101511114389266693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1462,7 +1464,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 1.01
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -2580,6 +2582,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8764426929595995873}
   m_LocalEulerAnglesHint: {x: 0, y: -5, z: 0}
+--- !u!1 &6843371080716284666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8502538188800490498}
+  - component: {fileID: 6242588292436510613}
+  m_Layer: 6
+  m_Name: TargetEnemy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8502538188800490498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843371080716284666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6363322599526773559}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6242588292436510613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843371080716284666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2750003092e2f874cb28a87bd212efcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPositionCaster
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  _movementCastingThreshold: 1
 --- !u!1 &6856656255395432402
 GameObject:
   m_ObjectHideFlags: 0
@@ -2790,8 +2840,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
   moduleName: ReloadModule
   moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
-  _autoReload: 1
-  _magazineSize: 30
+  _autoReload: 0
+  _magazineSize: 6
   reloadDuration: 3
   _ammoText: {fileID: 1926107359013030339}
   _imageReload: {fileID: 815123897057752124}
@@ -3227,6 +3277,10 @@ PrefabInstance:
     - target: {fileID: 5978688025392802851, guid: bb96394e9629f20408ea23d3760ba123, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5978688025392802851, guid: bb96394e9629f20408ea23d3760ba123, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6185404380584570323, guid: bb96394e9629f20408ea23d3760ba123, type: 3}
       propertyPath: m_Layer
