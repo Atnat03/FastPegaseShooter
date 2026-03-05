@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GunDecorator.AmmoModules
 {
-    public class DefaultRaycastAmmoModuleTest : GunModule , IAmmoModule
+    public class DefaultRaycastAmmoModuleRealTimeObstacleDetection : GunModule , IAmmoModule
     {
         #region variables
         
