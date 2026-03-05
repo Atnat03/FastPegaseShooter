@@ -262,6 +262,7 @@ public class PathfindingGridCreator : MonoBehaviour
         return false;
     }
 
+    #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if(boundsVertices.Count < 3) return;
@@ -327,4 +328,5 @@ public class PathfindingGridCreator : MonoBehaviour
             }
         }
     }
+    #endif
 }
