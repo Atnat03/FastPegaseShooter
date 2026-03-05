@@ -346,9 +346,9 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         
 
         leftSideAgainstWall = Physics.Raycast(playerLeftSide.position, playerLeftSide.forward,
-            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"));
+            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
         rightSideAgainstWall = Physics.Raycast(playerRightSide.position, playerRightSide.forward,
-            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"));
+            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"),  QueryTriggerInteraction.Ignore);
 
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
     }
@@ -1390,14 +1390,13 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             SetLayerRecursively(child.gameObject, newLayer);
         }
     }
-
-    #endregion
-    
     public void OnGetEnergy(float energy)
     {
         Debug.Log("OnGetEnergy");
         enoughtEnegyToDash = energy - dashEnergyCost >= 0;
     }
+    
+    #endregion
     
     void OnDrawGizmos()
     {
