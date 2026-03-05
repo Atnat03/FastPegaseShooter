@@ -1772,6 +1772,37 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &3886709635506594959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2678900306165570265}
+  m_Layer: 6
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2678900306165570265
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3886709635506594959}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.50333315, z: 2.5166664}
+  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4802069573413919863}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4214363024654826616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1966,6 +1997,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2074332437972243630}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4434170324477356582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3780168399810280855}
+  m_Layer: 6
+  m_Name: SpawnPoint (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3780168399810280855
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4434170324477356582}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.40666676, z: 0.47333336}
+  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7192232651776338960}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4514465476081768021
 GameObject:
   m_ObjectHideFlags: 0
@@ -2085,7 +2147,7 @@ GameObject:
   - component: {fileID: 8869676505487279489}
   - component: {fileID: 4608310258961911901}
   - component: {fileID: 17982176900637114}
-  - component: {fileID: 5554794514714353065}
+  - component: {fileID: 4088187983441833645}
   - component: {fileID: 2184978861920935494}
   m_Layer: 6
   m_Name: AK
@@ -2142,7 +2204,7 @@ MonoBehaviour:
   moduleName: TemplateShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
   _secondModule: []
-  _ammoType: {fileID: 5554794514714353065}
+  _ammoType: {fileID: 4088187983441833645}
 --- !u!114 &4608310258961911901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2182,7 +2244,7 @@ MonoBehaviour:
   _recoilZ: 0.35
   _returnSpeed: 6
   _snapiness: 15
---- !u!114 &5554794514714353065
+--- !u!114 &4088187983441833645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2191,15 +2253,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4886578194324541769}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e54ed7d538ee9f40a169cc416c79703, type: 3}
+  m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModule
-  moduleName: DefaultRaycastAmmoModule
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModuleRealTimeObstacleDetection
+  moduleName: DefaultRaycastAmmoModuleRealTimeObstacleDetection
   moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _camera: {fileID: 3061844143884342809}
-  _visualBulletPrefab: {fileID: 9013429817892366803, guid: 8aede746fc03d3a458572360c5a3b1cd, type: 3}
-  _maxDistance: 100
-  _damages: 0
+  BulletPrefab: {fileID: 9013429817892366803, guid: c7bdca4a53385554f8a8047df87cc680, type: 3}
+  _spawnPoint: {fileID: 2678900306165570265}
+  _maxDistance: 200
+  _damages: 5
   _BulletSpeed: 50
   p_markPrefab: {fileID: 963067351685044417, guid: 1d9c92197d26f4945a16b966caa07f11, type: 3}
 --- !u!82 &2184978861920935494
@@ -2746,8 +2809,8 @@ GameObject:
   - component: {fileID: 7688501357711374014}
   - component: {fileID: 8977986747039668759}
   - component: {fileID: 6651845242360554492}
-  - component: {fileID: 779520171477951247}
   - component: {fileID: 9128913315205030470}
+  - component: {fileID: 4206248787677004955}
   m_Layer: 6
   m_Name: Pistol
   m_TagString: Untagged
@@ -2803,7 +2866,7 @@ MonoBehaviour:
   moduleName: TemplateShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
   _secondModule: []
-  _ammoType: {fileID: 779520171477951247}
+  _ammoType: {fileID: 4206248787677004955}
 --- !u!114 &8977986747039668759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2818,7 +2881,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
   moduleName: ReloadModule
   moduleColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
-  _autoReload: 0
+  _autoReload: 1
   _magazineSize: 6
   reloadDuration: 1
   _ammoText: {fileID: 1926107359013030339}
@@ -2843,26 +2906,6 @@ MonoBehaviour:
   _recoilZ: 0.35
   _returnSpeed: 3
   _snapiness: 15
---- !u!114 &779520171477951247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7875098038689886236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e54ed7d538ee9f40a169cc416c79703, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModule
-  moduleName: DefaultRaycastAmmoModule
-  moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  _camera: {fileID: 3061844143884342809}
-  _visualBulletPrefab: {fileID: 9013429817892366803, guid: 8aede746fc03d3a458572360c5a3b1cd, type: 3}
-  _maxDistance: 100
-  _damages: 5
-  _BulletSpeed: 50
-  p_markPrefab: {fileID: 963067351685044417, guid: 1d9c92197d26f4945a16b966caa07f11, type: 3}
 --- !u!82 &9128913315205030470
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2960,6 +3003,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4206248787677004955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875098038689886236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModuleRealTimeObstacleDetection
+  moduleName: DefaultRaycastAmmoModuleRealTimeObstacleDetection
+  moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _camera: {fileID: 3061844143884342809}
+  BulletPrefab: {fileID: 9013429817892366803, guid: c7bdca4a53385554f8a8047df87cc680, type: 3}
+  _spawnPoint: {fileID: 3780168399810280855}
+  _maxDistance: 200
+  _damages: 10
+  _BulletSpeed: 50
+  p_markPrefab: {fileID: 963067351685044417, guid: 1d9c92197d26f4945a16b966caa07f11, type: 3}
 --- !u!1 &8121068319375699811
 GameObject:
   m_ObjectHideFlags: 0
@@ -3835,7 +3899,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 33269b2b610f4c245a712795c1927939, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2678900306165570265}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33269b2b610f4c245a712795c1927939, type: 3}
 --- !u!4 &4802069573413919863 stripped
@@ -3999,7 +4066,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4df3ce82db8e66645afd54ab1d5b0262, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3780168399810280855}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4df3ce82db8e66645afd54ab1d5b0262, type: 3}
 --- !u!4 &7192232651776338960 stripped
