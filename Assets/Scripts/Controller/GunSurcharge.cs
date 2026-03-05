@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Controller
 {
@@ -10,7 +11,8 @@ namespace Controller
         [Header("Overloading")]
         [SerializeField] private bool _isOverload = false;
         [SerializeField] private float _elapsedTimeOverload = 0;
-        [SerializeField] private GameObject _infoOverload;
+        private float _currentOverloadTimer = 0;
+        [SerializeField] private Image _infoOverload;
 
         private EventBus _bus;
 
@@ -21,6 +23,7 @@ namespace Controller
 
         public void SetOverloadStats(bool state, float overloadTime, float dmg_Multi, float rate_Multi, int newAmmoAmount = -1)
         {
+            _currentOverloadTimer = overloadTime;
             _elapsedTimeOverload = overloadTime;
             
             _isOverload = state;
@@ -36,7 +39,8 @@ namespace Controller
 
         private void OverloadTimer()
         {
-            _infoOverload.SetActive(_isOverload);
+            _infoOverload.gameObject.SetActive(_isOverload);
+            _infoOverload.fillAmount = _elapsedTimeOverload / _currentOverloadTimer;
             
             if (_isOverload)
             {
