@@ -21,6 +21,8 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     private List<PathfindingNode> _path = new List<PathfindingNode>();
     private Vector3 _lastPos;
     private float _t;
+
+    private Action _unsubscribePPU;
     public override void OnStartClient()
     {
         _transform = transform;
@@ -29,10 +31,15 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     public override void OnStartServer()
     {
         _bus = EventBusInitialiser.instance.Bus;
-        _bus.Subscribe((PlayerPositionUpdate PPU) =>
+        _unsubscribePPU = _bus.Subscribe((PlayerPositionUpdate PPU) =>
         {
             OnPlayerMoving(PPU.p_playerId, PPU.p_playerPosition);
         });
+    }
+
+    public override void OnStopServer()
+    {
+        _unsubscribePPU?.Invoke();
     }
     
     public void SetGridReaderGuid(Guid gridReaderId) => _gridReaderId = gridReaderId;
