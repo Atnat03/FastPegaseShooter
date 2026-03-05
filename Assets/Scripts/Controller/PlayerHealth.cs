@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
@@ -29,6 +30,7 @@ public class PlayerHealth : NetworkBehaviour
 	[Header("UI")]
 	[SerializeField] private Image _healthBar;
 	[SerializeField] private Image _deathImage;
+	private float _targetHealthFill;
 	
 	private EventBus _bus;
 
@@ -42,7 +44,8 @@ public class PlayerHealth : NetworkBehaviour
 		_currentHealth.Value = _healthBase;
 		
 		_bus = EventBusInitialiser.instance.Bus;
-		_bus.Subscribe((PlayerTakeDamageEvent data) => TakeDamage(data));
+		_bus.Subscribe((PlayerChangeHealthEvent data) => TakeDamage(data));
+		_bus.Subscribe((AddHealthFromBarEvent data) => AddHealth(data));
 	}
 
 	public override void OnStartClient()
@@ -59,6 +62,11 @@ public class PlayerHealth : NetworkBehaviour
 
 	private void Update()
 	{
+		if (!IsOwner) return;
+
+		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _targetHealthFill, Time.deltaTime * 25);
+
+		
 		if (_isDead.Value)
 		{
 			if (_respawnTimer.Value > 0)
@@ -73,13 +81,13 @@ public class PlayerHealth : NetworkBehaviour
 	}
 
 	[Server]
-	void TakeDamage(PlayerTakeDamageEvent data)
+	void TakeDamage(PlayerChangeHealthEvent data)
 	{
-		if (data.playerN.ObjectId != NetworkObject.ObjectId) return;	
+		if (data.playerN.ObjectId != NetworkObject.ObjectId) return;
 		
 		if (_isDead.Value) return;
 		
-		float newHealth = _currentHealth.Value - data.damage;
+		float newHealth = _currentHealth.Value - data.value;
 
 		if (newHealth <= 0)
 		{
@@ -89,6 +97,15 @@ public class PlayerHealth : NetworkBehaviour
 		{
 			_currentHealth.Value = newHealth;
 		}
+	}
+
+	[Server]
+	void AddHealth(AddHealthFromBarEvent data)
+	{
+		if (_isDead.Value) return;
+
+		float newHealth = (_currentHealth.Value + data.value) > _healthBase ? _healthBase : _currentHealth.Value + data.value;
+		_currentHealth.Value = newHealth;
 	}
 
 	private void Death()
@@ -105,8 +122,6 @@ public class PlayerHealth : NetworkBehaviour
 
 	private void Respawn()
 	{
-		Debug.Log("Respawn");
-		
 		_respawnTimer.Value = 0;
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
@@ -124,7 +139,7 @@ public class PlayerHealth : NetworkBehaviour
 	{
 		if (!IsOwner) return;
 		
-		_healthBar.fillAmount = next / _healthBase;
+		_targetHealthFill = next / _healthBase;
 	}
 	
 	private void OnDeadChange(bool prev, bool next, bool asServer)
@@ -145,10 +160,10 @@ public class PlayerHealth : NetworkBehaviour
 	}
 }
 
-public struct PlayerTakeDamageEvent
+public struct PlayerChangeHealthEvent
 {
 	public NetworkObject playerN;
-	public float damage;
+	public float value;
 }
 
 public struct OnPlayerDeathEvent

@@ -256,7 +256,8 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   rb: {fileID: 5777719286037595758}
   cameraParentTransform: {fileID: 0}
-  cameraTarget: {fileID: 5635335992715781554}
+  cameraSpringTarget: {fileID: 0}
+  _camera: {fileID: 0}
   playerFeet: {fileID: 3094173869688485860}
   playerLeftSide: {fileID: 6060067213430410933}
   playerRightSide: {fileID: 4679784800279815862}
@@ -264,8 +265,6 @@ MonoBehaviour:
   playerInput: {fileID: 997312506154426130}
   _playerVisual: {fileID: 4615614786451762460}
   _playerAnimation: {fileID: 3465261579877272972}
-  _capsuleColliderStandUp: {fileID: 6664158444492377981}
-  _capsuleColliderCrouched: {fileID: 3576913710045463952}
   landSnap: 0
   dashVerticality: 0
   clampedMaxAirSpeed: 0
@@ -274,12 +273,14 @@ MonoBehaviour:
   slideUnlocked: 1
   dashUnlocked: 1
   slopeSlideUnlocked: 1
+  cameraSpringHalfLife: 0.075
+  cameraSpringFrequency: 22.5
+  rollSmoothing: 15
   mouseSensitivity: 0.2
   verticalLimit: 80
   moveSpeed: 10
   groundMomentumFactor: 2
   sideStepImpulseForce: 3
-  followSmoothing: 15
   wallDetectionRange: 1
   walkableSlopeAngle: 45
   maxStepHeight: 0.2
@@ -381,9 +382,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39251be4eb517f5418867bcdc08c4ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grapple
-  _componentIndexCache: 255
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   playerInput: {fileID: 997312506154426130}
   rb: {fileID: 5777719286037595758}
   _castWidth: 0.5
@@ -432,7 +433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Transforming.NetworkTransform
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _componentConfiguration: 2
@@ -487,8 +488,10 @@ MonoBehaviour:
   NetworkBehaviours:
   - {fileID: 1792326860910464111}
   - {fileID: 4170606718173402673}
+  - {fileID: 1282941799053182666}
   - {fileID: 6892326474594197254}
   - {fileID: 3402474507132829477}
+  - {fileID: 3485912905427261247}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -499,7 +502,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584294814419827433
+  _initializedTimestamp: -8584288883010512126
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -515,9 +518,9 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 0
+  <PrefabId>k__BackingField: 3
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 4833678033195686141
+  <AssetPathHash>k__BackingField: 4190266304921104969
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0.948, z: 0}
@@ -536,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8cac635f24954048aad3a6ff9110beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Animating.NetworkAnimator
-  _componentIndexCache: 3
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   IgnoredParameters: []
@@ -669,11 +672,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68eaf2ffb56bbab46a3e5e5b88a80db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
-  _componentIndexCache: 255
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _playerInputAction: {fileID: 997312506154426130}
-  _gunSwitching: {fileID: 0}
   _bridgePlayer: {fileID: 0}
 --- !u!1 &3153661936363678950
 GameObject:

@@ -640,12 +640,14 @@ MonoBehaviour:
   slideUnlocked: 1
   dashUnlocked: 1
   slopeSlideUnlocked: 1
+  cameraSpringHalfLife: 0.075
+  cameraSpringFrequency: 22.5
+  rollSmoothing: 15
   mouseSensitivity: 0.2
   verticalLimit: 80
   moveSpeed: 10
   groundMomentumFactor: 2
   sideStepImpulseForce: 3
-  followSmoothing: 15
   wallDetectionRange: 0
   walkableSlopeAngle: 45
   maxStepHeight: 0.2
@@ -712,9 +714,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39251be4eb517f5418867bcdc08c4ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grapple
-  _componentIndexCache: 255
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   playerInput: {fileID: 997312506154426130}
   rb: {fileID: 5777719286037595758}
   _castWidth: 0.5
@@ -817,9 +819,13 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: 1792326860910464111}
-  - {fileID: 0}
+  - {fileID: 1282941799053182666}
   - {fileID: 6892326474594197254}
   - {fileID: 3402474507132829477}
+  - {fileID: 474458369723399952}
+  - {fileID: 300968199624122896}
+  - {fileID: 5329717332355912109}
+  - {fileID: 5613344581138772939}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -830,7 +836,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584294814419827433
+  _initializedTimestamp: -8584288883010512126
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -846,9 +852,9 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 0
+  <PrefabId>k__BackingField: 4
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 5360620377555402393
+  <AssetPathHash>k__BackingField: 3812436196325289749
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0.948, z: 0}
@@ -1000,9 +1006,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68eaf2ffb56bbab46a3e5e5b88a80db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Controller.PlayerShooting
-  _componentIndexCache: 255
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _playerInputAction: {fileID: 997312506154426130}
   _bridgePlayer: {fileID: 300968199624122896}
 --- !u!1 &2684936702738368028
@@ -2163,9 +2169,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 255
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
 --- !u!114 &8869676505487279489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2946,9 +2952,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 255
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
 --- !u!114 &7688501357711374014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3187,9 +3193,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a65429ff79430aa97139d9aff98755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Controller.GunBridgePlayer
-  _componentIndexCache: 255
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _gunSwitching: {fileID: 3154577241410043838}
   _gunSurcharge: {fileID: 8957410558547212102}
 --- !u!114 &8957410558547212102
