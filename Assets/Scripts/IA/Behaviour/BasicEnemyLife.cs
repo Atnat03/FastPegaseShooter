@@ -42,7 +42,6 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     public void Death()
     {
         InstanceFinder.ServerManager.Despawn(gameObject);
-        CustomLogger.HighlightLog("Casting info enemy died");
         EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyDyingEvent(_gridReaderId, _enemySpawnCost));
     }
 
