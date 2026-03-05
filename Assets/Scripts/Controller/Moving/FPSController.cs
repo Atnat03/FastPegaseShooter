@@ -4,7 +4,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
 
-public class FPSController : NetworkBehaviour
+public struct RequestEnergyEvent
+{
+    public IEnergyRequest requester;
+}
+
+public struct RequestEnergyResponseEvent
+{
+    public float energy;
+}
+
+public class FPSController : NetworkBehaviour, IEnergyRequest
 { 
     // faire mieux le Grappling
     
@@ -108,6 +118,7 @@ public class FPSController : NetworkBehaviour
     [SerializeField] float dashSpeed = 5f;
     [SerializeField] float dashTimeDuration = 0.2f;
     [SerializeField] float dashCooldown;
+    [SerializeField] private float dashEnergyCost = 15f;
 
     [Header("Slope Slide")]
     [SerializeField] float minSlopeAngleToSlopeSlide = 11f; 
@@ -146,6 +157,7 @@ public class FPSController : NetworkBehaviour
     bool coyoteJump = false;
     bool hasDashed = false;
     bool coyoteSlide = false;
+    bool enoughtEnegyToDash = false;
 
 
     public enum ControlerState
@@ -163,6 +175,7 @@ public class FPSController : NetworkBehaviour
 
     public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
 
+    private EventBus _bus;
     
     #endregion
 
@@ -170,6 +183,8 @@ public class FPSController : NetworkBehaviour
     {
         base.OnStartClient();
 
+        _bus = EventBusInitialiser.instance.Bus;
+        
         if(IsOwner)
         {
             SetUpLayer();
@@ -177,6 +192,11 @@ public class FPSController : NetworkBehaviour
             _camTransform = _camera.transform;
             _cameraDefaultFOV = _camera.fieldOfView;
             _camTransform.localPosition = Vector3.zero;
+            
+            _bus.Subscribe((RequestEnergyResponseEvent data) => 
+            {
+                enoughtEnegyToDash = data.energy >= dashEnergyCost;
+            });
         }
         else
         {
@@ -271,8 +291,6 @@ public class FPSController : NetworkBehaviour
             ));
 
         stateMachine.ChangeState(ControlerState.Idle);
-        
-        
         
         //debug
         
@@ -401,8 +419,10 @@ public class FPSController : NetworkBehaviour
             if (coyoteSlide && !justSlided && slideUnlocked) stateMachine.ChangeState(ControlerState.Sliding); 
             else stateMachine.ChangeState(ControlerState.Crouching);
         }
-
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        
+        _bus.InvokeEvent(new RequestEnergyEvent{requester = this});
+        
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked && enoughtEnegyToDash)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
@@ -472,8 +492,9 @@ public class FPSController : NetworkBehaviour
             else stateMachine.ChangeState(ControlerState.Crouching);
         }
         
+        _bus.InvokeEvent(new RequestEnergyEvent{requester = this});
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked && enoughtEnegyToDash)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
@@ -548,8 +569,10 @@ public class FPSController : NetworkBehaviour
             if (rb.linearVelocity.y < 0) stateMachine.ChangeState(ControlerState.WallRiding);
             else mustHeadTilt = true;
         }
+        
+        _bus.InvokeEvent(new RequestEnergyEvent{requester = this});
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked && enoughtEnegyToDash)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
@@ -980,6 +1003,9 @@ public class FPSController : NetworkBehaviour
             if (verticalInput == 0f && horizontalInput == 0f) dashingDirection = transform.forward;
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
+        
+        _bus.InvokeEvent(new OnModifyEnergyEvent{value = -15f});
+        
         dashingDirection *= dashSpeed;
         StartCoroutine(DashingCoroutine());
     }
@@ -1366,7 +1392,13 @@ public class FPSController : NetworkBehaviour
     }
 
     #endregion
-
+    
+    public void OnGetEnergy(float energy)
+    {
+        Debug.Log("OnGetEnergy");
+        enoughtEnegyToDash = energy - dashEnergyCost >= 0;
+    }
+    
     void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
