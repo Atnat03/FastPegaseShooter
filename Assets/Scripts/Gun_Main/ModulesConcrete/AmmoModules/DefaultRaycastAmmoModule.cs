@@ -1,9 +1,4 @@
-using System;
 using System.Collections;
-using Controller;
-using CustomConsole.Runtime.Logger;
-using FishNet;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GunDecorator.AmmoModules
@@ -30,12 +25,9 @@ namespace GunDecorator.AmmoModules
         
         #endregion
 
-        private PlayerShooting _ps;
-
         void Start()
         {
             _camTransform = _camera.transform;
-            _ps = GetComponentInParent<PlayerShooting>();
         }
 
 
