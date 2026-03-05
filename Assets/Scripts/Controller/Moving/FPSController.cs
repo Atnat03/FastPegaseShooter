@@ -6,10 +6,6 @@ using FishNet.Object;
 
 public class FPSController : NetworkBehaviour
 { 
-    // réparer allignVelocityToWall
-    
-    // refaire un followSmoothing vu que la camera est maintenant enfant du player
-    
     // faire mieux le Grappling
     
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
@@ -22,7 +18,7 @@ public class FPSController : NetworkBehaviour
     
     [SerializeField] Rigidbody rb;
     [SerializeField] Transform cameraParentTransform;
-    [SerializeField] Transform cameraTarget;
+    [SerializeField] Transform cameraSpringTarget;
     [SerializeField] private Camera _camera;
     [SerializeField] Transform playerFeet;
     [SerializeField] Transform playerLeftSide;
@@ -31,8 +27,6 @@ public class FPSController : NetworkBehaviour
     [SerializeField] PlayerInput playerInput;
     [SerializeField] private GameObject _playerVisual;
     [SerializeField] private PlayerAnimation _playerAnimation;
-    [SerializeField] CapsuleCollider _capsuleColliderStandUp;
-    [SerializeField] CapsuleCollider _capsuleColliderCrouched;
 
     [Header("parameters")]
     [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")][SerializeField] private bool landSnap = true;
@@ -46,13 +40,17 @@ public class FPSController : NetworkBehaviour
     public bool dashUnlocked = true;
     public bool slopeSlideUnlocked = true;
     
+    [Header("Camera")]
+    [SerializeField] float cameraSpringHalfLife = 0.075f;
+    [SerializeField] float cameraSpringFrequency = 22.5f;
+    [SerializeField] float rollSmoothing = 15f;
+    
     [Header("movement")] 
     [SerializeField] float mouseSensitivity = 2f;
     [SerializeField] float verticalLimit = 80f;
     [SerializeField] float moveSpeed;
     [SerializeField] float groundMomentumFactor = 2f; 
     [SerializeField] float sideStepImpulseForce; 
-    [SerializeField] float followSmoothing = 15f;
     [SerializeField] float wallDetectionRange = 0.65f;
     [SerializeField]float walkableSlopeAngle = 45f; 
     [SerializeField]float maxStepHeight = .2f;
@@ -434,10 +432,10 @@ public class FPSController : NetworkBehaviour
     float defaultSmooting;
     IEnumerator FollowSmoothingOnLandingCoroutine()
     {
-        defaultSmooting = followSmoothing;
-        followSmoothing = landSnapVelocity;
+        defaultSmooting = rollSmoothing;
+        rollSmoothing = landSnapVelocity;
         yield return new WaitForSeconds(.2f);
-        followSmoothing = defaultSmooting;
+        rollSmoothing = defaultSmooting;
     }
 
     #endregion
@@ -693,14 +691,14 @@ public class FPSController : NetworkBehaviour
             wallRidingDirection = Vector3.Dot(Vector3.Cross(leftSideHit.normal, Vector3.up), rb.linearVelocity) *
                                   Vector3.Cross(leftSideHit.normal, Vector3.up);
             currentWallHit = leftSideHit;
-            cameraTarget.rotation = cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, -headtiltIntensity);
+            cameraSpringTarget.rotation = cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, -headtiltIntensity);
         }
         else
         {
             wallRidingDirection = Vector3.Dot(Vector3.Cross(rightSideHit.normal, Vector3.up), rb.linearVelocity) *
                                   Vector3.Cross(rightSideHit.normal, Vector3.up);
             currentWallHit = rightSideHit;
-            cameraTarget.rotation = cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, headtiltIntensity);
+            cameraSpringTarget.rotation = cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, headtiltIntensity);
         }
 
         wallRidingCoroutine = StartCoroutine(WallRidingDurationCoroutine());
@@ -747,7 +745,7 @@ public class FPSController : NetworkBehaviour
 
     void ExitWallRidingState()
     {
-        cameraTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+        cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
         StopCoroutine(wallRidingCoroutine);
     }
 
@@ -1175,18 +1173,20 @@ public class FPSController : NetworkBehaviour
     #region PlayerActions
 
     private float currentRoll = 0f;
+    private Vector3 camVelocity =  Vector3.zero;
+    private Vector3 camNextPos;
 
     void UpdateCameraPositionAndRotation(bool headbob = false, float headbobAmplitude = 0f, float headbobFrequency = 0f)
     {
         transform.rotation = Quaternion.Euler(0, yaw, 0);
 
-        float targetRoll = cameraTarget.eulerAngles.z;
-        currentRoll = Mathf.LerpAngle(currentRoll, targetRoll, followSmoothing * Time.deltaTime);
+        float targetRoll = cameraSpringTarget.eulerAngles.z;
+        currentRoll = Mathf.LerpAngle(currentRoll, targetRoll, rollSmoothing * Time.deltaTime);
 
         cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, currentRoll);
 
-        Vector3 targetPos = cameraTarget.position;
-
+        Vector3 targetPos = cameraSpringTarget.position;
+        
         if (headbob)
         {
             headbobTimer += Time.deltaTime * headbobFrequency;
@@ -1201,8 +1201,24 @@ public class FPSController : NetworkBehaviour
         {
             headbobTimer = 0f;
         }
-
-        cameraParentTransform.position = Vector3.Lerp(cameraParentTransform.position, targetPos, followSmoothing * Time.deltaTime);
+        
+        Spring(ref camNextPos ,ref  camVelocity, targetPos, cameraSpringHalfLife, cameraSpringFrequency, Time.deltaTime);
+        cameraParentTransform.position = camNextPos;
+    }
+    
+    
+    public void Spring(ref Vector3 current, ref Vector3 velocity, Vector3 target, float halfLife, float frequency, float timeStep)
+    {
+        var dampingRatio = -Mathf.Log(0.5f) / (frequency * halfLife);
+        var f            = 1.0f + 2.0f * timeStep * dampingRatio * frequency;
+        var oo           = frequency * frequency;
+        var hoo          = timeStep  * oo;
+        var hhoo         = timeStep  * hoo;
+        var detInv       = 1.0f      / (f + hhoo);
+        var detX         = f * current + timeStep * velocity + hhoo * target;
+        var detV         = velocity    + hoo      * (target - current);
+        current = detX * detInv;
+        velocity = detV * detInv;
     }
 
 
@@ -1220,8 +1236,6 @@ public class FPSController : NetworkBehaviour
         height = Vector3.Distance(capsuleTop, playerFeet.position);
         point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
         point2 = playerFeet.position  + Vector3.up * bodyRadius;
-        
-        capsule = crouched ? _capsuleColliderCrouched :  _capsuleColliderStandUp;
          
         currentHorizontal = new Vector3(velocity.x, 0, velocity.z);
         if (Physics.CapsuleCast(point1, point2, bodyRadius, currentHorizontal.normalized, out RaycastHit hit, wallDetectionRange, ~LayerMask.GetMask("Owner")))
@@ -1314,18 +1328,18 @@ public class FPSController : NetworkBehaviour
 
     void Crouch()
     {
-        cameraTarget.position =
-            new Vector3(cameraTarget.position.x, cameraTarget.position.y - cameraOffsetWhenCrouching,
-                cameraTarget.position.z);
+        cameraSpringTarget.position =
+            new Vector3(cameraSpringTarget.position.x, cameraSpringTarget.position.y - cameraOffsetWhenCrouching,
+                cameraSpringTarget.position.z);
         foreach (GameObject col in bodyStandUpCollider) col.SetActive(false);
         foreach (GameObject col in bodyCrouchedCollider) col.SetActive(true);
     }
 
     void UnCrouch()
     {
-        cameraTarget.position =
-            new Vector3(cameraTarget.position.x, cameraTarget.position.y + cameraOffsetWhenCrouching,
-                cameraTarget.position.z);
+        cameraSpringTarget.position =
+            new Vector3(cameraSpringTarget.position.x, cameraSpringTarget.position.y + cameraOffsetWhenCrouching,
+                cameraSpringTarget.position.z);
         foreach (GameObject col in bodyStandUpCollider) col.SetActive(true);
         foreach (GameObject col in bodyCrouchedCollider) col.SetActive(false);
     }

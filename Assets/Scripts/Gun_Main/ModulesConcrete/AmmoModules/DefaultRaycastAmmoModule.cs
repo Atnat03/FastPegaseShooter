@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Controller;
 using CustomConsole.Runtime.Logger;
 using FishNet;
@@ -7,20 +8,24 @@ using UnityEngine;
 
 namespace GunDecorator.AmmoModules
 {
-    
-    
     public class DefaultRaycastAmmoModule : GunModule , IAmmoModule
     {
         #region variables
+        
+        [Header("references")]
+        [SerializeField] private Camera _camera;
+        [SerializeField] private GameObject _visualBulletPrefab;
 
         [Header("parametres")]
         [SerializeField] private float _maxDistance;
-        [SerializeField] private float _damages;//Debug
-        [SerializeField] private Camera _camera;
+        [SerializeField] private float _damages;
+        [SerializeField] private float _BulletSpeed = 50;
         
         [Header("Debug")]
         public GameObject p_markPrefab;
         private GameObject _currentMark;
+        
+        //privates
         private Transform _camTransform;
         
         #endregion
@@ -32,22 +37,44 @@ namespace GunDecorator.AmmoModules
             _camTransform = _camera.transform;
             _ps = GetComponentInParent<PlayerShooting>();
         }
-        
+
+
+        private Vector3 _spawnPos;
         public void SpawnBullet()
         {
-            if (Physics.Raycast(_camTransform.position + transform.forward * .3f, transform.forward, out RaycastHit hit,_maxDistance, ~LayerMask.GetMask("Owner")))
+            _spawnPos = _camTransform.position + transform.forward * .3f;
+            if (Physics.Raycast(_spawnPos, _camTransform.forward, out RaycastHit hit,_maxDistance, ~LayerMask.GetMask("Owner")))
             {
                 if (_currentMark != null)
                 {
                     Destroy(_currentMark);
                 }
                 
-                _currentMark = Instantiate(p_markPrefab, hit.point + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal));
-                if (hit.collider.TryGetComponent<IDamagable>(out IDamagable iDamagable))
-                {
-                    CustomLogger.ImportantLog($"Shoot : {_damages}");
-                    iDamagable.TakeDamage((int)_damages);
-                }
+                float travelTime = hit.distance / _BulletSpeed;
+                
+                StartCoroutine(TravelTimeCoroutine(hit, travelTime, Instantiate(_visualBulletPrefab,transform.position + transform.forward * .3f, Quaternion.identity), _spawnPos));
+            }
+        }
+
+        IEnumerator TravelTimeCoroutine(RaycastHit hit, float travelTime, GameObject bullet, Vector3 spawnPos)
+        {
+            float elapsedTime = 0;
+            while (elapsedTime < travelTime)
+            {
+                elapsedTime += Time.deltaTime;
+                bullet.transform.position += (hit.point - spawnPos).normalized * (_BulletSpeed * Time.deltaTime);
+                yield  return null;
+            }
+            Destroy(bullet);
+            HitTarget(hit);
+        }
+
+        private void HitTarget(RaycastHit hit)
+        {
+            _currentMark = Instantiate(p_markPrefab, hit.point + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal));
+            if (hit.collider.TryGetComponent<IDamagable>(out IDamagable iDamagable))
+            {
+                iDamagable.TakeDamage((int)_damages);
             }
         }
 
