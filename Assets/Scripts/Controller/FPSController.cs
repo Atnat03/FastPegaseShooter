@@ -40,13 +40,17 @@ public class FPSController : NetworkBehaviour
     public bool dashUnlocked = true;
     public bool slopeSlideUnlocked = true;
     
+    [Header("Camera")]
+    [SerializeField] float cameraSpringHalfLife = 0.075f;
+    [SerializeField] float cameraSpringFrequency = 22.5f;
+    [SerializeField] float rollSmoothing = 15f;
+    
     [Header("movement")] 
     [SerializeField] float mouseSensitivity = 2f;
     [SerializeField] float verticalLimit = 80f;
     [SerializeField] float moveSpeed;
     [SerializeField] float groundMomentumFactor = 2f; 
     [SerializeField] float sideStepImpulseForce; 
-    [SerializeField] float followSmoothing = 15f;
     [SerializeField] float wallDetectionRange = 0.65f;
     [SerializeField]float walkableSlopeAngle = 45f; 
     [SerializeField]float maxStepHeight = .2f;
@@ -428,10 +432,10 @@ public class FPSController : NetworkBehaviour
     float defaultSmooting;
     IEnumerator FollowSmoothingOnLandingCoroutine()
     {
-        defaultSmooting = followSmoothing;
-        followSmoothing = landSnapVelocity;
+        defaultSmooting = rollSmoothing;
+        rollSmoothing = landSnapVelocity;
         yield return new WaitForSeconds(.2f);
-        followSmoothing = defaultSmooting;
+        rollSmoothing = defaultSmooting;
     }
 
     #endregion
@@ -1177,7 +1181,7 @@ public class FPSController : NetworkBehaviour
         transform.rotation = Quaternion.Euler(0, yaw, 0);
 
         float targetRoll = cameraSpringTarget.eulerAngles.z;
-        currentRoll = Mathf.LerpAngle(currentRoll, targetRoll, followSmoothing * Time.deltaTime);
+        currentRoll = Mathf.LerpAngle(currentRoll, targetRoll, rollSmoothing * Time.deltaTime);
 
         cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, currentRoll);
 
@@ -1198,7 +1202,7 @@ public class FPSController : NetworkBehaviour
             headbobTimer = 0f;
         }
         
-        Spring(ref camNextPos ,ref  camVelocity, targetPos, 0.075f, 25, Time.deltaTime);
+        Spring(ref camNextPos ,ref  camVelocity, targetPos, cameraSpringHalfLife, cameraSpringFrequency, Time.deltaTime);
         cameraParentTransform.position = camNextPos;
     }
     

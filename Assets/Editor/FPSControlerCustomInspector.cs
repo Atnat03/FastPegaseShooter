@@ -7,6 +7,7 @@ public class FPSControlerCustomInspector : Editor
     // Foldout states
     private bool showParameters = true;
     private bool showUnlockedCapacities = true;
+    private bool showCamera = true;
     private bool showMovement = true;
     private bool showHeadbob = true;
     private bool showJump = true;
@@ -59,6 +60,13 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashUnlocked"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeSlideUnlocked"));
         }, ref showUnlockedCapacities);
+        
+        DrawSection("Camera", Color.aliceBlue, () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraSpringHalfLife"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraSpringFrequency"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("rollSmoothing"));
+        },ref showCamera);
 
         DrawSection("Movement", new Color(0.6f, 1f, 0.6f), () =>
         {
@@ -67,7 +75,6 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("moveSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("groundMomentumFactor"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("sideStepImpulseForce"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("followSmoothing"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRange"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("walkableSlopeAngle"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
