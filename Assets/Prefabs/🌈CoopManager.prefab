@@ -52,27 +52,15 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 6325006552558930708}
   _networkObjectCache: {fileID: 6325006552558930708}
   _timeToAcceptSwap: 2
-  _swapingTime: 0.5
-  _damageSurchargeData:
-  - damageMultiplier: 1
-    cadenceMultiplier: 1
-    overloadDuration: 2
-    timeToCombo: 5
-    colorJauge: {r: 0.04924178, g: 1, b: 0, a: 1}
-  - damageMultiplier: 1
-    cadenceMultiplier: 1
-    overloadDuration: 2
-    timeToCombo: 5
-    colorJauge: {r: 1, g: 0.986335, b: 0, a: 1}
-  - damageMultiplier: 1
-    cadenceMultiplier: 1
-    overloadDuration: 2
-    timeToCombo: 5
-    colorJauge: {r: 1, g: 0.079807915, b: 0, a: 1}
+  _swapingTime: 0
+  _damageSurchargeData: []
   _isCombo: 0
   _infoCombo: {fileID: 5540293941858202540}
   _barUI: {fileID: 6177467222654113904}
   _valueImage: {fileID: 3282145146028173647}
+  _textSwapUI: {fileID: 6725736506753744396}
+  _youAskSwapMessage: You ask for a swap !
+  _broAskyouSwapMessage: BRO ask you for a swap
 --- !u!114 &6325006552558930708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +93,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584288705598029744
+  _initializedTimestamp: -8584288021963211082
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -121,7 +109,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 10
+  <PrefabId>k__BackingField: 11
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 11948202327552370993
   SceneId: 0
@@ -164,10 +152,10 @@ MonoBehaviour:
   _energyMax: 100
   _valueOneBar: 20
   _healFromOneBar: 20
-  _imageBarPrefab: {fileID: 7619886682169414630, guid: c09496d7f8606de4896136f69e2ff335, type: 3}
-  _barParent: {fileID: 1588695423598340219}
-  _energyBarColorFull: {r: 0.49362147, g: 1, b: 0.33490568, a: 1}
-  _energyBarColorNotFull: {r: 0.21521114, g: 0.46226418, b: 0, a: 1}
+  _imageBarPrefab: {fileID: 8220875089700260255}
+  _barParent: {fileID: 4136940362464684520, guid: c09496d7f8606de4896136f69e2ff335, type: 3}
+  _energyBarColorFull: {r: 0.070666075, g: 1, b: 0, a: 1}
+  _energyBarColorNotFull: {r: 0.10656601, g: 0.5, b: 0, a: 1}
 --- !u!1 &1604989574223165493
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +425,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 396.4419}
+  m_AnchoredPosition: {x: 0, y: -24.999878}
   m_SizeDelta: {x: 500, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6923306999198197438
@@ -553,6 +541,143 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3530806852037218419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 424871993816370293}
+  - component: {fileID: 382718204755778303}
+  - component: {fileID: 6725736506753744396}
+  m_Layer: 5
+  m_Name: MessageSwap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &424871993816370293
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3530806852037218419}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1336348143662203783}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 37.5}
+  m_SizeDelta: {x: 513.3856, y: 75}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &382718204755778303
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3530806852037218419}
+  m_CullTransparentMesh: 1
+--- !u!114 &6725736506753744396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3530806852037218419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Vous proposez un SWAP !
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4304483316840470302
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,7 +1003,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &490618630963375597
 RectTransform:
   m_ObjectHideFlags: 0
@@ -931,12 +1056,13 @@ RectTransform:
   m_Children:
   - {fileID: 7802348073314784527}
   - {fileID: 9029929477560728266}
+  - {fileID: 424871993816370293}
   m_Father: {fileID: 5818129008459692721}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 410}
+  m_SizeDelta: {x: 657.2584, y: 204.916}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6993871622620548529
 GameObject:
@@ -1152,7 +1278,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 396.4419}
+  m_AnchoredPosition: {x: 0, y: -25}
   m_SizeDelta: {x: 500, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5246325225584199235

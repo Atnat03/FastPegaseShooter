@@ -3,6 +3,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 
 public struct RequestEnergyEvent
 {
@@ -118,7 +119,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float dashSpeed = 5f;
     [SerializeField] float dashTimeDuration = 0.2f;
     [SerializeField] float dashCooldown;
-    [SerializeField] private float dashEnergyCost = 15f;
+    [SerializeField] private float dashEnergyCost = 20f;
 
     [Header("Slope Slide")]
     [SerializeField] float minSlopeAngleToSlopeSlide = 11f; 
@@ -158,7 +159,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     bool hasDashed = false;
     bool coyoteSlide = false;
     bool enoughtEnegyToDash = false;
-    private bool isDead = false;
+    private readonly SyncVar<bool> isDead = new SyncVar<bool>(false);
 
     public enum ControlerState
     {
@@ -196,24 +197,25 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             _bus.Subscribe((RequestEnergyResponseEvent data) => 
             {
                 enoughtEnegyToDash = data.energy >= dashEnergyCost;
+                enoughtEnegyToDash = data.energy >= dashEnergyCost;
+            });
+            
+            _bus.Subscribe((OnPlayerDeathEvent data) =>
+            {
+                if (data.playerN == NetworkObject)
+                    SetDeadServerRpc(true);
             });
             
             _bus.Subscribe((OnPlayerDeathEvent data) => 
             {
                 if(data.playerN == NetworkObject) 
-                    isDead = true;
-            });
-            
-            _bus.Subscribe((OnPlayerDeathEvent data) => 
-            {
-                if(data.playerN == NetworkObject) 
-                    isDead = true;
+                    SetDeadServerRpc(true);
             });
             
             _bus.Subscribe((OnPlayerRespawnEvent data) => 
             {
                 if(data.playerN == NetworkObject) 
-                    isDead = false;
+                    SetDeadServerRpc(false);
             });
         }
         else
@@ -324,8 +326,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     void Update()
     {
         if (!IsOwner) return;
-
-        if (isDead) return;
+        
+        if (isDead.Value) return;
         
         UpdateInputs();
         stateMachine?.Update();
@@ -335,12 +337,16 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     { 
         if (!IsOwner) return;
         
+        if (isDead.Value) return;
+        
         stateMachine?.FixedUpdate();
     }
 
     void LateUpdate()
     {
         if (!IsOwner) return;
+        
+        if (isDead.Value) return;
         
         stateMachine?.LateUpdate();
     }
@@ -1024,7 +1030,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
         
-        _bus.InvokeEvent(new OnModifyEnergyEvent{value = -15f});
+        _bus.InvokeEvent(new OnModifyEnergyEvent{value = -dashEnergyCost});
         
         dashingDirection *= dashSpeed;
         StartCoroutine(DashingCoroutine());
@@ -1414,6 +1420,12 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         Debug.Log("OnGetEnergy");
         enoughtEnegyToDash = energy - dashEnergyCost >= 0;
+    }
+    
+    [ServerRpc]
+    private void SetDeadServerRpc(bool value)
+    {
+        isDead.Value = value;
     }
     
     #endregion

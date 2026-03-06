@@ -22,6 +22,8 @@ namespace Controller
         private readonly SyncVar<bool> _wantToSwitch = new SyncVar<bool>();
         private bool _localWantToSwitch = false;
         
+        private Material _gunMaterial;
+        
         private EventBus _bus;
         
         public override void OnStartClient()
@@ -37,7 +39,7 @@ namespace Controller
                 
                 _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
             }
-
+            
             int startIndex = OwnerId % 2;
             _gunSwitching.Initialize(startIndex);
         }
@@ -60,7 +62,7 @@ namespace Controller
         }
 
         [ServerRpc]
-        public void RequestSwapingGunServerRpc(NetworkObject playerNet, int gunIndex)
+        public void RequestSwapingGunServerRpc(NetworkObject playerNet, int gunIndex,int currentAmmo)
         {
             if (!_gunSwitching.IsMainGun) return;
             
@@ -69,7 +71,8 @@ namespace Controller
             CallSwapGunEvent data = new CallSwapGunEvent
             {
                 player = playerNet,
-                gunIndex = gunIndex
+                gunIndex = gunIndex,
+                currentAmmo = currentAmmo
             };
     
             _bus.InvokeEvent(data);
@@ -78,19 +81,48 @@ namespace Controller
         private void SwapingGun(SwapingGunEvent data)
         {
             _wantToSwitch.Value = false;
+            CurrentMainSurchargeGun.StopReload();
             StartCoroutine(WaitBeforeSwapCoroutine(data));
-            Debug.Log($"[{OwnerId}] Swapped to index: {data.gunIndex}");
         }
 
         IEnumerator WaitBeforeSwapCoroutine(SwapingGunEvent data)
         {
-            _gunSwitching.DesactivateAllMainGun();
+            _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
             
-            yield return new WaitForSeconds(data.timeToSwap);
-            
+            int ammoToApply = data.currentAmmo;
+
+            _gunMaterial.SetFloat("_Dissolving", 0);
+
+            float duration = data.timeToSwap / 2;
+            float elapsedTime = 0;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                _gunMaterial.SetFloat("_Dissolving", elapsedTime / duration);
+                
+                yield return null;
+            }
+
             _gunSwitching.ChangeCurrentGun_Main(data.gunIndex);
 
-            _gunSurcharge.SetOverloadStats(true, 2, 2, 2, data.currentAmmo);
+            _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
+            
+            _gunMaterial.SetFloat("_Dissolving", 1);
+            
+            elapsedTime = duration;
+            
+            while (elapsedTime >0)
+            {
+                elapsedTime -= Time.deltaTime;
+                _gunMaterial.SetFloat("_Dissolving", elapsedTime / duration);
+                
+                yield return null;
+            }
+            
+            _gunMaterial.SetFloat("_Dissolving", 0);
+            
+            _gunSurcharge.SetOverloadStats(true, 2, 2, 2, ammoToApply);
         }
 
         private void EndTimerSwap(EndTimerSwapEvent data)

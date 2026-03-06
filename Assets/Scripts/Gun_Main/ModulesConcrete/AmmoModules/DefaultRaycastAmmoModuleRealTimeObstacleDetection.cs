@@ -1,4 +1,6 @@
 using System.Collections;
+using FishNet;
+using FishNet.Object;
 using UnityEngine;
 
 namespace GunDecorator.AmmoModules
@@ -10,6 +12,7 @@ namespace GunDecorator.AmmoModules
         [Header("references")]
         [SerializeField] private Camera _camera;
         [SerializeField] private GameObject BulletPrefab;
+        [SerializeField] private Transform _spawnPoint;
 
         [Header("parametres")]
         [SerializeField] private float _maxDistance;
@@ -34,23 +37,63 @@ namespace GunDecorator.AmmoModules
         private float travelTime;
         public void SpawnBullet()
         {
-            if (Physics.Raycast(_camTransform.position + transform.forward * .3f, _camTransform.forward, out RaycastHit hit,_maxDistance, ~LayerMask.GetMask("Owner")))
+            Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+            
+            Vector3 targetPoint;
+            
+            NetworkObject damagableObject = null;
+
+            if (Physics.Raycast(ray, out hit, _maxDistance, ~LayerMask.GetMask("Owner", "Other")))
             {
-                bulletDirection = (hit.point - (_camTransform.position + transform.forward * .3f)).normalized;
-                travelTime = hit.distance / _BulletSpeed;
+                targetPoint = hit.point;
+                if (hit.collider.TryGetComponent<NetworkObject>(out NetworkObject iDamagable))
+                {
+                    damagableObject = iDamagable;
+                }
             }
             else
             {
-                bulletDirection = _camera.transform.forward;
-                travelTime = _maxDistance /  _BulletSpeed;
+                targetPoint = ray.GetPoint(_maxDistance);
             }
+
+            bulletDirection = (targetPoint - _spawnPoint.position).normalized;
+            travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _BulletSpeed;
             
-            GameObject newBullet = Instantiate(BulletPrefab, transform.position + transform.forward * .3f, Quaternion.LookRotation(bulletDirection));
-            Destroy(newBullet, travelTime + .5f);
+            if (damagableObject != null)
+                ApplyDamageServerRpc(damagableObject);
+
+            SpawnVisualBulletServerRpc(bulletDirection, travelTime);
+        }
+        
+        [ServerRpc]
+        private void ApplyDamageServerRpc(NetworkObject target)
+        {
+            if (target.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                damagable.TakeDamage((int)_damages);
+            }
+        }
+
+        [ServerRpc]
+        private void SpawnVisualBulletServerRpc(Vector3 direction, float travel)
+        {
+            SpawnVisualBulletObserverRpc(direction, travel);
+        }
+
+        [ObserversRpc]
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel)
+        {
+            GameObject newBullet = Instantiate(BulletPrefab, _spawnPoint.position, Quaternion.LookRotation(direction));
+    
+            //InstanceFinder.ServerManager.Spawn(newBullet);
+    
+            Destroy(newBullet, travel + .5f);
             BulletBehaviour bulletBehaviour = newBullet.GetComponent<BulletBehaviour>();
-            bulletBehaviour.p_damage =  _damages;
-            bulletBehaviour.p_speed =  _BulletSpeed;
-            bulletBehaviour.p_markPrefab =  p_markPrefab;
+    
+            bulletBehaviour.p_damage = _damages;
+            bulletBehaviour.p_speed = _BulletSpeed;
+            bulletBehaviour.p_markPrefab = p_markPrefab;
         }
 
         public void SetDamage(float multiplierDmg)

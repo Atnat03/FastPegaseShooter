@@ -1,9 +1,10 @@
+using FishNet.Object;
 using UnityEditor;
 using UnityEngine;
 
 namespace  GunDecorator
 {
-    public abstract class GunModule : MonoBehaviour
+    public abstract class GunModule : NetworkBehaviour
     {
         protected GunController _gunController;
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using FishNet.Object;
@@ -19,6 +20,8 @@ public interface ISurcharge
     public void SetAmmo(int value);
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
     public bool IsOverload { get; }
+    public MeshRenderer ModelGun { get; }
+    public void StopReload();
 }
 
 namespace GunDecorator
@@ -26,9 +29,10 @@ namespace GunDecorator
     public class GunController : NetworkBehaviour, IGun, ISurcharge
     {
         public bool IsOverload => _isOverload.Value;
-
         public float SurchargeMultiplierDamage { get; set; }
         public float SurchargeMultiplierRate { get; set; }
+
+        public MeshRenderer ModelGun => _model;
 
         private IShootModule[] _shootModule;
         private IReloadModule _reloadModule;
@@ -36,6 +40,7 @@ namespace GunDecorator
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
         
+        [SerializeField] public MeshRenderer _model;
         [SerializeField] public AudioSource _source;
         [SerializeField] public SoundsDataSO _soundData;
 
@@ -64,8 +69,8 @@ namespace GunDecorator
                     s?.TryShoot();
                 }
 
-                SetAmmo(GetCurrentAmmo() - 1);
                 _recoilModule?.Recoil();
+                SetAmmo(GetCurrentAmmo() - 1);
             }
 
             if (GetCurrentAmmo() <= 0)
@@ -97,6 +102,8 @@ namespace GunDecorator
             AudioClip clip = SoundManager.GetAudioClip(_soundData, "Reload");
             SoundManager.PlaySound(clip, _source);
         }
-        
+
+        public void StopReload() => _reloadModule.StopReload();
+
     }
 }

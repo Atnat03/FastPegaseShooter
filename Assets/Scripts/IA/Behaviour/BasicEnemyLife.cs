@@ -31,9 +31,14 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
             }
         }
     }
-
-    [Server]
+    
     public void TakeDamage(int damageAmount)
+    {
+        TakeDamageServerRpc(damageAmount);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void TakeDamageServerRpc(int damageAmount)
     {
         p_life.Value -= damageAmount;
     }
