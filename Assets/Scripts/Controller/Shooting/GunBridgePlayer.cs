@@ -22,6 +22,8 @@ namespace Controller
         private readonly SyncVar<bool> _wantToSwitch = new SyncVar<bool>();
         private bool _localWantToSwitch = false;
         
+        private Material _gunMaterial;
+        
         private EventBus _bus;
         
         public override void OnStartClient()
@@ -37,7 +39,7 @@ namespace Controller
                 
                 _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
             }
-
+            
             int startIndex = OwnerId % 2;
             _gunSwitching.Initialize(startIndex);
         }
@@ -84,14 +86,41 @@ namespace Controller
 
         IEnumerator WaitBeforeSwapCoroutine(SwapingGunEvent data)
         {
-            _gunSwitching.DesactivateAllMainGun();
+            _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
             
             int ammoToApply = data.currentAmmo;
-            
-            yield return new WaitForSeconds(data.timeToSwap);
-            
+
+            _gunMaterial.SetFloat("_Dissolving", 0);
+
+            float duration = data.timeToSwap / 2;
+            float elapsedTime = 0;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                _gunMaterial.SetFloat("_Dissolving", elapsedTime / duration);
+                
+                yield return null;
+            }
+
             _gunSwitching.ChangeCurrentGun_Main(data.gunIndex);
 
+            _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
+            
+            _gunMaterial.SetFloat("_Dissolving", 1);
+            
+            elapsedTime = duration;
+            
+            while (elapsedTime >0)
+            {
+                elapsedTime -= Time.deltaTime;
+                _gunMaterial.SetFloat("_Dissolving", elapsedTime / duration);
+                
+                yield return null;
+            }
+            
+            _gunMaterial.SetFloat("_Dissolving", 0);
+            
             _gunSurcharge.SetOverloadStats(true, 2, 2, 2, ammoToApply);
         }
 
