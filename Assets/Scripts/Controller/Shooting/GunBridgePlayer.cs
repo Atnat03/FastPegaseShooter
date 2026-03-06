@@ -49,6 +49,11 @@ namespace Controller
             CurrentGun.TryFire();
         }
 
+        public void TryCancelShooting()
+        {
+            CurrentGun.TryCancelShooting();
+        }
+
         public void TryReload()
         {
             CurrentGun.TryReload();

@@ -7,11 +7,17 @@ namespace GunDecorator
 {
     public class TemplateShootModule : GunModule, IShootModule
     {
+        public bool IsFullAuto => _isFullAuto;
+        public float FireRate => _fireRate;
+        
         [SerializeField] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
         
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
+
+        [SerializeField]private bool _isFullAuto;
+        [SerializeField]private float _fireRate;
         
         private void Start()
         {

@@ -10,6 +10,7 @@ using UnityEngine;
 public interface IGun
 {
     public void TryFire();
+    public void TryCancelShooting();
     public void TryReload();
 }
 
@@ -44,6 +45,8 @@ namespace GunDecorator
         [SerializeField] public AudioSource _source;
         [SerializeField] public SoundsDataSO _soundData;
 
+        private bool ShootingInputPressed;
+
         private void Awake()
         {
             //On récupere tout les types de modules possible et potentiellement sur l'arme
@@ -62,10 +65,17 @@ namespace GunDecorator
         {
             //On appele la fonction shoot du module de shoot actuellement équipé
 
+            ShootingInputPressed = true;
+                   
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
                 foreach (IShootModule s in _shootModule)
                 {
+                    if (s is { IsFullAuto: true })
+                    {
+                        StartCoroutine(ShootingCoroutine(s));
+                        continue;
+                    }
                     s?.TryShoot();
                 }
 
@@ -80,6 +90,23 @@ namespace GunDecorator
                     TryReload();
                 }
             }
+        }
+
+        IEnumerator ShootingCoroutine(IShootModule s)
+        {
+            while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
+            {
+                s.TryShoot();
+                _recoilModule?.Recoil();
+                SetAmmo(GetCurrentAmmo() - 1);
+                yield return new WaitForSeconds(s.FireRate);
+            }
+        }
+        
+
+        public void TryCancelShooting()
+        {
+            ShootingInputPressed = false;
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;

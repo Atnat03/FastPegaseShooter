@@ -6,6 +6,9 @@ namespace GunDecorator
     {
         public void TryShoot();
         public void Shooting();
+        
+        public bool IsFullAuto { get; }
+        public float FireRate { get; }
     }
     
     public interface IReloadModule

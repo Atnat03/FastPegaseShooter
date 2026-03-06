@@ -25,9 +25,9 @@ namespace GunDecorator
         {
             for (int i = 0; i < _numberShootPerSalve; i++)
             {
-                yield return new WaitForSeconds(_intervalDuration);
                 Shooting();
                 _recoilModule?.Recoil();
+                yield return new WaitForSeconds(_intervalDuration);
             }
         }
 
