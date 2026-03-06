@@ -119,7 +119,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float dashSpeed = 5f;
     [SerializeField] float dashTimeDuration = 0.2f;
     [SerializeField] float dashCooldown;
-    [SerializeField] private float dashEnergyCost = 15f;
+    [SerializeField] private float dashEnergyCost = 20f;
 
     [Header("Slope Slide")]
     [SerializeField] float minSlopeAngleToSlopeSlide = 11f; 
@@ -196,6 +196,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             
             _bus.Subscribe((RequestEnergyResponseEvent data) => 
             {
+                enoughtEnegyToDash = data.energy >= dashEnergyCost;
                 enoughtEnegyToDash = data.energy >= dashEnergyCost;
             });
             
@@ -1027,7 +1028,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
         
-        _bus.InvokeEvent(new OnModifyEnergyEvent{value = -15f});
+        _bus.InvokeEvent(new OnModifyEnergyEvent{value = -dashEnergyCost});
         
         dashingDirection *= dashSpeed;
         StartCoroutine(DashingCoroutine());

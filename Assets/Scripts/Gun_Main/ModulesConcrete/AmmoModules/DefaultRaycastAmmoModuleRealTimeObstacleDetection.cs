@@ -41,10 +41,16 @@ namespace GunDecorator.AmmoModules
             RaycastHit hit;
 
             Vector3 targetPoint;
+            
+            NetworkObject damagableObject = null;
 
             if (Physics.Raycast(ray, out hit, _maxDistance, ~LayerMask.GetMask("Owner")))
             {
                 targetPoint = hit.point;
+                if (hit.collider.TryGetComponent<NetworkObject>(out NetworkObject iDamagable))
+                {
+                    damagableObject = iDamagable;
+                }
             }
             else
             {
@@ -53,8 +59,20 @@ namespace GunDecorator.AmmoModules
 
             bulletDirection = (targetPoint - _spawnPoint.position).normalized;
             travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _BulletSpeed;
+            
+            if (damagableObject != null)
+                ApplyDamageServerRpc(damagableObject);
 
             SpawnVisualBulletServerRpc(bulletDirection, travelTime);
+        }
+        
+        [ServerRpc]
+        private void ApplyDamageServerRpc(NetworkObject target)
+        {
+            if (target.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                damagable.TakeDamage((int)_damages);
+            }
         }
 
         [ServerRpc]
@@ -68,7 +86,7 @@ namespace GunDecorator.AmmoModules
         {
             GameObject newBullet = Instantiate(BulletPrefab, _spawnPoint.position, Quaternion.LookRotation(direction));
     
-            InstanceFinder.ServerManager.Spawn(newBullet);
+            //InstanceFinder.ServerManager.Spawn(newBullet);
     
             Destroy(newBullet, travel + .5f);
             BulletBehaviour bulletBehaviour = newBullet.GetComponent<BulletBehaviour>();
