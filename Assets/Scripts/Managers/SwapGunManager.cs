@@ -5,6 +5,7 @@ using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +29,7 @@ namespace Managers
         
         [SerializeField] private List<SurchargeData> _damageSurchargeData = new List<SurchargeData>();
         private readonly SyncVar<int> _currentSurchargeLevel = new SyncVar<int>();
+        private readonly SyncVar<int> _firstPlayerOwnerId = new SyncVar<int>(-1);
         
         [Header("Combo")]
         [SerializeField] private bool _isCombo = false;
@@ -37,6 +39,9 @@ namespace Managers
         [Header("UI")]
         [SerializeField] private GameObject _barUI;
         [SerializeField] private Image _valueImage;
+        [SerializeField] private TextMeshProUGUI _textSwapUI;
+        [SerializeField] private string _youAskSwapMessage;
+        [SerializeField] private string _broAskyouSwapMessage;
         
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
@@ -55,7 +60,11 @@ namespace Managers
             
             InitBus();
             _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
-            _bus.Subscribe((EndOVerload data) => _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo);
+            _bus.Subscribe((EndOVerload data) =>
+            {
+                _currentSurchargeLevel.Value = 0;
+                _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo;
+            });
         }
 
         public override void OnStartClient()
@@ -108,18 +117,16 @@ namespace Managers
         private void CheckCanSwapServerRpc(CallSwapGunEvent data)
         {
             if (_player == data.player) return;
-
+            
             if (_elapsedTime.Value > 0)
             {
                 if (_isCombo)
                 {
                     _currentSurchargeLevel.Value++;
                     
-                    if(_currentSurchargeLevel.Value > _damageSurchargeData.Count)
+                    if(_currentSurchargeLevel.Value >= _damageSurchargeData.Count)
                     {
                         _currentSurchargeLevel.Value = 0;
-                        Debug.Log("Vous etes arrivez au bout du nombre maximal de combo");
-                        return;
                     }
                 }
                 else
@@ -139,6 +146,7 @@ namespace Managers
                 _elapsedTime.Value = _timeToAcceptSwap;
                 _player = data.player;
                 _firstGunIndex = data.gunIndex;
+                _firstPlayerOwnerId.Value = data.player.OwnerId;
             }
         }
         
@@ -164,21 +172,30 @@ namespace Managers
             _player = null;
             _elapsedTime.Value = 0;
             _firstGunIndex = -1;
+            _firstGunAmmo = -1;
+            _firstPlayerOwnerId.Value = -1;
         }
         
         private void OnElapsedTimeChanged(float prev, float next, bool asServer)
         {
             _targetTime = next;
             _barUI.SetActive(next > 0);
-    
+
+            if (next > 0)
+            {
+                bool isRequester = LocalConnection.ClientId == _firstPlayerOwnerId.Value;
+                _textSwapUI.text = isRequester ? _youAskSwapMessage : _broAskyouSwapMessage;
+            }
+
             if (next > prev)
                 _displayedTime = next;
         }
         
         private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
         {
+            int safeLevel = Mathf.Clamp(_currentSurchargeLevel.Value, 0, _damageSurchargeData.Count - 1);
             _infoCombo.color = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
-            _infoCombo.gameObject.SetActive(next > 0);
+            _infoCombo.gameObject.SetActive(next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count-1);
         }
     }
 }

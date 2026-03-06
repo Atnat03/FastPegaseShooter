@@ -60,7 +60,7 @@ namespace Controller
         }
 
         [ServerRpc]
-        public void RequestSwapingGunServerRpc(NetworkObject playerNet, int gunIndex)
+        public void RequestSwapingGunServerRpc(NetworkObject playerNet, int gunIndex,int currentAmmo)
         {
             if (!_gunSwitching.IsMainGun) return;
             
@@ -69,7 +69,8 @@ namespace Controller
             CallSwapGunEvent data = new CallSwapGunEvent
             {
                 player = playerNet,
-                gunIndex = gunIndex
+                gunIndex = gunIndex,
+                currentAmmo = currentAmmo
             };
     
             _bus.InvokeEvent(data);
@@ -79,18 +80,19 @@ namespace Controller
         {
             _wantToSwitch.Value = false;
             StartCoroutine(WaitBeforeSwapCoroutine(data));
-            Debug.Log($"[{OwnerId}] Swapped to index: {data.gunIndex}");
         }
 
         IEnumerator WaitBeforeSwapCoroutine(SwapingGunEvent data)
         {
             _gunSwitching.DesactivateAllMainGun();
             
+            int ammoToApply = data.currentAmmo;
+            
             yield return new WaitForSeconds(data.timeToSwap);
             
             _gunSwitching.ChangeCurrentGun_Main(data.gunIndex);
 
-            _gunSurcharge.SetOverloadStats(true, 2, 2, 2, data.currentAmmo);
+            _gunSurcharge.SetOverloadStats(true, 2, 2, 2, ammoToApply);
         }
 
         private void EndTimerSwap(EndTimerSwapEvent data)
