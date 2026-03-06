@@ -12,6 +12,7 @@ namespace Controller
 
         [SerializeField] private PlayerInput _playerInputAction;
         [SerializeField] private GunBridgePlayer _bridgePlayer;
+        [SerializeField] private PlayerHealth _playerHealth;
 
         #endregion
 
@@ -20,6 +21,7 @@ namespace Controller
         private void Shooting(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
 
             if (_bridgePlayer != null)
             {
@@ -30,6 +32,7 @@ namespace Controller
         private void Reloading(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
 
             if (_bridgePlayer != null)
             {
@@ -40,6 +43,7 @@ namespace Controller
         private void SwitchGunType(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
 
             _bridgePlayer.SwitchGunType();
         }
@@ -47,13 +51,14 @@ namespace Controller
         private void RequestSwapingGun(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
 
             _bridgePlayer.RequestSwapingGunServerRpc(
                 this, 
                 _bridgePlayer.GetCurrentMainIndex,
                 _bridgePlayer.GetCurrentAmmo);
         }
-
+        
         void OnEnable()
         {
             _playerInputAction.actions["Shoot"].performed += Shooting;

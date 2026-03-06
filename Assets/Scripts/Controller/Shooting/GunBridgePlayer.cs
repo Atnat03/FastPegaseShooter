@@ -80,7 +80,6 @@ namespace Controller
         {
             _wantToSwitch.Value = false;
             StartCoroutine(WaitBeforeSwapCoroutine(data));
-            Debug.Log($"[{OwnerId}] Swapped to index: {data.gunIndex}");
         }
 
         IEnumerator WaitBeforeSwapCoroutine(SwapingGunEvent data)
