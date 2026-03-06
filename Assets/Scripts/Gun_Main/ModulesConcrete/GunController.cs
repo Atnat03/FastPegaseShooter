@@ -19,6 +19,7 @@ public interface ISurcharge
     public void SetAmmo(int value);
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
     public bool IsOverload { get; }
+    public MeshRenderer ModelGun { get; }
 }
 
 namespace GunDecorator
@@ -26,9 +27,10 @@ namespace GunDecorator
     public class GunController : NetworkBehaviour, IGun, ISurcharge
     {
         public bool IsOverload => _isOverload.Value;
-
         public float SurchargeMultiplierDamage { get; set; }
         public float SurchargeMultiplierRate { get; set; }
+
+        public MeshRenderer ModelGun => _model;
 
         private IShootModule[] _shootModule;
         private IReloadModule _reloadModule;
@@ -36,6 +38,7 @@ namespace GunDecorator
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
         
+        [SerializeField] public MeshRenderer _model;
         [SerializeField] public AudioSource _source;
         [SerializeField] public SoundsDataSO _soundData;
 
