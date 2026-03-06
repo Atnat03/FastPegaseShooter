@@ -23,6 +23,8 @@ namespace Controller
 
         public void SetOverloadStats(bool state, float overloadTime, float dmg_Multi, float rate_Multi, int newAmmoAmount = -1)
         {
+            Debug.Log($"[SetOverloadStats] state={state}, ammo={newAmmoAmount}, CurrentGun={_gunBridge.CurrentMainSurchargeGun.GetCurrentAmmo()}");
+            
             _currentOverloadTimer = overloadTime;
             _elapsedTimeOverload = overloadTime;
             

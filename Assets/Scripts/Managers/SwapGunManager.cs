@@ -164,6 +164,7 @@ namespace Managers
             _player = null;
             _elapsedTime.Value = 0;
             _firstGunIndex = -1;
+            _firstGunAmmo = -1;
         }
         
         private void OnElapsedTimeChanged(float prev, float next, bool asServer)

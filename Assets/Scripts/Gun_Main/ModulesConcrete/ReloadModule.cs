@@ -60,7 +60,6 @@ namespace GunDecorator
             SetAmmo(_magazineSize);
         }
 
-        public void SetAmmo(int value) => _currentAmmo = value;
-        
+        public void SetAmmo(int value) => _currentAmmo = Mathf.Min(value, _magazineSize);        
     }
 }

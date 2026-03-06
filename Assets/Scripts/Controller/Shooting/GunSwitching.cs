@@ -117,7 +117,7 @@ public class GunSwitching : MonoBehaviour
 	public void ChangeCurrentGun_Main(int newIndex)
 	{
 		_currentMainGun = newIndex;
-
+		Debug.Log($"[ChangeCurrentGun_Main] newIndex={newIndex}, ammo après changement={_mainGunsList[newIndex].GetComponent<ISurcharge>()?.GetCurrentAmmo()}");
 		ActivateCurrentGun(_mainGunsList, _currentMainGun);
 	}
 	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun = newIndex;

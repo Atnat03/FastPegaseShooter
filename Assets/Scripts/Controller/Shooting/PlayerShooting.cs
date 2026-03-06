@@ -48,7 +48,10 @@ namespace Controller
         {
             if (!IsOwner) return;
 
-            _bridgePlayer.RequestSwapingGunServerRpc(this, _bridgePlayer.GetCurrentMainIndex);
+            _bridgePlayer.RequestSwapingGunServerRpc(
+                this, 
+                _bridgePlayer.GetCurrentMainIndex,
+                _bridgePlayer.GetCurrentAmmo);
         }
 
         void OnEnable()
