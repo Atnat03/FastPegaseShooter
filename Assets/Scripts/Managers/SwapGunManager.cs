@@ -62,7 +62,6 @@ namespace Managers
             _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
             _bus.Subscribe((EndOVerload data) =>
             {
-                _currentSurchargeLevel.Value = 0;
                 _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo;
             });
         }
@@ -120,28 +119,22 @@ namespace Managers
             
             if (_elapsedTime.Value > 0)
             {
-                Debug.Log("_isCombo : "+  _isCombo);
-                
                 if (_isCombo)
                 {
                     _currentSurchargeLevel.Value++;
-                    
-                    Debug.Log(_currentSurchargeLevel.Value + " §§§ " + _damageSurchargeData.Count);
-                    
-                    if(_currentSurchargeLevel.Value >= _damageSurchargeData.Count - 1)
+
+                    if (_currentSurchargeLevel.Value >= _damageSurchargeData.Count)
                     {
-                        Debug.Log("Reset when combo arrive au bout");
                         _currentSurchargeLevel.Value = 0;
                     }
                 }
                 else
                 {
-                    Debug.Log("Reset when pas combo");
-                    _currentSurchargeLevel.Value = 0;
+                    _elapsedTimeForCombo.Value = 0;
                 }
-
+                    
                 _elapsedTimeForCombo.Value = 0;
-                
+
                 NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
                 NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo);
                 ResetTimer();
@@ -199,9 +192,7 @@ namespace Managers
         
         private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
         {
-            int safeLevel = Mathf.Clamp(_currentSurchargeLevel.Value, 0, _damageSurchargeData.Count - 1);
-            Debug.Log("OnElapsedComboTimeChanged" +  safeLevel);
-            _infoCombo.color = _damageSurchargeData[safeLevel].colorJauge;
+            _infoCombo.color = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
             _infoCombo.gameObject.SetActive(next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count-1);
         }
     }
