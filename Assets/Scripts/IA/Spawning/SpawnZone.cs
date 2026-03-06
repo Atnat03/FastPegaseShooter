@@ -29,14 +29,12 @@ public class SpawnZone : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        CustomLogger.HighlightLog("OnServerInitialized SpawnZone");
         _gridReader = GetComponent<PathfindingGridReader>();
         
         EventBusInitialiser.instance.Bus.Subscribe((EnemyDyingEvent EDE) =>
         {
             if (EDE.p_gridReaderId == _gridReader.p_id)
             {
-                CustomLogger.HighlightLog("Received info enemy died");
                 _currentBudget -= EDE.p_enemySpawnCost;
             }
         });
@@ -63,7 +61,7 @@ public class SpawnZone : NetworkBehaviour
     public void SpawnEnemy(GameObject enemyPrefab, int enemyCost)
     {
         Vector3 position = GetValidSpawnPoint().position;
-        GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity, transform);
+        GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         BasicEnemyMovements enemyMovement =  enemy.GetComponent<BasicEnemyMovements>();
         enemyMovement.SetGridReaderGuid(_gridReader.p_id);
         BasicEnemyLife enemyLife =  enemy.GetComponent<BasicEnemyLife>();

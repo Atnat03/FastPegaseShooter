@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -6,7 +7,9 @@ namespace GunDecorator
 {
     public class SalveShootModule : GunModule, ISecondModule
     {
-        public int numberShootPerSalve = 3;
+        [SerializeField] private RecoilModule _recoilModule;
+        [SerializeField]private int _numberShootPerSalve = 3;
+        [SerializeField] private float _intervalDuration = 0.1f; 
         private IShootModule _shootModule;
         private ISecondModule _next;
 
@@ -15,8 +18,17 @@ namespace GunDecorator
 
         public void DoAdditionnalEffect()
         {
-            for (int i = 0; i < numberShootPerSalve; i++)
+            StartCoroutine(MultipleShoot());
+        }
+
+        IEnumerator MultipleShoot()
+        {
+            for (int i = 0; i < _numberShootPerSalve; i++)
+            {
+                yield return new WaitForSeconds(_intervalDuration);
                 Shooting();
+                _recoilModule?.Recoil();
+            }
         }
 
         public void Shooting()

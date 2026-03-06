@@ -36,6 +36,7 @@ public class PlayerPositionCaster : NetworkBehaviour
     {
         PlayerPositionCastingObserverRPC(position, conn.ClientId);
     }
+    
     [ObserversRpc]
     void PlayerPositionCastingObserverRPC(Vector3 position, int playerId)
     {

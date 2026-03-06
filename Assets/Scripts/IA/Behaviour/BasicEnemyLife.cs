@@ -31,9 +31,14 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
             }
         }
     }
-
-    [Server]
+    
     public void TakeDamage(int damageAmount)
+    {
+        TakeDamageServerRpc(damageAmount);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void TakeDamageServerRpc(int damageAmount)
     {
         p_life.Value -= damageAmount;
     }
@@ -42,7 +47,6 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     public void Death()
     {
         InstanceFinder.ServerManager.Despawn(gameObject);
-        CustomLogger.HighlightLog("Casting info enemy died");
         EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyDyingEvent(_gridReaderId, _enemySpawnCost));
     }
 

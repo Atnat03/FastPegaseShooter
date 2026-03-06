@@ -45,7 +45,7 @@ namespace GunDecorator.AmmoModules
                 travelTime = _maxDistance /  _BulletSpeed;
             }
             
-            GameObject newBullet = Instantiate(BulletPrefab, _camTransform.position + transform.forward * .3f, Quaternion.LookRotation(bulletDirection));
+            GameObject newBullet = Instantiate(BulletPrefab, transform.position + transform.forward * .3f, Quaternion.LookRotation(bulletDirection));
             Destroy(newBullet, travelTime + .5f);
             BulletBehaviour bulletBehaviour = newBullet.GetComponent<BulletBehaviour>();
             bulletBehaviour.p_damage =  _damages;
