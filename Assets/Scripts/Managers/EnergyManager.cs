@@ -99,10 +99,17 @@ public class EnergyManager : NetworkBehaviour
     {
         float prev = _currentEnergy.Value;
         _currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + amount, 0f, _energyMax);
-        
-        if (prev < _energyMax && _currentEnergy.Value >= _energyMax)
+    
+        int prevBarIndex = Mathf.FloorToInt(prev / _valueOneBar);
+        int newBarIndex = Mathf.FloorToInt(_currentEnergy.Value / _valueOneBar);
+    
+        if (newBarIndex > prevBarIndex)
         {
-            AddHealthObserversRpc();
+            int barsCompleted = newBarIndex - prevBarIndex;
+            for (int i = 0; i < barsCompleted; i++)
+            {
+                AddHealthObserversRpc();
+            }
         }
     }
     
@@ -154,10 +161,17 @@ public class EnergyManager : NetworkBehaviour
     {
         float prev = _currentEnergy.Value;
         _currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + amount, 0f, _energyMax);
-        
-        if (prev < _energyMax && _currentEnergy.Value >= _energyMax)
+    
+        int prevBarIndex = Mathf.FloorToInt(prev / _valueOneBar);
+        int newBarIndex = Mathf.FloorToInt(_currentEnergy.Value / _valueOneBar);
+    
+        if (newBarIndex > prevBarIndex)
         {
-            AddHealthObserversRpc();
+            int barsCompleted = newBarIndex - prevBarIndex;
+            for (int i = 0; i < barsCompleted; i++)
+            {
+                AddHealthObserversRpc();
+            }
         }
     }
     

@@ -1,13 +1,14 @@
 using FishNet.Object;
 using UnityEngine;
 
-public class BulletBehaviour : NetworkBehaviour
+public class BulletBehaviour : MonoBehaviour
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
 
     [HideInInspector] public GameObject p_markPrefab;
     private GameObject _currentMark;
+    private bool _hasHit = false;
 
     private void FixedUpdate()
     {
@@ -22,10 +23,13 @@ public class BulletBehaviour : NetworkBehaviour
 
     private void DetectCollision()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 
-                (p_speed * Time.fixedDeltaTime), ~LayerMask.NameToLayer("Owner"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit,
+                p_speed * Time.fixedDeltaTime, ~LayerMask.NameToLayer("Owner"), QueryTriggerInteraction.Ignore))
         {
-            HitTarget(hit);
+            _hasHit = true;
+            
+            Destroy(Instantiate(p_markPrefab, hit.point + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal)), 3f);
+            Destroy(gameObject);
         }
     }
 
@@ -36,7 +40,6 @@ public class BulletBehaviour : NetworkBehaviour
         {
             iDamagable.TakeDamage((int)p_damage);
         }
-        NetworkObject.Despawn(gameObject);
         Destroy(gameObject);
     }
 }

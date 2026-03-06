@@ -33,7 +33,7 @@ public class GunSwitching : MonoBehaviour
 	private List<GameObject> _secondaryGunsList;
 	private int _currentMainGun = 0;
 	private int _currentSecondaryGun = 0;
-
+	
 	#endregion
 
 	#region Fonctions
