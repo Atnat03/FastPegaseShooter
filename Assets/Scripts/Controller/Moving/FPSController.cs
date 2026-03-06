@@ -3,6 +3,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 
 public struct RequestEnergyEvent
 {
@@ -158,7 +159,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     bool hasDashed = false;
     bool coyoteSlide = false;
     bool enoughtEnegyToDash = false;
-    private bool isDead = false;
+    private readonly SyncVar<bool> isDead = new SyncVar<bool>(false);
 
     public enum ControlerState
     {
@@ -198,22 +199,22 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
                 enoughtEnegyToDash = data.energy >= dashEnergyCost;
             });
             
-            _bus.Subscribe((OnPlayerDeathEvent data) => 
+            _bus.Subscribe((OnPlayerDeathEvent data) =>
             {
-                if(data.playerN == NetworkObject) 
-                    isDead = true;
+                if (data.playerN == NetworkObject)
+                    SetDeadServerRpc(true);
             });
             
             _bus.Subscribe((OnPlayerDeathEvent data) => 
             {
                 if(data.playerN == NetworkObject) 
-                    isDead = true;
+                    SetDeadServerRpc(true);
             });
             
             _bus.Subscribe((OnPlayerRespawnEvent data) => 
             {
                 if(data.playerN == NetworkObject) 
-                    isDead = false;
+                    SetDeadServerRpc(false);
             });
         }
         else
@@ -325,7 +326,9 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         if (!IsOwner) return;
 
-        if (isDead) return;
+        Debug.Log("ID DEAD : " + isDead.Value);
+        
+        if (isDead.Value) return;
         
         UpdateInputs();
         stateMachine?.Update();
@@ -1414,6 +1417,12 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         Debug.Log("OnGetEnergy");
         enoughtEnegyToDash = energy - dashEnergyCost >= 0;
+    }
+    
+    [ServerRpc]
+    private void SetDeadServerRpc(bool value)
+    {
+        isDead.Value = value;
     }
     
     #endregion

@@ -56,12 +56,14 @@ public class PlayerHealth : NetworkBehaviour
 
 	public override void OnStartClient()
 	{
+		_bus = EventBusInitialiser.instance.Bus;
+		
 		_currentHealth.OnChange += OnHealthChange;
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
 		
-		_respawnPosition = transform.position;
-		_respawnRotation = transform.rotation;
+		_respawnPosition = Vector3.zero;
+		_respawnRotation = Quaternion.identity;
 		
 		_audioSource = GetComponent<AudioSource>();
 		
@@ -70,21 +72,20 @@ public class PlayerHealth : NetworkBehaviour
 
 	private void Update()
 	{
-		if (!IsOwner) return;
-
-		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _targetHealthFill, Time.deltaTime * 25);
-
-		
-		if (_isDead.Value)
+		if (IsServerInitialized)
 		{
-			if (_respawnTimer.Value > 0)
+			if (_isDead.Value)
 			{
-				_respawnTimer.Value -= Time.deltaTime;;
+				if (_respawnTimer.Value > 0)
+					_respawnTimer.Value -= Time.deltaTime;
+				else
+					RespawnObserverRpc();
 			}
-			else
-			{
-				Respawn();
-			}
+		}
+    
+		if (IsOwner)
+		{
+			_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _targetHealthFill, Time.deltaTime * 25);
 		}
 	}
 
@@ -93,12 +94,11 @@ public class PlayerHealth : NetworkBehaviour
 	{
 		if (data.playerN.ObjectId != NetworkObject.ObjectId) return;
 		
-		if (_isDead.Value) return;
+		if (IsDead) return;
 		
 		float newHealth = _currentHealth.Value - data.value;
 
-		AudioClip clip = SoundManager.GetAudioClip(_soundsData, "Hurt");
-		SoundManager.PlaySound(clip, _audioSource);
+		PlayHurtSoundObserverRpc();
 
 		if (newHealth <= 0)
 		{
@@ -108,6 +108,13 @@ public class PlayerHealth : NetworkBehaviour
 		{
 			_currentHealth.Value = newHealth;
 		}
+	}
+
+	[ObserversRpc]
+	private void PlayHurtSoundObserverRpc()
+	{
+		AudioClip clip = SoundManager.GetAudioClip(_soundsData, "Hurt");
+		SoundManager.PlaySound(clip, _audioSource);
 	}
 
 	[Server]
@@ -124,26 +131,35 @@ public class PlayerHealth : NetworkBehaviour
 		_currentHealth.Value = 0;
 		_isDead.Value = true;
 		_respawnTimer.Value = _timeToRespawn;
-		
-		_bus.InvokeEvent(new OnPlayerDeathEvent
-		{
-			playerN = NetworkObject
-		});
-	}
 
-	private void Respawn()
+		NotifyDeathRpc(NetworkObject);
+	}
+	
+	[ObserversRpc]
+	private void RespawnObserverRpc()
 	{
+		Debug.Log("Respawn");
+		
 		_respawnTimer.Value = 0;
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
 		
 		transform.position = _respawnPosition;
 		transform.rotation = _respawnRotation;
-		
-		_bus.InvokeEvent(new OnPlayerRespawnEvent
-		{
-			playerN = NetworkObject
-		});
+
+		NotifyRespawnRpc(NetworkObject);
+	}
+	
+	[ObserversRpc]
+	private void NotifyDeathRpc(NetworkObject playerN)
+	{
+		_bus.InvokeEvent(new OnPlayerDeathEvent { playerN = playerN });
+	}
+	
+	[ObserversRpc]
+	private void NotifyRespawnRpc(NetworkObject playerN)
+	{
+		_bus.InvokeEvent(new OnPlayerRespawnEvent { playerN = playerN });
 	}
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
@@ -167,7 +183,7 @@ public class PlayerHealth : NetworkBehaviour
 	public void Interact()
 	{
 		Debug.Log("Interact");
-		Respawn();
+		RespawnObserverRpc();
 	}
 }
 

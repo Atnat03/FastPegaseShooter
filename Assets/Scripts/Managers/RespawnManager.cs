@@ -57,6 +57,8 @@ public class RespawnManager : NetworkBehaviour
 	{
 		if(_nbPlayerDead.Value == InstanceFinder.ClientManager.Clients.Count)
 		{
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
 			_isGameOver.Value = true;
 			_playerUIEnd.SetActive(true);
 		}
@@ -64,6 +66,7 @@ public class RespawnManager : NetworkBehaviour
 
 	public void Quit()
 	{
+		Debug.Log("Quit");
 		Application.Quit();
 	}
 

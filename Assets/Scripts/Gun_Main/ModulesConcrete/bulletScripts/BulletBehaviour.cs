@@ -1,6 +1,7 @@
+using FishNet.Object;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBehaviour
+public class BulletBehaviour : NetworkBehaviour
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
@@ -35,6 +36,7 @@ public class BulletBehaviour : MonoBehaviour
         {
             iDamagable.TakeDamage((int)p_damage);
         }
+        NetworkObject.Despawn(gameObject);
         Destroy(gameObject);
     }
 }
