@@ -81,6 +81,7 @@ namespace Controller
         private void SwapingGun(SwapingGunEvent data)
         {
             _wantToSwitch.Value = false;
+            CurrentMainSurchargeGun.StopReload();
             StartCoroutine(WaitBeforeSwapCoroutine(data));
         }
 

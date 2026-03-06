@@ -326,8 +326,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     void Update()
     {
         if (!IsOwner) return;
-
-        Debug.Log("ID DEAD : " + isDead.Value);
         
         if (isDead.Value) return;
         
@@ -339,12 +337,16 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     { 
         if (!IsOwner) return;
         
+        if (isDead.Value) return;
+        
         stateMachine?.FixedUpdate();
     }
 
     void LateUpdate()
     {
         if (!IsOwner) return;
+        
+        if (isDead.Value) return;
         
         stateMachine?.LateUpdate();
     }

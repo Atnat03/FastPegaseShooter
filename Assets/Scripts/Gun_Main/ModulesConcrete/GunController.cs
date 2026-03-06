@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using FishNet.Object;
@@ -20,6 +21,7 @@ public interface ISurcharge
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
     public bool IsOverload { get; }
     public MeshRenderer ModelGun { get; }
+    public void StopReload();
 }
 
 namespace GunDecorator
@@ -67,8 +69,8 @@ namespace GunDecorator
                     s?.TryShoot();
                 }
 
-                SetAmmo(GetCurrentAmmo() - 1);
                 _recoilModule?.Recoil();
+                SetAmmo(GetCurrentAmmo() - 1);
             }
 
             if (GetCurrentAmmo() <= 0)
@@ -100,6 +102,8 @@ namespace GunDecorator
             AudioClip clip = SoundManager.GetAudioClip(_soundData, "Reload");
             SoundManager.PlaySound(clip, _source);
         }
-        
+
+        public void StopReload() => _reloadModule.StopReload();
+
     }
 }

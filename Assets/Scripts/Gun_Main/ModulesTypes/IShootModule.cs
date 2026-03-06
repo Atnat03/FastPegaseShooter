@@ -16,6 +16,7 @@ namespace GunDecorator
         
         public bool IsReloading { get; }
         public void SetAmmo(int value);
+        public void StopReload();
     }
 
     public interface IRecoilModule

@@ -120,17 +120,23 @@ namespace Managers
             
             if (_elapsedTime.Value > 0)
             {
+                Debug.Log("_isCombo : "+  _isCombo);
+                
                 if (_isCombo)
                 {
                     _currentSurchargeLevel.Value++;
                     
-                    if(_currentSurchargeLevel.Value >= _damageSurchargeData.Count)
+                    Debug.Log(_currentSurchargeLevel.Value + " §§§ " + _damageSurchargeData.Count);
+                    
+                    if(_currentSurchargeLevel.Value >= _damageSurchargeData.Count - 1)
                     {
+                        Debug.Log("Reset when combo arrive au bout");
                         _currentSurchargeLevel.Value = 0;
                     }
                 }
                 else
                 {
+                    Debug.Log("Reset when pas combo");
                     _currentSurchargeLevel.Value = 0;
                 }
 
@@ -194,7 +200,8 @@ namespace Managers
         private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
         {
             int safeLevel = Mathf.Clamp(_currentSurchargeLevel.Value, 0, _damageSurchargeData.Count - 1);
-            _infoCombo.color = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
+            Debug.Log("OnElapsedComboTimeChanged" +  safeLevel);
+            _infoCombo.color = _damageSurchargeData[safeLevel].colorJauge;
             _infoCombo.gameObject.SetActive(next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count-1);
         }
     }

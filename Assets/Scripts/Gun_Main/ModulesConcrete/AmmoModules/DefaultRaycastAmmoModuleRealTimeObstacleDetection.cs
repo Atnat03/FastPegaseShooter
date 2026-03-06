@@ -39,12 +39,12 @@ namespace GunDecorator.AmmoModules
         {
             Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             RaycastHit hit;
-
+            
             Vector3 targetPoint;
             
             NetworkObject damagableObject = null;
 
-            if (Physics.Raycast(ray, out hit, _maxDistance, ~LayerMask.GetMask("Owner")))
+            if (Physics.Raycast(ray, out hit, _maxDistance, ~LayerMask.GetMask("Owner", "Other")))
             {
                 targetPoint = hit.point;
                 if (hit.collider.TryGetComponent<NetworkObject>(out NetworkObject iDamagable))
