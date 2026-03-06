@@ -36,6 +36,11 @@ public class SecondaryGun : MonoBehaviour, IGun
 		_effect.ApplyEffect();
 	}
 
+	public void TryCancelShooting()
+	{
+		throw new NotImplementedException();
+	}
+
 	public void TryReload()
 	{
 		throw new NotImplementedException();
