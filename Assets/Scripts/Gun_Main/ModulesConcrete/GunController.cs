@@ -125,7 +125,13 @@ namespace GunDecorator
             if (_reloadModule.IsReloading) return;
             
             _reloadModule?.Reload();
-            
+
+            PlayReloadSoundObserverRpc();
+        }
+
+        [ObserversRpc]
+        private void PlayReloadSoundObserverRpc()
+        {
             AudioClip clip = SoundManager.GetAudioClip(_soundData, "Reload");
             SoundManager.PlaySound(clip, _source);
         }

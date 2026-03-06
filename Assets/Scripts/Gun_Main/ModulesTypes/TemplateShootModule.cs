@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FishNet.Object;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 
@@ -62,14 +63,20 @@ namespace GunDecorator
                     _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
                 
                 _ammoModule.SpawnBullet();
-                
-                AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
-                SoundManager.PlaySound(clip, _gunController._source);
+
+                PlayShootSoundObserverRpc();
                 
                 return;
             }
             
             Debug.Log("Bullet fired");
+        }
+
+        [ObserversRpc]
+        private void PlayShootSoundObserverRpc()
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
+            SoundManager.PlaySound(clip, _gunController._source);
         }
     }
 }
