@@ -9,6 +9,7 @@ namespace GunDecorator
         
         public bool IsFullAuto { get; }
         public float FireRate { get; }
+        public IAmmoModule AmmoModule { get; }
     }
     
     public interface IReloadModule
@@ -29,8 +30,22 @@ namespace GunDecorator
 
     public interface IAmmoModule
     {
-        public void SpawnBullet();
+        public void SpawnBullet(Vector3 direction);
         public void SetDamage(float multiplierDmg);
+        public void SetBulletData(BulletData data);
+        public void ResetBulletData();
+    }
+
+    public class BulletData
+    {
+        public bool IsExplosive { get; set; }
+        public float ExplosionRadius { get; set; }
+    }
+    
+    public interface IAmmoExplosif
+    {
+        public void Explosed(GameObject vfx, float raduis, int damage);
+        public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius);
     }
 
     public interface ISecondModule

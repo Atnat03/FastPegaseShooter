@@ -2,50 +2,34 @@ using FishNet.Object;
 using GunDecorator;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
+[RequireComponent(typeof(Rigidbody))]
+public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
-    [HideInInspector] public GameObject p_markPrefab;
     [HideInInspector] public bool p_isExplosive;
     [HideInInspector] public float p_explosionRadius;
     [SerializeField] private GameObject _explosionVFX;
     
     private bool _hasHit = false;
 
-    private void FixedUpdate()
-    {
-        DetectCollision();
-        Move();
-    }
-
     public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius)
     {
         p_damage = damage;
         p_speed = speed;
-        p_markPrefab = markPrefab;
         p_isExplosive = isExplosive;
         p_explosionRadius = explosionRadius;
     }
 
-    private void Move()
+    private void OnCollisionEnter(Collision collision)
     {
-        transform.Translate(transform.forward * (p_speed * Time.deltaTime), Space.World);
-    }
+        if (_hasHit) return;
+        _hasHit = true;
 
-    private void DetectCollision()
-    {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit,
-                p_speed * Time.fixedDeltaTime, ~LayerMask.NameToLayer("Owner"), QueryTriggerInteraction.Ignore))
-        {
-            if (p_isExplosive)
-                Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
-            else
-                Destroy(Instantiate(p_markPrefab, hit.point + hit.normal * 0.1f, 
-                    Quaternion.LookRotation(hit.normal)), 3f);
-            
-            Destroy(gameObject);
-        }
+        if (p_isExplosive)
+            Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
+
+        Destroy(gameObject);
     }
 
     public void Explosed(GameObject vfx, float radius, int damage)

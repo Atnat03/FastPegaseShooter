@@ -10,7 +10,8 @@ namespace GunDecorator
     {
         public bool IsFullAuto => _isFullAuto;
         public float FireRate => _fireRate;
-        
+        public IAmmoModule AmmoModule => _ammoModule;
+
         [SerializeField] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
         
@@ -19,6 +20,8 @@ namespace GunDecorator
 
         [SerializeField]private bool _isFullAuto;
         [SerializeField]private float _fireRate;
+        
+        private BulletData _currentBulletConfig;
         
         private void Start()
         {
@@ -54,7 +57,7 @@ namespace GunDecorator
 
             _additionalEffectModule[0].DoAdditionnalEffect();
         }
-
+        
         public virtual void Shooting()
         {
             if (_ammoModule != null)
@@ -62,8 +65,10 @@ namespace GunDecorator
                 if(_gunController.IsOverload)
                     _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
                 
-                _ammoModule.SpawnBullet();
-
+                _ammoModule.SpawnBullet(Vector3.zero);
+                
+                _ammoModule.ResetBulletData();
+                
                 PlayShootSoundObserverRpc();
                 
                 return;
