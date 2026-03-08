@@ -10,15 +10,17 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
     [HideInInspector] public bool p_isExplosive;
     [HideInInspector] public float p_explosionRadius;
     [SerializeField] private GameObject _explosionVFX;
+    private GunController _gunController;
     
     private bool _hasHit = false;
 
-    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius)
+    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun)
     {
         p_damage = damage;
         p_speed = speed;
         p_isExplosive = isExplosive;
         p_explosionRadius = explosionRadius;
+        _gunController = gun;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -28,6 +30,14 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
 
         if (p_isExplosive)
             Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
+        else
+        {
+            if (collision.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                damagable.TakeDamage((int)p_damage);
+                _gunController.TriggerHitMark();
+            }
+        }
 
         Destroy(gameObject);
     }
@@ -41,7 +51,10 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
         foreach (Collider c in colliders)
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
                 damagable.TakeDamage(damage);
+                _gunController.TriggerHitMark();
+            }
         }
     }
 }

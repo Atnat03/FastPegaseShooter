@@ -11,8 +11,8 @@ namespace GunDecorator.AmmoModules
         [SerializeField] private Transform _spawnPoint;
         
         [Header("parametres")]
-        [SerializeField] private float _maxDistance;
-        [SerializeField] private float _damages;
+        [SerializeField] private float _maxDistance = 2000;
+        [SerializeField] private float _damages = 5;
         [SerializeField] private float _BulletSpeed = 50;
 
         [Header("Debug")]
@@ -67,7 +67,10 @@ namespace GunDecorator.AmmoModules
         private void ApplyDamageServerRpc(NetworkObject target)
         {
             if (target.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
                 damagable.TakeDamage((int)_damages);
+                _gunController.TriggerHitMark();
+            }
         }
 
         [ServerRpc]
@@ -83,7 +86,7 @@ namespace GunDecorator.AmmoModules
             Destroy(newBullet, travel + .5f);
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_damages, _BulletSpeed, p_markPrefab, isExplosive, radius);
+            bullet.SetUpVariables(_damages, _BulletSpeed, p_markPrefab, isExplosive, radius, _gunController);
         }
         
         public void SetDamage(float multiplierDmg) => _damages *= multiplierDmg;
