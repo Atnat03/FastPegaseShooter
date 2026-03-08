@@ -26,9 +26,9 @@ public class RecoilModule : GunModule, IRecoilModule
 
     #endregion
     
-    public void Recoil()
+    public void Recoil(float multiplier = 1)
     {
-        _targetRotation +=  new Vector3( -_recoilX, Random.Range(-_recoilY, _recoilY) , Random.Range(-_recoilZ, _recoilZ));
+        _targetRotation +=  new Vector3( -_recoilX, Random.Range(-_recoilY, _recoilY) , Random.Range(-_recoilZ, _recoilZ)) * multiplier;
     }
 
     void Update()

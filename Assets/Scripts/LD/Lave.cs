@@ -1,65 +1,67 @@
 using System;
-using FishNet.Connection;
+using System.Collections.Generic;
 using FishNet.Object;
 using UnityEngine;
 
 public class Lave : NetworkBehaviour
 {
-	#region Properties
+    [SerializeField] private float _damage = 10;
+    [SerializeField] private float _timeTickDamage = 1;
+    
+    private Dictionary<NetworkObject, float> _playerTimers = new Dictionary<NetworkObject, float>();
+    
+    private EventBus _bus;
 
-	#endregion
+    public override void OnStartServer()
+    {
+        _bus = EventBusInitialiser.instance.Bus;
+    }
 
+    private void Update()
+    {
+        if (!IsServerInitialized) return;
 
-	#region Variables
+        var keys = new List<NetworkObject>(_playerTimers.Keys);
+        foreach (var key in keys)
+        {
+            if (_playerTimers[key] > 0)
+                _playerTimers[key] -= Time.deltaTime;
+        }
+    }
 
-	[SerializeField] private float _damage = 10;
-	[SerializeField] private float _timeTickDamage = 1;
-	private float elapsedTime = 0;
-	
-	private EventBus _bus;
+    public void OnTriggerStay(Collider other)
+    {
+        if (!IsServerInitialized) return;
 
-	#endregion
+        if (other.TryGetComponent(out PlayerVisuelBridge player))
+        {
+            ApplyDamage(player.NetworkObject);
+        }
+    }
+    
+    public void OnTriggerExit(Collider other)
+    {
+        if (!IsServerInitialized) return;
+        
+        if (other.TryGetComponent(out PlayerVisuelBridge player))
+        {
+            _playerTimers.Remove(player.NetworkObject);
+        }
+    }
 
+    void ApplyDamage(NetworkObject playerCollision)
+    {
+        if (!_playerTimers.ContainsKey(playerCollision))
+            _playerTimers[playerCollision] = 0;
 
-	#region Fonctions
+        if (_playerTimers[playerCollision] > 0) return;
 
-	public override void OnStartServer()
-	{
-		_bus = EventBusInitialiser.instance.Bus;
-	}
+        _playerTimers[playerCollision] = _timeTickDamage;
 
-	private void Update()
-	{
-		if (!IsServerInitialized) return;
-
-		if (elapsedTime > 0)
-			elapsedTime -= Time.deltaTime;
-	}
-
-	public void OnTriggerStay(Collider other)
-	{
-		if (!IsServerInitialized) return;		
-		
-		if (other.TryGetComponent(out PlayerVisuelBridge player))
-		{
-			ApplyDamage(player.NetworkObject);
-		}
-	}
-
-	void ApplyDamage(NetworkObject playerCollision)
-	{ 
-		if (elapsedTime > 0) return;
-		
-		elapsedTime =  _timeTickDamage;
-		
-		Debug.Log("Apply player dmg");
-
-		_bus.InvokeEvent(new PlayerTakeDamageEvent
-		{
-			playerN = playerCollision,
-			value = _damage
-		});
-	}
-
-	#endregion
+        _bus.InvokeEvent(new PlayerTakeDamageEvent
+        {
+            playerN = playerCollision,
+            value = _damage
+        });
+    }
 }

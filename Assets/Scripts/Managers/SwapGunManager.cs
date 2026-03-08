@@ -62,7 +62,6 @@ namespace Managers
             _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
             _bus.Subscribe((EndOVerload data) =>
             {
-                _currentSurchargeLevel.Value = 0;
                 _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo;
             });
         }
@@ -123,19 +122,19 @@ namespace Managers
                 if (_isCombo)
                 {
                     _currentSurchargeLevel.Value++;
-                    
-                    if(_currentSurchargeLevel.Value >= _damageSurchargeData.Count)
+
+                    if (_currentSurchargeLevel.Value >= _damageSurchargeData.Count)
                     {
                         _currentSurchargeLevel.Value = 0;
                     }
                 }
                 else
                 {
-                    _currentSurchargeLevel.Value = 0;
+                    _elapsedTimeForCombo.Value = 0;
                 }
-
+                    
                 _elapsedTimeForCombo.Value = 0;
-                
+
                 NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
                 NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo);
                 ResetTimer();
@@ -193,7 +192,6 @@ namespace Managers
         
         private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
         {
-            int safeLevel = Mathf.Clamp(_currentSurchargeLevel.Value, 0, _damageSurchargeData.Count - 1);
             _infoCombo.color = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
             _infoCombo.gameObject.SetActive(next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count-1);
         }

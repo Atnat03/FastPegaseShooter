@@ -49,6 +49,11 @@ namespace Controller
             CurrentGun.TryFire();
         }
 
+        public void TryCancelShooting()
+        {
+            CurrentGun.TryCancelShooting();
+        }
+
         public void TryReload()
         {
             CurrentGun.TryReload();
@@ -81,6 +86,7 @@ namespace Controller
         private void SwapingGun(SwapingGunEvent data)
         {
             _wantToSwitch.Value = false;
+            CurrentMainSurchargeGun.StopReload();
             StartCoroutine(WaitBeforeSwapCoroutine(data));
         }
 

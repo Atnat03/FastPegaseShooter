@@ -23,6 +23,8 @@ namespace GunDecorator
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _ammoText;
         [SerializeField] private Image _imageReload;
+        
+        public Coroutine p_reloadCoroutine = null;
 
         public override void Initialize(GunController gun)
         {
@@ -35,9 +37,24 @@ namespace GunDecorator
             _ammoText.text = CurrentAmmo +  "/" + _magazineSize;
         }
 
-        public void Reload() => StartCoroutine(ReloadCoroutine());
+        public void StopReload()
+        {
+            if (p_reloadCoroutine != null)
+            {
+                StopCoroutine(p_reloadCoroutine);
+                p_reloadCoroutine = null;
+                _imageReload.gameObject.SetActive(false);
+                _isReloading = false;
+            }
+        }
 
-        public IEnumerator ReloadCoroutine()
+        public void Reload()
+        {
+            if(p_reloadCoroutine == null)
+                StartCoroutine(ReloadCoroutine());
+        }
+
+        IEnumerator ReloadCoroutine()
         {
             _imageReload.gameObject.SetActive(true);
             _imageReload.fillAmount = 1;

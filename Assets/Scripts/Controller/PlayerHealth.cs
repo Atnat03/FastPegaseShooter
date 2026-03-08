@@ -29,7 +29,8 @@ public class PlayerHealth : NetworkBehaviour
 	[SerializeField] private float _timeToRespawn = 5;
 	private Vector3 _respawnPosition;
 	private Quaternion _respawnRotation;
-
+	private bool _initialized = false;
+	
 	[Header("UI")]
 	[SerializeField] private Image _healthBar;
 	[SerializeField] private Image _deathImage;
@@ -45,9 +46,14 @@ public class PlayerHealth : NetworkBehaviour
 
 	#region Fonctions
 	
+	
 	public override void OnStartServer()
 	{
-		_currentHealth.Value = _healthBase;
+		if (!_initialized)
+		{
+			_currentHealth.Value = _healthBase;
+			_initialized = true;
+		}
 		
 		_bus = EventBusInitialiser.instance.Bus;
 		_bus.Subscribe((PlayerTakeDamageEvent data) => TakeDamage(data));
@@ -62,8 +68,11 @@ public class PlayerHealth : NetworkBehaviour
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
 		
-		_respawnPosition = Vector3.zero;
-		_respawnRotation = Quaternion.identity;
+		if (IsOwner)
+		{
+			_respawnPosition = transform.position;
+			_respawnRotation = transform.rotation;
+		}
 		
 		_audioSource = GetComponent<AudioSource>();
 		
