@@ -1,3 +1,4 @@
+using FishNet;
 using UnityEngine;
 
 public struct EnemyBullet
@@ -19,8 +20,8 @@ public struct EnemyBullet
 
     public bool MoveForward(float serverTime)
     {
-        float time = serverTime - _spawnTime;
-        Vector3 position = _startPos + _direction * _speed * time;
+        float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta - _spawnTime;
+        Vector3 position = _startPos + _direction * _speed * networkTime;
 
         if(DoCollide(_lastPosition, position)) return true;
         else
