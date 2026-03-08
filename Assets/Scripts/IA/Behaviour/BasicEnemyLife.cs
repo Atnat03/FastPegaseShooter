@@ -49,23 +49,23 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     
     void TriggerHitMark(bool IsCritique, float dmg)
     {
-        
         _cumuatifDmg += (int)dmg;
         if(_elapsedCumulativeDmgTime <= 0)
         {
             TextMeshProUGUI text;
             text = IsCritique ? _textDmgCritique : _textDmg;
             _hitMarker = Instantiate(text.gameObject, _hitMarkerParent).GetComponent<TextMeshProUGUI>();
-            _elapsedCumulativeDmgTime = 0.5f;
+            _elapsedCumulativeDmgTime = 0.05f;
             _hitMarker.SetText((_cumuatifDmg).ToString());
         }
         else
         {
-            if (_hitMarker == null)
+            if (_hitMarker != null)
                 _hitMarker.SetText((_cumuatifDmg).ToString());
         }
         
-        Destroy(_hitMarker.gameObject, 0.05f);
+        if(_hitMarker != null)
+            Destroy(_hitMarker.gameObject, 0.5f);
     }
 
     [ServerRpc(RequireOwnership = false)]
