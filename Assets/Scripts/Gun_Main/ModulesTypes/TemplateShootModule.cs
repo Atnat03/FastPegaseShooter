@@ -63,19 +63,12 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
-                if(_gunController.IsOverload)
-                    _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
-                
                 _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
                 
                 _ammoModule.ResetBulletData();
                 
                 PlayShootSoundObserverRpc();
-                
-                return;
             }
-            
-            Debug.Log("Bullet fired");
         }
 
         [ObserversRpc]
