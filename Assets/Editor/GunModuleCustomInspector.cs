@@ -97,6 +97,10 @@ public class GunModuleCustomInspector : Editor
             {
                 moduleColorProp.colorValue = Color.yellow;
             }
+            else if (module is IHitMarkerModule)
+            {
+                moduleColorProp.colorValue = Color.magenta;
+            }
         }
 
         private void DrawModuleWarnings(GunModule module)
