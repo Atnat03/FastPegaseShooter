@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GunDecorator.AmmoModules
 {
-    public class DefaultRaycastAmmoModuleRealTimeObstacleDetection : GunModule, IAmmoModule
+    public class DefaultRaycastAmmoModule : GunModule, IAmmoModule
     {
         [Header("references")]
         [SerializeField] private Camera _camera;
@@ -14,6 +14,7 @@ namespace GunDecorator.AmmoModules
         [SerializeField] private float _maxDistance = 2000;
         [SerializeField] private float _damages = 5;
         [SerializeField] private float _BulletSpeed = 50;
+        private float _dmgToApply = 0;
 
         [Header("Debug")]
         public GameObject p_markPrefab;
@@ -58,18 +59,20 @@ namespace GunDecorator.AmmoModules
             float radius = _bulletData?.ExplosionRadius ?? 0f;
             
             if (damagableObject != null && !isExplosive)
-                ApplyDamageServerRpc(damagableObject);
+            {
+                ApplyDamageServerRpc(damagableObject, _gunController.IsOverload);
+            }
 
             SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset);
         }
 
         [ServerRpc]
-        private void ApplyDamageServerRpc(NetworkObject target)
+        private void ApplyDamageServerRpc(NetworkObject target, bool isOverload)
         {
             if (target.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage((int)_damages);
-                _gunController.TriggerHitMark();
+                damagable.TakeDamage((int)_dmgToApply, isOverload);
+                _gunController.TriggerHitMark(_gunController.IsOverload);
             }
         }
 
@@ -86,10 +89,10 @@ namespace GunDecorator.AmmoModules
             Destroy(newBullet, travel + .5f);
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_damages, _BulletSpeed, p_markPrefab, isExplosive, radius, _gunController);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, p_markPrefab, isExplosive, radius, _gunController);
         }
         
-        public void SetDamage(float multiplierDmg) => _damages *= multiplierDmg;
+        public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;
         
         public void ResetBulletData()
         {

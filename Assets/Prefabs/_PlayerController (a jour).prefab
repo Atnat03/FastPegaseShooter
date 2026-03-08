@@ -3986,6 +3986,7 @@ GameObject:
   - component: {fileID: 4997057281965842912}
   - component: {fileID: 5639936714480259773}
   - component: {fileID: 7781035500729037681}
+  - component: {fileID: 6021751292684359228}
   m_Layer: 6
   m_Name: AK
   m_TagString: Untagged
@@ -4044,7 +4045,8 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 0}
   moduleName: TemplateShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule: []
+  _secondModule:
+  - {fileID: 6021751292684359228}
   _ammoType: {fileID: 5639936714480259773}
   _isFullAuto: 1
   _fireRate: 0.1
@@ -4236,6 +4238,24 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+--- !u!114 &6021751292684359228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7426788794118929898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  moduleName: ExplosifAmmoModule
+  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+  _radiusExplosion: 2
 --- !u!1 &7654427447990518306
 GameObject:
   m_ObjectHideFlags: 0

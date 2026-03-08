@@ -127,6 +127,10 @@ namespace GunDecorator
             _isOverload.Value = isOverload;
             SurchargeMultiplierDamage = dmgMultiplicator;
             SurchargeMultiplierRate = cadenceMultiplicator;
+            foreach (IShootModule s in _shootModule)
+            {
+                s?.AmmoModule.SetDamage(dmgMultiplicator);
+            }
         }
 
         public void TryReload()

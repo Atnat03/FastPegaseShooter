@@ -65,9 +65,6 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
-                if(_gunController.IsOverload)
-                    _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
-
                 for (int i = 0; i < _numberBulletSpread; i++)
                 {
                     Vector3 direction = 
@@ -83,10 +80,7 @@ namespace GunDecorator
                 
                 PlayShootSoundObserverRpc();
                 
-                return;
             }
-            
-            Debug.Log("Bullet fired");
         }
 
         [ObserversRpc]

@@ -41,6 +41,7 @@ namespace GunDecorator
     public class BulletData
     {
         public bool IsExplosive { get; set; }
+        public bool IsCritical { get; set; }
         public float ExplosionRadius { get; set; }
     }
     
