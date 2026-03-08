@@ -3,7 +3,7 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    public void TakeDamage(int damageAmount);
+    public void TakeDamage(int damageAmount, bool isCritical = false);
     
     public void Death();
 }

@@ -23,6 +23,7 @@ namespace GunDecorator
             {
                 IsExplosive = true,
                 ExplosionRadius = _radiusExplosion,
+                IsCritical = _gunController.IsOverload
             });
 
             Shooting();

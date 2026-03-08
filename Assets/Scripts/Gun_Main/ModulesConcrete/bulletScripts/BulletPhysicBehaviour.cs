@@ -34,8 +34,8 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
         {
             if (collision.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage((int)p_damage);
-                _gunController.TriggerHitMark();
+                damagable.TakeDamage((int)p_damage, _gunController.IsOverload);
+                _gunController.TriggerHitMark(_gunController.IsOverload);
             }
         }
 
@@ -52,8 +52,8 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage(damage);
-                _gunController.TriggerHitMark();
+                damagable.TakeDamage(damage, _gunController.IsOverload);
+                _gunController.TriggerHitMark(_gunController.IsOverload);
             }
         }
     }

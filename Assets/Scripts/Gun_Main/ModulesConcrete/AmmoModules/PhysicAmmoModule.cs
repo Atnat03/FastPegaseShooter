@@ -12,9 +12,10 @@ namespace GunDecorator.AmmoModules
         [SerializeField] private Camera _camera;
         
         [SerializeField] private float _bulletMass = 1;
-        [SerializeField] private float _damages;
+        [SerializeField] private float _damages = 2;
         [SerializeField] private float _bulletThrowForce = 100;
         [SerializeField] private float _BulletSpeed = 50;
+        private float _dmgToApply = 0;
         
         private BulletData _bulletData;
         
@@ -47,15 +48,12 @@ namespace GunDecorator.AmmoModules
             }
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_damages, _BulletSpeed, null, isExplosive, radius, _gunController);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController);
 
             Destroy(newBullet, 5f);
         }
 
-        public void SetDamage(float multiplierDmg)
-        {
-            _damages *= multiplierDmg;
-        }
+        public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;
 
         public void SetBulletData(BulletData data)
         {
