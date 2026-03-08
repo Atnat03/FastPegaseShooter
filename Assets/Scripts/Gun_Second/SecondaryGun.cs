@@ -46,6 +46,11 @@ public class SecondaryGun : MonoBehaviour, IGun
 		throw new NotImplementedException();
 	}
 
+	public void TriggerHitMark(bool isCritique = false)
+	{
+		
+	}
+
 	public int GetCurrentAmmo()
 	{
 		return 0;

@@ -47,7 +47,7 @@ namespace GunDecorator.AmmoModules
             }
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_damages, _BulletSpeed, null, isExplosive, radius);
+            bullet.SetUpVariables(_damages, _BulletSpeed, null, isExplosive, radius, _gunController);
 
             Destroy(newBullet, 5f);
         }
