@@ -29,7 +29,7 @@ namespace GunDecorator.AmmoModules
             _camTransform = _camera.transform;
         }
 
-        public void SpawnBullet(Vector3 direction)
+        public void SpawnBullet(Vector3 direction, Vector3 offset)
         {
             Ray cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
@@ -60,7 +60,7 @@ namespace GunDecorator.AmmoModules
             if (damagableObject != null && !isExplosive)
                 ApplyDamageServerRpc(damagableObject);
 
-            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius);
+            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset);
         }
 
         [ServerRpc]
@@ -71,15 +71,15 @@ namespace GunDecorator.AmmoModules
         }
 
         [ServerRpc]
-        private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, float radius)
+        private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, float radius, Vector3 offset)
         {
-            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius);
+            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset);
         }
 
         [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, float radius)
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, float radius, Vector3 offset)
         {
-            GameObject newBullet = Instantiate(BulletPrefab, _spawnPoint.position, Quaternion.LookRotation(direction));
+            GameObject newBullet = Instantiate(BulletPrefab, _spawnPoint.position + offset, Quaternion.LookRotation(direction));
             Destroy(newBullet, travel + .5f);
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();

@@ -45,7 +45,7 @@ namespace GunDecorator
                 _ammoModule = (IAmmoModule)_ammoType;
         }
 
-        public virtual void TryShoot()
+        public void TryShoot()
         {
             if (_additionalEffectModule.Count == 0)
             {
@@ -61,7 +61,7 @@ namespace GunDecorator
             _additionalEffectModule[0].DoAdditionnalEffect();
         }
 
-        public virtual void Shooting()
+        public void Shooting()
         {
             if (_ammoModule != null)
             {
@@ -76,7 +76,7 @@ namespace GunDecorator
                                 Random.Range(-_spreadAngle, _spreadAngle),
                                 0);
                     
-                    _ammoModule.SpawnBullet(direction);
+                    _ammoModule.SpawnBullet(direction, Vector3.zero);
                 }
                 
                 _ammoModule.ResetBulletData();
@@ -95,5 +95,8 @@ namespace GunDecorator
             AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
             SoundManager.PlaySound(clip, _gunController._source);
         }
+        
+        public void CancelShooting()
+        { }
     }
 }

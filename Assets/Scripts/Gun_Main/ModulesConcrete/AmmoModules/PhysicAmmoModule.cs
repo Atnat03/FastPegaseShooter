@@ -18,27 +18,27 @@ namespace GunDecorator.AmmoModules
         
         private BulletData _bulletData;
         
-        public void SpawnBullet(Vector3 direction)
+        public void SpawnBullet(Vector3 direction, Vector3 offset)
         {
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
 
-            SpawnVisualBulletServerRpc(direction, isExplosive, radius);
+            SpawnVisualBulletServerRpc(direction, isExplosive, radius, offset);
         }
         
         [ServerRpc]
-        private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius)
+        private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset)
         {
-            SpawnVisualBulletObserverRpc(direction, isExplosive, radius);
+            SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset);
         }
 
         [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius)
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset)
         {
             Vector3 baseDirection = _spawnPoint.forward;
             Vector3 spreadDirection = direction == Vector3.zero ? baseDirection : Quaternion.Euler(direction.y, direction.x, 0) * baseDirection;
 
-            GameObject newBullet = Instantiate(AmmoPrefab, _spawnPoint.position, Quaternion.LookRotation(spreadDirection));
+            GameObject newBullet = Instantiate(AmmoPrefab, _spawnPoint.position + offset, Quaternion.LookRotation(spreadDirection));
 
             if (newBullet.TryGetComponent(out Rigidbody rb))
             {
