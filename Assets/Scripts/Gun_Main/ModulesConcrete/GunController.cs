@@ -32,7 +32,7 @@ namespace GunDecorator
         public bool IsOverload => _isOverload.Value;
         public float SurchargeMultiplierDamage { get; set; }
         public float SurchargeMultiplierRate { get; set; }
-
+        
         public MeshRenderer ModelGun => _model;
 
         private IShootModule[] _shootModule;
@@ -107,6 +107,10 @@ namespace GunDecorator
         public void TryCancelShooting()
         {
             ShootingInputPressed = false;
+            foreach (IShootModule s in _shootModule)
+            {
+                s?.CancelShooting();
+            }
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;

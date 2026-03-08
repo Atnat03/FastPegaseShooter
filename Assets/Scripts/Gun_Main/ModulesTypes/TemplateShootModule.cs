@@ -8,6 +8,7 @@ namespace GunDecorator
 {
     public class TemplateShootModule : GunModule, IShootModule
     {
+
         public bool IsFullAuto => _isFullAuto;
         public float FireRate => _fireRate;
         public IAmmoModule AmmoModule => _ammoModule;
@@ -42,7 +43,7 @@ namespace GunDecorator
                 _ammoModule = (IAmmoModule)_ammoType;
         }
 
-        public virtual void TryShoot()
+        public void TryShoot()
         {
             if (_additionalEffectModule.Count == 0)
             {
@@ -58,14 +59,14 @@ namespace GunDecorator
             _additionalEffectModule[0].DoAdditionnalEffect();
         }
         
-        public virtual void Shooting()
+        public void Shooting()
         {
             if (_ammoModule != null)
             {
                 if(_gunController.IsOverload)
                     _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
                 
-                _ammoModule.SpawnBullet(Vector3.zero);
+                _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
                 
                 _ammoModule.ResetBulletData();
                 
@@ -83,5 +84,8 @@ namespace GunDecorator
             AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
             SoundManager.PlaySound(clip, _gunController._source);
         }
+
+        public void CancelShooting()
+        { }
     }
 }

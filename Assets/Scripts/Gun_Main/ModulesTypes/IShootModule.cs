@@ -6,6 +6,8 @@ namespace GunDecorator
     {
         public void TryShoot();
         public void Shooting();
+
+        public void CancelShooting();
         
         public bool IsFullAuto { get; }
         public float FireRate { get; }
@@ -30,7 +32,7 @@ namespace GunDecorator
 
     public interface IAmmoModule
     {
-        public void SpawnBullet(Vector3 direction);
+        public void SpawnBullet(Vector3 direction, Vector3 offset);
         public void SetDamage(float multiplierDmg);
         public void SetBulletData(BulletData data);
         public void ResetBulletData();
