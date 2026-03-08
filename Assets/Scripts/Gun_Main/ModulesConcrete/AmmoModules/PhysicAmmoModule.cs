@@ -13,7 +13,7 @@ namespace GunDecorator.AmmoModules
         
         [SerializeField] private float _bulletMass = 1;
         [SerializeField] private float _damages;
-        [SerializeField] private float _bulletThrowForce = 2000;
+        [SerializeField] private float _bulletThrowForce = 100;
         [SerializeField] private float _BulletSpeed = 50;
         
         private BulletData _bulletData;
