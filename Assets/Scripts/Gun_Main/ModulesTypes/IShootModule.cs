@@ -27,7 +27,7 @@ namespace GunDecorator
 
     public interface IRecoilModule
     {
-        public void Recoil();
+        public void Recoil(float multiplier = 1);
     }
 
     public interface IAmmoModule

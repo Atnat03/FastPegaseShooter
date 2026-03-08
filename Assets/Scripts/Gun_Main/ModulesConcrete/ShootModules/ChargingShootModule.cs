@@ -28,6 +28,7 @@ namespace GunDecorator
         [SerializeField] private float _numberBulletInShootCharge = 5;
         [SerializeField] private float _timeToCharge = 3;
         [SerializeField] private float _startToChargingTime = 1;
+        [SerializeField] private float _recoilChargedMultiplier = 1.25f;
         private bool _isCharged = false;
         private bool _charging = false;
         private bool _startCharging = false;
@@ -116,6 +117,8 @@ namespace GunDecorator
                     float maxBulletShoot = _numberBulletInShootCharge;
                     int numberBulletShoot = (int)Mathf.Lerp(0, maxBulletShoot, _charginTimer/_timeToCharge);
                     float range = numberBulletShoot * 0.02f;
+                    
+                    _gunController.RecoilModule.Recoil(_recoilChargedMultiplier);
                     
                     for (int i = 0; i < numberBulletShoot; i++)
                     {

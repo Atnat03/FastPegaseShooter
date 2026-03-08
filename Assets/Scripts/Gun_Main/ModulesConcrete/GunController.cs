@@ -33,6 +33,8 @@ namespace GunDecorator
         public float SurchargeMultiplierDamage { get; set; }
         public float SurchargeMultiplierRate { get; set; }
         
+        public IRecoilModule RecoilModule => _recoilModule;
+        
         public MeshRenderer ModelGun => _model;
 
         private IShootModule[] _shootModule;
