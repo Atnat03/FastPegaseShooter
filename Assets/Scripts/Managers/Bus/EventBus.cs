@@ -36,7 +36,7 @@ public class EventBus
     {
         if(!_handlers.TryGetValue(typeof(T), out List<Delegate> subscribers)) return;
 
-        foreach (Delegate subscriber in subscribers)
-            ((Action<T>)subscriber).Invoke(invokedEvent);
+        for(int _i = subscribers.Count - 1; _i >= 0; _i--)
+            ((Action<T>)subscribers[_i]).Invoke(invokedEvent);
     }
 }

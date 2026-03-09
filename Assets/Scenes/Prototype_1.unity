@@ -1015,6 +1015,109 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324174890}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &355935910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 355935913}
+  - component: {fileID: 355935912}
+  - component: {fileID: 355935911}
+  m_Layer: 0
+  m_Name: Enemy Bullet Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &355935911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355935910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+  <IsNested>k__BackingField: 0
+  WasActiveDuringEdit: 1
+  WasActiveDuringEdit_Set1: 1
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  <PredictedOwner>k__BackingField: {fileID: 0}
+  NetworkBehaviours: []
+  InitializedParentNetworkBehaviour: {fileID: 0}
+  InitializedNestedNetworkObjects: []
+  RuntimeParentNetworkBehaviour: {fileID: 0}
+  RuntimeChildNetworkBehaviours: []
+  _isNetworked: 1
+  _isSpawnable: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _preventDespawnOnDisconnect: 0
+  _defaultDespawnType: 0
+  _initializedTimestamp: 0
+  NetworkObserver: {fileID: 0}
+  _enablePrediction: 0
+  _predictionType: 0
+  _localReconcileCorrectionType: 2
+  _graphicalObject: {fileID: 0}
+  _detachGraphicalObject: 0
+  _enableStateForwarding: 1
+  _networkTransform: {fileID: 0}
+  _ownerInterpolation: 1
+  _ownerSmoothedProperties: 255
+  _adaptiveInterpolation: 3
+  _spectatorSmoothedProperties: 255
+  _spectatorInterpolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  <PrefabId>k__BackingField: 65535
+  <SpawnableCollectionId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 0
+  SceneId: 1071381788
+  SerializedTransformProperties:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
+    Scale: {x: 0, y: 0, z: 0}
+    IsValid: 0
+--- !u!114 &355935912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355935910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd6a2859f6c82d43b3d191e2029b3c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBulletManager
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 355935911}
+  _networkObjectCache: {fileID: 0}
+  _bulletPrefab: {fileID: 4591400360090582569, guid: 563cd6461b623044c8d7fd34d0aecdac, type: 3}
+--- !u!4 &355935913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355935910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.32754, y: -0.03815, z: -1.24941}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &475009460
 GameObject:
   m_ObjectHideFlags: 0
@@ -5524,18 +5627,12 @@ MonoBehaviour:
   spawnDelayFirstWave: 1
   spawnMobsFirstWave:
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 77302ea4f07ba9f48b72c5b36eefd472, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   spawnDelay: 3
-  spawnMobs:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 77302ea4f07ba9f48b72c5b36eefd472, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 77302ea4f07ba9f48b72c5b36eefd472, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 77302ea4f07ba9f48b72c5b36eefd472, type: 2}
+  spawnMobs: []
   _spawnPoints:
   - {fileID: 499524539}
   - {fileID: 1812943799}
@@ -6121,19 +6218,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _damageSurchargeData.Array.data[0].damageMultiplier
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _damageSurchargeData.Array.data[0].overloadDuration
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _damageSurchargeData.Array.data[1].damageMultiplier
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _damageSurchargeData.Array.data[1].overloadDuration
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _damageSurchargeData.Array.data[2].damageMultiplier
@@ -6141,7 +6238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _damageSurchargeData.Array.data[2].overloadDuration
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _damageSurchargeData.Array.data[0].cadenceMultiplier
@@ -6184,3 +6281,4 @@ SceneRoots:
   - {fileID: 6634984143752002792}
   - {fileID: 2305770598962335177}
   - {fileID: 2019655459}
+  - {fileID: 355935913}

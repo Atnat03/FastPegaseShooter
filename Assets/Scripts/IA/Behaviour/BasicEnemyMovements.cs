@@ -31,9 +31,9 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     {
         _transform = transform;
         _bus = EventBusInitialiser.instance.Bus;
-        _unsubscribePPU = _bus.Subscribe((PlayerPositionUpdate PPU) =>
+        _unsubscribePPU = _bus.Subscribe((PlayerPositionUpdateEvent PPUE) =>
         {
-            OnPlayerMoving(PPU.p_playerId, PPU.p_playerPosition);
+            OnPlayerMoving(PPUE.p_playerId, PPUE.p_playerPosition);
         });
     }
 
@@ -66,7 +66,6 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             _lastPlayerPosition = playerPosition;
             
             //Updating Pathfinding
-            CustomLogger.ImportantLog($"this : {this == null}, gridId { _gridReaderId == null}, transform {_transform == null}");
             _bus.InvokeEvent(new PathRequestEvent(this, _gridReaderId, _transform.position, _lastPlayerPosition));
         }
     }
@@ -90,6 +89,18 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
             _t = 0;
             _path.RemoveAt(_path.Count - 1);
             if(_path.Count > 0) _lastPos = _path[^1].position;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (IsServerInitialized)
+        {
+            Gizmos.color = Color.green;
+            foreach (PathfindingNode node in _path)
+            {
+                Gizmos.DrawWireSphere(node.position, 1f);
+            }
         }
     }
 }

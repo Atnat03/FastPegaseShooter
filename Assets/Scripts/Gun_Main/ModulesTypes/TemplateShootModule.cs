@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FishNet.Object;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 
@@ -7,11 +8,21 @@ namespace GunDecorator
 {
     public class TemplateShootModule : GunModule, IShootModule
     {
+
+        public bool IsFullAuto => _isFullAuto;
+        public float FireRate => _fireRate;
+        public IAmmoModule AmmoModule => _ammoModule;
+
         [SerializeField] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
         
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
+
+        [SerializeField]private bool _isFullAuto;
+        [SerializeField]private float _fireRate;
+        
+        private BulletData _currentBulletConfig;
         
         private void Start()
         {
@@ -32,7 +43,7 @@ namespace GunDecorator
                 _ammoModule = (IAmmoModule)_ammoType;
         }
 
-        public virtual void TryShoot()
+        public void TryShoot()
         {
             if (_additionalEffectModule.Count == 0)
             {
@@ -47,23 +58,27 @@ namespace GunDecorator
 
             _additionalEffectModule[0].DoAdditionnalEffect();
         }
-
-        public virtual void Shooting()
+        
+        public void Shooting()
         {
             if (_ammoModule != null)
             {
-                if(_gunController.IsOverload)
-                    _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
+                _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
                 
-                _ammoModule.SpawnBullet();
+                _ammoModule.ResetBulletData();
                 
-                AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
-                SoundManager.PlaySound(clip, _gunController._source);
-                
-                return;
+                PlayShootSoundObserverRpc();
             }
-            
-            Debug.Log("Bullet fired");
         }
+
+        [ObserversRpc]
+        private void PlayShootSoundObserverRpc()
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
+            SoundManager.PlaySound(clip, _gunController._source);
+        }
+
+        public void CancelShooting()
+        { }
     }
 }

@@ -7,6 +7,7 @@ public class PlayerPositionCaster : NetworkBehaviour
 {
     [SerializeField] private float _movementCastingThreshold = 0.5f;
     private Transform _playerTransform;
+    private NetworkObject _networkObject;
     private Vector3 _playerPosition;
     
     
@@ -16,6 +17,7 @@ public class PlayerPositionCaster : NetworkBehaviour
         base.OnStartClient();
         _playerTransform = transform;
         _playerPosition = _playerTransform.position;
+        _networkObject = GetComponentInParent<NetworkObject>();
         
         _playerPosition = _playerTransform.position;
         PlayerPositionCastingServerRPC(_playerPosition);
@@ -40,7 +42,7 @@ public class PlayerPositionCaster : NetworkBehaviour
     [ObserversRpc]
     void PlayerPositionCastingObserverRPC(Vector3 position, int playerId)
     {
-        EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerPositionUpdate(playerId, position));
+        EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId));
     }
 
     private void OnDrawGizmos()
@@ -53,14 +55,16 @@ public class PlayerPositionCaster : NetworkBehaviour
     }
 }
 
-public struct PlayerPositionUpdate
+public struct PlayerPositionUpdateEvent
 {
     public int p_playerId;
     public Vector3 p_playerPosition;
+    public int p_networkObjectId;
 
-    public PlayerPositionUpdate(int playerId, Vector3 playerPos)
+    public PlayerPositionUpdateEvent(int playerId, Vector3 playerPos, int networkObjectId)
     {
         p_playerId = playerId;
         p_playerPosition = playerPos;
+        p_networkObjectId = networkObjectId;
     }
 }
