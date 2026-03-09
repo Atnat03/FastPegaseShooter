@@ -8,19 +8,21 @@ public class EnemyBulletVisuals : MonoBehaviour
     private Vector3 _direction;
     private float _speed;
     private float _spawnTime;
+    private float _damage = 10;
 
     private int _bulletId;
 
     private float _maxEnabledTime = 5f;
     private Action _unsubscribeAction;
 
-    public void SetupVariables(Vector3 startPos, Vector3 direction, float speed, float spawnTime, int bulletId)
+    public void SetupVariables(Vector3 startPos, Vector3 direction, float speed, float spawnTime, int bulletId, float damage)
     {
         _startPos = startPos;
         _direction = direction;
         _speed = speed;
         _spawnTime = spawnTime;
-        
+        _damage = damage;
+
         _bulletId = bulletId;
         
         transform.position = _startPos;
@@ -58,5 +60,18 @@ public class EnemyBulletVisuals : MonoBehaviour
         {
             KillBullet();
         }
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.TryGetComponent(out PlayerHealth player))
+        {
+            EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerTakeDamageEvent
+            {
+                playerN = player.NetworkObject,
+                value = _damage
+            });
+        }
+        KillBullet();
     }
 }
