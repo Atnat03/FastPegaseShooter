@@ -14,7 +14,7 @@ namespace GunDecorator.AmmoModules
         [SerializeField] private float _maxDistance = 2000;
         [SerializeField] private float _damages = 5;
         [SerializeField] private float _BulletSpeed = 50;
-        private float _dmgToApply = 0;
+        private float _dmgToApply = 1;
 
         [Header("Debug")]
         public GameObject p_markPrefab;
@@ -28,6 +28,7 @@ namespace GunDecorator.AmmoModules
         void Start()
         {
             _camTransform = _camera.transform;
+            _dmgToApply = _damages;
         }
 
         public void SpawnBullet(Vector3 direction, Vector3 offset)
@@ -87,7 +88,7 @@ namespace GunDecorator.AmmoModules
         {
             GameObject newBullet = Instantiate(BulletPrefab, _spawnPoint.position + offset, Quaternion.LookRotation(direction));
             Destroy(newBullet, travel + .5f);
-
+            
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, p_markPrefab, isExplosive, radius, _gunController);
         }
