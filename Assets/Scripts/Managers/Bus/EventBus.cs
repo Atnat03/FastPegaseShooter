@@ -11,7 +11,6 @@ public interface INetworkEvent
 public class EventBus
 {
     private readonly Dictionary<Type, List<Delegate>>  _handlers = new Dictionary<Type, List<Delegate>>();
-    private int _i;
 
     public Action Subscribe<T>(Action<T> handler) where T : struct
     {
@@ -37,7 +36,7 @@ public class EventBus
     {
         if(!_handlers.TryGetValue(typeof(T), out List<Delegate> subscribers)) return;
 
-        for(_i = subscribers.Count - 1; _i >= 0; _i--)
+        for(int _i = subscribers.Count - 1; _i >= 0; _i--)
             ((Action<T>)subscribers[_i]).Invoke(invokedEvent);
     }
 }
