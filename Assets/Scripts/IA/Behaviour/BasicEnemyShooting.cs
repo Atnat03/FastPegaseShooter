@@ -13,16 +13,18 @@ public class BasicEnemyShooting : NetworkBehaviour
 
     private int _targetedPlayerId;
     Vector3 _lastPlayerPosition;
+    private int _playerObjectId;
     private float _waitedTimeSinceShoot;
     public override void OnStartServer()
     {
         base.OnStartServer();
         
-        EventBusInitialiser.instance.Bus.Subscribe((PlayerPositionUpdate PPU) =>
+        EventBusInitialiser.instance.Bus.Subscribe((PlayerPositionUpdateEvent PPUE) =>
         {
-            if (IsTargetPlayer(PPU.p_playerId) || IsPlayerCloser(PPU.p_playerPosition))
+            if (IsTargetPlayer(PPUE.p_playerId) || IsPlayerCloser(PPUE.p_playerPosition))
             {
-                _lastPlayerPosition = PPU.p_playerPosition;
+                _lastPlayerPosition = PPUE.p_playerPosition;
+                _playerObjectId = PPUE.p_networkObjectId;
             }
         });
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
@@ -44,7 +46,7 @@ public class BasicEnemyShooting : NetworkBehaviour
         {
             _waitedTimeSinceShoot = 0;
 
-            Vector3 delta = _lastPlayerPosition - transform.position;
+            Vector3 delta = PlayerPosition() - transform.position;
             float length = delta.magnitude;
             Vector3 dir = delta / length;
             
@@ -62,7 +64,7 @@ public class BasicEnemyShooting : NetworkBehaviour
         if ((transform.position - _lastPlayerPosition).sqrMagnitude > _maxPlayerDistance * _maxPlayerDistance)
             return false;
         
-        Vector3 delta = _lastPlayerPosition - transform.position;
+        Vector3 delta = PlayerPosition() - transform.position;
         float length = delta.magnitude;
         Vector3 dir = delta / length;
 
@@ -78,11 +80,7 @@ public class BasicEnemyShooting : NetworkBehaviour
         return false;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(_lastPlayerPosition, 0.3f);
-    }
+    Vector3 PlayerPosition() => InstanceFinder.ClientManager.Objects.Spawned[_playerObjectId].transform.position;
 }
 
 public struct EnemyShootingEvent

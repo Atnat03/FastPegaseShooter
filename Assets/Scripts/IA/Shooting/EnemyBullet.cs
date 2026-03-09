@@ -9,13 +9,16 @@ public struct EnemyBullet
     private float _spawnTime;
     private Vector3 _lastPosition;
 
-    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime)
+    public int p_bulletId;
+
+    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, int bulletId)
     {
         _startPos = startPos;
         _lastPosition = startPos;
         _direction = direction;
         _speed = speed;
         _spawnTime = serverSpawnTime;
+        p_bulletId = bulletId;
     }
 
     public bool MoveForward(float serverTime)
