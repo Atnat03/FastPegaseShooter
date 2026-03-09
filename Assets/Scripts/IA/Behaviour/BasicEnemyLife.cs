@@ -21,13 +21,18 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     [SerializeField] private TextMeshProUGUI _textDmgCritique;
     [SerializeField] private int _cumuatifDmg = 0;
     [SerializeField] private float _elapsedCumulativeDmgTime = 0;
+    [SerializeField] private float _energyGainWhenTouch = 1;
     private TextMeshProUGUI _hitMarker;
+    
+    private EventBus _bus;
     
     public override void OnStartServer()
     {
         base.OnStartServer();
         p_life.Value = _life;
         p_life.OnChange += OnLifeChanged;
+
+        _bus = EventBusInitialiser.instance.Bus;
     }
     
     private void OnLifeChanged(int prev, int next, bool asServer)
@@ -41,14 +46,23 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
         }
     }
     
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int damageAmount, bool isCritical = false)
     {
+        Debug.Log("TakeDamage : "  + damageAmount);
         TakeDamageServerRpc(damageAmount);
-        TriggerHitMark(false, damageAmount);
+        TriggerHitMark(isCritical, damageAmount);
     }
     
     void TriggerHitMark(bool IsCritique, float dmg)
     {
+        if (IsCritique)
+        {
+            _bus.InvokeEvent(new OnModifyEnergyEvent
+            {
+                value = _energyGainWhenTouch
+            });
+        }
+        
         _cumuatifDmg += (int)dmg;
         if(_elapsedCumulativeDmgTime <= 0)
         {

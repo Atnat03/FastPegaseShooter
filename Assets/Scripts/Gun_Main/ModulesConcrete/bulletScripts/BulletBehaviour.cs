@@ -1,5 +1,6 @@
 using FishNet.Object;
 using GunDecorator;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
@@ -61,8 +62,8 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage(damage);
-                _gunController.TriggerHitMark();
+                damagable.TakeDamage(damage, _gunController.IsOverload);
+                _gunController.TriggerHitMark(_gunController.IsOverload);
             }
         }
     }

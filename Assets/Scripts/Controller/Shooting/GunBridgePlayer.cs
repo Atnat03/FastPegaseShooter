@@ -127,7 +127,11 @@ namespace Controller
             
             _gunMaterial.SetFloat("_Dissolving", 0);
             
-            _gunSurcharge.SetOverloadStats(true, 2, 2, 2, ammoToApply);
+            _gunSurcharge.SetOverloadStats(true, 
+                data.dataSurcharge.overloadDuration, 
+                data.dataSurcharge.damageMultiplier, 
+                data.dataSurcharge.cadenceMultiplier,
+                ammoToApply);
         }
 
         private void EndTimerSwap(EndTimerSwapEvent data)
