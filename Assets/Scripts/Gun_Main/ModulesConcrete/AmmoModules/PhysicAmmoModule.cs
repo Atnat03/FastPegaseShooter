@@ -18,6 +18,11 @@ namespace GunDecorator.AmmoModules
         private float _dmgToApply = 0;
         
         private BulletData _bulletData;
+
+        void Start()
+        {
+            _dmgToApply = _damages;
+        }
         
         public void SpawnBullet(Vector3 direction, Vector3 offset)
         {
