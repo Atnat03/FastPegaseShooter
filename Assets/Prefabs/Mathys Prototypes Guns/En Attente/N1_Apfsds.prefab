@@ -17,8 +17,9 @@ GameObject:
   - component: {fileID: 3951620352559692258}
   - component: {fileID: 1398411418380392494}
   - component: {fileID: 5166209753257545983}
+  - component: {fileID: -6179145872599277339}
   m_Layer: 6
-  m_Name: ApfsdsN1
+  m_Name: N1_Apfsds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,11 +286,35 @@ MonoBehaviour:
   moduleName: FragShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
   _secondModule: []
-  _ammoType: {fileID: 3951620352559692258}
+  _ammoType: {fileID: -6179145872599277339}
   _isFullAuto: 1
   _fireRate: 0.1
   _numberBulletSpread: 4
-  _spreadAngle: 8
+  _spreadAngle: 10
+--- !u!114 &-6179145872599277339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2270566580818466485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModuleRealTimeObstacleDetection
+  _componentIndexCache: 4
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
+  moduleName: DefaultRaycastAmmoModuleRealTimeObstacleDetection
+  moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _camera: {fileID: 0}
+  BulletPrefab: {fileID: 9013429817892366803, guid: c7bdca4a53385554f8a8047df87cc680, type: 3}
+  _spawnPoint: {fileID: 2066783639254934238}
+  _maxDistance: 1
+  _damages: 5
+  _BulletSpeed: 30
+  p_markPrefab: {fileID: 2307883914161421898, guid: 7d05f0e9449391e41a91bae315fd9c9d, type: 3}
 --- !u!1 &8303527679091990986
 GameObject:
   m_ObjectHideFlags: 0
