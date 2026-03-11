@@ -6,6 +6,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public interface IGun
 {
@@ -48,6 +49,7 @@ namespace GunDecorator
         [SerializeField] public MeshRenderer _model;
         [SerializeField] public AudioSource _source;
         [SerializeField] public SoundsDataSO _soundData;
+        [SerializeField] public VisualEffect _muzzleFlash; // test
 
         private bool ShootingInputPressed;
 
@@ -86,6 +88,7 @@ namespace GunDecorator
 
                 _recoilModule?.Recoil();
                 SetAmmo(GetCurrentAmmo() - 1);
+                _muzzleFlash?.Play();
             }
 
             if (GetCurrentAmmo() <= 0)
@@ -102,6 +105,7 @@ namespace GunDecorator
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
                 s.TryShoot();
+                _muzzleFlash?.Play();
                 _recoilModule?.Recoil();
                 SetAmmo(GetCurrentAmmo() - 1);
                 yield return new WaitForSeconds(s.FireRate);
