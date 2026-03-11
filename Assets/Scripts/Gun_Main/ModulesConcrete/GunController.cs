@@ -13,6 +13,7 @@ public interface IGun
     public void TryFire();
     public void TryCancelShooting();
     public void TryReload();
+    public void TriggerHitMark(bool isCritique = false);
 }
 
 
@@ -33,12 +34,15 @@ namespace GunDecorator
         public bool IsOverload => _isOverload.Value;
         public float SurchargeMultiplierDamage { get; set; }
         public float SurchargeMultiplierRate { get; set; }
-
+        
+        public IRecoilModule RecoilModule => _recoilModule;
+        
         public MeshRenderer ModelGun => _model;
 
         private IShootModule[] _shootModule;
         private IReloadModule _reloadModule;
         private IRecoilModule _recoilModule;
+        private IHitMarkerModule _hitMarkerModule;
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
         
@@ -55,6 +59,7 @@ namespace GunDecorator
             _shootModule = GetComponents<IShootModule>();
             _reloadModule = GetComponent<IReloadModule>();
             _recoilModule = GetComponent<IRecoilModule>();
+            _hitMarkerModule = GetComponent<IHitMarkerModule>();
 
             //On initialise tout les modules de l'arme
             foreach (GunModule module in GetComponents<GunModule>())
@@ -111,6 +116,10 @@ namespace GunDecorator
         public void TryCancelShooting()
         {
             ShootingInputPressed = false;
+            foreach (IShootModule s in _shootModule)
+            {
+                s?.CancelShooting();
+            }
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
@@ -129,7 +138,25 @@ namespace GunDecorator
             if (_reloadModule.IsReloading) return;
             
             _reloadModule?.Reload();
-            
+
+            PlayReloadSoundObserverRpc();
+        }
+
+        public void TriggerHitMark(bool isCritique = false)
+        {
+            if (!isCritique)
+            {
+                _hitMarkerModule?.HitMark();
+            }
+            else
+            {
+                _hitMarkerModule?.HitMarkCritique();
+            }
+        }
+
+        [ObserversRpc]
+        private void PlayReloadSoundObserverRpc()
+        {
             AudioClip clip = SoundManager.GetAudioClip(_soundData, "Reload");
             SoundManager.PlaySound(clip, _source);
         }

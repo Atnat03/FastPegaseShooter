@@ -44,6 +44,7 @@ namespace GunDecorator
                 StopCoroutine(p_reloadCoroutine);
                 p_reloadCoroutine = null;
                 _imageReload.gameObject.SetActive(false);
+                _isReloading = false;
             }
         }
 
