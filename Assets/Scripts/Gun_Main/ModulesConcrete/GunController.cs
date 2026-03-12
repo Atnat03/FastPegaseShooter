@@ -53,6 +53,8 @@ namespace GunDecorator
 
         private bool ShootingInputPressed;
 
+        [HideInInspector] public bool p_authorizedToShoot = true;
+
         private void Awake()
         {
             //On récupere tout les types de modules possible et potentiellement sur l'arme
@@ -74,7 +76,7 @@ namespace GunDecorator
 
             ShootingInputPressed = true;
                    
-            if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
+            if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 foreach (IShootModule s in _shootModule)
                 {
@@ -104,11 +106,13 @@ namespace GunDecorator
         {
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
+                p_authorizedToShoot = false;
                 s.TryShoot();
                 _muzzleFlash?.Play();
                 _recoilModule?.Recoil();
                 SetAmmo(GetCurrentAmmo() - 1);
                 yield return new WaitForSeconds(s.FireRate);
+                p_authorizedToShoot =  true;
             }
         }
         
