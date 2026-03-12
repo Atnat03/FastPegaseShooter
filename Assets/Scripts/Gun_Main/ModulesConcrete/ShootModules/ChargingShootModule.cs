@@ -96,6 +96,8 @@ namespace GunDecorator
                     _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
 
                     _ammoModule.ResetBulletData();
+                    
+                    _gunController.RecoilModule?.Recoil();
 
                     PlayShootSoundObserverRpc("Shoot");
                 }
@@ -118,8 +120,6 @@ namespace GunDecorator
                     int numberBulletShoot = (int)Mathf.Lerp(0, maxBulletShoot, _charginTimer/_timeToCharge);
                     float range = numberBulletShoot * 0.02f;
                     
-                    _gunController.RecoilModule.Recoil(_recoilChargedMultiplier);
-                    
                     for (int i = 0; i < numberBulletShoot; i++)
                     {
                         Vector3 offset = new Vector3(
@@ -131,6 +131,8 @@ namespace GunDecorator
                     }
                 
                     _ammoModule.ResetBulletData();
+                    
+                    _gunController.RecoilModule.Recoil(_recoilChargedMultiplier);
                 
                     PlayShootSoundObserverRpc("ChargedShoot");
                 

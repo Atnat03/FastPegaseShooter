@@ -84,7 +84,6 @@ namespace GunDecorator
                     s?.TryShoot();
                 }
 
-                _recoilModule?.Recoil();
                 SetAmmo(GetCurrentAmmo() - 1);
             }
 
@@ -102,7 +101,6 @@ namespace GunDecorator
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
                 s.TryShoot();
-                _recoilModule?.Recoil();
                 SetAmmo(GetCurrentAmmo() - 1);
                 yield return new WaitForSeconds(s.FireRate);
             }

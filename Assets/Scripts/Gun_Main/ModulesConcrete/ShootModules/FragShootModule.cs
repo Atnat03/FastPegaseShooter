@@ -78,8 +78,9 @@ namespace GunDecorator
                 
                 _ammoModule.ResetBulletData();
                 
-                PlayShootSoundObserverRpc();
+                _gunController.RecoilModule?.Recoil();
                 
+                PlayShootSoundObserverRpc();
             }
         }
 
