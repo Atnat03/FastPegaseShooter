@@ -12,6 +12,7 @@ namespace GunDecorator
         public bool IsFullAuto => _isFullAuto;
         public float FireRate => _fireRate;
         public IAmmoModule AmmoModule => _ammoModule;
+
         public bool IsExplosed => _isExplosedAmmo;
 
         [SerializeField] protected MonoBehaviour[] _secondModule;
@@ -45,6 +46,7 @@ namespace GunDecorator
         
         
         private bool _isExplosedAmmo = false;
+        private Vector3 _directionOffset = Vector3.zero;
         
         private void Start()
         {
@@ -93,7 +95,7 @@ namespace GunDecorator
                     if (_gunController.IsOverload)
                         _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
 
-                    _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
+                    _ammoModule.SpawnBullet(_directionOffset, Vector3.zero);
 
                     _ammoModule.ResetBulletData();
 
@@ -191,5 +193,8 @@ namespace GunDecorator
             AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, clipName);
             SoundManager.PlaySound(clip, _gunController._source);
         }
+        
+        public void SetDirectionModifier(Vector3 direction) => _directionOffset =  direction;
+        
     }
 }

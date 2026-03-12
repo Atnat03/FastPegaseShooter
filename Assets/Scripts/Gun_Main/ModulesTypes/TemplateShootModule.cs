@@ -23,6 +23,7 @@ namespace GunDecorator
         [SerializeField]private float _fireRate;
         
         private BulletData _currentBulletConfig;
+        private Vector3 _directionModifier = Vector3.zero;
         
         private void Start()
         {
@@ -63,7 +64,7 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
-                _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
+                _ammoModule.SpawnBullet(_directionModifier, Vector3.zero);
                 
                 _ammoModule.ResetBulletData();
                 
@@ -80,5 +81,8 @@ namespace GunDecorator
 
         public void CancelShooting()
         { }
+        
+        public void SetDirectionModifier(Vector3 direction) =>_directionModifier = direction;
+        
     }
 }
