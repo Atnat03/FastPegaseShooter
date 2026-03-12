@@ -78,7 +78,7 @@ public class EnemyBulletManager : NetworkBehaviour
         GameObject newBullet = Instantiate(_bulletPrefab, ESE.p_startPos, Quaternion.identity);
         
         EnemyBulletVisuals EBV = newBullet.GetComponent<EnemyBulletVisuals>();
-        EBV.SetupVariables(ESE.p_startPos, ESE.p_direction, ESE.p_speed, spawnTime, bulletId);
+        EBV.SetupVariables(ESE.p_startPos, ESE.p_direction, ESE.p_speed, spawnTime, bulletId, ESE.p_damage);
     }
 
     [ObserversRpc]
