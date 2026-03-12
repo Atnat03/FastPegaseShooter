@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
+using CustomConsole.Runtime.Logger;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
+using Object = UnityEngine.Object;
 
-[ExecuteAlways]
-public class PathfindingGridCreator : MonoBehaviour
+public class PathfindingGridCreator : EditorWindow
 {
+    
     [Header("Bounding box")]
+    public Vector3 boundsOffset =  Vector3.zero;
     [SerializeField] private float boundsHeight = 0.5f;
     [SerializeField] private List<Vector2> boundsVertices = new List<Vector2>();
     
@@ -32,16 +32,171 @@ public class PathfindingGridCreator : MonoBehaviour
     //Debug Variables
     List<Vector3> obstaclesDebug =  new List<Vector3>();
     [HideInInspector] public bool drawBounds = true;
-    [HideInInspector] public bool drawBoundingBox = true;
-    [HideInInspector] public bool drawObstacles = true;
-    [HideInInspector] public bool drawNodes = true;
+    [HideInInspector] public bool drawBoundingBox = false;
+    [HideInInspector] public bool drawObstacles = false;
+    [HideInInspector] public bool drawNodes = false;
     [HideInInspector] public bool drawNodesConnections = true;
     //
-    private void Update()
+
+    [MenuItem("Tools/Pathfinding Grid Creator")]
+    public static void ShowWindow()
     {
+        PathfindingGridCreator window = GetWindow<PathfindingGridCreator>();
+        
+        window.titleContent = new GUIContent("Pathfinding Grid Creator");
+    }
+
+    private void OnEnable()
+    {
+        SceneView.duringSceneGui += OnSceneGUI;
+    }
+    private void OnDisable()
+    {
+        SceneView.duringSceneGui -= OnSceneGUI;
+    }
+
+
+    public void CreateGUI()
+    {
+        Debug.Log("CreateGUI");
+    }
+
+    public void OnGUI()
+    {
+        DrawGUI();
         if(boundsVertices.Count < 3) return;
         
         InitializeNodes();
+    }
+    private void OnSceneGUI(SceneView obj)
+    {
+        DrawGizmos();
+    }
+
+    void DrawGUI()
+    {
+        GUIStyle titleStyle = new GUIStyle
+        {
+            alignment = TextAnchor.MiddleLeft,
+            fontStyle = FontStyle.Bold,
+            fontSize = 18
+        };
+        titleStyle.normal.textColor = Color.white;
+        
+        GUILayout.Label("Bounding Box", titleStyle);
+        boundsHeight = EditorGUILayout.FloatField("Bounds Height", boundsHeight);
+        boundsOffset = EditorGUILayout.Vector3Field("Bounds Offset", boundsOffset);
+        DrawList(boundsVertices);
+        GUILayout.Label("Grid Generation Parameters", titleStyle);
+        detectionPrecision = EditorGUILayout.FloatField("Detection Precision", detectionPrecision);
+        maxVerticalDistance = EditorGUILayout.FloatField("Max Vertical Distance", maxVerticalDistance);
+        agentHeight = EditorGUILayout.FloatField("Agent Height", agentHeight);
+        
+        GUILayout.Label("Node Parameters", titleStyle);
+        wallAvoidanceDistance = EditorGUILayout.IntField("Wall Avoidance Distance", wallAvoidanceDistance);
+        
+        GUILayout.Label("Debug", titleStyle);
+        nodeSize = EditorGUILayout.FloatField("Node Size", nodeSize);
+        wallAvoidanceGradient = EditorGUILayout.GradientField("Wall Avoidance Gradient", wallAvoidanceGradient);
+        
+        
+        GUILayout.Label("Debug");
+        Color backgroundColor = GUI.color;
+        GUILayout.BeginHorizontal();
+        GUI.backgroundColor = drawBounds ? Color.green : Color.red;
+        if(GUILayout.Button("Draw Bounds")) drawBounds = !drawBounds;
+        GUI.backgroundColor = drawBoundingBox ? Color.green : Color.red;
+        if(GUILayout.Button("Draw Boundind Box")) drawBoundingBox = !drawBoundingBox;
+        GUILayout.EndHorizontal();
+        GUI.backgroundColor = drawObstacles ? Color.green : Color.red;
+        if(GUILayout.Button("Draw Obstacles")) drawObstacles = !drawObstacles;
+        GUILayout.BeginHorizontal();
+        GUI.backgroundColor = drawNodes ? Color.green : Color.red;
+        if(GUILayout.Button("Draw Nodes")) drawNodes = !drawNodes;
+        GUI.backgroundColor = drawNodesConnections ? Color.green : Color.red;
+        if(GUILayout.Button("Draw Connections")) drawNodesConnections = !drawNodesConnections;
+        GUILayout.EndHorizontal();
+        
+        GUI.backgroundColor = backgroundColor;
+
+        if (GUILayout.Button("Save Grid"))
+        {
+            string path = EditorUtility.SaveFilePanel(
+                "Save Grid",
+                "Assets/ScriptableObjects/Pathfinding Grids",
+                "MyGrid",
+                "asset");
+            
+            if(string.IsNullOrEmpty(path)) return;
+            if (path.StartsWith(Application.dataPath))
+            {
+                string relativePath = $"Assets{path.Substring(Application.dataPath.Length)}";
+
+                PathfindingGridSO asset = ScriptableObject.CreateInstance<PathfindingGridSO>();
+                
+                AssetDatabase.CreateAsset(asset, relativePath);
+                asset.nodes = new List<PathfindingNode>();
+                foreach (PathfindingNode node in nodes)
+                {
+                    PathfindingNode newNode = new PathfindingNode(node.index, node.gridPosition, node.position, node.wallAvoidance);
+                    newNode.neighborsIndex = new List<int>(node.neighborsIndex);
+                    asset.nodes.Add(newNode);
+                }
+                EditorUtility.SetDirty(asset);
+                AssetDatabase.SaveAssets();
+                CustomLogger.ImportantLog($"Created asset at : {relativePath}");
+            }
+        }
+    }
+    
+    void DrawList<T>(List<T> list)
+    {
+        Color oldColor = GUI.color;
+        Color red = new Color(0.8f, 0.3f, 0.3f);
+        Color green = new Color(0.3f, 0.8f, 0.3f);
+        
+        GUILayout.BeginVertical("box");
+        for (int i = list.Count-1; i >= 0; i--)
+        {
+            object value = list[i];
+            EditorGUILayout.BeginHorizontal();
+            if(typeof(T) == typeof(Vector2))
+            {
+                value = EditorGUILayout.Vector2Field("", (Vector2)value);
+            }
+            else if (typeof(Object).IsAssignableFrom(typeof(T)))
+            {
+                value = EditorGUILayout.ObjectField("", (Object)value, typeof(T), true);
+            }
+
+            GUI.color = red;
+            if (GUILayout.Button("-",  GUILayout.Width(50)))
+            {
+                list.RemoveAt(i);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
+                return;
+            }
+            GUI.color = oldColor;
+            EditorGUILayout.EndHorizontal();
+
+            list[i] = (T)value;
+        }
+        GUILayout.BeginHorizontal();
+        
+        GUI.color = green;
+        if (GUILayout.Button("+"))
+        {
+            list.Add(default(T));
+        }
+        GUI.color = red;
+        if (GUILayout.Button("-"))
+        {
+            list.RemoveAt(list.Count - 1);
+        }
+        GUI.color = oldColor;
+        GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
     }
 
     Vector3[] GetRaycastPositions()
@@ -56,13 +211,13 @@ public class PathfindingGridCreator : MonoBehaviour
         float xStartOffset = (boundingBoxExtent.x - detectionPrecision * (xRaycastAmount-1))*0.5f + boundingBoxCenter.x;
         float zStartOffset = (boundingBoxExtent.y - detectionPrecision * (zRaycastAmount-1))*0.5f + boundingBoxCenter.y;
         
-        Vector3 positionOffset = transform.position + new Vector3(-boundingBoxExtent.x*0.5f+xStartOffset, boundsHeight*0.5f, -boundingBoxExtent.y*0.5f+zStartOffset);
+        Vector3 offset = boundsOffset + new Vector3(-boundingBoxExtent.x*0.5f+xStartOffset, boundsHeight*0.5f, -boundingBoxExtent.y*0.5f+zStartOffset);
         Vector3[] raycastPositions = new Vector3[xRaycastAmount * zRaycastAmount];
         for (int i = 0; i < xRaycastAmount; i++)
         {
             for (int j = 0; j < zRaycastAmount; j++)
             {
-                raycastPositions[i * zRaycastAmount + j] = positionOffset + new Vector3(i * detectionPrecision, 0, j * detectionPrecision);
+                raycastPositions[i * zRaycastAmount + j] = offset + new Vector3(i * detectionPrecision, 0, j * detectionPrecision);
             }
         }
         
@@ -146,7 +301,7 @@ public class PathfindingGridCreator : MonoBehaviour
             
             for(int j = 0; j < hits.Length; j++)
             {
-                Vector2 pos = new Vector2(raycastPositions[i].x-transform.position.x, raycastPositions[i].z-transform.position.z);
+                Vector2 pos = new Vector2(raycastPositions[i].x-boundsOffset.x, raycastPositions[i].z-boundsOffset.z);
                 if(!CanAgentWalkUnder(hits[j], hits, obstacles) ||
                    hits[j].collider.gameObject.layer != 8 ||
                    IsInsideObstacle(hits[j], obstacles) ||
@@ -263,11 +418,11 @@ public class PathfindingGridCreator : MonoBehaviour
     }
 
     #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    private void DrawGizmos()
     {
         if(boundsVertices.Count < 3) return;
         
-        Gizmos.color = Color.yellow;
+        Handles.color = Color.yellow;
         Handles.color = Color.yellow;
         if(drawBounds)
         {for (int i = 0; i < boundsVertices.Count; i++)
@@ -275,19 +430,19 @@ public class PathfindingGridCreator : MonoBehaviour
             Vector2 v1 = boundsVertices[i];
             Vector2 v2 = boundsVertices[(i + 1)%boundsVertices.Count];
 
-            Vector3 pos1 = new Vector3(v1.x,-boundsHeight*0.5f,v1.y) + transform.position;
-            Vector3 pos2 = new Vector3(v1.x,boundsHeight*0.5f,v1.y) + transform.position;
+            Vector3 pos1 = new Vector3(v1.x,-boundsHeight*0.5f,v1.y) + boundsOffset;
+            Vector3 pos2 = new Vector3(v1.x,boundsHeight*0.5f,v1.y) + boundsOffset;
             
-            Vector3 pos3 = new Vector3(v2.x,-boundsHeight*0.5f,v2.y) + transform.position;
-            Vector3 pos4 = new Vector3(v2.x,boundsHeight*0.5f,v2.y) + transform.position;
+            Vector3 pos3 = new Vector3(v2.x,-boundsHeight*0.5f,v2.y) + boundsOffset;
+            Vector3 pos4 = new Vector3(v2.x,boundsHeight*0.5f,v2.y) + boundsOffset;
             
-            Gizmos.DrawLine(pos1, pos2);
+            Handles.DrawLine(pos1, pos2);
             Handles.Label(pos2 + Vector3.up*0.1f, $"{i}");
-            Gizmos.DrawLine(pos1, pos3);
-            Gizmos.DrawLine(pos2, pos4);
+            Handles.DrawLine(pos1, pos3);
+            Handles.DrawLine(pos2, pos4);
         }}
         
-        Gizmos.color = new Color(0.9f,0.9f,0.3f);
+        Handles.color = new Color(0.9f,0.9f,0.3f);
         if(drawNodes)
         {
             if (drawBoundingBox)
@@ -295,7 +450,7 @@ public class PathfindingGridCreator : MonoBehaviour
                 (Vector2, Vector2) BBMinMax = GetBoundsBoxMinMax();
                 Vector2 BBExtent = BBMinMax.Item2 - BBMinMax.Item1;
                 Vector2 BBCenter = GetBoundingBoxCenter(BBMinMax.Item1, BBMinMax.Item2);
-                Gizmos.DrawWireCube(transform.position + new Vector3(BBCenter.x, 0, BBCenter.y),
+                Handles.DrawWireCube(boundsOffset + new Vector3(BBCenter.x, 0, BBCenter.y),
                     new Vector3(BBExtent.x, boundsHeight, BBExtent.y));
             }
         }
@@ -304,27 +459,27 @@ public class PathfindingGridCreator : MonoBehaviour
         {
             foreach (PathfindingNode node in nodes)
             {
-                Gizmos.color = wallAvoidanceGradient.Evaluate(wallAvoidanceDistance == 0 ? 0 : (node.wallAvoidance / (float)wallAvoidanceDistance)); 
-                if(drawNodes) Gizmos.DrawSphere(node.position, nodeSize);
+                Handles.color = wallAvoidanceGradient.Evaluate(wallAvoidanceDistance == 0 ? 0 : (node.wallAvoidance / (float)wallAvoidanceDistance)); 
+                if(drawNodes) Handles.SphereHandleCap(0, node.position, Quaternion.identity, nodeSize, EventType.Repaint);
                 
                 if(drawNodesConnections)
                 {
                     foreach (int n in node.neighborsIndex)
                     {
                         float t = wallAvoidanceDistance == 0 ? 0 : Mathf.Min(node.wallAvoidance, nodes[n].wallAvoidance) / (float)wallAvoidanceDistance; 
-                        Gizmos.color = wallAvoidanceGradient.Evaluate(t);
-                        Gizmos.DrawLine(node.position, nodes[n].position);
+                        Handles.color = wallAvoidanceGradient.Evaluate(t);
+                        Handles.DrawLine(node.position, nodes[n].position);
                     }
                 }
             }
         }
         
-        Gizmos.color = new Color(0.7f, 0.5f, 0.7f);
+        Handles.color = new Color(0.7f, 0.5f, 0.7f);
         if(drawObstacles)
         {
             foreach (Vector3 v3 in obstaclesDebug)
             {
-                Gizmos.DrawSphere(v3, 0.01f);
+                Handles.SphereHandleCap(0, v3, Quaternion.identity, nodeSize/2, EventType.Repaint);
             }
         }
     }
