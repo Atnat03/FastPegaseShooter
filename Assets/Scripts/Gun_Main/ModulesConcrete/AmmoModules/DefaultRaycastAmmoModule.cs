@@ -11,9 +11,9 @@ namespace GunDecorator.AmmoModules
         [SerializeField] private Transform _spawnPoint;
         
         [Header("parametres")]
-        [SerializeField] private float _maxDistance = 2000;
-        [SerializeField] private float _damages = 5;
-        [SerializeField] private float _BulletSpeed = 50;
+        [SerializeField][Tooltip("disance maximum que les balles peuvent parcourir avant de disparaitre")] private float _maxDistance = 2000;
+        [SerializeField][Tooltip("nombre de dommages que chaque balle va infliger a la cible")] private float _damages = 5;
+        [SerializeField][Tooltip("vitesse de la balle en Unité/secondes")] private float _BulletSpeed = 50;
         private float _dmgToApply = 1;
 
         [Header("Debug")]
