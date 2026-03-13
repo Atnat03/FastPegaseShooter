@@ -26,13 +26,16 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     
     private EventBus _bus;
     
+    private void Awake()
+    {
+        _bus = EventBusInitialiser.instance.Bus;
+    }
+    
     public override void OnStartServer()
     {
         base.OnStartServer();
         p_life.Value = _life;
         p_life.OnChange += OnLifeChanged;
-
-        _bus = EventBusInitialiser.instance.Bus;
     }
     
     private void OnLifeChanged(int prev, int next, bool asServer)
