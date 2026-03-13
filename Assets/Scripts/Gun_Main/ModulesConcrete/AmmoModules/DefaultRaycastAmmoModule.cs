@@ -61,36 +61,38 @@ namespace GunDecorator.AmmoModules
             
             if (damagableObject != null && !isExplosive)
             {
-                ApplyDamageServerRpc(damagableObject, _gunController.IsOverload);
+                ApplyDamageServerRpc(damagableObject);
             }
 
             SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset);
         }
 
         [ServerRpc]
-        private void ApplyDamageServerRpc(NetworkObject target, bool isOverload)
+        private void ApplyDamageServerRpc(NetworkObject target)
         {
             if (target.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage((int)_dmgToApply, isOverload);
-                _gunController.TriggerHitMark(_gunController.IsOverload);
+                bool isCritical = _gunController.IsOverload;
+                damagable.TakeDamage((int)_dmgToApply, isCritical);
+                _gunController.TriggerHitMark(isCritical);
             }
         }
 
         [ServerRpc]
         private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, float radius, Vector3 offset)
         {
-            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset);
+            bool isCritical = _gunController.IsOverload;
+            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical);
         }
 
         [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, float radius, Vector3 offset)
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, float radius, Vector3 offset, bool isCritical)
         {
             GameObject newBullet = Instantiate(BulletPrefab, _spawnPoint.position + offset, Quaternion.LookRotation(direction));
             Destroy(newBullet, travel + .5f);
             
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, p_markPrefab, isExplosive, radius, _gunController);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, p_markPrefab, isExplosive, radius, _gunController, isCritical);
         }
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;

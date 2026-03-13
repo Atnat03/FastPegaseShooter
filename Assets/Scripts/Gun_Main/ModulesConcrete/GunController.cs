@@ -132,13 +132,22 @@ namespace GunDecorator
 
         public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
         {
+            if (!IsServerInitialized)
+            {
+                SetSurchargeStatServerRpc(isOverload, dmgMultiplicator, cadenceMultiplicator);
+                return;
+            }
             _isOverload.Value = isOverload;
             SurchargeMultiplierDamage = dmgMultiplicator;
             SurchargeMultiplierRate = cadenceMultiplicator;
             foreach (IShootModule s in _shootModule)
-            {
                 s?.AmmoModule.SetDamage(dmgMultiplicator);
-            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SetSurchargeStatServerRpc(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
+        {
+            SetSurchargeStat(isOverload, dmgMultiplicator, cadenceMultiplicator);
         }
 
         public void TryReload()

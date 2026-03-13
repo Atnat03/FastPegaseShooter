@@ -10,8 +10,10 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
     [HideInInspector] public GameObject p_markPrefab;
     [HideInInspector] public bool p_isExplosive;
     [HideInInspector] public float p_explosionRadius;
+    [HideInInspector] public bool p_isCritical;
     [SerializeField] private GameObject _explosionVFX;
     private GunController _gunController;
+    
     
     private bool _hasHit = false;
 
@@ -21,7 +23,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
         Move();
     }
 
-    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun)
+    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun, bool isCritical)
     {
         p_damage = damage;
         p_speed = speed;
@@ -29,6 +31,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
         p_isExplosive = isExplosive;
         p_explosionRadius = explosionRadius;
         _gunController = gun;
+        p_isCritical = isCritical;
     }
 
     private void Move()
@@ -62,8 +65,8 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage(damage, _gunController.IsOverload);
-                _gunController.TriggerHitMark(_gunController.IsOverload);
+                damagable.TakeDamage(damage, p_isCritical);
+                _gunController.TriggerHitMark(p_isCritical);
             }
         }
     }

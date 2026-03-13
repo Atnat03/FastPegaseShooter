@@ -48,44 +48,38 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     
     public void TakeDamage(int damageAmount, bool isCritical = false)
     {
-        Debug.Log("TakeDamage : "  + damageAmount);
-        TakeDamageServerRpc(damageAmount);
-        TriggerHitMark(isCritical, damageAmount);
+        if (IsServerInitialized)
+            p_life.Value -= damageAmount;
+    
+        TriggerHitMarkObserversRpc(isCritical, damageAmount);
     }
     
-    void TriggerHitMark(bool IsCritique, float dmg)
+    [ObserversRpc]
+    void TriggerHitMarkObserversRpc(bool IsCritique, float dmg)
     {
+        print("is critik : " + IsCritique);
+        
         if (IsCritique)
         {
-            _bus.InvokeEvent(new OnModifyEnergyEvent
-            {
-                value = _energyGainWhenTouch
-            });
+            _bus.InvokeEvent(new OnModifyEnergyEvent { value = _energyGainWhenTouch });
         }
-        
+
         _cumuatifDmg += (int)dmg;
-        if(_elapsedCumulativeDmgTime <= 0)
+
+        if (_elapsedCumulativeDmgTime <= 0)
         {
-            TextMeshProUGUI text;
-            text = IsCritique ? _textDmgCritique : _textDmg;
+            TextMeshProUGUI text = IsCritique ? _textDmgCritique : _textDmg;
             _hitMarker = Instantiate(text.gameObject, _hitMarkerParent).GetComponent<TextMeshProUGUI>();
+            _hitMarker.SetText(_cumuatifDmg.ToString());
             _elapsedCumulativeDmgTime = 0.05f;
-            _hitMarker.SetText((_cumuatifDmg).ToString());
+
+            Destroy(_hitMarker.gameObject, 0.5f);
         }
         else
         {
             if (_hitMarker != null)
-                _hitMarker.SetText((_cumuatifDmg).ToString());
+                _hitMarker.SetText(_cumuatifDmg.ToString());
         }
-        
-        if(_hitMarker != null)
-            Destroy(_hitMarker.gameObject, 0.5f);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    void TakeDamageServerRpc(int damageAmount)
-    {
-        p_life.Value -= damageAmount;
     }
 
     [Server]

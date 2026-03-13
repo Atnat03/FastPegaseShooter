@@ -50,7 +50,7 @@ namespace GunDecorator
     public interface IAmmoExplosif
     {
         public void Explosed(GameObject vfx, float raduis, int damage);
-        public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun);
+        public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun, bool isCritical);
     }
 
     public interface ISecondModule

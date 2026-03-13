@@ -28,18 +28,19 @@ namespace GunDecorator.AmmoModules
         {
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
+            bool isCritical = _bulletData?.IsCritical ?? _gunController.IsOverload;
 
-            SpawnVisualBulletServerRpc(direction, isExplosive, radius, offset);
+            SpawnVisualBulletServerRpc(direction, isExplosive, radius, offset, isCritical);
         }
         
         [ServerRpc]
-        private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset)
+        private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical)
         {
-            SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset);
+            SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset, isCritical);
         }
 
         [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset)
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical)
         {
             Vector3 baseDirection = _spawnPoint.forward;
             Vector3 spreadDirection = direction == Vector3.zero ? baseDirection : Quaternion.Euler(direction.y, direction.x, 0) * baseDirection;
@@ -53,7 +54,7 @@ namespace GunDecorator.AmmoModules
             }
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, isCritical);
 
             Destroy(newBullet, 5f);
         }
