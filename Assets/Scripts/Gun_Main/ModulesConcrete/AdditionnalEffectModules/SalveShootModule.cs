@@ -7,9 +7,9 @@ namespace GunDecorator
 {
     public class SalveShootModule : GunModule, ISecondModule
     {
-        [SerializeField] private RecoilModule _recoilModule;
-        [SerializeField]private int _numberShootPerSalve = 3;
-        [SerializeField] private float _intervalDuration = 0.1f; 
+        [SerializeField][Tooltip("renseigner le module de recoil de l'arme si il y en a un")] private RecoilModule _recoilModule;
+        [SerializeField][Tooltip("nombre de balles tirées en 1 clic")] private int _numberShootPerSalve = 3;
+        [SerializeField][Tooltip("temps en seconde entre chaque tir en 1 salve")] private float _intervalDuration = 0.1f; 
         private IShootModule _shootModule;
         private ISecondModule _next;
 
