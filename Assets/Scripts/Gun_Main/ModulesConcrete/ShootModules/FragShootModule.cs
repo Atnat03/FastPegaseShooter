@@ -92,5 +92,11 @@ namespace GunDecorator
         
         public void CancelShooting()
         { }
+        
+        public void SetDirectionModifier(Vector3 direction)
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
 }

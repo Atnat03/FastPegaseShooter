@@ -7,6 +7,9 @@ namespace GunDecorator
     {
         private IShootModule _shootModule;
         private ISecondModule _next;
+        
+        [SerializeField] private float _maxOffsetX;
+        [SerializeField] private float _maxOffsetY;
 
         public void SetUpModule(IShootModule shootModule)
         {
@@ -17,7 +20,7 @@ namespace GunDecorator
 
         public void DoAdditionnalEffect()
         {
-            Debug.Log("plein de noise omg");
+            _shootModule.SetDirectionModifier(new Vector3(Random.Range(-_maxOffsetX, _maxOffsetX), Random.Range(-_maxOffsetY, _maxOffsetY), 1));
         }
 
         public void Shooting()

@@ -23,12 +23,14 @@ namespace GunDecorator
 
         IEnumerator MultipleShoot()
         {
+            _gunController.p_authorizedToShoot = false;
             for (int i = 0; i < _numberShootPerSalve; i++)
             {
                 Shooting();
                 _recoilModule?.Recoil();
                 yield return new WaitForSeconds(_intervalDuration);
             }
+            _gunController.p_authorizedToShoot = true;
         }
 
         public void Shooting()

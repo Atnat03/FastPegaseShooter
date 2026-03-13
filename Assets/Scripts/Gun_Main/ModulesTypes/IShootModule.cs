@@ -12,6 +12,8 @@ namespace GunDecorator
         public bool IsFullAuto { get; }
         public float FireRate { get; }
         public IAmmoModule AmmoModule { get; }
+        
+        public void SetDirectionModifier(Vector3 direction);
     }
     
     public interface IReloadModule

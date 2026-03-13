@@ -6,6 +6,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public interface IGun
 {
@@ -48,8 +49,11 @@ namespace GunDecorator
         [SerializeField] public MeshRenderer _model;
         [SerializeField] public AudioSource _source;
         [SerializeField] public SoundsDataSO _soundData;
+        [SerializeField] public VisualEffect _muzzleFlash; // test
 
         private bool ShootingInputPressed;
+
+        [HideInInspector] public bool p_authorizedToShoot = true;
 
         private void Awake()
         {
@@ -72,7 +76,7 @@ namespace GunDecorator
 
             ShootingInputPressed = true;
                    
-            if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
+            if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 foreach (IShootModule s in _shootModule)
                 {
@@ -86,6 +90,7 @@ namespace GunDecorator
 
                 _recoilModule?.Recoil();
                 SetAmmo(GetCurrentAmmo() - 1);
+                _muzzleFlash?.Play();
             }
 
             if (GetCurrentAmmo() <= 0)
@@ -101,10 +106,13 @@ namespace GunDecorator
         {
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
+                p_authorizedToShoot = false;
                 s.TryShoot();
+                _muzzleFlash?.Play();
                 _recoilModule?.Recoil();
                 SetAmmo(GetCurrentAmmo() - 1);
                 yield return new WaitForSeconds(s.FireRate);
+                p_authorizedToShoot =  true;
             }
         }
         
