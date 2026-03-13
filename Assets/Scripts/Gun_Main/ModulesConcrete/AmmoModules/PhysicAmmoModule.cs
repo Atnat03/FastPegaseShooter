@@ -52,9 +52,11 @@ namespace GunDecorator.AmmoModules
                 rb.mass = _bulletMass;
                 rb.AddForce(spreadDirection.normalized * _bulletThrowForce, ForceMode.Impulse);
             }
+            
+            Vector3 targetPos = _spawnPoint.position + _spawnPoint.forward * 2000f;
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, isCritical);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, isCritical, targetPos);
 
             Destroy(newBullet, 5f);
         }

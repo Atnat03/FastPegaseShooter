@@ -13,6 +13,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
     [HideInInspector] public bool p_isCritical;
     [SerializeField] private GameObject _explosionVFX;
     private GunController _gunController;
+    private Vector3 _targetPoint;
     
     
     private bool _hasHit = false;
@@ -23,7 +24,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
         Move();
     }
 
-    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun, bool isCritical)
+    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint)
     {
         p_damage = damage;
         p_speed = speed;
@@ -32,6 +33,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
         p_explosionRadius = explosionRadius;
         _gunController = gun;
         p_isCritical = isCritical;
+        _targetPoint = targetPoint;
     }
 
     private void Move()
@@ -48,7 +50,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
                 Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
             else
             {
-                Destroy(Instantiate(p_markPrefab, hit.point + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal)), 3f);
+                Destroy(Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal)), 3f);
             }
             
             Destroy(gameObject);

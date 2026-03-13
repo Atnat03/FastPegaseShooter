@@ -37,7 +37,7 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
         p_life.Value = _life;
         p_life.OnChange += OnLifeChanged;
     }
-    
+
     private void OnLifeChanged(int prev, int next, bool asServer)
     {
         if (next <= 0)
