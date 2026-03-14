@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using GunDecorator;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -35,10 +36,42 @@ public class RecoilModule : GunModule, IRecoilModule
 
     #endregion
     
-    public void Recoil(float multiplier = 1)
+    public void Recoil(Transform model, float time, float multiplier = 1)
     {
         _targetRotation +=  new Vector3( -_recoilX, Random.Range(-_recoilY, _recoilY) , Random.Range(-_recoilZ, _recoilZ)) * multiplier;
+        
+        if(model != null)
+            StartCoroutine(RecoilingZ(model, time));
     }
+
+    IEnumerator RecoilingZ(Transform model, float time)
+    {
+        float elapsedTime = 0;
+                
+        Vector3 startPos = model.transform.localPosition;
+        
+        while (elapsedTime < time)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float t = elapsedTime / time;
+            
+            float recoil = Z_RecoilCurve.Evaluate(t) * Z_RecoilDistance;
+
+            model.transform.localPosition = startPos + new Vector3(0, 0, -recoil);
+
+            yield return null;
+        }
+                
+        model.transform.localPosition = startPos;
+    }
+
+
+    public AnimationCurve Z_RecoilCurve => _z_recoilCurve;
+    public float Z_RecoilDistance => _z_recoilDistance;
+    
+    [SerializeField] private AnimationCurve _z_recoilCurve;
+    [SerializeField] private float _z_recoilDistance;
 
     void Update()
     {

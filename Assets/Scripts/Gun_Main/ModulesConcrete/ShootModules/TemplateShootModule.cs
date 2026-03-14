@@ -68,16 +68,10 @@ namespace GunDecorator
                 
                 _ammoModule.ResetBulletData();
                 
-                PlayShootSoundObserverRpc();
+                _gunController.PlaySound("Shoot");
             }
         }
-
-        [ObserversRpc]
-        private void PlayShootSoundObserverRpc()
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
-            SoundManager.PlaySound(clip, _gunController._source);
-        }
+        
 
         public void CancelShooting()
         { }

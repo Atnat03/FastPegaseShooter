@@ -16,7 +16,8 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
     
     private bool _hasHit = false;
 
-    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint)
+    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
+        float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target)
     {
         p_damage = damage;
         p_speed = speed;

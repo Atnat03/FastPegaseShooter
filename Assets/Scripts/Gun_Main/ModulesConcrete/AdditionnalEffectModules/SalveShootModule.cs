@@ -27,7 +27,7 @@ namespace GunDecorator
             for (int i = 0; i < _numberShootPerSalve; i++)
             {
                 Shooting();
-                _recoilModule?.Recoil();
+                _recoilModule?.Recoil(_gunController.ModelGun.transform, _shootModule.FireRate);
                 yield return new WaitForSeconds(_intervalDuration);
             }
             _gunController.p_authorizedToShoot = true;

@@ -91,7 +91,7 @@ namespace GunDecorator
                     s?.TryShoot();
                 }
 
-                _recoilModule?.Recoil();
+                _recoilModule?.Recoil(_model.transform, 0.1f);
                 SetAmmo(GetCurrentAmmo() - 1);
                 _muzzleFlash?.Play();
             }
@@ -112,9 +112,11 @@ namespace GunDecorator
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 _muzzleFlash?.Play();
-                _recoilModule?.Recoil();
+                _recoilModule?.Recoil(_model.transform, s.FireRate);
                 SetAmmo(GetCurrentAmmo() - 1);
+                
                 yield return new WaitForSeconds(s.FireRate);
+                
                 p_authorizedToShoot =  true;
             }
         }
@@ -159,7 +161,7 @@ namespace GunDecorator
             
             _reloadModule?.Reload();
 
-            PlayReloadSoundObserverRpc();
+            PlaySound("Reload");
         }
 
         public void TriggerHitMark(bool isCritique = false)
@@ -175,10 +177,10 @@ namespace GunDecorator
         }
 
         [ObserversRpc]
-        private void PlayReloadSoundObserverRpc()
+        public void PlaySound(string sound, float volume = 0.5f)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData, "Reload");
-            SoundManager.PlaySound(clip, _source);
+            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
+            SoundManager.PlaySound(clip, _source, volume);
         }
 
         public void StopReload() => _reloadModule.StopReload();

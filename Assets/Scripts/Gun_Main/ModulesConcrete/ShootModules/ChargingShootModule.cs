@@ -99,7 +99,7 @@ namespace GunDecorator
 
                     _ammoModule.ResetBulletData();
 
-                    PlayShootSoundObserverRpc("Shoot");
+                    _gunController.PlaySound("Shoot");
                 }
                 
                 _startCharging = true;
@@ -120,7 +120,7 @@ namespace GunDecorator
                     int numberBulletShoot = (int)Mathf.Lerp(0, maxBulletShoot, _charginTimer/_timeToCharge);
                     float range = numberBulletShoot * 0.02f;
                     
-                    _gunController.RecoilModule.Recoil(_recoilChargedMultiplier);
+                    _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f ,_recoilChargedMultiplier);
                     
                     for (int i = 0; i < numberBulletShoot; i++)
                     {
@@ -134,7 +134,7 @@ namespace GunDecorator
                 
                     _ammoModule.ResetBulletData();
                 
-                    PlayShootSoundObserverRpc("ChargedShoot");
+                    _gunController.PlaySound("ChargedShoot");
                 
                     _isCharged = false;
                 }
@@ -185,13 +185,6 @@ namespace GunDecorator
                     }
                 }
             }
-        }
-
-        [ObserversRpc]
-        private void PlayShootSoundObserverRpc(string clipName)
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, clipName);
-            SoundManager.PlaySound(clip, _gunController._source);
         }
         
         public void SetDirectionModifier(Vector3 direction) => _directionOffset =  direction;

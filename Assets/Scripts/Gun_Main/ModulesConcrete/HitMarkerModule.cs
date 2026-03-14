@@ -18,12 +18,14 @@ namespace GunDecorator
         
         public void HitMark()
         {
-            Debug.Log("HitMark");
             Image s = Instantiate(_hitMarkerPrefab, _hitMarkerParent).GetComponent<Image>();
             if (s != null)
             {
                 s.color = _hitMarkerColor;
             }
+            
+            _gunController.PlaySound("HitMark", 0.1f);
+            
             Destroy(s, 0.1f);
         }
 
@@ -34,6 +36,9 @@ namespace GunDecorator
             {
                 s.color = _hitMarkerCritiqueColor;
             }
+            
+            _gunController.PlaySound("HitMark", 0.1f);
+            
             Destroy(s, 0.1f);
         }
     }
