@@ -7,14 +7,29 @@ namespace GunDecorator.AmmoModules
     {
         public GameObject AmmoPrefab => _ammoPrefab;
 
-        [SerializeField] private GameObject _ammoPrefab;
-        [SerializeField] private Transform _spawnPoint;
-        [SerializeField] private Camera _camera;
+        [Header("References")]
+        [SerializeField, Tooltip("Prefab de la balle qui sera instanciée lors du tir.")]
+        private GameObject _ammoPrefab;
+
+        [SerializeField, Tooltip("Point de spawn de la balle (généralement à l'extrémité du canon).")]
+        private Transform _spawnPoint;
+
+        [SerializeField, Tooltip("Caméra du joueur utilisée pour déterminer la direction du tir.")]
+        private Camera _camera;
         
-        [SerializeField] private float _bulletMass = 1;
-        [SerializeField] private float _damages = 2;
-        [SerializeField] private float _bulletThrowForce = 100;
-        [SerializeField] private float _BulletSpeed = 50;
+        [Header("Bullet Settings")]
+        [SerializeField, Tooltip("Masse physique appliquée au Rigidbody de la balle.")]
+        private float _bulletMass = 1;
+
+        [SerializeField, Tooltip("Dégâts de base infligés par la balle.")]
+        private float _damages = 2;
+
+        [SerializeField, Tooltip("Force initiale appliquée à la balle lors du tir.")]
+        private float _bulletThrowForce = 100;
+
+        [SerializeField, Tooltip("Vitesse logique de la balle utilisée par certains systèmes (ex: calculs d'impact ou trajectoire).")]
+        
+        private float _BulletSpeed = 50;
         private float _dmgToApply = 0;
         
         private BulletData _bulletData;

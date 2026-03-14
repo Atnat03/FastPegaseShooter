@@ -46,10 +46,13 @@ namespace GunDecorator
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
         
-        [SerializeField] public MeshRenderer _model;
-        [SerializeField] public AudioSource _source;
-        [SerializeField] public SoundsDataSO _soundData;
-        [SerializeField] public VisualEffect _muzzleFlash; // test
+        [SerializeField, Tooltip("Model 3d de l'arme")] 
+        public MeshRenderer _model;
+        [SerializeField, Tooltip("Audio Source de l'arme")] 
+        public AudioSource _source;
+        [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")] 
+        public SoundsDataSO _soundData;
+        [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
 
         private bool ShootingInputPressed;
 
