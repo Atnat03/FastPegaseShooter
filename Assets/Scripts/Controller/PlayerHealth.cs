@@ -110,7 +110,6 @@ public class PlayerHealth : NetworkBehaviour
 
 	void ShowWarning()
 	{
-		IsCritik = _healthBar.fillAmount < _critikStep;
 		_frameDeccordImage.color = IsCritik ? Color.red : Color.white;
 		_damagedWarningImage.gameObject.SetActive(IsCritik);
 
@@ -137,7 +136,7 @@ public class PlayerHealth : NetworkBehaviour
 		
 		float newHealth = _currentHealth.Value - data.value;
 
-		StartCoroutine(ApplyVolumeDamagedEffect());
+		ApplyVolumeDamagedEffectTargetRpc(Owner);
 
 		PlayHurtSoundObserverRpc();
 
@@ -151,6 +150,12 @@ public class PlayerHealth : NetworkBehaviour
 		}
 	}
 
+	[TargetRpc]
+	private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
+	{
+		StartCoroutine(ApplyVolumeDamagedEffect());
+	}
+	
 	IEnumerator ApplyVolumeDamagedEffect()
 	{
 		float time = 0.5f;
@@ -225,9 +230,21 @@ public class PlayerHealth : NetworkBehaviour
 	private void OnHealthChange(float prev, float next, bool asServer)
 	{
 		if (!IsOwner) return;
-		
+    
 		_targetHealthFill = next / _healthBase;
+
+		if (_targetHealthFill <= _critikStep)
+		{
+			IsCritik = true;
+			_elapsedTimeShowWarning = 1f;
+		}
+		else
+		{
+			IsCritik = false;
+			_damagedWarningImage.alpha = 0f;
+		}
 	}
+
 	
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{

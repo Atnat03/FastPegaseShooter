@@ -60,7 +60,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
                     damagable.TakeDamage((int)p_damage, p_isCritical);
                     _gunController.TriggerHitMark(p_isCritical);
                 }
-
+                
                 Destroy(Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal)), 3f);
             }
 
