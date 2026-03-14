@@ -330,6 +330,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         if (isDead.Value) return;
         
         UpdateInputs();
+        UpdateLdInteractions();
         stateMachine?.Update();
     }
 
@@ -352,7 +353,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     }
 
 
-    void UpdateInputs()
+    void UpdateInputs() // appelé en update dans tout les states
     {
         //inputs
         horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
@@ -377,6 +378,21 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"),  QueryTriggerInteraction.Ignore);
 
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+    }
+
+    private GrapplePoint currentLookedGrapplePoint;
+    void UpdateLdInteractions() // appelé en update dans tout les states
+    {
+        // grapplepoints 
+        if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
+        {
+             currentLookedGrapplePoint = hit.collider.GetComponent<GrapplePoint>();
+            if (currentLookedGrapplePoint != null)
+            {
+                currentLookedGrapplePoint.p_mustShowCanvas = true;
+                Debug.Log("activate canvas");
+            }
+        }
     }
 
     #endregion
@@ -457,7 +473,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
             {
-                if (hit.collider.CompareTag("GrapplePoint"))
+                if (hit.collider.GetComponent<GrapplePoint>() != null)
                 {
                     _currentGrapplePoint =  hit.collider.transform;
                     stateMachine.ChangeState(ControlerState.Grappling);
@@ -529,7 +545,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
             {
-                if (hit.collider.CompareTag("GrapplePoint"))
+                if (hit.collider.GetComponent<GrapplePoint>() != null)
                 {
                     stateMachine.ChangeState(ControlerState.Grappling);
                 }
@@ -607,7 +623,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
             {
-                if (hit.collider.CompareTag("GrapplePoint"))
+                if (hit.collider.GetComponent<GrapplePoint>() != null)
                 {
                     stateMachine.ChangeState(ControlerState.Grappling);
                 }
@@ -774,7 +790,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
             {
-                if (hit.collider.CompareTag("GrapplePoint"))
+                if (hit.collider.GetComponent<GrapplePoint>() != null)
                 {
                     stateMachine.ChangeState(ControlerState.Grappling);
                 }
@@ -1161,7 +1177,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward, out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),QueryTriggerInteraction.Collide))
         {
-            if (hit.collider.CompareTag("GrapplePoint"))
+            if (hit.collider.GetComponent<GrapplePoint>() != null)
             {
                 _currentGrapplePoint =  hit.collider.transform;
             }
@@ -1170,6 +1186,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         {
             stateMachine.ChangeState(ControlerState.Idle);
         }
+        
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
         StartCoroutine(GrappleCoroutine());
     }
@@ -1178,15 +1195,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         if (!mustGrapple)
         {
-            if (playerInput.actions["Grapple"].IsPressed())
-            {
-                rb.linearVelocity = Vector3.zero;
-                rb.AddForce(Vector3.up * _endGrappleImpulseForce, ForceMode.Impulse);
-            }
-            else
-            {
-                rb.AddForce(grappleDirection * _endGrappleImpulseForce,  ForceMode.Impulse);
-            }
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(grappleDirection * _endGrappleImpulseForce,  ForceMode.Impulse);
             _currentGrapplePoint = null;
             stateMachine.ChangeState(ControlerState.Idle);
         }
@@ -1210,8 +1220,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     IEnumerator GrappleCoroutine()
     {
         mustGrapple = true;
-        while (Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f &&
-               playerInput.actions["Grapple"].IsPressed())
+        while (Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f && playerInput.actions["Grapple"].IsPressed())
         {
             yield return new WaitForEndOfFrame();
         }
@@ -1395,6 +1404,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         foreach (GameObject col in bodyStandUpCollider) col.SetActive(true);
         foreach (GameObject col in bodyCrouchedCollider) col.SetActive(false);
     }
+
+
 
     #endregion
 
