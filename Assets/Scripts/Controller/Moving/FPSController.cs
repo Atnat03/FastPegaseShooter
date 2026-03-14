@@ -1170,6 +1170,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         {
             stateMachine.ChangeState(ControlerState.Idle);
         }
+        
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
         StartCoroutine(GrappleCoroutine());
     }
@@ -1178,15 +1179,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         if (!mustGrapple)
         {
-            if (playerInput.actions["Grapple"].IsPressed())
-            {
-                rb.linearVelocity = Vector3.zero;
-                rb.AddForce(Vector3.up * _endGrappleImpulseForce, ForceMode.Impulse);
-            }
-            else
-            {
-                rb.AddForce(grappleDirection * _endGrappleImpulseForce,  ForceMode.Impulse);
-            }
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(grappleDirection * _endGrappleImpulseForce,  ForceMode.Impulse);
             _currentGrapplePoint = null;
             stateMachine.ChangeState(ControlerState.Idle);
         }
@@ -1210,8 +1204,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     IEnumerator GrappleCoroutine()
     {
         mustGrapple = true;
-        while (Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f &&
-               playerInput.actions["Grapple"].IsPressed())
+        while (Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f && playerInput.actions["Grapple"].IsPressed())
         {
             yield return new WaitForEndOfFrame();
         }
