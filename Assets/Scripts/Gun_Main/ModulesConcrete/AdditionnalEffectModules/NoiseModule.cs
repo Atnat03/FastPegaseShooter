@@ -21,6 +21,7 @@ namespace GunDecorator
         public void DoAdditionnalEffect()
         {
             _shootModule.SetDirectionModifier(new Vector3(Random.Range(-_maxOffsetX, _maxOffsetX), Random.Range(-_maxOffsetY, _maxOffsetY), 1));
+            Shooting();
         }
 
         public void Shooting()

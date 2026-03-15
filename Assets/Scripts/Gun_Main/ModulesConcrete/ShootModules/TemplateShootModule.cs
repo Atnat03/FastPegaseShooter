@@ -24,6 +24,7 @@ namespace GunDecorator
         
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
+        private Vector3 _bulletOffset = Vector3.zero;
         
         private void Start()
         {
@@ -64,7 +65,7 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
-                _ammoModule.SpawnBullet(_directionModifier, Vector3.zero);
+                _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
                 
                 _ammoModule.ResetBulletData();
                 
@@ -77,6 +78,8 @@ namespace GunDecorator
         { }
         
         public void SetDirectionModifier(Vector3 direction) =>_directionModifier = direction;
+        
+        public void SetBulletOffset(Vector3 offset) =>_bulletOffset = offset;
         
     }
 }

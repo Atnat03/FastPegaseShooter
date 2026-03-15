@@ -15,6 +15,7 @@ namespace GunDecorator
         public IAmmoModule AmmoModule { get; }
         
         public void SetDirectionModifier(Vector3 direction);
+        public void SetBulletOffset(Vector3 offset);
     }
     
     public interface IReloadModule

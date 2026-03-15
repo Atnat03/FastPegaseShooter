@@ -47,6 +47,7 @@ namespace GunDecorator
         
         private bool _isExplosedAmmo = false;
         private Vector3 _directionOffset = Vector3.zero;
+        private Vector3 _bulletOffset = Vector3.zero;
         
         private void Start()
         {
@@ -95,7 +96,7 @@ namespace GunDecorator
                     if (_gunController.IsOverload)
                         _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
 
-                    _ammoModule.SpawnBullet(_directionOffset, Vector3.zero);
+                    _ammoModule.SpawnBullet(_directionOffset, _bulletOffset);
 
                     _ammoModule.ResetBulletData();
 
@@ -188,6 +189,6 @@ namespace GunDecorator
         }
         
         public void SetDirectionModifier(Vector3 direction) => _directionOffset =  direction;
-        
+        public void SetBulletOffset(Vector3 offset) =>  _bulletOffset = offset;
     }
 }

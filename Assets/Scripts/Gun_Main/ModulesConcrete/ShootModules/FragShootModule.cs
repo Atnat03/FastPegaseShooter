@@ -91,5 +91,9 @@ namespace GunDecorator
             throw new System.NotImplementedException();
         }
 
+        public void SetBulletOffset(Vector3 offset)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
