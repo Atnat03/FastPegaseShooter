@@ -200,7 +200,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             _bus.Subscribe((RequestEnergyResponseEvent data) =>
             {
                 enoughtEnegyToDash = data.energy >= dashEnergyCost;
-                enoughtEnegyToDash = data.energy >= dashEnergyCost;
             });
 
             _bus.Subscribe((OnPlayerDeathEvent data) =>
