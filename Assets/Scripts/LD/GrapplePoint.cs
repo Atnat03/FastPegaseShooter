@@ -5,19 +5,19 @@ using UnityEngine;
 public class GrapplePoint : MonoBehaviour
 {
     [SerializeField]private GameObject _canvas;
-    private Transform _camTransform;
-
+    
+    [HideInInspector]public Transform p_playerTransform;
     [HideInInspector]public bool p_mustShowCanvas = false;
 
     void Start()
     {
-        _camTransform = Camera.main?.transform;
+        p_playerTransform = Camera.main?.transform;
         _canvas.SetActive(false);
     }
     
     void Update() 
     {
-        if(_camTransform!=null) transform.LookAt(_camTransform);
+        if(p_playerTransform!=null) _canvas.transform.LookAt(p_playerTransform);
         _canvas.SetActive(p_mustShowCanvas); // ne se desactive jamais
     }
     

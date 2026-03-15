@@ -391,7 +391,13 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             if (currentLookedGrapplePoint != null)
             {
                 currentLookedGrapplePoint.p_mustShowCanvas = true;
+                currentLookedGrapplePoint.p_playerTransform = cameraParentTransform;
             }
+        }
+        else if (currentLookedGrapplePoint != null)
+        {
+            currentLookedGrapplePoint.p_mustShowCanvas = false;
+            currentLookedGrapplePoint = null;
         }
     }
 
@@ -1170,8 +1176,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     #endregion
     
     #region GrappleState
-
-    bool mustGrapple = false;
+    
     Vector3 grappleDirection;
     void EnterGrappleState()
     {
