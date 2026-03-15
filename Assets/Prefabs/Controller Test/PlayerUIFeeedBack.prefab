@@ -100,12 +100,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 161854279569103325}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 84360363029319753}
+  m_Father: {fileID: 6789599677095664740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -716,7 +716,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5630252951326551327}
-  - {fileID: 1634359443424699263}
   - {fileID: 4808302530464539788}
   m_Father: {fileID: 7218313039823865412}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -819,7 +818,7 @@ RectTransform:
   - {fileID: 1612263465473122098}
   - {fileID: 1547877852521593223}
   - {fileID: 7464616491510464497}
-  m_Father: {fileID: 7218313039823865412}
+  m_Father: {fileID: 6789599677095664740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -901,6 +900,59 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2184747489939930036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6789599677095664740}
+  - component: {fileID: 5950501766581123557}
+  m_Layer: 5
+  m_Name: UI_Bump
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6789599677095664740
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2184747489939930036}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8889810533888742078}
+  - {fileID: 1634359443424699263}
+  m_Father: {fileID: 7218313039823865412}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5950501766581123557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2184747489939930036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd5ebd5ef02e5e4fb6de4901a208a12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _playerRB: {fileID: 5777719286037595758}
+  _verticalBumpForce: 1
+  _smoothTimeVerticalBump: 0.01
 --- !u!1 &2284159160321034349
 GameObject:
   m_ObjectHideFlags: 0
@@ -1795,40 +1847,9 @@ MonoBehaviour:
   _recoilZ: 0.35
   _returnSpeed: 6
   _snapiness: 15
-  _z_recoilCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: -0.01234436
-      value: -0.0019302368
-      inSlope: 1.9567508
-      outSlope: 1.9567508
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.49967775
-      value: 0.9999695
-      inSlope: -0.01772051
-      outSlope: -0.01772051
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.13566904
-    - serializedVersion: 3
-      time: 0.99176025
-      value: 0.0019607544
-      inSlope: -2.028133
-      outSlope: -2.028133
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   _z_recoilDistance: 0.25
+  _z_returnSpeed: 8
+  _maxZKickback: 0.15
 --- !u!82 &1563613516594705392
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2407,11 +2428,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7936943699042696849}
-  - {fileID: 8889810533888742078}
   - {fileID: 8793975659489958311}
   - {fileID: 84360363029319753}
   - {fileID: 6522936701761927037}
   - {fileID: 1911605871459531796}
+  - {fileID: 6789599677095664740}
   m_Father: {fileID: 6363322599526773559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3778,40 +3799,9 @@ MonoBehaviour:
   _recoilZ: 0.35
   _returnSpeed: 6
   _snapiness: 15
-  _z_recoilCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: -0.01234436
-      value: -0.0019302368
-      inSlope: 1.9567508
-      outSlope: 1.9567508
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.49967775
-      value: 0.9999695
-      inSlope: -0.01772051
-      outSlope: -0.01772051
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.13566904
-    - serializedVersion: 3
-      time: 0.99176025
-      value: 0.0019607544
-      inSlope: -2.028133
-      outSlope: -2.028133
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   _z_recoilDistance: 0.5
+  _z_returnSpeed: 8
+  _maxZKickback: 0.15
 --- !u!82 &8211222051239367102
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4824,40 +4814,9 @@ MonoBehaviour:
   _recoilZ: 0.35
   _returnSpeed: 6
   _snapiness: 15
-  _z_recoilCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: -0.01234436
-      value: -0.0019302368
-      inSlope: 2.044081
-      outSlope: 2.044081
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.47875795
-      value: 1.0019226
-      inSlope: -0.01772051
-      outSlope: -0.01772051
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.13566904
-    - serializedVersion: 3
-      time: 0.99176025
-      value: 0.0019607544
-      inSlope: -1.9492347
-      outSlope: -1.9492347
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   _z_recoilDistance: 0.15
+  _z_returnSpeed: 8
+  _maxZKickback: 0.15
 --- !u!82 &4997057281965842912
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5227,40 +5186,9 @@ MonoBehaviour:
   _recoilZ: 0.35
   _returnSpeed: 3
   _snapiness: 15
-  _z_recoilCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: -0.01234436
-      value: -0.0019302368
-      inSlope: 1.9567508
-      outSlope: 1.9567508
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.49967775
-      value: 0.9999695
-      inSlope: -0.01772051
-      outSlope: -0.01772051
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.13566904
-    - serializedVersion: 3
-      time: 0.99176025
-      value: 0.0019607544
-      inSlope: -2.028133
-      outSlope: -2.028133
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   _z_recoilDistance: 0.5
+  _z_returnSpeed: 8
+  _maxZKickback: 0.15
 --- !u!82 &9128913315205030470
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5537,10 +5465,12 @@ MonoBehaviour:
   _playerInput: {fileID: 997312506154426130}
   _swayAmount: 0.02
   _maxSwayAmount: 0.05
-  _smooth: 1
+  _smooth: 5
   _idleCoef: 0.005
   _bobSpeed: 12
   _bobAmount: 0.04
+  _verticalBumpForce: 0.005
+  _smoothTimeVerticalBump: 0.01
 --- !u!1 &8629060704290151112
 GameObject:
   m_ObjectHideFlags: 0
