@@ -11,6 +11,7 @@ public class FPSControlerCustomInspector : Editor
     private bool showMovement = true;
     private bool showHeadbob = true;
     private bool showJump = true;
+    private bool showSuperJump = true;
     private bool showWallRide = true;
     private bool showCrouch = true;
     private bool showSlide = true;
@@ -60,13 +61,13 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashUnlocked"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeSlideUnlocked"));
         }, ref showUnlockedCapacities);
-        
+
         DrawSection("Camera", Color.aliceBlue, () =>
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraSpringHalfLife"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraSpringFrequency"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("rollSmoothing"));
-        },ref showCamera);
+        }, ref showCamera);
 
         DrawSection("Movement", new Color(0.6f, 1f, 0.6f), () =>
         {
@@ -98,6 +99,13 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteTimeDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("landSnapVelocity"));
         }, ref showJump);
+
+        DrawSection("Super Jump", Color.brown, () =>
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("superJumpInputMaxDelay"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("superJumpVerticalForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("superJumpHorizontalForce"));
+        }, ref showSuperJump);
 
         DrawSection("Wall Ride", new Color(1f, 0.6f, 0.6f), () =>
         {
@@ -147,15 +155,15 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeInfluenceOnRotation"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeInfluenceOnVelocity"));
         }, ref showSlopeSlide);
-        
-        DrawSection("Grappling" , Color.aliceBlue, () =>
+
+        DrawSection("Grappling", Color.aliceBlue, () =>
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_castWidth"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_castMaxDistance"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_grapplingSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_grappleRedirectionSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_endGrappleImpulseForce"));
-        } , ref showGapple);
+        }, ref showGapple);
 
         serializedObject.ApplyModifiedProperties();
     }
