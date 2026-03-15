@@ -131,6 +131,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] private float _castWidth = .5f;
     [SerializeField] private float _castMaxDistance = 100f;
     [SerializeField] private float _grapplingSpeed = 15;
+    [SerializeField] float _grappleRedirectionSpeed = 8f;
     [SerializeField] private float _endGrappleImpulseForce = 3f;
     
     #endregion
@@ -369,7 +370,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         //situation de jeu
 
         grounded = (Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, 0.25f,
-            ~LayerMask.GetMask("Owner")) && !justJumped);
+            ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore) && !justJumped);
         
 
         leftSideAgainstWall = Physics.Raycast(playerLeftSide.position, playerLeftSide.forward,
@@ -390,7 +391,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             if (currentLookedGrapplePoint != null)
             {
                 currentLookedGrapplePoint.p_mustShowCanvas = true;
-                Debug.Log("activate canvas");
             }
         }
     }
@@ -1188,12 +1188,11 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         }
         
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
-        StartCoroutine(GrappleCoroutine());
     }
 
     void GrappleUpdate()
     {
-        if (!mustGrapple)
+        if (!(Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f && playerInput.actions["Grapple"].IsPressed()))
         {
             rb.linearVelocity = Vector3.zero;
             rb.AddForce(grappleDirection * _endGrappleImpulseForce,  ForceMode.Impulse);
@@ -1204,7 +1203,10 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     void GrappleFixedUpdate()
     {
-        rb.linearVelocity = grappleDirection * _grapplingSpeed;
+        grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
+        Vector3 newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection, _grappleRedirectionSpeed * Time.fixedDeltaTime);
+        
+        rb.linearVelocity = newDir * _grapplingSpeed;
     }
 
     void ExitGrappleState()
@@ -1215,16 +1217,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     void GrappleLateUpdate()
     {
         UpdateCameraPositionAndRotation();
-    }
-
-    IEnumerator GrappleCoroutine()
-    {
-        mustGrapple = true;
-        while (Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f && playerInput.actions["Grapple"].IsPressed())
-        {
-            yield return new WaitForEndOfFrame();
-        }
-        mustGrapple = false;
     }
 
     #endregion
