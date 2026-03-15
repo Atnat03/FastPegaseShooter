@@ -348,13 +348,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 419356252353084801}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7223032234500983169}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!2083052967 &4552020306343886856
 VisualEffect:
   m_ObjectHideFlags: 0
@@ -545,6 +545,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6363322599526773559}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &525997578193406192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3357247291835520974}
+  m_Layer: 6
+  m_Name: CameraHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3357247291835520974
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525997578193406192}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6291573982660001099}
+  m_Father: {fileID: 3952118585016700218}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &665676091765843870
 GameObject:
@@ -884,7 +916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1212,6 +1244,9 @@ MonoBehaviour:
   bufferJumpTime: 0.2
   coyoteTimeDuration: 0.2
   landSnapVelocity: 50
+  superJumpInputMaxDelay: 0
+  superJumpVerticalForce: 0
+  superJumpHorizontalForce: 0
   wallRideDetectionRange: 0.5
   wallRidingDuration: 1.5
   wallRideCooldown: 0.2
@@ -1246,6 +1281,7 @@ MonoBehaviour:
   _castWidth: 0.5
   _castMaxDistance: 100
   _grapplingSpeed: 15
+  _grappleRedirectionSpeed: 8
   _endGrappleImpulseForce: 3
   grounded: 0
   leftSideAgainstWall: 0
@@ -1801,6 +1837,7 @@ MonoBehaviour:
   _source: {fileID: 1563613516594705392}
   _soundData: {fileID: 11400000, guid: 376eb2d5da950c64c8f7abf6d416e1e0, type: 2}
   _muzzleFlash: {fileID: 0}
+  _cameraShakeSettings: {x: 0.05, y: 0.1}
   p_authorizedToShoot: 1
 --- !u!114 &4565791143881034744
 MonoBehaviour:
@@ -2048,7 +2085,7 @@ GameObject:
   - component: {fileID: 2241006602390823596}
   - component: {fileID: 7975374765759237130}
   m_Layer: 6
-  m_Name: Camera
+  m_Name: MainCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2070,7 +2107,7 @@ Transform:
   - {fileID: 807649137645278252}
   - {fileID: 302214889374688515}
   - {fileID: 7098446205810024789}
-  m_Father: {fileID: 3952118585016700218}
+  m_Father: {fileID: 3357247291835520974}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &3061844143884342809
 Camera:
@@ -2111,7 +2148,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3991
+    m_Bits: 1943
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2236,7 +2273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2762,7 +2799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3209,7 +3246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3618,7 +3655,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5791381683401028223}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.296}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3753,6 +3790,7 @@ MonoBehaviour:
   _source: {fileID: 8211222051239367102}
   _soundData: {fileID: 11400000, guid: baba7f4aad2773f45b57a042e622a26d, type: 2}
   _muzzleFlash: {fileID: 0}
+  _cameraShakeSettings: {x: 0.05, y: 0.1}
   p_authorizedToShoot: 1
 --- !u!114 &5635982690636968274
 MonoBehaviour:
@@ -4747,6 +4785,7 @@ MonoBehaviour:
   _source: {fileID: 4997057281965842912}
   _soundData: {fileID: 11400000, guid: 65bd5cf42144b4241ad32c45f4c56e43, type: 2}
   _muzzleFlash: {fileID: 4552020306343886856}
+  _cameraShakeSettings: {x: 0.1, y: 0.2}
   p_authorizedToShoot: 1
 --- !u!114 &5897507103756933187
 MonoBehaviour:
@@ -5119,6 +5158,7 @@ MonoBehaviour:
   _source: {fileID: 9128913315205030470}
   _soundData: {fileID: 11400000, guid: bed84edcd44ad494b8bcf63c31debaab, type: 2}
   _muzzleFlash: {fileID: 4364521639019778698}
+  _cameraShakeSettings: {x: 0.05, y: 0.1}
   p_authorizedToShoot: 1
 --- !u!114 &7688501357711374014
 MonoBehaviour:
@@ -5341,6 +5381,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3952118585016700218}
+  - component: {fileID: 8432070366235327542}
   m_Layer: 6
   m_Name: CameraRecoil
   m_TagString: Untagged
@@ -5362,9 +5403,24 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2571651778359029525}
-  - {fileID: 6291573982660001099}
+  - {fileID: 3357247291835520974}
   m_Father: {fileID: 6062630658384634040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8432070366235327542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121068319375699811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2e9a64614e6ee84795674a91f1a5b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraShake
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
 --- !u!1 &8149685527222359090
 GameObject:
   m_ObjectHideFlags: 0
@@ -5642,7 +5698,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -6255,11 +6311,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 33269b2b610f4c245a712795c1927939, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 33269b2b610f4c245a712795c1927939, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 33269b2b610f4c245a712795c1927939, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

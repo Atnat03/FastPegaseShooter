@@ -54,12 +54,18 @@ namespace GunDecorator
         public SoundsDataSO _soundData;
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
 
+        [SerializeField, Tooltip("Camera shake setting : {x = duration du shake || y = magnitude du shake}")] Vector2 _cameraShakeSettings = new Vector2(0.05f, 0.1f);
+        
         private bool ShootingInputPressed;
 
         [HideInInspector] public bool p_authorizedToShoot = true;
 
+        private EventBus _bus;
+
         private void Awake()
         {
+            _bus = EventBusInitialiser.instance.Bus;
+            
             //On récupere tout les types de modules possible et potentiellement sur l'arme
             _shootModule = GetComponents<IShootModule>();
             _reloadModule = GetComponent<IReloadModule>();
@@ -76,7 +82,6 @@ namespace GunDecorator
         public void TryFire()
         {
             //On appele la fonction shoot du module de shoot actuellement équipé
-
             ShootingInputPressed = true;
                    
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
@@ -89,12 +94,19 @@ namespace GunDecorator
                         continue;
                     }
                     s?.TryShoot();
+                    _recoilModule?.Recoil(_model.transform, 0.1f);
+                    SetAmmo(GetCurrentAmmo() - 1);
+                    PlayMuzzleFlash();
                 }
 
-                _recoilModule?.Recoil(_model.transform, 0.1f);
-                SetAmmo(GetCurrentAmmo() - 1);
-                PlayMuzzleFlash();
             }
+            
+            _bus.InvokeEvent(new OnCameraShakeEvent
+            {
+                player = NetworkObject,
+                duration = _cameraShakeSettings.x,
+                magnitude = _cameraShakeSettings.y
+            });
 
             if (GetCurrentAmmo() <= 0)
             {

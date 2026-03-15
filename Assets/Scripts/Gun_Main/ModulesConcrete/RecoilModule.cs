@@ -47,7 +47,7 @@ public class RecoilModule : GunModule, IRecoilModule
     private float _targetZ;
 
     private Vector3 _initialLocalPos;
-
+    
     #endregion
 
     void Start()
@@ -66,6 +66,7 @@ public class RecoilModule : GunModule, IRecoilModule
         _targetZ += _z_recoilDistance * multiplier;
 
         _targetZ = Mathf.Clamp(_targetZ, 0, _maxZKickback);
+
     }
 
     void Update()
