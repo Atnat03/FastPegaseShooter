@@ -1402,7 +1402,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         float elapsedTime = 0.1f;
         yield return new WaitForSeconds(0.1f);
-        while (elapsedTime < superJumpInputMaxDelay)
+        while (elapsedTime < superJumpInputMaxDelay && !grounded)
         {
             elapsedTime += Time.deltaTime;
             if (playerInput.actions["Jump"].WasPressedThisFrame())
