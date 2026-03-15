@@ -31,8 +31,6 @@ namespace GunDecorator
     public interface IRecoilModule
     {
         public void Recoil(Transform model, float time, float multiplier = 1);
-        public AnimationCurve Z_RecoilCurve { get; }
-        public float Z_RecoilDistance { get; }
     }
 
     public interface IAmmoModule

@@ -37,6 +37,8 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
         p_isCritical = isCritical;
         _targetPoint = targetPoint;
         _targetNetworkObject = target;
+        
+        Destroy(gameObject, 3f);
     }
 
     private void Move()

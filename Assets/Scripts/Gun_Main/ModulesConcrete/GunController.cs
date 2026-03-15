@@ -93,7 +93,7 @@ namespace GunDecorator
 
                 _recoilModule?.Recoil(_model.transform, 0.1f);
                 SetAmmo(GetCurrentAmmo() - 1);
-                _muzzleFlash?.Play();
+                PlayMuzzleFlash();
             }
 
             if (GetCurrentAmmo() <= 0)
@@ -105,13 +105,14 @@ namespace GunDecorator
             }
         }
 
+
         IEnumerator ShootingCoroutine(IShootModule s)
         {
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
                 p_authorizedToShoot = false;
                 s.TryShoot();
-                _muzzleFlash?.Play();
+                PlayMuzzleFlash();
                 _recoilModule?.Recoil(_model.transform, s.FireRate);
                 SetAmmo(GetCurrentAmmo() - 1);
                 
@@ -181,6 +182,14 @@ namespace GunDecorator
         {
             AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
             SoundManager.PlaySound(clip, _source, volume);
+        }
+        
+                
+        [ObserversRpc]
+        private void PlayMuzzleFlash()
+        {
+            Debug.Log("Play Muzzle flash");
+            _muzzleFlash.Play();
         }
 
         public void StopReload() => _reloadModule.StopReload();

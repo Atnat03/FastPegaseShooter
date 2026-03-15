@@ -30,58 +30,58 @@ public class RecoilModule : GunModule, IRecoilModule
     private float _snapiness = 10f;
     
     
-    //privates variables
+    [Header("Z Kickback")]
+    [SerializeField]
+    private float _z_recoilDistance = 0.05f;
+
+    [SerializeField]
+    private float _z_returnSpeed = 8f;
+
+    [SerializeField]
+    private float _maxZKickback = 0.15f;
+
     private Vector3 _currentRotation;
     private Vector3 _targetRotation;
 
+    private float _currentZ;
+    private float _targetZ;
+
+    private Vector3 _initialLocalPos;
+
     #endregion
-    
+
+    void Start()
+    {
+        _initialLocalPos = _recoilTransform.localPosition;
+    }
+
     public void Recoil(Transform model, float time, float multiplier = 1)
     {
-        _targetRotation +=  new Vector3( -_recoilX, Random.Range(-_recoilY, _recoilY) , Random.Range(-_recoilZ, _recoilZ)) * multiplier;
-        
-        if(model != null)
-            StartCoroutine(RecoilingZ(model, time));
+        _targetRotation += new Vector3(
+            -_recoilX,
+            Random.Range(-_recoilY, _recoilY),
+            Random.Range(-_recoilZ, _recoilZ)
+        ) * multiplier;
+
+        _targetZ += _z_recoilDistance * multiplier;
+
+        _targetZ = Mathf.Clamp(_targetZ, 0, _maxZKickback);
     }
-
-    IEnumerator RecoilingZ(Transform model, float time)
-    {
-        float elapsedTime = 0;
-                
-        Vector3 startPos = model.transform.localPosition;
-        
-        while (elapsedTime < time)
-        {
-            elapsedTime += Time.deltaTime;
-
-            float t = elapsedTime / time;
-            
-            float recoil = Z_RecoilCurve.Evaluate(t) * Z_RecoilDistance;
-
-            model.transform.localPosition = startPos + new Vector3(0, 0, -recoil);
-
-            yield return null;
-        }
-                
-        model.transform.localPosition = startPos;
-    }
-
-
-    public AnimationCurve Z_RecoilCurve => _z_recoilCurve;
-    public float Z_RecoilDistance => _z_recoilDistance;
-    
-    [SerializeField] private AnimationCurve _z_recoilCurve;
-    [SerializeField] private float _z_recoilDistance;
 
     void Update()
     {
         BringBackWeapon();
     }
-    
+
     void BringBackWeapon()
     {
         _targetRotation = Vector3.Lerp(_targetRotation, Vector3.zero, _returnSpeed * Time.deltaTime);
         _currentRotation = Vector3.Slerp(_currentRotation, _targetRotation, _snapiness * Time.deltaTime);
         _recoilTransform.localRotation = Quaternion.Euler(_currentRotation);
+
+        _targetZ = Mathf.Lerp(_targetZ, 0, _z_returnSpeed * Time.deltaTime);
+        _currentZ = Mathf.Lerp(_currentZ, _targetZ, _snapiness * Time.deltaTime);
+
+        _gunController.ModelGun.transform.localPosition = _initialLocalPos + new Vector3(0, 0, -_currentZ);
     }
 }
