@@ -7,7 +7,6 @@ using Object = UnityEngine.Object;
 
 public class PathfindingGridCreator : EditorWindow
 {
-    
     [Header("Bounding box")]
     public Vector3 boundsOffset =  Vector3.zero;
     [SerializeField] private float boundsHeight = 0.5f;
@@ -22,7 +21,7 @@ public class PathfindingGridCreator : EditorWindow
     [SerializeField] private int wallAvoidanceDistance = 3;
     
     [Header("Debug")]
-    [SerializeField] private float nodeSize = 0.025f;
+    [SerializeField] private float nodeSize = 0.05f;
     [SerializeField] private Gradient wallAvoidanceGradient = new Gradient();
 
     [HideInInspector] public List<PathfindingNode> nodes = new List<PathfindingNode>();
@@ -37,6 +36,10 @@ public class PathfindingGridCreator : EditorWindow
     [HideInInspector] public bool drawNodes = false;
     [HideInInspector] public bool drawNodesConnections = true;
     //
+
+    private Material nodeMaterial;
+    private Material lineMaterial;
+
 
     [MenuItem("Tools/Pathfinding Grid Creator")]
     public static void ShowWindow()
@@ -58,19 +61,36 @@ public class PathfindingGridCreator : EditorWindow
 
     public void CreateGUI()
     {
-        Debug.Log("CreateGUI");
+        LoadPreferences();
+        
+        nodeMaterial = new Material(Shader.Find("Unlit/Color"));
+        nodeMaterial.color = new Color(0.8f,0.3f,0.3f, 1f);
+        nodeMaterial.enableInstancing = true;
+        
+        lineMaterial = new Material(Shader.Find("Unlit/Color"));
+        lineMaterial.color = new Color(1f,0.4f,0.4f, 1f);
+        lineMaterial.enableInstancing = true;
+        
+        GridCreatorGizmosDrawer.ClearLists();
     }
 
     public void OnGUI()
     {
         DrawGUI();
-        if(boundsVertices.Count < 3) return;
-        
-        InitializeNodes();
     }
     private void OnSceneGUI(SceneView obj)
     {
         DrawGizmos();
+    }
+
+    private void GridUpdate()
+    {
+        if(boundsVertices.Count < 3)
+        {
+            CustomLogger.CCErrorLog("Bounding box size is less than 3");
+            return;
+        }
+        InitializeNodes();
     }
 
     void DrawGUI()
@@ -83,6 +103,24 @@ public class PathfindingGridCreator : EditorWindow
         };
         titleStyle.normal.textColor = Color.white;
         
+        GUILayout.Label("Utilities", titleStyle);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Generate Grid"))
+        {
+            GridUpdate();
+            GridCreatorGizmosDrawer.GenerateNodeMatrix(nodes);
+            GridCreatorGizmosDrawer.GenerateConnectionMatrix(nodes);
+        }
+        if (GUILayout.Button("Load Preferences"))
+        {
+            LoadPreferences();
+        }
+        if (GUILayout.Button("Save Preferences"))
+        {
+            SavePreferences();
+        }
+        GUILayout.EndHorizontal();
+        
         GUILayout.Label("Bounding Box", titleStyle);
         boundsHeight = EditorGUILayout.FloatField("Bounds Height", boundsHeight);
         boundsOffset = EditorGUILayout.Vector3Field("Bounds Offset", boundsOffset);
@@ -92,8 +130,8 @@ public class PathfindingGridCreator : EditorWindow
         maxVerticalDistance = EditorGUILayout.FloatField("Max Vertical Distance", maxVerticalDistance);
         agentHeight = EditorGUILayout.FloatField("Agent Height", agentHeight);
         
-        GUILayout.Label("Node Parameters", titleStyle);
-        wallAvoidanceDistance = EditorGUILayout.IntField("Wall Avoidance Distance", wallAvoidanceDistance);
+        //GUILayout.Label("Node Parameters", titleStyle);
+        //wallAvoidanceDistance = EditorGUILayout.IntField("Wall Avoidance Distance", wallAvoidanceDistance);
         
         GUILayout.Label("Debug", titleStyle);
         nodeSize = EditorGUILayout.FloatField("Node Size", nodeSize);
@@ -199,6 +237,34 @@ public class PathfindingGridCreator : EditorWindow
         GUILayout.EndVertical();
     }
 
+    void LoadPreferences()
+    {
+        GridCreatorPreferences GCP = new GridCreatorPreferences().GetFromJSon();
+        
+        boundsOffset = GCP.boundsOffset;
+        boundsHeight = GCP.boundsHeight;
+        boundsVertices =  GCP.boundsVertices;
+        detectionPrecision  = GCP.detectionPrecision;
+        maxVerticalDistance =  GCP.maxVerticalDistance;
+        agentHeight =  GCP.agentHeight;
+        //wallAvoidanceDistance =   GCP.wallAvoidanceDistance;
+        nodeSize =  GCP.nodeSize;
+        //wallAvoidanceGradient = GCP.wallAvoidanceGradient;
+        drawBounds = GCP.drawBounds;
+        drawBoundingBox = GCP.drawBoundingBox;
+        drawObstacles = GCP.drawObstacles;
+        drawNodes = GCP.drawNodes;
+        drawNodesConnections  = GCP.drawNodesConnections;
+    }
+    void SavePreferences()
+    {
+        new GridCreatorPreferences(
+        boundsOffset, boundsHeight, boundsVertices,
+        detectionPrecision, maxVerticalDistance, agentHeight,
+        wallAvoidanceDistance, nodeSize,
+        drawBounds, drawBoundingBox, drawObstacles, drawNodes, drawNodesConnections).SaveToJson();
+    }
+
     Vector3[] GetRaycastPositions()
     {
         (Vector2,Vector2) minMaxBoundingBox = GetBoundsBoxMinMax(); 
@@ -271,35 +337,36 @@ public class PathfindingGridCreator : EditorWindow
         
         for(int i = 0; i < raycastPositions.Length; i++)
         {
-            RaycastHit[] hits = Physics.RaycastAll(raycastPositions[i], Vector3.down, boundsHeight);
+            RaycastHit[] hits = new RaycastHit[10];
+            int hitCount = Physics.RaycastNonAlloc(raycastPositions[i], Vector3.down, hits, boundsHeight);
 
             nodesPerCell[i] = new List<PathfindingNode>();
             
             List<(float,float)> obstacles = new List<(float,float)>();
-            for (int j = hits.Length-1; j >= 0; j--)
+            for (int j = hitCount-1; j >= 0; j--)
             {
                 if (hits[j].collider.gameObject.layer == 8 &&
                     hits[j].collider.gameObject.CompareTag("PathFindingObstacle"))
                 {
                     float lenght = hits[j].collider.bounds.max.y - hits[j].collider.bounds.min.y;
-                    RaycastHit[] backHits = Physics.RaycastAll(
+                    RaycastHit[] backHits = new RaycastHit[10];
+                        int backHitCount = Physics.RaycastNonAlloc(
                         new Vector3(raycastPositions[i].x,hits[j].point.y-lenght-0.1f,raycastPositions[i].z),
-                        Vector3.up,
-                        lenght);
-                    foreach (RaycastHit hit in backHits)
+                        Vector3.up, backHits, lenght);
+                    for(int k = 0; k < backHitCount; k++ )
                     {
-                        if (hit.collider == hits[j].collider)
+                        if (backHits[k].collider == hits[j].collider)
                         {
                             obstaclesDebug.Add(hits[j].point);
-                            obstaclesDebug.Add(hit.point);
-                            obstacles.Add((hit.point.y, hits[j].point.y));
+                            obstaclesDebug.Add(backHits[k].point);
+                            obstacles.Add((backHits[k].point.y, hits[j].point.y));
                         }
                     }
                     
                 }
             }
             
-            for(int j = 0; j < hits.Length; j++)
+            for(int j = 0; j < hitCount; j++)
             {
                 Vector2 pos = new Vector2(raycastPositions[i].x-boundsOffset.x, raycastPositions[i].z-boundsOffset.z);
                 if(!CanAgentWalkUnder(hits[j], hits, obstacles) ||
@@ -422,66 +489,9 @@ public class PathfindingGridCreator : EditorWindow
     {
         if(boundsVertices.Count < 3) return;
         
-        Handles.color = Color.yellow;
-        Handles.color = Color.yellow;
-        if(drawBounds)
-        {for (int i = 0; i < boundsVertices.Count; i++)
-        {
-            Vector2 v1 = boundsVertices[i];
-            Vector2 v2 = boundsVertices[(i + 1)%boundsVertices.Count];
-
-            Vector3 pos1 = new Vector3(v1.x,-boundsHeight*0.5f,v1.y) + boundsOffset;
-            Vector3 pos2 = new Vector3(v1.x,boundsHeight*0.5f,v1.y) + boundsOffset;
-            
-            Vector3 pos3 = new Vector3(v2.x,-boundsHeight*0.5f,v2.y) + boundsOffset;
-            Vector3 pos4 = new Vector3(v2.x,boundsHeight*0.5f,v2.y) + boundsOffset;
-            
-            Handles.DrawLine(pos1, pos2);
-            Handles.Label(pos2 + Vector3.up*0.1f, $"{i}");
-            Handles.DrawLine(pos1, pos3);
-            Handles.DrawLine(pos2, pos4);
-        }}
+        if(drawNodes) GridCreatorGizmosDrawer.DrawNodes(nodeMaterial, nodeSize);
+        if(drawNodesConnections) GridCreatorGizmosDrawer.DrawConnections(lineMaterial);
         
-        Handles.color = new Color(0.9f,0.9f,0.3f);
-        if(drawNodes)
-        {
-            if (drawBoundingBox)
-            {
-                (Vector2, Vector2) BBMinMax = GetBoundsBoxMinMax();
-                Vector2 BBExtent = BBMinMax.Item2 - BBMinMax.Item1;
-                Vector2 BBCenter = GetBoundingBoxCenter(BBMinMax.Item1, BBMinMax.Item2);
-                Handles.DrawWireCube(boundsOffset + new Vector3(BBCenter.x, 0, BBCenter.y),
-                    new Vector3(BBExtent.x, boundsHeight, BBExtent.y));
-            }
-        }
-        
-        if(drawNodes || drawNodesConnections)
-        {
-            foreach (PathfindingNode node in nodes)
-            {
-                Handles.color = wallAvoidanceGradient.Evaluate(wallAvoidanceDistance == 0 ? 0 : (node.wallAvoidance / (float)wallAvoidanceDistance)); 
-                if(drawNodes) Handles.SphereHandleCap(0, node.position, Quaternion.identity, nodeSize, EventType.Repaint);
-                
-                if(drawNodesConnections)
-                {
-                    foreach (int n in node.neighborsIndex)
-                    {
-                        float t = wallAvoidanceDistance == 0 ? 0 : Mathf.Min(node.wallAvoidance, nodes[n].wallAvoidance) / (float)wallAvoidanceDistance; 
-                        Handles.color = wallAvoidanceGradient.Evaluate(t);
-                        Handles.DrawLine(node.position, nodes[n].position);
-                    }
-                }
-            }
-        }
-        
-        Handles.color = new Color(0.7f, 0.5f, 0.7f);
-        if(drawObstacles)
-        {
-            foreach (Vector3 v3 in obstaclesDebug)
-            {
-                Handles.SphereHandleCap(0, v3, Quaternion.identity, nodeSize/2, EventType.Repaint);
-            }
-        }
     }
     #endif
 }
