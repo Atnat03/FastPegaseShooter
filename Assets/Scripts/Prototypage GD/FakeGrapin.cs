@@ -33,7 +33,7 @@ public class FakeGrapin : MonoBehaviour
         {
             Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
             Debug.Log("je touche " + hit.transform.name);
-            if (hit.transform.CompareTag("GrapplePoint2"))
+            if (hit.transform.CompareTag("GrapplePoint"))
             {
                 newPos =  hit.transform.position + new Vector3(0, 2, 0);
                 StartCoroutine(TPOverGrapin());
