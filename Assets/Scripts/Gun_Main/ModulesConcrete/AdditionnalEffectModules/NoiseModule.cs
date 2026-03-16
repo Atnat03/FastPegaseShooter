@@ -7,6 +7,9 @@ namespace GunDecorator
     {
         private IShootModule _shootModule;
         private ISecondModule _next;
+        
+        [SerializeField][Tooltip("le décalage en X du tir est determiné aléatoirement entre -_maxOffsetX et _maxOffsetX")] private float _maxOffsetX;
+        [SerializeField][Tooltip("le décalage en Y du tir est determiné aléatoirement entre -_maxOffsetY et _maxOffsetY")] private float _maxOffsetY;
 
         public void SetUpModule(IShootModule shootModule)
         {
@@ -17,7 +20,8 @@ namespace GunDecorator
 
         public void DoAdditionnalEffect()
         {
-            Debug.Log("plein de noise omg");
+            _shootModule.SetDirectionModifier(new Vector3(Random.Range(-_maxOffsetX, _maxOffsetX), Random.Range(-_maxOffsetY, _maxOffsetY), 1));
+            Shooting();
         }
 
         public void Shooting()

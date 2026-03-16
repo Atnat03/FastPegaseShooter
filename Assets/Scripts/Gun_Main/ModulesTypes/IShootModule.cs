@@ -1,3 +1,4 @@
+using FishNet.Object;
 using UnityEngine;
 
 namespace GunDecorator
@@ -12,6 +13,9 @@ namespace GunDecorator
         public bool IsFullAuto { get; }
         public float FireRate { get; }
         public IAmmoModule AmmoModule { get; }
+        
+        public void SetDirectionModifier(Vector3 direction);
+        public void SetBulletOffset(Vector3 offset);
     }
     
     public interface IReloadModule
@@ -27,7 +31,7 @@ namespace GunDecorator
 
     public interface IRecoilModule
     {
-        public void Recoil(float multiplier = 1);
+        public void Recoil(Transform model, float time, float multiplier = 1);
     }
 
     public interface IAmmoModule
@@ -48,7 +52,8 @@ namespace GunDecorator
     public interface IAmmoExplosif
     {
         public void Explosed(GameObject vfx, float raduis, int damage);
-        public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun);
+        public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
+            float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target);
     }
 
     public interface ISecondModule

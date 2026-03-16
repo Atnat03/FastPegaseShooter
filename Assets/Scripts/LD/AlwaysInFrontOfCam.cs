@@ -13,6 +13,7 @@ public class AlwaysInFrontOfCam : MonoBehaviour
 
 	Camera cam;
 	[SerializeField] float _distanceMax = 100f;
+	[SerializeField] private bool _scaleModifier = true;
 	
 	#endregion
 
@@ -29,7 +30,9 @@ public class AlwaysInFrontOfCam : MonoBehaviour
 		if (cam != null)
 		{
 			transform.LookAt(cam.transform.position);
-			transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 10,  Vector3.Distance(cam.transform.position, transform.position) / _distanceMax);
+			
+			if(_scaleModifier)
+				transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 10,  Vector3.Distance(cam.transform.position, transform.position) / _distanceMax);
 		}
 	}
 
