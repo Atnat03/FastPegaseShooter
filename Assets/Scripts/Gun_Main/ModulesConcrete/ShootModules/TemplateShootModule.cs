@@ -13,17 +13,18 @@ namespace GunDecorator
         public float FireRate => _fireRate;
         public IAmmoModule AmmoModule => _ammoModule;
 
-        [SerializeField] protected MonoBehaviour[] _secondModule;
+        [SerializeField][Tooltip("liste de l'ensemble des modificateurs appliqués au tir (l'ordre eut changer le comportement du tir)")] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
         
-        [SerializeField] MonoBehaviour _ammoType;
+        [SerializeField][Tooltip("type de la balle tirée par l'ensemble du module")] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
 
-        [SerializeField]private bool _isFullAuto;
-        [SerializeField]private float _fireRate;
+        [SerializeField][Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
+        [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
         
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
+        private Vector3 _bulletOffset = Vector3.zero;
         
         private void Start()
         {
@@ -64,25 +65,21 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
-                _ammoModule.SpawnBullet(_directionModifier, Vector3.zero);
+                _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
                 
                 _ammoModule.ResetBulletData();
                 
-                PlayShootSoundObserverRpc();
+                _gunController.PlaySound("Shoot");
             }
         }
-
-        [ObserversRpc]
-        private void PlayShootSoundObserverRpc()
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, "Shoot");
-            SoundManager.PlaySound(clip, _gunController._source);
-        }
+        
 
         public void CancelShooting()
         { }
         
         public void SetDirectionModifier(Vector3 direction) =>_directionModifier = direction;
+        
+        public void SetBulletOffset(Vector3 offset) =>_bulletOffset = offset;
         
     }
 }

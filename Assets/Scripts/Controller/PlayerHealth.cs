@@ -5,7 +5,9 @@ using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using ScriptableObjectsDefinitions;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -27,14 +29,22 @@ public class PlayerHealth : NetworkBehaviour
 	[SerializeField] private float _healthBase = 100;
 	[SerializeField] private PlayerAnimation _playerAnimation;
 	[SerializeField] private float _timeToRespawn = 5;
+	[SerializeField, Range(0f, 1f)] private float _critikStep = 0.5f;
 	private Vector3 _respawnPosition;
 	private Quaternion _respawnRotation;
 	private bool _initialized = false;
+	bool IsCritik = false;
 	
 	[Header("UI")]
 	[SerializeField] private Image _healthBar;
 	[SerializeField] private Image _deathImage;
 	private float _targetHealthFill;
+	[SerializeField] private CanvasGroup _damagedWarningImage;
+	[SerializeField] private Image _frameDeccordImage;
+	float _elapsedTimeShowWarning = 0;
+	bool _isShowedWarning = false;
+
+	[SerializeField] private Volume _damagedVolume;
 	
 	[SerializeField] private SoundsDataSO _soundsData;
 	private AudioSource _audioSource;
@@ -45,7 +55,6 @@ public class PlayerHealth : NetworkBehaviour
 
 
 	#region Fonctions
-	
 	
 	public override void OnStartServer()
 	{
@@ -95,6 +104,26 @@ public class PlayerHealth : NetworkBehaviour
 		if (IsOwner)
 		{
 			_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _targetHealthFill, Time.deltaTime * 25);
+			ShowWarning();
+		}
+	}
+
+	void ShowWarning()
+	{
+		_frameDeccordImage.color = IsCritik ? Color.red : Color.white;
+		_damagedWarningImage.gameObject.SetActive(IsCritik);
+
+		if (IsCritik)
+		{
+			_elapsedTimeShowWarning -= Time.deltaTime;
+
+			if (_elapsedTimeShowWarning <= 0)
+			{
+				_isShowedWarning = !_isShowedWarning;
+				_elapsedTimeShowWarning = 1f;
+			}
+			
+			_damagedWarningImage.alpha = Mathf.Sin(_elapsedTimeShowWarning * Mathf.PI);
 		}
 	}
 
@@ -107,6 +136,8 @@ public class PlayerHealth : NetworkBehaviour
 		
 		float newHealth = _currentHealth.Value - data.value;
 
+		ApplyVolumeDamagedEffectTargetRpc(Owner);
+
 		PlayHurtSoundObserverRpc();
 
 		if (newHealth <= 0)
@@ -118,6 +149,31 @@ public class PlayerHealth : NetworkBehaviour
 			_currentHealth.Value = newHealth;
 		}
 	}
+
+	[TargetRpc]
+	private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
+	{
+		StartCoroutine(ApplyVolumeDamagedEffect());
+	}
+	
+	IEnumerator ApplyVolumeDamagedEffect()
+	{
+		float time = 0.5f;
+		float elapsedTime = 0f;
+
+		while (elapsedTime < time)
+		{
+			elapsedTime += Time.deltaTime;
+
+			float t = elapsedTime / time;
+			_damagedVolume.weight = Mathf.Sin(t * Mathf.PI);
+
+			yield return null;
+		}
+
+		_damagedVolume.weight = 0f;
+	}
+	
 
 	[ObserversRpc]
 	private void PlayHurtSoundObserverRpc()
@@ -174,9 +230,21 @@ public class PlayerHealth : NetworkBehaviour
 	private void OnHealthChange(float prev, float next, bool asServer)
 	{
 		if (!IsOwner) return;
-		
+    
 		_targetHealthFill = next / _healthBase;
+
+		if (_targetHealthFill <= _critikStep)
+		{
+			IsCritik = true;
+			_elapsedTimeShowWarning = 1f;
+		}
+		else
+		{
+			IsCritik = false;
+			_damagedWarningImage.alpha = 0f;
+		}
 	}
+
 	
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{
