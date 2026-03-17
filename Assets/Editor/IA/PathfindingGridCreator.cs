@@ -37,6 +37,7 @@ public class PathfindingGridCreator : EditorWindow
     [HideInInspector] public bool drawNodesConnections = true;
     //
 
+    private Color boundsColor;
     private Material nodeMaterial;
     private Material lineMaterial;
     
@@ -83,6 +84,7 @@ public class PathfindingGridCreator : EditorWindow
     private void OnSceneGUI(SceneView obj)
     {
         DrawGizmos();
+        SceneView.RepaintAll();
     }
 
     #region Window Drawing
@@ -129,9 +131,6 @@ public class PathfindingGridCreator : EditorWindow
         //GUILayout.Label("Node Parameters", titleStyle);
         //wallAvoidanceDistance = EditorGUILayout.IntField("Wall Avoidance Distance", wallAvoidanceDistance);
         
-        GUILayout.Label("Debug", titleStyle);
-        nodeSize = EditorGUILayout.FloatField("Node Size", nodeSize);
-        //wallAvoidanceGradient = EditorGUILayout.GradientField("Wall Avoidance Gradient", wallAvoidanceGradient);
         GUILayout.EndVertical();
         
         GUILayout.BeginVertical(GUILayout.Width(windowWidth/2));
@@ -219,6 +218,11 @@ public class PathfindingGridCreator : EditorWindow
         GUI.backgroundColor = drawNodesConnections ? Color.green : Color.red;
         if(GUILayout.Button("Draw Connections")) drawNodesConnections = !drawNodesConnections;
         GUILayout.EndHorizontal();
+        
+        GUI.backgroundColor = backgroundColor;
+        nodeSize = EditorGUILayout.FloatField("Node Size", nodeSize);
+        boundsColor = EditorGUILayout.ColorField("Bounds Color", boundsColor);
+        
         
         GUI.backgroundColor = backgroundColor;
         GUILayout.EndVertical();
@@ -331,6 +335,7 @@ public class PathfindingGridCreator : EditorWindow
         drawObstacles = GCP.drawObstacles;
         drawNodes = GCP.drawNodes;
         drawNodesConnections  = GCP.drawNodesConnections;
+        boundsColor = GCP.boundsColor;
     }
     void SavePreferences()
     {
@@ -338,7 +343,8 @@ public class PathfindingGridCreator : EditorWindow
         boundsOffset, boundsHeight, boundsVertices,
         detectionPrecision, maxVerticalDistance, agentHeight,
         wallAvoidanceDistance, nodeSize,
-        drawBounds, drawObstacles, drawNodes, drawNodesConnections).SaveToJson();
+        drawBounds, drawObstacles, drawNodes, drawNodesConnections, 
+        boundsColor).SaveToJson();
     }
     #endregion
 
@@ -648,6 +654,15 @@ public class PathfindingGridCreator : EditorWindow
     #region Drawing
     private void DrawGizmos()
     {
+        Handles.color = new Color(0.7f, 0.5f, 0.7f);
+        if(drawObstacles)
+        {
+            foreach (Vector3 v3 in obstaclesDebug)
+            {
+                Handles.SphereHandleCap(0, v3, Quaternion.identity, nodeSize, EventType.Repaint);
+            }
+        }
+        
         if(boundsVertices.Count < 3) return;
         
         if(drawNodes)
@@ -659,7 +674,7 @@ public class PathfindingGridCreator : EditorWindow
             GridCreatorGizmosDrawer.DrawConnections(lineMaterial);
         }
         
-        Handles.color = new Color(0.9f,0.9f,0.3f);
+        Handles.color = boundsColor;
         if(drawBounds)
         {
             for (int i = 0; i < boundsVertices.Count; i++)
@@ -673,22 +688,14 @@ public class PathfindingGridCreator : EditorWindow
                 Vector3 pos3 = new Vector3(v2.x,-boundsHeight*0.5f,v2.y) + boundsOffset;
                 Vector3 pos4 = new Vector3(v2.x,boundsHeight*0.5f,v2.y) + boundsOffset;
                         
-                Handles.Label(pos2 + Vector3.up*0.1f, $"{i}");
+                GUIStyle style = new GUIStyle();
+                style.normal.textColor = boundsColor;
+                Handles.Label(pos2 + Vector3.up, $"{i}", style);
                 Handles.DrawLine(pos1, pos2);
                 Handles.DrawLine(pos1, pos3);
                 Handles.DrawLine(pos2, pos4);
             }
         }
-        Handles.color = new Color(0.7f, 0.5f, 0.7f);
-        if(drawObstacles)
-        {
-            foreach (Vector3 v3 in obstaclesDebug)
-            {
-                Handles.SphereHandleCap(0, v3, Quaternion.identity, nodeSize, EventType.Repaint);
-            }
-        }
-        
-        
     }
     #endregion
 }

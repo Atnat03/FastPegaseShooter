@@ -24,13 +24,16 @@ public class GridCreatorPreferences : ISavable<GridCreatorPreferences>
     public bool drawObstacles = false;
     public bool drawNodes = false;
     public bool drawNodesConnections = true;
+
+    public Color boundsColor = new Color(0.9f,0.9f,0.3f);
     
     public GridCreatorPreferences(){}
 
     public GridCreatorPreferences(Vector3 boundsOffset, float boundsHeight, List<Vector2> boundsVertices,
         float detectionPrecision, float maxVerticalDistance, float agentHeight,
         int wallAvoidanceDistance, float nodeSize,
-        bool drawBounds, bool drawObstacles, bool drawNodes, bool drawNodesConnections)
+        bool drawBounds, bool drawObstacles, bool drawNodes, bool drawNodesConnections,
+        Color boundsColor)
     {
         this.boundsOffset = boundsOffset;
         this.boundsHeight = boundsHeight;
@@ -44,6 +47,7 @@ public class GridCreatorPreferences : ISavable<GridCreatorPreferences>
         this.drawObstacles = drawObstacles;
         this.drawNodes = drawNodes;
         this.drawNodesConnections = drawNodesConnections;
+        this.boundsColor = boundsColor;
     }
     
     
