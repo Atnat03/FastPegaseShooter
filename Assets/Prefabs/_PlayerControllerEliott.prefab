@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2624057951769441985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6363322599526773559}
+  - component: {fileID: 1792326860910464111}
+  - component: {fileID: 3217273699543337116}
+  m_Layer: 6
+  m_Name: _PlayerControllerEliott
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6363322599526773559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2624057951769441985}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.948, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1792326860910464111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2624057951769441985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acacab6b18fd06f41b9907077ea2c090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 3217273699543337116}
+  _networkObjectCache: {fileID: 0}
+  rb: {fileID: 0}
+  cameraParentTransform: {fileID: 0}
+  cameraSpringTarget: {fileID: 0}
+  _camera: {fileID: 0}
+  playerFeet: {fileID: 0}
+  playerLeftSide: {fileID: 0}
+  playerRightSide: {fileID: 0}
+  bodyRadius: 1
+  playerInput: {fileID: 0}
+  _playerVisual: {fileID: 0}
+  _playerAnimation: {fileID: 0}
+  landSnap: 0
+  dashVerticality: 1
+  clampedMaxAirSpeed: 0
+  jumpSlideOnEndOfSlide: 0
+  wallRideUnlocked: 1
+  slideUnlocked: 1
+  dashUnlocked: 1
+  slopeSlideUnlocked: 1
+  cameraSpringHalfLife: 0.075
+  cameraSpringFrequency: 22.5
+  rollSmoothing: 15
+  mouseSensitivity: 0.2
+  verticalLimit: 75
+  moveSpeed: 9.5
+  groundMomentumFactor: 2
+  sideStepImpulseForce: 3
+  wallDetectionRange: 0
+  walkableSlopeAngle: 45
+  maxStepHeight: 1
+  walkingHeadbobAmplitude: 0.075
+  walkingHeadbobFrequency: 15
+  wallRidingHeadbobAmplitude: 0.1
+  wallRidingHeadbobFrequency: 25
+  jumpForce: 22.5
+  airControlForce: 3
+  maxAirSpeed: 6
+  airDrag: 0.5
+  bufferJumpTime: 0.2
+  coyoteTimeDuration: 0.2
+  landSnapVelocity: 50
+  superJumpInputMaxDelay: 0
+  superJumpVerticalForce: 0
+  superJumpHorizontalForce: 0
+  wallRideDetectionRange: 0.5
+  wallRidingDuration: 1.5
+  wallRideCooldown: 0.2
+  wallRidingSpeed: 10
+  minSpeedToWallRide: 1
+  wallJumpVerticalForce: 27
+  wallJumpHorizontalForce: 27
+  headtiltIntensity: 7
+  crouchSpeed: 5
+  cameraOffsetWhenCrouching: 0.75
+  bodyStandUpCollider:
+  - {fileID: 0}
+  topHeightStandUpCollider: {fileID: 0}
+  bodyCrouchedCollider:
+  - {fileID: 0}
+  topHeightCrouchedCollider: {fileID: 0}
+  slideSpeed: 15
+  slideTimeDuration: 0.5
+  slideJumpVerticalForce: 19.5
+  slideJumpHorizontalForce: 3
+  slideCooldown: 2
+  coyoteSlideDuration: 0.1
+  CameraSlideFOV: 50
+  dashSpeed: 5
+  dashTimeDuration: 0.2
+  dashCooldown: 0.75
+  dashEnergyCost: 20
+  minSlopeAngleToSlopeSlide: 10
+  slopeSlideMaxSpeed: 11
+  slopeInfluenceOnRotation: 3
+  slopeInfluenceOnVelocity: 0.075
+  _castWidth: 0.5
+  _castMaxDistance: 100
+  _grapplingSpeed: 15
+  _grappleRedirectionSpeed: 8
+  _endGrappleImpulseForce: 3
+  grounded: 1
+  leftSideAgainstWall: 0
+  rightSideAgainstWall: 0
+  fellOffWallrinding: 0
+  horizontalVelocity: {x: 0, y: 0, z: 0}
+  justWallRided: 0
+--- !u!114 &3217273699543337116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2624057951769441985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+  <IsNested>k__BackingField: 0
+  WasActiveDuringEdit: 0
+  WasActiveDuringEdit_Set1: 1
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  <PredictedOwner>k__BackingField: {fileID: 0}
+  NetworkBehaviours: []
+  InitializedParentNetworkBehaviour: {fileID: 0}
+  InitializedNestedNetworkObjects: []
+  RuntimeParentNetworkBehaviour: {fileID: 0}
+  RuntimeChildNetworkBehaviours: []
+  _isNetworked: 1
+  _isSpawnable: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _preventDespawnOnDisconnect: 0
+  _defaultDespawnType: 0
+  _initializedTimestamp: 0
+  NetworkObserver: {fileID: 0}
+  _enablePrediction: 0
+  _predictionType: 0
+  _localReconcileCorrectionType: 2
+  _graphicalObject: {fileID: 0}
+  _detachGraphicalObject: 0
+  _enableStateForwarding: 1
+  _networkTransform: {fileID: 0}
+  _ownerInterpolation: 1
+  _ownerSmoothedProperties: 255
+  _adaptiveInterpolation: 3
+  _spectatorSmoothedProperties: 255
+  _spectatorInterpolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  <PrefabId>k__BackingField: 65535
+  <SpawnableCollectionId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 3008886138171744697
+  SceneId: 0
+  SerializedTransformProperties:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
+    Scale: {x: 0, y: 0, z: 0}
+    IsValid: 0
