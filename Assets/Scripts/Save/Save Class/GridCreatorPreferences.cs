@@ -21,7 +21,6 @@ public class GridCreatorPreferences : ISavable<GridCreatorPreferences>
     //public Gradient wallAvoidanceGradient = new Gradient();
     
     public bool drawBounds = true;
-    public bool drawBoundingBox = false;
     public bool drawObstacles = false;
     public bool drawNodes = false;
     public bool drawNodesConnections = true;
@@ -31,7 +30,7 @@ public class GridCreatorPreferences : ISavable<GridCreatorPreferences>
     public GridCreatorPreferences(Vector3 boundsOffset, float boundsHeight, List<Vector2> boundsVertices,
         float detectionPrecision, float maxVerticalDistance, float agentHeight,
         int wallAvoidanceDistance, float nodeSize,
-        bool drawBounds, bool drawBoundingBox, bool drawObstacles, bool drawNodes, bool drawNodesConnections)
+        bool drawBounds, bool drawObstacles, bool drawNodes, bool drawNodesConnections)
     {
         this.boundsOffset = boundsOffset;
         this.boundsHeight = boundsHeight;
@@ -42,7 +41,6 @@ public class GridCreatorPreferences : ISavable<GridCreatorPreferences>
         this.wallAvoidanceDistance = wallAvoidanceDistance;
         this.nodeSize = nodeSize;
         this.drawBounds = drawBounds;
-        this.drawBoundingBox = drawBoundingBox;
         this.drawObstacles = drawObstacles;
         this.drawNodes = drawNodes;
         this.drawNodesConnections = drawNodesConnections;

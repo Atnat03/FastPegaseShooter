@@ -1,0 +1,1220 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e50dfabe331a2b44a56549deb3e550a, type: 3}
+  m_Name: MyGrid
+  m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridSO
+  nodes:
+  - index: 0
+    gridPosition: {x: 0, y: 1}
+    position: {x: -4.5, y: 0.4, z: 0.25000003}
+    wallAvoidance: 0
+    neighborsIndex: 0100000002000000
+  - index: 1
+    gridPosition: {x: 0, y: 2}
+    position: {x: -4.2000003, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 00000000030000000200000004000000
+  - index: 2
+    gridPosition: {x: 1, y: 2}
+    position: {x: -4.2000003, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 0000000001000000030000000400000005000000
+  - index: 3
+    gridPosition: {x: 0, y: 3}
+    position: {x: -3.9, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 0100000006000000020000000400000007000000
+  - index: 4
+    gridPosition: {x: 1, y: 3}
+    position: {x: -3.9, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 01000000030000000600000002000000070000000500000008000000
+  - index: 5
+    gridPosition: {x: 2, y: 3}
+    position: {x: -3.9, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 0200000004000000070000000800000009000000
+  - index: 6
+    gridPosition: {x: 0, y: 4}
+    position: {x: -3.6, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 030000000a00000004000000070000000b000000
+  - index: 7
+    gridPosition: {x: 1, y: 4}
+    position: {x: -3.6000001, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 03000000060000000a000000040000000b00000005000000080000000c000000
+  - index: 8
+    gridPosition: {x: 2, y: 4}
+    position: {x: -3.6, y: 0.4, z: 0.84999996}
+    wallAvoidance: 0
+    neighborsIndex: 04000000070000000b000000050000000c000000090000000d000000
+  - index: 9
+    gridPosition: {x: 3, y: 4}
+    position: {x: -3.6000001, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 05000000080000000c0000000d0000000e000000
+  - index: 10
+    gridPosition: {x: 0, y: 5}
+    position: {x: -3.3000002, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 060000000f000000070000000b00000010000000
+  - index: 11
+    gridPosition: {x: 1, y: 5}
+    position: {x: -3.3000002, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 060000000a0000000f0000000700000010000000080000000c00000011000000
+  - index: 12
+    gridPosition: {x: 2, y: 5}
+    position: {x: -3.3000002, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 070000000b000000100000000800000011000000090000000d00000012000000
+  - index: 13
+    gridPosition: {x: 3, y: 5}
+    position: {x: -3.3000002, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 080000000c0000001100000009000000120000000e00000013000000
+  - index: 14
+    gridPosition: {x: 4, y: 5}
+    position: {x: -3.3000002, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 090000000d000000120000001300000014000000
+  - index: 15
+    gridPosition: {x: 0, y: 6}
+    position: {x: -2.9999995, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 0a000000150000000b0000001000000016000000
+  - index: 16
+    gridPosition: {x: 1, y: 6}
+    position: {x: -3, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 0a0000000f000000150000000b000000160000000c0000001100000017000000
+  - index: 17
+    gridPosition: {x: 2, y: 6}
+    position: {x: -3, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 0b00000010000000160000000c000000170000000d0000001200000018000000
+  - index: 18
+    gridPosition: {x: 3, y: 6}
+    position: {x: -3, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 0c00000011000000170000000d000000180000000e0000001300000019000000
+  - index: 19
+    gridPosition: {x: 4, y: 6}
+    position: {x: -3, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 0d00000012000000180000000e00000019000000140000001a000000
+  - index: 20
+    gridPosition: {x: 5, y: 6}
+    position: {x: -3, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 0e00000013000000190000001a0000001b000000
+  - index: 21
+    gridPosition: {x: 0, y: 7}
+    position: {x: -2.6999998, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 0f0000001c00000010000000160000001d000000
+  - index: 22
+    gridPosition: {x: 1, y: 7}
+    position: {x: -2.6999998, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 0f000000150000001c000000100000001d00000011000000170000001e000000
+  - index: 23
+    gridPosition: {x: 2, y: 7}
+    position: {x: -2.6999998, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 10000000160000001d000000110000001e00000012000000180000001f000000
+  - index: 24
+    gridPosition: {x: 3, y: 7}
+    position: {x: -2.6999998, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 11000000170000001e000000120000001f000000130000001900000020000000
+  - index: 25
+    gridPosition: {x: 4, y: 7}
+    position: {x: -2.6999998, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 12000000180000001f0000001300000020000000140000001a00000021000000
+  - index: 26
+    gridPosition: {x: 5, y: 7}
+    position: {x: -2.6999998, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 13000000190000002000000014000000210000001b00000022000000
+  - index: 27
+    gridPosition: {x: 6, y: 7}
+    position: {x: -2.6999998, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 140000001a000000210000002200000023000000
+  - index: 28
+    gridPosition: {x: 0, y: 8}
+    position: {x: -2.4, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 15000000160000001d000000
+  - index: 29
+    gridPosition: {x: 1, y: 8}
+    position: {x: -2.4, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 150000001c00000016000000170000001e000000
+  - index: 30
+    gridPosition: {x: 2, y: 8}
+    position: {x: -2.4, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 160000001d00000017000000180000001f000000
+  - index: 31
+    gridPosition: {x: 3, y: 8}
+    position: {x: -2.4, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 170000001e000000180000001900000020000000
+  - index: 32
+    gridPosition: {x: 4, y: 8}
+    position: {x: -2.4, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 180000001f000000190000001a00000021000000
+  - index: 33
+    gridPosition: {x: 5, y: 8}
+    position: {x: -2.4, y: 0.4, z: 1.75}
+    wallAvoidance: 0
+    neighborsIndex: 19000000200000001a0000001b00000022000000
+  - index: 34
+    gridPosition: {x: 6, y: 8}
+    position: {x: -2.3999996, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 1a000000210000001b00000023000000
+  - index: 35
+    gridPosition: {x: 7, y: 8}
+    position: {x: -2.4, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 1b00000022000000
+  - index: 36
+    gridPosition: {x: 0, y: 11}
+    position: {x: -1.5000002, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: 2f0000002500000030000000
+  - index: 37
+    gridPosition: {x: 1, y: 11}
+    position: {x: -1.4999993, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 240000002f000000300000002600000031000000
+  - index: 38
+    gridPosition: {x: 2, y: 11}
+    position: {x: -1.4999998, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 2500000030000000310000002700000032000000
+  - index: 39
+    gridPosition: {x: 3, y: 11}
+    position: {x: -1.4999998, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 2600000031000000320000002800000033000000
+  - index: 40
+    gridPosition: {x: 4, y: 11}
+    position: {x: -1.5000002, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 2700000032000000330000002900000034000000
+  - index: 41
+    gridPosition: {x: 5, y: 11}
+    position: {x: -1.4999998, y: 0.4, z: 1.75}
+    wallAvoidance: 0
+    neighborsIndex: 2800000033000000340000002a00000035000000
+  - index: 42
+    gridPosition: {x: 6, y: 11}
+    position: {x: -1.4999998, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 2900000034000000350000002b00000036000000
+  - index: 43
+    gridPosition: {x: 7, y: 11}
+    position: {x: -1.5000002, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 2a00000035000000360000002c00000037000000
+  - index: 44
+    gridPosition: {x: 8, y: 11}
+    position: {x: -1.4999998, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: 2b00000036000000370000002d00000038000000
+  - index: 45
+    gridPosition: {x: 9, y: 11}
+    position: {x: -1.4999998, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 2c00000037000000380000002e00000039000000
+  - index: 46
+    gridPosition: {x: 10, y: 11}
+    position: {x: -1.4999998, y: 0.4, z: 3.25}
+    wallAvoidance: 0
+    neighborsIndex: 2d00000038000000390000003a000000
+  - index: 47
+    gridPosition: {x: 0, y: 12}
+    position: {x: -1.2, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: 240000003b00000025000000300000003c000000
+  - index: 48
+    gridPosition: {x: 1, y: 12}
+    position: {x: -1.2, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 240000002f0000003b000000250000003c00000026000000310000003d000000
+  - index: 49
+    gridPosition: {x: 2, y: 12}
+    position: {x: -1.2, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: 25000000300000003c000000260000003d00000027000000320000003e000000
+  - index: 50
+    gridPosition: {x: 3, y: 12}
+    position: {x: -1.1999996, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 26000000310000003d000000270000003e00000028000000330000003f000000
+  - index: 51
+    gridPosition: {x: 4, y: 12}
+    position: {x: -1.2, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 27000000320000003e000000280000003f000000290000003400000040000000
+  - index: 52
+    gridPosition: {x: 5, y: 12}
+    position: {x: -1.2, y: 0.4, z: 1.75}
+    wallAvoidance: 0
+    neighborsIndex: 28000000330000003f00000029000000400000002a0000003500000041000000
+  - index: 53
+    gridPosition: {x: 6, y: 12}
+    position: {x: -1.2, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 2900000034000000400000002a000000410000002b0000003600000042000000
+  - index: 54
+    gridPosition: {x: 7, y: 12}
+    position: {x: -1.2, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 2a00000035000000410000002b000000420000002c0000003700000043000000
+  - index: 55
+    gridPosition: {x: 8, y: 12}
+    position: {x: -1.2, y: 0.4, z: 2.6499999}
+    wallAvoidance: 0
+    neighborsIndex: 2b00000036000000420000002c000000430000002d0000003800000044000000
+  - index: 56
+    gridPosition: {x: 9, y: 12}
+    position: {x: -1.2, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 2c00000037000000430000002d000000440000002e0000003900000045000000
+  - index: 57
+    gridPosition: {x: 10, y: 12}
+    position: {x: -1.2, y: 0.4, z: 3.2499998}
+    wallAvoidance: 0
+    neighborsIndex: 2d00000038000000440000002e000000450000003a00000046000000
+  - index: 58
+    gridPosition: {x: 11, y: 12}
+    position: {x: -1.2, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: 2e00000039000000450000004600000047000000
+  - index: 59
+    gridPosition: {x: 0, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 2f00000048000000300000003c00000049000000
+  - index: 60
+    gridPosition: {x: 1, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 2f0000003b000000480000003000000049000000310000003d0000004a000000
+  - index: 61
+    gridPosition: {x: 2, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 300000003c00000049000000310000004a000000320000003e0000004b000000
+  - index: 62
+    gridPosition: {x: 3, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 310000003d0000004a000000320000004b000000330000003f0000004c000000
+  - index: 63
+    gridPosition: {x: 4, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 320000003e0000004b000000330000004c00000034000000400000004d000000
+  - index: 64
+    gridPosition: {x: 5, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 330000003f0000004c000000340000004d00000035000000410000004e000000
+  - index: 65
+    gridPosition: {x: 6, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 34000000400000004d000000350000004e00000036000000420000004f000000
+  - index: 66
+    gridPosition: {x: 7, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 35000000410000004e000000360000004f000000370000004300000050000000
+  - index: 67
+    gridPosition: {x: 8, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 2.6499999}
+    wallAvoidance: 0
+    neighborsIndex: 36000000420000004f0000003700000050000000380000004400000051000000
+  - index: 68
+    gridPosition: {x: 9, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 3700000043000000500000003800000051000000390000004500000052000000
+  - index: 69
+    gridPosition: {x: 10, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 3.2500002}
+    wallAvoidance: 0
+    neighborsIndex: 38000000440000005100000039000000520000003a0000004600000053000000
+  - index: 70
+    gridPosition: {x: 11, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: 3900000045000000520000003a000000530000004700000054000000
+  - index: 71
+    gridPosition: {x: 12, y: 13}
+    position: {x: -0.90000033, y: 0.4, z: 3.8500001}
+    wallAvoidance: 0
+    neighborsIndex: 3a00000046000000530000005400000055000000
+  - index: 72
+    gridPosition: {x: 0, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 3b000000560000003c0000004900000058000000
+  - index: 73
+    gridPosition: {x: 1, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 3b00000048000000560000003c000000580000003d0000004a0000005a000000
+  - index: 74
+    gridPosition: {x: 2, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: 3c00000049000000580000003d0000005a0000003e0000004b0000005b000000
+  - index: 75
+    gridPosition: {x: 3, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 3d0000004a0000005a0000003e0000005b0000003f0000004c0000005c000000
+  - index: 76
+    gridPosition: {x: 4, y: 14}
+    position: {x: -0.60000014, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 3e0000004b0000005b0000003f0000005c000000400000004d0000005d000000
+  - index: 77
+    gridPosition: {x: 5, y: 14}
+    position: {x: -0.60000014, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 3f0000004c0000005c000000400000005d000000410000004e0000005e000000
+  - index: 78
+    gridPosition: {x: 6, y: 14}
+    position: {x: -0.60000014, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 400000004d0000005d000000410000005e000000420000004f0000005f000000
+  - index: 79
+    gridPosition: {x: 7, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 410000004e0000005e000000420000005f000000430000005000000060000000
+  - index: 80
+    gridPosition: {x: 8, y: 14}
+    position: {x: -0.60000014, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: 420000004f0000005f0000004300000060000000440000005100000061000000
+  - index: 81
+    gridPosition: {x: 9, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 4300000050000000600000004400000061000000450000005200000062000000
+  - index: 82
+    gridPosition: {x: 10, y: 14}
+    position: {x: -0.59999967, y: 0.4, z: 3.2499998}
+    wallAvoidance: 0
+    neighborsIndex: 4400000051000000610000004500000062000000460000005300000063000000
+  - index: 83
+    gridPosition: {x: 11, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: 4500000052000000620000004600000063000000470000005400000064000000
+  - index: 84
+    gridPosition: {x: 12, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 3.8500001}
+    wallAvoidance: 0
+    neighborsIndex: 46000000530000006300000047000000640000005500000065000000
+  - index: 85
+    gridPosition: {x: 13, y: 14}
+    position: {x: -0.5999999, y: 0.4, z: 4.15}
+    wallAvoidance: 0
+    neighborsIndex: 4700000054000000640000006500000066000000
+  - index: 86
+    gridPosition: {x: 0, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 4800000067000000490000005800000068000000
+  - index: 87
+    gridPosition: {x: 0, y: 15}
+    position: {x: -0.30000043, y: 1.2397914, z: 0.24999985}
+    wallAvoidance: 0
+    neighborsIndex: 5900000069000000
+  - index: 88
+    gridPosition: {x: 1, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 48000000560000006700000049000000680000004a0000005a0000006a000000
+  - index: 89
+    gridPosition: {x: 1, y: 15}
+    position: {x: -0.30000043, y: 1.1526985, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 57000000690000006b000000
+  - index: 90
+    gridPosition: {x: 2, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: 4900000058000000680000004a0000006a0000004b0000005b000000
+  - index: 91
+    gridPosition: {x: 3, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 4a0000005a0000006a0000004b0000004c0000005c0000006d000000
+  - index: 92
+    gridPosition: {x: 4, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 4b0000005b0000004c0000006d0000004d0000005d0000006e000000
+  - index: 93
+    gridPosition: {x: 5, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 4c0000005c0000006d0000004d0000006e0000004e0000005e0000006f000000
+  - index: 94
+    gridPosition: {x: 6, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 4d0000005d0000006e0000004e0000006f0000004f0000005f00000070000000
+  - index: 95
+    gridPosition: {x: 7, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 4e0000005e0000006f0000004f00000070000000500000006000000071000000
+  - index: 96
+    gridPosition: {x: 8, y: 15}
+    position: {x: -0.29999995, y: 0.4, z: 2.6499999}
+    wallAvoidance: 0
+    neighborsIndex: 4f0000005f000000700000005000000071000000510000006100000072000000
+  - index: 97
+    gridPosition: {x: 9, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 5000000060000000710000005100000072000000520000006200000073000000
+  - index: 98
+    gridPosition: {x: 10, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 3.2499998}
+    wallAvoidance: 0
+    neighborsIndex: 5100000061000000720000005200000073000000530000006300000074000000
+  - index: 99
+    gridPosition: {x: 11, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: 5200000062000000730000005300000074000000540000006400000075000000
+  - index: 100
+    gridPosition: {x: 12, y: 15}
+    position: {x: -0.29999995, y: 0.4, z: 3.85}
+    wallAvoidance: 0
+    neighborsIndex: 5300000063000000740000005400000075000000550000006500000076000000
+  - index: 101
+    gridPosition: {x: 13, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 4.1500006}
+    wallAvoidance: 0
+    neighborsIndex: 54000000640000007500000055000000760000006600000077000000
+  - index: 102
+    gridPosition: {x: 14, y: 15}
+    position: {x: -0.3000002, y: 0.4, z: 4.4500003}
+    wallAvoidance: 0
+    neighborsIndex: 5500000065000000760000007700000078000000
+  - index: 103
+    gridPosition: {x: 0, y: 16}
+    position: {x: -0.00000023841858, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 560000007900000058000000680000007a000000
+  - index: 104
+    gridPosition: {x: 1, y: 16}
+    position: {x: 0.00000023841858, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 560000006700000079000000580000007a0000005a0000006a000000
+  - index: 105
+    gridPosition: {x: 1, y: 16}
+    position: {x: -0.0000001937151, y: 1.069972, z: 0.5500001}
+    wallAvoidance: 0
+    neighborsIndex: 57000000590000007b0000006b0000007c000000
+  - index: 106
+    gridPosition: {x: 2, y: 16}
+    position: {x: 0.00000023841858, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: 58000000680000007a0000005a0000005b000000
+  - index: 107
+    gridPosition: {x: 2, y: 16}
+    position: {x: -0.00000025331974, y: 0.98287916, z: 0.85000014}
+    wallAvoidance: 0
+    neighborsIndex: 59000000690000007b0000007c0000006c0000007d000000
+  - index: 108
+    gridPosition: {x: 3, y: 16}
+    position: {x: -0.00000017881393, y: 0.7557263, z: 1.15}
+    wallAvoidance: 0
+    neighborsIndex: 6b0000007c0000007d0000006d000000
+  - index: 109
+    gridPosition: {x: 4, y: 16}
+    position: {x: -0.0000002682209, y: 0.6915121, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 5b0000006c0000007d0000005c0000007e0000005d0000006e0000007f000000
+  - index: 110
+    gridPosition: {x: 5, y: 16}
+    position: {x: 0.00000023841858, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 5c0000006d0000007e0000005d0000007f0000005e0000006f00000080000000
+  - index: 111
+    gridPosition: {x: 6, y: 16}
+    position: {x: 0.00000023841858, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 5d0000006e0000007f0000005e000000800000005f0000007000000081000000
+  - index: 112
+    gridPosition: {x: 7, y: 16}
+    position: {x: 0, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 5e0000006f000000800000005f00000081000000600000007100000082000000
+  - index: 113
+    gridPosition: {x: 8, y: 16}
+    position: {x: 0, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: 5f00000070000000810000006000000082000000610000007200000083000000
+  - index: 114
+    gridPosition: {x: 9, y: 16}
+    position: {x: 0, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 6000000071000000820000006100000083000000620000007300000084000000
+  - index: 115
+    gridPosition: {x: 10, y: 16}
+    position: {x: 0.00000023841858, y: 0.4, z: 3.2499998}
+    wallAvoidance: 0
+    neighborsIndex: 6100000072000000830000006200000084000000630000007400000085000000
+  - index: 116
+    gridPosition: {x: 11, y: 16}
+    position: {x: 0.00000023841858, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: 6200000073000000840000006300000085000000640000007500000086000000
+  - index: 117
+    gridPosition: {x: 12, y: 16}
+    position: {x: 0.00000023841858, y: 0.4, z: 3.8500001}
+    wallAvoidance: 0
+    neighborsIndex: 6300000074000000850000006400000086000000650000007600000087000000
+  - index: 118
+    gridPosition: {x: 13, y: 16}
+    position: {x: 0, y: 0.4, z: 4.1500006}
+    wallAvoidance: 0
+    neighborsIndex: 6400000075000000860000006500000087000000660000007700000088000000
+  - index: 119
+    gridPosition: {x: 14, y: 16}
+    position: {x: 0, y: 0.4, z: 4.4500003}
+    wallAvoidance: 0
+    neighborsIndex: 650000007600000087000000660000008800000078000000
+  - index: 120
+    gridPosition: {x: 15, y: 16}
+    position: {x: 0.00000023841858, y: 0.4, z: 4.749999}
+    wallAvoidance: 0
+    neighborsIndex: 660000007700000088000000
+  - index: 121
+    gridPosition: {x: 0, y: 17}
+    position: {x: 0.3000002, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 6700000089000000680000007a000000
+  - index: 122
+    gridPosition: {x: 1, y: 17}
+    position: {x: 0.3000002, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 670000007900000089000000680000006a000000
+  - index: 123
+    gridPosition: {x: 1, y: 17}
+    position: {x: 0.30000013, y: 0.98724556, z: 0.5500001}
+    wallAvoidance: 0
+    neighborsIndex: 690000006b0000007c0000008a000000
+  - index: 124
+    gridPosition: {x: 2, y: 17}
+    position: {x: 0.3000001, y: 0.88681674, z: 0.84999985}
+    wallAvoidance: 0
+    neighborsIndex: 690000007b0000006b0000008a0000006c0000007d000000
+  - index: 125
+    gridPosition: {x: 3, y: 17}
+    position: {x: 0.30000007, y: 0.8226025, z: 1.15}
+    wallAvoidance: 0
+    neighborsIndex: 6b0000007c0000008a0000006c0000006d000000
+  - index: 126
+    gridPosition: {x: 4, y: 17}
+    position: {x: 0.30000043, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 8b0000006d0000008c0000006e0000007f0000008d000000
+  - index: 127
+    gridPosition: {x: 5, y: 17}
+    position: {x: 0.29999995, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 6d0000007e0000008c0000006e0000008d0000006f000000800000008e000000
+  - index: 128
+    gridPosition: {x: 6, y: 17}
+    position: {x: 0.30000043, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 6e0000007f0000008d0000006f0000008e00000070000000810000008f000000
+  - index: 129
+    gridPosition: {x: 7, y: 17}
+    position: {x: 0.29999995, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 6f000000800000008e000000700000008f000000710000008200000090000000
+  - index: 130
+    gridPosition: {x: 8, y: 17}
+    position: {x: 0.3000002, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: 70000000810000008f0000007100000090000000720000008300000091000000
+  - index: 131
+    gridPosition: {x: 9, y: 17}
+    position: {x: 0.30000043, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 7100000082000000900000007200000091000000730000008400000092000000
+  - index: 132
+    gridPosition: {x: 10, y: 17}
+    position: {x: 0.30000043, y: 0.4, z: 3.2499998}
+    wallAvoidance: 0
+    neighborsIndex: 7200000083000000910000007300000092000000740000008500000093000000
+  - index: 133
+    gridPosition: {x: 11, y: 17}
+    position: {x: 0.3000002, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: 7300000084000000920000007400000093000000750000008600000094000000
+  - index: 134
+    gridPosition: {x: 12, y: 17}
+    position: {x: 0.29999995, y: 0.4, z: 3.8500001}
+    wallAvoidance: 0
+    neighborsIndex: 7400000085000000930000007500000094000000760000008700000095000000
+  - index: 135
+    gridPosition: {x: 13, y: 17}
+    position: {x: 0.3000002, y: 0.4, z: 4.15}
+    wallAvoidance: 0
+    neighborsIndex: 75000000860000009400000076000000950000007700000088000000
+  - index: 136
+    gridPosition: {x: 14, y: 17}
+    position: {x: 0.3000002, y: 0.4, z: 4.4500003}
+    wallAvoidance: 0
+    neighborsIndex: 7600000087000000950000007700000078000000
+  - index: 137
+    gridPosition: {x: 0, y: 18}
+    position: {x: 0.59999967, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 79000000960000007a00000097000000
+  - index: 138
+    gridPosition: {x: 2, y: 18}
+    position: {x: 0.59999996, y: 0.9536929, z: 0.84999985}
+    wallAvoidance: 0
+    neighborsIndex: 7b0000007c0000007d000000
+  - index: 139
+    gridPosition: {x: 3, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 98000000990000007e0000008c0000009a000000
+  - index: 140
+    gridPosition: {x: 4, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 8b000000990000007e0000009a0000007f0000008d0000009b000000
+  - index: 141
+    gridPosition: {x: 5, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 7e0000008c0000009a0000007f0000009b000000800000008e0000009c000000
+  - index: 142
+    gridPosition: {x: 6, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 7f0000008d0000009b000000800000009c000000810000008f0000009d000000
+  - index: 143
+    gridPosition: {x: 7, y: 18}
+    position: {x: 0.59999967, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 800000008e0000009c000000810000009d00000082000000900000009e000000
+  - index: 144
+    gridPosition: {x: 8, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: 810000008f0000009d000000820000009e00000083000000910000009f000000
+  - index: 145
+    gridPosition: {x: 9, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 82000000900000009e000000830000009f0000008400000092000000a0000000
+  - index: 146
+    gridPosition: {x: 10, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 3.2499998}
+    wallAvoidance: 0
+    neighborsIndex: 83000000910000009f00000084000000a00000008500000093000000a1000000
+  - index: 147
+    gridPosition: {x: 11, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: 8400000092000000a000000085000000a10000008600000094000000a2000000
+  - index: 148
+    gridPosition: {x: 12, y: 18}
+    position: {x: 0.5999999, y: 0.4, z: 3.8500001}
+    wallAvoidance: 0
+    neighborsIndex: 8500000093000000a100000086000000a20000008700000095000000
+  - index: 149
+    gridPosition: {x: 13, y: 18}
+    position: {x: 0.59999967, y: 0.4, z: 4.1500006}
+    wallAvoidance: 0
+    neighborsIndex: 8600000094000000a20000008700000088000000
+  - index: 150
+    gridPosition: {x: 0, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 89000000a300000097000000a4000000
+  - index: 151
+    gridPosition: {x: 1, y: 19}
+    position: {x: 0.90000033, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 8900000096000000a3000000a400000098000000a5000000
+  - index: 152
+    gridPosition: {x: 2, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 97000000a4000000a50000008b00000099000000a6000000
+  - index: 153
+    gridPosition: {x: 3, y: 19}
+    position: {x: 0.90000033, y: 0.4, z: 1.15}
+    wallAvoidance: 0
+    neighborsIndex: 98000000a50000008b000000a60000008c0000009a000000a7000000
+  - index: 154
+    gridPosition: {x: 4, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 8b00000099000000a60000008c000000a70000008d0000009b000000a8000000
+  - index: 155
+    gridPosition: {x: 5, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 1.75}
+    wallAvoidance: 0
+    neighborsIndex: 8c0000009a000000a70000008d000000a80000008e0000009c000000a9000000
+  - index: 156
+    gridPosition: {x: 6, y: 19}
+    position: {x: 0.90000033, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 8d0000009b000000a80000008e000000a90000008f0000009d000000aa000000
+  - index: 157
+    gridPosition: {x: 7, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: 8e0000009c000000a90000008f000000aa000000900000009e000000ab000000
+  - index: 158
+    gridPosition: {x: 8, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: 8f0000009d000000aa00000090000000ab000000910000009f000000ac000000
+  - index: 159
+    gridPosition: {x: 9, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 900000009e000000ab00000091000000ac00000092000000a0000000ad000000
+  - index: 160
+    gridPosition: {x: 10, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 3.25}
+    wallAvoidance: 0
+    neighborsIndex: 910000009f000000ac00000092000000ad00000093000000a1000000ae000000
+  - index: 161
+    gridPosition: {x: 11, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: 92000000a0000000ad00000093000000ae00000094000000a2000000
+  - index: 162
+    gridPosition: {x: 12, y: 19}
+    position: {x: 0.9000001, y: 0.4, z: 3.8500004}
+    wallAvoidance: 0
+    neighborsIndex: 93000000a1000000ae0000009400000095000000
+  - index: 163
+    gridPosition: {x: 0, y: 20}
+    position: {x: 1.2, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: 96000000af00000097000000a4000000b0000000
+  - index: 164
+    gridPosition: {x: 1, y: 20}
+    position: {x: 1.1999998, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: 96000000a3000000af00000097000000b000000098000000a5000000b1000000
+  - index: 165
+    gridPosition: {x: 2, y: 20}
+    position: {x: 1.1999998, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: 97000000a4000000b000000098000000b100000099000000a6000000b2000000
+  - index: 166
+    gridPosition: {x: 3, y: 20}
+    position: {x: 1.2, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: 98000000a5000000b100000099000000b20000009a000000a7000000b3000000
+  - index: 167
+    gridPosition: {x: 4, y: 20}
+    position: {x: 1.1999998, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: 99000000a6000000b20000009a000000b30000009b000000a8000000b4000000
+  - index: 168
+    gridPosition: {x: 5, y: 20}
+    position: {x: 1.1999998, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: 9a000000a7000000b30000009b000000b40000009c000000a9000000b5000000
+  - index: 169
+    gridPosition: {x: 6, y: 20}
+    position: {x: 1.1999998, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: 9b000000a8000000b40000009c000000b50000009d000000aa000000b6000000
+  - index: 170
+    gridPosition: {x: 7, y: 20}
+    position: {x: 1.2, y: 0.4, z: 2.35}
+    wallAvoidance: 0
+    neighborsIndex: 9c000000a9000000b50000009d000000b60000009e000000ab000000b7000000
+  - index: 171
+    gridPosition: {x: 8, y: 20}
+    position: {x: 1.1999998, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: 9d000000aa000000b60000009e000000b70000009f000000ac000000b8000000
+  - index: 172
+    gridPosition: {x: 9, y: 20}
+    position: {x: 1.1999998, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: 9e000000ab000000b70000009f000000b8000000a0000000ad000000b9000000
+  - index: 173
+    gridPosition: {x: 10, y: 20}
+    position: {x: 1.2, y: 0.4, z: 3.2499998}
+    wallAvoidance: 0
+    neighborsIndex: 9f000000ac000000b8000000a0000000b9000000a1000000ae000000
+  - index: 174
+    gridPosition: {x: 11, y: 20}
+    position: {x: 1.1999998, y: 0.4, z: 3.5500002}
+    wallAvoidance: 0
+    neighborsIndex: a0000000ad000000b9000000a1000000a2000000
+  - index: 175
+    gridPosition: {x: 0, y: 21}
+    position: {x: 1.5000001, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: a3000000ba000000a4000000b0000000bb000000
+  - index: 176
+    gridPosition: {x: 1, y: 21}
+    position: {x: 1.5, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: a3000000af000000ba000000a4000000bb000000a5000000b1000000bc000000
+  - index: 177
+    gridPosition: {x: 2, y: 21}
+    position: {x: 1.5, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: a4000000b0000000bb000000a5000000bc000000a6000000b2000000bd000000
+  - index: 178
+    gridPosition: {x: 3, y: 21}
+    position: {x: 1.5, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: a5000000b1000000bc000000a6000000bd000000a7000000b3000000be000000
+  - index: 179
+    gridPosition: {x: 4, y: 21}
+    position: {x: 1.5, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: a6000000b2000000bd000000a7000000be000000a8000000b4000000bf000000
+  - index: 180
+    gridPosition: {x: 5, y: 21}
+    position: {x: 1.5, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: a7000000b3000000be000000a8000000bf000000a9000000b5000000c0000000
+  - index: 181
+    gridPosition: {x: 6, y: 21}
+    position: {x: 1.5, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: a8000000b4000000bf000000a9000000c0000000aa000000b6000000c1000000
+  - index: 182
+    gridPosition: {x: 7, y: 21}
+    position: {x: 1.5, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: a9000000b5000000c0000000aa000000c1000000ab000000b7000000c2000000
+  - index: 183
+    gridPosition: {x: 8, y: 21}
+    position: {x: 1.5, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: aa000000b6000000c1000000ab000000c2000000ac000000b8000000c3000000
+  - index: 184
+    gridPosition: {x: 9, y: 21}
+    position: {x: 1.5, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: ab000000b7000000c2000000ac000000c3000000ad000000b9000000
+  - index: 185
+    gridPosition: {x: 10, y: 21}
+    position: {x: 1.5000001, y: 0.4, z: 3.2499998}
+    wallAvoidance: 0
+    neighborsIndex: ac000000b8000000c3000000ad000000ae000000
+  - index: 186
+    gridPosition: {x: 0, y: 22}
+    position: {x: 1.8000002, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: af000000c4000000b0000000bb000000c5000000
+  - index: 187
+    gridPosition: {x: 1, y: 22}
+    position: {x: 1.8000003, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: af000000ba000000c4000000b0000000c5000000b1000000bc000000c6000000
+  - index: 188
+    gridPosition: {x: 2, y: 22}
+    position: {x: 1.8000002, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: b0000000bb000000c5000000b1000000c6000000b2000000bd000000c7000000
+  - index: 189
+    gridPosition: {x: 3, y: 22}
+    position: {x: 1.8000002, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: b1000000bc000000c6000000b2000000c7000000b3000000be000000c8000000
+  - index: 190
+    gridPosition: {x: 4, y: 22}
+    position: {x: 1.8000002, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: b2000000bd000000c7000000b3000000c8000000b4000000bf000000c9000000
+  - index: 191
+    gridPosition: {x: 5, y: 22}
+    position: {x: 1.8000002, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: b3000000be000000c8000000b4000000c9000000b5000000c0000000ca000000
+  - index: 192
+    gridPosition: {x: 6, y: 22}
+    position: {x: 1.8000003, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: b4000000bf000000c9000000b5000000ca000000b6000000c1000000cb000000
+  - index: 193
+    gridPosition: {x: 7, y: 22}
+    position: {x: 1.8000002, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: b5000000c0000000ca000000b6000000cb000000b7000000c2000000cc000000
+  - index: 194
+    gridPosition: {x: 8, y: 22}
+    position: {x: 1.8000002, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: b6000000c1000000cb000000b7000000cc000000b8000000c3000000
+  - index: 195
+    gridPosition: {x: 9, y: 22}
+    position: {x: 1.8000002, y: 0.4, z: 2.95}
+    wallAvoidance: 0
+    neighborsIndex: b7000000c2000000cc000000b8000000b9000000
+  - index: 196
+    gridPosition: {x: 0, y: 23}
+    position: {x: 2.1, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: ba000000cd000000bb000000c5000000ce000000
+  - index: 197
+    gridPosition: {x: 1, y: 23}
+    position: {x: 2.1, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: ba000000c4000000cd000000bb000000ce000000bc000000c6000000cf000000
+  - index: 198
+    gridPosition: {x: 2, y: 23}
+    position: {x: 2.1, y: 0.4, z: 0.84999996}
+    wallAvoidance: 0
+    neighborsIndex: bb000000c5000000ce000000bc000000cf000000bd000000c7000000d0000000
+  - index: 199
+    gridPosition: {x: 3, y: 23}
+    position: {x: 2.1, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: bc000000c6000000cf000000bd000000d0000000be000000c8000000d1000000
+  - index: 200
+    gridPosition: {x: 4, y: 23}
+    position: {x: 2.1, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: bd000000c7000000d0000000be000000d1000000bf000000c9000000d2000000
+  - index: 201
+    gridPosition: {x: 5, y: 23}
+    position: {x: 2.1, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: be000000c8000000d1000000bf000000d2000000c0000000ca000000d3000000
+  - index: 202
+    gridPosition: {x: 6, y: 23}
+    position: {x: 2.1, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: bf000000c9000000d2000000c0000000d3000000c1000000cb000000d4000000
+  - index: 203
+    gridPosition: {x: 7, y: 23}
+    position: {x: 2.1, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: c0000000ca000000d3000000c1000000d4000000c2000000cc000000
+  - index: 204
+    gridPosition: {x: 8, y: 23}
+    position: {x: 2.1, y: 0.4, z: 2.65}
+    wallAvoidance: 0
+    neighborsIndex: c1000000cb000000d4000000c2000000c3000000
+  - index: 205
+    gridPosition: {x: 0, y: 24}
+    position: {x: 2.4, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: c4000000d5000000c5000000ce000000d6000000
+  - index: 206
+    gridPosition: {x: 1, y: 24}
+    position: {x: 2.4, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: c4000000cd000000d5000000c5000000d6000000c6000000cf000000d7000000
+  - index: 207
+    gridPosition: {x: 2, y: 24}
+    position: {x: 2.4, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: c5000000ce000000d6000000c6000000d7000000c7000000d0000000d8000000
+  - index: 208
+    gridPosition: {x: 3, y: 24}
+    position: {x: 2.4, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: c6000000cf000000d7000000c7000000d8000000c8000000d1000000d9000000
+  - index: 209
+    gridPosition: {x: 4, y: 24}
+    position: {x: 2.4, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: c7000000d0000000d8000000c8000000d9000000c9000000d2000000da000000
+  - index: 210
+    gridPosition: {x: 5, y: 24}
+    position: {x: 2.4, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: c8000000d1000000d9000000c9000000da000000ca000000d3000000db000000
+  - index: 211
+    gridPosition: {x: 6, y: 24}
+    position: {x: 2.4, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: c9000000d2000000da000000ca000000db000000cb000000d4000000
+  - index: 212
+    gridPosition: {x: 7, y: 24}
+    position: {x: 2.4, y: 0.4, z: 2.3500001}
+    wallAvoidance: 0
+    neighborsIndex: ca000000d3000000db000000cb000000cc000000
+  - index: 213
+    gridPosition: {x: 0, y: 25}
+    position: {x: 2.7000003, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: cd000000dc000000ce000000d6000000dd000000
+  - index: 214
+    gridPosition: {x: 1, y: 25}
+    position: {x: 2.7000003, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: cd000000d5000000dc000000ce000000dd000000cf000000d7000000de000000
+  - index: 215
+    gridPosition: {x: 2, y: 25}
+    position: {x: 2.7000003, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: ce000000d6000000dd000000cf000000de000000d0000000d8000000df000000
+  - index: 216
+    gridPosition: {x: 3, y: 25}
+    position: {x: 2.7000003, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: cf000000d7000000de000000d0000000df000000d1000000d9000000e0000000
+  - index: 217
+    gridPosition: {x: 4, y: 25}
+    position: {x: 2.7000003, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: d0000000d8000000df000000d1000000e0000000d2000000da000000e1000000
+  - index: 218
+    gridPosition: {x: 5, y: 25}
+    position: {x: 2.7000003, y: 0.4, z: 1.7499999}
+    wallAvoidance: 0
+    neighborsIndex: d1000000d9000000e0000000d2000000e1000000d3000000db000000
+  - index: 219
+    gridPosition: {x: 6, y: 25}
+    position: {x: 2.7000003, y: 0.4, z: 2.0500002}
+    wallAvoidance: 0
+    neighborsIndex: d2000000da000000e1000000d3000000d4000000
+  - index: 220
+    gridPosition: {x: 0, y: 26}
+    position: {x: 3, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: d5000000e2000000d6000000dd000000e3000000
+  - index: 221
+    gridPosition: {x: 1, y: 26}
+    position: {x: 3, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: d5000000dc000000e2000000d6000000e3000000d7000000de000000e4000000
+  - index: 222
+    gridPosition: {x: 2, y: 26}
+    position: {x: 3, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: d6000000dd000000e3000000d7000000e4000000d8000000df000000e5000000
+  - index: 223
+    gridPosition: {x: 3, y: 26}
+    position: {x: 3, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: d7000000de000000e4000000d8000000e5000000d9000000e0000000e6000000
+  - index: 224
+    gridPosition: {x: 4, y: 26}
+    position: {x: 3, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: d8000000df000000e5000000d9000000e6000000da000000e1000000
+  - index: 225
+    gridPosition: {x: 5, y: 26}
+    position: {x: 3, y: 0.4, z: 1.75}
+    wallAvoidance: 0
+    neighborsIndex: d9000000e0000000e6000000da000000db000000
+  - index: 226
+    gridPosition: {x: 0, y: 27}
+    position: {x: 3.3000002, y: 0.4, z: 0.25}
+    wallAvoidance: 0
+    neighborsIndex: dc000000e7000000dd000000e3000000e8000000
+  - index: 227
+    gridPosition: {x: 1, y: 27}
+    position: {x: 3.3000002, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: dc000000e2000000e7000000dd000000e8000000de000000e4000000e9000000
+  - index: 228
+    gridPosition: {x: 2, y: 27}
+    position: {x: 3.3000002, y: 0.4, z: 0.8499999}
+    wallAvoidance: 0
+    neighborsIndex: dd000000e3000000e8000000de000000e9000000df000000e5000000ea000000
+  - index: 229
+    gridPosition: {x: 3, y: 27}
+    position: {x: 3.3000002, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: de000000e4000000e9000000df000000ea000000e0000000e6000000
+  - index: 230
+    gridPosition: {x: 4, y: 27}
+    position: {x: 3.3000002, y: 0.4, z: 1.45}
+    wallAvoidance: 0
+    neighborsIndex: df000000e5000000ea000000e0000000e1000000
+  - index: 231
+    gridPosition: {x: 0, y: 28}
+    position: {x: 3.6000004, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: e2000000eb000000e3000000e8000000ec000000
+  - index: 232
+    gridPosition: {x: 1, y: 28}
+    position: {x: 3.6000004, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: e2000000e7000000eb000000e3000000ec000000e4000000e9000000ed000000
+  - index: 233
+    gridPosition: {x: 2, y: 28}
+    position: {x: 3.6000004, y: 0.4, z: 0.8500001}
+    wallAvoidance: 0
+    neighborsIndex: e3000000e8000000ec000000e4000000ed000000e5000000ea000000
+  - index: 234
+    gridPosition: {x: 3, y: 28}
+    position: {x: 3.6000004, y: 0.4, z: 1.1500001}
+    wallAvoidance: 0
+    neighborsIndex: e4000000e9000000ed000000e5000000e6000000
+  - index: 235
+    gridPosition: {x: 0, y: 29}
+    position: {x: 3.9000006, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: e7000000ee000000e8000000ec000000ef000000
+  - index: 236
+    gridPosition: {x: 1, y: 29}
+    position: {x: 3.9000006, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: e7000000eb000000ee000000e8000000ef000000e9000000ed000000
+  - index: 237
+    gridPosition: {x: 2, y: 29}
+    position: {x: 3.9000006, y: 0.4, z: 0.85}
+    wallAvoidance: 0
+    neighborsIndex: e8000000ec000000ef000000e9000000ea000000
+  - index: 238
+    gridPosition: {x: 0, y: 30}
+    position: {x: 4.2, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: eb000000f0000000ec000000ef000000
+  - index: 239
+    gridPosition: {x: 1, y: 30}
+    position: {x: 4.2, y: 0.4, z: 0.55}
+    wallAvoidance: 0
+    neighborsIndex: eb000000ee000000f0000000ec000000ed000000
+  - index: 240
+    gridPosition: {x: 0, y: 31}
+    position: {x: 4.5, y: 0.4, z: 0.24999997}
+    wallAvoidance: 0
+    neighborsIndex: ee000000ef000000
