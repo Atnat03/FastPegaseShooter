@@ -173,6 +173,7 @@ MonoBehaviour:
   _source: {fileID: 4452635434205039295}
   _soundData: {fileID: 11400000, guid: 65bd5cf42144b4241ad32c45f4c56e43, type: 2}
   _muzzleFlash: {fileID: 7979225881567528821}
+  _cameraShakeSettings: {x: 0.05, y: 0.1}
   p_authorizedToShoot: 1
 --- !u!114 &7285036745726084220
 MonoBehaviour:
@@ -219,6 +220,9 @@ MonoBehaviour:
   _recoilZ: 5
   _returnSpeed: 6
   _snapiness: 15
+  _z_recoilDistance: 0.05
+  _z_returnSpeed: 8
+  _maxZKickback: 0.15
 --- !u!82 &4452635434205039295
 AudioSource:
   m_ObjectHideFlags: 0
@@ -339,7 +343,7 @@ MonoBehaviour:
   _maxDistance: 500
   _damages: 3
   _BulletSpeed: 60
-  p_markPrefab: {fileID: 2307883914161421898, guid: 7d05f0e9449391e41a91bae315fd9c9d, type: 3}
+  _impactVFXData: {fileID: 0}
 --- !u!114 &1398411418380392494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,7 +460,7 @@ MonoBehaviour:
   _maxDistance: 1000
   _damages: 100
   _BulletSpeed: 30
-  p_markPrefab: {fileID: 2307883914161421898, guid: 7d05f0e9449391e41a91bae315fd9c9d, type: 3}
+  _impactVFXData: {fileID: 0}
 --- !u!1 &7494419032053318145
 GameObject:
   m_ObjectHideFlags: 0
