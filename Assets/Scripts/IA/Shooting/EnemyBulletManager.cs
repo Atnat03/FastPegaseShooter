@@ -43,12 +43,12 @@ public class EnemyBulletManager : NetworkBehaviour
         float networkTime = (float)InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
         for(int i = _spawnedBullets.Count - 1; i >= 0; i--)
         {
-            if(_spawnedBullets[i].MoveForward(networkTime))
+            if(_spawnedBullets[i].MoveForward(networkTime, out IDamagable damagable))
             {
                 //here, apply target hitting logic
 
-
                 EnemyBullet bullet = _spawnedBullets[i];
+                damagable.TakeDamage(bullet.p_bulletStrenght);
                 KillVisualBulletObserverRPC(bullet.p_bulletId);
                 
                 //replace RemoveAt by "swap remove" for performences
@@ -61,7 +61,7 @@ public class EnemyBulletManager : NetworkBehaviour
     void AddBullet(EnemyShootingEvent ESE)
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
-        EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, networkTime, _lastBulletId);
+        EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, networkTime, _lastBulletId, ESE.p_damage);
 
         _lastBulletId++;
         
