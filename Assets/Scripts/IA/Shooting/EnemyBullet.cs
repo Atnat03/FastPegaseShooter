@@ -10,8 +10,9 @@ public struct EnemyBullet
     private Vector3 _lastPosition;
 
     public int p_bulletId;
+    public int p_bulletStrenght;
 
-    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, int bulletId)
+    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, int bulletId, int strenght)
     {
         _startPos = startPos;
         _lastPosition = startPos;
@@ -19,14 +20,20 @@ public struct EnemyBullet
         _speed = speed;
         _spawnTime = serverSpawnTime;
         p_bulletId = bulletId;
+        p_bulletStrenght = strenght;
     }
 
-    public bool MoveForward(float serverTime)
+    /// <summary>
+    /// Move The bullet one step further
+    /// </summary>
+    /// <param name="serverTime">the current server time (since beginning)</param>
+    /// <returns>True if a target was hit, false in the other case</returns>
+    public bool MoveForward(float serverTime, out IDamagable damagableObject)
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta - _spawnTime;
         Vector3 position = _startPos + _direction * _speed * networkTime;
 
-        if(DoCollide(_lastPosition, position)) return true;
+        if(DoCollide(_lastPosition, position, out damagableObject)) return true;
         else
         {
             _lastPosition = position;
@@ -34,7 +41,7 @@ public struct EnemyBullet
         }
     }
 
-    bool DoCollide(Vector3 startPos, Vector3 endPos)
+    bool DoCollide(Vector3 startPos, Vector3 endPos, out IDamagable damagableObject)
     {
         Vector3 delta = endPos - startPos;
         float length = delta.magnitude;
@@ -43,11 +50,15 @@ public struct EnemyBullet
         //May change CompareTag by layer checking
         if(Physics.Raycast(startPos, dir, out RaycastHit hit, length))
         {
+            damagableObject = hit.collider.GetComponent<IDamagable>();
+            if(damagableObject == null) return false;
+            
             if(hit.collider.CompareTag("Player"))
             {
                 return true;
             }
         }
+        damagableObject = null;
         return false;
     }
 }
