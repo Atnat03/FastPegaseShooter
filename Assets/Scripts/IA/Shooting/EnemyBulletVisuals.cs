@@ -12,7 +12,6 @@ public class EnemyBulletVisuals : MonoBehaviour
 
     private int _bulletId;
 
-    private float _maxEnabledTime = 5f;
     private Action _unsubscribeAction;
 
     public void SetupVariables(Vector3 startPos, Vector3 direction, float speed, float spawnTime, int bulletId, float damage)
@@ -54,15 +53,10 @@ public class EnemyBulletVisuals : MonoBehaviour
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta - _spawnTime;
         transform.position = _startPos + _direction * _speed * networkTime;
-
-        //only for debug
-        if (networkTime >= _maxEnabledTime)
-        {
-            KillBullet();
-        }
     }
 
-    public void OnCollisionEnter(Collision collision)
+    //collision with player shouldn't be done in visual updater
+    /*public void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.TryGetComponent(out PlayerHealth player))
         {
@@ -73,5 +67,5 @@ public class EnemyBulletVisuals : MonoBehaviour
             });
         }
         KillBullet();
-    }
+    }*/
 }
