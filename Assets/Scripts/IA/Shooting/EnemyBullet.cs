@@ -1,3 +1,4 @@
+using CustomConsole.Runtime.Logger;
 using FishNet;
 using UnityEngine;
 
@@ -28,12 +29,12 @@ public struct EnemyBullet
     /// </summary>
     /// <param name="serverTime">the current server time (since beginning)</param>
     /// <returns>True if a target was hit, false in the other case</returns>
-    public bool MoveForward(float serverTime, out IDamagable damagableObject)
+    public bool MoveForward(float serverTime, out PlayerHealth playerHealth)
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta - _spawnTime;
         Vector3 position = _startPos + _direction * _speed * networkTime;
 
-        if(DoCollide(_lastPosition, position, out damagableObject)) return true;
+        if(DoCollide(_lastPosition, position, out playerHealth)) return true;
         else
         {
             _lastPosition = position;
@@ -41,7 +42,7 @@ public struct EnemyBullet
         }
     }
 
-    bool DoCollide(Vector3 startPos, Vector3 endPos, out IDamagable damagableObject)
+    bool DoCollide(Vector3 startPos, Vector3 endPos, out PlayerHealth playerHealthObject)
     {
         Vector3 delta = endPos - startPos;
         float length = delta.magnitude;
@@ -50,15 +51,22 @@ public struct EnemyBullet
         //May change CompareTag by layer checking
         if(Physics.Raycast(startPos, dir, out RaycastHit hit, length))
         {
-            damagableObject = hit.collider.GetComponent<IDamagable>();
-            if(damagableObject == null) return false;
+            PlayerVisuelBridge PVB = hit.collider.GetComponent<PlayerVisuelBridge>();
+            CustomLogger.ImportantLog($"hit: {hit.collider.name}");
+            if(PVB == null)
+            {
+                playerHealthObject = null;
+                return false;
+            }
+            playerHealthObject = PVB.PlayerHealth;
             
             if(hit.collider.CompareTag("Player"))
             {
+                CustomLogger.ImportantLog($"hit was player");
                 return true;
             }
         }
-        damagableObject = null;
+        playerHealthObject = null;
         return false;
     }
 }
