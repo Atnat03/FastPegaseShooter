@@ -14,6 +14,7 @@ public class MenuSelectionArme : MonoBehaviour
 	[SerializeField] private GameObject ui;
 	
 	PlayerInput _playerInput;
+	FPSController _fpsController;
 	
 	#endregion
 
@@ -23,6 +24,7 @@ public class MenuSelectionArme : MonoBehaviour
 	private void Awake()
 	{
 		_playerInput = GetComponent<PlayerInput>();
+		_fpsController = GetComponent<FPSController>();
 
 		ui.SetActive(false);
 	}
@@ -34,6 +36,8 @@ public class MenuSelectionArme : MonoBehaviour
 		
 		Cursor.lockState = ui.activeSelf ?  CursorLockMode.None : CursorLockMode.Locked;
 		Cursor.visible = ui.activeSelf;
+		
+		_fpsController.IsFreeze = ui.activeSelf;
 	}
 
 	public void DesactivateUI()
@@ -41,6 +45,7 @@ public class MenuSelectionArme : MonoBehaviour
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		ui.SetActive(false);
+		_fpsController.IsFreeze = false;
 	}
 	
 	

@@ -22,6 +22,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
 
     public Camera Camera => _camera;
+    public bool IsFreeze { get => isFreeze; set=> isFreeze=value; }
 
     #region public variables
 
@@ -92,6 +93,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] [Tooltip("delai maximum avant le deuxieme trigger de l'input pour que le super jump s'active")] private float superJumpInputMaxDelay;
     [SerializeField] private float superJumpVerticalForce;
     [SerializeField] private float superJumpHorizontalForce;
+    [SerializeField] private float superJumpEnergyCost = 20f;
 
 
     [Header("wallRide")] [SerializeField] float wallRideDetectionRange = .5f;
@@ -162,6 +164,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     bool hasDashed = false;
     bool coyoteSlide = false;
     bool enoughtEnegyToDash = false;
+    bool enoughtEnegyToDoubleJump = false;
+    bool isFreeze = false;
     private readonly SyncVar<bool> isDead = new SyncVar<bool>(false);
 
     public enum ControlerState
@@ -201,6 +205,11 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             {
                 enoughtEnegyToDash = data.energy >= dashEnergyCost;
             });
+            
+            _bus.Subscribe((RequestEnergyResponseEvent data) =>
+            {
+                enoughtEnegyToDoubleJump = data.energy >= superJumpEnergyCost;
+            });
 
             _bus.Subscribe((OnPlayerDeathEvent data) =>
             {
@@ -225,7 +234,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             _camera.gameObject.SetActive(false);
         }
 
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
 
         yaw = transform.eulerAngles.y;
         pitch = cameraParentTransform.localEulerAngles.x;
@@ -330,7 +339,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         if (!IsOwner) return;
 
         if (isDead.Value) return;
-
+        if (IsFreeze) return;
+        
         UpdateInputs();
         UpdateLdInteractions();
         stateMachine?.Update();
@@ -342,6 +352,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         if (!IsOwner) return;
 
         if (isDead.Value) return;
+        if (IsFreeze) return;
 
         stateMachine?.FixedUpdate();
     }
@@ -351,6 +362,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         if (!IsOwner) return;
 
         if (isDead.Value) return;
+        if(IsFreeze) return;
 
         stateMachine?.LateUpdate();
     }
@@ -1072,7 +1084,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         }
         else
         {
-            if (verticalInput == 0f && horizontalInput == 0f) dashingDirection = transform.forward;
+            if (verticalInput == 0f && horizontalInput == 0f) dashingDirection = _camera.transform.forward;
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
 
@@ -1416,7 +1428,11 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     private void SuperJump()
     {
-        rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce, ForceMode.Impulse);
+        if(enoughtEnegyToDoubleJump)
+        {
+            rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce, ForceMode.Impulse);
+            _bus.InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
+        }
     }
 
     void WallJump(Vector3 wallNormal)

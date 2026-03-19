@@ -83,9 +83,11 @@ namespace GunDecorator
         {
             //On appele la fonction shoot du module de shoot actuellement équipé
             ShootingInputPressed = true;
-                   
+            
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
+                Debug.Log("shoot 2");
+                
                 foreach (IShootModule s in _shootModule)
                 {
                     if (s is { IsFullAuto: true })
@@ -122,6 +124,8 @@ namespace GunDecorator
         {
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
+                Debug.Log("shoot 3");
+                
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 PlayMuzzleFlash();
@@ -174,7 +178,8 @@ namespace GunDecorator
             
             _reloadModule?.Reload();
 
-            PlaySound("Reload");
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,"Reload");
+            SoundManager.PlaySound(clip, _source, 0.5f);
         }
 
         public void TriggerHitMark(bool isCritique = false)
@@ -188,15 +193,7 @@ namespace GunDecorator
                 _hitMarkerModule?.HitMarkCritique();
             }
         }
-
-        [ObserversRpc]
-        public void PlaySound(string sound, float volume = 0.5f)
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
-            SoundManager.PlaySound(clip, _source, volume);
-        }
         
-                
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {
