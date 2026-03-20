@@ -31,27 +31,28 @@ namespace GunDecorator.AmmoModules
 
         public void SpawnBullet(Vector3 direction, Vector3 offset)
         {
-            Ray cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Vector3 spreadDirection = _camera.transform.rotation * Quaternion.Euler(direction.y, direction.x, 0) * Vector3.forward;
+
+            Ray ray = new Ray(_camera.transform.position, spreadDirection);
 
             RaycastHit hit;
             Vector3 targetPoint;
             NetworkObject damagableObject = null;
             string touchTag = "Default";
 
-            if (Physics.Raycast(cameraRay, out hit, _maxDistance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out hit, _maxDistance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
             {
                 targetPoint = hit.point;
                 touchTag = hit.collider.gameObject.tag;
 
-                if (hit.collider.TryGetComponent<NetworkObject>(out NetworkObject iDamagable))
+                if (hit.collider.TryGetComponent(out NetworkObject iDamagable))
                     damagableObject = iDamagable;
             }
             else
             {
-                targetPoint = cameraRay.GetPoint(_maxDistance);
+                targetPoint = ray.GetPoint(_maxDistance);
             }
 
-            Vector3 spreadDirection = _camera.transform.rotation * Quaternion.Euler(direction.y, direction.x, 0) * Vector3.forward;
             bulletDirection = spreadDirection.normalized;
             travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _BulletSpeed;
 
