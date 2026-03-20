@@ -69,7 +69,7 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
         {
             if (asServer)
             {
-                Death(next-prev); // serveur uniquement
+                Death(prev-next); // serveur uniquement
             }
         }
     }

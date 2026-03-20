@@ -3,7 +3,6 @@ using UnityEngine;
 using FishNet;
 using FishNet.Object;
 using System.Collections.Generic;
-using CustomConsole.Runtime.Logger;
 
 public class EnemyBulletManager : NetworkBehaviour
 {

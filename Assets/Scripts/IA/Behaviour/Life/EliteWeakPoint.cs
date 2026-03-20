@@ -11,7 +11,7 @@ public class EliteWeakPoint : NetworkBehaviour, IDamagable
     [SerializeField] private int _life;
     public readonly SyncVar<int> p_life = new SyncVar<int>();
     [SerializeField] private float _energyGainWhenTouch = 1;
-    [SerializeField] private float _eliteDamageMultWhenDestroyed;
+    [SerializeField] private float _eliteDamageMultWhenDestroyed = 1;
     
     public override void OnStartServer()
     {
@@ -32,7 +32,7 @@ public class EliteWeakPoint : NetworkBehaviour, IDamagable
         {
             if (asServer)
             {
-                Death(next-prev); // serveur uniquement
+                Death(prev-next); // serveur uniquement
             }
         }
     }
@@ -40,7 +40,6 @@ public class EliteWeakPoint : NetworkBehaviour, IDamagable
     [Server]
     public bool TakeDamage(int rawDamageAmount, bool isCritical = false)
     {
-        CustomLogger.HighlightLog($"Weak point hit");
         if (IsServerInitialized)
         {
             int damages = GetDamageAmount(rawDamageAmount);
@@ -59,7 +58,9 @@ public class EliteWeakPoint : NetworkBehaviour, IDamagable
     [Server]
     public void Death(int takenDamages)
     {
-        baseEnemyLife.TakeDamage(Mathf.RoundToInt(takenDamages*_eliteDamageMultWhenDestroyed));
+        int damages = Mathf.RoundToInt(takenDamages * _eliteDamageMultWhenDestroyed);
+        CustomLogger.HighlightLog($"Weak point hit damages : {damages}");
+        baseEnemyLife.TakeDamage(damages, true);
         
         InstanceFinder.ServerManager.Despawn(gameObject);
         WeakPointDestroyedObserverRPC();
