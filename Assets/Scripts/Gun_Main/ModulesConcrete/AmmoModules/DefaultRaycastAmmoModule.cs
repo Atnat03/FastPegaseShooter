@@ -60,6 +60,7 @@ namespace GunDecorator.AmmoModules
 
             SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, damagableObject);
         }
+        
         [ServerRpc]
         private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, 
             float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, NetworkObject target = null)

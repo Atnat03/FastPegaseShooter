@@ -27,7 +27,8 @@ namespace Managers
         private readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
         [SerializeField] private float _swapingTime;
         
-        [SerializeField] private List<SurchargeData> _damageSurchargeData = new List<SurchargeData>();
+        [SerializeField] 
+        private List<SurchargeData> _damageSurchargeData = new List<SurchargeData>();
         private readonly SyncVar<int> _currentSurchargeLevel = new SyncVar<int>();
         private readonly SyncVar<int> _firstPlayerOwnerId = new SyncVar<int>(-1);
         

@@ -99,7 +99,6 @@ namespace GunDecorator
                     SetAmmo(GetCurrentAmmo() - 1);
                     PlayMuzzleFlash();
                 }
-
             }
             
             _bus.InvokeEvent(new OnCameraShakeEvent
