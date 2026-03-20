@@ -64,7 +64,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
                     _gunController.TriggerHitMark(crit || p_isCritical);
                 }
                 
-                GameObject hitMark = Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.2f, Quaternion.LookRotation(hit.normal));
+                GameObject hitMark = Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
                 
                 Destroy(hitMark, 1f);
             }

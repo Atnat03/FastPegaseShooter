@@ -31,7 +31,13 @@ namespace GunDecorator.AmmoModules
 
         public void SpawnBullet(Vector3 direction, Vector3 offset)
         {
-            Ray cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Vector3 spreadDirection = _camera.transform.rotation * Quaternion.Euler(direction.y, direction.x, 0) * Vector3.forward;
+            Ray cameraRay;
+            
+            if(direction != Vector3.zero)
+                cameraRay = new Ray(_camera.transform.position, spreadDirection);
+            
+            cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
             RaycastHit hit;
             Vector3 targetPoint;
@@ -51,7 +57,6 @@ namespace GunDecorator.AmmoModules
                 targetPoint = cameraRay.GetPoint(_maxDistance);
             }
 
-            Vector3 spreadDirection = _camera.transform.rotation * Quaternion.Euler(direction.y, direction.x, 0) * Vector3.forward;
             bulletDirection = spreadDirection.normalized;
             travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _BulletSpeed;
 

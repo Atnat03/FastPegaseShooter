@@ -27,6 +27,9 @@ public class MenuSelectionArme : MonoBehaviour
 		_fpsController = GetComponent<FPSController>();
 
 		ui.SetActive(false);
+		
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
 	}
 	
 	
