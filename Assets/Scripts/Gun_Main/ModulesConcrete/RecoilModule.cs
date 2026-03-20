@@ -81,7 +81,7 @@ public class RecoilModule : GunModule, IRecoilModule
         }
         else if(_timeRecoil > 0)
         {
-            _timeRecoil -= Time.deltaTime * _returnSpeed;
+            _timeRecoil -= Time.deltaTime * _returnSpeed * 2;
         }
         
         BringBackWeapon();
