@@ -65,8 +65,6 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
-                Debug.Log("shoot 3");
-                
                 _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
                 
                 _ammoModule.ResetBulletData();

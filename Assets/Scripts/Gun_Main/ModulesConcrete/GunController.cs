@@ -86,8 +86,6 @@ namespace GunDecorator
             
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
-                Debug.Log("shoot 2");
-                
                 foreach (IShootModule s in _shootModule)
                 {
                     if (s is { IsFullAuto: true })
@@ -97,6 +95,7 @@ namespace GunDecorator
                     }
                     s?.TryShoot();
                     _recoilModule?.Recoil(_model.transform, 0.1f);
+                    _recoilModule?.SetIsRecoil(true);
                     SetAmmo(GetCurrentAmmo() - 1);
                     PlayMuzzleFlash();
                 }
@@ -124,12 +123,11 @@ namespace GunDecorator
         {
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
-                Debug.Log("shoot 3");
-                
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 PlayMuzzleFlash();
                 _recoilModule?.Recoil(_model.transform, s.FireRate);
+                _recoilModule?.SetIsRecoil(true);
                 SetAmmo(GetCurrentAmmo() - 1);
                 
                 yield return new WaitForSeconds(s.FireRate);
@@ -146,6 +144,8 @@ namespace GunDecorator
             {
                 s?.CancelShooting();
             }
+            
+            _recoilModule?.SetIsRecoil(false);
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
