@@ -1044,6 +1044,9 @@ MonoBehaviour:
   bufferJumpTime: 0.2
   coyoteTimeDuration: 0.2
   landSnapVelocity: 50
+  superJumpInputMaxDelay: 0
+  superJumpVerticalForce: 0
+  superJumpHorizontalForce: 0
   wallRideDetectionRange: 0.5
   wallRidingDuration: 1.5
   wallRideCooldown: 0.2
@@ -1078,6 +1081,7 @@ MonoBehaviour:
   _castWidth: 0.5
   _castMaxDistance: 100
   _grapplingSpeed: 15
+  _grappleRedirectionSpeed: 8
   _endGrappleImpulseForce: 3
   grounded: 0
   leftSideAgainstWall: 0
@@ -1212,7 +1216,7 @@ MonoBehaviour:
   _teleportThreshold: 1
   <PrefabId>k__BackingField: 0
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 5897612701177573949
+  <AssetPathHash>k__BackingField: 16953947015139502031
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0.948, z: 0}
@@ -1388,8 +1392,12 @@ MonoBehaviour:
   _healthBase: 100
   _playerAnimation: {fileID: 3465261579877272972}
   _timeToRespawn: 5
+  _critikStep: 0.5
   _healthBar: {fileID: 8595574569810004968}
   _deathImage: {fileID: 8235982739118108901}
+  _damagedWarningImage: {fileID: 0}
+  _frameDeccordImage: {fileID: 0}
+  _damagedVolume: {fileID: 0}
   _soundsData: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}
 --- !u!114 &8101511114389266693
 MonoBehaviour:
@@ -4281,6 +4289,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7099757047308385760}
     m_Modifications:
+    - target: {fileID: -1471915538984385455, guid: 041d9a6803faeca40947450789945c85, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1398411418380392494, guid: 041d9a6803faeca40947450789945c85, type: 3}
       propertyPath: _hitMarkerParent
       value: 
@@ -4435,6 +4447,10 @@ PrefabInstance:
       propertyPath: _imageReload
       value: 
       objectReference: {fileID: 815123897057752124}
+    - target: {fileID: 8426487597539566496, guid: a29c407fb8e4e2e4881a550846dc6238, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4453,6 +4469,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7099757047308385760}
     m_Modifications:
+    - target: {fileID: -8578125264028084615, guid: d5adacdd83b08364dbf74ae0b8b87b0c, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 43625782835899419, guid: d5adacdd83b08364dbf74ae0b8b87b0c, type: 3}
       propertyPath: _addedNetworkObject
       value: 
@@ -4717,6 +4737,10 @@ PrefabInstance:
       propertyPath: _addedNetworkObject
       value: 
       objectReference: {fileID: 7927807153383519047}
+    - target: {fileID: 5790634011955312282, guid: 52352049afd7aff45b8a7f742aad5f52, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5795572438786032481, guid: 52352049afd7aff45b8a7f742aad5f52, type: 3}
       propertyPath: _addedNetworkObject
       value: 
