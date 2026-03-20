@@ -27,7 +27,7 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
     [SerializeField] private float _elapsedCumulativeDmgTime = 0;
     private TextMeshProUGUI _hitMarker;
 
-    private List<Action> _unsubscribeEvents;
+    private List<Action> _unsubscribeEvents = new List<Action>();
     private EventBus _bus;
 
     #region Init

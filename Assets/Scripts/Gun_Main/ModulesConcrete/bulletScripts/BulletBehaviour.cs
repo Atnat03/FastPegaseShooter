@@ -1,3 +1,4 @@
+using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using GunDecorator;
 using NUnit.Framework.Constraints;
@@ -57,7 +58,6 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
             }
             else
             {
-                
                 if (_targetNetworkObject != null && _targetNetworkObject.TryGetComponent<IDamagable>(out IDamagable damagable))
                 {
                     bool crit = damagable.TakeDamage((int)p_damage, p_isCritical);

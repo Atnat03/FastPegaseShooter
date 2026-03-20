@@ -1,4 +1,5 @@
 using System;
+using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -39,6 +40,7 @@ public class EliteWeakPoint : NetworkBehaviour, IDamagable
     [Server]
     public bool TakeDamage(int rawDamageAmount, bool isCritical = false)
     {
+        CustomLogger.HighlightLog($"Weak point hit");
         if (IsServerInitialized)
         {
             int damages = GetDamageAmount(rawDamageAmount);
