@@ -87,6 +87,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("walkingHeadbobFrequency"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingHeadbobAmplitude"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingHeadbobFrequency"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("headbobStopReturningSpeed"));
         }, ref showHeadbob);
 
         DrawSection("Jump", new Color(0.6f, 0.8f, 1f), () =>

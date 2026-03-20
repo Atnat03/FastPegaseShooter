@@ -74,6 +74,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float walkingHeadbobFrequency = 8f;
     [SerializeField] float wallRidingHeadbobAmplitude = 0.1f;
     [SerializeField] float wallRidingHeadbobFrequency = 8f;
+    [SerializeField] float headbobStopReturningSpeed = 5f;
 
     float yaw;
     float pitch;
@@ -1277,6 +1278,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     private float currentRoll = 0f;
     private Vector3 camVelocity = Vector3.zero;
     private Vector3 camNextPos;
+    private Vector3 bobOffset = Vector3.zero;
 
     void UpdateCameraPositionAndRotation(bool headbob = false, float headbobAmplitude = 0f, float headbobFrequency = 0f)
     {
@@ -1295,15 +1297,15 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
             float bobY = Mathf.Sin(headbobTimer) * headbobAmplitude;
             float bobX = Mathf.Cos(headbobTimer * 0.5f) * headbobAmplitude * 0.5f;
-
-            targetPos += cameraParentTransform.up * bobY;
-            targetPos += cameraParentTransform.right * bobX;
+            
+            bobOffset = new Vector3(bobX, bobY, 0);
         }
         else
         {
+            bobOffset = Vector3.Lerp(bobOffset, Vector3.zero, Time.deltaTime * headbobStopReturningSpeed);
             headbobTimer = 0f;
         }
-
+        targetPos += bobOffset;
         Spring(ref camNextPos, ref camVelocity, targetPos, cameraSpringHalfLife, cameraSpringFrequency, Time.deltaTime);
         cameraParentTransform.position = camNextPos;
     }
