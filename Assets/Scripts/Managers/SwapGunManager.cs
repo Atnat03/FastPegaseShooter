@@ -61,7 +61,7 @@ namespace Managers
             
             InitBus();
             _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
-            _bus.Subscribe((EndOVerload data) =>
+            _bus.Subscribe((EndOverloadEvent data) =>
             {
                 _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo;
             });
