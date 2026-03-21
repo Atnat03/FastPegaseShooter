@@ -9,6 +9,7 @@ public class FakeGrapin : MonoBehaviour
     [Header("References")]
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField]private Camera _playerCamera;
+    public LayerMask layerGrapple;
 
     #endregion
     
@@ -29,11 +30,10 @@ public class FakeGrapin : MonoBehaviour
         
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, layerGrapple))
         {
-            Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
             Debug.Log("je touche " + hit.transform.name);
-            if (hit.transform.CompareTag("GrapplePoint2"))
+            if (hit.transform.CompareTag("GrapplePoint"))
             {
                 newPos =  hit.transform.position + new Vector3(0, 2, 0);
                 StartCoroutine(TPOverGrapin());

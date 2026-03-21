@@ -1301,6 +1301,7 @@ GameObject:
   - component: {fileID: 733889428415545954}
   - component: {fileID: 7752085964504601645}
   - component: {fileID: 1610322985881872505}
+  - component: {fileID: -2142763674882647559}
   m_Layer: 6
   m_Name: _PlayerController (a jour)
   m_TagString: Player
@@ -1342,7 +1343,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2624057951769441985}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 3
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1388,7 +1389,7 @@ MonoBehaviour:
   _playerVisual: {fileID: 4615614786451762460}
   _playerAnimation: {fileID: 3465261579877272972}
   landSnap: 0
-  dashVerticality: 1
+  dashVerticality: 0
   clampedMaxAirSpeed: 0
   jumpSlideOnEndOfSlide: 0
   wallRideUnlocked: 1
@@ -1399,18 +1400,18 @@ MonoBehaviour:
   cameraSpringFrequency: 22.5
   rollSmoothing: 15
   mouseSensitivity: 0.2
-  verticalLimit: 80
-  moveSpeed: 10
+  verticalLimit: 75
+  moveSpeed: 9.5
   groundMomentumFactor: 2
   sideStepImpulseForce: 3
   wallDetectionRange: 0
   walkableSlopeAngle: 45
-  maxStepHeight: 0.2
+  maxStepHeight: 1
   walkingHeadbobAmplitude: 0.075
   walkingHeadbobFrequency: 15
   wallRidingHeadbobAmplitude: 0.1
   wallRidingHeadbobFrequency: 25
-  jumpForce: 6.5
+  jumpForce: 22.5
   airControlForce: 3
   maxAirSpeed: 6
   airDrag: 0.5
@@ -1418,16 +1419,15 @@ MonoBehaviour:
   coyoteTimeDuration: 0.2
   landSnapVelocity: 50
   superJumpInputMaxDelay: 0.5
-  superJumpVerticalForce: 10
-  superJumpHorizontalForce: 2
-  superJumpEnergyCost: 20
+  superJumpVerticalForce: 30
+  superJumpHorizontalForce: 6
   wallRideDetectionRange: 0.5
   wallRidingDuration: 1.5
-  wallRideCooldown: 0.2
+  wallRideCooldown: 1.5
   wallRidingSpeed: 10
   minSpeedToWallRide: 1
-  wallJumpVerticalForce: 8
-  wallJumpHorizontalForce: 9
+  wallJumpVerticalForce: 27
+  wallJumpHorizontalForce: 18
   headtiltIntensity: 7
   crouchSpeed: 5
   cameraOffsetWhenCrouching: 0.75
@@ -1437,13 +1437,13 @@ MonoBehaviour:
   bodyCrouchedCollider:
   - {fileID: 3153661936363678950}
   topHeightCrouchedCollider: {fileID: 4821877748357995787}
-  slideSpeed: 12
+  slideSpeed: 15
   slideTimeDuration: 0.5
-  slideJumpVerticalForce: 6.5
+  slideJumpVerticalForce: 19.5
   slideJumpHorizontalForce: 2
-  slideCooldown: 0.1
+  slideCooldown: 2
   coyoteSlideDuration: 0.1
-  CameraSlideFOV: 50
+  CameraSlideFOV: 80
   dashSpeed: 5
   dashTimeDuration: 0.2
   dashCooldown: 0.75
@@ -1575,7 +1575,7 @@ MonoBehaviour:
   - {fileID: 5987821232048065999}
   - {fileID: 5639936714480259773}
   - {fileID: 7781035500729037681}
-  - {fileID: 0}
+  - {fileID: 6021751292684359228}
   - {fileID: 5329717332355912109}
   - {fileID: 7688501357711374014}
   - {fileID: 8977986747039668759}
@@ -1605,7 +1605,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584276048977709325
+  _initializedTimestamp: -8584275819987112341
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1621,7 +1621,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 7
+  <PrefabId>k__BackingField: 16
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 6683661854146624352
   SceneId: 0
@@ -1838,6 +1838,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuSelectionArme
   ui: {fileID: 7750543907722423900}
+--- !u!114 &-2142763674882647559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2624057951769441985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252ee30a3f6b1af45a378dd639f97f1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FakeGrapin
+  _playerInput: {fileID: 997312506154426130}
+  _playerCamera: {fileID: 3061844143884342809}
+  layerGrapple:
+    serializedVersion: 2
+    m_Bits: 4096
+  newPos: {x: 0, y: 0, z: 0}
 --- !u!1 &2771240253514392097
 GameObject:
   m_ObjectHideFlags: 0
@@ -2220,12 +2238,7 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 3952118585016700218}
-  _recoilCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _recoilX: 5
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -2488,13 +2501,13 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1943
+    m_Bits: 6039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3732,12 +3745,7 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 3952118585016700218}
-  _recoilCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _recoilX: 5
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -4724,6 +4732,7 @@ GameObject:
   - component: {fileID: 4997057281965842912}
   - component: {fileID: 5639936714480259773}
   - component: {fileID: 7781035500729037681}
+  - component: {fileID: 6021751292684359228}
   m_Layer: 11
   m_Name: AK
   m_TagString: Untagged
@@ -4785,8 +4794,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule:
-  - {fileID: 0}
+  _secondModule: []
   _ammoType: {fileID: 5639936714480259773}
   _isFullAuto: 1
   _fireRate: 0.1
@@ -4830,39 +4838,7 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 3952118585016700218}
-  _recoilCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 11.458394
-      value: 1.297615
-      inSlope: 0.21630539
-      outSlope: 0.21630539
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.6099043
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 20
-      value: 20
-      inSlope: 3.7569067
-      outSlope: 3.7569067
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.019182682
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _recoilX: 5
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -4989,7 +4965,7 @@ MonoBehaviour:
   _spawnPoint: {fileID: 7223032234500983169}
   _maxDistance: 2000
   _damages: 10
-  _BulletSpeed: 100
+  _BulletSpeed: 50
   _impactVFXData: {fileID: 11400000, guid: fa51d249e5d6f104e9e152faba21b25a, type: 2}
 --- !u!114 &7781035500729037681
 MonoBehaviour:
@@ -5013,6 +4989,24 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+--- !u!114 &6021751292684359228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7426788794118929898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
+  _componentIndexCache: 17
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 7927807153383519047}
+  moduleName: ExplosifAmmoModule
+  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+  _radiusExplosion: 2
 --- !u!1 &7654427447990518306
 GameObject:
   m_ObjectHideFlags: 0
@@ -5235,12 +5229,7 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 3952118585016700218}
-  _recoilCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _recoilX: 15
   _recoilY: 2
   _recoilZ: 0.35
   _returnSpeed: 3

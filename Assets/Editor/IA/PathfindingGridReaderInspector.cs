@@ -7,8 +7,10 @@ public class PathfindingGridReaderInspector : Editor
 {
     public override void OnInspectorGUI()
     {
-        PathfindingGridReader script = target as PathfindingGridReader;
-        base.OnInspectorGUI();
+        PathfindingGridReader script = (PathfindingGridReader)target;
+        
+        GUILayout.Label($"Reader Id : {script.p_id}");
+        DrawDefaultInspector();
         
         Color backgroundColor = GUI.color;
         GUILayout.Label("Debug");
