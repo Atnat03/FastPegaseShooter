@@ -78,7 +78,8 @@ namespace GunDecorator
                 
                 _ammoModule.ResetBulletData();
                 
-                _gunController.PlaySound("Shoot");
+                AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
+                SoundManager.PlaySound(clip, _gunController._source, 0.5f);
                 
             }
         }
@@ -91,5 +92,9 @@ namespace GunDecorator
             throw new System.NotImplementedException();
         }
 
+        public void SetBulletOffset(Vector3 offset)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

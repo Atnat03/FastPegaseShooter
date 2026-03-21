@@ -24,6 +24,7 @@ namespace GunDecorator
         
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
+        private Vector3 _bulletOffset = Vector3.zero;
         
         private void Start()
         {
@@ -64,19 +65,30 @@ namespace GunDecorator
         {
             if (_ammoModule != null)
             {
-                _ammoModule.SpawnBullet(_directionModifier, Vector3.zero);
+                _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
                 
                 _ammoModule.ResetBulletData();
                 
-                _gunController.PlaySound("Shoot");
+                PlayerShootSound();
             }
         }
+
+        [ServerRpc]
+        void PlayerShootSound()
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
+            SoundManager.PlaySound(clip, _gunController._source, 0.5f);
+        }
+        
+        
         
 
         public void CancelShooting()
         { }
         
         public void SetDirectionModifier(Vector3 direction) =>_directionModifier = direction;
+        
+        public void SetBulletOffset(Vector3 offset) =>_bulletOffset = offset;
         
     }
 }

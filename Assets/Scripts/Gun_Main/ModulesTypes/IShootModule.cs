@@ -15,6 +15,7 @@ namespace GunDecorator
         public IAmmoModule AmmoModule { get; }
         
         public void SetDirectionModifier(Vector3 direction);
+        public void SetBulletOffset(Vector3 offset);
     }
     
     public interface IReloadModule
@@ -31,6 +32,7 @@ namespace GunDecorator
     public interface IRecoilModule
     {
         public void Recoil(Transform model, float time, float multiplier = 1);
+        public void SetIsRecoil(bool value);
     }
 
     public interface IAmmoModule

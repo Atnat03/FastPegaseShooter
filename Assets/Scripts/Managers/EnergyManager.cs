@@ -40,8 +40,6 @@ public class EnergyManager : NetworkBehaviour
     
     [SerializeField] private Color _energyBarColorFull;
     [SerializeField] private Color _energyBarColorNotFull;
-
-    [SerializeField] private Image _imageFullCharged;
     
     private EventBus _bus;
 
@@ -85,7 +83,7 @@ public class EnergyManager : NetworkBehaviour
     {
         if (!IsClientInitialized || !_isLerping) return;
         
-        _imageFullCharged.gameObject.SetActive(IsEnergyFull);
+        //_imageFullCharged.gameObject.SetActive(IsEnergyFull);
 
         _displayedEnergy = Mathf.Lerp(_displayedEnergy, _targetEnergy, Time.deltaTime * 20);
 

@@ -4,20 +4,23 @@ namespace GunDecorator
 {
     public class MultipleShootModule : GunModule, ISecondModule
     {
-        [SerializeField] private string _shapeName;
         private IShootModule _shootModule;
         private ISecondModule _next;
 
-        public void SetUpModule(IShootModule shootModule)
-        {
-            _shootModule = shootModule;
-        }
+        [SerializeField] private Transform[] _shootingStartPoint;
 
+        public void SetUpModule(IShootModule shootModule)=>_shootModule = shootModule;
         public void SetNext(ISecondModule next) =>  _next = next;
 
+        
         public void DoAdditionnalEffect()
         {
-            Debug.Log("MultipleShootModule --- " + _shapeName);
+            foreach (Transform t in _shootingStartPoint)
+            {
+                _shootModule.SetDirectionModifier(t.forward);
+                _shootModule.SetBulletOffset(t.localPosition);
+                Shooting();
+            }
         }
 
         public void Shooting()

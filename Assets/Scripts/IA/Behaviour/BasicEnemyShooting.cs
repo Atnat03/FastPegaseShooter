@@ -10,7 +10,7 @@ public class BasicEnemyShooting : NetworkBehaviour
     [SerializeField] private float _maxPlayerDistance = 10f;
     [SerializeField] private float _shootingDelay = 2f;
     [SerializeField] private float _ammoSpeed;
-    [SerializeField] private float _damage = 10;
+    [SerializeField] private int _damage = 10;
 
     private int _targetedPlayerId;
     Vector3 _lastPlayerPosition;
@@ -90,5 +90,5 @@ public struct EnemyShootingEvent
     public Vector3 p_startPos;
     public Vector3 p_direction;
     public float p_speed;
-    public float p_damage;
+    public int p_damage;
 }

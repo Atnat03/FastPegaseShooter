@@ -47,6 +47,7 @@ namespace GunDecorator
         
         private bool _isExplosedAmmo = false;
         private Vector3 _directionOffset = Vector3.zero;
+        private Vector3 _bulletOffset = Vector3.zero;
         
         private void Start()
         {
@@ -95,11 +96,12 @@ namespace GunDecorator
                     if (_gunController.IsOverload)
                         _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
 
-                    _ammoModule.SpawnBullet(_directionOffset, Vector3.zero);
+                    _ammoModule.SpawnBullet(_directionOffset, _bulletOffset);
 
                     _ammoModule.ResetBulletData();
 
-                    _gunController.PlaySound("Shoot");
+                    AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
+                    SoundManager.PlaySound(clip, _gunController._source, 0.5f);
                 }
                 
                 _startCharging = true;
@@ -134,7 +136,8 @@ namespace GunDecorator
                 
                     _ammoModule.ResetBulletData();
                 
-                    _gunController.PlaySound("ChargedShoot");
+                    AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"ChargedSound");
+                    SoundManager.PlaySound(clip, _gunController._source, 0.5f);
                 
                     _isCharged = false;
                 }
@@ -188,6 +191,6 @@ namespace GunDecorator
         }
         
         public void SetDirectionModifier(Vector3 direction) => _directionOffset =  direction;
-        
+        public void SetBulletOffset(Vector3 offset) =>  _bulletOffset = offset;
     }
 }

@@ -14,17 +14,30 @@ public class GunsSway : MonoBehaviour
     [SerializeField] float _bobSpeed = 8f;
     [SerializeField] float _bobAmount = 0.02f;
 
+    [Header("Vertical Bump")]
+    [SerializeField] float _verticalBumpForce = 0.015f;
+    [SerializeField] float _smoothTimeVerticalBump = 0.01f;
+
+    private float _bumpPosition;
+    private float _bumpVelocity;
+    private float _lastVerticalVelocity;
+
+    private Rigidbody _playerRB;
+    
     private Vector3 _initialPosition;
     private float _bobTimer;
-
+    
+    
     void Start()
     {
         _initialPosition = transform.localPosition;
+        _playerRB = _playerInput.GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void LateUpdate()
     {
-        //Quand on bouge la souris
+        #region Sway
+        
         float mouseX = _playerInput.actions["Look"].ReadValue<Vector2>().x;
         float mouseY = _playerInput.actions["Look"].ReadValue<Vector2>().y;
         
@@ -33,15 +46,17 @@ public class GunsSway : MonoBehaviour
 
         Vector3 finalPosition = new Vector3(_initialPosition.x + moveX, _initialPosition.y + moveY, _initialPosition.z);
         
-        //Idle
+        #endregion
+
+        #region Headbob
+        
         float idleY = Mathf.Cos(Time.time * 1.5f) * _idleCoef;
 
         finalPosition += new Vector3(0, idleY, 0);
         
-        //Headbob
         Vector2 moveInput = _playerInput.actions["Move"].ReadValue<Vector2>();
 
-        if (moveInput.magnitude > 0.1f)
+        if (moveInput.magnitude > 0.1f && _playerRB.linearVelocity.y < 0.2f) 
         {
             _bobTimer += Time.deltaTime * _bobSpeed;
 
@@ -53,8 +68,19 @@ public class GunsSway : MonoBehaviour
             _bobTimer = 0;
         }
         
+        #endregion
+        
+        #region Vertical Bump (Jump/Landing)
+        
+        float verticalVelocity = _playerRB.linearVelocity.y;
+
+        float targetBump = -verticalVelocity * (_verticalBumpForce);
+
+        _bumpPosition = Mathf.SmoothDamp(_bumpPosition, targetBump, ref _bumpVelocity, _smoothTimeVerticalBump);
+
+        finalPosition.y += _bumpPosition;
+        #endregion
 
         transform.localPosition = Vector3.Lerp(transform.localPosition, finalPosition, Time.deltaTime * _smooth);
-
     }
 }

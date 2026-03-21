@@ -86,12 +86,13 @@ namespace Controller
         private void SwapingGun(SwapingGunEvent data)
         {
             _wantToSwitch.Value = false;
-            CurrentMainSurchargeGun.StopReload();
             StartCoroutine(WaitBeforeSwapCoroutine(data));
         }
 
         IEnumerator WaitBeforeSwapCoroutine(SwapingGunEvent data)
         {
+            CurrentMainSurchargeGun.StopReload();
+            
             _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
             
             int ammoToApply = data.currentAmmo;

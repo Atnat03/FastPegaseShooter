@@ -49,19 +49,20 @@ public class BasicEnemyLife : NetworkBehaviour, IDamagable
         }
     }
     
-    public void TakeDamage(int damageAmount, bool isCritical = false)
+    public bool TakeDamage(int damageAmount, bool isCritical = false)
     {
         if (IsServerInitialized)
+        {
             p_life.Value -= damageAmount;
-    
-        TriggerHitMarkObserversRpc(isCritical, damageAmount);
+            TriggerHitMarkObserversRpc(isCritical, damageAmount);
+        }
+
+        return isCritical;
     }
     
     [ObserversRpc]
     void TriggerHitMarkObserversRpc(bool IsCritique, float dmg)
     {
-        print("is critik : " + IsCritique);
-        
         if (IsCritique)
         {
             _bus.InvokeEvent(new OnModifyEnergyEvent { value = _energyGainWhenTouch });
