@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _distanceMax: 100
+  _scaleModifier: 1
 --- !u!1 &4999955547964881675
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +169,7 @@ GameObject:
   - component: {fileID: -8997744782067408838}
   m_Layer: 0
   m_Name: Enemy 1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -211,6 +212,7 @@ MonoBehaviour:
   _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
   _cumuatifDmg: 0
   _elapsedCumulativeDmgTime: 0
+  _energyGainWhenTouch: 1
 --- !u!114 &4856717765235199756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +247,7 @@ MonoBehaviour:
   _maxPlayerDistance: 10
   _shootingDelay: 1
   _ammoSpeed: 4
+  _damage: 10
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -301,7 +304,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584286063260357855
+  _initializedTimestamp: -8584276919366787541
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0

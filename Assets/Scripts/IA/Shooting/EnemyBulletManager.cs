@@ -37,19 +37,25 @@ public class EnemyBulletManager : NetworkBehaviour
         base.OnStopServer();
     }
 
-    //Executed at each network Tick
+    //Executed at each network Tick only by server because of subscription
     private void OnNetworkTick()
     {
         float networkTime = (float)InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
         for(int i = _spawnedBullets.Count - 1; i >= 0; i--)
         {
-            if(_spawnedBullets[i].MoveForward(networkTime))
+            if(_spawnedBullets[i].MoveForward(networkTime, out PlayerHealth playerHealth))
             {
                 //here, apply target hitting logic
-
-
-                EnemyBullet bullet = _spawnedBullets[i];
-                KillVisualBulletObserverRPC(bullet.p_bulletId);
+                EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerTakeDamageEvent
+                {
+                    playerN = playerHealth.NetworkObject,
+                    value = _spawnedBullets[i].p_bulletStrenght
+                });
+                
+                
+                //EnemyBullet bullet = _spawnedBullets[i];
+                //playerHealth.TakeDamage(bullet.p_bulletStrenght);
+                KillVisualBulletObserverRPC(_spawnedBullets[i].p_bulletId);
                 
                 //replace RemoveAt by "swap remove" for performences
                 _spawnedBullets.RemoveAt(i);
@@ -61,7 +67,7 @@ public class EnemyBulletManager : NetworkBehaviour
     void AddBullet(EnemyShootingEvent ESE)
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
-        EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, networkTime, _lastBulletId);
+        EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, networkTime, _lastBulletId, ESE.p_damage);
 
         _lastBulletId++;
         

@@ -83,7 +83,7 @@ namespace GunDecorator
         {
             //On appele la fonction shoot du module de shoot actuellement équipé
             ShootingInputPressed = true;
-                   
+            
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 foreach (IShootModule s in _shootModule)
@@ -95,10 +95,10 @@ namespace GunDecorator
                     }
                     s?.TryShoot();
                     _recoilModule?.Recoil(_model.transform, 0.1f);
+                    _recoilModule?.SetIsRecoil(true);
                     SetAmmo(GetCurrentAmmo() - 1);
                     PlayMuzzleFlash();
                 }
-
             }
             
             _bus.InvokeEvent(new OnCameraShakeEvent
@@ -126,6 +126,7 @@ namespace GunDecorator
                 s.TryShoot();
                 PlayMuzzleFlash();
                 _recoilModule?.Recoil(_model.transform, s.FireRate);
+                _recoilModule?.SetIsRecoil(true);
                 SetAmmo(GetCurrentAmmo() - 1);
                 
                 yield return new WaitForSeconds(s.FireRate);
@@ -142,6 +143,8 @@ namespace GunDecorator
             {
                 s?.CancelShooting();
             }
+            
+            _recoilModule?.SetIsRecoil(false);
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
@@ -174,7 +177,8 @@ namespace GunDecorator
             
             _reloadModule?.Reload();
 
-            PlaySound("Reload");
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,"Reload");
+            SoundManager.PlaySound(clip, _source, 0.5f);
         }
 
         public void TriggerHitMark(bool isCritique = false)
@@ -188,15 +192,7 @@ namespace GunDecorator
                 _hitMarkerModule?.HitMarkCritique();
             }
         }
-
-        [ObserversRpc]
-        public void PlaySound(string sound, float volume = 0.5f)
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
-            SoundManager.PlaySound(clip, _source, volume);
-        }
         
-                
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {

@@ -12,11 +12,11 @@ public class RecoilModule : GunModule, IRecoilModule
     [Header("References")] [SerializeField, Tooltip("Objet CameraRecoil dans la hiérarchie du joueur")]
     private Transform _recoilTransform;
 
-    [Header("Settings")] 
+    [Header("Settings")]
     
     [SerializeField, Tooltip("Force du recul vertical (axe X). Valeur négative appliquée pour faire monter l'arme.")]
-    private float _recoilX;
-
+    private AnimationCurve _recoilCurve;
+    
     [SerializeField, Tooltip("Amplitude aléatoire du recul horizontal gauche/droite (axe Y).")]
     private float _recoilY;
 
@@ -28,7 +28,6 @@ public class RecoilModule : GunModule, IRecoilModule
 
     [SerializeField, Tooltip("Vitesse à laquelle l'arme atteint la rotation de recul cible (plus la valeur est grande, plus le recul est sec).")]
     private float _snapiness = 10f;
-    
     
     [Header("Z Kickback")]
     [SerializeField]
@@ -45,6 +44,9 @@ public class RecoilModule : GunModule, IRecoilModule
 
     private float _currentZ;
     private float _targetZ;
+    private float _timeRecoil = 0;
+    private bool _isRecoil = false;
+    private float _maxRecoilTime = 10;
 
     private Vector3 _initialLocalPos;
     
@@ -58,7 +60,7 @@ public class RecoilModule : GunModule, IRecoilModule
     public void Recoil(Transform model, float time, float multiplier = 1)
     {
         _targetRotation += new Vector3(
-            -_recoilX,
+            -_recoilCurve.Evaluate(_timeRecoil),
             Random.Range(-_recoilY, _recoilY),
             Random.Range(-_recoilZ, _recoilZ)
         ) * multiplier;
@@ -71,6 +73,18 @@ public class RecoilModule : GunModule, IRecoilModule
 
     void Update()
     {
+        if(_recoilCurve.length > 0)
+            _maxRecoilTime = _recoilCurve[_recoilCurve.length-1].time;
+        
+        if (_isRecoil && _timeRecoil < _maxRecoilTime)
+        {
+            _timeRecoil += Time.deltaTime * _snapiness;
+        }
+        else if(_timeRecoil > 0)
+        {
+            _timeRecoil -= Time.deltaTime * _returnSpeed * 2;
+        }
+        
         BringBackWeapon();
     }
 
@@ -84,5 +98,10 @@ public class RecoilModule : GunModule, IRecoilModule
         _currentZ = Mathf.Lerp(_currentZ, _targetZ, _snapiness * Time.deltaTime);
 
         _gunController.ModelGun.transform.localPosition = _initialLocalPos + new Vector3(0, 0, -_currentZ);
+    }
+
+    public void SetIsRecoil(bool state)
+    {
+        _isRecoil = state;
     }
 }

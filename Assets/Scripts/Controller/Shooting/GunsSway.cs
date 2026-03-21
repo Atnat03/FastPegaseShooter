@@ -56,7 +56,7 @@ public class GunsSway : MonoBehaviour
         
         Vector2 moveInput = _playerInput.actions["Move"].ReadValue<Vector2>();
 
-        if (moveInput.magnitude > 0.1f)
+        if (moveInput.magnitude > 0.1f && _playerRB.linearVelocity.y < 0.2f) 
         {
             _bobTimer += Time.deltaTime * _bobSpeed;
 
