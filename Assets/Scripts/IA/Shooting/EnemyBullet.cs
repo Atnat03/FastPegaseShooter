@@ -9,11 +9,12 @@ public class EnemyBullet
     private float _speed;
     private float _spawnTime;
     private Vector3 _lastPosition;
+    private float _maxLifeTime;
 
     public int p_bulletId;
     public int p_bulletStrenght;
 
-    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, int bulletId, int strenght)
+    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, float maxLifeTime, int bulletId, int strenght)
     {
         _startPos = startPos;
         _lastPosition = startPos;
@@ -22,6 +23,7 @@ public class EnemyBullet
         _spawnTime = serverSpawnTime;
         p_bulletId = bulletId;
         p_bulletStrenght = strenght;
+        _maxLifeTime = maxLifeTime;
     }
 
     /// <summary>
@@ -64,5 +66,11 @@ public class EnemyBullet
         }
         playerHealthObject = null;
         return false;
+    }
+
+    public bool ShouldBeDestroyed(float serverTime)
+    {
+        //if the bullet was alive for too long
+        return serverTime - _spawnTime > _maxLifeTime;
     }
 }

@@ -11,6 +11,7 @@ public class BasicEnemyShooting : NetworkBehaviour
     [SerializeField] private float _shootingDelay = 2f;
     [SerializeField] private float _ammoSpeed;
     [SerializeField] private int _damage = 10;
+    [SerializeField] private float _maxAmmoLifeTime = 10f;
 
     private int _targetedPlayerId;
     Vector3 _lastPlayerPosition;
@@ -56,7 +57,8 @@ public class BasicEnemyShooting : NetworkBehaviour
                 p_startPos = transform.position + dir * 0.1f + Vector3.up * 0.5f,
                 p_direction = dir,
                 p_speed = _ammoSpeed,
-                p_damage = _damage
+                p_damage = _damage,
+                p_aliveTime = _maxAmmoLifeTime
             });
         }
     }
@@ -66,15 +68,19 @@ public class BasicEnemyShooting : NetworkBehaviour
         if ((transform.position - _lastPlayerPosition).sqrMagnitude > _maxPlayerDistance * _maxPlayerDistance)
             return false;
         
+        
         Vector3 delta = PlayerPosition() - transform.position;
         float length = delta.magnitude;
         Vector3 dir = delta / length;
 
-        Debug.DrawLine(transform.position + dir * 0.1f  + Vector3.up * 0.5f, dir * length, Color.red, _shootingDelay);
-        if (Physics.Raycast(transform.position + dir * 0.1f  + Vector3.up * 0.5f, dir, out RaycastHit hit, length))
+        Vector3 origin = transform.position + dir * 0.1f + Vector3.up * 0.5f;
+        Debug.DrawLine(origin,origin + dir * length, Color.red, _shootingDelay);
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, length, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
+            CustomLogger.ImportantLog($"{hit.collider.name}");
             if (hit.collider.CompareTag("Player"))
             {
+                CustomLogger.ImportantLog($"Can shoot third check");
                 return true;
             }
         }
@@ -83,6 +89,13 @@ public class BasicEnemyShooting : NetworkBehaviour
     }
 
     Vector3 PlayerPosition() => InstanceFinder.ClientManager.Objects.Spawned[_playerObjectId].transform.position;
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
+        Gizmos.DrawSphere(PlayerPosition(), 0.1f);
+    }
 }
 
 public struct EnemyShootingEvent
@@ -91,4 +104,5 @@ public struct EnemyShootingEvent
     public Vector3 p_direction;
     public float p_speed;
     public int p_damage;
+    public float p_aliveTime;
 }
