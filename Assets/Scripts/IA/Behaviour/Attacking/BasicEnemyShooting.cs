@@ -1,5 +1,3 @@
-using System;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using UnityEngine;
 using FishNet.Object;
@@ -77,10 +75,8 @@ public class BasicEnemyShooting : NetworkBehaviour
         Debug.DrawLine(origin,origin + dir * length, Color.red, _shootingDelay);
         if (Physics.Raycast(origin, dir, out RaycastHit hit, length, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
-            CustomLogger.ImportantLog($"{hit.collider.name}");
             if (hit.collider.CompareTag("Player"))
             {
-                CustomLogger.ImportantLog($"Can shoot third check");
                 return true;
             }
         }
@@ -92,6 +88,7 @@ public class BasicEnemyShooting : NetworkBehaviour
 
     private void OnDrawGizmos()
     {
+        if(!Application.isPlaying || !IsServerInitialized) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
         Gizmos.DrawSphere(PlayerPosition(), 0.1f);
