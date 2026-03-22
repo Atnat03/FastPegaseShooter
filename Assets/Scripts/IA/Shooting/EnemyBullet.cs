@@ -2,18 +2,19 @@ using CustomConsole.Runtime.Logger;
 using FishNet;
 using UnityEngine;
 
-public struct EnemyBullet
+public class EnemyBullet
 {
     private Vector3 _startPos;
     private Vector3 _direction;
     private float _speed;
     private float _spawnTime;
     private Vector3 _lastPosition;
+    private float _maxLifeTime;
 
     public int p_bulletId;
     public int p_bulletStrenght;
 
-    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, int bulletId, int strenght)
+    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, float maxLifeTime, int bulletId, int strenght)
     {
         _startPos = startPos;
         _lastPosition = startPos;
@@ -22,6 +23,7 @@ public struct EnemyBullet
         _spawnTime = serverSpawnTime;
         p_bulletId = bulletId;
         p_bulletStrenght = strenght;
+        _maxLifeTime = maxLifeTime;
     }
 
     /// <summary>
@@ -31,15 +33,13 @@ public struct EnemyBullet
     /// <returns>True if a target was hit, false in the other case</returns>
     public bool MoveForward(float serverTime, out PlayerHealth playerHealth)
     {
-        float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta - _spawnTime;
-        Vector3 position = _startPos + _direction * _speed * networkTime;
+        float networkTime = serverTime - _spawnTime;
+        Vector3 position = _startPos + (_direction * _speed * networkTime);
 
         if(DoCollide(_lastPosition, position, out playerHealth)) return true;
-        else
-        {
-            _lastPosition = position;
-            return false;
-        }
+        
+        _lastPosition = position;
+        return false;
     }
 
     bool DoCollide(Vector3 startPos, Vector3 endPos, out PlayerHealth playerHealthObject)
@@ -52,7 +52,6 @@ public struct EnemyBullet
         if(Physics.Raycast(startPos, dir, out RaycastHit hit, length))
         {
             PlayerVisuelBridge PVB = hit.collider.GetComponent<PlayerVisuelBridge>();
-            CustomLogger.ImportantLog($"hit: {hit.collider.name}");
             if(PVB == null)
             {
                 playerHealthObject = null;
@@ -62,11 +61,16 @@ public struct EnemyBullet
             
             if(hit.collider.CompareTag("Player"))
             {
-                CustomLogger.ImportantLog($"hit was player");
                 return true;
             }
         }
         playerHealthObject = null;
         return false;
+    }
+
+    public bool ShouldBeDestroyed(float serverTime)
+    {
+        //if the bullet was alive for too long
+        return serverTime - _spawnTime > _maxLifeTime;
     }
 }
