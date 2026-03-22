@@ -1234,17 +1234,21 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
                 out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
         {
-            if (hit.collider.GetComponent<GrapplePoint>() != null)
+            GrapplePoint grapplePoint;
+            if (hit.collider.TryGetComponent<GrapplePoint>(out grapplePoint))
             {
-                _currentGrapplePoint = hit.collider.transform;
+                _currentGrapplePoint = grapplePoint.p_targetTransform;
             }
         }
         else //ne devrait pas etre appelé
         {
             stateMachine.ChangeState(ControlerState.Idle);
+            Debug.Log("No Grapple Point found");
         }
 
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
+        
+        Debug.Log("enterGrappleState");
     }
 
     void GrappleUpdate()
