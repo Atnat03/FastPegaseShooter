@@ -643,6 +643,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         {
             if (coyoteJump) Jump();
             else StartCoroutine(JumpBufferingCoroutine());
+            StartCoroutine(SuperJumpCoroutine());
         }
 
         if (verticalInput > 0.1f && (leftSideAgainstWall || rightSideAgainstWall) &&
@@ -1247,8 +1248,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         }
 
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
-        
-        Debug.Log("enterGrappleState");
     }
 
     void GrappleUpdate()
@@ -1451,6 +1450,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         if (enoughtEnegyToDoubleJump)
         {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce,
                 ForceMode.Impulse);
             _bus.InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
