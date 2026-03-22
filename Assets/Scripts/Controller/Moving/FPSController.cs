@@ -564,10 +564,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
         if (playerInput.actions["Crouch"].WasPressedThisFrame())
         {
-            if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked)
-                stateMachine.ChangeState(ControlerState.SlopeSliding);
-            else if (coyoteSlide && slideUnlocked && !justSlided) stateMachine.ChangeState(ControlerState.Sliding);
-            else stateMachine.ChangeState(ControlerState.Crouching);
+            if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked) stateMachine.ChangeState(ControlerState.SlopeSliding);
+            else stateMachine.ChangeState(ControlerState.Sliding);
         }
 
         _bus.InvokeEvent(new RequestEnergyEvent { requester = this });
