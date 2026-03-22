@@ -22,7 +22,12 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
 
     public Camera Camera => _camera;
-    public bool IsFreeze { get => isFreeze; set=> isFreeze=value; }
+
+    public bool IsFreeze
+    {
+        get => isFreeze;
+        set => isFreeze = value;
+    }
 
     #region public variables
 
@@ -91,7 +96,10 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float landSnapVelocity = 50f;
 
     [Header(("Super Jump"))] //new
-    [SerializeField] [Tooltip("delai maximum avant le deuxieme trigger de l'input pour que le super jump s'active")] private float superJumpInputMaxDelay;
+    [SerializeField]
+    [Tooltip("delai maximum avant le deuxieme trigger de l'input pour que le super jump s'active")]
+    private float superJumpInputMaxDelay;
+
     [SerializeField] private float superJumpVerticalForce;
     [SerializeField] private float superJumpHorizontalForce;
     [SerializeField] private float superJumpEnergyCost = 20f;
@@ -206,7 +214,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             {
                 enoughtEnegyToDash = data.energy >= dashEnergyCost;
             });
-            
+
             _bus.Subscribe((RequestEnergyResponseEvent data) =>
             {
                 enoughtEnegyToDoubleJump = data.energy >= superJumpEnergyCost;
@@ -341,11 +349,10 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
         if (isDead.Value) return;
         if (IsFreeze) return;
-        
+
         UpdateInputs();
         UpdateLdInteractions();
         stateMachine?.Update();
-        
     }
 
     void FixedUpdate()
@@ -363,7 +370,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         if (!IsOwner) return;
 
         if (isDead.Value) return;
-        if(IsFreeze) return;
+        if (IsFreeze) return;
 
         stateMachine?.LateUpdate();
     }
@@ -668,7 +675,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         }
     }
 
-    void FallingFixedUpdate() // on peut tres facilecement diviser air controle force en deux floats, un de rediraction et un de force d'arret puisque la redirection se fait avec une methode d'ifferente de l'arret qui n'utilisent pas les memes ordres de grandeurs
+    void
+        FallingFixedUpdate() // on peut tres facilecement diviser air controle force en deux floats, un de rediraction et un de force d'arret puisque la redirection se fait avec une methode d'ifferente de l'arret qui n'utilisent pas les memes ordres de grandeurs
     {
         Vector3 velocity = rb.linearVelocity;
 
@@ -1254,9 +1262,14 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     void GrappleFixedUpdate()
     {
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
-        Vector3 newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection,
-            _grappleRedirectionSpeed * Time.fixedDeltaTime);
 
+
+        Vector3 newDir = grappleDirection;
+        if (rb.linearVelocity.magnitude > 0.1)
+        {
+            newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection, _grappleRedirectionSpeed * Time.fixedDeltaTime);
+        }
+        
         rb.linearVelocity = newDir * _grapplingSpeed;
     }
 
@@ -1297,7 +1310,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
             float bobY = Mathf.Sin(headbobTimer) * headbobAmplitude;
             float bobX = Mathf.Cos(headbobTimer * 0.5f) * headbobAmplitude * 0.5f;
-            
+
             bobOffset = new Vector3(bobX, bobY, 0);
         }
         else
@@ -1305,6 +1318,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             bobOffset = Vector3.Lerp(bobOffset, Vector3.zero, Time.deltaTime * headbobStopReturningSpeed);
             headbobTimer = 0f;
         }
+
         targetPos += bobOffset;
         Spring(ref camNextPos, ref camVelocity, targetPos, cameraSpringHalfLife, cameraSpringFrequency, Time.deltaTime);
         cameraParentTransform.position = camNextPos;
@@ -1424,15 +1438,17 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
                 SuperJump();
                 yield break;
             }
+
             yield return new WaitForEndOfFrame();
         }
     }
 
     private void SuperJump()
     {
-        if(enoughtEnegyToDoubleJump)
+        if (enoughtEnegyToDoubleJump)
         {
-            rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce,
+                ForceMode.Impulse);
             _bus.InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
         }
     }
