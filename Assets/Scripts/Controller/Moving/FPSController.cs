@@ -107,7 +107,11 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     [Header("wallRide")] [SerializeField] float wallRideDetectionRange = .5f;
     [SerializeField] float wallRidingDuration = 2f;
-    [SerializeField] private float wallRideCooldown = .2f;
+    [SerializeField] private float wallRideCooldownChangeSide = .2f;
+
+    [SerializeField] [Tooltip("la valeur doit etre superieur a 'wallRideCooldownChangeSide'")]
+    private float wallRideCooldownSameSide = 2f;
+
     [SerializeField] float wallRidingSpeed = 10f;
     [SerializeField] float minSpeedToWallRide = 1f;
     [SerializeField] float wallJumpVerticalForce = 10f;
@@ -128,6 +132,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float slideCooldown = .1f;
     [SerializeField] float coyoteSlideDuration = .1f;
     [SerializeField] private float CameraSlideFOV = 50;
+    [SerializeField] private float slidingBackToNormalSpeedDelay = .5f;
 
     [Header("Dash")] [SerializeField] float dashSpeed = 5f;
     [SerializeField] float dashTimeDuration = 0.2f;
@@ -564,7 +569,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
         if (playerInput.actions["Crouch"].WasPressedThisFrame())
         {
-            if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked) stateMachine.ChangeState(ControlerState.SlopeSliding);
+            if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked)
+                stateMachine.ChangeState(ControlerState.SlopeSliding);
             else stateMachine.ChangeState(ControlerState.Sliding);
         }
 
@@ -644,12 +650,21 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             StartCoroutine(SuperJumpCoroutine());
         }
 
-        if (verticalInput > 0.1f && (leftSideAgainstWall || rightSideAgainstWall) &&
-            horizontalVelocity.magnitude > minSpeedToWallRide && !grounded && !justWallRided && !fellOffWallrinding &&
-            wallRideUnlocked)
+        if (verticalInput > 0.1f &&
+            (leftSideAgainstWall || rightSideAgainstWall) &&
+            horizontalVelocity.magnitude > minSpeedToWallRide &&
+            !grounded && !fellOffWallrinding && wallRideUnlocked)
         {
-            if (rb.linearVelocity.y < 0) stateMachine.ChangeState(ControlerState.WallRiding);
-            else mustHeadTilt = true;
+            wallRideSide currentSide = rightSideAgainstWall ? wallRideSide.rightSide : wallRideSide.leftSide;
+
+            bool isSameSide = currentSide == previousWallRideSide;
+            bool canWallRide = (isSameSide && !justWallridedSameSide) || (!isSameSide && !justWallridedOtherSide);
+
+            if (canWallRide && rb.linearVelocity.y < 0)
+            {
+                stateMachine.ChangeState(ControlerState.WallRiding);
+                mustHeadTilt = true;
+            }
         }
 
         _bus.InvokeEvent(new RequestEnergyEvent { requester = this });
@@ -779,15 +794,23 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     #region WallRidingState
 
+    enum wallRideSide
+    {
+        rightSide,
+        leftSide
+    }
+
     private float wallRidingHeight;
     private Vector3 wallRidingDirection;
 
     RaycastHit currentWallHit;
+    private wallRideSide previousWallRideSide;
 
     Coroutine wallRidingCoroutine;
     bool wallRidingCoroutineRunning;
 
-    [HideInInspector] public bool justWallRided;
+    [HideInInspector] public bool justWallridedOtherSide;
+    [HideInInspector] public bool justWallridedSameSide;
 
     void EnterWallRidingState()
     {
@@ -803,6 +826,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             currentWallHit = leftSideHit;
             cameraSpringTarget.rotation =
                 cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, -headtiltIntensity);
+            previousWallRideSide = wallRideSide.leftSide;
         }
         else
         {
@@ -811,6 +835,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             currentWallHit = rightSideHit;
             cameraSpringTarget.rotation =
                 cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, headtiltIntensity);
+            previousWallRideSide = wallRideSide.rightSide;
         }
 
         wallRidingCoroutine = StartCoroutine(WallRidingDurationCoroutine());
@@ -878,9 +903,20 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     IEnumerator WallRidingCooldownCoroutine()
     {
-        justWallRided = true;
-        yield return new WaitForSeconds(wallRideCooldown);
-        justWallRided = false;
+        justWallridedOtherSide = true;
+        justWallridedSameSide = true;
+        yield return new WaitForSeconds(wallRideCooldownChangeSide);
+        justWallridedOtherSide = false;
+        if (wallRideCooldownSameSide - wallRideCooldownChangeSide <= 0)
+        {
+            justWallridedSameSide = false;
+            Debug.LogError(
+                "la valeur de wallRideCooldownSameSide doit etre superieur a celle de wallRideCooldownChangeSide");
+            yield break;
+        }
+
+        yield return new WaitForSeconds(wallRideCooldownSameSide - wallRideCooldownChangeSide);
+        justWallridedSameSide = false;
     }
 
     #endregion
@@ -924,7 +960,16 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
         verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
-        Vector3 velocity = move * crouchSpeed;
+        Vector3 velocity = move;
+        if (!slowingDownFromSliding)
+        {
+            velocity *= crouchSpeed;
+        }
+        else
+        {
+            velocity *= slowingFromSlideSpeed;
+        }
+        
         velocity.y = rb.linearVelocity.y;
 
         velocity = AlignVelocityToWall(velocity, true);
@@ -950,6 +995,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     private bool mustSlide;
     private bool justSlided;
     private bool mustBeGrounded;
+    private bool slowingDownFromSliding;
+    private float slowingFromSlideSpeed;
     Vector3 landingDirection;
 
     void EnterSlidingState()
@@ -992,6 +1039,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
                 else if (playerInput.actions["Crouch"].IsPressed())
                 {
                     stateMachine.ChangeState(ControlerState.Crouching);
+                    StartCoroutine(SlidingSlowDownCoroutine());
                 }
 
                 else if (verticalInput != 0f || horizontalInput != 0f)
@@ -1056,24 +1104,29 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     IEnumerator JustSlidedCoroutine()
     {
         justSlided = true;
+        float elapsedTime = 0;
+        yield return new WaitForSeconds(slideCooldown);
+        justSlided = false;
+    }
 
+    IEnumerator SlidingSlowDownCoroutine()
+    {
+        slowingDownFromSliding = true;
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
-
-        while (elapsedTime < slideCooldown)
+        while (stateMachine.currentState == stateMachine.GetState(ControlerState.Crouching) 
+               && verticalInput != 0f || horizontalInput != 0f
+               && elapsedTime < slidingBackToNormalSpeedDelay)
         {
             elapsedTime += Time.deltaTime;
-
-            if (elapsedTime < 0.1f)
-            {
-                float t = elapsedTime / 0.1f;
-                _camera.fieldOfView = Mathf.Lerp(startFOV, _cameraDefaultFOV, t);
-            }
-
+            float t = elapsedTime / slidingBackToNormalSpeedDelay;
+            _camera.fieldOfView = Mathf.Lerp(startFOV, _cameraDefaultFOV, t);
+            slowingFromSlideSpeed = Mathf.Lerp(slideSpeed, crouchSpeed, t);
             yield return null;
         }
 
-        justSlided = false;
+        _camera.fieldOfView = _cameraDefaultFOV;
+        slowingDownFromSliding = false;
     }
 
     #endregion
@@ -1268,9 +1321,10 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         Vector3 newDir = grappleDirection;
         if (rb.linearVelocity.magnitude > 0.1)
         {
-            newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection, _grappleRedirectionSpeed * Time.fixedDeltaTime);
+            newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection,
+                _grappleRedirectionSpeed * Time.fixedDeltaTime);
         }
-        
+
         rb.linearVelocity = newDir * _grapplingSpeed;
     }
 
@@ -1359,7 +1413,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
         currentHorizontal = new Vector3(velocity.x, 0, velocity.z);
         if (Physics.CapsuleCast(point1, point2, bodyRadius, currentHorizontal.normalized, out RaycastHit hit,
-                wallDetectionRange, ~LayerMask.GetMask("Owner")))
+                wallDetectionRange, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
         {
             // Si le contact est bas , pente / sol
             float hitHeight = hit.point.y - playerFeet.position.y;

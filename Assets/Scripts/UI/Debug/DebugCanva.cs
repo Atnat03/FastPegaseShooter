@@ -39,7 +39,7 @@ public class DebugCanva : MonoBehaviour
             controllerSidesDetection.text = "No wall detected";
         }
 
-        canWallRide.text = (mainFPSController.fellOffWallrinding || mainFPSController.justWallRided) ? "Cannot wallride" : "Can wallride";
+        canWallRide.text = (mainFPSController.fellOffWallrinding || mainFPSController.justWallridedOtherSide) ? "Cannot wallride" : "Can wallride";
 
         CurrentVelocity.text = "Current velocity :" + mainFPSController.horizontalVelocity.magnitude;
     }
