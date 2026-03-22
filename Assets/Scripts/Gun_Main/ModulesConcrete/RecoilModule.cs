@@ -73,7 +73,8 @@ public class RecoilModule : GunModule, IRecoilModule
 
     void Update()
     {
-        _maxRecoilTime = _recoilCurve[_recoilCurve.length-1].time;
+        if(_recoilCurve.length > 0)
+            _maxRecoilTime = _recoilCurve[_recoilCurve.length-1].time;
         
         if (_isRecoil && _timeRecoil < _maxRecoilTime)
         {

@@ -15,7 +15,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
     private GunController _gunController;
     private Vector3 _targetPoint;
     private NetworkObject _targetNetworkObject;
-    
+    private bool _finalCheckDone;
     
     private bool _hasHit = false;
 
@@ -49,14 +49,33 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
     private void DetectCollision()
     {
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit,
-                p_speed * Time.fixedDeltaTime, ~LayerMask.NameToLayer("Owner"), QueryTriggerInteraction.Ignore))
+                p_speed * Time.fixedDeltaTime, ~LayerMask.NameToLayer("Owner"), 
+                QueryTriggerInteraction.Ignore))
         {
             if (p_isExplosive)
             {
-                Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
+                if (_explosionVFX != null)
+                    Destroy(Instantiate(_explosionVFX, transform.position, 
+                        Quaternion.identity), 3f);
+
+                if (_gunController.IsServerInitialized)
+                    Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
             }
             else
             {
+                Destroy(Instantiate(p_markPrefab, 
+                    _targetPoint + hit.normal * 0.1f, 
+                    Quaternion.LookRotation(hit.normal)), 3f);
+
+                if (_gunController.IsServerInitialized)
+                {
+                    if (_targetNetworkObject != null && 
+                        _targetNetworkObject.TryGetComponent<IDamagable>(out var d))
+                    {
+                        d.TakeDamage((int)p_damage, p_isCritical);
+                        _gunController.TriggerHitMark(p_isCritical);
+                    }
+                }
                 
                 if (_targetNetworkObject != null && _targetNetworkObject.TryGetComponent<IDamagable>(out IDamagable damagable))
                 {
