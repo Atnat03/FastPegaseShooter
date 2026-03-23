@@ -116,7 +116,7 @@ namespace Controller
                 yield return null;
             }
 
-            _gunSwitching.ChangeCurrentGun_Main(data.gunIndex);
+            _gunSwitching.ChangeCurrentGun_Main_ServerRpc(data.gunIndex);
 
             _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
             

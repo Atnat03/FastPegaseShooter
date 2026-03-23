@@ -74,6 +74,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float wallDetectionRange = 0.65f;
     [SerializeField] float walkableSlopeAngle = 45f;
     [SerializeField] float maxStepHeight = .2f;
+    [SerializeField] private float gravityBonusForce = 3f; 
 
     [Header("headbob")] [SerializeField] float walkingHeadbobAmplitude = 0.05f;
     [SerializeField] float walkingHeadbobFrequency = 8f;
@@ -747,6 +748,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         velocity = AlignVelocityToWall(velocity);
 
         rb.linearVelocity = velocity;
+        rb.AddForce(-Vector3.up * gravityBonusForce, ForceMode.Force);
     }
 
 
@@ -1319,13 +1321,14 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
 
         Vector3 newDir = grappleDirection;
-        if (rb.linearVelocity.magnitude > 0.1)
+        if (rb.linearVelocity.magnitude > 0.1 && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f && Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
         {
             newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection,
                 _grappleRedirectionSpeed * Time.fixedDeltaTime);
         }
 
         rb.linearVelocity = newDir * _grapplingSpeed;
+        Debug.Log("distance with grapple point" + Vector3.Distance(transform.position, _currentGrapplePoint.position));
     }
 
     void ExitGrappleState()

@@ -79,6 +79,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRange"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("walkableSlopeAngle"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForce"));
         }, ref showMovement);
 
         DrawSection("Headbob", new Color(1f, 0.6f, 1f), () =>
