@@ -33,6 +33,7 @@ namespace Controller
             if (_bridgePlayer != null)
             {
                 _bridgePlayer.TryShootWithCurrentGun();
+                Debug.Log("Shoot 1");
             }
         }
 

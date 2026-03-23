@@ -63,24 +63,14 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
             }
             else
             {
-                Destroy(Instantiate(p_markPrefab, 
-                    _targetPoint + hit.normal * 0.1f, 
-                    Quaternion.LookRotation(hit.normal)), 3f);
-
                 if (_gunController.IsServerInitialized)
                 {
                     if (_targetNetworkObject != null && 
                         _targetNetworkObject.TryGetComponent<IDamagable>(out var d))
                     {
-                        d.TakeDamage((int)p_damage, p_isCritical);
-                        _gunController.TriggerHitMark(p_isCritical);
+                        bool crit = d.TakeDamage((int)p_damage, p_isCritical);
+                        _gunController.TriggerHitMark(crit || p_isCritical);
                     }
-                }
-                
-                if (_targetNetworkObject != null && _targetNetworkObject.TryGetComponent<IDamagable>(out IDamagable damagable))
-                {
-                    bool crit = damagable.TakeDamage((int)p_damage, p_isCritical);
-                    _gunController.TriggerHitMark(crit || p_isCritical);
                 }
                 
                 GameObject hitMark = Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
