@@ -748,7 +748,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         velocity = AlignVelocityToWall(velocity);
 
         rb.linearVelocity = velocity;
-        rb.AddForce(-Vector3.up * gravityBonusForce, ForceMode.Force);
+        rb.AddForce(-Vector3.up * gravityBonusForce, ForceMode.Acceleration);
     }
 
 
@@ -1408,7 +1408,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
-        if (velocity.sqrMagnitude < .1f) return velocity;
+        if (velocity.sqrMagnitude == 0) return velocity;
         capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
         height = Vector3.Distance(capsuleTop, playerFeet.position);
         point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
@@ -1419,10 +1419,16 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
                 wallDetectionRange, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
         {
             // Si le contact est bas , pente / sol
-            float hitHeight = hit.point.y - playerFeet.position.y;
+            Ray downRay = new Ray(hit.point + Vector3.up * 0.2f, Vector3.down);
+            if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.5f))
+            {
+                float stepHeight = stepHit.point.y - playerFeet.position.y;
 
-            if (hitHeight < maxStepHeight)
-                return new Vector3(velocity.x, velocity.y + (maxStepHeight - hitHeight), velocity.z);
+                if (stepHeight > 0 && stepHeight <= maxStepHeight)
+                {
+                    return new Vector3(velocity.x, velocity.y + (maxStepHeight - stepHeight), velocity.z);
+                }
+            }
 
             float hitSlopeAngle = Vector3.Angle(hit.normal, Vector3.up);
 
