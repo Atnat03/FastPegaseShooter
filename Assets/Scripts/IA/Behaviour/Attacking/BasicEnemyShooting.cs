@@ -3,50 +3,22 @@ using UnityEngine;
 using FishNet.Object;
 
 
-public class BasicEnemyShooting : NetworkBehaviour
+public class BasicEnemyShooting : EnemyAttackingModule
 {
     [SerializeField] private float _maxPlayerDistance = 10f;
-    [SerializeField] private float _shootingDelay = 2f;
     [SerializeField] private float _ammoSpeed;
-    [SerializeField] private int _damage = 10;
     [SerializeField] private float _maxAmmoLifeTime = 10f;
+    
+    
 
-    private int _targetedPlayerId;
-    Vector3 _lastPlayerPosition;
-    private int _playerObjectId;
-    private float _waitedTimeSinceShoot;
-    public override void OnStartServer()
+    protected override void OnNetworkTick()
     {
-        base.OnStartServer();
-        
-        EventBusInitialiser.instance.Bus.Subscribe((PlayerPositionUpdateEvent PPUE) =>
+        base.OnNetworkTick();
+        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack())
         {
-            if (IsTargetPlayer(PPUE.p_playerId) || IsPlayerCloser(PPUE.p_playerPosition))
-            {
-                _lastPlayerPosition = PPUE.p_playerPosition;
-                _playerObjectId = PPUE.p_networkObjectId;
-            }
-        });
-        InstanceFinder.TimeManager.OnTick += OnNetworkTick;
-    }
-    bool IsTargetPlayer(int playerId) => playerId == _targetedPlayerId;
-    bool IsPlayerCloser(Vector3 playerPosition) => (transform.position - playerPosition).sqrMagnitude < (transform.position - _lastPlayerPosition).sqrMagnitude;
+            _waitedTimeSinceAttack = 0;
 
-    public override void OnStopServer()
-    {
-        InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
-        
-        base.OnStopServer();
-    }
-
-    private void OnNetworkTick()
-    {
-        _waitedTimeSinceShoot += (float)InstanceFinder.TimeManager.TickDelta;
-        if (_waitedTimeSinceShoot >= _shootingDelay && CanShoot())
-        {
-            _waitedTimeSinceShoot = 0;
-
-            Vector3 delta = PlayerPosition() - transform.position;
+            Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
             float length = delta.magnitude;
             Vector3 dir = delta / length;
             
@@ -61,18 +33,18 @@ public class BasicEnemyShooting : NetworkBehaviour
         }
     }
 
-    bool CanShoot()
+    protected override bool CanAttack()
     {
-        if ((transform.position - _lastPlayerPosition).sqrMagnitude > _maxPlayerDistance * _maxPlayerDistance)
+        if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
             return false;
-        
-        
-        Vector3 delta = PlayerPosition() - transform.position;
+
+
+        Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
         float length = delta.magnitude;
         Vector3 dir = delta / length;
 
         Vector3 origin = transform.position + dir * 0.1f + Vector3.up * 0.5f;
-        Debug.DrawLine(origin,origin + dir * length, Color.red, _shootingDelay);
+        Debug.DrawLine(origin,origin + dir * length, Color.red, _attackDelay);
         if (Physics.Raycast(origin, dir, out RaycastHit hit, length, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.CompareTag("Player"))
@@ -80,18 +52,17 @@ public class BasicEnemyShooting : NetworkBehaviour
                 return true;
             }
         }
-        
+
         return false;
     }
 
-    Vector3 PlayerPosition() => InstanceFinder.ClientManager.Objects.Spawned[_playerObjectId].transform.position;
 
     private void OnDrawGizmos()
     {
         if(!Application.isPlaying || !IsServerInitialized) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
-        Gizmos.DrawSphere(PlayerPosition(), 0.1f);
+        Gizmos.DrawSphere(_targetingModule.GetTargetPosition(), 0.1f);
     }
 }
 

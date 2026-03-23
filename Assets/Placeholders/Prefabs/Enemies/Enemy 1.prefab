@@ -246,9 +246,10 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 4531288954403815074}
-  baseEnemyLife: {fileID: 4639033686446523756}
-  _life: 20
   _energyGainWhenTouch: 1
+  _life: 20
+  p_damageMultiplier: 1
+  _enemyLifeModule: {fileID: 4639033686446523756}
   _eliteDamageMultWhenDestroyed: 2
 --- !u!114 &4531288954403815074
 MonoBehaviour:
@@ -270,7 +271,7 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: 1267449697482659097}
-  InitializedParentNetworkBehaviour: {fileID: 2460980101886863971}
+  InitializedParentNetworkBehaviour: {fileID: 4385027282801438809}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
@@ -280,7 +281,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584274008908413133
+  _initializedTimestamp: -8584273212215033864
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -502,9 +503,10 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 621410928043515991}
-  baseEnemyLife: {fileID: 4639033686446523756}
-  _life: 20
   _energyGainWhenTouch: 1
+  _life: 20
+  p_damageMultiplier: 1
+  _enemyLifeModule: {fileID: 4639033686446523756}
   _eliteDamageMultWhenDestroyed: 2
 --- !u!114 &621410928043515991
 MonoBehaviour:
@@ -526,7 +528,7 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: 8676698036849061702}
-  InitializedParentNetworkBehaviour: {fileID: 2460980101886863971}
+  InitializedParentNetworkBehaviour: {fileID: 4385027282801438809}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
@@ -536,7 +538,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584274008908413133
+  _initializedTimestamp: -8584273212215033864
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -570,7 +572,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1710859028773061241}
+  - component: {fileID: 4385027282801438809}
   - component: {fileID: 2460980101886863971}
+  - component: {fileID: 2780056509964836476}
   - component: {fileID: 4639033686446523756}
   - component: {fileID: 4856717765235199756}
   - component: {fileID: 1891565403973585591}
@@ -596,11 +600,34 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2335491406218563683}
   - {fileID: 7118404291989148995}
   - {fileID: 7334294301029598172}
   - {fileID: 9106211645160859814}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4385027282801438809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f6b4475ac4843d4798768881fa904fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCore
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
+  _maxEnemySwelling: 0
+  _attackingModules:
+  - {fileID: 2460980101886863971}
+  _lifeModules:
+  - {fileID: 4639033686446523756}
+  _movingModules: {fileID: 4856717765235199756}
+  p_enemySpawnCost: 0
 --- !u!114 &2460980101886863971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -613,12 +640,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a4715cc2ffd43a40ac064fa6cb4f8d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyMelee
-  _componentIndexCache: 0
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _maxPlayerDistance: 2
-  _attackDelay: 2
+  _targetingModule: {fileID: 2780056509964836476}
   _damage: 10
+  _attackDelay: 2
+  _maxPlayerDistance: 2
+--- !u!114 &2780056509964836476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 099f65e195cc2e74fb0255db981497b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FluidTargetingModule
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
+  p_targetObjectId: 0
+  p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,17 +676,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3141c02e2afe434e8d51531588cbb6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyLife
-  _componentIndexCache: 1
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _life: 100
   _energyGainWhenTouch: 1
+  _life: 100
   p_damageMultiplier: 1
-  _hitMarkerParent: {fileID: 4034669122735167816}
-  _textDmg: {fileID: 769879031349949937, guid: db53057fdd2066748b797f06e5df7027, type: 3}
-  _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
-  _cumulatifDmg: 0
-  _elapsedCumulativeDmgTime: 0
 --- !u!114 &4856717765235199756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,9 +694,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5492ed17c451d4885c1b50d3efafe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
-  _componentIndexCache: 2
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
+  _targetingModule: {fileID: 2780056509964836476}
   _speed: 1
 --- !u!136 &1891565403973585591
 CapsuleCollider:
@@ -700,7 +741,9 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
+  - {fileID: 4385027282801438809}
   - {fileID: 2460980101886863971}
+  - {fileID: 2780056509964836476}
   - {fileID: 4639033686446523756}
   - {fileID: 4856717765235199756}
   - {fileID: -8997744782067408838}
@@ -716,7 +759,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584274008908413133
+  _initializedTimestamp: -8584273212215033864
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -753,7 +796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Transforming.NetworkTransform
-  _componentIndexCache: 3
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _componentConfiguration: 0
@@ -877,3 +920,81 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8649276501711791122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2335491406218563683}
+  - component: {fileID: 5346405171015881183}
+  - component: {fileID: 7388347016383583870}
+  - component: {fileID: 8394527351532065358}
+  m_Layer: 0
+  m_Name: Viewers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2335491406218563683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8649276501711791122}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1710859028773061241}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5346405171015881183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8649276501711791122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38fd55acbfe3f2e48aeb546c6cc230d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicLifeViewer
+  _enemyLifeModule: {fileID: 4639033686446523756}
+  _hitMarkerParent: {fileID: 4034669122735167816}
+  _textDmg: {fileID: 769879031349949937, guid: db53057fdd2066748b797f06e5df7027, type: 3}
+  _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
+  _cumulatifDmg: 0
+  _elapsedCumulativeDmgTime: 0
+--- !u!114 &7388347016383583870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8649276501711791122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50fe888303867494b98f068a419d98fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EliteWeakPointViewer
+  _enemyLifeModule: {fileID: 8676698036849061702}
+--- !u!114 &8394527351532065358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8649276501711791122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50fe888303867494b98f068a419d98fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EliteWeakPointViewer
+  _enemyLifeModule: {fileID: 1267449697482659097}
