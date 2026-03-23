@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 3217273699543337116}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 3217273699543337116}
   rb: {fileID: 0}
   cameraParentTransform: {fileID: 0}
   cameraSpringTarget: {fileID: 0}
@@ -82,6 +82,7 @@ MonoBehaviour:
   walkingHeadbobFrequency: 15
   wallRidingHeadbobAmplitude: 0.1
   wallRidingHeadbobFrequency: 25
+  headbobStopReturningSpeed: 5
   jumpForce: 22.5
   airControlForce: 3
   maxAirSpeed: 6
@@ -92,9 +93,11 @@ MonoBehaviour:
   superJumpInputMaxDelay: 0.5
   superJumpVerticalForce: 30
   superJumpHorizontalForce: 6
+  superJumpEnergyCost: 20
   wallRideDetectionRange: 0.5
   wallRidingDuration: 1.5
-  wallRideCooldown: 1.5
+  wallRideCooldownChangeSide: 0.2
+  wallRideCooldownSameSide: 2
   wallRidingSpeed: 10
   minSpeedToWallRide: 1
   wallJumpVerticalForce: 27
@@ -115,6 +118,7 @@ MonoBehaviour:
   slideCooldown: 2
   coyoteSlideDuration: 0.1
   CameraSlideFOV: 95
+  slidingBackToNormalSpeedDelay: 0.5
   dashSpeed: 5
   dashTimeDuration: 0.2
   dashCooldown: 0.75
@@ -133,7 +137,8 @@ MonoBehaviour:
   rightSideAgainstWall: 0
   fellOffWallrinding: 0
   horizontalVelocity: {x: 0, y: 0, z: 0}
-  justWallRided: 0
+  justWallridedOtherSide: 0
+  justWallridedSameSide: 0
 --- !u!114 &3217273699543337116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,7 +157,8 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
-  NetworkBehaviours: []
+  NetworkBehaviours:
+  - {fileID: 1792326860910464111}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -163,7 +169,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: 0
+  _initializedTimestamp: -8584273299249341762
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -179,12 +185,12 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 65535
+  <PrefabId>k__BackingField: 8
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 3008886138171744697
   SceneId: 0
   SerializedTransformProperties:
-    Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0, w: 0}
-    Scale: {x: 0, y: 0, z: 0}
-    IsValid: 0
+    Position: {x: 0, y: 0.948, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    Scale: {x: 1, y: 1, z: 1}
+    IsValid: 1
