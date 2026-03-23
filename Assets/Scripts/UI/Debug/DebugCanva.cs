@@ -9,6 +9,7 @@ public class DebugCanva : MonoBehaviour
     [SerializeField] TextMeshProUGUI controllerSidesDetection;
     [SerializeField] TextMeshProUGUI canWallRide;
     [SerializeField] TextMeshProUGUI CurrentVelocity;
+    [SerializeField] TextMeshProUGUI maxHeight;
     
     [Header("Ingame objects")]
     [SerializeField] FPSController mainFPSController;
@@ -17,6 +18,9 @@ public class DebugCanva : MonoBehaviour
     [SerializeField] GameObject TPSCamera;
     [SerializeField] float horizontalCameraOffset;
     [SerializeField] float verticalCameraOffset;
+
+    private float currentHeightMarker;
+    private float maxReachedHeight;
     
     void Update()
     {
