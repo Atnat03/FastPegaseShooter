@@ -2,20 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using GunDecorator;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GunSwitching : MonoBehaviour
+public class GunSwitching : NetworkBehaviour
 {
 	#region Properties
 
 	public bool IsMainGun => _isMainGun;
-	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun];
-	public GameObject CurrentSecondaryGun => _secondaryGunsList[_currentSecondaryGun];
-
-	public int CurrentMainGunIndex => _currentMainGun;
+	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun.Value];
+	public GameObject CurrentSecondaryGun => _secondaryGunsList[_currentSecondaryGun.Value];
+	public int CurrentMainGunIndex => _currentMainGun.Value;
 	
 
 	#endregion
@@ -31,8 +31,9 @@ public class GunSwitching : MonoBehaviour
 	private bool _canSwitch = true;
 	private List<GameObject> _mainGunsList;
 	private List<GameObject> _secondaryGunsList;
-	private int _currentMainGun = 0;
-	private int _currentSecondaryGun = 0;
+	
+	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
+	private readonly SyncVar<int> _currentSecondaryGun = new SyncVar<int>(0);
 	
 	#endregion
 
@@ -40,6 +41,11 @@ public class GunSwitching : MonoBehaviour
 
 	public void Initialize(int startIndex)
 	{
+
+		_currentMainGun.OnChange += OnCurrentGunMainChange;
+		_currentSecondaryGun.OnChange += OnCurrentGunSecondaireChange;
+		
+		
 		_mainGunsList = new List<GameObject>();
 		_secondaryGunsList = new List<GameObject>();
 
@@ -53,7 +59,7 @@ public class GunSwitching : MonoBehaviour
 			_secondaryGunsList.Add(gun.gameObject);
 		}
 		
-		_currentMainGun = startIndex;
+		_currentMainGun.Value = startIndex;
 		
 		UpdateVisual();
 	}
@@ -70,11 +76,11 @@ public class GunSwitching : MonoBehaviour
 	{
 		if (_isMainGun)
 		{
-			SwitchAnimatedWeapon(_mainGunsList, _currentMainGun);
+			SwitchAnimatedWeapon(_mainGunsList, _currentMainGun.Value);
 		}
 		else
 		{
-			SwitchAnimatedWeapon(_secondaryGunsList, _currentSecondaryGun);
+			SwitchAnimatedWeapon(_secondaryGunsList, _currentSecondaryGun.Value);
 		}
 	}
 	
@@ -111,15 +117,50 @@ public class GunSwitching : MonoBehaviour
 			t.gameObject.SetActive(false);
 		}
 	}
-
-	public void ChangeCurrentGun_Main(int newIndex)
+	
+	[ServerRpc]
+	public void ChangeCurrentGun_Main_ServerRpc(int newIndex)
 	{
-		_currentMainGun = newIndex;
-		CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
-		CurrentMainGun.GetComponent<GunController>().StopReload();
-		ActivateCurrentGun(_mainGunsList, _currentMainGun);
+		ChangeCurrentGun_Main(newIndex);
 	}
-	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun = newIndex;
+
+	[Server]
+	void ChangeCurrentGun_Main(int newIndex)
+	{
+		_currentMainGun.Value = newIndex;
+	}
+		
+	private void OnCurrentGunMainChange(int prev, int next, bool asServer)
+	{
+		if (_mainGunsList == null || _mainGunsList.Count == 0) return;
+       
+		if (next < _mainGunsList.Count)
+		{
+			if (IsOwner)
+			{
+				CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
+				CurrentMainGun.GetComponent<GunController>().StopReload();
+			}
+          
+			if (_isMainGun)
+			{
+				ActivateCurrentGun(_mainGunsList, next);
+			}
+		}
+	}
+
+	
+	private void OnCurrentGunSecondaireChange(int prev, int next, bool asServer)
+	{
+		if (_secondaryGunsList == null || _secondaryGunsList.Count == 0) return;
+       
+		if (next < _secondaryGunsList.Count && !_isMainGun)
+		{
+			ActivateCurrentGun(_secondaryGunsList, next);
+		}
+	}
+	
+	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun.Value = newIndex;
 	
 	#endregion
 }

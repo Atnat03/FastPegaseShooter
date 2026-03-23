@@ -38,22 +38,22 @@ public class MenuSelectionArme : NetworkBehaviour
 	void ChangeGun1(InputAction.CallbackContext obj)
 	{
 		if (!IsOwner) return;
-		_gunSwitching.ChangeCurrentGun_Main(0); ActivateUI(0); 
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(0); ActivateUI(0); 
 	}
 	void ChangeGun2(InputAction.CallbackContext obj) 
 	{ 		
 		if (!IsOwner) return;
-		_gunSwitching.ChangeCurrentGun_Main(1);ActivateUI(1);
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(1);ActivateUI(1);
 	}
 	void ChangeGun3(InputAction.CallbackContext obj) 
 	{ 		
 		if (!IsOwner) return;
-		_gunSwitching.ChangeCurrentGun_Main(2);ActivateUI(2);
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(2);ActivateUI(2);
 	}
 	void ChangeGun4(InputAction.CallbackContext obj) 
 	{
 		if (!IsOwner) return;
-		_gunSwitching.ChangeCurrentGun_Main(3);ActivateUI(3);
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(3);ActivateUI(3);
 	}
 
 	void ActivateUI(int index )
