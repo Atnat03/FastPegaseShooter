@@ -193,6 +193,7 @@ public class PathfindingGridCreator : EditorWindow
         if (GUILayout.Button("Clear Grid"))
         {
             nodes.Clear();
+            GridCreatorGizmosDrawer.ClearLists();
         }
         GUILayout.Space(5);
         GUI.backgroundColor = new Color(0.8f,0.7f,0.1f);

@@ -87,6 +87,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("walkingHeadbobFrequency"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingHeadbobAmplitude"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingHeadbobFrequency"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("headbobStopReturningSpeed"));
         }, ref showHeadbob);
 
         DrawSection("Jump", new Color(0.6f, 0.8f, 1f), () =>
@@ -111,7 +112,8 @@ public class FPSControlerCustomInspector : Editor
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideDetectionRange"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingDuration"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideCooldown"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideCooldownChangeSide"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideCooldownSameSide"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRidingSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("minSpeedToWallRide"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpVerticalForce"));
@@ -138,6 +140,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideCooldown"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteSlideDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("CameraSlideFOV"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slidingBackToNormalSpeedDelay"));
         }, ref showSlide);
 
         DrawSection("Dash", new Color(0.6f, 1f, 1f), () =>

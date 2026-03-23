@@ -117,6 +117,7 @@ public class GunSwitching : MonoBehaviour
 	public void ChangeCurrentGun_Main(int newIndex)
 	{
 		_currentMainGun = newIndex;
+		CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
 		ActivateCurrentGun(_mainGunsList, _currentMainGun);
 	}
 	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun = newIndex;

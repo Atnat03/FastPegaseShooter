@@ -1,17 +1,20 @@
+using CustomConsole.Runtime.Logger;
 using FishNet;
 using UnityEngine;
 
-public struct EnemyBullet
+public class EnemyBullet
 {
     private Vector3 _startPos;
     private Vector3 _direction;
     private float _speed;
     private float _spawnTime;
     private Vector3 _lastPosition;
+    private float _maxLifeTime;
 
     public int p_bulletId;
+    public int p_bulletStrenght;
 
-    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, int bulletId)
+    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, float maxLifeTime, int bulletId, int strenght)
     {
         _startPos = startPos;
         _lastPosition = startPos;
@@ -19,22 +22,27 @@ public struct EnemyBullet
         _speed = speed;
         _spawnTime = serverSpawnTime;
         p_bulletId = bulletId;
+        p_bulletStrenght = strenght;
+        _maxLifeTime = maxLifeTime;
     }
 
-    public bool MoveForward(float serverTime)
+    /// <summary>
+    /// Move The bullet one step further
+    /// </summary>
+    /// <param name="serverTime">the current server time (since beginning)</param>
+    /// <returns>True if a target was hit, false in the other case</returns>
+    public bool MoveForward(float serverTime, out PlayerHealth playerHealth)
     {
-        float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta - _spawnTime;
-        Vector3 position = _startPos + _direction * _speed * networkTime;
+        float networkTime = serverTime - _spawnTime;
+        Vector3 position = _startPos + (_direction * _speed * networkTime);
 
-        if(DoCollide(_lastPosition, position)) return true;
-        else
-        {
-            _lastPosition = position;
-            return false;
-        }
+        if(DoCollide(_lastPosition, position, out playerHealth)) return true;
+        
+        _lastPosition = position;
+        return false;
     }
 
-    bool DoCollide(Vector3 startPos, Vector3 endPos)
+    bool DoCollide(Vector3 startPos, Vector3 endPos, out PlayerHealth playerHealthObject)
     {
         Vector3 delta = endPos - startPos;
         float length = delta.magnitude;
@@ -43,11 +51,26 @@ public struct EnemyBullet
         //May change CompareTag by layer checking
         if(Physics.Raycast(startPos, dir, out RaycastHit hit, length))
         {
+            PlayerVisuelBridge PVB = hit.collider.GetComponent<PlayerVisuelBridge>();
+            if(PVB == null)
+            {
+                playerHealthObject = null;
+                return false;
+            }
+            playerHealthObject = PVB.PlayerHealth;
+            
             if(hit.collider.CompareTag("Player"))
             {
                 return true;
             }
         }
+        playerHealthObject = null;
         return false;
+    }
+
+    public bool ShouldBeDestroyed(float serverTime)
+    {
+        //if the bullet was alive for too long
+        return serverTime - _spawnTime > _maxLifeTime;
     }
 }

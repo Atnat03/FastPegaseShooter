@@ -9,6 +9,7 @@ public class DebugCanva : MonoBehaviour
     [SerializeField] TextMeshProUGUI controllerSidesDetection;
     [SerializeField] TextMeshProUGUI canWallRide;
     [SerializeField] TextMeshProUGUI CurrentVelocity;
+    [SerializeField] TextMeshProUGUI maxHeight;
     
     [Header("Ingame objects")]
     [SerializeField] FPSController mainFPSController;
@@ -17,6 +18,9 @@ public class DebugCanva : MonoBehaviour
     [SerializeField] GameObject TPSCamera;
     [SerializeField] float horizontalCameraOffset;
     [SerializeField] float verticalCameraOffset;
+
+    private float currentHeightMarker;
+    private float maxReachedHeight;
     
     void Update()
     {
@@ -39,7 +43,7 @@ public class DebugCanva : MonoBehaviour
             controllerSidesDetection.text = "No wall detected";
         }
 
-        canWallRide.text = (mainFPSController.fellOffWallrinding || mainFPSController.justWallRided) ? "Cannot wallride" : "Can wallride";
+        canWallRide.text = (mainFPSController.fellOffWallrinding || mainFPSController.justWallridedOtherSide) ? "Cannot wallride" : "Can wallride";
 
         CurrentVelocity.text = "Current velocity :" + mainFPSController.horizontalVelocity.magnitude;
     }

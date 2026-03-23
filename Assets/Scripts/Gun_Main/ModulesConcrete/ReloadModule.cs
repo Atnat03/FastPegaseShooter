@@ -40,7 +40,7 @@ namespace GunDecorator
 
         public void StopReload()
         {
-            if (p_reloadCoroutine != null)
+            if(p_reloadCoroutine != null)
             {
                 StopCoroutine(p_reloadCoroutine);
                 p_reloadCoroutine = null;
@@ -52,7 +52,7 @@ namespace GunDecorator
         public void Reload()
         {
             if(p_reloadCoroutine == null)
-                StartCoroutine(ReloadCoroutine());
+                p_reloadCoroutine = StartCoroutine(ReloadCoroutine());
         }
 
         IEnumerator ReloadCoroutine()
@@ -76,6 +76,8 @@ namespace GunDecorator
             
             _isReloading = false;
             SetAmmo(_magazineSize);
+            
+            p_reloadCoroutine = null;
         }
 
         public void SetAmmo(int value) => _currentAmmo = Mathf.Min(value, _magazineSize);        

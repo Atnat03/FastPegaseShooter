@@ -1084,7 +1084,6 @@ GameObject:
   - component: {fileID: 733889428415545954}
   - component: {fileID: 7752085964504601645}
   - component: {fileID: 1610322985881872505}
-  - component: {fileID: -2142763674882647559}
   m_Layer: 6
   m_Name: _PlayerController (a jour)
   m_TagString: Player
@@ -1187,13 +1186,14 @@ MonoBehaviour:
   moveSpeed: 9.5
   groundMomentumFactor: 2
   sideStepImpulseForce: 3
-  wallDetectionRange: 0
+  wallDetectionRange: 0.1
   walkableSlopeAngle: 45
   maxStepHeight: 1
   walkingHeadbobAmplitude: 0.075
   walkingHeadbobFrequency: 15
   wallRidingHeadbobAmplitude: 0.1
   wallRidingHeadbobFrequency: 25
+  headbobStopReturningSpeed: 5
   jumpForce: 22.5
   airControlForce: 3
   maxAirSpeed: 6
@@ -1204,9 +1204,11 @@ MonoBehaviour:
   superJumpInputMaxDelay: 0.5
   superJumpVerticalForce: 30
   superJumpHorizontalForce: 6
+  superJumpEnergyCost: 20
   wallRideDetectionRange: 0.5
   wallRidingDuration: 1.5
-  wallRideCooldown: 1.5
+  wallRideCooldownChangeSide: 0.2
+  wallRideCooldownSameSide: 2
   wallRidingSpeed: 10
   minSpeedToWallRide: 1
   wallJumpVerticalForce: 27
@@ -1226,7 +1228,8 @@ MonoBehaviour:
   slideJumpHorizontalForce: 2
   slideCooldown: 2
   coyoteSlideDuration: 0.1
-  CameraSlideFOV: 80
+  CameraSlideFOV: 95
+  slidingBackToNormalSpeedDelay: 1
   dashSpeed: 5
   dashTimeDuration: 0.2
   dashCooldown: 0.75
@@ -1236,16 +1239,17 @@ MonoBehaviour:
   slopeInfluenceOnRotation: 3
   slopeInfluenceOnVelocity: 0.075
   _castWidth: 0.5
-  _castMaxDistance: 100
-  _grapplingSpeed: 15
+  _castMaxDistance: 15
+  _grapplingSpeed: 45
   _grappleRedirectionSpeed: 8
-  _endGrappleImpulseForce: 10
+  _endGrappleImpulseForce: 30
   grounded: 0
   leftSideAgainstWall: 0
   rightSideAgainstWall: 0
   fellOffWallrinding: 0
   horizontalVelocity: {x: 0, y: 0, z: 0}
-  justWallRided: 0
+  justWallridedOtherSide: 0
+  justWallridedSameSide: 0
 --- !u!114 &997312506154426130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1621,24 +1625,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuSelectionArme
   ui: {fileID: 7750543907722423900}
---- !u!114 &-2142763674882647559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2624057951769441985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 252ee30a3f6b1af45a378dd639f97f1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FakeGrapin
-  _playerInput: {fileID: 997312506154426130}
-  _playerCamera: {fileID: 3061844143884342809}
-  layerGrapple:
-    serializedVersion: 2
-    m_Bits: 4096
-  newPos: {x: 0, y: 0, z: 0}
 --- !u!1 &2771240253514392097
 GameObject:
   m_ObjectHideFlags: 0
