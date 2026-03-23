@@ -1319,13 +1319,14 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
 
         Vector3 newDir = grappleDirection;
-        if (rb.linearVelocity.magnitude > 0.1)
+        if (rb.linearVelocity.magnitude > 0.1 && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f && Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
         {
             newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection,
                 _grappleRedirectionSpeed * Time.fixedDeltaTime);
         }
 
         rb.linearVelocity = newDir * _grapplingSpeed;
+        Debug.Log("distance with grapple point" + Vector3.Distance(transform.position, _currentGrapplePoint.position));
     }
 
     void ExitGrappleState()
