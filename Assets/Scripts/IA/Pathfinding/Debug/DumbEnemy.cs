@@ -6,7 +6,7 @@ using UnityEngine;
 //##########
 //Script Broken by removal of "IPlayerPositionListener" interface
 //##########
-public class DumbEnemy : MonoBehaviour, /*IPlayerPositionListener,*/ IPathRequester
+public class DumbEnemy : MonoBehaviour/*, IPlayerPositionListener,*/ /*IPathRequester*/
 {
     [SerializeField] private float playerPositionUpdateThreshold;
     [SerializeField] private float _speed;
@@ -59,10 +59,13 @@ public class DumbEnemy : MonoBehaviour, /*IPlayerPositionListener,*/ IPathReques
         }
     }
 
-    public void OnPathAnswer(List<PathfindingNode> path)
+    //##########
+    //Script Broken by removale of interface "IPathRequester"
+    //##########
+    /*public void OnPathAnswer(List<PathfindingNode> path)
     {
         _path = path;
         _lastPos = transform.position;
         _t = 0;
-    }
+    }*/
 }

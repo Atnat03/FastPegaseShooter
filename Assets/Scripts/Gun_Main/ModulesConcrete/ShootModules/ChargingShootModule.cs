@@ -100,7 +100,8 @@ namespace GunDecorator
 
                     _ammoModule.ResetBulletData();
 
-                    _gunController.PlaySound("Shoot");
+                    AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
+                    SoundManager.PlaySound(clip, _gunController._source, 0.5f);
                 }
                 
                 _startCharging = true;
@@ -135,7 +136,8 @@ namespace GunDecorator
                 
                     _ammoModule.ResetBulletData();
                 
-                    _gunController.PlaySound("ChargedShoot");
+                    AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"ChargedSound");
+                    SoundManager.PlaySound(clip, _gunController._source, 0.5f);
                 
                     _isCharged = false;
                 }

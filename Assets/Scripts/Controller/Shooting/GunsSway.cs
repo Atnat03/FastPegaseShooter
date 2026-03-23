@@ -50,14 +50,14 @@ public class GunsSway : MonoBehaviour
 
         #region Headbob
         
-        float idleY = Mathf.Cos(Time.time * 1.5f) * _idleCoef;
-
-        finalPosition += new Vector3(0, idleY, 0);
-        
         Vector2 moveInput = _playerInput.actions["Move"].ReadValue<Vector2>();
 
-        if (moveInput.magnitude > 0.1f)
+        if (moveInput.magnitude > 0.1f && Mathf.Abs(_playerRB.linearVelocity.y) < 0.1f)
         {
+            float idleY = Mathf.Cos(Time.time * 1.5f) * _idleCoef;
+
+            finalPosition += new Vector3(0, idleY, 0);
+
             _bobTimer += Time.deltaTime * _bobSpeed;
 
             float bobY = Mathf.Sin(_bobTimer) * _bobAmount;

@@ -1,4 +1,5 @@
 using System;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,13 +51,14 @@ namespace Controller
                 }
                 else
                 {
-                    _bus.InvokeEvent(new EndOVerload());
+                    _bus.InvokeEvent(new EndOverloadEvent());
                     _isOverload = false;
-                    SetOverloadStats(false, 0, 1, 1); 
+                    SetOverloadStats(false, 0, 1, 1);
                 }
             }
         }
 
     }
-    public struct EndOVerload {}
+
+    public struct EndOverloadEvent{}
 }
