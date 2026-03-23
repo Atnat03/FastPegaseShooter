@@ -74,6 +74,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float wallDetectionRange = 0.65f;
     [SerializeField] float walkableSlopeAngle = 45f;
     [SerializeField] float maxStepHeight = .2f;
+    [SerializeField] private float gravityBonusForce = 3f; 
 
     [Header("headbob")] [SerializeField] float walkingHeadbobAmplitude = 0.05f;
     [SerializeField] float walkingHeadbobFrequency = 8f;
@@ -747,6 +748,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         velocity = AlignVelocityToWall(velocity);
 
         rb.linearVelocity = velocity;
+        rb.AddForce(-Vector3.up * gravityBonusForce, ForceMode.Force);
     }
 
 
