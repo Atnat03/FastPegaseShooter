@@ -8,7 +8,7 @@ namespace GunDecorator
         private ISecondModule _next;
 
         [Header("Explosion")] 
-        [SerializeField] private float _radiusExplosion;
+        [SerializeField, Tooltip("Taille de la zone d'explosion")] private float _radiusExplosion;
 
         public void SetUpModule(IShootModule shootModule)
         {

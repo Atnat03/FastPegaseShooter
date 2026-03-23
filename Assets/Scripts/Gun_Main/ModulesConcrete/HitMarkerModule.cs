@@ -9,21 +9,24 @@ namespace GunDecorator
         private Transform _hitMarkerParent;
         
         [Header("Hit")]
-        [SerializeField] private GameObject _hitMarkerPrefab;
-        [SerializeField] private Color _hitMarkerColor = Color.white;
+        [SerializeField, Tooltip("Prefab visuel a instancié quand on réussi un tir normal")] private GameObject _hitMarkerPrefab;
+        [SerializeField, Tooltip("Couleur du hitMarker normal")] private Color _hitMarkerColor = Color.white;
         
         [Header("Hit critique")]
-        [SerializeField] private GameObject _hitMarkerCritiquePrefab;
-        [SerializeField] private Color _hitMarkerCritiqueColor = Color.red;
+        [SerializeField, Tooltip("Prefab visuel a instancié quand on réussi un tir critique")] private GameObject _hitMarkerCritiquePrefab;
+        [SerializeField, Tooltip("Couleur du hitMarker critique")] private Color _hitMarkerCritiqueColor = Color.red;
         
         public void HitMark()
         {
-            Debug.Log("HitMark");
             Image s = Instantiate(_hitMarkerPrefab, _hitMarkerParent).GetComponent<Image>();
             if (s != null)
             {
                 s.color = _hitMarkerColor;
             }
+            
+            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"HitMark");
+            SoundManager.PlaySound(clip, _gunController._source, 0.1f);
+            
             Destroy(s, 0.1f);
         }
 
@@ -34,6 +37,10 @@ namespace GunDecorator
             {
                 s.color = _hitMarkerCritiqueColor;
             }
+            
+            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"HitMark");
+            SoundManager.PlaySound(clip, _gunController._source, 0.1f);
+            
             Destroy(s, 0.1f);
         }
     }

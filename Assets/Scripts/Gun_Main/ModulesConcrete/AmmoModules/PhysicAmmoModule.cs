@@ -7,14 +7,29 @@ namespace GunDecorator.AmmoModules
     {
         public GameObject AmmoPrefab => _ammoPrefab;
 
-        [SerializeField] private GameObject _ammoPrefab;
-        [SerializeField] private Transform _spawnPoint;
-        [SerializeField] private Camera _camera;
+        [Header("References")]
+        [SerializeField, Tooltip("Prefab de la balle qui sera instanciée lors du tir.")]
+        private GameObject _ammoPrefab;
+
+        [SerializeField, Tooltip("Point de spawn de la balle (généralement à l'extrémité du canon).")]
+        private Transform _spawnPoint;
+
+        [SerializeField, Tooltip("Caméra du joueur utilisée pour déterminer la direction du tir.")]
+        private Camera _camera;
         
-        [SerializeField] private float _bulletMass = 1;
-        [SerializeField] private float _damages = 2;
-        [SerializeField] private float _bulletThrowForce = 100;
-        [SerializeField] private float _BulletSpeed = 50;
+        [Header("Bullet Settings")]
+        [SerializeField, Tooltip("Masse physique appliquée au Rigidbody de la balle.")]
+        private float _bulletMass = 1;
+
+        [SerializeField, Tooltip("Dégâts de base infligés par la balle.")]
+        private float _damages = 2;
+
+        [SerializeField, Tooltip("Force initiale appliquée à la balle lors du tir.")]
+        private float _bulletThrowForce = 100;
+
+        [SerializeField, Tooltip("Vitesse logique de la balle utilisée par certains systèmes (ex: calculs d'impact ou trajectoire).")]
+        
+        private float _BulletSpeed = 50;
         private float _dmgToApply = 0;
         
         private BulletData _bulletData;
@@ -28,18 +43,19 @@ namespace GunDecorator.AmmoModules
         {
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
+            bool isCritical = _bulletData?.IsCritical ?? _gunController.IsOverload;
 
-            SpawnVisualBulletServerRpc(direction, isExplosive, radius, offset);
+            SpawnVisualBulletServerRpc(direction, isExplosive, radius, offset, isCritical);
         }
         
         [ServerRpc]
-        private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset)
+        private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical)
         {
-            SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset);
+            SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset, isCritical);
         }
 
         [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset)
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical)
         {
             Vector3 baseDirection = _spawnPoint.forward;
             Vector3 spreadDirection = direction == Vector3.zero ? baseDirection : Quaternion.Euler(direction.y, direction.x, 0) * baseDirection;
@@ -51,9 +67,11 @@ namespace GunDecorator.AmmoModules
                 rb.mass = _bulletMass;
                 rb.AddForce(spreadDirection.normalized * _bulletThrowForce, ForceMode.Impulse);
             }
+            
+            Vector3 targetPos = _spawnPoint.position + _spawnPoint.forward * 2000f;
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, isCritical, targetPos, null);
 
             Destroy(newBullet, 5f);
         }

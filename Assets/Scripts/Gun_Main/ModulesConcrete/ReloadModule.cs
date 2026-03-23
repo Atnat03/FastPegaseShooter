@@ -14,15 +14,16 @@ namespace GunDecorator
         
         public bool IsReloading => _isReloading;
 
-        [SerializeField] private bool _autoReload = true;
-        [SerializeField] private int _magazineSize = 30;
-        [SerializeField] private float reloadDuration = 3f;
+        [SerializeField, Tooltip("Si coché => l'arme recharge automatiquement quand on arrive à 0 balles dans le chargeur")]
+        private bool _autoReload = true;
+        [SerializeField, Tooltip("Nombre max de munition dans un chargeur")] private int _magazineSize = 30;
+        [SerializeField, Tooltip("Temps de rechargement")] private float reloadDuration = 3f;
         private int _currentAmmo = 0;
         private bool _isReloading = false;
         
         [Header("UI")]
-        [SerializeField] private TextMeshProUGUI _ammoText;
-        [SerializeField] private Image _imageReload;
+        [SerializeField, Tooltip("Text des balles actuelles + max balles")] private TextMeshProUGUI _ammoText;
+        [SerializeField, Tooltip("Cercle pour le temps de reload")] private Image _imageReload;
         
         public Coroutine p_reloadCoroutine = null;
 
@@ -39,7 +40,7 @@ namespace GunDecorator
 
         public void StopReload()
         {
-            if (p_reloadCoroutine != null)
+            if(p_reloadCoroutine != null)
             {
                 StopCoroutine(p_reloadCoroutine);
                 p_reloadCoroutine = null;
@@ -51,7 +52,7 @@ namespace GunDecorator
         public void Reload()
         {
             if(p_reloadCoroutine == null)
-                StartCoroutine(ReloadCoroutine());
+                p_reloadCoroutine = StartCoroutine(ReloadCoroutine());
         }
 
         IEnumerator ReloadCoroutine()
@@ -75,6 +76,8 @@ namespace GunDecorator
             
             _isReloading = false;
             SetAmmo(_magazineSize);
+            
+            p_reloadCoroutine = null;
         }
 
         public void SetAmmo(int value) => _currentAmmo = Mathf.Min(value, _magazineSize);        

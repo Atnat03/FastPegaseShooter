@@ -12,6 +12,7 @@ namespace GunDecorator
         public bool IsFullAuto => _isFullAuto;
         public float FireRate => _fireRate;
         public IAmmoModule AmmoModule => _ammoModule;
+
         public bool IsExplosed => _isExplosedAmmo;
 
         [SerializeField] protected MonoBehaviour[] _secondModule;
@@ -45,6 +46,8 @@ namespace GunDecorator
         
         
         private bool _isExplosedAmmo = false;
+        private Vector3 _directionOffset = Vector3.zero;
+        private Vector3 _bulletOffset = Vector3.zero;
         
         private void Start()
         {
@@ -93,13 +96,14 @@ namespace GunDecorator
                     if (_gunController.IsOverload)
                         _ammoModule.SetDamage(_gunController.SurchargeMultiplierDamage);
 
-                    _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
+                    _ammoModule.SpawnBullet(_directionOffset, _bulletOffset);
 
                     _ammoModule.ResetBulletData();
                     
                     _gunController.RecoilModule?.Recoil();
 
-                    PlayShootSoundObserverRpc("Shoot");
+                    AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
+                    SoundManager.PlaySound(clip, _gunController._source, 0.5f);
                 }
                 
                 _startCharging = true;
@@ -120,6 +124,8 @@ namespace GunDecorator
                     int numberBulletShoot = (int)Mathf.Lerp(0, maxBulletShoot, _charginTimer/_timeToCharge);
                     float range = numberBulletShoot * 0.02f;
                     
+                    _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f ,_recoilChargedMultiplier);
+                    
                     for (int i = 0; i < numberBulletShoot; i++)
                     {
                         Vector3 offset = new Vector3(
@@ -134,7 +140,8 @@ namespace GunDecorator
                     
                     _gunController.RecoilModule.Recoil(_recoilChargedMultiplier);
                 
-                    PlayShootSoundObserverRpc("ChargedShoot");
+                    AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"ChargedSound");
+                    SoundManager.PlaySound(clip, _gunController._source, 0.5f);
                 
                     _isCharged = false;
                 }
@@ -186,12 +193,8 @@ namespace GunDecorator
                 }
             }
         }
-
-        [ObserversRpc]
-        private void PlayShootSoundObserverRpc(string clipName)
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData, clipName);
-            SoundManager.PlaySound(clip, _gunController._source);
-        }
+        
+        public void SetDirectionModifier(Vector3 direction) => _directionOffset =  direction;
+        public void SetBulletOffset(Vector3 offset) =>  _bulletOffset = offset;
     }
 }

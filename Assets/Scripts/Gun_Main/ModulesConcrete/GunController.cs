@@ -46,15 +46,26 @@ namespace GunDecorator
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
         
-        [SerializeField] public MeshRenderer _model;
-        [SerializeField] public AudioSource _source;
-        [SerializeField] public SoundsDataSO _soundData;
-        [SerializeField] public VisualEffect _muzzleFlash; // test
+        [SerializeField, Tooltip("Model 3d de l'arme")] 
+        public MeshRenderer _model;
+        [SerializeField, Tooltip("Audio Source de l'arme")] 
+        public AudioSource _source;
+        [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")] 
+        public SoundsDataSO _soundData;
+        [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
 
+        [SerializeField, Tooltip("Camera shake setting : {x = duration du shake || y = magnitude du shake}")] Vector2 _cameraShakeSettings = new Vector2(0.05f, 0.1f);
+        
         private bool ShootingInputPressed;
+
+        [HideInInspector] public bool p_authorizedToShoot = true;
+
+        private EventBus _bus;
 
         private void Awake()
         {
+            _bus = EventBusInitialiser.instance.Bus;
+            
             //On récupere tout les types de modules possible et potentiellement sur l'arme
             _shootModule = GetComponents<IShootModule>();
             _reloadModule = GetComponent<IReloadModule>();
@@ -71,10 +82,11 @@ namespace GunDecorator
         public void TryFire()
         {
             //On appele la fonction shoot du module de shoot actuellement équipé
-
             ShootingInputPressed = true;
-                   
-            if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
+            
+            Debug.Log("Shoot 3");
+            
+            if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 foreach (IShootModule s in _shootModule)
                 {
@@ -84,11 +96,19 @@ namespace GunDecorator
                         continue;
                     }
                     s?.TryShoot();
+                    _recoilModule?.Recoil(_model.transform, 0.1f);
+                    _recoilModule?.SetIsRecoil(true);
+                    SetAmmo(GetCurrentAmmo() - 1);
+                    PlayMuzzleFlash();
                 }
-
-                SetAmmo(GetCurrentAmmo() - 1);
-                _muzzleFlash?.Play();
             }
+            
+            _bus.InvokeEvent(new OnCameraShakeEvent
+            {
+                player = NetworkObject,
+                duration = _cameraShakeSettings.x,
+                magnitude = _cameraShakeSettings.y
+            });
 
             if (GetCurrentAmmo() <= 0)
             {
@@ -99,15 +119,21 @@ namespace GunDecorator
             }
         }
 
+
         IEnumerator ShootingCoroutine(IShootModule s)
         {
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
+                p_authorizedToShoot = false;
                 s.TryShoot();
-                _muzzleFlash?.Play();
-                _recoilModule?.Recoil();
+                PlayMuzzleFlash();
+                _recoilModule?.Recoil(_model.transform, s.FireRate);
+                _recoilModule?.SetIsRecoil(true);
                 SetAmmo(GetCurrentAmmo() - 1);
+                
                 yield return new WaitForSeconds(s.FireRate);
+                
+                p_authorizedToShoot =  true;
             }
         }
         
@@ -119,6 +145,8 @@ namespace GunDecorator
             {
                 s?.CancelShooting();
             }
+            
+            _recoilModule?.SetIsRecoil(false);
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
@@ -127,13 +155,22 @@ namespace GunDecorator
 
         public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
         {
+            if (!IsServerInitialized)
+            {
+                SetSurchargeStatServerRpc(isOverload, dmgMultiplicator, cadenceMultiplicator);
+                return;
+            }
             _isOverload.Value = isOverload;
             SurchargeMultiplierDamage = dmgMultiplicator;
             SurchargeMultiplierRate = cadenceMultiplicator;
             foreach (IShootModule s in _shootModule)
-            {
                 s?.AmmoModule.SetDamage(dmgMultiplicator);
-            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SetSurchargeStatServerRpc(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
+        {
+            SetSurchargeStat(isOverload, dmgMultiplicator, cadenceMultiplicator);
         }
 
         public void TryReload()
@@ -142,7 +179,8 @@ namespace GunDecorator
             
             _reloadModule?.Reload();
 
-            PlayReloadSoundObserverRpc();
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,"Reload");
+            SoundManager.PlaySound(clip, _source, 0.5f);
         }
 
         public void TriggerHitMark(bool isCritique = false)
@@ -156,12 +194,12 @@ namespace GunDecorator
                 _hitMarkerModule?.HitMarkCritique();
             }
         }
-
+        
         [ObserversRpc]
-        private void PlayReloadSoundObserverRpc()
+        private void PlayMuzzleFlash()
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData, "Reload");
-            SoundManager.PlaySound(clip, _source);
+            Debug.Log("Play Muzzle flash");
+            _muzzleFlash.Play();
         }
 
         public void StopReload() => _reloadModule.StopReload();

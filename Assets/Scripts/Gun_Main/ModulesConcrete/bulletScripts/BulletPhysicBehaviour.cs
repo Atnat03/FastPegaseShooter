@@ -1,3 +1,4 @@
+using FishNet;
 using FishNet.Object;
 using GunDecorator;
 using UnityEngine;
@@ -9,37 +10,54 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
     [HideInInspector] public float p_speed;
     [HideInInspector] public bool p_isExplosive;
     [HideInInspector] public float p_explosionRadius;
+    [HideInInspector] public bool p_isCritical;
     [SerializeField] private GameObject _explosionVFX;
     private GunController _gunController;
     
     private bool _hasHit = false;
+    RaycastHit hit;
 
-    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, float explosionRadius, GunController gun)
+    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
+        float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target)
     {
         p_damage = damage;
         p_speed = speed;
         p_isExplosive = isExplosive;
         p_explosionRadius = explosionRadius;
         _gunController = gun;
+        p_isCritical = isCritical;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void FixedUpdate()
     {
-        if (_hasHit) return;
-        _hasHit = true;
+        DetectCollision();
+    }
 
-        if (p_isExplosive)
-            Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
-        else
+    private void DetectCollision()
+    {
+        if (Physics.SphereCast(transform.position, 0.15f, transform.forward, out hit, 
+                p_speed * Time.fixedDeltaTime, ~LayerMask.NameToLayer("Owner"), 
+                QueryTriggerInteraction.Ignore))
         {
-            if (collision.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
-            {
-                damagable.TakeDamage((int)p_damage, _gunController.IsOverload);
-                _gunController.TriggerHitMark(_gunController.IsOverload);
-            }
-        }
+            if (_hasHit) return;
+            _hasHit = true;
 
-        Destroy(gameObject);
+            if (InstanceFinder.IsServerStarted)
+            {
+                if (p_isExplosive)
+                    Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
+                else
+                {
+                    if (hit.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
+                    {
+                        bool crit = damagable.TakeDamage((int)p_damage, p_isCritical);
+                        _gunController.TriggerHitMark(crit || p_isCritical);
+                    }
+                }
+            }
+
+            Destroy(gameObject);
+        }
     }
 
     public void Explosed(GameObject vfx, float radius, int damage)
@@ -52,8 +70,8 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage(damage, _gunController.IsOverload);
-                _gunController.TriggerHitMark(_gunController.IsOverload);
+                bool crit = damagable.TakeDamage((int)p_damage, p_isCritical);
+                _gunController.TriggerHitMark(crit || p_isCritical);
             }
         }
     }

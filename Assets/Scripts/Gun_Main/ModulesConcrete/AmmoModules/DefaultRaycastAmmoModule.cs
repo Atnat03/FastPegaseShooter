@@ -1,5 +1,6 @@
 using FishNet.Object;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GunDecorator.AmmoModules
 {
@@ -11,15 +12,13 @@ namespace GunDecorator.AmmoModules
         [SerializeField] private Transform _spawnPoint;
         
         [Header("parametres")]
-        [SerializeField] private float _maxDistance = 2000;
-        [SerializeField] private float _damages = 5;
-        [SerializeField] private float _BulletSpeed = 50;
+        [SerializeField][Tooltip("disance maximum que les balles peuvent parcourir avant de disparaitre")] private float _maxDistance = 2000;
+        [SerializeField][Tooltip("nombre de dommages que chaque balle va infliger a la cible")] private float _damages = 5;
+        [SerializeField][Tooltip("vitesse de la balle en Unité/secondes")] private float _BulletSpeed = 50;
         private float _dmgToApply = 1;
 
-        [Header("Debug")]
-        public GameObject p_markPrefab;
+        [SerializeField, Tooltip("scriptable object des vfx en fonction de la surface touché")] ImpactBulletSO _impactVFXData;
 
-        private Transform _camTransform;
         private BulletData _bulletData;
         
         private Vector3 bulletDirection;
@@ -27,21 +26,29 @@ namespace GunDecorator.AmmoModules
         
         void Start()
         {
-            _camTransform = _camera.transform;
             _dmgToApply = _damages;
         }
 
         public void SpawnBullet(Vector3 direction, Vector3 offset)
         {
-            Ray cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Vector3 spreadDirection = _camera.transform.rotation * Quaternion.Euler(direction.y, direction.x, 0) * Vector3.forward;
+            Ray cameraRay;
+            
+            if(direction != Vector3.zero)
+                cameraRay = new Ray(_camera.transform.position, spreadDirection);
+            
+            cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
             RaycastHit hit;
             Vector3 targetPoint;
             NetworkObject damagableObject = null;
+            string touchTag = "Default";
 
-            if (Physics.Raycast(cameraRay, out hit, _maxDistance, ~LayerMask.GetMask("Owner", "Other")))
+            if (Physics.Raycast(cameraRay, out hit, _maxDistance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
             {
                 targetPoint = hit.point;
+                touchTag = hit.collider.gameObject.tag;
+
                 if (hit.collider.TryGetComponent<NetworkObject>(out NetworkObject iDamagable))
                     damagableObject = iDamagable;
             }
@@ -50,47 +57,41 @@ namespace GunDecorator.AmmoModules
                 targetPoint = cameraRay.GetPoint(_maxDistance);
             }
 
-            Vector3 baseDirection = (targetPoint - _spawnPoint.position).normalized;
-            Vector3 spreadDirection = Quaternion.Euler(direction.y, direction.x, 0) * baseDirection;
-
             bulletDirection = spreadDirection.normalized;
             travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _BulletSpeed;
 
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
+
+            Debug.Log("Shoot 5");
             
-            if (damagableObject != null && !isExplosive)
-            {
-                ApplyDamageServerRpc(damagableObject, _gunController.IsOverload);
-            }
-
-            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset);
+            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, damagableObject);
         }
-
+        
         [ServerRpc]
-        private void ApplyDamageServerRpc(NetworkObject target, bool isOverload)
+        private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, 
+            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, NetworkObject target = null)
         {
-            if (target.TryGetComponent<IDamagable>(out IDamagable damagable))
-            {
-                damagable.TakeDamage((int)_dmgToApply, isOverload);
-                _gunController.TriggerHitMark(_gunController.IsOverload);
-            }
-        }
-
-        [ServerRpc]
-        private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, float radius, Vector3 offset)
-        {
-            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset);
+            bool isCritical = _gunController.IsOverload;
+            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, target);
         }
 
         [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, float radius, Vector3 offset)
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, NetworkObject target = null)
         {
             GameObject newBullet = Instantiate(BulletPrefab, _spawnPoint.position + offset, Quaternion.LookRotation(direction));
             Destroy(newBullet, travel + .5f);
-            
+    
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, p_markPrefab, isExplosive, radius, _gunController);
+
+            SurfaceType surface = ImpactSurface.GetSurfaceType(touchObject);
+            GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
+            
+            Debug.Log("Shoot 6");
+
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
+                    isCritical, targetPoint, target);
         }
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;
