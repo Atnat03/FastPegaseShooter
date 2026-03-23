@@ -80,8 +80,6 @@ namespace GunDecorator
                 
                 AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
                 SoundManager.PlaySound(clip, _gunController._source, 0.5f);
-                
-                PlayShootSoundObserverRpc();
             }
         }
 

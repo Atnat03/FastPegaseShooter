@@ -19,7 +19,7 @@ namespace GunDecorator
         List<ISecondModule> _additionalEffectModule;
         
         [SerializeField] MonoBehaviour _ammoType;
-        protected IAmmoModule _ammoModule;
+        IAmmoModule _ammoModule;
 
         [SerializeField]private bool _isFullAuto;
         [SerializeField]private float _fireRate;
@@ -43,7 +43,6 @@ namespace GunDecorator
         [SerializeField] private Color _fullChargeColor;
         private Vector3 _startModelScale;
         private Vector3 _startBallVisuelScale;
-        
         
         private bool _isExplosedAmmo = false;
         private Vector3 _directionOffset = Vector3.zero;
@@ -100,7 +99,7 @@ namespace GunDecorator
 
                     _ammoModule.ResetBulletData();
                     
-                    _gunController.RecoilModule?.Recoil();
+                    _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.25f ,_recoilChargedMultiplier);
 
                     AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
                     SoundManager.PlaySound(clip, _gunController._source, 0.5f);
@@ -138,8 +137,6 @@ namespace GunDecorator
                 
                     _ammoModule.ResetBulletData();
                     
-                    _gunController.RecoilModule.Recoil(_recoilChargedMultiplier);
-                
                     AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"ChargedSound");
                     SoundManager.PlaySound(clip, _gunController._source, 0.5f);
                 

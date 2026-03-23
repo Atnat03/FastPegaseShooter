@@ -23,7 +23,9 @@ namespace Controller
         void Update()
         {
             if(_playerInputAction.actions["Shoot"].WasReleasedThisFrame())CancelShooting();
+            if(_playerInputAction.actions["Charge"].WasReleasedThisFrame())ShootCharged();
         }
+        
 
         private void Shooting(InputAction.CallbackContext obj)
         {
@@ -33,7 +35,6 @@ namespace Controller
             if (_bridgePlayer != null)
             {
                 _bridgePlayer.TryShootWithCurrentGun();
-                Debug.Log("Shoot 1");
             }
         }
 
@@ -45,6 +46,28 @@ namespace Controller
             if (_bridgePlayer != null)
             {
                 _bridgePlayer.TryCancelShooting();
+            }
+        }
+        
+        private void Charging(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            if (_bridgePlayer != null)
+            {
+                _bridgePlayer.TryChargeWithCurrentGun();
+            }
+        }
+        
+        private void ShootCharged()
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            if (_bridgePlayer != null)
+            {
+                _bridgePlayer.TryShootChargeShooting();
             }
         }
 
@@ -81,14 +104,17 @@ namespace Controller
         void OnEnable()
         {
             _playerInputAction.actions["Shoot"].performed += Shooting;
+            _playerInputAction.actions["Charge"].performed += Charging;
             _playerInputAction.actions["SwitchGunType"].performed += SwitchGunType;
             _playerInputAction.actions["SwapGun"].performed += RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed += Reloading;
         }
 
+
         void OnDisable()
         {
             _playerInputAction.actions["Shoot"].performed -= Shooting;
+            _playerInputAction.actions["Charge"].performed -= Charging;
             _playerInputAction.actions["SwitchGunType"].performed -= SwitchGunType;
             _playerInputAction.actions["SwapGun"].performed -= RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed -= Reloading;
