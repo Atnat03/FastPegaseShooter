@@ -1404,13 +1404,14 @@ MonoBehaviour:
   moveSpeed: 9.5
   groundMomentumFactor: 2
   sideStepImpulseForce: 3
-  wallDetectionRange: 0
+  wallDetectionRange: 0.1
   walkableSlopeAngle: 45
   maxStepHeight: 1
   walkingHeadbobAmplitude: 0.075
   walkingHeadbobFrequency: 15
   wallRidingHeadbobAmplitude: 0.1
   wallRidingHeadbobFrequency: 25
+  headbobStopReturningSpeed: 5
   jumpForce: 22.5
   airControlForce: 3
   maxAirSpeed: 6
@@ -1421,9 +1422,11 @@ MonoBehaviour:
   superJumpInputMaxDelay: 0.5
   superJumpVerticalForce: 30
   superJumpHorizontalForce: 6
+  superJumpEnergyCost: 20
   wallRideDetectionRange: 0.5
   wallRidingDuration: 1.5
-  wallRideCooldown: 1.5
+  wallRideCooldownChangeSide: 0.2
+  wallRideCooldownSameSide: 2
   wallRidingSpeed: 10
   minSpeedToWallRide: 1
   wallJumpVerticalForce: 27
@@ -1444,6 +1447,7 @@ MonoBehaviour:
   slideCooldown: 2
   coyoteSlideDuration: 0.1
   CameraSlideFOV: 80
+  slidingBackToNormalSpeedDelay: 0.5
   dashSpeed: 5
   dashTimeDuration: 0.2
   dashCooldown: 0.75
@@ -1453,16 +1457,17 @@ MonoBehaviour:
   slopeInfluenceOnRotation: 3
   slopeInfluenceOnVelocity: 0.075
   _castWidth: 0.5
-  _castMaxDistance: 100
-  _grapplingSpeed: 15
+  _castMaxDistance: 18
+  _grapplingSpeed: 45
   _grappleRedirectionSpeed: 8
-  _endGrappleImpulseForce: 10
+  _endGrappleImpulseForce: 30
   grounded: 0
   leftSideAgainstWall: 0
   rightSideAgainstWall: 0
   fellOffWallrinding: 0
   horizontalVelocity: {x: 0, y: 0, z: 0}
-  justWallRided: 0
+  justWallridedOtherSide: 0
+  justWallridedSameSide: 0
 --- !u!114 &997312506154426130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1605,7 +1610,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584275819987112341
+  _initializedTimestamp: -8584273428615293641
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1621,7 +1626,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 16
+  <PrefabId>k__BackingField: 21
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 10800431360241506232
   SceneId: 0
@@ -2238,7 +2243,12 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 3952118585016700218}
-  _recoilX: 5
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -3745,7 +3755,12 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 3952118585016700218}
-  _recoilX: 5
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -4838,7 +4853,12 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 3952118585016700218}
-  _recoilX: 5
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -5229,7 +5249,12 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 3952118585016700218}
-  _recoilX: 15
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 2
   _recoilZ: 0.35
   _returnSpeed: 3
