@@ -1431,25 +1431,25 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             Vector3 closest = col.ClosestPoint(playerFeet.position);
             Vector3 toPlayer = playerFeet.position - closest;
 
-            if (toPlayer.sqrMagnitude < 0.0001f) continue;
+            if (toPlayer.sqrMagnitude < 0.1f) continue;
 
             Vector3 normal = toPlayer.normalized;
-
-            float slopeAngle = Vector3.Angle(normal, Vector3.up);
-
+            
             // STEP  
             Ray downRay = new Ray(closest + Vector3.up * 0.2f, Vector3.down);
 
-            if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.5f))
+            if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.3f))
             {
                 float stepHeight = stepHit.point.y - playerFeet.position.y;
 
                 if (stepHeight > 0 && stepHeight <= maxStepHeight)
                 {
-                    adjustedVelocity.y += (maxStepHeight - stepHeight);
+                    rb.position += Vector3.up*(maxStepHeight - stepHeight);
                     continue;
                 }
             }
+            
+            float slopeAngle = Vector3.Angle(normal, Vector3.up);
             
             if (slopeAngle <= walkableSlopeAngle) continue;
 
