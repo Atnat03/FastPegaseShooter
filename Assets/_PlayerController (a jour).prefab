@@ -1403,13 +1403,14 @@ MonoBehaviour:
   moveSpeed: 10
   groundMomentumFactor: 2
   sideStepImpulseForce: 3
-  wallDetectionRange: 0
+  wallDetectionRange: 0.1
   walkableSlopeAngle: 45
   maxStepHeight: 0.2
   walkingHeadbobAmplitude: 0.075
   walkingHeadbobFrequency: 15
   wallRidingHeadbobAmplitude: 0.1
   wallRidingHeadbobFrequency: 25
+  headbobStopReturningSpeed: 5
   jumpForce: 6.5
   airControlForce: 3
   maxAirSpeed: 6
@@ -1423,7 +1424,8 @@ MonoBehaviour:
   superJumpEnergyCost: 20
   wallRideDetectionRange: 0.5
   wallRidingDuration: 1.5
-  wallRideCooldown: 0.2
+  wallRideCooldownChangeSide: 0.2
+  wallRideCooldownSameSide: 2
   wallRidingSpeed: 10
   minSpeedToWallRide: 1
   wallJumpVerticalForce: 8
@@ -1462,7 +1464,8 @@ MonoBehaviour:
   rightSideAgainstWall: 0
   fellOffWallrinding: 0
   horizontalVelocity: {x: 0, y: 0, z: 0}
-  justWallRided: 0
+  justWallridedOtherSide: 0
+  justWallridedSameSide: 0
 --- !u!114 &997312506154426130
 MonoBehaviour:
   m_ObjectHideFlags: 0
