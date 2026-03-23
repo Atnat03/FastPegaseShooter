@@ -1424,11 +1424,11 @@ MonoBehaviour:
   superJumpHorizontalForce: 6
   wallRideDetectionRange: 0.5
   wallRidingDuration: 1.5
-  wallRideCooldown: 0.2
+  wallRideCooldown: 1.5
   wallRidingSpeed: 10
   minSpeedToWallRide: 1
   wallJumpVerticalForce: 27
-  wallJumpHorizontalForce: 27
+  wallJumpHorizontalForce: 18
   headtiltIntensity: 7
   crouchSpeed: 5
   cameraOffsetWhenCrouching: 0.75
@@ -1441,7 +1441,7 @@ MonoBehaviour:
   slideSpeed: 15
   slideTimeDuration: 0.5
   slideJumpVerticalForce: 19.5
-  slideJumpHorizontalForce: 3
+  slideJumpHorizontalForce: 2
   slideCooldown: 2
   coyoteSlideDuration: 0.1
   CameraSlideFOV: 80
@@ -1606,7 +1606,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584279193939484282
+  _initializedTimestamp: -8584275819987112341
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1622,7 +1622,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 8
+  <PrefabId>k__BackingField: 16
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 6683661854146624352
   SceneId: 0
@@ -1853,6 +1853,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FakeGrapin
   _playerInput: {fileID: 997312506154426130}
   _playerCamera: {fileID: 3061844143884342809}
+  layerGrapple:
+    serializedVersion: 2
+    m_Bits: 4096
   newPos: {x: 0, y: 0, z: 0}
 --- !u!1 &2771240253514392097
 GameObject:
@@ -2796,7 +2799,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1943
+    m_Bits: 6039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
