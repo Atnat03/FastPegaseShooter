@@ -15,6 +15,7 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
     private GunController _gunController;
     
     private bool _hasHit = false;
+    RaycastHit hit;
 
     public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
         float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target)
@@ -27,26 +28,36 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
         p_isCritical = isCritical;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void FixedUpdate()
     {
-        if (_hasHit) return;
-        _hasHit = true;
+        DetectCollision();
+    }
 
-        if (InstanceFinder.IsServerStarted)
+    private void DetectCollision()
+    {
+        if (Physics.SphereCast(transform.position, 0.15f, transform.forward, out hit, 
+                p_speed * Time.fixedDeltaTime, ~LayerMask.NameToLayer("Owner"), 
+                QueryTriggerInteraction.Ignore))
         {
-            if (p_isExplosive)
-                Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
-            else
+            if (_hasHit) return;
+            _hasHit = true;
+
+            if (InstanceFinder.IsServerStarted)
             {
-                if (collision.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
+                if (p_isExplosive)
+                    Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
+                else
                 {
-                    bool crit = damagable.TakeDamage((int)p_damage, p_isCritical);
-                    _gunController.TriggerHitMark(crit || p_isCritical);
+                    if (hit.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
+                    {
+                        bool crit = damagable.TakeDamage((int)p_damage, p_isCritical);
+                        _gunController.TriggerHitMark(crit || p_isCritical);
+                    }
                 }
             }
-        }
 
-        Destroy(gameObject);
+            Destroy(gameObject);
+        }
     }
 
     public void Explosed(GameObject vfx, float radius, int damage)
