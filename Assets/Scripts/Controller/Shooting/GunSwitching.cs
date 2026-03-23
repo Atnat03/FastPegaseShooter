@@ -77,8 +77,6 @@ public class GunSwitching : MonoBehaviour
 			SwitchAnimatedWeapon(_secondaryGunsList, _currentSecondaryGun);
 		}
 	}
-
-	
 	
 	void SwitchAnimatedWeapon(List<GameObject> list, int index)
 	{
@@ -118,6 +116,7 @@ public class GunSwitching : MonoBehaviour
 	{
 		_currentMainGun = newIndex;
 		CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
+		CurrentMainGun.GetComponent<GunController>().StopReload();
 		ActivateCurrentGun(_mainGunsList, _currentMainGun);
 	}
 	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun = newIndex;

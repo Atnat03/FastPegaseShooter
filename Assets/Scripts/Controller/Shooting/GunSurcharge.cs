@@ -38,6 +38,11 @@ namespace Controller
             OverloadTimer();
         }
 
+        public void SetColorImage(Color color)
+        {
+            _infoOverload.color = color;
+        }
+
         private void OverloadTimer()
         {
             _infoOverload.gameObject.SetActive(_isOverload);
