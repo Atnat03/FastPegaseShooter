@@ -74,6 +74,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float wallDetectionRange = 0.65f;
     [SerializeField] float walkableSlopeAngle = 45f;
     [SerializeField] float maxStepHeight = .2f;
+    [SerializeField] private float gravityBonusForce = 3f; 
 
     [Header("headbob")] [SerializeField] float walkingHeadbobAmplitude = 0.05f;
     [SerializeField] float walkingHeadbobFrequency = 8f;
@@ -747,6 +748,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         velocity = AlignVelocityToWall(velocity);
 
         rb.linearVelocity = velocity;
+        rb.AddForce(-Vector3.up * gravityBonusForce, ForceMode.Acceleration);
     }
 
 
@@ -1319,13 +1321,14 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
 
         Vector3 newDir = grappleDirection;
-        if (rb.linearVelocity.magnitude > 0.1)
+        if (rb.linearVelocity.magnitude > 0.1 && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f && Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
         {
             newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection,
                 _grappleRedirectionSpeed * Time.fixedDeltaTime);
         }
 
         rb.linearVelocity = newDir * _grapplingSpeed;
+        Debug.Log("distance with grapple point" + Vector3.Distance(transform.position, _currentGrapplePoint.position));
     }
 
     void ExitGrappleState()
@@ -1405,33 +1408,60 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
-        if (velocity.sqrMagnitude < .1f) return velocity;
+        if (velocity.sqrMagnitude == 0) return velocity;
+
         capsuleTop = crouched ? topHeightCrouchedCollider.position : topHeightStandUpCollider.position;
         height = Vector3.Distance(capsuleTop, playerFeet.position);
+
         point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
         point2 = playerFeet.position + Vector3.up * bodyRadius;
 
-        currentHorizontal = new Vector3(velocity.x, 0, velocity.z);
-        if (Physics.CapsuleCast(point1, point2, bodyRadius, currentHorizontal.normalized, out RaycastHit hit,
-                wallDetectionRange, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
+        Collider[] hits = Physics.OverlapCapsule(
+            point1,
+            point2,
+            bodyRadius + wallDetectionRange,
+            ~LayerMask.GetMask("Owner"),
+            QueryTriggerInteraction.Ignore
+        );
+
+        Vector3 adjustedVelocity = velocity;
+
+        foreach (var col in hits)
         {
-            // Si le contact est bas , pente / sol
-            float hitHeight = hit.point.y - playerFeet.position.y;
+            Vector3 closest = col.ClosestPoint(playerFeet.position);
+            Vector3 toPlayer = playerFeet.position - closest;
 
-            if (hitHeight < maxStepHeight)
-                return new Vector3(velocity.x, velocity.y + (maxStepHeight - hitHeight), velocity.z);
+            if (toPlayer.sqrMagnitude < 0.1f) continue;
 
-            float hitSlopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            Vector3 normal = toPlayer.normalized;
+            
+            // STEP  
+            Ray downRay = new Ray(closest + Vector3.up * 0.2f, Vector3.down);
 
-            // Pente marchable , ne pas bloquer
-            if (hitSlopeAngle <= walkableSlopeAngle) return velocity;
+            if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.3f))
+            {
+                float stepHeight = stepHit.point.y - playerFeet.position.y;
 
-            Vector3 aligned = Vector3.ProjectOnPlane(currentHorizontal, hit.normal);
+                if (stepHeight > 0 && stepHeight <= maxStepHeight)
+                {
+                    rb.position += Vector3.up*(maxStepHeight - stepHeight);
+                    continue;
+                }
+            }
+            
+            float slopeAngle = Vector3.Angle(normal, Vector3.up);
+            
+            if (slopeAngle <= walkableSlopeAngle) continue;
 
-            return new Vector3(aligned.x, velocity.y, aligned.z);
+            //  SLIDE
+            if (Vector3.Dot(adjustedVelocity, -normal) <= 0) continue;
+
+            adjustedVelocity = Vector3.ProjectOnPlane(adjustedVelocity, normal);
         }
+        
+        if (adjustedVelocity.magnitude < 0.01f) adjustedVelocity = Vector3.zero;
 
-        return velocity;
+        return adjustedVelocity;
     }
 
 
