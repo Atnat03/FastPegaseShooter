@@ -159,6 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8152673178008715728}
+  - component: {fileID: -2947125155063271523}
   m_Layer: 11
   m_Name: Principal
   m_TagString: Untagged
@@ -186,6 +187,21 @@ Transform:
   - {fileID: 7894244782423911641}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2947125155063271523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693488478359352468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6a39c46bf52104ba8efe3100bce3f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.EmptyNetworkBehaviour
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
 --- !u!1 &1732928472966477477
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,7 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 18
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   _model: {fileID: 6047232286497617289}
@@ -441,7 +457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 19
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: TemplateShootModule
@@ -462,7 +478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 20
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ReloadModule
@@ -484,13 +500,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 21
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 0}
-  _recoilX: 20
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 3
   _recoilZ: 0.55
   _returnSpeed: 2
@@ -607,7 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 23
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: HitMarkerModule
@@ -629,7 +650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 255
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ExplosifAmmoModule
@@ -647,7 +668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1c10d552aef42cf9e8fb79047b90af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.PhysicAmmoModule
-  _componentIndexCache: 255
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: PhysicAmmoModule
@@ -711,7 +732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 24
+  _componentIndexCache: 8
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   _model: {fileID: 8480240266963790232}
@@ -732,7 +753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 25
+  _componentIndexCache: 9
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ReloadModule
@@ -754,13 +775,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 26
+  _componentIndexCache: 10
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 0}
-  _recoilX: 5
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -877,7 +903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45db67dd1c8040edbc6fd3ca22e0271d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.FragShootModule
-  _componentIndexCache: 27
+  _componentIndexCache: 11
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: FragShootModule
@@ -901,7 +927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1c10d552aef42cf9e8fb79047b90af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.PhysicAmmoModule
-  _componentIndexCache: 28
+  _componentIndexCache: 12
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: PhysicAmmoModule
@@ -925,7 +951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 29
+  _componentIndexCache: 13
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ExplosifAmmoModule
@@ -943,7 +969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 30
+  _componentIndexCache: 14
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: HitMarkerModule
@@ -1036,7 +1062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 31
+  _componentIndexCache: 28
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   _model: {fileID: 490663529023582429}
@@ -1057,7 +1083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 32
+  _componentIndexCache: 29
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ReloadModule
@@ -1079,13 +1105,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 33
+  _componentIndexCache: 30
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 0}
-  _recoilX: 5
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -1202,7 +1233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f328dd613755485187713a7a5c3ba84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargingShootModule
-  _componentIndexCache: 34
+  _componentIndexCache: 31
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ChargingShootModule
@@ -1231,7 +1262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModuleRealTimeObstacleDetection
-  _componentIndexCache: 35
+  _componentIndexCache: 32
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: DefaultRaycastAmmoModuleRealTimeObstacleDetection
@@ -1255,7 +1286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 36
+  _componentIndexCache: 33
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: HitMarkerModule
@@ -1783,7 +1814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 11
+  _componentIndexCache: 15
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   _model: {fileID: 4537327131681164176}
@@ -1804,7 +1835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 12
+  _componentIndexCache: 16
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: TemplateShootModule
@@ -1825,7 +1856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 13
+  _componentIndexCache: 17
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ReloadModule
@@ -1847,13 +1878,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 14
+  _componentIndexCache: 18
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 0}
-  _recoilX: 5
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 0.25
   _recoilZ: 0.35
   _returnSpeed: 6
@@ -1970,7 +2006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModuleRealTimeObstacleDetection
-  _componentIndexCache: 15
+  _componentIndexCache: 19
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: DefaultRaycastAmmoModuleRealTimeObstacleDetection
@@ -1994,7 +2030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 16
+  _componentIndexCache: 20
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: HitMarkerModule
@@ -2016,7 +2052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 17
+  _componentIndexCache: 21
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ExplosifAmmoModule
@@ -2105,7 +2141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 18
+  _componentIndexCache: 22
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   _model: {fileID: 6928691019075758927}
@@ -2126,7 +2162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 19
+  _componentIndexCache: 23
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: TemplateShootModule
@@ -2147,7 +2183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 20
+  _componentIndexCache: 24
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: ReloadModule
@@ -2169,13 +2205,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 21
+  _componentIndexCache: 25
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 0}
-  _recoilX: 15
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilY: 2
   _recoilZ: 0.35
   _returnSpeed: 3
@@ -2292,7 +2333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModuleRealTimeObstacleDetection
-  _componentIndexCache: 22
+  _componentIndexCache: 26
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: DefaultRaycastAmmoModuleRealTimeObstacleDetection
@@ -2316,7 +2357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 23
+  _componentIndexCache: 27
   _addedNetworkObject: {fileID: 0}
   _networkObjectCache: {fileID: 0}
   moduleName: HitMarkerModule
