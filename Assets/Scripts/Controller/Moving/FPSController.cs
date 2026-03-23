@@ -1499,6 +1499,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         bufferJump = false;
         StartCoroutine(JumpAntiLagCoroutine());
         StartCoroutine(SuperJumpCoroutine());
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
@@ -1557,6 +1558,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         coyoteJump = false;
         bufferJump = false;
         StartCoroutine(JumpAntiLagCoroutine());
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
             ForceMode.Impulse);
     }
