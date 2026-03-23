@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class MenuSelectionArme : MonoBehaviour
 {
@@ -14,53 +15,58 @@ public class MenuSelectionArme : MonoBehaviour
 	[SerializeField] private GameObject ui;
 	
 	PlayerInput _playerInput;
-	FPSController _fpsController;
+	[SerializeField] private GunSwitching _gunSwitching;
+	[SerializeField] private Image[] _imagesCircles;
+	[SerializeField] private Color _baseColor;
+	[SerializeField] private Color _selectedColor;
 	
 	#endregion
 
 
 	#region Fonctions
 
+	// ⚠️ c'est crade mais c'est pour le debug 
+	
 	private void Awake()
 	{
 		_playerInput = GetComponent<PlayerInput>();
-		_fpsController = GetComponent<FPSController>();
-
-		ui.SetActive(false);
-		
-		Cursor.lockState = CursorLockMode.Locked;
-		Cursor.visible = false;
-	}
-	
-	
-	private void ActivateUI(InputAction.CallbackContext obj)
-	{
-		ui.SetActive(!ui.activeSelf);
-		
-		Cursor.lockState = ui.activeSelf ?  CursorLockMode.None : CursorLockMode.Locked;
-		Cursor.visible = ui.activeSelf;
-		
-		_fpsController.IsFreeze = ui.activeSelf;
+		ActivateUI(_gunSwitching.CurrentMainGunIndex);
 	}
 
-	public void DesactivateUI()
+	void ChangeGun1(InputAction.CallbackContext obj) { _gunSwitching.ChangeCurrentGun_Main(0); ActivateUI(0); }
+	void ChangeGun2(InputAction.CallbackContext obj) { _gunSwitching.ChangeCurrentGun_Main(1);ActivateUI(1);}
+	void ChangeGun3(InputAction.CallbackContext obj) { _gunSwitching.ChangeCurrentGun_Main(2);ActivateUI(2);}
+	void ChangeGun4(InputAction.CallbackContext obj) { _gunSwitching.ChangeCurrentGun_Main(3);ActivateUI(3);}
+
+	void ActivateUI(int index )
 	{
-		Cursor.lockState = CursorLockMode.Locked;
-		Cursor.visible = false;
-		ui.SetActive(false);
-		_fpsController.IsFreeze = false;
+		for (int i = 0; i < _imagesCircles.Length; i++)
+		{
+			if (i == index)
+			{
+				_imagesCircles[i].color = _selectedColor;
+			}
+			else
+			{
+				_imagesCircles[i].color = _baseColor;
+			}
+		}
 	}
-	
 	
 	private void OnEnable()
 	{
-		_playerInput.actions["ChooseGun"].performed += ActivateUI;
+		_playerInput.actions["ChooseGun1"].performed += ChangeGun1;
+		_playerInput.actions["ChooseGun2"].performed += ChangeGun2;
+		_playerInput.actions["ChooseGun3"].performed += ChangeGun3;
+		_playerInput.actions["ChooseGun4"].performed += ChangeGun4;
 	}
 
-	
 	private void OnDisable()
 	{
-		_playerInput.actions["ChooseGun"].performed -= ActivateUI;
+		_playerInput.actions["ChooseGun1"].performed -= ChangeGun1;
+		_playerInput.actions["ChooseGun2"].performed -= ChangeGun2;
+		_playerInput.actions["ChooseGun3"].performed -= ChangeGun3;
+		_playerInput.actions["ChooseGun4"].performed -= ChangeGun4;	
 	}
 
 
