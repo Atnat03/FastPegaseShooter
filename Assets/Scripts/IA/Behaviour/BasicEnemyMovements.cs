@@ -4,7 +4,7 @@ using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using UnityEngine;
 
-public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
+public class BasicEnemyMovements : NetworkBehaviour
 {
     [SerializeField] private float _speed;
     
@@ -22,7 +22,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     private Vector3 _lastPos;
     private float _t;
 
-    private Action _unsubscribePPU;
+    //private Action _unsubscribePPU;
     public override void OnStartClient()
     {
     }
@@ -31,16 +31,16 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
     {
         _transform = transform;
         _bus = EventBusInitialiser.instance.Bus;
-        _unsubscribePPU = _bus.Subscribe((PlayerPositionUpdateEvent PPUE) =>
+        /*_unsubscribePPU = _bus.Subscribe((PlayerPositionUpdateEvent PPUE) =>
         {
             OnPlayerMoving(PPUE.p_playerId, PPUE.p_playerPosition);
-        });
+        });*/
     }
 
-    public override void OnStopServer()
+    /*public override void OnStopServer()
     {
         _unsubscribePPU?.Invoke();
-    }
+    }*/
     
     public void SetGridReaderGuid(Guid gridReaderId) => _gridReaderId = gridReaderId;
 
@@ -58,27 +58,30 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
         }
     }
 
-    void OnPlayerMoving(int playerId, Vector3 playerPosition)
+    public void OnPlayerMoving(int playerId, Vector3 playerPosition, PathfindingGridReader gridReader)
     {
         if (IsTargetPlayer(playerId) || IsPlayerCloser(playerPosition))
         {
             _targetedPlayerId = playerId;
             _lastPlayerPosition = playerPosition;
+            //_bus.InvokeEvent(new PathRequestEvent(this, _gridReaderId, _transform.position, _lastPlayerPosition));
             
             //Updating Pathfinding
-            _bus.InvokeEvent(new PathRequestEvent(this, _gridReaderId, _transform.position, _lastPlayerPosition));
+            _path = gridReader.GetPath(transform.position, playerPosition);
+            _lastPos = transform.position;
+            _t = 0;
         }
     }
 
     bool IsTargetPlayer(int playerId) => playerId == _targetedPlayerId;
     bool IsPlayerCloser(Vector3 playerPosition) => (transform.position - playerPosition).sqrMagnitude < (transform.position - _lastPlayerPosition).sqrMagnitude;
 
-    public void OnPathAnswer(List<PathfindingNode> path)
+    /*public void OnPathAnswer(List<PathfindingNode> path)
     {
         _path = path;
         _lastPos = _transform.position;
         _t = 0;
-    }
+    }*/
     
     void FollowPath()
     {
@@ -92,7 +95,7 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
         }
     }
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         if (IsServerInitialized)
         {
@@ -102,9 +105,9 @@ public class BasicEnemyMovements : NetworkBehaviour, IPathRequester
                 Gizmos.DrawWireSphere(node.position, 1f);
             }
         }
-    }
+    }*/
 }
-public struct PathRequestEvent
+/*public struct PathRequestEvent
 {
     public IPathRequester p_requester;
     public Guid p_gridReaderId;
@@ -118,4 +121,4 @@ public struct PathRequestEvent
         p_startPosition = startPosition;
         p_endPosition = endPosition;
     }
-}
+}*/

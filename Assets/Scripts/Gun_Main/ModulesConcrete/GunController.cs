@@ -84,6 +84,8 @@ namespace GunDecorator
             //On appele la fonction shoot du module de shoot actuellement équipé
             ShootingInputPressed = true;
             
+            Debug.Log("Shoot 3");
+            
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 foreach (IShootModule s in _shootModule)

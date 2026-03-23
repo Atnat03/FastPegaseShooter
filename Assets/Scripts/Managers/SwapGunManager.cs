@@ -43,6 +43,7 @@ namespace Managers
         [SerializeField] private TextMeshProUGUI _textSwapUI;
         [SerializeField] private string _youAskSwapMessage;
         [SerializeField] private string _broAskyouSwapMessage;
+        [SerializeField] private Image _surchargeImage;
         
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
@@ -61,7 +62,7 @@ namespace Managers
             
             InitBus();
             _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
-            _bus.Subscribe((EndOVerload data) =>
+            _bus.Subscribe((EndOverloadEvent data) =>
             {
                 _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo;
             });
@@ -136,8 +137,8 @@ namespace Managers
                     
                 _elapsedTimeForCombo.Value = 0;
 
-                NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
-                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo);
+                NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo, _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge);
+                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo, _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge);
                 ResetTimer();
             }
             else
@@ -151,14 +152,15 @@ namespace Managers
         }
         
         [TargetRpc]
-        private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo)
+        private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo, Color color)
         {
             _bus.InvokeEvent(new SwapingGunEvent
             {
                 dataSurcharge = _damageSurchargeData[_currentSurchargeLevel.Value],
                 gunIndex = newIndex,
                 timeToSwap = _swapingTime,
-                currentAmmo = currentAmmo
+                currentAmmo = currentAmmo,
+                color = color,
             });
         }
 

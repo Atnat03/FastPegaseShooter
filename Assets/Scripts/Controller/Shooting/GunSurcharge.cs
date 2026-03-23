@@ -38,6 +38,11 @@ namespace Controller
             OverloadTimer();
         }
 
+        public void SetColorImage(Color color)
+        {
+            _infoOverload.color = color;
+        }
+
         private void OverloadTimer()
         {
             _infoOverload.gameObject.SetActive(_isOverload);
@@ -51,7 +56,7 @@ namespace Controller
                 }
                 else
                 {
-                    _bus.InvokeEvent(new EndOVerload());
+                    _bus.InvokeEvent(new EndOverloadEvent());
                     _isOverload = false;
                     SetOverloadStats(false, 0, 1, 1);
                 }
@@ -60,5 +65,5 @@ namespace Controller
 
     }
 
-    public struct EndOVerload{}
+    public struct EndOverloadEvent{}
 }

@@ -26,6 +26,9 @@ public class SpawnZone : NetworkBehaviour
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     
     private PathfindingGridReader _gridReader;
+    private List<BasicEnemyMovements> _spawnedEnemies = new List<BasicEnemyMovements>();
+
+    private Action _unsubscribeAction;
 
     public override void OnStartServer()
     {
@@ -38,6 +41,21 @@ public class SpawnZone : NetworkBehaviour
                 _currentBudget -= EDE.p_enemySpawnCost;
             }
         });
+
+        _unsubscribeAction = EventBusInitialiser.instance.Bus.Subscribe((PlayerPositionUpdateEvent PPUE) =>
+        {
+            for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
+            {
+                if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
+                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_playerId, PPUE.p_playerPosition, _gridReader);
+            }
+        });
+    }
+
+    public override void OnStopServer()
+    {
+        _unsubscribeAction?.Invoke();
+        base.OnStopServer();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -66,6 +84,8 @@ public class SpawnZone : NetworkBehaviour
         enemyMovement.SetGridReaderGuid(_gridReader.p_id);
         BasicEnemyLife enemyLife =  enemy.GetComponent<BasicEnemyLife>();
         enemyLife.SetInfos(_gridReader.p_id, enemyCost);
+        
+        _spawnedEnemies.Add(enemyMovement);
         
         InstanceFinder.ServerManager.Spawn(enemy);
     }

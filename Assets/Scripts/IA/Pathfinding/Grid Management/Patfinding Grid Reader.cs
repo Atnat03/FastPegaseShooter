@@ -25,7 +25,7 @@ public class PathfindingGridReader : MonoBehaviour
         List<Vector3> values = pathfindingGridSO.nodes.Select(n => n.position).ToList();
         searchTree.Populate(pathfindingGridSO.nodes);
 
-        EventBusInitialiser.instance.Bus.Subscribe((PathRequestEvent PRE) =>
+        /*EventBusInitialiser.instance.Bus.Subscribe((PathRequestEvent PRE) =>
         {
             if(PRE.p_gridReaderId != p_id) return;
             PRE.p_requester.OnPathAnswer(
@@ -33,9 +33,14 @@ public class PathfindingGridReader : MonoBehaviour
                     pathfindingGridSO.nodes,
                     searchTree.FindClosest(PRE.p_startPosition).node,
                     searchTree.FindClosest(PRE.p_endPosition).node));
-        });
+        });*/
 
         _aStarAlgorithm = GetComponent<AStarAlgorithm>();
+    }
+
+    public List<PathfindingNode> GetPath(Vector3 start, Vector3 end)
+    {
+        return _aStarAlgorithm.FindPathFromGrid(pathfindingGridSO.nodes, searchTree.FindClosest(start).node, searchTree.FindClosest(end).node);
     }
 
     private void OnDrawGizmos()
