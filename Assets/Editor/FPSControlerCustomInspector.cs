@@ -135,7 +135,8 @@ public class FPSControlerCustomInspector : Editor
         DrawSection("Slide", new Color(1f, 1f, 0.6f), () =>
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideSpeed"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideTimeDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideMinTimeDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slideMaxTimeDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideJumpVerticalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideJumpHorizontalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideCooldown"));

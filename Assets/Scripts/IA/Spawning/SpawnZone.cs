@@ -26,7 +26,7 @@ public class SpawnZone : NetworkBehaviour
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     
     private PathfindingGridReader _gridReader;
-    private List<BasicEnemyMovements> _spawnedEnemies = new List<BasicEnemyMovements>();
+    private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
 
     private Action _unsubscribeAction;
 
@@ -47,7 +47,7 @@ public class SpawnZone : NetworkBehaviour
             for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
             {
                 if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
-                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_playerId, PPUE.p_playerPosition, _gridReader);
+                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition, _gridReader);
             }
         });
     }
@@ -80,12 +80,12 @@ public class SpawnZone : NetworkBehaviour
     {
         Vector3 position = GetValidSpawnPoint().position;
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
-        BasicEnemyMovements enemyMovement =  enemy.GetComponent<BasicEnemyMovements>();
-        enemyMovement.SetGridReaderGuid(_gridReader.p_id);
-        BasicEnemyLife enemyLife =  enemy.GetComponent<BasicEnemyLife>();
-        enemyLife.SetInfos(_gridReader.p_id, enemyCost);
         
-        _spawnedEnemies.Add(enemyMovement);
+        
+        EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
+        enemyCore.SetInfos(_gridReader.p_id, enemyCost);
+        
+        _spawnedEnemies.Add(enemyCore);
         
         InstanceFinder.ServerManager.Spawn(enemy);
     }
