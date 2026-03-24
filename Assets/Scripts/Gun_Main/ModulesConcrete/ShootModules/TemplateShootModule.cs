@@ -67,8 +67,6 @@ namespace GunDecorator
             {
                 _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
                 
-                Debug.Log("Shoot 4");
-                
                 _ammoModule.ResetBulletData();
                 
                 PlayerShootSound();
