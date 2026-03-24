@@ -51,6 +51,16 @@ public class SecondaryGun : MonoBehaviour, IGun
 		
 	}
 
+	public void TryCharging()
+	{
+		throw new NotImplementedException();
+	}
+
+	public void TryShootCharged()
+	{
+		throw new NotImplementedException();
+	}
+
 	public int GetCurrentAmmo()
 	{
 		return 0;
