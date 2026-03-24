@@ -580,6 +580,7 @@ GameObject:
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: -8997744782067408838}
+  - component: {fileID: 6912678073703625548}
   m_Layer: 0
   m_Name: Enemy 1
   m_TagString: Enemy
@@ -643,7 +644,7 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _targetingModule: {fileID: 2780056509964836476}
+  _targetingModule: {fileID: 6912678073703625548}
   _damage: 10
   _attackDelay: 2
   _maxPlayerDistance: 2
@@ -829,6 +830,29 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
+--- !u!114 &6912678073703625548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 551daad7dd080364381524025b5adc95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreTargetingModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 0}
+  p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
+  _aggroPointWhenInDetectZone: 10
+  _aggroPointPerDamageTaken: 0
+  _aggroPointPerSecond: 0
+  _aggroPointPerDamageDealed: 0
+  _detectionZoneRadius: 10
+  _aggroZoneRadius: 5
+  _idealDistanceRadius: 3
 --- !u!1 &6364117521231957157
 GameObject:
   m_ObjectHideFlags: 0

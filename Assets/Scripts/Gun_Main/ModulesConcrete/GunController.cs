@@ -213,7 +213,6 @@ namespace GunDecorator
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {
-            Debug.Log("Play Muzzle flash");
             _muzzleFlash.Play();
         }
 

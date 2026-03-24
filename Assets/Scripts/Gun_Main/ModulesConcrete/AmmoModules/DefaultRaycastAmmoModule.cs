@@ -63,7 +63,6 @@ namespace GunDecorator.AmmoModules
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
 
-            Debug.Log("Shoot 5");
             
             SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, damagableObject);
         }
@@ -88,7 +87,6 @@ namespace GunDecorator.AmmoModules
             SurfaceType surface = ImpactSurface.GetSurfaceType(touchObject);
             GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
-            Debug.Log("Shoot 6");
 
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
                     isCritical, targetPoint, target);

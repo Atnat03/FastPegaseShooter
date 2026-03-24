@@ -10,10 +10,8 @@ public class BasicEnemyMelee : EnemyAttackingModule
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
-        CustomLogger.HighlightLog("on networkTime attack 2");
         if (_waitedTimeSinceAttack >= _attackDelay && CanAttack())
         {
-            CustomLogger.HighlightLog("on networkTime attack 3");
             _waitedTimeSinceAttack = 0;
             
             //Empty event for now
@@ -33,7 +31,6 @@ public class BasicEnemyMelee : EnemyAttackingModule
     {
         if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
         {
-            CustomLogger.HighlightLog($"target distance : {GetTargetSqrDistance()}, max dist : {_maxPlayerDistance*_maxPlayerDistance}");
             return false;
         }
             
