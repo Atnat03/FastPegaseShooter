@@ -1,64 +1,105 @@
 using System;
+using FishNet.Object;
 using UnityEngine;
 
-public interface IEffectSecondaryGun
+public class SecondaryGun : NetworkBehaviour, IGun
 {
-	public void ApplyEffect();
-}
-
-public class SecondaryGun : MonoBehaviour, IGun
-{
-	#region Properties
-
-	public IEffectSecondaryGun EffectSecondaryGun { get; set; }
-	
-	#endregion
-
-
 	#region Variables
-		
-	private IEffectSecondaryGun _effect;
+
+	[Header("References")]
+	[SerializeField] private GameObject _ammoPrefab;
+	[SerializeField] private Camera _camera; 
+	[SerializeField] private Transform _spawnPoint;
+	[SerializeField] private GameObject _model;
+	
+	[Header("Settings")]
+	[SerializeField] private float _fireRate = 1;
+	[SerializeField] private float _maxDistance = 2000f;
+	[SerializeField] private float _bulletSpeed = 50;
+	
+	private bool _canShoot = true;
+	private float elapsedTime = 0;
+	
+	Ray cameraRay;
+	RaycastHit hit;
 
 	#endregion
 
 
 	#region Fonctions
 
-	private void Start()
+	private void Update()
 	{
-		_effect = GetComponent<IEffectSecondaryGun>();
+		if (!_canShoot)
+		{
+			elapsedTime += Time.deltaTime;
+
+			if (elapsedTime >= _fireRate)
+			{
+				elapsedTime = 0;
+				_canShoot = true;
+			}
+		}
 	}
 
 	public void TryFire()
 	{
-		Debug.Log("Secondary gun fire");
+		if (!_canShoot) return;
 		
-		_effect.ApplyEffect();
+		Debug.Log("Secondary gun fire");
+
+		cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+		Vector3 targetPoint;
+		float travelTime = 0;
+		
+		if (Physics.Raycast(cameraRay, out hit, _maxDistance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
+		{
+			targetPoint = hit.point;
+		}
+		else
+		{
+			targetPoint = cameraRay.GetPoint(_maxDistance);
+		}
+		
+		travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _bulletSpeed;
+		Vector3 direction = _camera.transform.forward.normalized;
+		
+		SpawnVisualBulletServerRpc(direction, targetPoint);
 	}
+
+	[ServerRpc]
+	private void SpawnVisualBulletServerRpc(Vector3 direction, Vector3 targetPoint)
+	{
+		SpawnVisualBulletObserverRpc(direction, targetPoint);
+	}
+
+	[ObserversRpc]
+	private void SpawnVisualBulletObserverRpc(Vector3 direction,Vector3 targetPoint)
+	{
+		EffectSecondaryGun newBullet = Instantiate(_ammoPrefab, _spawnPoint.position, Quaternion.LookRotation(direction)).GetComponent<EffectSecondaryGun>();
+		newBullet.SetUpVariables(_bulletSpeed, targetPoint);
+	}
+
 
 	public void TryCancelShooting()
-	{
-		throw new NotImplementedException();
-	}
+	{}
 
 	public void TryReload()
-	{
-		throw new NotImplementedException();
-	}
+	{ }
 
 	public void TriggerHitMark(bool isCritique = false)
-	{
-		
-	}
+	{ }
 
 	public void TryCharging()
-	{
-		throw new NotImplementedException();
-	}
+	{ }
 
 	public void TryShootCharged()
+	{ }
+
+	public void Disable(bool state)
 	{
-		throw new NotImplementedException();
+		_model.SetActive(state);
 	}
 
 	public int GetCurrentAmmo()

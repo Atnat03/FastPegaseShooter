@@ -16,6 +16,8 @@ public interface IGun
     public void TryReload();
     public void TryCharging();
     public void TryShootCharged();
+
+    public void Disable(bool state);
 }
 
 
@@ -210,6 +212,11 @@ namespace GunDecorator
             _chargedModule?.TryShootCharging();
         }
 
+        public void Disable(bool state)
+        {
+            _model.gameObject.SetActive(state);
+        }
+
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {
@@ -218,6 +225,5 @@ namespace GunDecorator
         }
 
         public void StopReload() => _reloadModule.StopReload();
-
     }
 }
