@@ -249,7 +249,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             _camera.gameObject.SetActive(false);
         }
 
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         yaw = transform.eulerAngles.y;
         pitch = cameraParentTransform.localEulerAngles.x;

@@ -43,9 +43,8 @@ namespace GunDecorator.ChargedModules
         protected bool _charging = false;
         private bool _deadZoneCharge = false;
         
-        [Header("Debug")]
-        [SerializeField]protected float _charginTimer = 0;
-        [SerializeField]private float _elapsedTimeDeadZone = 0;
+        protected float _charginTimer = 0;
+        private float _elapsedTimeDeadZone = 0;
         
         //Action
         public Action OnStartCharging;
