@@ -79,13 +79,31 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwitchGunType",
+                    "name": "SwitchMainGunType",
                     "type": "Button",
                     "id": "4a2add0d-395e-4fd6-9d24-69bd9cd0fb82",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchSecondGunType",
+                    "type": "Button",
+                    "id": "b22f0df5-1915-4572-a1fb-d7963002980c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchGunScroll",
+                    "type": "PassThrough",
+                    "id": "34995c43-d4bc-4095-b23e-a9cf5c606d3f",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "SwapGun",
@@ -311,7 +329,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SwitchGunType",
+                    "action": "SwitchMainGunType",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "054ac832-23d0-4780-9c94-24da9603c1d6",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchGunScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe6cc437-b999-4cb1-9bd7-ccadaf93d86e",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchSecondGunType",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
