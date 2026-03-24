@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class UIVerticalBump : MonoBehaviour
 {
-
 	#region Variables
 
 	[SerializeField] private Rigidbody _playerRB;
