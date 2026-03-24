@@ -7,7 +7,7 @@ public class BasicEnemyMelee : EnemyAttackingModule
 {
     [SerializeField] private float _maxPlayerDistance = 1.5f;
     
-    protected override void OnNetworkTick()
+    public override void OnNetworkTick()
     {
         base.OnNetworkTick();
         CustomLogger.HighlightLog("on networkTime attack 2");

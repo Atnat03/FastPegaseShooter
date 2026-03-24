@@ -85,7 +85,8 @@ namespace GunDecorator
 
         public void TryFire()
         {
-            if (_chargedModule.IsCharging) return;
+            if (_chargedModule != null)
+                if (_chargedModule.IsCharging) return;
             
             //On appele la fonction shoot du module de shoot actuellement équipé
             ShootingInputPressed = true;

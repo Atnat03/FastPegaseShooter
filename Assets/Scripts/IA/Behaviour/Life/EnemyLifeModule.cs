@@ -22,7 +22,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     {
         if (IsServerInitialized)
         {
-            OnLifeUpdate?.Invoke(isCritical, GetDamageAmount(rawDamageAmount));
+            OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
         }
         return isCritical;
     }

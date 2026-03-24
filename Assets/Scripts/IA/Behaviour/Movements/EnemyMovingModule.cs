@@ -10,12 +10,9 @@ public abstract class EnemyMovingModule : EnemyBehaviourModule
         base.OnStartServer();
     }
 
-    protected void FixedUpdate()
+    public virtual void OnNetworkTick()
     {
-        if (IsServerInitialized)
-        {
-            MoveAlongPath();
-        }
+        MoveAlongPath();
     }
     
     public abstract void OnPlayerMoving(int playerObjectId, Vector3 playerPosition, PathfindingGridReader gridReader);

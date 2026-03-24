@@ -11,7 +11,7 @@ public class BasicEnemyShooting : EnemyAttackingModule
     
     
 
-    protected override void OnNetworkTick()
+    public override void OnNetworkTick()
     {
         base.OnNetworkTick();
         if (_waitedTimeSinceAttack >= _attackDelay && CanAttack())
