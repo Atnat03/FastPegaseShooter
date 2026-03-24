@@ -9,13 +9,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            p_checkpointManager.RegisterCheckpoint(this, GetRootParent(other.transform).gameObject);
+            p_checkpointManager.RegisterCheckpoint(this, other.transform.GetRootTransform().gameObject);
         }
-    }
-
-    Transform GetRootParent(Transform t)
-    {
-        if (t.parent == null) return t;
-        return GetRootParent(t.parent);
     }
 }
