@@ -36,6 +36,7 @@ public class EnergyManager : NetworkBehaviour
     private int _previousIndexFull;
 
     [SerializeField] private Image _imageBarPrefab;
+    [SerializeField] private Sprite[] _energyBarSprites;
     [SerializeField] private Transform _barParent;
     
     [SerializeField] private Color _energyBarColorFull;
@@ -67,6 +68,21 @@ public class EnergyManager : NetworkBehaviour
         for (int i = 0; i < _totalBars; i++)
         {
             Image newImage = Instantiate(_imageBarPrefab, _barParent);
+            
+            if(i == 0)
+            {
+                newImage.sprite = _energyBarSprites[0];
+                Debug.Log("First");
+            }
+            else if(i == _totalBars-1)
+            {
+                newImage.sprite = _energyBarSprites[2];
+            }
+            else
+            {
+                newImage.sprite = _energyBarSprites[1];
+            }
+            
             _energyBarsImageList.Add(newImage);
         }
         

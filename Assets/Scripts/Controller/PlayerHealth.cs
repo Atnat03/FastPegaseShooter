@@ -44,7 +44,7 @@ public class PlayerHealth : NetworkBehaviour
 	float _elapsedTimeShowWarning = 0;
 	bool _isShowedWarning = false;
 
-	[SerializeField] private Volume _damagedVolume;
+	[SerializeField] private CanvasGroup _damagedImage;
 	
 	[SerializeField] private SoundsDataSO _soundsData;
 	private AudioSource _audioSource;
@@ -166,12 +166,12 @@ public class PlayerHealth : NetworkBehaviour
 			elapsedTime += Time.deltaTime;
 
 			float t = elapsedTime / time;
-			_damagedVolume.weight = Mathf.Sin(t * Mathf.PI);
+			_damagedImage.alpha = Mathf.Sin(t * Mathf.PI);
 
 			yield return null;
 		}
 
-		_damagedVolume.weight = 0f;
+		_damagedImage.alpha = 0f;
 	}
 	
 
