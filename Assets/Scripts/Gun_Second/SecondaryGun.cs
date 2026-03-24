@@ -2,11 +2,14 @@ using System;
 using FishNet.Object;
 using UnityEngine;
 
+public enum Element{ Fire, Ice, Elek }
+
 public class SecondaryGun : NetworkBehaviour, IGun
 {
 	#region Variables
 
 	[Header("References")]
+	[SerializeField] private Element _element;
 	[SerializeField] private GameObject _ammoPrefab;
 	[SerializeField] private Camera _camera; 
 	[SerializeField] private Transform _spawnPoint;
@@ -24,8 +27,7 @@ public class SecondaryGun : NetworkBehaviour, IGun
 	RaycastHit hit;
 
 	#endregion
-
-
+	
 	#region Fonctions
 
 	private void Update()
@@ -78,7 +80,7 @@ public class SecondaryGun : NetworkBehaviour, IGun
 	private void SpawnVisualBulletObserverRpc(Vector3 direction,Vector3 targetPoint)
 	{
 		EffectSecondaryGun newBullet = Instantiate(_ammoPrefab, _spawnPoint.position, Quaternion.LookRotation(direction)).GetComponent<EffectSecondaryGun>();
-		newBullet.SetUpVariables(_bulletSpeed, targetPoint);
+		newBullet.SetUpVariables(_bulletSpeed, targetPoint, (int)_element);
 	}
 
 

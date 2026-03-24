@@ -64,6 +64,7 @@ public class GunSwitching : NetworkBehaviour
 		UpdateVisual(true);
 		
 		_currentMainGun.Value = startIndex;
+		_currentSecondaryGun.Value = startIndex;
 	}
 	
 	[ServerRpc]

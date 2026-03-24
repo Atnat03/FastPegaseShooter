@@ -5,13 +5,14 @@ public abstract class EffectSecondaryGun : MonoBehaviour
 {
 	private float _speed;
 	private Vector3 _targetPoint;
-	
 	protected RaycastHit _hit;
+	private Element _element;
 	
-	public void SetUpVariables(float speed, Vector3 targetPoint)
+	public void SetUpVariables(float speed, Vector3 targetPoint, int element)
 	{
 		_speed = speed;
 		_targetPoint = targetPoint;
+		_element = (Element)element;
 	}
 	
 	private void FixedUpdate()
