@@ -42,8 +42,6 @@ public class NetworkUIVerticalBump : NetworkBehaviour
 		if (!IsOwner && _playerRB == null)
 			return;
 		
-		Debug.Log("Bump");
-
 		Vector3 finalPosition = _startPosition;
 
 		float verticalVelocity = _playerRB.linearVelocity.y;
