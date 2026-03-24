@@ -52,7 +52,7 @@ public class PathfindingGridReader : MonoBehaviour
         {
             foreach (PathfindingNode node in pathfindingGridSO.nodes)
             {
-                if(drawNodes) Gizmos.DrawSphere(node.position, 0.02f);
+                if(drawNodes) Gizmos.DrawSphere(node.position, 0.2f);
                 if(drawNodesConnections)
                 {
                     foreach (int n in node.neighborsIndex)

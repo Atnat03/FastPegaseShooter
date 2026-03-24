@@ -39,6 +39,10 @@ namespace Controller
                 
                 _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
             }
+            else
+            {
+                SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
+            }
             
             int startIndex = OwnerId % 2;
             _gunSwitching.Initialize(startIndex);
@@ -52,6 +56,16 @@ namespace Controller
         public void TryCancelShooting()
         {
             CurrentGun.TryCancelShooting();
+        }
+        
+        public void TryChargeWithCurrentGun()
+        { 
+            CurrentGun.TryCharging();
+        }
+
+        public void TryShootChargeShooting()
+        {
+            CurrentGun.TryShootCharged();
         }
 
         public void TryReload()
@@ -77,7 +91,7 @@ namespace Controller
             {
                 player = playerNet,
                 gunIndex = gunIndex,
-                currentAmmo = currentAmmo
+                currentAmmo = currentAmmo,
             };
     
             _bus.InvokeEvent(data);
@@ -94,6 +108,7 @@ namespace Controller
             CurrentMainSurchargeGun.StopReload();
             
             _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
+            _gunSurcharge.SetColorImage(data.color);
             
             int ammoToApply = data.currentAmmo;
 
@@ -110,7 +125,7 @@ namespace Controller
                 yield return null;
             }
 
-            _gunSwitching.ChangeCurrentGun_Main(data.gunIndex);
+            _gunSwitching.ChangeCurrentGun_Main_ServerRpc(data.gunIndex);
 
             _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
             
@@ -147,6 +162,16 @@ namespace Controller
         {
             _wantToSwitch.Value = false;
         }
+        
+        void SetLayerRecursively(GameObject obj, int newLayer)
+        {
+            obj.layer = newLayer;
+
+            foreach (Transform child in obj.transform)
+            {
+                SetLayerRecursively(child.gameObject, newLayer);
+            }
+        }
     }
 
     //Demande de swap
@@ -155,6 +180,7 @@ namespace Controller
         public NetworkObject player;
         public int gunIndex;
         public int currentAmmo;
+        public Color colorSwap;
     }
     
     //Swap accepté et envoyé au joueux
@@ -164,6 +190,7 @@ namespace Controller
         public int gunIndex;
         public float timeToSwap;
         public int currentAmmo;
+        public Color color;
     }
 
     //Event de fin de demande de swap
