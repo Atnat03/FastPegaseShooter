@@ -89,14 +89,10 @@ namespace GunDecorator.ChargedModules
         public void TryCharging()
         {
             _deadZoneCharge = true;
-            
-            Debug.Log("Charging...");
         }
         
         public virtual void TryShootCharging()
         {
-            Debug.Log("SHOOT !! " + _charginTimer);
-            
             ResetCharging();
         }
 
