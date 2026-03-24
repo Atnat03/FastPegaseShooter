@@ -816,8 +816,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     Coroutine wallRidingCoroutine;
     bool wallRidingCoroutineRunning;
 
-    [HideInInspector] public bool justWallridedOtherSide;
-    [HideInInspector] public bool justWallridedSameSide;
+    private bool justWallridedOtherSide;
+    private bool justWallridedSameSide;
 
     void EnterWallRidingState()
     {

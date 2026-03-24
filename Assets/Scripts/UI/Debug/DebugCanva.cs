@@ -9,7 +9,6 @@ public class DebugCanva : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI controllerGrounded;
     [SerializeField] TextMeshProUGUI controllerSidesDetection;
-    [SerializeField] TextMeshProUGUI canWallRide;
     [SerializeField] TextMeshProUGUI CurrentVelocity;
     [SerializeField] TextMeshProUGUI maxHeight;
 
@@ -52,10 +51,6 @@ public class DebugCanva : MonoBehaviour
         {
             controllerSidesDetection.text = "No wall detected";
         }
-
-        canWallRide.text = (mainFPSController.fellOffWallrinding || mainFPSController.justWallridedOtherSide)
-            ? "Cannot wallride"
-            : "Can wallride";
 
         CurrentVelocity.text = "Current velocity :" + mainFPSController.horizontalVelocity.magnitude;
 
