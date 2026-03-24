@@ -149,6 +149,9 @@
         },
         {
             "m_Id": "23509c80514b45149236bf26323b38e4"
+        },
+        {
+            "m_Id": "6c4dd5c8505e4c10b26247786941373e"
         }
     ],
     "m_GroupDatas": [
@@ -959,7 +962,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "CellDensity",
     "m_StageCapability": 3,
-    "m_Value": 1.2999999523162842,
+    "m_Value": 1.600000023841858,
     "m_DefaultValue": 5.0,
     "m_Labels": [],
     "m_LiteralMode": false
@@ -1368,9 +1371,9 @@
     "m_PerRendererData": false,
     "m_customAttributes": [],
     "m_Value": {
-        "r": 0.9056603908538818,
-        "g": 0.8009968400001526,
-        "b": 0.39729440212249758,
+        "r": 0.8867924213409424,
+        "g": 0.7448674440383911,
+        "b": 0.30535775423049929,
         "a": 1.0
     },
     "isMainColor": false,
@@ -1794,7 +1797,7 @@
     "m_ShaderOutputName": "Edge1",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.38999998569488528,
+        "x": 0.41999998688697817,
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
@@ -2942,6 +2945,72 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.ParallaxMappingNode",
+    "m_ObjectId": "6c4dd5c8505e4c10b26247786941373e",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Parallax Mapping",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -1557.0,
+            "y": 2294.0,
+            "width": 272.0,
+            "height": 183.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "6cc276b878c14b5995d3c25b27881c44"
+        },
+        {
+            "m_Id": "c029e4802c114220ac5d427a2fc76136"
+        },
+        {
+            "m_Id": "f4c88b7101274329ae1be62b71591db2"
+        },
+        {
+            "m_Id": "8aafd200f7fd4b7d8602fac20d19b8bb"
+        },
+        {
+            "m_Id": "76089ea981aa4498949ef6c083dcdcb6"
+        }
+    ],
+    "synonyms": [
+        "offset mapping"
+    ],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Channel": 1
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Texture2DInputMaterialSlot",
+    "m_ObjectId": "6cc276b878c14b5995d3c25b27881c44",
+    "m_Id": 1,
+    "m_DisplayName": "Heightmap",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Heightmap",
+    "m_StageCapability": 2,
+    "m_BareResource": false,
+    "m_Texture": {
+        "m_SerializedTexture": "",
+        "m_Guid": ""
+    },
+    "m_DefaultType": 1
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "700cbfe2528349e089b1e61d96a26ce8",
     "m_Id": 2,
@@ -3084,6 +3153,27 @@
     "m_DefaultValue": 1.0,
     "m_Labels": [],
     "m_LiteralMode": false
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "76089ea981aa4498949ef6c083dcdcb6",
+    "m_Id": 0,
+    "m_DisplayName": "ParallaxUVs",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "ParallaxUVs",
+    "m_StageCapability": 2,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
 }
 
 {
@@ -3231,7 +3321,7 @@
     "m_Title": "Base textures",
     "m_Position": {
         "x": -3030.000244140625,
-        "y": -304.0
+        "y": -304.0000305175781
     }
 }
 
@@ -3406,6 +3496,28 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.UVMaterialSlot",
+    "m_ObjectId": "8aafd200f7fd4b7d8602fac20d19b8bb",
+    "m_Id": 4,
+    "m_DisplayName": "UVs",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "UVs",
+    "m_StageCapability": 2,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": [],
+    "m_Channel": 0
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "8ffd903fdd134fa58d6207d8ef1931e0",
     "m_Id": 1,
@@ -3562,7 +3674,7 @@
     "m_ShaderOutputName": "Edge2",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 1.440000057220459,
+        "x": 0.9100000262260437,
         "y": 1.0,
         "z": 1.0,
         "w": 1.0
@@ -4468,6 +4580,19 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.SamplerStateMaterialSlot",
+    "m_ObjectId": "c029e4802c114220ac5d427a2fc76136",
+    "m_Id": 2,
+    "m_DisplayName": "HeightmapSampler",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "HeightmapSampler",
+    "m_StageCapability": 3,
+    "m_BareResource": false
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "c3dc1665f75749ee9c7b1a09979d8165",
     "m_Id": 0,
@@ -4832,7 +4957,7 @@
     "m_Title": "reflets crystaux",
     "m_Position": {
         "x": -2992.000244140625,
-        "y": 617.0
+        "y": 617.0000610351563
     }
 }
 
@@ -5039,9 +5164,9 @@
     "m_PerRendererData": false,
     "m_customAttributes": [],
     "m_Value": {
-        "r": 0.7490196228027344,
-        "g": 0.4133740961551666,
-        "b": 0.4133740961551666,
+        "r": 0.5660377740859985,
+        "g": 0.1735493242740631,
+        "b": 0.1735493242740631,
         "a": 1.0
     },
     "isMainColor": false,
@@ -5588,6 +5713,22 @@
     "m_StageCapability": 3,
     "m_Value": -4.789999961853027,
     "m_DefaultValue": 2.0,
+    "m_Labels": [],
+    "m_LiteralMode": false
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "f4c88b7101274329ae1be62b71591db2",
+    "m_Id": 3,
+    "m_DisplayName": "Amplitude",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Amplitude",
+    "m_StageCapability": 2,
+    "m_Value": 1.0,
+    "m_DefaultValue": 1.0,
     "m_Labels": [],
     "m_LiteralMode": false
 }
