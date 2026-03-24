@@ -1,9 +1,11 @@
 using System;
+using FishNet;
+using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class MenuSelectionArme : MonoBehaviour
+public class MenuSelectionArme : NetworkBehaviour
 {
 	#region Properties
 
@@ -33,10 +35,26 @@ public class MenuSelectionArme : MonoBehaviour
 		ActivateUI(_gunSwitching.CurrentMainGunIndex);
 	}
 
-	void ChangeGun1(InputAction.CallbackContext obj) { _gunSwitching.ChangeCurrentGun_Main(0); ActivateUI(0); }
-	void ChangeGun2(InputAction.CallbackContext obj) { _gunSwitching.ChangeCurrentGun_Main(1);ActivateUI(1);}
-	void ChangeGun3(InputAction.CallbackContext obj) { _gunSwitching.ChangeCurrentGun_Main(2);ActivateUI(2);}
-	void ChangeGun4(InputAction.CallbackContext obj) { _gunSwitching.ChangeCurrentGun_Main(3);ActivateUI(3);}
+	void ChangeGun1(InputAction.CallbackContext obj)
+	{
+		if (!IsOwner) return;
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(0); ActivateUI(0); 
+	}
+	void ChangeGun2(InputAction.CallbackContext obj) 
+	{ 		
+		if (!IsOwner) return;
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(1);ActivateUI(1);
+	}
+	void ChangeGun3(InputAction.CallbackContext obj) 
+	{ 		
+		if (!IsOwner) return;
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(2);ActivateUI(2);
+	}
+	void ChangeGun4(InputAction.CallbackContext obj) 
+	{
+		if (!IsOwner) return;
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(3);ActivateUI(3);
+	}
 
 	void ActivateUI(int index )
 	{
