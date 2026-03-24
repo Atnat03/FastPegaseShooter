@@ -127,7 +127,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] Transform topHeightCrouchedCollider;
 
     [Header("Slide")] [SerializeField] float slideSpeed = 5f;
-    [SerializeField] float slideTimeDuration = 0.2f;
+    [SerializeField] float slideMinTimeDuration = 0.1f;
+    [SerializeField] float slideMaxTimeDuration = 0.2f;
     [SerializeField] float slideJumpVerticalForce = 6.5f;
     [SerializeField] float slideJumpHorizontalForce = 2f;
     [SerializeField] float slideCooldown = .1f;
@@ -1069,6 +1070,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         UnCrouch();
         StartCoroutine(JustSlidedCoroutine());
+        _camera.fieldOfView = _cameraDefaultFOV;
     }
 
     void SlidingLateUpdate()
@@ -1084,7 +1086,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
 
-        while (elapsedTime < slideTimeDuration)
+        while (elapsedTime < slideMinTimeDuration && !(elapsedTime >= slideMaxTimeDuration && !playerInput.actions["Crouch"].IsPressed()))
         {
             elapsedTime += Time.deltaTime;
 
@@ -1107,7 +1109,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     IEnumerator JustSlidedCoroutine()
     {
         justSlided = true;
-        float elapsedTime = 0;
         yield return new WaitForSeconds(slideCooldown);
         justSlided = false;
     }
