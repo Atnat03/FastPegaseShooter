@@ -22,7 +22,7 @@ public class AlwaysInFrontOfCam : MonoBehaviour
 
 	private void Awake()
 	{
-		cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponent<FPSController>().Camera;
+		//cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponent<FPSController>().Camera;
 	}
 
 	private void LateUpdate()
