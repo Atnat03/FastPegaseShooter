@@ -51,12 +51,21 @@ namespace Controller
         public void TryShootWithCurrentGun()
         { 
             CurrentGun.TryFire();
-            Debug.Log("Shoot 2");
         }
 
         public void TryCancelShooting()
         {
             CurrentGun.TryCancelShooting();
+        }
+        
+        public void TryChargeWithCurrentGun()
+        { 
+            CurrentGun.TryCharging();
+        }
+
+        public void TryShootChargeShooting()
+        {
+            CurrentGun.TryShootCharged();
         }
 
         public void TryReload()

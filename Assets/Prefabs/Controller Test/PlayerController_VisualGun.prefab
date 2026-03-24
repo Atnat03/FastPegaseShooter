@@ -5564,6 +5564,8 @@ GameObject:
   - component: {fileID: 4997057281965842912}
   - component: {fileID: 5639936714480259773}
   - component: {fileID: 7781035500729037681}
+  - component: {fileID: 7535119577484282721}
+  - component: {fileID: 873108482872747217}
   m_Layer: 11
   m_Name: AK
   m_TagString: Untagged
@@ -5625,8 +5627,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule:
-  - {fileID: 0}
+  _secondModule: []
   _ammoType: {fileID: 5639936714480259773}
   _isFullAuto: 1
   _fireRate: 0.1
@@ -5853,6 +5854,55 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+--- !u!114 &7535119577484282721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7426788794118929898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54694bd6bf22480cb93d2e412bbf17eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.SalveChargedModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  moduleName: SalveChargedModule
+  moduleColor: {r: 0, g: 1, b: 1, a: 1}
+  _ammoType: {fileID: 5639936714480259773}
+  _isExplosifAmmo: 0
+  _explosionRadius: 1
+  _timeToCharge: 1
+  _deadZoneStartCharging: 0.5
+  _recoilChargedMultiplier: 1.25
+  _charginTimer: 0
+  _elapsedTimeDeadZone: 0
+  _numberBulletInCharge: 10
+  _intervaleCharge: 0.05
+--- !u!114 &873108482872747217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7426788794118929898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  moduleName: VisualChargedModule
+  moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
+  _chargedModule: {fileID: 7535119577484282721}
+  _chargedUI: {fileID: 0}
+  _valueCharging: {fileID: 0}
+  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &7654427447990518306
 GameObject:
   m_ObjectHideFlags: 0
@@ -6291,6 +6341,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 767434e683a0c8a45894327daa6bb753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunSwitching
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
   _isMainGun: 1
   _mainGunParent: {fileID: 298082726096373924}
   _secondaryGunParent: {fileID: 2620352974341419778}

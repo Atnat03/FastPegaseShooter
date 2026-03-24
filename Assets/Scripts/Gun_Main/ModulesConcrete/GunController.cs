@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using GunDecorator.ChargedModules;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -13,7 +14,8 @@ public interface IGun
     public void TryFire();
     public void TryCancelShooting();
     public void TryReload();
-    public void TriggerHitMark(bool isCritique = false);
+    public void TryCharging();
+    public void TryShootCharged();
 }
 
 
@@ -43,6 +45,7 @@ namespace GunDecorator
         private IReloadModule _reloadModule;
         private IRecoilModule _recoilModule;
         private IHitMarkerModule _hitMarkerModule;
+        private ChargedParentModule _chargedModule;
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
         
@@ -71,6 +74,7 @@ namespace GunDecorator
             _reloadModule = GetComponent<IReloadModule>();
             _recoilModule = GetComponent<IRecoilModule>();
             _hitMarkerModule = GetComponent<IHitMarkerModule>();
+            _chargedModule = GetComponent<ChargedParentModule>();
 
             //On initialise tout les modules de l'arme
             foreach (GunModule module in GetComponents<GunModule>())
@@ -81,10 +85,10 @@ namespace GunDecorator
 
         public void TryFire()
         {
+            if (_chargedModule.IsCharging) return;
+            
             //On appele la fonction shoot du module de shoot actuellement équipé
             ShootingInputPressed = true;
-            
-            Debug.Log("Shoot 3");
             
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
@@ -194,7 +198,17 @@ namespace GunDecorator
                 _hitMarkerModule?.HitMarkCritique();
             }
         }
-        
+
+        public void TryCharging()
+        {
+            _chargedModule?.TryCharging();
+        }
+
+        public void TryShootCharged()
+        {
+            _chargedModule?.TryShootCharging();
+        }
+
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {
