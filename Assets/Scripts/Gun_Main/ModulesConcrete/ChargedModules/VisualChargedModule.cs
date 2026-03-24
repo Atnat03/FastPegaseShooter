@@ -25,10 +25,8 @@ public class VisualChargedModule : GunModule
 
 	#region Fonctions
 
-	void Start()
+	void OnEnable()
 	{
-		Debug.Log("Start");
-		
 		_chargedModule.OnStartCharging += StartCharing;
 		_chargedModule.OnEndCharging += EndCharging;
 		_chargedModule.OnCharging += Charging;
@@ -52,8 +50,6 @@ public class VisualChargedModule : GunModule
 	
 	private void StartCharing()
 	{
-		Debug.Log("StartCharging");
-		
 		_chargedUI.SetActive(true);
 		_valueCharging.color = _chargingColor;
 	}

@@ -10,14 +10,17 @@ namespace GunDecorator.ChargedModules
         #region Properties
 
         public bool IsCharging => _charging;
-        public bool IsFullCharged
+
+        protected bool IsFullCharged
         {
             get => _fullCharged;
-            set
+            private set
             {
-                _fullCharged = value; 
-                if(value)
+                _fullCharged = value;
+                if(_fullCharged)
+                {
                     OnFullCharged.Invoke();
+                }
             }
         }
 
@@ -35,6 +38,7 @@ namespace GunDecorator.ChargedModules
         [SerializeField] protected float _timeToCharge = 1;
         [SerializeField] protected float _deadZoneStartCharging = 0.5f;
         [SerializeField] protected float _recoilChargedMultiplier = 1.25f;
+        [SerializeField] protected float _isFullMultiplicator = 0.9f;
         private bool _fullCharged = false;
         protected bool _charging = false;
         private bool _deadZoneCharge = false;
@@ -48,6 +52,7 @@ namespace GunDecorator.ChargedModules
         public Action OnEndCharging;
         public Action<float> OnCharging;
         public Action OnFullCharged;
+        private bool _triggerActionStart = false;
         
         #endregion
         
@@ -68,18 +73,23 @@ namespace GunDecorator.ChargedModules
 
             if (_charging)
             {
+                if(!_triggerActionStart)
+                {
+                    OnStartCharging?.Invoke();
+                    _triggerActionStart = true;
+                }
+                
                 _charginTimer += Time.deltaTime;
                 
                 OnCharging?.Invoke(_charginTimer / _timeToCharge);
                 
-                _fullCharged = _charginTimer >= _timeToCharge;
+                IsFullCharged = _charginTimer >= _timeToCharge * _isFullMultiplicator;
             }
         }
 
         public void TryCharging()
         {
             _deadZoneCharge = true;
-            OnStartCharging?.Invoke();
             
             Debug.Log("Charging...");
         }
@@ -97,6 +107,8 @@ namespace GunDecorator.ChargedModules
             _charging = false;
             _charginTimer = 0;
             _elapsedTimeDeadZone = 0;
+            _triggerActionStart = false;
+            
             OnEndCharging?.Invoke();
         }
     }
