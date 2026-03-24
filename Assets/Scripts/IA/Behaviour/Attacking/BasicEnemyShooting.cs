@@ -14,7 +14,7 @@ public class BasicEnemyShooting : EnemyAttackingModule
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
-        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack())
+        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack(out int playerObjectId))
         {
             _waitedTimeSinceAttack = 0;
 
@@ -30,13 +30,17 @@ public class BasicEnemyShooting : EnemyAttackingModule
                 p_damage = _damage,
                 p_aliveTime = _maxAmmoLifeTime
             });
+            OnHitPlayer?.Invoke(playerObjectId, _damage);
         }
     }
 
-    protected override bool CanAttack()
+    protected override bool CanAttack(out int playerObjectId)
     {
         if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
+        {
+            playerObjectId = 0;
             return false;
+        }
 
 
         Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
@@ -49,10 +53,12 @@ public class BasicEnemyShooting : EnemyAttackingModule
         {
             if (hit.collider.CompareTag("Player"))
             {
+                playerObjectId = hit.collider.transform.root.GetComponent<NetworkObject>().ObjectId;
                 return true;
             }
         }
 
+        playerObjectId = 0;
         return false;
     }
 

@@ -25,6 +25,10 @@ public class EnemyCore : NetworkBusListener
         
         //detect all scoreTargetingModule on gameObject
         GetComponents<ScoreTargetingModule>(_scoreModules);
+        
+        foreach (EnemyAttackingModule module in _attackingModules)
+            foreach (ScoreTargetingModule scoreModule in _scoreModules)
+                module.OnHitPlayer += scoreModule.OnHitPlayer;
     }
 
     public override void OnStopServer()

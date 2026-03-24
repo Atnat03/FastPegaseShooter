@@ -18,10 +18,11 @@ public class ScoreTargetingModule : EnemyTargetingModule
     [SerializeField] private float _aggroZoneRadius;
     [SerializeField] private float _idealDistanceRadius;
 
+    private HashSet<int> players = new HashSet<int>();
     private Dictionary<int, int> _playerAggroValue = new Dictionary<int, int>();
     private Dictionary<int, bool> _playerInDetectionZone = new Dictionary<int, bool>();
 
-    private List<(int,int,bool)> _playerToAdd = new List<(int,int,bool)>();
+    private List<int> _playerToAdd = new List<int>();
     
     public override void OnNetworkTick()
     {
@@ -29,12 +30,11 @@ public class ScoreTargetingModule : EnemyTargetingModule
         string text = "";
         foreach (var newEntry in _playerToAdd)
         {
-            _playerAggroValue.Add(newEntry.Item1, newEntry.Item2);
-            _playerInDetectionZone.Add(newEntry.Item1, newEntry.Item3);
+            players.Add(newEntry);
         }
         _playerToAdd.Clear();
         
-        foreach (int playerId in _playerAggroValue.Keys)
+        foreach (int playerId in players)
         {
             if(!InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(playerId, out NetworkObject playerObject))
             {
@@ -68,9 +68,11 @@ public class ScoreTargetingModule : EnemyTargetingModule
             int aggroValue = sqrDistance > _detectionZoneRadius * _detectionZoneRadius
                 ? 0
                 : _aggroPointWhenInDetectZone;
-            _playerToAdd.Add((PPUE.p_networkObjectId, aggroValue, aggroValue > 0));
             
-            return;
+            _playerAggroValue.Add(PPUE.p_networkObjectId, aggroValue);
+            _playerInDetectionZone.Add(PPUE.p_networkObjectId, sqrDistance <= _detectionZoneRadius*_detectionZoneRadius);
+            
+            _playerToAdd.Add(PPUE.p_networkObjectId);
         }
         
         if (_playerInDetectionZone[PPUE.p_networkObjectId] && sqrDistance > _detectionZoneRadius*_detectionZoneRadius)
@@ -84,6 +86,11 @@ public class ScoreTargetingModule : EnemyTargetingModule
             _playerAggroValue[PPUE.p_networkObjectId] += _aggroPointWhenInDetectZone;
             _playerInDetectionZone[PPUE.p_networkObjectId] = true;
         }
+    }
+
+    public void OnHitPlayer(int playerId, int damages)
+    {
+        _playerAggroValue[playerId] += damages*_aggroPointPerDamageDealed;
     }
 
     private void OnDrawGizmos()

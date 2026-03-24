@@ -10,25 +10,27 @@ public class BasicEnemyMelee : EnemyAttackingModule
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
-        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack())
+        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack(out int playerObjectId))
         {
             _waitedTimeSinceAttack = 0;
             
-            //Empty event for now
             if (InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(_targetingModule.p_targetId, out NetworkObject player))
             {
+                //Empty event for now
                 EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyMeleeAttack());
                 EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerTakeDamageEvent
                 {
                     playerN = player,
                     value = _damage
                 });
+                OnHitPlayer?.Invoke(player.ObjectId, _damage);
             }
         }
     }
 
-    protected override bool CanAttack()
+    protected override bool CanAttack(out int playerObjectId)
     {
+        playerObjectId = 0;
         if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
         {
             return false;
