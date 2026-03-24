@@ -5754,7 +5754,7 @@ GameObject:
   - component: {fileID: 5639936714480259773}
   - component: {fileID: 7781035500729037681}
   - component: {fileID: 6612938143707883386}
-  - component: {fileID: 3733066775782859118}
+  - component: {fileID: 7035211315077752265}
   m_Layer: 11
   m_Name: AK
   m_TagString: Untagged
@@ -6066,7 +6066,7 @@ MonoBehaviour:
   _valueCharging: {fileID: 1044039032198290018}
   _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
   _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
---- !u!114 &3733066775782859118
+--- !u!114 &7035211315077752265
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6075,13 +6075,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7426788794118929898}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54694bd6bf22480cb93d2e412bbf17eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 3af359fc3e59411da93c658f8239b885, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.SalveChargedModule
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.DecreaseNoiseChargedModule
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 0}
-  moduleName: SalveChargedModule
+  moduleName: DecreaseNoiseChargedModule
   moduleColor: {r: 0, g: 1, b: 1, a: 1}
   _ammoType: {fileID: 5639936714480259773}
   _isExplosifAmmo: 0
@@ -6090,10 +6090,32 @@ MonoBehaviour:
   _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25
   _isFullMultiplicator: 0.9
-  _charginTimer: 0
-  _elapsedTimeDeadZone: 0
   _numberBulletInCharge: 10
-  _intervaleCharge: 0.05
+  _noiseEvolutionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _startMaxNoiseAngle: 10
 --- !u!1 &7654427447990518306
 GameObject:
   m_ObjectHideFlags: 0
