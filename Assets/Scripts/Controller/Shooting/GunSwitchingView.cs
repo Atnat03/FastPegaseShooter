@@ -63,18 +63,30 @@ public class GunSwitchingView : MonoBehaviour
 		_enableMainImage.SetActive(true);
 		_enableSecondImage.SetActive(true);
 		
+		CanvasGroup disable = disableObject.GetComponent<CanvasGroup>();
+		CanvasGroup enable = enableObject.GetComponent<CanvasGroup>();
+		
 		float duration = 0.5f;
 		float elapsedTime = 0f;
+
+		enable.alpha = 0;
+		disable.alpha = 1;
 
 		while (elapsedTime < duration)
 		{
 			elapsedTime += Time.deltaTime;
+			
+			enable.alpha = Mathf.Lerp(0, 1, elapsedTime / duration);
+			disable.alpha = Mathf.Lerp(1, 0, elapsedTime / duration);
 			
 			disableObject.transform.position = Vector3.Lerp(disableObject.transform.position, _disablePos.position, elapsedTime / duration);
 			enableObject.transform.position = Vector3.Lerp(disableObject.transform.position, _enablePos.position, elapsedTime / duration);
 			
 			yield return null;
 		}
+		
+		enable.alpha = 1;
+		disable.alpha = 0;
 				
 		_enableMainImage.SetActive(main);
 		_disableMainImage.SetActive(!main);
