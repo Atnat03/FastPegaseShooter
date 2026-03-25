@@ -160,6 +160,8 @@ public class GunSwitching : NetworkBehaviour
 	[ServerRpc]
 	public void ChangeCurrentGun_Main_ServerRpc(int newIndex)
 	{
+		if (!IsMainGun) return;
+		
 		ChangeCurrentGun_Main(newIndex);
 	}
 

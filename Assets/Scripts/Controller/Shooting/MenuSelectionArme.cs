@@ -56,8 +56,11 @@ public class MenuSelectionArme : NetworkBehaviour
 		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(3);ActivateUI(3);
 	}
 
-	void ActivateUI(int index )
+	void ActivateUI(int index)
 	{
+		if (!_gunSwitching.IsMainGun)
+			return;
+		
 		for (int i = 0; i < _imagesCircles.Length; i++)
 		{
 			if (i == index)
