@@ -46,6 +46,8 @@ public class PlayerHealth : NetworkBehaviour
 	
 	[SerializeField] private SoundsDataSO _soundsData;
 	private AudioSource _audioSource;
+
+	private Vector3 _startPos;
 	
 	private EventBus _bus;
 
@@ -78,6 +80,9 @@ public class PlayerHealth : NetworkBehaviour
 		_audioSource = GetComponent<AudioSource>();
 		
 		_deathImage.gameObject.SetActive(false);
+
+		if (IsOwner)
+			_startPos = transform.position;
 	}
 
 	private void Update()
@@ -200,6 +205,8 @@ public class PlayerHealth : NetworkBehaviour
 		_respawnTimer.Value = 0;
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
+
+		transform.position = _startPos;
 
 		NotifyRespawnRpc(NetworkObject);
 	}

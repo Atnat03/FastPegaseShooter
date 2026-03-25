@@ -20,9 +20,7 @@ namespace GunDecorator.ChargedModules
                     IsCritical = _gunController.IsOverload,
                     ExplosionRadius = _explosionRadius
                 });
-
-                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, _recoilChargedMultiplier);
-
+                
                 StartCoroutine(ShootSalve(numberBulletShoot));
             }
             
@@ -38,6 +36,9 @@ namespace GunDecorator.ChargedModules
                 
                 AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Charged");
                 SoundManager.PlaySound(clip, _gunController._source, 0.5f);
+                
+                _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
+                _gunController.RecoilModule?.SetIsRecoil(true);
                 
                 yield return new WaitForSeconds(_intervaleCharge);
             }

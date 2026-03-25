@@ -1,5 +1,6 @@
 using System;
 using FishNet.Object;
+using GunDecorator;
 using UnityEngine;
 
 public enum Element{ Fire, Ice, Elek }
@@ -15,10 +16,14 @@ public class SecondaryGun : NetworkBehaviour, IGun
 	[SerializeField] private Transform _spawnPoint;
 	[SerializeField] private GameObject _model;
 	
+	[Header("Recoil")]
+	private RecoilModule _recoilModule;
+	
 	[Header("Settings")]
 	[SerializeField] private float _fireRate = 1;
 	[SerializeField] private float _maxDistance = 2000f;
 	[SerializeField] private float _bulletSpeed = 50;
+
 	
 	private bool _canShoot = true;
 	private float elapsedTime = 0;
@@ -29,6 +34,11 @@ public class SecondaryGun : NetworkBehaviour, IGun
 	#endregion
 	
 	#region Fonctions
+
+	void Start()
+	{
+		_recoilModule = GetComponent<RecoilModule>();
+	}
 
 	private void Update()
 	{
@@ -67,6 +77,9 @@ public class SecondaryGun : NetworkBehaviour, IGun
 		travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _bulletSpeed;
 		Vector3 direction = _camera.transform.forward.normalized;
 		
+		_recoilModule?.Recoil(_model.transform, _fireRate, false);
+		_recoilModule?.SetIsRecoil(true);
+		
 		SpawnVisualBulletServerRpc(direction, targetPoint);
 	}
 
@@ -85,7 +98,9 @@ public class SecondaryGun : NetworkBehaviour, IGun
 
 
 	public void TryCancelShooting()
-	{}
+	{
+		_recoilModule?.SetIsRecoil(false);
+	}
 
 	public void TryReload()
 	{ }
