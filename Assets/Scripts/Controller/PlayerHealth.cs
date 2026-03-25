@@ -30,8 +30,6 @@ public class PlayerHealth : NetworkBehaviour
 	[SerializeField] private PlayerAnimation _playerAnimation;
 	[SerializeField] private float _timeToRespawn = 5;
 	[SerializeField, Range(0f, 1f)] private float _critikStep = 0.5f;
-	private Vector3 _respawnPosition;
-	private Quaternion _respawnRotation;
 	private bool _initialized = false;
 	bool IsCritik = false;
 	
@@ -76,12 +74,6 @@ public class PlayerHealth : NetworkBehaviour
 		_currentHealth.OnChange += OnHealthChange;
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
-		
-		if (IsOwner)
-		{
-			_respawnPosition = transform.position;
-			_respawnRotation = transform.rotation;
-		}
 		
 		_audioSource = GetComponent<AudioSource>();
 		
@@ -208,9 +200,6 @@ public class PlayerHealth : NetworkBehaviour
 		_respawnTimer.Value = 0;
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
-		
-		transform.position = _respawnPosition;
-		transform.rotation = _respawnRotation;
 
 		NotifyRespawnRpc(NetworkObject);
 	}
