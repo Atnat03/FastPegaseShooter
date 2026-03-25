@@ -12,8 +12,10 @@ public abstract class EnemyMovingModule : EnemyBehaviourModule
 
     public virtual void OnNetworkTick()
     {
-        MoveAlongPath();
         _targetingModule.OnNetworkTick();
+        if(!_targetingModule.HasTarget()) return;
+        
+        MoveAlongPath();
     }
     
     public abstract void OnPlayerMoving(int playerObjectId, Vector3 playerPosition, PathfindingGridReader gridReader);

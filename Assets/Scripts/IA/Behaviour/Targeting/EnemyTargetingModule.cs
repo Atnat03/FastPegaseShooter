@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class EnemyTargetingModule : EnemyBehaviourModule
 {
-    public int p_targetId { get; private set; }
+    public int p_targetId { get; protected set; }
     public Vector3 p_lastTargetPosition =  Vector3.negativeInfinity;
     protected virtual bool IsNewTargetValid(PlayerPositionUpdateEvent PPUE) => true;
 
@@ -29,8 +29,6 @@ public abstract class EnemyTargetingModule : EnemyBehaviourModule
     {
         p_lastTargetPosition = PPUE.p_playerPosition;
     }
-    protected bool IsTargetPlayer(int playerId)  => playerId == p_targetId;
-
     public virtual Vector3 GetTargetPosition()
     {
         if(InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(p_targetId, out var value))
@@ -38,6 +36,8 @@ public abstract class EnemyTargetingModule : EnemyBehaviourModule
         
         return Vector3.positiveInfinity; 
     }
+
+    public virtual bool HasTarget() => true;
     public virtual bool IsMyTarget(int objectId)
     {
         return objectId == p_targetId;

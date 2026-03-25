@@ -12,32 +12,45 @@ public class ScoreTargetingModule : EnemyTargetingModule
     [SerializeField] private int _aggroPointPerDamageTaken;
     [SerializeField] private int _aggroPointPerSecond;
     [SerializeField] private int _aggroPointPerDamageDealed;
+    [SerializeField] private List<int> _aggroPointsThreshold = new List<int>(){0,100,200};
     
     [Header("Zones")]
     [SerializeField] private float _detectionZoneRadius;
     [SerializeField] private float _aggroZoneRadius;
     [SerializeField] private float _idealDistanceRadius;
+    
 
-    private HashSet<int> players = new HashSet<int>();
+    private HashSet<int> _players = new HashSet<int>();
     private Dictionary<int, int> _playerAggroValue = new Dictionary<int, int>();
     private Dictionary<int, bool> _playerInDetectionZone = new Dictionary<int, bool>();
 
     private List<int> _playerToAdd = new List<int>();
     
     private float _timeSincePointAdded;
-    
+    private int _currentThreshold;
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        p_targetId = -1;
+        _currentThreshold = 0;
+    }
+
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
         _timeSincePointAdded += (float)InstanceFinder.TimeManager.TickDelta;
         string text = "";
+        if(_currentThreshold < _aggroPointsThreshold.Count)
+            text = $"currentTarget: {p_targetId} => next threshold :{_aggroPointsThreshold[_currentThreshold]}";
+        
         foreach (var newEntry in _playerToAdd)
         {
-            players.Add(newEntry);
+            _players.Add(newEntry);
         }
         _playerToAdd.Clear();
         
-        foreach (int playerId in players)
+        foreach (int playerId in _players)
         {
             if(!InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(playerId, out NetworkObject playerObject))
             {
@@ -51,8 +64,24 @@ public class ScoreTargetingModule : EnemyTargetingModule
             if(sqrDistance <= _aggroZoneRadius * _aggroZoneRadius && _timeSincePointAdded > 1)
                     _playerAggroValue[playerId] += _aggroPointPerSecond;
             
+            //switching aggroCheck
+            if (_currentThreshold < _aggroPointsThreshold.Count &&
+                _playerAggroValue[playerId] > _aggroPointsThreshold[_currentThreshold])
+            {
+                p_targetId = playerId;
+                _currentThreshold++;
+                if (InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(playerId, out NetworkObject networkObject))
+                {
+                    p_lastTargetPosition = networkObject.transform.position;
+                }
+            }
+            if (p_targetId == playerId && _playerAggroValue[playerId] == 0)
+                p_targetId = -1;
+            
             text += $"p{playerId}: {_playerAggroValue[playerId]}";
         }
+
+        if (p_targetId == -1) _currentThreshold = 0;
 
         if (_timeSincePointAdded > 1) _timeSincePointAdded = 0;
         CustomLogger.HighlightLog(text);
@@ -90,6 +119,11 @@ public class ScoreTargetingModule : EnemyTargetingModule
             _playerAggroValue[PPUE.p_networkObjectId] += _aggroPointWhenInDetectZone;
             _playerInDetectionZone[PPUE.p_networkObjectId] = true;
         }
+    }
+
+    public override bool HasTarget()
+    {
+        return p_targetId != -1;
     }
 
     public void OnHitPlayer(int playerId, int damages)
