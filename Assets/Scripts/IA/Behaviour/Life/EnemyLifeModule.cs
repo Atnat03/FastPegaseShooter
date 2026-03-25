@@ -16,12 +16,16 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     public Action<bool, int> OnLifeUpdate;
     public Action OnDeath;
     
+    public Action<int, int> p_onHitPlayer;
+    
+    
     [HideInInspector] public float p_damageMultiplier = 1;
 
-    public virtual bool TakeDamage(int rawDamageAmount, bool isCritical = false)
+    public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
     {
         if (IsServerInitialized)
         {
+            p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
             OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
         }
         return isCritical;

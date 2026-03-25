@@ -11,13 +11,20 @@ public class EliteWeakPoint : EnemyLifeModule
     [SerializeField] private float _eliteDamageMultWhenDestroyed = 1;
     
     [Server]
-    public override bool TakeDamage(int rawDamageAmount, bool isCritical = false)
+    public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
     {
-        base.TakeDamage(rawDamageAmount, isCritical);
+        base.TakeDamage(attackerObjectId, rawDamageAmount, isCritical);
         if (IsServerInitialized)
         {
             int damages = GetDamageAmount(rawDamageAmount);
             p_life.Value -= damages;
+            
+            if(p_life.Value <= 0)
+            {
+                int damage = Mathf.RoundToInt(GetDamageAmount(rawDamageAmount) * _eliteDamageMultWhenDestroyed);
+                CustomLogger.HighlightLog($"Weak point hit damages : {damage}");
+                _enemyLifeModule.TakeDamage(attackerObjectId, rawDamageAmount, isCritical);
+            }
         }
 
         //Damages are always critical when done on weak point
@@ -29,9 +36,6 @@ public class EliteWeakPoint : EnemyLifeModule
     {
         base.Death(takenDamages);
         
-        int damages = Mathf.RoundToInt(takenDamages * _eliteDamageMultWhenDestroyed);
-        CustomLogger.HighlightLog($"Weak point hit damages : {damages}");
-        _enemyLifeModule.TakeDamage(damages, true);
         
         InstanceFinder.ServerManager.Despawn(gameObject);
     }

@@ -12,14 +12,27 @@ public class EnemyCore : NetworkBusListener
     [SerializeField] private List<EnemyLifeModule> _lifeModules = new List<EnemyLifeModule>();
     [SerializeField] private EnemyMovingModule _movingModule;
     
+    //Filled In Automatially
+    private List<ScoreTargetingModule> _scoreModules = new List<ScoreTargetingModule>();
+
     public Guid p_gridReaderId;
     [HideInInspector]public  int p_enemySpawnCost;
-
     public override void OnStartServer()
     {
         base.OnStartServer();
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
+        
+        //detect all scoreTargetingModule on gameObject
+        GetComponents<ScoreTargetingModule>(_scoreModules);
+        
+        foreach (EnemyAttackingModule module in _attackingModules)
+            foreach (ScoreTargetingModule scoreModule in _scoreModules)
+                module.p_onHitPlayer += scoreModule.OnHitPlayer;
+        
+        foreach (EnemyLifeModule module in _lifeModules)
+            foreach (ScoreTargetingModule scoreModule in _scoreModules)
+                module.p_onHitPlayer += scoreModule.OnDamageTaken;
     }
 
     public override void OnStopServer()
