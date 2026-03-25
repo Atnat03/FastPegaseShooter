@@ -17,7 +17,7 @@ public class SecondaryGun : NetworkBehaviour, IGun
 	[SerializeField] private GameObject _model;
 	
 	[Header("Recoil")]
-	private RecoilModule _recoilModule;
+	private RecoilSecond _recoilModule;
 	
 	[Header("Settings")]
 	[SerializeField] private float _fireRate = 1;
@@ -37,7 +37,7 @@ public class SecondaryGun : NetworkBehaviour, IGun
 
 	void Start()
 	{
-		_recoilModule = GetComponent<RecoilModule>();
+		_recoilModule = GetComponent<RecoilSecond>();
 	}
 
 	private void Update()
@@ -77,8 +77,7 @@ public class SecondaryGun : NetworkBehaviour, IGun
 		travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _bulletSpeed;
 		Vector3 direction = _camera.transform.forward.normalized;
 		
-		_recoilModule?.Recoil(_model.transform, _fireRate, false);
-		_recoilModule?.SetIsRecoil(true);
+		_recoilModule?.Recoil();
 		
 		SpawnVisualBulletServerRpc(direction, targetPoint);
 	}
@@ -98,9 +97,7 @@ public class SecondaryGun : NetworkBehaviour, IGun
 
 
 	public void TryCancelShooting()
-	{
-		_recoilModule?.SetIsRecoil(false);
-	}
+	{ }
 
 	public void TryReload()
 	{ }
