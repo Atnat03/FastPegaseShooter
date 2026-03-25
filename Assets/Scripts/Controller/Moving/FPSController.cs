@@ -57,6 +57,9 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [Tooltip("est ce que le joueur doit attendre la fin du slide avant de JumpSlide")] [SerializeField]
     private bool jumpSlideOnEndOfSlide = false;
 
+    [Tooltip("est ce que le joueur doit maintenir le clic pour continuer de se diriger vers le grapplePoint")]
+    [SerializeField] private bool singleClicGrapple;
+
     [Header("UnlockedCapacities")] public bool wallRideUnlocked = true;
     public bool slideUnlocked = true;
     public bool dashUnlocked = true;
@@ -813,8 +816,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     Coroutine wallRidingCoroutine;
     bool wallRidingCoroutineRunning;
 
-    [HideInInspector] public bool justWallridedOtherSide;
-    [HideInInspector] public bool justWallridedSameSide;
+    private bool justWallridedOtherSide;
+    private bool justWallridedSameSide;
 
     void EnterWallRidingState()
     {
@@ -1308,7 +1311,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     void GrappleUpdate()
     {
         if (!(Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f &&
-              playerInput.actions["Grapple"].IsPressed()))
+              (playerInput.actions["Grapple"].IsPressed() || singleClicGrapple)))
         {
             rb.linearVelocity = Vector3.zero;
             rb.AddForce(grappleDirection * _endGrappleImpulseForce, ForceMode.Impulse);

@@ -46,38 +46,50 @@ namespace Controller
             
             int startIndex = OwnerId % 2;
             _gunSwitching.Initialize(startIndex);
+
+            _gunSwitching.OnStartSwitchGun += StopReloadGun;
         }
 
         public void TryShootWithCurrentGun()
-        { 
+        {
+            if (_gunSwitching.IsSwitching) return;
+            
             CurrentGun.TryFire();
         }
 
         public void TryCancelShooting()
         {
+            if (_gunSwitching.IsSwitching) return;
+            
             CurrentGun.TryCancelShooting();
         }
         
         public void TryChargeWithCurrentGun()
-        { 
+        {             
+            if (_gunSwitching.IsSwitching) return;
+
             CurrentGun.TryCharging();
         }
 
         public void TryShootChargeShooting()
         {
+            if (_gunSwitching.IsSwitching) return;
+            
             CurrentGun.TryShootCharged();
         }
 
         public void TryReload()
         {
+            if (_gunSwitching.IsSwitching) return;
+            
             CurrentGun.TryReload();
         }
         
-        public void SwitchGunType()
+        public void SwitchGunType(bool state)
         {
             if (_localWantToSwitch) return;
             
-            _gunSwitching.SwitchGunType();
+            _gunSwitching.SwitchGunType(state);
         }
 
         [ServerRpc]
@@ -99,7 +111,7 @@ namespace Controller
 
         private void SwapingGun(SwapingGunEvent data)
         {
-            _wantToSwitch.Value = false;
+            ResetWantToSwitchServerRpc();
             StartCoroutine(WaitBeforeSwapCoroutine(data));
         }
 
@@ -161,6 +173,11 @@ namespace Controller
         private void ResetWantToSwitchServerRpc()
         {
             _wantToSwitch.Value = false;
+        }
+        
+        private void StopReloadGun()
+        {
+            CurrentMainSurchargeGun.StopReload();
         }
         
         void SetLayerRecursively(GameObject obj, int newLayer)

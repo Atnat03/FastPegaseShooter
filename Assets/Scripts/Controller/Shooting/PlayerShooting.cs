@@ -82,12 +82,31 @@ namespace Controller
             }
         }
 
-        private void SwitchGunType(InputAction.CallbackContext obj)
+        private void SwitchToMainGun(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
 
-            _bridgePlayer.SwitchGunType();
+            _bridgePlayer.SwitchGunType(true);
+        }
+        
+        private void SwitchToSecondGun(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+
+            _bridgePlayer.SwitchGunType(false);
+        }
+        
+        private void SwitchScollGun(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            float value = obj.ReadValue<float>();
+
+            if(value != 0)
+                _bridgePlayer.SwitchGunType(value > 0);
         }
 
         private void RequestSwapingGun(InputAction.CallbackContext obj)
@@ -105,7 +124,11 @@ namespace Controller
         {
             _playerInputAction.actions["Shoot"].performed += Shooting;
             _playerInputAction.actions["Charge"].performed += Charging;
-            _playerInputAction.actions["SwitchGunType"].performed += SwitchGunType;
+            
+            _playerInputAction.actions["SwitchMainGunType"].performed += SwitchToMainGun;
+            _playerInputAction.actions["SwitchSecondGunType"].performed += SwitchToSecondGun;
+            _playerInputAction.actions["SwitchGunScroll"].performed += SwitchScollGun;
+ 
             _playerInputAction.actions["SwapGun"].performed += RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed += Reloading;
         }
@@ -115,7 +138,11 @@ namespace Controller
         {
             _playerInputAction.actions["Shoot"].performed -= Shooting;
             _playerInputAction.actions["Charge"].performed -= Charging;
-            _playerInputAction.actions["SwitchGunType"].performed -= SwitchGunType;
+            
+            _playerInputAction.actions["SwitchMainGunType"].performed -= SwitchToMainGun;
+            _playerInputAction.actions["SwitchSecondGunType"].performed -= SwitchToSecondGun;
+            _playerInputAction.actions["SwitchGunScroll"].performed -= SwitchScollGun;
+            
             _playerInputAction.actions["SwapGun"].performed -= RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed -= Reloading;
         }
