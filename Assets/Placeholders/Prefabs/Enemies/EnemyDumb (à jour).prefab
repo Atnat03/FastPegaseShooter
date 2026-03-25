@@ -132,6 +132,8 @@ GameObject:
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: 6176439864006220930}
+  - component: {fileID: -5373042176863292788}
+  - component: {fileID: 4005584926992846120}
   m_Layer: 0
   m_Name: "EnemyDumb (\xE0 jour)"
   m_TagString: Untagged
@@ -172,13 +174,9 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _life: 60
-  _hitMarkerParent: {fileID: 3188806993101296044}
-  _textDmg: {fileID: 769879031349949937, guid: db53057fdd2066748b797f06e5df7027, type: 3}
-  _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
-  _cumuatifDmg: 0
-  _elapsedCumulativeDmgTime: 0
   _energyGainWhenTouch: 1
+  _life: 60
+  p_damageMultiplier: 1
 --- !u!114 &4856717765235199756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +192,7 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
+  _targetingModule: {fileID: 4005584926992846120}
   _speed: 3
 --- !u!114 &5913997660152659872
 MonoBehaviour:
@@ -210,10 +209,12 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _maxPlayerDistance: 10
-  _shootingDelay: 1
-  _ammoSpeed: 12
+  _targetingModule: {fileID: 4005584926992846120}
   _damage: 10
+  _attackDelay: 2
+  _maxPlayerDistance: 10
+  _ammoSpeed: 12
+  _maxAmmoLifeTime: 10
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -270,7 +271,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584273429281441560
+  _initializedTimestamp: -8584272227429962020
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -286,7 +287,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 26
+  <PrefabId>k__BackingField: 30
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 11985662873391357865
   SceneId: 0
@@ -341,6 +342,44 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
+--- !u!114 &-5373042176863292788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f6b4475ac4843d4798768881fa904fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCore
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
+  _maxEnemySwelling: 0
+  _attackingModules:
+  - {fileID: 5913997660152659872}
+  _lifeModules:
+  - {fileID: 4639033686446523756}
+  _movingModule: {fileID: 4856717765235199756}
+  p_enemySpawnCost: 0
+--- !u!114 &4005584926992846120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 099f65e195cc2e74fb0255db981497b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FluidTargetingModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
+  p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
 --- !u!1 &6364117521231957157
 GameObject:
   m_ObjectHideFlags: 0
