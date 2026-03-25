@@ -61,7 +61,7 @@ public class MenuSelectionArme : NetworkBehaviour
 		if (!_gunSwitching.IsMainGun)
 			return;
 		
-		for (int i = 0; i < _imagesCircles.Length; i++)
+		/*for (int i = 0; i < _imagesCircles.Length; i++)
 		{
 			if (i == index)
 			{
@@ -71,7 +71,7 @@ public class MenuSelectionArme : NetworkBehaviour
 			{
 				_imagesCircles[i].color = _baseColor;
 			}
-		}
+		}*/
 	}
 	
 	private void OnEnable()

@@ -103,7 +103,7 @@ namespace GunDecorator
                         continue;
                     }
                     s?.TryShoot();
-                    _recoilModule?.Recoil(_model.transform, 0.1f);
+                    _recoilModule?.Recoil(_model.transform, 0.1f, false);
                     _recoilModule?.SetIsRecoil(true);
                     SetAmmo(GetCurrentAmmo() - 1);
                     PlayMuzzleFlash();
@@ -134,7 +134,7 @@ namespace GunDecorator
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 PlayMuzzleFlash();
-                _recoilModule?.Recoil(_model.transform, s.FireRate);
+                _recoilModule?.Recoil(_model.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
                 SetAmmo(GetCurrentAmmo() - 1);
                 
