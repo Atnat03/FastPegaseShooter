@@ -12,6 +12,9 @@ public class GunSwitchingView : MonoBehaviour
 	#region Variables
 
 	[SerializeField] private GunSwitching _gunSwitching;
+	[SerializeField] private Transform _enablePos;
+	[SerializeField] private Transform _disablePos;
+	
 	
 	[Header("UI Main")]
 	[SerializeField] private GameObject _enableMainImage;
@@ -28,26 +31,56 @@ public class GunSwitchingView : MonoBehaviour
 
 	private void OnEnable()
 	{
-		SwapUI();
+		_enableMainImage.SetActive(_gunSwitching.IsMainGun);
+		_disableMainImage.SetActive(!_gunSwitching.IsMainGun);
+		_enableSecondImage.SetActive(!_gunSwitching.IsMainGun);
+		_disableSecondImage.SetActive(_gunSwitching.IsMainGun);
+		
 		_gunSwitching.OnStartSwitchGun += SwapUI;
 	}
 
 	private void SwapUI()
 	{
 		bool main = _gunSwitching.IsMainGun;
+		GameObject dObject, eObject;
 		
+		if (main)
+		{
+			eObject = _enableMainImage;
+			dObject = _enableSecondImage;
+		}
+		else
+		{
+			dObject = _enableMainImage;
+			eObject = _enableSecondImage;
+		}
+		
+		StartCoroutine(SwapGunsUI(dObject, eObject, main));
+	}
+
+	IEnumerator SwapGunsUI(GameObject disableObject, GameObject enableObject ,bool main)
+	{
+		_enableMainImage.SetActive(true);
+		_enableSecondImage.SetActive(true);
+		
+		float duration = 0.5f;
+		float elapsedTime = 0f;
+
+		while (elapsedTime < duration)
+		{
+			elapsedTime += Time.deltaTime;
+			
+			disableObject.transform.position = Vector3.Lerp(disableObject.transform.position, _disablePos.position, elapsedTime / duration);
+			enableObject.transform.position = Vector3.Lerp(disableObject.transform.position, _enablePos.position, elapsedTime / duration);
+			
+			yield return null;
+		}
+				
 		_enableMainImage.SetActive(main);
 		_disableMainImage.SetActive(!main);
 		_enableSecondImage.SetActive(!main);
 		_disableSecondImage.SetActive(main);
-		
-		//StartCoroutine(SwapGunsUI());
 	}
-
-	/*IEnumerator SwapGunsUI(GameObject target, Transform final, bool main)
-	{
-		
-	}*/
 
 
 	private void OnDisable()
