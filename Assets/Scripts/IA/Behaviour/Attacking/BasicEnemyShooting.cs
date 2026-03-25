@@ -1,3 +1,4 @@
+using System;
 using FishNet;
 using UnityEngine;
 using FishNet.Object;
@@ -28,7 +29,8 @@ public class BasicEnemyShooting : EnemyAttackingModule
                 p_direction = dir,
                 p_speed = _ammoSpeed,
                 p_damage = _damage,
-                p_aliveTime = _maxAmmoLifeTime
+                p_aliveTime = _maxAmmoLifeTime,
+                p_enemyAttackingModule = this
             });
         }
     }
@@ -36,7 +38,9 @@ public class BasicEnemyShooting : EnemyAttackingModule
     protected override bool CanAttack()
     {
         if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
+        {
             return false;
+        }
 
 
         Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
@@ -73,4 +77,5 @@ public struct EnemyShootingEvent
     public float p_speed;
     public int p_damage;
     public float p_aliveTime;
+    public EnemyAttackingModule p_enemyAttackingModule;
 }

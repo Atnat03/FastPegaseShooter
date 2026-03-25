@@ -1,3 +1,4 @@
+using System;
 using CustomConsole.Runtime.Logger;
 using FishNet;
 using UnityEngine;
@@ -13,8 +14,9 @@ public class EnemyBullet
 
     public int p_bulletId;
     public int p_bulletStrenght;
+    public EnemyAttackingModule p_attackingModule;
 
-    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, float maxLifeTime, int bulletId, int strenght)
+    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, float maxLifeTime, int bulletId, int strenght, EnemyAttackingModule attackingModule)
     {
         _startPos = startPos;
         _lastPosition = startPos;
@@ -24,6 +26,7 @@ public class EnemyBullet
         p_bulletId = bulletId;
         p_bulletStrenght = strenght;
         _maxLifeTime = maxLifeTime;
+        p_attackingModule = attackingModule;
     }
 
     /// <summary>

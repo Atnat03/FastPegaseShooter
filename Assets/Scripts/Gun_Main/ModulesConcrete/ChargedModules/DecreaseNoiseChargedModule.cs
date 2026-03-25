@@ -5,7 +5,6 @@ namespace GunDecorator.ChargedModules
     public class DecreaseNoiseChargedModule : ChargedParentModule
     {
         [Header("Salve")] 
-        [SerializeField] private int _numberBulletInCharge = 10;
         [SerializeField] private AnimationCurve _noiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
         [SerializeField] private float _startMaxNoiseAngle = 10;
         
@@ -20,7 +19,8 @@ namespace GunDecorator.ChargedModules
                     ExplosionRadius = _explosionRadius
                 });
 
-                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, _recoilChargedMultiplier);
+                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
+                _gunController.RecoilModule?.SetIsRecoil(true);
 
                 int numberBulletShoot = (int)Mathf.Lerp(_numberBulletInCharge, 0, _charginTimer / _timeToCharge);
 
