@@ -10,7 +10,7 @@ public class BasicEnemyMelee : EnemyAttackingModule
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
-        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack(out int playerObjectId))
+        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack())
         {
             _waitedTimeSinceAttack = 0;
             
@@ -23,14 +23,13 @@ public class BasicEnemyMelee : EnemyAttackingModule
                     playerN = player,
                     value = _damage
                 });
-                OnHitPlayer?.Invoke(player.ObjectId, _damage);
+                p_onHitPlayer?.Invoke(player.ObjectId, _damage);
             }
         }
     }
 
-    protected override bool CanAttack(out int playerObjectId)
+    protected override bool CanAttack()
     {
-        playerObjectId = 0;
         if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
         {
             return false;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class EnemyAttackingModule : EnemyBehaviourModule
 {
-    public Action<int, int> OnHitPlayer;
+    public Action<int, int> p_onHitPlayer;
     
     [SerializeField] protected EnemyTargetingModule _targetingModule;
     
@@ -12,7 +12,7 @@ public abstract class EnemyAttackingModule : EnemyBehaviourModule
     [SerializeField] protected float _attackDelay = 2f;
     protected float _waitedTimeSinceAttack;
 
-    protected abstract bool CanAttack(out int playerObjectId);
+    protected abstract bool CanAttack();
 
     public virtual void OnNetworkTick()
     {

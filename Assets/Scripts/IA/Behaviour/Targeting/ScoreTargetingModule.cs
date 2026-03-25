@@ -24,9 +24,12 @@ public class ScoreTargetingModule : EnemyTargetingModule
 
     private List<int> _playerToAdd = new List<int>();
     
+    private float _timeSincePointAdded;
+    
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
+        _timeSincePointAdded += (float)InstanceFinder.TimeManager.TickDelta;
         string text = "";
         foreach (var newEntry in _playerToAdd)
         {
@@ -45,12 +48,13 @@ public class ScoreTargetingModule : EnemyTargetingModule
             
             
             //Player in aggro zone
-            if(sqrDistance <= _aggroZoneRadius * _aggroZoneRadius)
+            if(sqrDistance <= _aggroZoneRadius * _aggroZoneRadius && _timeSincePointAdded > 1)
                     _playerAggroValue[playerId] += _aggroPointPerSecond;
             
             text += $"p{playerId}: {_playerAggroValue[playerId]}";
         }
-        
+
+        if (_timeSincePointAdded > 1) _timeSincePointAdded = 0;
         CustomLogger.HighlightLog(text);
     }
 
@@ -91,6 +95,10 @@ public class ScoreTargetingModule : EnemyTargetingModule
     public void OnHitPlayer(int playerId, int damages)
     {
         _playerAggroValue[playerId] += damages*_aggroPointPerDamageDealed;
+    }
+    public void OnDamageTaken(int playerId, int damages)
+    {
+        _playerAggroValue[playerId] += damages*_aggroPointPerDamageTaken;
     }
 
     private void OnDrawGizmos()

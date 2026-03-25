@@ -20,9 +20,9 @@ public class BasicEnemyLife : EnemyLifeModule
     }
 
     [Server]
-    public override bool TakeDamage(int rawDamageAmount, bool isCritical = false)
+    public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
     {
-        base.TakeDamage(rawDamageAmount, isCritical);
+        base.TakeDamage(attackerObjectId, rawDamageAmount, isCritical);
         
         if (IsServerInitialized)
         {

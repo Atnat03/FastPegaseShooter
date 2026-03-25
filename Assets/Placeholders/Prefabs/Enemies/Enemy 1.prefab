@@ -281,7 +281,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584272256108584326
+  _initializedTimestamp: -8584271682447549124
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -538,7 +538,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584272256108584326
+  _initializedTimestamp: -8584271682447549124
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -581,6 +581,7 @@ GameObject:
   - component: {fileID: 8280671740658429549}
   - component: {fileID: -8997744782067408838}
   - component: {fileID: 6912678073703625548}
+  - component: {fileID: -2748586939674322534}
   m_Layer: 0
   m_Name: Enemy 1
   m_TagString: Enemy
@@ -625,8 +626,11 @@ MonoBehaviour:
   _maxEnemySwelling: 0
   _attackingModules:
   - {fileID: 2460980101886863971}
+  - {fileID: -2748586939674322534}
   _lifeModules:
   - {fileID: 4639033686446523756}
+  - {fileID: 8676698036849061702}
+  - {fileID: 1267449697482659097}
   _movingModule: {fileID: 4856717765235199756}
   p_enemySpawnCost: 0
 --- !u!114 &2460980101886863971
@@ -748,6 +752,7 @@ MonoBehaviour:
   - {fileID: 4856717765235199756}
   - {fileID: -8997744782067408838}
   - {fileID: 6912678073703625548}
+  - {fileID: -2748586939674322534}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects:
   - {fileID: 621410928043515991}
@@ -760,7 +765,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584272256108584326
+  _initializedTimestamp: -8584271682447549124
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -847,13 +852,34 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
-  _aggroPointWhenInDetectZone: 10
+  _aggroPointWhenInDetectZone: 0
   _aggroPointPerDamageTaken: 0
   _aggroPointPerSecond: 1
   _aggroPointPerDamageDealed: 0
   _detectionZoneRadius: 10
   _aggroZoneRadius: 5
   _idealDistanceRadius: 3
+--- !u!114 &-2748586939674322534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6ba93510160064a98da7ea092fae40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyShooting
+  _componentIndexCache: 7
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
+  _targetingModule: {fileID: 2780056509964836476}
+  _damage: 10
+  _attackDelay: 2
+  _maxPlayerDistance: 10
+  _ammoSpeed: 1
+  _maxAmmoLifeTime: 10
 --- !u!1 &6364117521231957157
 GameObject:
   m_ObjectHideFlags: 0

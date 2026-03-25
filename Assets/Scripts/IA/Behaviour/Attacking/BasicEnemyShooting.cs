@@ -1,3 +1,4 @@
+using System;
 using FishNet;
 using UnityEngine;
 using FishNet.Object;
@@ -14,7 +15,7 @@ public class BasicEnemyShooting : EnemyAttackingModule
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
-        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack(out int playerObjectId))
+        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack())
         {
             _waitedTimeSinceAttack = 0;
 
@@ -28,17 +29,16 @@ public class BasicEnemyShooting : EnemyAttackingModule
                 p_direction = dir,
                 p_speed = _ammoSpeed,
                 p_damage = _damage,
-                p_aliveTime = _maxAmmoLifeTime
+                p_aliveTime = _maxAmmoLifeTime,
+                p_enemyAttackingModule = this
             });
-            OnHitPlayer?.Invoke(playerObjectId, _damage);
         }
     }
 
-    protected override bool CanAttack(out int playerObjectId)
+    protected override bool CanAttack()
     {
         if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
         {
-            playerObjectId = 0;
             return false;
         }
 
@@ -53,12 +53,10 @@ public class BasicEnemyShooting : EnemyAttackingModule
         {
             if (hit.collider.CompareTag("Player"))
             {
-                playerObjectId = hit.collider.transform.root.GetComponent<NetworkObject>().ObjectId;
                 return true;
             }
         }
 
-        playerObjectId = 0;
         return false;
     }
 
@@ -79,4 +77,5 @@ public struct EnemyShootingEvent
     public float p_speed;
     public int p_damage;
     public float p_aliveTime;
+    public EnemyAttackingModule p_enemyAttackingModule;
 }

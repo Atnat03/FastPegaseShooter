@@ -50,6 +50,9 @@ public class EnemyBulletManager : NetworkBehaviour
                     playerN = playerHealth.NetworkObject,
                     value = _spawnedBullets[i].p_bulletStrenght
                 });
+                _spawnedBullets[i].p_attackingModule.p_onHitPlayer?.Invoke(
+                    playerHealth.NetworkObject.ObjectId,
+                    _spawnedBullets[i].p_bulletStrenght);
                 
                 
                 //EnemyBullet bullet = _spawnedBullets[i];
@@ -71,7 +74,7 @@ public class EnemyBulletManager : NetworkBehaviour
     void AddBullet(EnemyShootingEvent ESE)
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
-        EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, networkTime, ESE.p_aliveTime,_lastBulletId, ESE.p_damage);
+        EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, networkTime, ESE.p_aliveTime,_lastBulletId, ESE.p_damage, ESE.p_enemyAttackingModule);
 
         _lastBulletId++;
         

@@ -28,7 +28,11 @@ public class EnemyCore : NetworkBusListener
         
         foreach (EnemyAttackingModule module in _attackingModules)
             foreach (ScoreTargetingModule scoreModule in _scoreModules)
-                module.OnHitPlayer += scoreModule.OnHitPlayer;
+                module.p_onHitPlayer += scoreModule.OnHitPlayer;
+        
+        foreach (EnemyLifeModule module in _lifeModules)
+            foreach (ScoreTargetingModule scoreModule in _scoreModules)
+                module.p_onHitPlayer += scoreModule.OnDamageTaken;
     }
 
     public override void OnStopServer()
