@@ -30,6 +30,7 @@ namespace GunDecorator.ChargedModules
         #region Variables
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
+        protected IRecoilModule _recoilModule;
 
         [SerializeField] protected bool _isExplosifAmmo = false;
         [SerializeField] protected float _explosionRadius = 1f;
@@ -39,6 +40,7 @@ namespace GunDecorator.ChargedModules
         [SerializeField] protected float _deadZoneStartCharging = 0.5f;
         [SerializeField] protected float _recoilChargedMultiplier = 1.25f;
         [SerializeField] protected float _isFullMultiplicator = 0.9f;
+        [SerializeField] protected int _numberBulletInCharge = 10;
         private bool _fullCharged = false;
         protected bool _charging = false;
         private bool _deadZoneCharge = false;

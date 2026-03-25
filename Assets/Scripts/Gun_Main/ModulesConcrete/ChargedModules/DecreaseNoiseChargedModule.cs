@@ -5,7 +5,6 @@ namespace GunDecorator.ChargedModules
     public class DecreaseNoiseChargedModule : ChargedParentModule
     {
         [Header("Salve")] 
-        [SerializeField] private int _numberBulletInCharge = 10;
         [SerializeField] private AnimationCurve _noiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
         [SerializeField] private float _startMaxNoiseAngle = 10;
         

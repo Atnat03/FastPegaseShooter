@@ -36,6 +36,8 @@ namespace GunDecorator
         private void Update()
         {
             _ammoText.text = CurrentAmmo +  "/" + _magazineSize;
+            
+            _currentAmmo = Mathf.Clamp(_currentAmmo, 0, _magazineSize);
         }
 
         public void StopReload()

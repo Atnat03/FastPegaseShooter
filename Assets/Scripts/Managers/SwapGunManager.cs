@@ -43,7 +43,6 @@ namespace Managers
         [SerializeField] private TextMeshProUGUI _textSwapUI;
         [SerializeField] private string _youAskSwapMessage;
         [SerializeField] private string _broAskyouSwapMessage;
-        [SerializeField] private Image _surchargeImage;
         
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;

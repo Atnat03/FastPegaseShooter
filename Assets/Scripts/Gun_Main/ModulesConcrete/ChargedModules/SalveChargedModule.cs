@@ -6,7 +6,6 @@ namespace GunDecorator.ChargedModules
     public class SalveChargedModule : ChargedParentModule
     {
         [Header("Salve")] 
-        [SerializeField] private int _numberBulletInCharge = 10;
         [SerializeField] private float _intervaleCharge = 0.05f;
         
         public override void TryShootCharging()
