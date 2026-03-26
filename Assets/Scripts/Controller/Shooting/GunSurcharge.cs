@@ -61,7 +61,7 @@ namespace Controller
                 }
             }
 
-            OnOverloadTimeUpdate?.Invoke(_isOverload, _elapsedTimeOverload);
+            OnOverloadTimeUpdate?.Invoke(_isOverload, _elapsedTimeOverload/_currentOverloadTimer);
         }
 
     }
