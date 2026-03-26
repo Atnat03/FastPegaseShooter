@@ -1323,12 +1323,17 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             _currentGrapplePoint = null;
             stateMachine.ChangeState(ControlerState.Idle);
         }
+
+        if (playerInput.actions["Grapple"].WasPressedThisFrame() && singleClicGrapple)
+        {
+            stateMachine.ChangeState(ControlerState.Idle);
+            rb.linearVelocity = Vector3.zero;
+        }
     }
 
     void GrappleFixedUpdate()
     {
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
-
 
         Vector3 newDir = grappleDirection;
         if (rb.linearVelocity.magnitude > 0.1 && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f && Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
