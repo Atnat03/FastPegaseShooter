@@ -5186,6 +5186,7 @@ GameObject:
   - component: {fileID: 300968199624122896}
   - component: {fileID: 8957410558547212102}
   - component: {fileID: 2365660128279577883}
+  - component: {fileID: 3370754105169483692}
   m_Layer: 11
   m_Name: Gun
   m_TagString: Untagged
@@ -5259,7 +5260,6 @@ MonoBehaviour:
   _gunBridge: {fileID: 300968199624122896}
   _isOverload: 0
   _elapsedTimeOverload: 0
-  _infoOverload: {fileID: 7996410386911518169}
 --- !u!114 &2365660128279577883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5281,6 +5281,20 @@ MonoBehaviour:
   _bobAmount: 0.04
   _verticalBumpForce: 0.005
   _smoothTimeVerticalBump: 0.01
+--- !u!114 &3370754105169483692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8149685527222359090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5dd76e2d6f00b747af1b05379bb19a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunSwapView
+  _gunSurcharge: {fileID: 8957410558547212102}
+  _infoOverload: {fileID: 7996410386911518169}
 --- !u!1 &8390140244956644506
 GameObject:
   m_ObjectHideFlags: 0

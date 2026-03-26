@@ -12,9 +12,8 @@ namespace Controller
         public int GetCurrentMainIndex => _gunSwitching.CurrentMainGunIndex;
         public int GetCurrentAmmo => CurrentMainSurchargeGun.GetCurrentAmmo();
         
-        public IGun CurrentGun => _gunSwitching.IsMainGun ? _gunSwitching.CurrentMainGun.GetComponent<IGun>() : _gunSwitching.CurrentSecondaryGun.GetComponent<IGun>();
-
-        public ISurcharge CurrentMainSurchargeGun => _gunSwitching.CurrentMainGun.GetComponent<ISurcharge>();
+        private IGun CurrentGun => _gunSwitching.IsMainGun ? _gunSwitching.IGunMain : _gunSwitching.IGunSecondary;
+        public ISurcharge CurrentMainSurchargeGun => _gunSwitching.ISurchargeMain;
         
         [SerializeField] private GunSwitching _gunSwitching;
         [SerializeField] private GunSurcharge _gunSurcharge;

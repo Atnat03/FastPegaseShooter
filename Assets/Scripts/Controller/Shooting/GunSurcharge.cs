@@ -13,9 +13,11 @@ namespace Controller
         [SerializeField] private bool _isOverload = false;
         [SerializeField] private float _elapsedTimeOverload = 0;
         private float _currentOverloadTimer = 0;
-        [SerializeField] private Image _infoOverload;
 
         private EventBus _bus;
+        
+        public Action<bool, float> OnOverloadTimeUpdate;
+        public Action<Color> OnInfoOverloadSetColor;
 
         private void Awake()
         {
@@ -40,14 +42,11 @@ namespace Controller
 
         public void SetColorImage(Color color)
         {
-            _infoOverload.color = color;
+            OnInfoOverloadSetColor?.Invoke(color);
         }
 
         private void OverloadTimer()
         {
-            _infoOverload.gameObject.SetActive(_isOverload);
-            _infoOverload.fillAmount = _elapsedTimeOverload / _currentOverloadTimer;
-            
             if (_isOverload)
             {
                 if (_elapsedTimeOverload > 0)
@@ -61,6 +60,8 @@ namespace Controller
                     SetOverloadStats(false, 0, 1, 1);
                 }
             }
+
+            OnOverloadTimeUpdate?.Invoke(_isOverload, _elapsedTimeOverload);
         }
 
     }
