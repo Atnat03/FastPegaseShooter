@@ -371,7 +371,7 @@ MonoBehaviour:
   priority: 1
   blendDistance: 0
   weight: 0
-  sharedProfile: {fileID: 11400000, guid: 100df2be6b021e94b905b25858d296eb, type: 2}
+  sharedProfile: {fileID: 0}
 --- !u!1 &338727312761180430
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,9 +863,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bcf555de9cb8d243a9dc0a0de2b7f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecondaryGun
-  _componentIndexCache: 255
+  _componentIndexCache: 13
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _element: 1
   _ammoPrefab: {fileID: 6619259697856463671, guid: 5b43197e23b534e42b1c0a4adae93c56, type: 3}
   _camera: {fileID: 3061844143884342809}
@@ -1862,7 +1862,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2624057951769441985}
   serializedVersion: 5
-  m_Mass: 3
+  m_Mass: 2.85
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1916,14 +1916,14 @@ MonoBehaviour:
   slideUnlocked: 1
   dashUnlocked: 1
   slopeSlideUnlocked: 1
-  cameraSpringHalfLife: 0.075
+  cameraSpringHalfLife: 0.025
   cameraSpringFrequency: 22.5
-  rollSmoothing: 15
+  rollSmoothing: 40
   mouseSensitivity: 0.2
   verticalLimit: 75
   moveSpeed: 9.5
   groundMomentumFactor: 2
-  sideStepImpulseForce: 3
+  sideStepImpulseForce: 2
   wallDetectionRange: 0
   walkableSlopeAngle: 45
   maxStepHeight: 1
@@ -1934,7 +1934,7 @@ MonoBehaviour:
   wallRidingHeadbobFrequency: 25
   headbobStopReturningSpeed: 5
   jumpForce: 22.5
-  airControlForce: 3
+  airControlForce: 4.5
   maxAirSpeed: 6
   airDrag: 0.5
   bufferJumpTime: 0.2
@@ -1962,11 +1962,11 @@ MonoBehaviour:
   - {fileID: 3153661936363678950}
   topHeightCrouchedCollider: {fileID: 4821877748357995787}
   slideSpeed: 15
-  slideMinTimeDuration: 1
-  slideMaxTimeDuration: 3
-  slideJumpVerticalForce: 19.5
+  slideMinTimeDuration: 0.2
+  slideMaxTimeDuration: 2.8
+  slideJumpVerticalForce: 22.5
   slideJumpHorizontalForce: 2
-  slideCooldown: 2
+  slideCooldown: 0.2
   coyoteSlideDuration: 0.1
   CameraSlideFOV: 85
   slidingBackToNormalSpeedDelay: 1
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   _castWidth: 0.5
   _castMaxDistance: 20
   _grapplingSpeed: 40
-  _grappleRedirectionSpeed: 8
+  _grappleRedirectionSpeed: 40
   _endGrappleImpulseForce: 30
   grounded: 0
   leftSideAgainstWall: 0
@@ -2096,37 +2096,12 @@ MonoBehaviour:
   - {fileID: 131834426877456924}
   - {fileID: 3154577241410043838}
   - {fileID: 300968199624122896}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 869206034996917951}
+  - {fileID: 3971557696978764178}
+  - {fileID: 6742485578398167153}
   InitializedParentNetworkBehaviour: {fileID: 0}
-  InitializedNestedNetworkObjects: []
+  InitializedNestedNetworkObjects:
+  - {fileID: 5539410192433701908}
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
   _isNetworked: 1
@@ -2135,7 +2110,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584272437777168490
+  _initializedTimestamp: -8584270748796559503
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -2151,7 +2126,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 16
+  <PrefabId>k__BackingField: 12
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 6683661854146624352
   SceneId: 0
@@ -2703,9 +2678,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bcf555de9cb8d243a9dc0a0de2b7f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecondaryGun
-  _componentIndexCache: 255
+  _componentIndexCache: 14
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _element: 0
   _ammoPrefab: {fileID: 6619259697856463671, guid: 75e54c72f8fa09244a248ab173e6e647, type: 3}
   _camera: {fileID: 3061844143884342809}
@@ -4325,9 +4300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bcf555de9cb8d243a9dc0a0de2b7f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecondaryGun
-  _componentIndexCache: 255
+  _componentIndexCache: 15
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 7927807153383519047}
   _element: 2
   _ammoPrefab: {fileID: 6619259697856463671, guid: b5753e7897454d7488479ef613d89cfe, type: 3}
   _camera: {fileID: 3061844143884342809}
@@ -6822,6 +6797,146 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2571651778359029525}
     m_Modifications:
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _initializedTimestamp
+      value: -8584270748796559503
+      objectReference: {fileID: 0}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: <IsNested>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: <PrefabId>k__BackingField
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: NetworkBehaviours.Array.size
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: <ComponentIndex>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[8]'
+      value: 
+      objectReference: {fileID: 8626901796585579507}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[9]'
+      value: 
+      objectReference: {fileID: 1558574577208680575}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[10]'
+      value: 
+      objectReference: {fileID: 4667889534577792590}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[11]'
+      value: 
+      objectReference: {fileID: 4108116853922842008}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[12]'
+      value: 
+      objectReference: {fileID: 7557458434173687512}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[13]'
+      value: 
+      objectReference: {fileID: 7731343862291320824}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[14]'
+      value: 
+      objectReference: {fileID: 8796539737316996173}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[15]'
+      value: 
+      objectReference: {fileID: 6154372736321769268}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[16]'
+      value: 
+      objectReference: {fileID: 219218631671859702}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[17]'
+      value: 
+      objectReference: {fileID: 3071663691151648594}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[18]'
+      value: 
+      objectReference: {fileID: 8725338982732411104}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[19]'
+      value: 
+      objectReference: {fileID: 7744048412683742324}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[20]'
+      value: 
+      objectReference: {fileID: 6500108499577103005}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[21]'
+      value: 
+      objectReference: {fileID: 3954904171555899916}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[22]'
+      value: 
+      objectReference: {fileID: 3934804178846433990}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[23]'
+      value: 
+      objectReference: {fileID: 3874387994779618593}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[24]'
+      value: 
+      objectReference: {fileID: 5311909569723153436}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[25]'
+      value: 
+      objectReference: {fileID: 8850256140603045240}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[26]'
+      value: 
+      objectReference: {fileID: 8981642852519101451}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[27]'
+      value: 
+      objectReference: {fileID: 43986294890614405}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[28]'
+      value: 
+      objectReference: {fileID: 3215290084546590920}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[29]'
+      value: 
+      objectReference: {fileID: 1142506762127253467}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[30]'
+      value: 
+      objectReference: {fileID: 1869490300898767730}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[31]'
+      value: 
+      objectReference: {fileID: 4123589606864636569}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[32]'
+      value: 
+      objectReference: {fileID: 6860789947931749886}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[33]'
+      value: 
+      objectReference: {fileID: 817262029011514003}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[34]'
+      value: 
+      objectReference: {fileID: 7445725968531030089}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[35]'
+      value: 
+      objectReference: {fileID: 4326445471948905439}
+    - target: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: InitializedParentNetworkBehaviour
+      value: 
+      objectReference: {fileID: 1792326860910464111}
     - target: {fileID: 871696745003016237, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _hitMarkerParent
       value: 
@@ -6833,6 +6948,10 @@ PrefabInstance:
     - target: {fileID: 871696745003016237, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 871696745003016237, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 925798460529762584, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _hitMarkerParent
@@ -6845,6 +6964,10 @@ PrefabInstance:
     - target: {fileID: 925798460529762584, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 925798460529762584, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 958775187233696503, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: m_ResetSeedOnPlay
@@ -6873,7 +6996,7 @@ PrefabInstance:
     - target: {fileID: 1020401213551579923, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5539410192433701908}
     - target: {fileID: 1566530226216134048, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _addedNetworkObject
       value: 
@@ -6881,7 +7004,7 @@ PrefabInstance:
     - target: {fileID: 1566530226216134048, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5539410192433701908}
     - target: {fileID: 1693488478359352468, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: m_Name
       value: Principal
@@ -6897,6 +7020,10 @@ PrefabInstance:
     - target: {fileID: 2126207841484970669, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 2126207841484970669, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2126207841484970669, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _recoilCurve.m_Curve.Array.size
@@ -6989,6 +7116,10 @@ PrefabInstance:
     - target: {fileID: 2140033923800430881, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 2140033923800430881, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 2140033923800430881, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _cameraShakeSettings.x
@@ -7013,6 +7144,10 @@ PrefabInstance:
     - target: {fileID: 2174098306734097293, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 2174098306734097293, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2567676202728233569, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _addedNetworkObject
@@ -7021,6 +7156,10 @@ PrefabInstance:
     - target: {fileID: 2567676202728233569, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 2567676202728233569, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3025542192401954987, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _camera
@@ -7033,6 +7172,10 @@ PrefabInstance:
     - target: {fileID: 3025542192401954987, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 3025542192401954987, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 3210921662057479224, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: m_ResetSeedOnPlay
@@ -7061,6 +7204,10 @@ PrefabInstance:
     - target: {fileID: 3242460607509936072, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 3242460607509936072, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3400955675133832890, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: m_ResetSeedOnPlay
@@ -7093,6 +7240,10 @@ PrefabInstance:
     - target: {fileID: 3894806976875201307, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 3894806976875201307, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4574882201610578249, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _addedNetworkObject
@@ -7101,6 +7252,10 @@ PrefabInstance:
     - target: {fileID: 4574882201610578249, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 4574882201610578249, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 4607030349333828305, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: WasActiveDuringEdit
@@ -7117,6 +7272,10 @@ PrefabInstance:
     - target: {fileID: 4622992160538828633, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 4622992160538828633, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 4622992160538828633, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _recoilCurve.m_Curve.Array.size
@@ -7205,7 +7364,7 @@ PrefabInstance:
     - target: {fileID: 4626028606232439308, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5539410192433701908}
     - target: {fileID: 4634684563791320979, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _addedNetworkObject
       value: 
@@ -7213,6 +7372,10 @@ PrefabInstance:
     - target: {fileID: 4634684563791320979, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 4634684563791320979, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 4664174277412565503, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _recoilTransform
@@ -7225,7 +7388,7 @@ PrefabInstance:
     - target: {fileID: 4664174277412565503, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5539410192433701908}
     - target: {fileID: 4664174277412565503, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _recoilCurve.m_Curve.Array.size
       value: 3
@@ -7277,7 +7440,7 @@ PrefabInstance:
     - target: {fileID: 4790524962655085683, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5539410192433701908}
     - target: {fileID: 4831827870365603956, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _camera
       value: 
@@ -7289,6 +7452,10 @@ PrefabInstance:
     - target: {fileID: 4831827870365603956, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 4831827870365603956, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 5748976869219504333, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _addedNetworkObject
@@ -7297,6 +7464,10 @@ PrefabInstance:
     - target: {fileID: 5748976869219504333, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 5748976869219504333, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5761054338846891980, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _recoilTransform
@@ -7309,6 +7480,10 @@ PrefabInstance:
     - target: {fileID: 5761054338846891980, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 5761054338846891980, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 5761054338846891980, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _recoilCurve.m_Curve.Array.size
@@ -7369,6 +7544,10 @@ PrefabInstance:
     - target: {fileID: 6509266927354244509, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 6509266927354244509, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 6766217449847352973, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _camera
@@ -7381,7 +7560,7 @@ PrefabInstance:
     - target: {fileID: 6766217449847352973, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5539410192433701908}
     - target: {fileID: 8015084648155719207, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _ammoText
       value: 
@@ -7397,6 +7576,10 @@ PrefabInstance:
     - target: {fileID: 8015084648155719207, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 8015084648155719207, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8152673178008715728, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7449,6 +7632,10 @@ PrefabInstance:
     - target: {fileID: 8484883594436353187, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 8484883594436353187, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8671875607893413697, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _hitMarkerParent
@@ -7461,7 +7648,7 @@ PrefabInstance:
     - target: {fileID: 8671875607893413697, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5539410192433701908}
     - target: {fileID: 8723597115148356238, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _addedNetworkObject
       value: 
@@ -7469,6 +7656,10 @@ PrefabInstance:
     - target: {fileID: 8723597115148356238, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 8723597115148356238, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 9051656906786777030, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _hitMarkerParent
@@ -7481,6 +7672,10 @@ PrefabInstance:
     - target: {fileID: 9051656906786777030, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: _networkObjectCache
       value: 
+      objectReference: {fileID: 5539410192433701908}
+    - target: {fileID: 9051656906786777030, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: _componentIndexCache
+      value: 33
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -6035727985655329067, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
@@ -7531,9 +7726,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 255
+  _componentIndexCache: 8
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5539410192433701908}
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 1558574577208680575}
@@ -7553,9 +7748,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54694bd6bf22480cb93d2e412bbf17eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.SalveChargedModule
-  _componentIndexCache: 255
+  _componentIndexCache: 9
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5539410192433701908}
   moduleName: SalveChargedModule
   moduleColor: {r: 0, g: 1, b: 1, a: 1}
   _ammoType: {fileID: 3111108181786016728}
@@ -7600,9 +7795,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 255
+  _componentIndexCache: 34
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5539410192433701908}
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 4326445471948905439}
@@ -7622,9 +7817,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54694bd6bf22480cb93d2e412bbf17eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.SalveChargedModule
-  _componentIndexCache: 255
+  _componentIndexCache: 35
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5539410192433701908}
   moduleName: SalveChargedModule
   moduleColor: {r: 0, g: 1, b: 1, a: 1}
   _ammoType: {fileID: 6860789947931749886}
@@ -7636,6 +7831,39 @@ MonoBehaviour:
   _isFullMultiplicator: 0.9
   _numberBulletInCharge: 5
   _intervaleCharge: 0.1
+--- !u!114 &817262029011514003 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9051656906786777030, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585471345522989433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
+--- !u!114 &1142506762127253467 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8723597115148356238, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585471345522989433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
+--- !u!114 &1869490300898767730 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8015084648155719207, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585471345522989433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
 --- !u!114 &3111108181786016728 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6766217449847352973, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
@@ -7647,6 +7875,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModuleRealTimeObstacleDetection
+--- !u!114 &3215290084546590920 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6509266927354244509, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585471345522989433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
 --- !u!114 &3874387994779618593 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4831827870365603956, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
@@ -7658,6 +7897,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1c10d552aef42cf9e8fb79047b90af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.PhysicAmmoModule
+--- !u!114 &3934804178846433990 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4634684563791320979, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5218239709253605311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45db67dd1c8040edbc6fd3ca22e0271d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.FragShootModule
+--- !u!114 &3954904171555899916 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4622992160538828633, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5218239709253605311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
+--- !u!114 &4108116853922842008 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5748976869219504333, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5476626997768438032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
+--- !u!114 &4123589606864636569 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5761054338846891980, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585471345522989433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
+--- !u!114 &4667889534577792590 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3894806976875201307, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5476626997768438032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
 --- !u!1 &5218239709253605311 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4512721028681548522, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
@@ -7675,9 +7969,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 255
+  _componentIndexCache: 26
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5539410192433701908}
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 43986294890614405}
@@ -7697,9 +7991,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af359fc3e59411da93c658f8239b885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.DecreaseNoiseChargedModule
-  _componentIndexCache: 255
+  _componentIndexCache: 27
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5539410192433701908}
   moduleName: DecreaseNoiseChargedModule
   moduleColor: {r: 0, g: 1, b: 1, a: 1}
   _ammoType: {fileID: 3874387994779618593}
@@ -7735,6 +8029,17 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _startMaxNoiseAngle: 10
+--- !u!114 &5311909569723153436 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4574882201610578249, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5218239709253605311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
 --- !u!1 &5476626997768438032 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4236319068536476741, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
@@ -7752,9 +8057,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 255
+  _componentIndexCache: 17
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5539410192433701908}
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 8725338982732411104}
@@ -7774,9 +8079,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7943d687f9f4473a952dd4bcf848eba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.IncreaseNoiseChargedModule
-  _componentIndexCache: 255
+  _componentIndexCache: 18
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5539410192433701908}
   moduleName: IncreaseNoiseChargedModule
   moduleColor: {r: 0, g: 1, b: 1, a: 1}
   _ammoType: {fileID: 219218631671859702}
@@ -7812,6 +8117,39 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _maximumNoiseAngle: 10
+--- !u!114 &5539410192433701908 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -5037981266198548159, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010684394084671937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+--- !u!114 &6154372736321769268 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2567676202728233569, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5476626997768438032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
+--- !u!114 &6500108499577103005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3242460607509936072, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5218239709253605311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
 --- !u!114 &6860789947931749886 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3025542192401954987, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
@@ -7828,6 +8166,61 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1693488478359352468, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
   m_PrefabInstance: {fileID: 8559810737245640021}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7557458434173687512 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2174098306734097293, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5476626997768438032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
+--- !u!114 &7731343862291320824 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2126207841484970669, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5476626997768438032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
+--- !u!114 &7744048412683742324 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2140033923800430881, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5218239709253605311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
+--- !u!114 &8796539737316996173 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 925798460529762584, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5476626997768438032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
+--- !u!114 &8850256140603045240 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 871696745003016237, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+  m_PrefabInstance: {fileID: 8559810737245640021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5218239709253605311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
 --- !u!2083052967 &8900465745978998690 stripped
 VisualEffect:
   m_CorrespondingSourceObject: {fileID: 958775187233696503, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
