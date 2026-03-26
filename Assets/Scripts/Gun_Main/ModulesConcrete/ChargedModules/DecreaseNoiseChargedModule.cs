@@ -38,7 +38,7 @@ namespace GunDecorator.ChargedModules
             _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
             _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
 
-            PlaySound();
+            _gunController.PlayerShootSound("Charged");
         }
 
         private void ApplyMultipleShoot(int numberBulletShoot)
@@ -57,13 +57,7 @@ namespace GunDecorator.ChargedModules
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
             }
 
-            PlaySound();
-        }
-
-        void PlaySound()
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Charged");
-            SoundManager.PlaySound(clip, _gunController._source, 0.5f);
+            _gunController.PlayerShootSound("Charged");
         }
     }
 }

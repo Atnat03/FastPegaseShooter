@@ -34,8 +34,7 @@ namespace GunDecorator.ChargedModules
                 _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
                 
-                AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Charged");
-                SoundManager.PlaySound(clip, _gunController._source, 0.5f);
+                _gunController.PlayerShootSound("Charged");
                 
                 _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);

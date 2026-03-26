@@ -136,6 +136,7 @@ namespace GunDecorator
                 PlayMuzzleFlash();
                 _recoilModule?.Recoil(_model.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
+                
                 SetAmmo(GetCurrentAmmo() - 1);
                 
                 yield return new WaitForSeconds(s.FireRate);
@@ -186,8 +187,7 @@ namespace GunDecorator
             
             _reloadModule?.Reload();
 
-            AudioClip clip = SoundManager.GetAudioClip(_soundData,"Reload");
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            PlayerShootSound("Reload");
         }
 
         public void TriggerHitMark(bool isCritique = false)
@@ -211,6 +211,31 @@ namespace GunDecorator
         {
             _chargedModule?.TryShootCharging();
         }
+        
+        public void PlayerShootSound(string sound)
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
+    
+            if (IsOwner)
+            {
+                SoundManager.PlaySound(clip, _source, 0.5f);
+                PlayShootSoundServerRpc(sound);
+            }
+        }
+
+        [ServerRpc]
+        private void PlayShootSoundServerRpc(string sound)
+        {
+            PlayShootSoundObserversRpc(sound);
+        }
+
+        [ObserversRpc(ExcludeOwner = true)]
+        private void PlayShootSoundObserversRpc(string sound)
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
+            SoundManager.PlaySound(clip, _source, 0.5f);
+        }
+
 
         public void Disable(bool state)
         {
