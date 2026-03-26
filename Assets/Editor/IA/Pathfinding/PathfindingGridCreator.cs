@@ -42,6 +42,11 @@ public class PathfindingGridCreator : EditorWindow
     private Material lineMaterial;
     
     bool isWorking = false;
+    
+    private GUIStyle titleStyle;
+    private EditorListDrawerStyle listStyle;
+
+    private bool _boundListOpened = true;
 
 
     [MenuItem("Tools/Pathfinding Grid Creator")]
@@ -55,6 +60,21 @@ public class PathfindingGridCreator : EditorWindow
     private void OnEnable()
     {
         SceneView.duringSceneGui += OnSceneGUI;
+        titleStyle = new GUIStyle
+        {
+            alignment = TextAnchor.MiddleLeft,
+            fontStyle = FontStyle.Bold,
+            fontSize = 18
+        };
+        titleStyle.normal.textColor = Color.white;
+        listStyle = new EditorListDrawerStyle
+        {
+            p_titleStyle = titleStyle,
+            p_label = (i => $"Index {i}"),
+            p_removeColor = new Color(0.8f, 0.3f, 0.3f),
+            p_addColor = new Color(0.3f, 0.8f, 0.3f),
+            p_verticalMargin = 15
+        };
     }
     private void OnDisable()
     {
@@ -97,13 +117,6 @@ public class PathfindingGridCreator : EditorWindow
             fontSize = 10
         };
         warning.normal.textColor = Color.yellow;
-        GUIStyle titleStyle = new GUIStyle
-        {
-            alignment = TextAnchor.MiddleLeft,
-            fontStyle = FontStyle.Bold,
-            fontSize = 18
-        };
-        titleStyle.normal.textColor = Color.white;
         GUIStyle bigTitleStyle = new GUIStyle
         {
             alignment = TextAnchor.MiddleLeft,
@@ -122,7 +135,7 @@ public class PathfindingGridCreator : EditorWindow
         GUILayout.Label("Bounding Box", titleStyle);
         boundsHeight = EditorGUILayout.FloatField("Bounds Height", boundsHeight);
         boundsOffset = EditorGUILayout.Vector3Field("Bounds Offset", boundsOffset);
-        DrawList(boundsVertices, i => $"Index {i}", "Bounds Vertices", titleStyle);
+        EditorUtilities.DrawList(boundsVertices, "Bounds Vertices", listStyle, ref _boundListOpened);
         GUILayout.Label("Connection Parameters", titleStyle);
         detectionPrecision = EditorGUILayout.FloatField("Detection Precision", detectionPrecision);
         maxVerticalDistance = EditorGUILayout.FloatField("Max Vertical Distance", maxVerticalDistance);
@@ -231,7 +244,7 @@ public class PathfindingGridCreator : EditorWindow
         GUILayout.EndHorizontal();
     }
     
-    void DrawList<T>(List<T> list, Func<int, string> label, string title, GUIStyle titleStyle =  null)
+    /*void DrawList<T>(List<T> list, Func<int, string> label, string title, GUIStyle titleStyle =  null)
     {
         Color oldColor = GUI.color;
         Color red = new Color(0.8f, 0.3f, 0.3f);
@@ -286,7 +299,7 @@ public class PathfindingGridCreator : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
         GUILayout.Space(15);
-    }
+    }*/
     #endregion
 
     void SaveGrid(List<PathfindingNode> grid)
