@@ -103,6 +103,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("bufferJumpTime"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteTimeDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("landSnapVelocity"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("airJumpCount"));
         }, ref showJump);
 
         DrawSection("Super Jump", Color.brown, () =>
