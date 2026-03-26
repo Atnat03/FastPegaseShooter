@@ -1562,6 +1562,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         hasJumped = true;
         coyoteJump = false;
         bufferJump = false;
+        mustSlide = false;
         StartCoroutine(JumpAntiLagCoroutine());
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
