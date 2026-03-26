@@ -63,6 +63,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [Header("UnlockedCapacities")] public bool wallRideUnlocked = true;
     public bool slideUnlocked = true;
     public bool dashUnlocked = true;
+    public bool superJumpUnlocked = true;
     public bool slopeSlideUnlocked = true;
 
     [Header("Camera")] [SerializeField] float cameraSpringHalfLife = 0.075f;
@@ -77,7 +78,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField] float wallDetectionRange = 0.65f;
     [SerializeField] float walkableSlopeAngle = 45f;
     [SerializeField] float maxStepHeight = .2f;
-    [SerializeField] private float gravityBonusForce = 3f; 
+    [SerializeField] private float gravityBonusForceAscending = 3f; 
+    [SerializeField] private float gravityBonusForceFalling = 3f;
 
     [Header("headbob")] [SerializeField] float walkingHeadbobAmplitude = 0.05f;
     [SerializeField] float walkingHeadbobFrequency = 8f;
@@ -633,8 +635,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     void EnterFallingState()
     {
-        /* _playerAnimation.SetFallingAnim(false);
-         _playerAnimation.SetGroundedAnim(true);*/
 
         _playerAnimation.ChangeAirState(false);
 
@@ -753,7 +753,9 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         velocity = AlignVelocityToWall(velocity);
 
         rb.linearVelocity = velocity;
-        rb.AddForce(-Vector3.up * gravityBonusForce, ForceMode.Acceleration);
+        
+        if(rb.linearVelocity.y > 0) rb.AddForce(-Vector3.up * gravityBonusForceAscending, ForceMode.Acceleration);
+        else  rb.AddForce(-Vector3.up * gravityBonusForceFalling, ForceMode.Acceleration);
     }
 
 
@@ -1546,6 +1548,8 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     private void SuperJump()
     {
+        if (!superJumpUnlocked) return;
+        
         if (enoughtEnegyToDoubleJump)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);

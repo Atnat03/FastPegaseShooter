@@ -60,6 +60,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideUnlocked"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideUnlocked"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashUnlocked"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("superJumpUnlocked"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeSlideUnlocked"));
         }, ref showUnlockedCapacities);
 
@@ -80,7 +81,8 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRange"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("walkableSlopeAngle"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceAscending"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceFalling"));
         }, ref showMovement);
 
         DrawSection("Headbob", new Color(1f, 0.6f, 1f), () =>
