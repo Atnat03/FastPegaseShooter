@@ -26,7 +26,6 @@ public class EnergyManager : NetworkBehaviour
     [SerializeField] private float _healFromOneBar = 10f;
 
     private int _totalBars;
-    private List<Image> _energyBarsImageList = new List<Image>();
 
     private readonly SyncVar<float> _currentEnergy = new SyncVar<float>();
     
@@ -34,15 +33,12 @@ public class EnergyManager : NetworkBehaviour
     private float _targetEnergy;
     private bool _isLerping;
     private int _previousIndexFull;
-
-    [SerializeField] private Image _imageBarPrefab;
-    [SerializeField] private Sprite[] _energyBarSprites;
-    [SerializeField] private Transform _barParent;
-    
-    [SerializeField] private Color _energyBarColorFull;
-    [SerializeField] private Color _energyBarColorNotFull;
     
     private EventBus _bus;
+    
+    //Actions
+    public Action<int> OnCreateBarUI;
+    public Action<int, float> OnUpdateUI;
 
     #endregion
 
@@ -64,27 +60,8 @@ public class EnergyManager : NetworkBehaviour
         });
         
         _totalBars = Mathf.CeilToInt(_energyMax / _valueOneBar);
-
-        for (int i = 0; i < _totalBars; i++)
-        {
-            Image newImage = Instantiate(_imageBarPrefab, _barParent);
-            
-            if(i == 0)
-            {
-                newImage.sprite = _energyBarSprites[0];
-                Debug.Log("First");
-            }
-            else if(i == _totalBars-1)
-            {
-                newImage.sprite = _energyBarSprites[2];
-            }
-            else
-            {
-                newImage.sprite = _energyBarSprites[1];
-            }
-            
-            _energyBarsImageList.Add(newImage);
-        }
+        
+        OnCreateBarUI?.Invoke(_totalBars);
         
         _displayedEnergy = _currentEnergy.Value;
         _targetEnergy = _currentEnergy.Value;
@@ -99,8 +76,6 @@ public class EnergyManager : NetworkBehaviour
     {
         if (!IsClientInitialized || !_isLerping) return;
         
-        //_imageFullCharged.gameObject.SetActive(IsEnergyFull);
-
         _displayedEnergy = Mathf.Lerp(_displayedEnergy, _targetEnergy, Time.deltaTime * 20);
 
         if (Mathf.Abs(_displayedEnergy - _targetEnergy) < 0.01f)
@@ -155,23 +130,7 @@ public class EnergyManager : NetworkBehaviour
 
         _previousIndexFull = activeBarIndex;
         
-        for (int i = 0; i < _energyBarsImageList.Count; i++)
-        {
-            if (i < activeBarIndex)
-            {
-                _energyBarsImageList[i].fillAmount = 1f;
-                _energyBarsImageList[i].color = _energyBarColorFull;
-            }
-            else if (i == activeBarIndex)
-            {
-                _energyBarsImageList[i].fillAmount = activeFill;
-                _energyBarsImageList[i].color = activeFill >= 1f ? _energyBarColorFull : _energyBarColorNotFull;
-            }
-            else
-            {
-                _energyBarsImageList[i].fillAmount = 0f;
-            }
-        }
+        OnUpdateUI?.Invoke(activeBarIndex, activeFill);
     }
 
     [Server]

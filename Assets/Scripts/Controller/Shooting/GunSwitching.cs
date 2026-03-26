@@ -11,10 +11,12 @@ using Random = UnityEngine.Random;
 public class GunSwitching : NetworkBehaviour
 {
 	#region Properties
-
 	public bool IsMainGun => _isMainGun.Value;
 	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun.Value];
 	public GameObject CurrentSecondaryGun => _secondaryGunsList[_currentSecondaryGun.Value];
+	public IGun IGunMain => _currentMainIGun;
+	public IGun IGunSecondary => _currentSecondIGun;
+	public ISurcharge ISurchargeMain => _currentISurcharge;
 	public int CurrentMainGunIndex => _currentMainGun.Value;
 
 	public bool IsSwitching => !_canSwitch;
@@ -38,6 +40,10 @@ public class GunSwitching : NetworkBehaviour
 
 	public Action OnStartSwitchGun;
 	public Action OnEndSwitchGun;
+
+	private IGun _currentMainIGun;
+	private IGun _currentSecondIGun;
+	private ISurcharge _currentISurcharge;
 	
 	#endregion
 
@@ -65,6 +71,10 @@ public class GunSwitching : NetworkBehaviour
 		
 		_currentMainGun.Value = startIndex;
 		_currentSecondaryGun.Value = startIndex;
+		
+		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
+		_currentSecondIGun = CurrentSecondaryGun.GetComponent<IGun>();
 	}
 	
 	[ServerRpc]
@@ -169,6 +179,8 @@ public class GunSwitching : NetworkBehaviour
 	void ChangeCurrentGun_Main(int newIndex)
 	{
 		_currentMainGun.Value = newIndex;
+		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
 	}
 		
 	private void OnCurrentGunMainChange(int prev, int next, bool asServer)
@@ -200,8 +212,12 @@ public class GunSwitching : NetworkBehaviour
 			ActivateCurrentGun(_secondaryGunsList, next);
 		}
 	}
-	
-	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun.Value = newIndex;
+
+	public void ChangeCurrentGun_Secondary(int newIndex)
+	{
+		_currentSecondaryGun.Value = newIndex;
+		_currentSecondIGun = CurrentSecondaryGun.GetComponent<IGun>();
+	} 
 
 	
 	#endregion

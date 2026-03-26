@@ -24,7 +24,7 @@ namespace Managers
     public class SwapGunManager : NetworkBehaviour
     {
         [SerializeField] private float _timeToAcceptSwap = 2f;
-        private readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
+        public readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
         [SerializeField] private float _swapingTime;
         
         [SerializeField] 
@@ -36,14 +36,7 @@ namespace Managers
         [SerializeField] private bool _isCombo = false;
         [SerializeField] private Image _infoCombo;
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
-        
-        [Header("UI")]
-        [SerializeField] private GameObject _barUI;
-        [SerializeField] private Image _valueImage;
-        [SerializeField] private TextMeshProUGUI _textSwapUI;
-        [SerializeField] private string _youAskSwapMessage;
-        [SerializeField] private string _broAskyouSwapMessage;
-        
+
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
         private int _firstGunAmmo = -1;
@@ -51,6 +44,9 @@ namespace Managers
         private float _targetTime = 0f;
         
         private EventBus _bus;
+
+        public Action<float> OnUpdateAskBroSwap;
+        public Action<bool> OnChangeAskText;
 
         public override void OnStartServer()
         {
@@ -110,7 +106,7 @@ namespace Managers
                 if (_displayedTime < 0) _displayedTime = 0;
             }
         
-            _valueImage.fillAmount = _displayedTime / _timeToAcceptSwap;
+            OnUpdateAskBroSwap?.Invoke(_displayedTime / _timeToAcceptSwap);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -180,12 +176,11 @@ namespace Managers
         private void OnElapsedTimeChanged(float prev, float next, bool asServer)
         {
             _targetTime = next;
-            _barUI.SetActive(next > 0);
 
             if (next > 0)
             {
                 bool isRequester = LocalConnection.ClientId == _firstPlayerOwnerId.Value;
-                _textSwapUI.text = isRequester ? _youAskSwapMessage : _broAskyouSwapMessage;
+                OnChangeAskText?.Invoke(isRequester);
             }
 
             if (next > prev)
