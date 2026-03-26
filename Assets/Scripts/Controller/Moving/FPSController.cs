@@ -420,7 +420,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         // grapplepoints 
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
+                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Collide))
         {
             currentLookedGrapplePoint = hit.collider.GetComponent<GrapplePoint>();
             if (currentLookedGrapplePoint != null)
@@ -1287,11 +1287,12 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     #region GrappleState
 
     Vector3 grappleDirection;
+    private float grappleStartingDistance;
 
     void EnterGrappleState()
     {
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
+                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Collide))
         {
             GrapplePoint grapplePoint;
             if (hit.collider.TryGetComponent<GrapplePoint>(out grapplePoint))
@@ -1305,25 +1306,34 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             Debug.Log("No Grapple Point found");
         }
 
-        grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
+        grappleDirection = _currentGrapplePoint.position - transform.position;
+        grappleStartingDistance = grappleDirection.magnitude;
+        grappleDirection.Normalize();
     }
 
     void GrappleUpdate()
     {
-        if (!(Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f &&
-              (playerInput.actions["Grapple"].IsPressed() || singleClicGrapple)))
+        if (!(Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.5f 
+              && (playerInput.actions["Grapple"].IsPressed() || singleClicGrapple) 
+              && !(Vector3.Distance(transform.position, _currentGrapplePoint.position) < grappleStartingDistance && rb.linearVelocity.magnitude < 0.05f)))
         {
+            
             rb.linearVelocity = Vector3.zero;
             rb.AddForce(grappleDirection * _endGrappleImpulseForce, ForceMode.Impulse);
             _currentGrapplePoint = null;
             stateMachine.ChangeState(ControlerState.Idle);
+        }
+
+        if (playerInput.actions["Grapple"].WasPressedThisFrame() && singleClicGrapple)
+        {
+            stateMachine.ChangeState(ControlerState.Idle);
+            rb.linearVelocity = Vector3.zero;
         }
     }
 
     void GrappleFixedUpdate()
     {
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
-
 
         Vector3 newDir = grappleDirection;
         if (rb.linearVelocity.magnitude > 0.1 && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f && Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
@@ -1562,6 +1572,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         hasJumped = true;
         coyoteJump = false;
         bufferJump = false;
+        mustSlide = false;
         StartCoroutine(JumpAntiLagCoroutine());
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
