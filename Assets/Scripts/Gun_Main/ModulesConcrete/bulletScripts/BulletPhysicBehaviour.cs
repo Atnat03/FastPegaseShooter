@@ -16,6 +16,8 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
     
     private bool _hasHit = false;
     RaycastHit hit;
+    
+    private Vector3 _lastPosition;
 
     public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
         float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target)
@@ -28,16 +30,26 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
         p_isCritical = isCritical;
     }
 
+    void Start()
+    {
+        _lastPosition = transform.position;
+    }
+
     void FixedUpdate()
     {
         DetectCollision();
+        _lastPosition = transform.position;
     }
 
     private void DetectCollision()
     {
-        if (Physics.SphereCast(transform.position, 0.15f, transform.forward, out hit, 
-                p_speed * Time.fixedDeltaTime, ~LayerMask.NameToLayer("Owner"), 
-                QueryTriggerInteraction.Ignore))
+        Vector3 direction = transform.position - _lastPosition;
+        float distance = direction.magnitude;
+
+        if (distance <= 0f) return;
+
+        if (Physics.SphereCast(_lastPosition, 0.15f, direction.normalized, out hit,
+                distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
         {
             if (_hasHit) return;
             _hasHit = true;
