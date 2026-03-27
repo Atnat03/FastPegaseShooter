@@ -1,22 +1,17 @@
 using System;
-using System.Collections;
-using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using ScriptableObjectsDefinitions;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
-public class PlayerHealth : NetworkBehaviour
+public class PlayerHealth : NetworkBusListener
 {
 	#region Properties
 
 	public float CurrentHealth => _currentHealth.Value;
 	public bool IsDead => _isDead.Value;
+
+	public bool IsCritik => _isCritik;
 	
 	#endregion
 
@@ -30,27 +25,20 @@ public class PlayerHealth : NetworkBehaviour
 	[SerializeField] private PlayerAnimation _playerAnimation;
 	[SerializeField] private float _timeToRespawn = 5;
 	[SerializeField, Range(0f, 1f)] private float _critikStep = 0.5f;
-	private Vector3 _respawnPosition;
-	private Quaternion _respawnRotation;
 	private bool _initialized = false;
-	bool IsCritik = false;
+	bool _isCritik = false;
 	
-	[Header("UI")]
-	[SerializeField] private Image _healthBar;
-	[SerializeField] private Image _deathImage;
 	private float _targetHealthFill;
-	[SerializeField] private CanvasGroup _damagedWarningImage;
-	[SerializeField] private Image _frameDeccordImage;
-	float _elapsedTimeShowWarning = 0;
-	bool _isShowedWarning = false;
 
-	[SerializeField] private CanvasGroup _damagedImage;
-	
-	[SerializeField] private SoundsDataSO _soundsData;
-	private AudioSource _audioSource;
-	
-	private EventBus _bus;
 
+	private Vector3 _startPos;
+	
+	//Action
+	public Action<float> OnUpdateHealth;
+	public Action OnStartWarning;
+	public Action<bool> OnKOPlayer;
+	public Action OnTakeDamage;
+	
 	#endregion
 
 
@@ -63,29 +51,19 @@ public class PlayerHealth : NetworkBehaviour
 			_currentHealth.Value = _healthBase;
 			_initialized = true;
 		}
-		
-		_bus = EventBusInitialiser.instance.Bus;
-		_bus.Subscribe((PlayerTakeDamageEvent data) => TakeDamage(data));
-		_bus.Subscribe((AddHealthFromBarEvent data) => AddHealth(data));
+
+		ListenToEvent<PlayerTakeDamageEvent>(TakeDamage);
+		ListenToEvent<AddHealthFromBarEvent>(AddHealth); 
 	}
 
 	public override void OnStartClient()
 	{
-		_bus = EventBusInitialiser.instance.Bus;
-		
 		_currentHealth.OnChange += OnHealthChange;
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
 		
 		if (IsOwner)
-		{
-			_respawnPosition = transform.position;
-			_respawnRotation = transform.rotation;
-		}
-		
-		_audioSource = GetComponent<AudioSource>();
-		
-		_deathImage.gameObject.SetActive(false);
+			_startPos = transform.position;
 	}
 
 	private void Update()
@@ -103,29 +81,10 @@ public class PlayerHealth : NetworkBehaviour
     
 		if (IsOwner)
 		{
-			_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _targetHealthFill, Time.deltaTime * 25);
-			ShowWarning();
+			OnUpdateHealth?.Invoke(_targetHealthFill);
 		}
 	}
 
-	void ShowWarning()
-	{
-		_frameDeccordImage.color = IsCritik ? Color.red : Color.white;
-		_damagedWarningImage.gameObject.SetActive(IsCritik);
-
-		if (IsCritik)
-		{
-			_elapsedTimeShowWarning -= Time.deltaTime;
-
-			if (_elapsedTimeShowWarning <= 0)
-			{
-				_isShowedWarning = !_isShowedWarning;
-				_elapsedTimeShowWarning = 1f;
-			}
-			
-			_damagedWarningImage.alpha = Mathf.Sin(_elapsedTimeShowWarning * Mathf.PI);
-		}
-	}
 
 	[Server]
 	void TakeDamage(PlayerTakeDamageEvent data)
@@ -137,9 +96,7 @@ public class PlayerHealth : NetworkBehaviour
 		float newHealth = _currentHealth.Value - data.value;
 
 		ApplyVolumeDamagedEffectTargetRpc(Owner);
-
-		PlayHurtSoundObserverRpc();
-
+		
 		if (newHealth <= 0)
 		{
 			Death();
@@ -153,34 +110,10 @@ public class PlayerHealth : NetworkBehaviour
 	[TargetRpc]
 	private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
 	{
-		StartCoroutine(ApplyVolumeDamagedEffect());
+		OnTakeDamage?.Invoke();
+		
 	}
-	
-	IEnumerator ApplyVolumeDamagedEffect()
-	{
-		float time = 0.5f;
-		float elapsedTime = 0f;
 
-		while (elapsedTime < time)
-		{
-			elapsedTime += Time.deltaTime;
-
-			float t = elapsedTime / time;
-			_damagedImage.alpha = Mathf.Sin(t * Mathf.PI);
-
-			yield return null;
-		}
-
-		_damagedImage.alpha = 0f;
-	}
-	
-
-	[ObserversRpc]
-	private void PlayHurtSoundObserverRpc()
-	{
-		AudioClip clip = SoundManager.GetAudioClip(_soundsData, "Hurt");
-		SoundManager.PlaySound(clip, _audioSource);
-	}
 
 	[Server]
 	void AddHealth(AddHealthFromBarEvent data)
@@ -208,9 +141,8 @@ public class PlayerHealth : NetworkBehaviour
 		_respawnTimer.Value = 0;
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
-		
-		transform.position = _respawnPosition;
-		transform.rotation = _respawnRotation;
+
+		transform.position = _startPos;
 
 		NotifyRespawnRpc(NetworkObject);
 	}
@@ -218,13 +150,13 @@ public class PlayerHealth : NetworkBehaviour
 	[ObserversRpc]
 	private void NotifyDeathRpc(NetworkObject playerN)
 	{
-		_bus.InvokeEvent(new OnPlayerDeathEvent { playerN = playerN });
+		InvokeEvent(new OnPlayerDeathEvent { playerN = playerN });
 	}
 	
 	[ObserversRpc]
 	private void NotifyRespawnRpc(NetworkObject playerN)
 	{
-		_bus.InvokeEvent(new OnPlayerRespawnEvent { playerN = playerN });
+		InvokeEvent(new OnPlayerRespawnEvent { playerN = playerN });
 	}
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
@@ -235,13 +167,12 @@ public class PlayerHealth : NetworkBehaviour
 
 		if (_targetHealthFill <= _critikStep)
 		{
-			IsCritik = true;
-			_elapsedTimeShowWarning = 1f;
+			_isCritik = true;
+			OnStartWarning?.Invoke();
 		}
 		else
 		{
-			IsCritik = false;
-			_damagedWarningImage.alpha = 0f;
+			_isCritik = false;
 		}
 	}
 
@@ -249,7 +180,7 @@ public class PlayerHealth : NetworkBehaviour
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{
 		_playerAnimation.SetDeadAnim(next);
-		_deathImage.gameObject.SetActive(next);
+		OnKOPlayer?.Invoke(next);
 	}
 	
 	private void OnRespawnTimerChange(float prev, float next, bool asServer)

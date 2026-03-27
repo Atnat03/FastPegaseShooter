@@ -9,7 +9,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
-public class SpawnZone : NetworkBehaviour
+public class SpawnZone : NetworkBusListener
 {
     [SerializeField] private int _budgetMin;
     [SerializeField] private int _budgetMax;
@@ -34,7 +34,7 @@ public class SpawnZone : NetworkBehaviour
     {
         _gridReader = GetComponent<PathfindingGridReader>();
         
-        EventBusInitialiser.instance.Bus.Subscribe((EnemyDyingEvent EDE) =>
+        ListenToEvent<EnemyDyingEvent>(EDE =>
         {
             if (EDE.p_gridReaderId == _gridReader.p_id)
             {
@@ -42,7 +42,7 @@ public class SpawnZone : NetworkBehaviour
             }
         });
 
-        _unsubscribeAction = EventBusInitialiser.instance.Bus.Subscribe((PlayerPositionUpdateEvent PPUE) =>
+        ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
         {
             for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
             {

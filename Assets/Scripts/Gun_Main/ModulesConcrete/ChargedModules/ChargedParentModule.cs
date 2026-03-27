@@ -38,7 +38,9 @@ namespace GunDecorator.ChargedModules
         [SerializeField] protected float _timeToCharge = 1;
         [SerializeField] protected float _deadZoneStartCharging = 0.5f;
         [SerializeField] protected float _recoilChargedMultiplier = 1.25f;
+        [SerializeField] protected float _recoilX = 2f;
         [SerializeField] protected float _isFullMultiplicator = 0.9f;
+        [SerializeField] protected int _numberBulletInCharge = 10;
         private bool _fullCharged = false;
         protected bool _charging = false;
         private bool _deadZoneCharge = false;
@@ -98,6 +100,8 @@ namespace GunDecorator.ChargedModules
 
         protected void ResetCharging()
         {
+            _gunController.RecoilModule?.SetIsRecoil(false);
+            
             _deadZoneCharge = false;
             _charging = false;
             _charginTimer = 0;

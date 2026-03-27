@@ -1,9 +1,11 @@
-using CustomConsole.Runtime.Logger;
+using System;
 using FishNet;
 using UnityEngine;
 
 public abstract class EnemyAttackingModule : EnemyBehaviourModule
 {
+    public Action<int, int> p_onHitPlayer;
+    
     [SerializeField] protected EnemyTargetingModule _targetingModule;
     
     [SerializeField] protected int _damage = 10;
@@ -19,7 +21,6 @@ public abstract class EnemyAttackingModule : EnemyBehaviourModule
 
     protected float GetTargetSqrDistance()
     {
-        float dist = (_targetingModule.GetTargetPosition() - transform.position).sqrMagnitude;
-        return dist;
+        return _targetingModule.GetTargetSqrDistance(transform.position);
     }
 }

@@ -11,18 +11,21 @@ using Random = UnityEngine.Random;
 public class GunSwitching : NetworkBehaviour
 {
 	#region Properties
-
-	public bool IsMainGun => _isMainGun;
+	public bool IsMainGun => _isMainGun.Value;
 	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun.Value];
 	public GameObject CurrentSecondaryGun => _secondaryGunsList[_currentSecondaryGun.Value];
+	public IGun IGunMain => _currentMainIGun;
+	public IGun IGunSecondary => _currentSecondIGun;
+	public ISurcharge ISurchargeMain => _currentISurcharge;
 	public int CurrentMainGunIndex => _currentMainGun.Value;
-	
 
+	public bool IsSwitching => !_canSwitch;
+	
 	#endregion
 	
 	#region Variables
 
-	[SerializeField] private bool _isMainGun = true;
+	private readonly SyncVar<bool> _isMainGun = new SyncVar<bool>(true);
 	
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
@@ -34,6 +37,13 @@ public class GunSwitching : NetworkBehaviour
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
 	private readonly SyncVar<int> _currentSecondaryGun = new SyncVar<int>(0);
+
+	public Action OnStartSwitchGun;
+	public Action OnEndSwitchGun;
+
+	private IGun _currentMainIGun;
+	private IGun _currentSecondIGun;
+	private ISurcharge _currentISurcharge;
 	
 	#endregion
 
@@ -41,14 +51,12 @@ public class GunSwitching : NetworkBehaviour
 
 	public void Initialize(int startIndex)
 	{
-
 		_currentMainGun.OnChange += OnCurrentGunMainChange;
 		_currentSecondaryGun.OnChange += OnCurrentGunSecondaireChange;
 		
-		
 		_mainGunsList = new List<GameObject>();
 		_secondaryGunsList = new List<GameObject>();
-
+		
 		foreach (Transform gun in _mainGunParent.transform)
 		{
 			_mainGunsList.Add(gun.gameObject);
@@ -58,47 +66,88 @@ public class GunSwitching : NetworkBehaviour
 		{
 			_secondaryGunsList.Add(gun.gameObject);
 		}
+
+		UpdateVisual(true);
 		
 		_currentMainGun.Value = startIndex;
+		_currentSecondaryGun.Value = startIndex;
 		
-		UpdateVisual();
+		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
+		_currentSecondIGun = CurrentSecondaryGun.GetComponent<IGun>();
 	}
 	
-	public void SwitchGunType()
+	[ServerRpc]
+	public void SwitchGunType(bool state)
 	{
 		if (!_canSwitch) return;
-		
-		_isMainGun = !_isMainGun;
-		UpdateVisual();
+		if(IsMainGun == state) return;
+
+		SwitchGunServer(state);
 	}
 
-	private void UpdateVisual()
+	[Server]
+	void SwitchGunServer(bool state)
 	{
-		if (_isMainGun)
+		_isMainGun.Value = state;
+		SwitchGunAnimation_ObserversRpc(state);
+	}
+	
+	[ObserversRpc]
+	private void SwitchGunAnimation_ObserversRpc(bool isMain)
+	{
+		UpdateVisual(isMain);
+	}
+
+	private void UpdateVisual(bool main)
+	{
+		if (main)
 		{
-			SwitchAnimatedWeapon(_mainGunsList, _currentMainGun.Value);
+			StartCoroutine(SwitchAnimatedWeapon(_mainGunsList, _currentMainGun.Value, true));
 		}
 		else
 		{
-			SwitchAnimatedWeapon(_secondaryGunsList, _currentSecondaryGun.Value);
+			StartCoroutine(SwitchAnimatedWeapon(_secondaryGunsList, _currentSecondaryGun.Value, false));
 		}
 	}
 	
-	void SwitchAnimatedWeapon(List<GameObject> list, int index)
+	IEnumerator SwitchAnimatedWeapon(List<GameObject> list, int index, bool isMain)
 	{
-		_mainGunParent.SetActive(false);
-		_secondaryGunParent.SetActive(false);
-		
 		_canSwitch = false;
 		
-		_mainGunParent.SetActive(_isMainGun);
-		_secondaryGunParent.SetActive(!_isMainGun);
+		OnStartSwitchGun?.Invoke();
+
+		float duration = 0.25f;
+		float elapsedTime = 0;
+	
+		Quaternion startRotation = transform.localRotation;
+		Quaternion targetRot = startRotation * Quaternion.Euler(-90, 0, 0);
+	
+		while (elapsedTime < duration)
+		{
+			elapsedTime += Time.deltaTime;
+			transform.localRotation = Quaternion.Lerp(startRotation, targetRot, elapsedTime / duration);
+			yield return null;
+		}
+
+		if(IsServerInitialized)
+			ActivateCurrentGun(list, index);
+	
+		_mainGunParent.SetActive(isMain);
+		_secondaryGunParent.SetActive(!isMain);
+	
+		elapsedTime = 0;
+		while (elapsedTime < duration)
+		{
+			elapsedTime += Time.deltaTime;
+			transform.localRotation = Quaternion.Lerp(targetRot, startRotation, elapsedTime / duration);
+			yield return null;
+		}
+	
+		transform.localRotation = startRotation;
 
 		_canSwitch = true;
-		
-		ActivateCurrentGun(list, index);
-	}
-	
+	}	
 	private void ActivateCurrentGun(List<GameObject> list, int index)
 	{
 		for (int i = 0; i < list.Count; i++)
@@ -121,6 +170,8 @@ public class GunSwitching : NetworkBehaviour
 	[ServerRpc]
 	public void ChangeCurrentGun_Main_ServerRpc(int newIndex)
 	{
+		if (!IsMainGun) return;
+		
 		ChangeCurrentGun_Main(newIndex);
 	}
 
@@ -128,6 +179,8 @@ public class GunSwitching : NetworkBehaviour
 	void ChangeCurrentGun_Main(int newIndex)
 	{
 		_currentMainGun.Value = newIndex;
+		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
 	}
 		
 	private void OnCurrentGunMainChange(int prev, int next, bool asServer)
@@ -142,7 +195,7 @@ public class GunSwitching : NetworkBehaviour
 				CurrentMainGun.GetComponent<GunController>().StopReload();
 			}
           
-			if (_isMainGun)
+			if (!asServer)
 			{
 				ActivateCurrentGun(_mainGunsList, next);
 			}
@@ -154,13 +207,18 @@ public class GunSwitching : NetworkBehaviour
 	{
 		if (_secondaryGunsList == null || _secondaryGunsList.Count == 0) return;
        
-		if (next < _secondaryGunsList.Count && !_isMainGun)
+		if (next < _secondaryGunsList.Count && !IsMainGun)
 		{
 			ActivateCurrentGun(_secondaryGunsList, next);
 		}
 	}
-	
-	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun.Value = newIndex;
+
+	public void ChangeCurrentGun_Secondary(int newIndex)
+	{
+		_currentSecondaryGun.Value = newIndex;
+		_currentSecondIGun = CurrentSecondaryGun.GetComponent<IGun>();
+	} 
+
 	
 	#endregion
 }

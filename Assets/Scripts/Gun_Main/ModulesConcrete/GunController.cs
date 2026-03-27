@@ -16,6 +16,8 @@ public interface IGun
     public void TryReload();
     public void TryCharging();
     public void TryShootCharged();
+
+    public void Disable(bool state);
 }
 
 
@@ -31,7 +33,7 @@ public interface ISurcharge
 
 namespace GunDecorator
 {
-    public class GunController : NetworkBehaviour, IGun, ISurcharge
+    public class GunController : NetworkBusListener, IGun, ISurcharge
     {
         public bool IsOverload => _isOverload.Value;
         public float SurchargeMultiplierDamage { get; set; }
@@ -62,13 +64,9 @@ namespace GunDecorator
         private bool ShootingInputPressed;
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-
-        private EventBus _bus;
-
+        
         private void Awake()
         {
-            _bus = EventBusInitialiser.instance.Bus;
-            
             //On récupere tout les types de modules possible et potentiellement sur l'arme
             _shootModule = GetComponents<IShootModule>();
             _reloadModule = GetComponent<IReloadModule>();
@@ -101,14 +99,14 @@ namespace GunDecorator
                         continue;
                     }
                     s?.TryShoot();
-                    _recoilModule?.Recoil(_model.transform, 0.1f);
+                    _recoilModule?.Recoil(_model.transform, 0.1f, false);
                     _recoilModule?.SetIsRecoil(true);
                     SetAmmo(GetCurrentAmmo() - 1);
                     PlayMuzzleFlash();
                 }
             }
             
-            _bus.InvokeEvent(new OnCameraShakeEvent
+            InvokeEvent(new OnCameraShakeEvent
             {
                 player = NetworkObject,
                 duration = _cameraShakeSettings.x,
@@ -132,7 +130,7 @@ namespace GunDecorator
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 PlayMuzzleFlash();
-                _recoilModule?.Recoil(_model.transform, s.FireRate);
+                _recoilModule?.Recoil(_model.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
                 SetAmmo(GetCurrentAmmo() - 1);
                 
@@ -210,14 +208,17 @@ namespace GunDecorator
             _chargedModule?.TryShootCharging();
         }
 
+        public void Disable(bool state)
+        {
+            _model.gameObject.SetActive(state);
+        }
+
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {
-            Debug.Log("Play Muzzle flash");
             _muzzleFlash.Play();
         }
 
         public void StopReload() => _reloadModule.StopReload();
-
     }
 }

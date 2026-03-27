@@ -52,6 +52,8 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashVerticality"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("clampedMaxAirSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpSlideOnEndOfSlide"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("singleClicGrapple"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("omnidirectionalWallRide"));
         }, ref showParameters);
 
         DrawSection("Unlocked Capacities", new Color(1f, 0.85f, 0.6f), () =>
@@ -59,6 +61,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideUnlocked"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slideUnlocked"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashUnlocked"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("superJumpUnlocked"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slopeSlideUnlocked"));
         }, ref showUnlockedCapacities);
 
@@ -79,7 +82,8 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRange"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("walkableSlopeAngle"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForce"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceAscending"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceFalling"));
         }, ref showMovement);
 
         DrawSection("Headbob", new Color(1f, 0.6f, 1f), () =>
@@ -100,6 +104,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("bufferJumpTime"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteTimeDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("landSnapVelocity"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("airJumpCount"));
         }, ref showJump);
 
         DrawSection("Super Jump", Color.brown, () =>

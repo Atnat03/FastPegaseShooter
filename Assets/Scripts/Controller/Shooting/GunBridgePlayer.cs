@@ -7,14 +7,13 @@ using UnityEngine;
 
 namespace Controller
 {
-    public class GunBridgePlayer : NetworkBehaviour
+    public class GunBridgePlayer : NetworkBusListener
     {
         public int GetCurrentMainIndex => _gunSwitching.CurrentMainGunIndex;
         public int GetCurrentAmmo => CurrentMainSurchargeGun.GetCurrentAmmo();
         
-        public IGun CurrentGun => _gunSwitching.IsMainGun ? _gunSwitching.CurrentMainGun.GetComponent<IGun>() : _gunSwitching.CurrentSecondaryGun.GetComponent<IGun>();
-
-        public ISurcharge CurrentMainSurchargeGun => _gunSwitching.CurrentMainGun.GetComponent<ISurcharge>();
+        private IGun CurrentGun => _gunSwitching.IsMainGun ? _gunSwitching.IGunMain : _gunSwitching.IGunSecondary;
+        public ISurcharge CurrentMainSurchargeGun => _gunSwitching.ISurchargeMain;
         
         [SerializeField] private GunSwitching _gunSwitching;
         [SerializeField] private GunSurcharge _gunSurcharge;
@@ -24,18 +23,14 @@ namespace Controller
         
         private Material _gunMaterial;
         
-        private EventBus _bus;
-        
         public override void OnStartClient()
         {
             base.OnStartClient();
-
-            _bus = EventBusInitialiser.instance.Bus;
-
+            
             if (IsOwner)
             {
-                _bus.Subscribe((SwapingGunEvent data) => SwapingGun(data));
-                _bus.Subscribe((EndTimerSwapEvent data) => EndTimerSwap(data));
+                ListenToEvent<SwapingGunEvent>(SwapingGun);
+                ListenToEvent<EndTimerSwapEvent>(EndTimerSwap);
                 
                 _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
             }
@@ -46,38 +41,50 @@ namespace Controller
             
             int startIndex = OwnerId % 2;
             _gunSwitching.Initialize(startIndex);
+
+            _gunSwitching.OnStartSwitchGun += StopReloadGun;
         }
 
         public void TryShootWithCurrentGun()
-        { 
+        {
+            if (_gunSwitching.IsSwitching) return;
+            
             CurrentGun.TryFire();
         }
 
         public void TryCancelShooting()
         {
+            if (_gunSwitching.IsSwitching) return;
+            
             CurrentGun.TryCancelShooting();
         }
         
         public void TryChargeWithCurrentGun()
-        { 
+        {             
+            if (_gunSwitching.IsSwitching) return;
+
             CurrentGun.TryCharging();
         }
 
         public void TryShootChargeShooting()
         {
+            if (_gunSwitching.IsSwitching) return;
+            
             CurrentGun.TryShootCharged();
         }
 
         public void TryReload()
         {
+            if (_gunSwitching.IsSwitching) return;
+            
             CurrentGun.TryReload();
         }
         
-        public void SwitchGunType()
+        public void SwitchGunType(bool state)
         {
             if (_localWantToSwitch) return;
             
-            _gunSwitching.SwitchGunType();
+            _gunSwitching.SwitchGunType(state);
         }
 
         [ServerRpc]
@@ -94,12 +101,12 @@ namespace Controller
                 currentAmmo = currentAmmo,
             };
     
-            _bus.InvokeEvent(data);
+            InvokeEvent(data);
         }
 
         private void SwapingGun(SwapingGunEvent data)
         {
-            _wantToSwitch.Value = false;
+            ResetWantToSwitchServerRpc();
             StartCoroutine(WaitBeforeSwapCoroutine(data));
         }
 
@@ -161,6 +168,11 @@ namespace Controller
         private void ResetWantToSwitchServerRpc()
         {
             _wantToSwitch.Value = false;
+        }
+        
+        private void StopReloadGun()
+        {
+            CurrentMainSurchargeGun.StopReload();
         }
         
         void SetLayerRecursively(GameObject obj, int newLayer)

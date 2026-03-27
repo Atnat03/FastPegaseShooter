@@ -21,10 +21,10 @@ public class PathfindingNode
     {
         PathfindingNode node = new PathfindingNode(index, gridPosition, position, wallAvoidance);
         node.neighborsIndex = new List<int>(neighborsIndex);
-        foreach (int neighborIndex in neighborsIndex)
+        /*foreach (int neighborIndex in neighborsIndex)
         {
             node.neighborsIndex.Add(neighborIndex);
-        }
+        }*/
         return node;
     }
 }
