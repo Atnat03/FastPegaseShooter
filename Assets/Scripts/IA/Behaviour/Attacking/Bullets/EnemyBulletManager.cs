@@ -4,28 +4,20 @@ using FishNet;
 using FishNet.Object;
 using System.Collections.Generic;
 
-public class EnemyBulletManager : NetworkBehaviour
+public class EnemyBulletManager : NetworkBusListener
 {
     [SerializeField] private GameObject _bulletPrefab;
-    private EventBus _bus;
     private Action _unsubscribeAction;
 
     private List<EnemyBullet> _spawnedBullets = new List<EnemyBullet>();
     private int _lastBulletId;
     
-    void Awake()
-    {
-        //Possible Because changed Script Execution Order
-        _bus = EventBusInitialiser.instance.Bus;
-    }
-
     public override void OnStartServer()
     {
         base.OnStartServer();
-        Debug.Log($"bus : {_bus == null}");
 
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
-        _unsubscribeAction = _bus.Subscribe((EnemyShootingEvent ESE) => AddBullet(ESE));
+        ListenToEvent<EnemyShootingEvent>(AddBullet);
     }
 
     public override void OnStopServer()
@@ -45,7 +37,7 @@ public class EnemyBulletManager : NetworkBehaviour
             if(_spawnedBullets[i].MoveForward(serverTime, out PlayerHealth playerHealth))
             {
                 //here, apply target hitting logic
-                EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerTakeDamageEvent
+                InvokeEvent(new PlayerTakeDamageEvent
                 {
                     playerN = playerHealth.NetworkObject,
                     value = _spawnedBullets[i].p_bulletStrenght
@@ -99,7 +91,7 @@ public class EnemyBulletManager : NetworkBehaviour
     [ObserversRpc]
     void KillVisualBulletObserverRPC(int bulletId)
     {
-        _bus.InvokeEvent(new BulletDestructionEvent{p_bulletId = bulletId});
+        InvokeEvent(new BulletDestructionEvent{p_bulletId = bulletId});
     }
 }
 

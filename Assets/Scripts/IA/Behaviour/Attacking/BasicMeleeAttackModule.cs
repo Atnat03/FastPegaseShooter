@@ -17,8 +17,8 @@ public class BasicMeleeAttackModule : EnemyAttackingModule
             if (InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(_targetingModule.p_targetId, out NetworkObject player))
             {
                 //Empty event for now
-                EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyMeleeAttack());
-                EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerTakeDamageEvent
+                InvokeEvent(new EnemyMeleeAttack());
+                InvokeEvent(new PlayerTakeDamageEvent
                 {
                     playerN = player,
                     value = _damage

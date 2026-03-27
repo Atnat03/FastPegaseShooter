@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 
 public class CameraShake : NetworkBusListener
 {
-    EventBus _bus;
     private Coroutine _currentShake;
     private Vector3 _initialLocalPos;
     

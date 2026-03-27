@@ -2,7 +2,7 @@ using System;
 using FishNet;
 using UnityEngine;
 
-public class EnemyBulletVisuals : MonoBehaviour
+public class EnemyBulletVisuals : MonoBusListener
 {
     private Vector3 _startPos;
     private Vector3 _direction;
@@ -28,7 +28,7 @@ public class EnemyBulletVisuals : MonoBehaviour
         transform.localScale = Vector3.one * bulletSize;
         
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
-        _unsubscribeAction = EventBusInitialiser.instance.Bus.Subscribe((BulletDestructionEvent BDE) =>
+        ListenToEvent<BulletDestructionEvent>(BDE =>
         {
             if (this != null && BDE.p_bulletId == _bulletId)
             {
