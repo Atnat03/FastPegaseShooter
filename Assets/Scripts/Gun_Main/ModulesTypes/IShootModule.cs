@@ -10,7 +10,6 @@ namespace GunDecorator
 
         public void CancelShooting();
         
-        public bool IsFullAuto { get; }
         public float FireRate { get; }
         public IAmmoModule AmmoModule { get; }
         

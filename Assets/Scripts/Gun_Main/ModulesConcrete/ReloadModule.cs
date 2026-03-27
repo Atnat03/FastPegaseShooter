@@ -38,6 +38,14 @@ namespace GunDecorator
             _ammoText.text = CurrentAmmo +  "/" + _magazineSize;
             
             _currentAmmo = Mathf.Clamp(_currentAmmo, 0, _magazineSize);
+
+            if (_autoReload)
+            {
+                if (_currentAmmo <= 0)
+                {
+                    Reload();
+                }
+            }
         }
 
         public void StopReload()
@@ -80,6 +88,11 @@ namespace GunDecorator
             SetAmmo(_magazineSize);
             
             p_reloadCoroutine = null;
+            
+            if (_gunController.IsFullAuto)
+            {
+                _gunController.ApplyShoot();
+            }
         }
 
         public void SetAmmo(int value) => _currentAmmo = Mathf.Min(value, _magazineSize);        

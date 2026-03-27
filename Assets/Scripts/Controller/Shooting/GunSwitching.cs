@@ -190,6 +190,8 @@ public class GunSwitching : NetworkBehaviour
 			_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 			_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
 			
+			_currentISurcharge.StopReload();
+			
 			if (IsOwner)
 			{
 				CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
