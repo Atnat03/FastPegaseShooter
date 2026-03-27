@@ -70,6 +70,8 @@ namespace GunDecorator
             _imageReload.gameObject.SetActive(true);
             _imageReload.fillAmount = 1;
             
+            _gunController?.p_animator.SetTrigger("Reload");
+            
             _isReloading = true;
             
             float duration = reloadDuration;
