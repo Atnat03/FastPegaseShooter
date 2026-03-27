@@ -888,7 +888,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     {
         transform.position = new Vector3(transform.position.x, wallRidingHeight, transform.position.z);
 
-        Vector3 move = (wallRidingDirection * verticalInput).normalized;
+        Vector3 move = wallRidingDirection.normalized;
         Vector3 velocity = move * wallRidingSpeed;
 
         rb.linearVelocity = velocity;
@@ -913,7 +913,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             float angle = i * 45f;
 
             Vector3 dir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
-            isWall |= Physics.Raycast(playerFeet.position,dir, wallDetectionRange*4, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
+            isWall |= Physics.Raycast(playerFeet.position,dir, wallRideDetectionRange*2, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
         }
         return isWall;
     }
@@ -1317,17 +1317,16 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             if (hit.collider.TryGetComponent<GrapplePoint>(out grapplePoint))
             {
                 _currentGrapplePoint = grapplePoint.p_targetTransform;
+                
+                grappleDirection = _currentGrapplePoint.position - transform.position;
+                grappleStartingDistance = grappleDirection.magnitude;
+                grappleDirection.Normalize();
+                return;
             }
         }
-        else //ne devrait pas etre appelé
-        {
-            stateMachine.ChangeState(ControlerState.Idle);
-            Debug.Log("No Grapple Point found");
-        }
-
-        grappleDirection = _currentGrapplePoint.position - transform.position;
-        grappleStartingDistance = grappleDirection.magnitude;
-        grappleDirection.Normalize();
+        
+        stateMachine.ChangeState(ControlerState.Idle);
+        Debug.LogWarning("No Grapple Point found");
     }
 
     void GrappleUpdate()
@@ -1363,7 +1362,6 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         }
 
         rb.linearVelocity = newDir * _grapplingSpeed;
-        Debug.Log("distance with grapple point" + Vector3.Distance(transform.position, _currentGrapplePoint.position));
     }
 
     void ExitGrappleState()
@@ -1658,7 +1656,6 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(playerFeet.position, playerFeet.position + Vector3.down * 0.1f);
         Gizmos.DrawLine(playerLeftSide.position,
             playerLeftSide.position + playerLeftSide.forward * wallRideDetectionRange);
         Gizmos.DrawLine(playerRightSide.position,
@@ -1666,5 +1663,13 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(point1, bodyRadius);
         Gizmos.DrawWireSphere(point2, bodyRadius);
+        Gizmos.color = Color.green;
+        for (int i = 0; i < 8; i++)
+        {
+            float angle = i * 45f;
+
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+            Gizmos.DrawLine(transform.position, transform.position + dir* (2*wallRideDetectionRange));
+        }
     }
 }

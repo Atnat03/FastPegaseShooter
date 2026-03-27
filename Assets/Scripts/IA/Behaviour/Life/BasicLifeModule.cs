@@ -11,13 +11,6 @@ using UnityEngine;
 
 public class BasicLifeModule : EnemyLifeModule
 {
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-        
-        ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
-        ListenToEvent((EndOverloadEvent EOE) => p_damageMultiplier = 1);
-    }
 
     [Server]
     public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)

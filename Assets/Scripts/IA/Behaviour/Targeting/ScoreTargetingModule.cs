@@ -39,9 +39,9 @@ public class ScoreTargetingModule : EnemyTargetingModule
     {
         base.OnNetworkTick();
         _timeSincePointAdded += (float)InstanceFinder.TimeManager.TickDelta;
-        string text = "";
-        if(_currentThreshold < _aggroPointsThreshold.Count)
-            text = $"currentTarget: {p_targetId} => next threshold :{_aggroPointsThreshold[_currentThreshold]}";
+        //string text = "";
+        /*if(_currentThreshold < _aggroPointsThreshold.Count)
+            text = $"currentTarget: {p_targetId} => next threshold :{_aggroPointsThreshold[_currentThreshold]}";*/
         
         foreach (var newEntry in _playerToAdd)
         {
@@ -77,13 +77,13 @@ public class ScoreTargetingModule : EnemyTargetingModule
             if (p_targetId == playerId && _playerAggroValue[playerId] == 0)
                 p_targetId = -1;
             
-            text += $"p{playerId}: {_playerAggroValue[playerId]}";
+            //text += $"p{playerId}: {_playerAggroValue[playerId]}";
         }
 
         if (p_targetId == -1) _currentThreshold = 0;
 
         if (_timeSincePointAdded > 1) _timeSincePointAdded = 0;
-        CustomLogger.HighlightLog(text);
+        //CustomLogger.HighlightLog(text);
     }
 
     protected override void OnPlayerPositionUpdate(PlayerPositionUpdateEvent PPUE)
@@ -127,11 +127,17 @@ public class ScoreTargetingModule : EnemyTargetingModule
 
     public void OnHitPlayer(int playerId, int damages)
     {
-        _playerAggroValue[playerId] += damages*_aggroPointPerDamageDealed;
+        if(_playerAggroValue.ContainsKey(playerId))
+            _playerAggroValue[playerId] += damages*_aggroPointPerDamageDealed;
+        else 
+            _playerAggroValue.Add(playerId, damages*_aggroPointPerDamageDealed);
     }
     public void OnDamageTaken(int playerId, int damages)
     {
-        _playerAggroValue[playerId] += damages*_aggroPointPerDamageTaken;
+        if(_playerAggroValue.ContainsKey(playerId))
+            _playerAggroValue[playerId] += damages*_aggroPointPerDamageTaken;
+        else 
+            _playerAggroValue.Add(playerId, damages*_aggroPointPerDamageTaken);
     }
 
     private void OnDrawGizmos()

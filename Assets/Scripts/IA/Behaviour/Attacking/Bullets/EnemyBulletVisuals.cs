@@ -12,7 +12,6 @@ public class EnemyBulletVisuals : MonoBusListener
 
     private int _bulletId;
 
-    private Action _unsubscribeAction;
 
     public void SetupVariables(Vector3 startPos, Vector3 direction, float speed, float bulletSize, float spawnTime, int bulletId, float damage)
     {
@@ -32,7 +31,6 @@ public class EnemyBulletVisuals : MonoBusListener
         {
             if (this != null && BDE.p_bulletId == _bulletId)
             {
-                _unsubscribeAction();
                 KillBullet();
             }
         });
@@ -43,9 +41,11 @@ public class EnemyBulletVisuals : MonoBusListener
         if(gameObject != null)
             Destroy(gameObject);
     }
-
-    private void OnDestroy()
+    
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+        
         if(InstanceFinder.TimeManager != null)
             InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }

@@ -15,7 +15,7 @@ public class MonoBusListener : MonoBehaviour
         EventBus.InvokeEvent(newEvent);
     }
 
-    protected void OnDestroy()
+    protected virtual void OnDestroy()
     {
         UnsubscribeAll();
     }
