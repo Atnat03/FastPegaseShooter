@@ -8,6 +8,7 @@ public class EnemyCoreInspector : Editor
     private SerializedProperty _maxEnemySwelling;
     private SerializedProperty _attackingModules;
     private SerializedProperty _lifeModules;
+    private SerializedProperty _targetModules;
     private SerializedProperty _movingModule;
 
     private GUIStyle _centeredTitleStyle;
@@ -21,6 +22,7 @@ public class EnemyCoreInspector : Editor
         _maxEnemySwelling = serializedObject.FindProperty("_maxEnemySwelling");
         _attackingModules = serializedObject.FindProperty("_attackingModules");
         _lifeModules = serializedObject.FindProperty("_lifeModules");
+        _targetModules = serializedObject.FindProperty("_targetingModules");
         _movingModule = serializedObject.FindProperty("_movingModule");
 
         _centeredTitleStyle = new GUIStyle
@@ -68,6 +70,7 @@ public class EnemyCoreInspector : Editor
         EditorGUILayout.PropertyField(_maxEnemySwelling);
         EditorUtilities.DrawList(_attackingModules, "Attacking Modules", _listStyle, ref _attackListOpened);
         EditorUtilities.DrawList(_lifeModules, "Life Modules", _listStyle, ref _lifeListOpened);
+        EditorUtilities.DrawList(_targetModules, "Target Modules", _listStyle, ref _lifeListOpened);
         
         GUILayout.BeginVertical("box");
         GUILayout.Label("Moving Module", _titleStyle);

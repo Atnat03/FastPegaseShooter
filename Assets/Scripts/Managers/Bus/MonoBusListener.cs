@@ -17,6 +17,10 @@ public class MonoBusListener : MonoBehaviour
     {
         _unsubscribeActions.Add(_bus.Subscribe(listeningAction));
     }
+    protected void InvokeEvent<T>(T newEvent) where T : struct
+    {
+        _bus.InvokeEvent(newEvent);
+    }
 
     protected void OnDestroy()
     {

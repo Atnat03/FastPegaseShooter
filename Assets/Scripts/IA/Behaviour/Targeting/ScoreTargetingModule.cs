@@ -17,7 +17,6 @@ public class ScoreTargetingModule : EnemyTargetingModule
     [Header("Zones")]
     [SerializeField] private float _detectionZoneRadius;
     [SerializeField] private float _aggroZoneRadius;
-    [SerializeField] private float _idealDistanceRadius;
     
 
     private HashSet<int> _players = new HashSet<int>();
@@ -137,8 +136,6 @@ public class ScoreTargetingModule : EnemyTargetingModule
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _idealDistanceRadius);
         Gizmos.color = Color.orange;
         Gizmos.DrawWireSphere(transform.position, _aggroZoneRadius);
         Gizmos.color = Color.yellow;

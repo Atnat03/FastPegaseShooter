@@ -3,7 +3,7 @@ using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
-public class BasicEnemyMelee : EnemyAttackingModule
+public class BasicMeleeAttackModule : EnemyAttackingModule
 {
     [SerializeField] private float _maxPlayerDistance = 1.5f;
     

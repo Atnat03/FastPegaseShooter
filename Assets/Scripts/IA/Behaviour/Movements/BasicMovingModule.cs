@@ -1,23 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicEnemyMovements : EnemyMovingModule
+public class BasicMovingModule : EnemyMovingModule
 {
-    [SerializeField] private float _speed;
-
-    private List<PathfindingNode> _path = new List<PathfindingNode>();
     private Vector3 _lastPos;
     private float _t;
 
     public override void OnPlayerMoving(int playerObjectId, Vector3 playerPosition, PathfindingGridReader gridReader)
     {
-        if (_targetingModule.IsMyTarget(playerObjectId))
-        {
-            //Updating Pathfinding
-            _path = gridReader.GetPath(transform.position, playerPosition);
-            _lastPos = transform.position;
-            _t = 0;
-        }
+        base.OnPlayerMoving(playerObjectId, playerPosition, gridReader);
+        
+        //only called when playerObjectId is the target
+        _lastPos = transform.position;
+        _t = 0;
     }
 
 

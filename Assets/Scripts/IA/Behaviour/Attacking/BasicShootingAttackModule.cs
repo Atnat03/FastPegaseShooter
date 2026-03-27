@@ -4,7 +4,7 @@ using UnityEngine;
 using FishNet.Object;
 
 
-public class BasicEnemyShooting : EnemyAttackingModule
+public class BasicShootingAttackModule : EnemyAttackingModule
 {
     [SerializeField] private float _maxPlayerDistance = 10f;
     [SerializeField] private float _bulletSize = 0.2f;
