@@ -50,12 +50,12 @@ namespace GunDecorator
         [SerializeField, Tooltip("Model 3d de l'arme")] 
         private MeshRenderer _model;
         [SerializeField, Tooltip("Audio Source de l'arme")] 
-        public AudioSource p_source;
+        public AudioSource _source;
         [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")] 
-        public SoundsDataSO p_soundData;
+        public SoundsDataSO _soundData;
         
         [SerializeField, Tooltip("Animation du modele de l'arme")] 
-        public Animator p_animator;
+        public Animator _animator;
         
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
         [SerializeField][Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
@@ -208,8 +208,8 @@ namespace GunDecorator
 
         public void PlaySound(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(p_soundData,sound);
-            SoundManager.PlaySound(clip, p_source, 0.5f);
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            SoundManager.PlaySound(clip, _source, 0.5f);
             
             PlaySoundServerRpc(sound);
         }
@@ -223,8 +223,8 @@ namespace GunDecorator
         [ObserversRpc(ExcludeOwner = true)]
         void PlaySoundObserverRpc(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(p_soundData,sound);
-            SoundManager.PlaySound(clip, p_source, 0.5f);
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            SoundManager.PlaySound(clip, _source, 0.5f);
         }
 
         [ObserversRpc]

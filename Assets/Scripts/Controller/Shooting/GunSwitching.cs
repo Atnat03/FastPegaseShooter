@@ -66,11 +66,11 @@ public class GunSwitching : NetworkBehaviour
 		{
 			_secondaryGunsList.Add(gun.gameObject);
 		}
-
-		UpdateVisual(true);
 		
 		_currentMainGun.Value = startIndex;
 		_currentSecondaryGun.Value = startIndex;
+		
+		UpdateVisual(true);
 		
 		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
@@ -130,8 +130,7 @@ public class GunSwitching : NetworkBehaviour
 			yield return null;
 		}
 
-		if(IsServerInitialized)
-			ActivateCurrentGun(list, index);
+		ActivateCurrentGun(list, index);
 	
 		_mainGunParent.SetActive(isMain);
 		_secondaryGunParent.SetActive(!isMain);
