@@ -179,8 +179,6 @@ public class GunSwitching : NetworkBehaviour
 	void ChangeCurrentGun_Main(int newIndex)
 	{
 		_currentMainGun.Value = newIndex;
-		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
-		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
 	}
 		
 	private void OnCurrentGunMainChange(int prev, int next, bool asServer)
@@ -189,6 +187,11 @@ public class GunSwitching : NetworkBehaviour
        
 		if (next < _mainGunsList.Count)
 		{
+			_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+			_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
+			
+			_currentISurcharge.StopReload();
+			
 			if (IsOwner)
 			{
 				CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
@@ -207,6 +210,8 @@ public class GunSwitching : NetworkBehaviour
 	{
 		if (_secondaryGunsList == null || _secondaryGunsList.Count == 0) return;
        
+		_currentSecondIGun = CurrentSecondaryGun.GetComponent<IGun>();
+		
 		if (next < _secondaryGunsList.Count && !IsMainGun)
 		{
 			ActivateCurrentGun(_secondaryGunsList, next);
@@ -216,7 +221,6 @@ public class GunSwitching : NetworkBehaviour
 	public void ChangeCurrentGun_Secondary(int newIndex)
 	{
 		_currentSecondaryGun.Value = newIndex;
-		_currentSecondIGun = CurrentSecondaryGun.GetComponent<IGun>();
 	} 
 
 	

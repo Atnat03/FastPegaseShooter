@@ -57,7 +57,7 @@ public class RecoilModule : GunModule, IRecoilModule
 
     void Start()
     {
-        _initialLocalPos = _recoilTransform.localPosition;
+        _initialLocalPos = _gunController.ModelGun.transform.localPosition;
     }
 
     public void Recoil(Transform model, float time, bool isFullAuto, float multiplier = 1, float newX = 1)

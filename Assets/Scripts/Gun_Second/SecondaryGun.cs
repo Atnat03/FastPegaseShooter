@@ -111,6 +111,8 @@ public class SecondaryGun : NetworkBehaviour, IGun
 	public void TryShootCharged()
 	{ }
 
+	public bool IsFullAuto => false;
+
 	public void Disable(bool state)
 	{
 		_model.SetActive(state);
