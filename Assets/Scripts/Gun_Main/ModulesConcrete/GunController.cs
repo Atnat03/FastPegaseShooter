@@ -33,7 +33,7 @@ public interface ISurcharge
 
 namespace GunDecorator
 {
-    public class GunController : NetworkBehaviour, IGun, ISurcharge
+    public class GunController : NetworkBusListener, IGun, ISurcharge
     {
         public bool IsOverload => _isOverload.Value;
         public float SurchargeMultiplierDamage { get; set; }
@@ -64,13 +64,9 @@ namespace GunDecorator
         private bool ShootingInputPressed;
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-
-        private EventBus _bus;
-
+        
         private void Awake()
         {
-            _bus = EventBusInitialiser.instance.Bus;
-            
             //On récupere tout les types de modules possible et potentiellement sur l'arme
             _shootModule = GetComponents<IShootModule>();
             _reloadModule = GetComponent<IReloadModule>();
@@ -110,7 +106,7 @@ namespace GunDecorator
                 }
             }
             
-            _bus.InvokeEvent(new OnCameraShakeEvent
+            InvokeEvent(new OnCameraShakeEvent
             {
                 player = NetworkObject,
                 duration = _cameraShakeSettings.x,

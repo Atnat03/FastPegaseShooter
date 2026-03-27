@@ -1,12 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FishNet.Object;
-using UnityEngine;
-
-public interface INetworkEvent
-{
-    public NetworkObject player { get; set; }
-}
 
 public class EventBus
 {

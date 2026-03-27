@@ -4,7 +4,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public class PlayerHealth : NetworkBehaviour
+public class PlayerHealth : NetworkBusListener
 {
 	#region Properties
 
@@ -33,8 +33,6 @@ public class PlayerHealth : NetworkBehaviour
 
 	private Vector3 _startPos;
 	
-	private EventBus _bus;
-	
 	//Action
 	public Action<float> OnUpdateHealth;
 	public Action OnStartWarning;
@@ -53,16 +51,13 @@ public class PlayerHealth : NetworkBehaviour
 			_currentHealth.Value = _healthBase;
 			_initialized = true;
 		}
-		
-		_bus = EventBusInitialiser.instance.Bus;
-		_bus.Subscribe((PlayerTakeDamageEvent data) => TakeDamage(data));
-		_bus.Subscribe((AddHealthFromBarEvent data) => AddHealth(data));
+
+		ListenToEvent<PlayerTakeDamageEvent>(TakeDamage);
+		ListenToEvent<AddHealthFromBarEvent>(AddHealth); 
 	}
 
 	public override void OnStartClient()
 	{
-		_bus = EventBusInitialiser.instance.Bus;
-		
 		_currentHealth.OnChange += OnHealthChange;
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
@@ -155,13 +150,13 @@ public class PlayerHealth : NetworkBehaviour
 	[ObserversRpc]
 	private void NotifyDeathRpc(NetworkObject playerN)
 	{
-		_bus.InvokeEvent(new OnPlayerDeathEvent { playerN = playerN });
+		InvokeEvent(new OnPlayerDeathEvent { playerN = playerN });
 	}
 	
 	[ObserversRpc]
 	private void NotifyRespawnRpc(NetworkObject playerN)
 	{
-		_bus.InvokeEvent(new OnPlayerRespawnEvent { playerN = playerN });
+		InvokeEvent(new OnPlayerRespawnEvent { playerN = playerN });
 	}
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
