@@ -74,7 +74,9 @@ public class EnemyBulletManager : NetworkBehaviour
     void AddBullet(EnemyShootingEvent ESE)
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
-        EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, networkTime, ESE.p_aliveTime,_lastBulletId, ESE.p_damage, ESE.p_enemyAttackingModule);
+        EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, ESE.p_bulletSize,
+            networkTime, ESE.p_aliveTime,_lastBulletId,
+            ESE.p_damage, ESE.p_enemyAttackingModule);
 
         _lastBulletId++;
         
@@ -91,7 +93,7 @@ public class EnemyBulletManager : NetworkBehaviour
         GameObject newBullet = Instantiate(_bulletPrefab, ESE.p_startPos, Quaternion.identity);
         
         EnemyBulletVisuals EBV = newBullet.GetComponent<EnemyBulletVisuals>();
-        EBV.SetupVariables(ESE.p_startPos, ESE.p_direction, ESE.p_speed, spawnTime, bulletId, ESE.p_damage);
+        EBV.SetupVariables(ESE.p_startPos, ESE.p_direction, ESE.p_speed, ESE.p_bulletSize, spawnTime, bulletId, ESE.p_damage);
     }
 
     [ObserversRpc]

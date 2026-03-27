@@ -11,12 +11,15 @@ public class EnemyBullet
     private float _spawnTime;
     private Vector3 _lastPosition;
     private float _maxLifeTime;
+    private float _bulletSize;
 
     public int p_bulletId;
     public int p_bulletStrenght;
     public EnemyAttackingModule p_attackingModule;
 
-    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float serverSpawnTime, float maxLifeTime, int bulletId, int strenght, EnemyAttackingModule attackingModule)
+    public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float bulletSize,
+        float serverSpawnTime, float maxLifeTime,
+        int bulletId, int strenght, EnemyAttackingModule attackingModule)
     {
         _startPos = startPos;
         _lastPosition = startPos;
@@ -27,6 +30,7 @@ public class EnemyBullet
         p_bulletStrenght = strenght;
         _maxLifeTime = maxLifeTime;
         p_attackingModule = attackingModule;
+        _bulletSize = bulletSize;
     }
 
     /// <summary>
@@ -52,7 +56,7 @@ public class EnemyBullet
         Vector3 dir = delta / length;
 
         //May change CompareTag by layer checking
-        if(Physics.Raycast(startPos, dir, out RaycastHit hit, length))
+        if(Physics.SphereCast(startPos,  _bulletSize,dir, out RaycastHit hit, length))
         {
             PlayerVisuelBridge PVB = hit.collider.GetComponent<PlayerVisuelBridge>();
             if(PVB == null)
