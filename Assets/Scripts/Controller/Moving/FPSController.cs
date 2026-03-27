@@ -10,11 +10,6 @@ public struct RequestEnergyEvent
     public IEnergyRequest requester;
 }
 
-public struct RequestEnergyResponseEvent
-{
-    public float energy;
-}
-
 public class FPSController : NetworkBusListener, IEnergyRequest
 {
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
@@ -224,8 +219,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             _camTransform = _camera.transform;
             _cameraDefaultFOV = _camera.fieldOfView;
             _camTransform.localPosition = Vector3.zero;
-
-            ListenToEvent<RequestEnergyResponseEvent>(data => enoughtEnegyToDash = data.energy >= dashEnergyCost);
+            
             ListenToEvent<OnPlayerDeathEvent>(data =>
             {
                 if (data.playerN == NetworkObject)
@@ -496,12 +490,13 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             else stateMachine.ChangeState(ControlerState.Crouching);
         }
 
-        InvokeEvent(new RequestEnergyEvent { requester = this });
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
-            enoughtEnegyToDash)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            stateMachine.ChangeState(ControlerState.Dashing);
+            InvokeEvent(new RequestEnergyEvent { requester = this });
+
+            if(enoughtEnegyToDash)            
+                stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
@@ -572,12 +567,13 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             else stateMachine.ChangeState(ControlerState.Sliding);
         }
 
-        InvokeEvent(new RequestEnergyEvent { requester = this });
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
-            enoughtEnegyToDash)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            stateMachine.ChangeState(ControlerState.Dashing);
+            InvokeEvent(new RequestEnergyEvent { requester = this });
+
+            if(enoughtEnegyToDash)
+                stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
@@ -668,12 +664,13 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             }
         }
 
-        InvokeEvent(new RequestEnergyEvent { requester = this });
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
-            enoughtEnegyToDash)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            stateMachine.ChangeState(ControlerState.Dashing);
+            InvokeEvent(new RequestEnergyEvent { requester = this });
+         
+            if(enoughtEnegyToDash)
+                stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())

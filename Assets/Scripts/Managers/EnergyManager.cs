@@ -50,7 +50,9 @@ public class EnergyManager : NetworkBusListener
     public override void OnStartClient()
     {
         ListenToEvent<OnModifyEnergyEvent>(data => ModifyEnergyServerRpc(data.value));
-        ListenToEvent<RequestEnergyEvent>(data => InvokeEvent(new RequestEnergyResponseEvent { energy = _currentEnergy.Value }));        
+        
+        ListenToEvent<RequestEnergyEvent>(data => data.requester.OnGetEnergy(_currentEnergy.Value));
+        
 
         _totalBars = Mathf.CeilToInt(_energyMax / _valueOneBar);
         
@@ -105,7 +107,6 @@ public class EnergyManager : NetworkBusListener
 
         _targetEnergy = next;
         _isLerping = true;
-        InvokeEvent(new RequestEnergyResponseEvent { energy = next });
     }
 
     private void UpdateVisualBars(float energy)
