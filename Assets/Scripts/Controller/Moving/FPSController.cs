@@ -61,6 +61,9 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField]
     private bool singleClicGrapple;
 
+    [Tooltip("est ce que le joueur peut regarder partout quand il est en wallride sans quitter cet état")]
+    [SerializeField] private bool omnidirectionalWallRide;
+    
     [Header("UnlockedCapacities")] public bool wallRideUnlocked = true;
     public bool slideUnlocked = true;
     public bool dashUnlocked = true;
@@ -537,6 +540,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     void IdleFixedUpdate()
     {
+        rb.linearVelocity = Vector3.zero;
     }
 
     void IdleLateUpdate()
@@ -862,9 +866,20 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     void WallRidingUpdate()
     {
-        if (verticalInput == 0f || (!leftSideAgainstWall && !rightSideAgainstWall) || !wallRidingCoroutineRunning)
+        if (omnidirectionalWallRide)
         {
-            stateMachine.ChangeState(ControlerState.Falling);
+            Debug.Log("detectWall : " + DetectWall());
+            if (verticalInput == 0f || !DetectWall() || !wallRidingCoroutineRunning)
+            {
+                stateMachine.ChangeState(ControlerState.Falling);
+            }
+        }
+        else
+        {
+            if (verticalInput == 0f || (!leftSideAgainstWall && !rightSideAgainstWall) || !wallRidingCoroutineRunning)
+            {
+                stateMachine.ChangeState(ControlerState.Falling);
+            }
         }
 
         if (playerInput.actions["Jump"].WasPressedThisFrame())
@@ -912,6 +927,19 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         UpdateCameraPositionAndRotation(true, wallRidingHeadbobAmplitude, wallRidingHeadbobFrequency);
     }
 
+    bool DetectWall()
+    {
+        bool isWall = false;
+        for (int i = 0; i < 8; i++)
+        {
+            float angle = i * 45f;
+
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+            isWall |= Physics.Raycast(playerFeet.position,dir, wallDetectionRange*4, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
+        }
+        return isWall;
+    }
+
     IEnumerator WallRidingDurationCoroutine()
     {
         yield return new WaitForSeconds(wallRidingDuration);
@@ -926,7 +954,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         justWallridedSameSide = true;
         yield return new WaitForSeconds(wallRideCooldownChangeSide);
         justWallridedOtherSide = false;
-        if (wallRideCooldownSameSide - wallRideCooldownChangeSide <= 0)
+        if (wallRideCooldownSameSide - wallRideCooldownChangeSide < 0)
         {
             justWallridedSameSide = false;
             Debug.LogError(
