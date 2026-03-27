@@ -35,7 +35,7 @@ public class BasicLifeModule : EnemyLifeModule
     {
         base.Death(takenDamages);
         InstanceFinder.ServerManager.Despawn(gameObject);
-        InvokeEvent(new EnemyDyingEvent(_enemyCore.p_gridReaderId, _enemyCore.p_enemySpawnCost));
+        InvokeEvent(new EnemyDyingEvent(_enemyCore.p_gridReaderId, _enemyCore.p_enemySpawnCost, _enemyCore));
     }
 }
 
@@ -43,11 +43,13 @@ public struct EnemyDyingEvent
 {
     public Guid p_gridReaderId;
     public int p_enemySpawnCost;
+    public EnemyCore p_enemyCore;
 
-    public EnemyDyingEvent(Guid id, int cost)
+    public EnemyDyingEvent(Guid id, int cost, EnemyCore core)
     {
         p_gridReaderId = id;
         p_enemySpawnCost = cost;
+        p_enemyCore = core;
     }
 }
 
