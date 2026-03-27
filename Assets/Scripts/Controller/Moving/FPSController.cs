@@ -1317,17 +1317,16 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             if (hit.collider.TryGetComponent<GrapplePoint>(out grapplePoint))
             {
                 _currentGrapplePoint = grapplePoint.p_targetTransform;
+                
+                grappleDirection = _currentGrapplePoint.position - transform.position;
+                grappleStartingDistance = grappleDirection.magnitude;
+                grappleDirection.Normalize();
+                return;
             }
         }
-        else //ne devrait pas etre appelé
-        {
-            stateMachine.ChangeState(ControlerState.Idle);
-            Debug.Log("No Grapple Point found");
-        }
-
-        grappleDirection = _currentGrapplePoint.position - transform.position;
-        grappleStartingDistance = grappleDirection.magnitude;
-        grappleDirection.Normalize();
+        
+        stateMachine.ChangeState(ControlerState.Idle);
+        Debug.LogWarning("No Grapple Point found");
     }
 
     void GrappleUpdate()
@@ -1363,7 +1362,6 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         }
 
         rb.linearVelocity = newDir * _grapplingSpeed;
-        Debug.Log("distance with grapple point" + Vector3.Distance(transform.position, _currentGrapplePoint.position));
     }
 
     void ExitGrappleState()
