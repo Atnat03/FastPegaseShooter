@@ -69,6 +69,8 @@ namespace GunDecorator
                 
                 _ammoModule.ResetBulletData();
             }
+
+            _gunController.PlaySound("Shoot");
         }
         
         public void CancelShooting()

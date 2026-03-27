@@ -181,9 +181,7 @@ namespace GunDecorator
             if (_reloadModule.IsReloading) return;
             
             _reloadModule?.Reload();
-
-            AudioClip clip = SoundManager.GetAudioClip(_soundData,"Reload");
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            PlaySound("Reload");
         }
 
         public void TriggerHitMark(bool isCritique = false)
@@ -211,6 +209,27 @@ namespace GunDecorator
         public void Disable(bool state)
         {
             _model.gameObject.SetActive(state);
+        }
+
+        public void PlaySound(string sound)
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            SoundManager.PlaySound(clip, _source, 0.5f);
+            
+            PlaySoundServerRpc(sound);
+        }
+
+        [ServerRpc]
+        void PlaySoundServerRpc(string sound)
+        {
+            PlaySoundObserverRpc(sound);
+        }
+
+        [ObserversRpc(ExcludeOwner = true)]
+        void PlaySoundObserverRpc(string sound)
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            SoundManager.PlaySound(clip, _source, 0.5f);
         }
 
         [ObserversRpc]
