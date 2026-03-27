@@ -42,7 +42,7 @@ public class BasicLifeModule : EnemyLifeModule
     {
         base.Death(takenDamages);
         InstanceFinder.ServerManager.Despawn(gameObject);
-        EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyDyingEvent(_enemyCore.p_gridReaderId, _enemyCore.p_enemySpawnCost));
+        InvokeEvent(new EnemyDyingEvent(_enemyCore.p_gridReaderId, _enemyCore.p_enemySpawnCost));
     }
 }
 

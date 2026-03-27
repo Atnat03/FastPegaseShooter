@@ -3,20 +3,13 @@ using System.Collections.Generic;
 using FishNet.Object;
 using UnityEngine;
 
-public class Lave : NetworkBehaviour
+public class Lave : NetworkBusListener
 {
     [SerializeField] private float _damage = 10;
     [SerializeField] private float _timeTickDamage = 1;
     
     private Dictionary<NetworkObject, float> _playerTimers = new Dictionary<NetworkObject, float>();
     
-    private EventBus _bus;
-
-    public override void OnStartServer()
-    {
-        _bus = EventBusInitialiser.instance.Bus;
-    }
-
     private void Update()
     {
         if (!IsServerInitialized) return;
@@ -58,7 +51,7 @@ public class Lave : NetworkBehaviour
 
         _playerTimers[playerCollision] = _timeTickDamage;
 
-        _bus.InvokeEvent(new PlayerTakeDamageEvent
+        InvokeEvent(new PlayerTakeDamageEvent
         {
             playerN = playerCollision,
             value = _damage

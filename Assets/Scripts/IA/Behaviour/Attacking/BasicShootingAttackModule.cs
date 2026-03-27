@@ -24,7 +24,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
             float length = delta.magnitude;
             Vector3 dir = delta / length;
             
-            EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyShootingEvent
+            InvokeEvent(new EnemyShootingEvent
             {
                 p_startPos = transform.position + dir * 0.1f + Vector3.up * 0.5f,
                 p_direction = dir,

@@ -15,7 +15,7 @@ public struct RequestEnergyResponseEvent
     public float energy;
 }
 
-public class FPSController : NetworkBehaviour, IEnergyRequest
+public class FPSController : NetworkBusListener, IEnergyRequest
 {
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
 
@@ -210,17 +210,13 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     }
 
     public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
-
-    private EventBus _bus;
-
+    
     #endregion
 
     public override void OnStartClient()
     {
         base.OnStartClient();
-
-        _bus = EventBusInitialiser.instance.Bus;
-
+        
         if (IsOwner)
         {
             SetUpLayer();
@@ -229,29 +225,14 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             _cameraDefaultFOV = _camera.fieldOfView;
             _camTransform.localPosition = Vector3.zero;
 
-            _bus.Subscribe((RequestEnergyResponseEvent data) =>
-            {
-                enoughtEnegyToDash = data.energy >= dashEnergyCost;
-            });
-
-            _bus.Subscribe((RequestEnergyResponseEvent data) =>
-            {
-                enoughtEnegyToDoubleJump = data.energy >= superJumpEnergyCost;
-            });
-
-            _bus.Subscribe((OnPlayerDeathEvent data) =>
+            ListenToEvent<RequestEnergyResponseEvent>(data => enoughtEnegyToDash = data.energy >= dashEnergyCost);
+            ListenToEvent<OnPlayerDeathEvent>(data =>
             {
                 if (data.playerN == NetworkObject)
                     SetDeadServerRpc(true);
             });
-
-            _bus.Subscribe((OnPlayerDeathEvent data) =>
-            {
-                if (data.playerN == NetworkObject)
-                    SetDeadServerRpc(true);
-            });
-
-            _bus.Subscribe((OnPlayerRespawnEvent data) =>
+            
+            ListenToEvent<OnPlayerRespawnEvent>(data =>
             {
                 if (data.playerN == NetworkObject)
                     SetDeadServerRpc(false);
@@ -515,7 +496,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             else stateMachine.ChangeState(ControlerState.Crouching);
         }
 
-        _bus.InvokeEvent(new RequestEnergyEvent { requester = this });
+        InvokeEvent(new RequestEnergyEvent { requester = this });
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
             enoughtEnegyToDash)
@@ -591,7 +572,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             else stateMachine.ChangeState(ControlerState.Sliding);
         }
 
-        _bus.InvokeEvent(new RequestEnergyEvent { requester = this });
+        InvokeEvent(new RequestEnergyEvent { requester = this });
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
             enoughtEnegyToDash)
@@ -687,7 +668,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             }
         }
 
-        _bus.InvokeEvent(new RequestEnergyEvent { requester = this });
+        InvokeEvent(new RequestEnergyEvent { requester = this });
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
             enoughtEnegyToDash)
@@ -1197,7 +1178,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
 
-        _bus.InvokeEvent(new OnModifyEnergyEvent { value = -dashEnergyCost });
+        InvokeEvent(new OnModifyEnergyEvent { value = -dashEnergyCost });
 
         dashingDirection *= dashSpeed;
         StartCoroutine(DashingCoroutine());
@@ -1596,7 +1577,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce,
                 ForceMode.Impulse);
-            _bus.InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
+            InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
         }
     }
 
