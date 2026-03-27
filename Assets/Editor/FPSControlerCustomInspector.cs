@@ -53,6 +53,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("clampedMaxAirSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpSlideOnEndOfSlide"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("singleClicGrapple"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("omnidirectionalWallRide"));
         }, ref showParameters);
 
         DrawSection("Unlocked Capacities", new Color(1f, 0.85f, 0.6f), () =>
