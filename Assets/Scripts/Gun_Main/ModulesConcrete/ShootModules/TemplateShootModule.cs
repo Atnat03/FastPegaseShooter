@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FishNet.Object;
+using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 
@@ -22,6 +23,14 @@ namespace GunDecorator
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
         private Vector3 _bulletOffset = Vector3.zero;
+
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is TemplateShootSetting shootSetting)
+            {
+                _fireRate = shootSetting.fireRate;
+            }
+        }
         
         private void Start()
         {

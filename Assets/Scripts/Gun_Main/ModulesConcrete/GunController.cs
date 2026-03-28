@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
@@ -46,6 +48,9 @@ namespace GunDecorator
         private ChargedParentModule _chargedModule;
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
+
+        [SerializeField, Tooltip("ScriptableObject contenant les settings de l'arme équilibré")]
+        private GunModuleSettingsSO _settings;
         
         [SerializeField, Tooltip("Model 3d de l'arme")] 
         private MeshRenderer _model;
@@ -73,10 +78,25 @@ namespace GunDecorator
             _hitMarkerModule = GetComponent<IHitMarkerModule>();
             _chargedModule = GetComponent<ChargedParentModule>();
 
+            List<GunModule> modules = GetComponents<GunModule>().ToList();
+
             //On initialise tout les modules de l'arme
-            foreach (GunModule module in GetComponents<GunModule>())
+            foreach (GunModule module in modules)
             {
                 module.Initialize(this);
+            }
+
+            if(_settings != null)
+            {
+                foreach (GunSetting s in _settings.modulesList)
+                {
+                    GunModule found = modules.Find(x => x.GetType().Name == s.displayName);
+
+                    if (found != null)
+                    {
+                        found.SetVariable(s);
+                    }
+                }
             }
         }
 
