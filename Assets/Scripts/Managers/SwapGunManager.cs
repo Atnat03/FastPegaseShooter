@@ -21,7 +21,7 @@ namespace Managers
         public Color colorJauge;
     }
     
-    public class SwapGunManager : NetworkBehaviour
+    public class SwapGunManager : NetworkBusListener
     {
         [SerializeField] private float _timeToAcceptSwap = 2f;
         public readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
@@ -43,8 +43,6 @@ namespace Managers
         private float _displayedTime = 0f;
         private float _targetTime = 0f;
         
-        private EventBus _bus;
-
         public Action<float> OnUpdateAskBroSwap;
         public Action<bool> OnChangeAskText;
 
@@ -55,28 +53,18 @@ namespace Managers
             _elapsedTimeForCombo.Value = 0;
             _elapsedTime.Value = 0;
             
-            InitBus();
-            _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
-            _bus.Subscribe((EndOverloadEvent data) =>
-            {
-                _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo;
-            });
+            ListenToEvent<CallSwapGunEvent>(CheckCanSwapServerRpc);
+            ListenToEvent<EndOverloadEvent>(data => _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo);
         }
 
         public override void OnStartClient()
         {
             base.OnStartClient();
             
-            InitBus();
             _elapsedTime.OnChange += OnElapsedTimeChanged;
             _elapsedTimeForCombo.OnChange += OnElapsedComboTimeChanged;
         }
         
-        private void InitBus()
-        {
-            _bus = EventBusInitialiser.instance.Bus;
-        }
-
         private void Update()
         {
             if (IsServerInitialized)
@@ -149,7 +137,7 @@ namespace Managers
         [TargetRpc]
         private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo, Color color)
         {
-            _bus.InvokeEvent(new SwapingGunEvent
+            InvokeEvent(new SwapingGunEvent
             {
                 dataSurcharge = _damageSurchargeData[_currentSurchargeLevel.Value],
                 gunIndex = newIndex,
@@ -161,7 +149,7 @@ namespace Managers
 
         void ResetTimer()
         {
-            _bus.InvokeEvent(new EndTimerSwapEvent()
+            InvokeEvent(new EndTimerSwapEvent()
             {
                 player = _player
             });

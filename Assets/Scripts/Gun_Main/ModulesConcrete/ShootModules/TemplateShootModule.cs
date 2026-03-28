@@ -8,8 +8,6 @@ namespace GunDecorator
 {
     public class TemplateShootModule : GunModule, IShootModule
     {
-
-        public bool IsFullAuto => _isFullAuto;
         public float FireRate => _fireRate;
         public IAmmoModule AmmoModule => _ammoModule;
 
@@ -19,7 +17,6 @@ namespace GunDecorator
         [SerializeField][Tooltip("type de la balle tirée par l'ensemble du module")] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
 
-        [SerializeField][Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
         [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
         
         private BulletData _currentBulletConfig;
@@ -68,18 +65,11 @@ namespace GunDecorator
                 _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
                 
                 _ammoModule.ResetBulletData();
-                
-                _gunController.PlayerShootSound("Shoot");
             }
-        }
 
-        void PlayerShootSound()
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
-            SoundManager.PlaySound(clip, _gunController._source, 0.5f);
+            _gunController.PlaySound("Shoot");
         }
         
-
         public void CancelShooting()
         { }
         

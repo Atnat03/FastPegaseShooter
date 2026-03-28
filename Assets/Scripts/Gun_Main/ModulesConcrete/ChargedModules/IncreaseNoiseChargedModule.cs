@@ -46,7 +46,7 @@ namespace GunDecorator.ChargedModules
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
             }
                             
-            _gunController.PlayerShootSound("Charged");
+            _gunController.PlaySound("Charged");
         }
     }
 }

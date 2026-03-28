@@ -17,7 +17,6 @@ public abstract class EnemyAttackingModule : EnemyBehaviourModule
     public virtual void OnNetworkTick()
     {
         _waitedTimeSinceAttack += (float)InstanceFinder.TimeManager.TickDelta;
-        _targetingModule.OnNetworkTick();
     }
 
     protected float GetTargetSqrDistance()

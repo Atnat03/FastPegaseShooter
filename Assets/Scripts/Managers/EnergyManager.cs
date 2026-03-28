@@ -10,7 +10,7 @@ public interface IEnergyRequest
     public void OnGetEnergy(float energy);
 }
 
-public class EnergyManager : NetworkBehaviour
+public class EnergyManager : NetworkBusListener
 {
     #region Properties
     
@@ -34,8 +34,6 @@ public class EnergyManager : NetworkBehaviour
     private bool _isLerping;
     private int _previousIndexFull;
     
-    private EventBus _bus;
-    
     //Actions
     public Action<int> OnCreateBarUI;
     public Action<int, float> OnUpdateUI;
@@ -47,18 +45,15 @@ public class EnergyManager : NetworkBehaviour
     public override void OnStartServer()
     {
         _currentEnergy.Value = _energyMax;
-        _bus = EventBusInitialiser.instance.Bus;
     }
     
     public override void OnStartClient()
     {
-        _bus = EventBusInitialiser.instance.Bus;
-        _bus.Subscribe((OnModifyEnergyEvent data) => ModifyEnergyServerRpc(data.value));
-        _bus.Subscribe((RequestEnergyEvent data) => 
-        {
-            _bus.InvokeEvent(new RequestEnergyResponseEvent { energy = _currentEnergy.Value });
-        });
+        ListenToEvent<OnModifyEnergyEvent>(data => ModifyEnergyServerRpc(data.value));
         
+        ListenToEvent<RequestEnergyEvent>(data => data.requester.OnGetEnergy(_currentEnergy.Value));
+        
+
         _totalBars = Mathf.CeilToInt(_energyMax / _valueOneBar);
         
         OnCreateBarUI?.Invoke(_totalBars);
@@ -112,7 +107,6 @@ public class EnergyManager : NetworkBehaviour
 
         _targetEnergy = next;
         _isLerping = true;
-        _bus.InvokeEvent(new RequestEnergyResponseEvent { energy = next });
     }
 
     private void UpdateVisualBars(float energy)
@@ -156,7 +150,7 @@ public class EnergyManager : NetworkBehaviour
     private void AddHealthObserversRpc()
     {
         Debug.Log("Add health");
-        _bus.InvokeEvent(new AddHealthFromBarEvent
+        InvokeEvent(new AddHealthFromBarEvent
         {
             value = _healFromOneBar
         });

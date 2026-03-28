@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Controller
 {
-    public class GunSurcharge : MonoBehaviour
+    public class GunSurcharge : MonoBusListener
     {
         [SerializeField] private GunBridgePlayer _gunBridge;
 
@@ -14,16 +14,10 @@ namespace Controller
         [SerializeField] private float _elapsedTimeOverload = 0;
         private float _currentOverloadTimer = 0;
 
-        private EventBus _bus;
         
         public Action<bool, float> OnOverloadTimeUpdate;
         public Action<Color> OnInfoOverloadSetColor;
-
-        private void Awake()
-        {
-            _bus = EventBusInitialiser.instance.Bus;
-        }
-
+        
         public void SetOverloadStats(bool state, float overloadTime, float dmg_Multi, float rate_Multi, int newAmmoAmount = -1)
         {
             _currentOverloadTimer = overloadTime;
@@ -55,7 +49,7 @@ namespace Controller
                 }
                 else
                 {
-                    _bus.InvokeEvent(new EndOverloadEvent());
+                    InvokeEvent(new EndOverloadEvent());
                     _isOverload = false;
                     SetOverloadStats(false, 0, 1, 1);
                 }

@@ -348,7 +348,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4034669122735167816}
-  - component: {fileID: 5760494081562315928}
   m_Layer: 0
   m_Name: DmgParent
   m_TagString: Untagged
@@ -375,26 +374,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5760494081562315928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4999955547964881675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f6b4475ac4843d4798768881fa904fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyCore
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 0}
-  _maxEnemySwelling: 0
-  _attackingModules: []
-  _lifeModules: []
-  _movingModule: {fileID: 0}
-  p_enemySpawnCost: 0
 --- !u!1 &5353756753010334805
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,14 +574,13 @@ GameObject:
   - component: {fileID: 1710859028773061241}
   - component: {fileID: 4385027282801438809}
   - component: {fileID: 2460980101886863971}
-  - component: {fileID: 2780056509964836476}
   - component: {fileID: 4639033686446523756}
-  - component: {fileID: 4856717765235199756}
+  - component: {fileID: -2748586939674322534}
   - component: {fileID: 6912678073703625548}
+  - component: {fileID: 1536957414134624642}
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: -8997744782067408838}
-  - component: {fileID: -2748586939674322534}
   m_Layer: 0
   m_Name: Enemy 1
   m_TagString: Enemy
@@ -652,7 +630,9 @@ MonoBehaviour:
   - {fileID: 4639033686446523756}
   - {fileID: 8676698036849061702}
   - {fileID: 8676698036849061702}
-  _movingModule: {fileID: 4856717765235199756}
+  _targetingModules:
+  - {fileID: 6912678073703625548}
+  _movingModule: {fileID: 1536957414134624642}
   p_enemySpawnCost: 0
 --- !u!114 &2460980101886863971
 MonoBehaviour:
@@ -673,22 +653,6 @@ MonoBehaviour:
   _damage: 10
   _attackDelay: 2
   _maxPlayerDistance: 2
---- !u!114 &2780056509964836476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5911405418369916473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 099f65e195cc2e74fb0255db981497b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FluidTargetingModule
-  _componentIndexCache: 2
-  _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 8280671740658429549}
-  p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -707,7 +671,7 @@ MonoBehaviour:
   _energyGainWhenTouch: 1
   _life: 100
   p_damageMultiplier: 1
---- !u!114 &4856717765235199756
+--- !u!114 &-2748586939674322534
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -716,14 +680,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 5911405418369916473}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5492ed17c451d4885c1b50d3efafe8, type: 3}
+  m_Script: {fileID: 11500000, guid: ba6ba93510160064a98da7ea092fae40, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
-  _componentIndexCache: 4
+  m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyShooting
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _targetingModule: {fileID: 6912678073703625548}
-  _speed: 1
+  _damage: 10
+  _attackDelay: 2
+  _maxPlayerDistance: 10
+  _bulletSize: 0.2
+  _ammoSpeed: 1
+  _maxAmmoLifeTime: 10
 --- !u!114 &6912678073703625548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747,7 +716,25 @@ MonoBehaviour:
   _aggroPointsThreshold: 0000000064000000c8000000
   _detectionZoneRadius: 10
   _aggroZoneRadius: 5
-  _idealDistanceRadius: 3
+--- !u!114 &1536957414134624642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53783909ae03234408c4b1a8d6416c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DistanceAwareMovingModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 0}
+  _doFreezeWithoutTarget: 1
+  _targetingModule: {fileID: 6912678073703625548}
+  _speed: 3
+  _idealDistance: 3
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -792,9 +779,9 @@ MonoBehaviour:
   NetworkBehaviours:
   - {fileID: 4385027282801438809}
   - {fileID: 2460980101886863971}
-  - {fileID: 2780056509964836476}
+  - {fileID: 0}
   - {fileID: 4639033686446523756}
-  - {fileID: 4856717765235199756}
+  - {fileID: 0}
   - {fileID: -8997744782067408838}
   - {fileID: 6912678073703625548}
   - {fileID: -2748586939674322534}
@@ -881,27 +868,6 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
---- !u!114 &-2748586939674322534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5911405418369916473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba6ba93510160064a98da7ea092fae40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyShooting
-  _componentIndexCache: 7
-  _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 8280671740658429549}
-  _targetingModule: {fileID: 2780056509964836476}
-  _damage: 10
-  _attackDelay: 2
-  _maxPlayerDistance: 10
-  _ammoSpeed: 1
-  _maxAmmoLifeTime: 10
 --- !u!1 &6364117521231957157
 GameObject:
   m_ObjectHideFlags: 0

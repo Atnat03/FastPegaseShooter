@@ -3,7 +3,7 @@ using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
-public class BasicEnemyMelee : EnemyAttackingModule
+public class BasicMeleeAttackModule : EnemyAttackingModule
 {
     [SerializeField] private float _maxPlayerDistance = 1.5f;
     
@@ -17,8 +17,8 @@ public class BasicEnemyMelee : EnemyAttackingModule
             if (InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(_targetingModule.p_targetId, out NetworkObject player))
             {
                 //Empty event for now
-                EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyMeleeAttack());
-                EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerTakeDamageEvent
+                InvokeEvent(new EnemyMeleeAttack());
+                InvokeEvent(new PlayerTakeDamageEvent
                 {
                     playerN = player,
                     value = _damage

@@ -4,9 +4,10 @@ using UnityEngine;
 using FishNet.Object;
 
 
-public class BasicEnemyShooting : EnemyAttackingModule
+public class BasicShootingAttackModule : EnemyAttackingModule
 {
     [SerializeField] private float _maxPlayerDistance = 10f;
+    [SerializeField] private float _bulletSize = 0.2f;
     [SerializeField] private float _ammoSpeed;
     [SerializeField] private float _maxAmmoLifeTime = 10f;
     
@@ -23,13 +24,14 @@ public class BasicEnemyShooting : EnemyAttackingModule
             float length = delta.magnitude;
             Vector3 dir = delta / length;
             
-            EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyShootingEvent
+            InvokeEvent(new EnemyShootingEvent
             {
                 p_startPos = transform.position + dir * 0.1f + Vector3.up * 0.5f,
                 p_direction = dir,
                 p_speed = _ammoSpeed,
                 p_damage = _damage,
                 p_aliveTime = _maxAmmoLifeTime,
+                p_bulletSize = _bulletSize,
                 p_enemyAttackingModule = this
             });
         }
@@ -67,6 +69,16 @@ public class BasicEnemyShooting : EnemyAttackingModule
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
         Gizmos.DrawSphere(_targetingModule.GetTargetPosition(), 0.1f);
+        
+        Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
+        float length = delta.magnitude;
+        Vector3 dir = delta / length;
+
+        Vector3 origin = transform.position + dir * 0.1f + Vector3.up * 0.5f;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(origin, _bulletSize);
+        Gizmos.DrawWireSphere(origin+dir*length, _bulletSize);
+        Gizmos.DrawLine(origin, origin + dir * length);
     }
 }
 
@@ -77,5 +89,6 @@ public struct EnemyShootingEvent
     public float p_speed;
     public int p_damage;
     public float p_aliveTime;
+    public float p_bulletSize;
     public EnemyAttackingModule p_enemyAttackingModule;
 }

@@ -9,15 +9,8 @@ using FishNet.Object.Synchronizing;
 using TMPro;
 using UnityEngine;
 
-public class BasicEnemyLife : EnemyLifeModule
+public class BasicLifeModule : EnemyLifeModule
 {
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-        
-        ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
-        ListenToEvent((EndOverloadEvent EOE) => p_damageMultiplier = 1);
-    }
 
     [Server]
     public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
@@ -42,7 +35,7 @@ public class BasicEnemyLife : EnemyLifeModule
     {
         base.Death(takenDamages);
         InstanceFinder.ServerManager.Despawn(gameObject);
-        EventBusInitialiser.instance.Bus.InvokeEvent(new EnemyDyingEvent(_enemyCore.p_gridReaderId, _enemyCore.p_enemySpawnCost));
+        InvokeEvent(new EnemyDyingEvent(_enemyCore.p_gridReaderId, _enemyCore.p_enemySpawnCost, _enemyCore));
     }
 }
 
@@ -50,11 +43,13 @@ public struct EnemyDyingEvent
 {
     public Guid p_gridReaderId;
     public int p_enemySpawnCost;
+    public EnemyCore p_enemyCore;
 
-    public EnemyDyingEvent(Guid id, int cost)
+    public EnemyDyingEvent(Guid id, int cost, EnemyCore core)
     {
         p_gridReaderId = id;
         p_enemySpawnCost = cost;
+        p_enemyCore = core;
     }
 }
 

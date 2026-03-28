@@ -10,12 +10,7 @@ public struct RequestEnergyEvent
     public IEnergyRequest requester;
 }
 
-public struct RequestEnergyResponseEvent
-{
-    public float energy;
-}
-
-public class FPSController : NetworkBehaviour, IEnergyRequest
+public class FPSController : NetworkBusListener, IEnergyRequest
 {
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
 
@@ -61,6 +56,9 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     [SerializeField]
     private bool singleClicGrapple;
 
+    [Tooltip("est ce que le joueur peut regarder partout quand il est en wallride sans quitter cet état")]
+    [SerializeField] private bool omnidirectionalWallRide;
+    
     [Header("UnlockedCapacities")] public bool wallRideUnlocked = true;
     public bool slideUnlocked = true;
     public bool dashUnlocked = true;
@@ -207,17 +205,13 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     }
 
     public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
-
-    private EventBus _bus;
-
+    
     #endregion
 
     public override void OnStartClient()
     {
         base.OnStartClient();
-
-        _bus = EventBusInitialiser.instance.Bus;
-
+        
         if (IsOwner)
         {
             SetUpLayer();
@@ -225,30 +219,14 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             _camTransform = _camera.transform;
             _cameraDefaultFOV = _camera.fieldOfView;
             _camTransform.localPosition = Vector3.zero;
-
-            _bus.Subscribe((RequestEnergyResponseEvent data) =>
-            {
-                enoughtEnegyToDash = data.energy >= dashEnergyCost;
-            });
-
-            _bus.Subscribe((RequestEnergyResponseEvent data) =>
-            {
-                enoughtEnegyToDoubleJump = data.energy >= superJumpEnergyCost;
-            });
-
-            _bus.Subscribe((OnPlayerDeathEvent data) =>
+            
+            ListenToEvent<OnPlayerDeathEvent>(data =>
             {
                 if (data.playerN == NetworkObject)
                     SetDeadServerRpc(true);
             });
-
-            _bus.Subscribe((OnPlayerDeathEvent data) =>
-            {
-                if (data.playerN == NetworkObject)
-                    SetDeadServerRpc(true);
-            });
-
-            _bus.Subscribe((OnPlayerRespawnEvent data) =>
+            
+            ListenToEvent<OnPlayerRespawnEvent>(data =>
             {
                 if (data.playerN == NetworkObject)
                     SetDeadServerRpc(false);
@@ -512,12 +490,13 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             else stateMachine.ChangeState(ControlerState.Crouching);
         }
 
-        _bus.InvokeEvent(new RequestEnergyEvent { requester = this });
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
-            enoughtEnegyToDash)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            stateMachine.ChangeState(ControlerState.Dashing);
+            InvokeEvent(new RequestEnergyEvent { requester = this });
+
+            if(enoughtEnegyToDash)            
+                stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
@@ -537,6 +516,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     void IdleFixedUpdate()
     {
+        rb.linearVelocity = Vector3.zero;
     }
 
     void IdleLateUpdate()
@@ -587,12 +567,13 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             else stateMachine.ChangeState(ControlerState.Sliding);
         }
 
-        _bus.InvokeEvent(new RequestEnergyEvent { requester = this });
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
-            enoughtEnegyToDash)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            stateMachine.ChangeState(ControlerState.Dashing);
+            InvokeEvent(new RequestEnergyEvent { requester = this });
+
+            if(enoughtEnegyToDash)
+                stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
@@ -683,12 +664,13 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             }
         }
 
-        _bus.InvokeEvent(new RequestEnergyEvent { requester = this });
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked &&
-            enoughtEnegyToDash)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            stateMachine.ChangeState(ControlerState.Dashing);
+            InvokeEvent(new RequestEnergyEvent { requester = this });
+         
+            if(enoughtEnegyToDash)
+                stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
@@ -862,9 +844,20 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
 
     void WallRidingUpdate()
     {
-        if (verticalInput == 0f || (!leftSideAgainstWall && !rightSideAgainstWall) || !wallRidingCoroutineRunning)
+        if (omnidirectionalWallRide)
         {
-            stateMachine.ChangeState(ControlerState.Falling);
+            Debug.Log("detectWall : " + DetectWall());
+            if (verticalInput == 0f || !DetectWall() || !wallRidingCoroutineRunning)
+            {
+                stateMachine.ChangeState(ControlerState.Falling);
+            }
+        }
+        else
+        {
+            if (verticalInput == 0f || (!leftSideAgainstWall && !rightSideAgainstWall) || !wallRidingCoroutineRunning)
+            {
+                stateMachine.ChangeState(ControlerState.Falling);
+            }
         }
 
         if (playerInput.actions["Jump"].WasPressedThisFrame())
@@ -895,7 +888,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     {
         transform.position = new Vector3(transform.position.x, wallRidingHeight, transform.position.z);
 
-        Vector3 move = (wallRidingDirection * verticalInput).normalized;
+        Vector3 move = wallRidingDirection.normalized;
         Vector3 velocity = move * wallRidingSpeed;
 
         rb.linearVelocity = velocity;
@@ -912,6 +905,19 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         UpdateCameraPositionAndRotation(true, wallRidingHeadbobAmplitude, wallRidingHeadbobFrequency);
     }
 
+    bool DetectWall()
+    {
+        bool isWall = false;
+        for (int i = 0; i < 8; i++)
+        {
+            float angle = i * 45f;
+
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+            isWall |= Physics.Raycast(playerFeet.position,dir, wallRideDetectionRange*2, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
+        }
+        return isWall;
+    }
+
     IEnumerator WallRidingDurationCoroutine()
     {
         yield return new WaitForSeconds(wallRidingDuration);
@@ -926,7 +932,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         justWallridedSameSide = true;
         yield return new WaitForSeconds(wallRideCooldownChangeSide);
         justWallridedOtherSide = false;
-        if (wallRideCooldownSameSide - wallRideCooldownChangeSide <= 0)
+        if (wallRideCooldownSameSide - wallRideCooldownChangeSide < 0)
         {
             justWallridedSameSide = false;
             Debug.LogError(
@@ -1169,7 +1175,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
 
-        _bus.InvokeEvent(new OnModifyEnergyEvent { value = -dashEnergyCost });
+        InvokeEvent(new OnModifyEnergyEvent { value = -dashEnergyCost });
 
         dashingDirection *= dashSpeed;
         StartCoroutine(DashingCoroutine());
@@ -1311,17 +1317,16 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             if (hit.collider.TryGetComponent<GrapplePoint>(out grapplePoint))
             {
                 _currentGrapplePoint = grapplePoint.p_targetTransform;
+                
+                grappleDirection = _currentGrapplePoint.position - transform.position;
+                grappleStartingDistance = grappleDirection.magnitude;
+                grappleDirection.Normalize();
+                return;
             }
         }
-        else //ne devrait pas etre appelé
-        {
-            stateMachine.ChangeState(ControlerState.Idle);
-            Debug.Log("No Grapple Point found");
-        }
-
-        grappleDirection = _currentGrapplePoint.position - transform.position;
-        grappleStartingDistance = grappleDirection.magnitude;
-        grappleDirection.Normalize();
+        
+        stateMachine.ChangeState(ControlerState.Idle);
+        Debug.LogWarning("No Grapple Point found");
     }
 
     void GrappleUpdate()
@@ -1357,7 +1362,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         }
 
         rb.linearVelocity = newDir * _grapplingSpeed;
-        Debug.Log("distance with grapple point" + Vector3.Distance(transform.position, _currentGrapplePoint.position));
     }
 
     void ExitGrappleState()
@@ -1568,7 +1572,7 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce,
                 ForceMode.Impulse);
-            _bus.InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
+            InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
         }
     }
 
@@ -1652,7 +1656,6 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
     void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(playerFeet.position, playerFeet.position + Vector3.down * 0.1f);
         Gizmos.DrawLine(playerLeftSide.position,
             playerLeftSide.position + playerLeftSide.forward * wallRideDetectionRange);
         Gizmos.DrawLine(playerRightSide.position,
@@ -1660,5 +1663,13 @@ public class FPSController : NetworkBehaviour, IEnergyRequest
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(point1, bodyRadius);
         Gizmos.DrawWireSphere(point2, bodyRadius);
+        Gizmos.color = Color.green;
+        for (int i = 0; i < 8; i++)
+        {
+            float angle = i * 45f;
+
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+            Gizmos.DrawLine(transform.position, transform.position + dir* (2*wallRideDetectionRange));
+        }
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Controller
 {
-    public class GunBridgePlayer : NetworkBehaviour
+    public class GunBridgePlayer : NetworkBusListener
     {
         public int GetCurrentMainIndex => _gunSwitching.CurrentMainGunIndex;
         public int GetCurrentAmmo => CurrentMainSurchargeGun.GetCurrentAmmo();
@@ -23,18 +23,14 @@ namespace Controller
         
         private Material _gunMaterial;
         
-        private EventBus _bus;
-        
         public override void OnStartClient()
         {
             base.OnStartClient();
-
-            _bus = EventBusInitialiser.instance.Bus;
-
+            
             if (IsOwner)
             {
-                _bus.Subscribe((SwapingGunEvent data) => SwapingGun(data));
-                _bus.Subscribe((EndTimerSwapEvent data) => EndTimerSwap(data));
+                ListenToEvent<SwapingGunEvent>(SwapingGun);
+                ListenToEvent<EndTimerSwapEvent>(EndTimerSwap);
                 
                 _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
             }
@@ -105,7 +101,7 @@ namespace Controller
                 currentAmmo = currentAmmo,
             };
     
-            _bus.InvokeEvent(data);
+            InvokeEvent(data);
         }
 
         private void SwapingGun(SwapingGunEvent data)

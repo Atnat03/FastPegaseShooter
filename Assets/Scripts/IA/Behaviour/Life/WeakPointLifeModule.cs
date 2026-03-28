@@ -5,7 +5,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public class EliteWeakPoint : EnemyLifeModule
+public class WeakPointLifeModule : EnemyLifeModule
 {
     [SerializeField] private EnemyLifeModule _enemyLifeModule;
     [SerializeField] private float _eliteDamageMultWhenDestroyed = 1;
