@@ -1,6 +1,6 @@
 using System;
 using FishNet.Object;
-using GunDecorator;
+using MyPrint;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,7 +22,7 @@ namespace Controller
 
         void Update()
         {
-            if(_playerInputAction.actions["Shoot"].WasReleasedThisFrame())CancelShooting();
+            if (_playerInputAction.actions["Shoot"].WasReleasedThisFrame()) CancelShooting();
             if(_playerInputAction.actions["Charge"].WasReleasedThisFrame())ShootCharged();
         }
         

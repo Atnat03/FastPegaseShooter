@@ -28,7 +28,8 @@ public class SpawnZone : NetworkBusListener
     private PathfindingGridReader _gridReader;
     private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
 
-    private Action _unsubscribeAction;
+    public Action<SpawnZone> p_onSpawnZoneComplete;
+
 
     public override void OnStartServer()
     {
@@ -39,7 +40,14 @@ public class SpawnZone : NetworkBusListener
             if (EDE.p_gridReaderId == _gridReader.p_id)
             {
                 _currentBudget -= EDE.p_enemySpawnCost;
+                _spawnedEnemies.Remove(EDE.p_enemyCore);
+                
+                if (IsSpawnZoneComplete())
+                {
+                    p_onSpawnZoneComplete?.Invoke(this);
+                }
             }
+            
         });
 
         ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
@@ -50,12 +58,6 @@ public class SpawnZone : NetworkBusListener
                 else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition, _gridReader);
             }
         });
-    }
-
-    public override void OnStopServer()
-    {
-        _unsubscribeAction?.Invoke();
-        base.OnStopServer();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -146,4 +148,10 @@ public class SpawnZone : NetworkBusListener
             }
         }
     }
+
+    bool IsSpawnZoneComplete()
+    {
+        return _spawnedEnemies.Count == 0 && spawnMobsFirstWave.Count == 0 && spawnMobs.Count == 0;
+    }
+    
 }

@@ -24,7 +24,7 @@ public abstract class NetworkBusListener : NetworkBehaviour
         base.OnStopServer();
     }
 
-    protected void OnDestroy()
+    protected virtual void OnDestroy()
     {
         UnsubscribeAll();
     }
