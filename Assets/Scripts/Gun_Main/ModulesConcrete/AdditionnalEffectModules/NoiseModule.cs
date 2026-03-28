@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GunDecorator
 {
-    public class NoiseModuleModule : GunModule, ISecondModule
+    public class NoiseModule : GunModule, ISecondModule
     {
         private IShootModule _shootModule;
         private ISecondModule _next;
@@ -11,6 +11,15 @@ namespace GunDecorator
         [SerializeField][Tooltip("le décalage en X du tir est determiné aléatoirement entre -_maxOffsetX et _maxOffsetX")] private float _maxOffsetX;
         [SerializeField][Tooltip("le décalage en Y du tir est determiné aléatoirement entre -_maxOffsetY et _maxOffsetY")] private float _maxOffsetY;
 
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is S_NoiseSetting s)
+            {
+                _maxOffsetX = s.MaxOffsetX;
+                _maxOffsetY = s.MaxOffsetY;
+            }
+        }
+        
         public void SetUpModule(IShootModule shootModule)
         {
             _shootModule = shootModule;

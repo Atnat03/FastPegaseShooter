@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 namespace GunDecorator.AmmoModules
 {
-    public class DefaultRaycastAmmoModule : GunModule, IAmmoModule
+    public class RaycastAmmoModule : GunModule, IAmmoModule
     {
         [Header("references")]
         [SerializeField] private Camera _camera;
@@ -23,6 +23,16 @@ namespace GunDecorator.AmmoModules
         
         private Vector3 bulletDirection;
         private float travelTime;
+        
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is RaycastAmmoSetting s)
+            {
+                _maxDistance = s.maxDistance;
+                _damages = s.damages;
+                _BulletSpeed = s.bulletSpeed;
+            }
+        }
         
         void Start()
         {

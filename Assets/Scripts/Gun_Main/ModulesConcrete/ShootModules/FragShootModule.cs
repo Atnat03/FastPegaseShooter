@@ -7,7 +7,6 @@ namespace GunDecorator
 {
     public class FragShootModule : GunModule, IShootModule
     {
-        public bool IsFullAuto => _isFullAuto;
         public float FireRate => _fireRate;
         public IAmmoModule AmmoModule => _ammoModule;
         public bool IsExplosed => _isExplosedAmmo;
@@ -18,13 +17,21 @@ namespace GunDecorator
         [SerializeField][Tooltip("type de la balle tirée par l'ensemble du module")] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
 
-        [SerializeField][Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
         [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
         
         [SerializeField][Tooltip("le nombre de balles tirées a chaque tir")] private float _numberBulletSpread;
         [SerializeField, Range(0, 60)][Tooltip("l'angle de propagation maximum que les balles peuvent prendre par rapport a l'orientation du canon")] private float _spreadAngle;
         private bool _isExplosedAmmo = false;
         
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is FragShootSetting s)
+            {
+                _fireRate = s.fireRate;
+                _numberBulletSpread = s.numberBulletSpread;
+                _spreadAngle = s.SpreadAngle;
+            }
+        }
         
         private void Start()
         {
