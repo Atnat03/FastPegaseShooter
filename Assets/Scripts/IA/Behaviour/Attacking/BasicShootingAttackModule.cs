@@ -63,7 +63,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
     }
 
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         if(!Application.isPlaying || !IsServerInitialized) return;
         Gizmos.color = Color.yellow;
@@ -79,7 +79,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
         Gizmos.DrawWireSphere(origin, _bulletSize);
         Gizmos.DrawWireSphere(origin+dir*length, _bulletSize);
         Gizmos.DrawLine(origin, origin + dir * length);
-    }
+    }*/
 }
 
 public struct EnemyShootingEvent

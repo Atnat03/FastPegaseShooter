@@ -6,11 +6,9 @@ public class BasicMovingModule : EnemyMovingModule
     private Vector3 _lastPos;
     private float _t;
 
-    public override void OnPlayerMoving(int playerObjectId, Vector3 playerPosition, PathfindingGridReader gridReader)
+    protected override void RecalculatePath()
     {
-        base.OnPlayerMoving(playerObjectId, playerPosition, gridReader);
-        
-        //only called when playerObjectId is the target
+        base.RecalculatePath();
         _lastPos = transform.position;
         _t = 0;
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FishNet;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemyCore : NetworkBusListener
 {
@@ -17,6 +18,8 @@ public class EnemyCore : NetworkBusListener
     private List<ScoreTargetingModule> _scoreModules = new List<ScoreTargetingModule>();
 
     public Guid p_gridReaderId;
+    public PathfindingRequestManager p_pathRequester;
+    public PathfindingGridReader p_gridReader;
     [HideInInspector]public  int p_enemySpawnCost;
     public override void OnStartServer()
     {
@@ -50,12 +53,16 @@ public class EnemyCore : NetworkBusListener
             module.InitialiseBehaviourModule(this);
         foreach (EnemyLifeModule module in _lifeModules)
             module.InitialiseBehaviourModule(this);
+        
+        _movingModule.InitialiseBehaviourModule(this);
     }
     
-    public void SetInfos(Guid _readerId, int cost)
+    public void SetInfos(Guid _readerId, PathfindingRequestManager pathfindingRequestManager, PathfindingGridReader pathfindingGridReader,  int cost)
     {
         p_gridReaderId = _readerId;
         p_enemySpawnCost = cost;
+        p_pathRequester = pathfindingRequestManager;
+        p_gridReader = pathfindingGridReader;
     }
     
     private void OnNetworkTick()
@@ -69,8 +76,8 @@ public class EnemyCore : NetworkBusListener
         _movingModule.OnNetworkTick();
     }
 
-    public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition, PathfindingGridReader gridReader)
+    public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
     {
-        _movingModule.OnPlayerMoving(playerObjectId, playerPosition, gridReader);
+        _movingModule.OnPlayerMoving(playerObjectId, playerPosition);
     }
 }

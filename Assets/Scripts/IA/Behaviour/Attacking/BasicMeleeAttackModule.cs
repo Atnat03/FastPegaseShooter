@@ -39,13 +39,13 @@ public class BasicMeleeAttackModule : EnemyAttackingModule
         return true;
     }
     
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         if(!Application.isPlaying || !IsServerInitialized) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
         Gizmos.DrawSphere(_targetingModule.GetTargetPosition(), 0.1f);
-    }
+    }*/
 }
 
 public struct EnemyMeleeAttack

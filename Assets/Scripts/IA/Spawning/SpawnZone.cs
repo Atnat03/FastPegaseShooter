@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(PathfindingGridReader))]
 public class SpawnZone : NetworkBusListener
 {
+    [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
     [SerializeField] private int _budgetMin;
     [SerializeField] private int _budgetMax;
     [SerializeField] private int _currentBudget;
@@ -29,7 +30,6 @@ public class SpawnZone : NetworkBusListener
     private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
 
     public Action<SpawnZone> p_onSpawnZoneComplete;
-
 
     public override void OnStartServer()
     {
@@ -55,7 +55,7 @@ public class SpawnZone : NetworkBusListener
             for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
             {
                 if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
-                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition, _gridReader);
+                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition);
             }
         });
     }
@@ -85,7 +85,7 @@ public class SpawnZone : NetworkBusListener
         
         
         EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
-        enemyCore.SetInfos(_gridReader.p_id, enemyCost);
+        enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader, enemyCost);
         
         _spawnedEnemies.Add(enemyCore);
         
