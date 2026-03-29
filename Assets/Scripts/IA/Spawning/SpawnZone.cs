@@ -9,7 +9,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
-public class SpawnZone : NetworkBehaviour
+public class SpawnZone : NetworkBusListener
 {
     [SerializeField] private int _budgetMin;
     [SerializeField] private int _budgetMax;
@@ -26,16 +26,36 @@ public class SpawnZone : NetworkBehaviour
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     
     private PathfindingGridReader _gridReader;
+    private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
+
+    public Action<SpawnZone> p_onSpawnZoneComplete;
+
 
     public override void OnStartServer()
     {
         _gridReader = GetComponent<PathfindingGridReader>();
         
-        EventBusInitialiser.instance.Bus.Subscribe((EnemyDyingEvent EDE) =>
+        ListenToEvent<EnemyDyingEvent>(EDE =>
         {
             if (EDE.p_gridReaderId == _gridReader.p_id)
             {
                 _currentBudget -= EDE.p_enemySpawnCost;
+                _spawnedEnemies.Remove(EDE.p_enemyCore);
+                
+                if (IsSpawnZoneComplete())
+                {
+                    p_onSpawnZoneComplete?.Invoke(this);
+                }
+            }
+            
+        });
+
+        ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
+        {
+            for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
+            {
+                if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
+                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition, _gridReader);
             }
         });
     }
@@ -62,10 +82,12 @@ public class SpawnZone : NetworkBehaviour
     {
         Vector3 position = GetValidSpawnPoint().position;
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
-        BasicEnemyMovements enemyMovement =  enemy.GetComponent<BasicEnemyMovements>();
-        enemyMovement.SetGridReaderGuid(_gridReader.p_id);
-        BasicEnemyLife enemyLife =  enemy.GetComponent<BasicEnemyLife>();
-        enemyLife.SetInfos(_gridReader.p_id, enemyCost);
+        
+        
+        EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
+        enemyCore.SetInfos(_gridReader.p_id, enemyCost);
+        
+        _spawnedEnemies.Add(enemyCore);
         
         InstanceFinder.ServerManager.Spawn(enemy);
     }
@@ -126,4 +148,10 @@ public class SpawnZone : NetworkBehaviour
             }
         }
     }
+
+    bool IsSpawnZoneComplete()
+    {
+        return _spawnedEnemies.Count == 0 && spawnMobsFirstWave.Count == 0 && spawnMobs.Count == 0;
+    }
+    
 }

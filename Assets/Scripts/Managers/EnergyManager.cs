@@ -10,7 +10,7 @@ public interface IEnergyRequest
     public void OnGetEnergy(float energy);
 }
 
-public class EnergyManager : NetworkBehaviour
+public class EnergyManager : NetworkBusListener
 {
     #region Properties
     
@@ -26,7 +26,6 @@ public class EnergyManager : NetworkBehaviour
     [SerializeField] private float _healFromOneBar = 10f;
 
     private int _totalBars;
-    private List<Image> _energyBarsImageList = new List<Image>();
 
     private readonly SyncVar<float> _currentEnergy = new SyncVar<float>();
     
@@ -34,14 +33,10 @@ public class EnergyManager : NetworkBehaviour
     private float _targetEnergy;
     private bool _isLerping;
     private int _previousIndexFull;
-
-    [SerializeField] private Image _imageBarPrefab;
-    [SerializeField] private Transform _barParent;
     
-    [SerializeField] private Color _energyBarColorFull;
-    [SerializeField] private Color _energyBarColorNotFull;
-
-    private EventBus _bus;
+    //Actions
+    public Action<int> OnCreateBarUI;
+    public Action<int, float> OnUpdateUI;
 
     #endregion
 
@@ -50,25 +45,18 @@ public class EnergyManager : NetworkBehaviour
     public override void OnStartServer()
     {
         _currentEnergy.Value = _energyMax;
-        _bus = EventBusInitialiser.instance.Bus;
     }
     
     public override void OnStartClient()
     {
-        _bus = EventBusInitialiser.instance.Bus;
-        _bus.Subscribe((OnModifyEnergyEvent data) => ModifyEnergyServerRpc(data.value));
-        _bus.Subscribe((RequestEnergyEvent data) => 
-        {
-            _bus.InvokeEvent(new RequestEnergyResponseEvent { energy = _currentEnergy.Value });
-        });
+        ListenToEvent<OnModifyEnergyEvent>(data => ModifyEnergyServerRpc(data.value));
         
-        _totalBars = Mathf.CeilToInt(_energyMax / _valueOneBar);
+        ListenToEvent<RequestEnergyEvent>(data => data.requester.OnGetEnergy(_currentEnergy.Value));
+        
 
-        for (int i = 0; i < _totalBars; i++)
-        {
-            Image newImage = Instantiate(_imageBarPrefab, _barParent);
-            _energyBarsImageList.Add(newImage);
-        }
+        _totalBars = Mathf.CeilToInt(_energyMax / _valueOneBar);
+        
+        OnCreateBarUI?.Invoke(_totalBars);
         
         _displayedEnergy = _currentEnergy.Value;
         _targetEnergy = _currentEnergy.Value;
@@ -82,7 +70,7 @@ public class EnergyManager : NetworkBehaviour
     private void Update()
     {
         if (!IsClientInitialized || !_isLerping) return;
-
+        
         _displayedEnergy = Mathf.Lerp(_displayedEnergy, _targetEnergy, Time.deltaTime * 20);
 
         if (Mathf.Abs(_displayedEnergy - _targetEnergy) < 0.01f)
@@ -99,10 +87,17 @@ public class EnergyManager : NetworkBehaviour
     {
         float prev = _currentEnergy.Value;
         _currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + amount, 0f, _energyMax);
-        
-        if (prev < _energyMax && _currentEnergy.Value >= _energyMax)
+    
+        int prevBarIndex = Mathf.FloorToInt(prev / _valueOneBar);
+        int newBarIndex = Mathf.FloorToInt(_currentEnergy.Value / _valueOneBar);
+    
+        if (newBarIndex > prevBarIndex)
         {
-            AddHealthObserversRpc();
+            int barsCompleted = newBarIndex - prevBarIndex;
+            for (int i = 0; i < barsCompleted; i++)
+            {
+                AddHealthObserversRpc();
+            }
         }
     }
     
@@ -112,7 +107,6 @@ public class EnergyManager : NetworkBehaviour
 
         _targetEnergy = next;
         _isLerping = true;
-        _bus.InvokeEvent(new RequestEnergyResponseEvent { energy = next });
     }
 
     private void UpdateVisualBars(float energy)
@@ -130,23 +124,7 @@ public class EnergyManager : NetworkBehaviour
 
         _previousIndexFull = activeBarIndex;
         
-        for (int i = 0; i < _energyBarsImageList.Count; i++)
-        {
-            if (i < activeBarIndex)
-            {
-                _energyBarsImageList[i].fillAmount = 1f;
-                _energyBarsImageList[i].color = _energyBarColorFull;
-            }
-            else if (i == activeBarIndex)
-            {
-                _energyBarsImageList[i].fillAmount = activeFill;
-                _energyBarsImageList[i].color = activeFill >= 1f ? _energyBarColorFull : _energyBarColorNotFull;
-            }
-            else
-            {
-                _energyBarsImageList[i].fillAmount = 0f;
-            }
-        }
+        OnUpdateUI?.Invoke(activeBarIndex, activeFill);
     }
 
     [Server]
@@ -154,10 +132,17 @@ public class EnergyManager : NetworkBehaviour
     {
         float prev = _currentEnergy.Value;
         _currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + amount, 0f, _energyMax);
-        
-        if (prev < _energyMax && _currentEnergy.Value >= _energyMax)
+    
+        int prevBarIndex = Mathf.FloorToInt(prev / _valueOneBar);
+        int newBarIndex = Mathf.FloorToInt(_currentEnergy.Value / _valueOneBar);
+    
+        if (newBarIndex > prevBarIndex)
         {
-            AddHealthObserversRpc();
+            int barsCompleted = newBarIndex - prevBarIndex;
+            for (int i = 0; i < barsCompleted; i++)
+            {
+                AddHealthObserversRpc();
+            }
         }
     }
     
@@ -165,7 +150,7 @@ public class EnergyManager : NetworkBehaviour
     private void AddHealthObserversRpc()
     {
         Debug.Log("Add health");
-        _bus.InvokeEvent(new AddHealthFromBarEvent
+        InvokeEvent(new AddHealthFromBarEvent
         {
             value = _healFromOneBar
         });

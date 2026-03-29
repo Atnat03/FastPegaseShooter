@@ -1015,6 +1015,109 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324174890}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &355935910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 355935913}
+  - component: {fileID: 355935912}
+  - component: {fileID: 355935911}
+  m_Layer: 0
+  m_Name: Enemy Bullet Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &355935911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355935910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+  <IsNested>k__BackingField: 0
+  WasActiveDuringEdit: 1
+  WasActiveDuringEdit_Set1: 1
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  <PredictedOwner>k__BackingField: {fileID: 0}
+  NetworkBehaviours: []
+  InitializedParentNetworkBehaviour: {fileID: 0}
+  InitializedNestedNetworkObjects: []
+  RuntimeParentNetworkBehaviour: {fileID: 0}
+  RuntimeChildNetworkBehaviours: []
+  _isNetworked: 1
+  _isSpawnable: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _preventDespawnOnDisconnect: 0
+  _defaultDespawnType: 0
+  _initializedTimestamp: 0
+  NetworkObserver: {fileID: 0}
+  _enablePrediction: 0
+  _predictionType: 0
+  _localReconcileCorrectionType: 2
+  _graphicalObject: {fileID: 0}
+  _detachGraphicalObject: 0
+  _enableStateForwarding: 1
+  _networkTransform: {fileID: 0}
+  _ownerInterpolation: 1
+  _ownerSmoothedProperties: 255
+  _adaptiveInterpolation: 3
+  _spectatorSmoothedProperties: 255
+  _spectatorInterpolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  <PrefabId>k__BackingField: 65535
+  <SpawnableCollectionId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 0
+  SceneId: 1071381788
+  SerializedTransformProperties:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
+    Scale: {x: 0, y: 0, z: 0}
+    IsValid: 0
+--- !u!114 &355935912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355935910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd6a2859f6c82d43b3d191e2029b3c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBulletManager
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 355935911}
+  _networkObjectCache: {fileID: 0}
+  _bulletPrefab: {fileID: 4591400360090582569, guid: 563cd6461b623044c8d7fd34d0aecdac, type: 3}
+--- !u!4 &355935913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355935910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.32754, y: -0.03815, z: -1.24941}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &475009460
 GameObject:
   m_ObjectHideFlags: 0
@@ -1248,7 +1351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 499524539}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpawnPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -1711,7 +1814,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 706963254}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpawnPoint (4)
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -1742,7 +1845,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 753788409}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2435,7 +2538,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 932571560}
   _networkObjectCache: {fileID: 0}
   _sceneToDisable: 
-  _playerPrefab: {fileID: 7927807153383519047, guid: 584ce4c983cccfe4bafe07e1f1194a55, type: 3}
+  _playerPrefab: {fileID: 7927807153383519047, guid: 754619bae7058254c9ea0ab17bdbbe8d, type: 3}
   _spawnPoints:
   - {fileID: 1029515664}
   - {fileID: 1039084780}
@@ -3422,6 +3525,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2260009213970758663, guid: 91249709fce89eb47bc65da19706dd8c, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260009213970758663, guid: 91249709fce89eb47bc65da19706dd8c, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260009213970758663, guid: 91249709fce89eb47bc65da19706dd8c, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 4204405226963140973, guid: 91249709fce89eb47bc65da19706dd8c, type: 3}
       propertyPath: _spawnablePrefabs
       value: 
@@ -4039,11 +4154,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419525512}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!224 &1434020735 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1588695423598340219, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-  m_PrefabInstance: {fileID: 7853791551555895662}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1440141910
 GameObject:
   m_ObjectHideFlags: 0
@@ -4497,7 +4607,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1628575065}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpawnPoint (5)
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -4640,7 +4750,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1661551837}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpawnPoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -4814,7 +4924,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1812943799}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpawnPoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -5426,7 +5536,7 @@ GameObject:
   - component: {fileID: 2019655460}
   - component: {fileID: 2019655464}
   - component: {fileID: 2019655465}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpawnZONE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5524,18 +5634,12 @@ MonoBehaviour:
   spawnDelayFirstWave: 1
   spawnMobsFirstWave:
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 77302ea4f07ba9f48b72c5b36eefd472, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   spawnDelay: 3
-  spawnMobs:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 77302ea4f07ba9f48b72c5b36eefd472, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 77302ea4f07ba9f48b72c5b36eefd472, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 77302ea4f07ba9f48b72c5b36eefd472, type: 2}
+  spawnMobs: []
   _spawnPoints:
   - {fileID: 499524539}
   - {fileID: 1812943799}
@@ -5850,6 +5954,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 207741499552690157, guid: 77a7e514e615582419116b198a9bc908, type: 3}
+      propertyPath: value
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 207741499552690157, guid: 77a7e514e615582419116b198a9bc908, type: 3}
       propertyPath: _energyManager
       value: 
       objectReference: {fileID: 1527374256}
@@ -5999,14 +6107,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\U0001F308CoopManager"
       objectReference: {fileID: 0}
-    - target: {fileID: 2421932575051063324, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _barParent
-      value: 
-      objectReference: {fileID: 1434020735}
-    - target: {fileID: 2421932575051063324, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _imageBarPrefab
-      value: 
-      objectReference: {fileID: 7619886682169414630, guid: c09496d7f8606de4896136f69e2ff335, type: 3}
     - target: {fileID: 3724542229050372869, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.70276
@@ -6047,110 +6147,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _swapingTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[0].timeToCombo
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[1].timeToCombo
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[2].timeToCombo
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[0].colorJauge.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[0].colorJauge.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[0].colorJauge.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[0].colorJauge.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[1].colorJauge.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[1].colorJauge.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[1].colorJauge.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[1].colorJauge.r
-      value: 0.17174888
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[2].colorJauge.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[2].colorJauge.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[2].colorJauge.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[2].colorJauge.r
-      value: 0.9009558
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[0].damageMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[0].overloadDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[1].damageMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[1].overloadDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[2].damageMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[2].overloadDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[0].cadenceMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[1].cadenceMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495569384548324198, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-      propertyPath: _damageSurchargeData.Array.data[2].cadenceMultiplier
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6325006552558930708, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: SceneId
       value: 2617243643
@@ -6180,3 +6176,4 @@ SceneRoots:
   - {fileID: 6634984143752002792}
   - {fileID: 2305770598962335177}
   - {fileID: 2019655459}
+  - {fileID: 355935913}

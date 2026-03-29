@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
-using FishNet.Object;
 using UnityEngine;
 
-public interface INetworkEvent
+public static class EventBus
 {
-    public NetworkObject player { get; set; }
-}
+    private static readonly Dictionary<Type, List<Delegate>>  _handlers = new Dictionary<Type, List<Delegate>>();
 
-public class EventBus
-{
-    private readonly Dictionary<Type, List<Delegate>>  _handlers = new Dictionary<Type, List<Delegate>>();
-
-    public Action Subscribe<T>(Action<T> handler) where T : struct
+    public static Action Subscribe<T>(Action<T> handler) where T : struct
     {
         Type type = typeof(T);
         if (!_handlers.ContainsKey(type))
@@ -24,7 +18,7 @@ public class EventBus
         return () => Unsubscribe(handler);
     }
     
-    public void Unsubscribe<T>(Action<T> handler) where T : struct
+    public static void Unsubscribe<T>(Action<T> handler) where T : struct
     {
         if (_handlers.ContainsKey(typeof(T)))
         {
@@ -32,11 +26,20 @@ public class EventBus
         }
     }
     
-    public void InvokeEvent<T>(T invokedEvent) where T : struct
+    public static void InvokeEvent<T>(T invokedEvent) where T : struct
     {
         if(!_handlers.TryGetValue(typeof(T), out List<Delegate> subscribers)) return;
 
-        foreach (Delegate subscriber in subscribers)
-            ((Action<T>)subscriber).Invoke(invokedEvent);
+        for (int _i = subscribers.Count - 1; _i >= 0; _i--)
+        {
+            try
+            {
+                ((Action<T>)subscribers[_i]).Invoke(invokedEvent);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
     }
 }

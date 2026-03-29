@@ -21,13 +21,14 @@ namespace Managers
         public Color colorJauge;
     }
     
-    public class SwapGunManager : NetworkBehaviour
+    public class SwapGunManager : NetworkBusListener
     {
         [SerializeField] private float _timeToAcceptSwap = 2f;
-        private readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
+        public readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
         [SerializeField] private float _swapingTime;
         
-        [SerializeField] private List<SurchargeData> _damageSurchargeData = new List<SurchargeData>();
+        [SerializeField] 
+        private List<SurchargeData> _damageSurchargeData = new List<SurchargeData>();
         private readonly SyncVar<int> _currentSurchargeLevel = new SyncVar<int>();
         private readonly SyncVar<int> _firstPlayerOwnerId = new SyncVar<int>(-1);
         
@@ -35,21 +36,15 @@ namespace Managers
         [SerializeField] private bool _isCombo = false;
         [SerializeField] private Image _infoCombo;
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
-        
-        [Header("UI")]
-        [SerializeField] private GameObject _barUI;
-        [SerializeField] private Image _valueImage;
-        [SerializeField] private TextMeshProUGUI _textSwapUI;
-        [SerializeField] private string _youAskSwapMessage;
-        [SerializeField] private string _broAskyouSwapMessage;
-        
+
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
         private int _firstGunAmmo = -1;
         private float _displayedTime = 0f;
         private float _targetTime = 0f;
         
-        private EventBus _bus;
+        public Action<float> OnUpdateAskBroSwap;
+        public Action<bool> OnChangeAskText;
 
         public override void OnStartServer()
         {
@@ -58,29 +53,18 @@ namespace Managers
             _elapsedTimeForCombo.Value = 0;
             _elapsedTime.Value = 0;
             
-            InitBus();
-            _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
-            _bus.Subscribe((EndOVerload data) =>
-            {
-                _currentSurchargeLevel.Value = 0;
-                _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo;
-            });
+            ListenToEvent<CallSwapGunEvent>(CheckCanSwapServerRpc);
+            ListenToEvent<EndOverloadEvent>(data => _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo);
         }
 
         public override void OnStartClient()
         {
             base.OnStartClient();
             
-            InitBus();
             _elapsedTime.OnChange += OnElapsedTimeChanged;
             _elapsedTimeForCombo.OnChange += OnElapsedComboTimeChanged;
         }
         
-        private void InitBus()
-        {
-            _bus = EventBusInitialiser.instance.Bus;
-        }
-
         private void Update()
         {
             if (IsServerInitialized)
@@ -110,7 +94,7 @@ namespace Managers
                 if (_displayedTime < 0) _displayedTime = 0;
             }
         
-            _valueImage.fillAmount = _displayedTime / _timeToAcceptSwap;
+            OnUpdateAskBroSwap?.Invoke(_displayedTime / _timeToAcceptSwap);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -123,21 +107,21 @@ namespace Managers
                 if (_isCombo)
                 {
                     _currentSurchargeLevel.Value++;
-                    
-                    if(_currentSurchargeLevel.Value >= _damageSurchargeData.Count)
+
+                    if (_currentSurchargeLevel.Value >= _damageSurchargeData.Count)
                     {
                         _currentSurchargeLevel.Value = 0;
                     }
                 }
                 else
                 {
-                    _currentSurchargeLevel.Value = 0;
+                    _elapsedTimeForCombo.Value = 0;
                 }
-
+                    
                 _elapsedTimeForCombo.Value = 0;
-                
-                NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
-                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo);
+
+                NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo, _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge);
+                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo, _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge);
                 ResetTimer();
             }
             else
@@ -151,20 +135,21 @@ namespace Managers
         }
         
         [TargetRpc]
-        private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo)
+        private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo, Color color)
         {
-            _bus.InvokeEvent(new SwapingGunEvent
+            InvokeEvent(new SwapingGunEvent
             {
                 dataSurcharge = _damageSurchargeData[_currentSurchargeLevel.Value],
                 gunIndex = newIndex,
                 timeToSwap = _swapingTime,
-                currentAmmo = currentAmmo
+                currentAmmo = currentAmmo,
+                color = color,
             });
         }
 
         void ResetTimer()
         {
-            _bus.InvokeEvent(new EndTimerSwapEvent()
+            InvokeEvent(new EndTimerSwapEvent()
             {
                 player = _player
             });
@@ -179,12 +164,11 @@ namespace Managers
         private void OnElapsedTimeChanged(float prev, float next, bool asServer)
         {
             _targetTime = next;
-            _barUI.SetActive(next > 0);
 
             if (next > 0)
             {
                 bool isRequester = LocalConnection.ClientId == _firstPlayerOwnerId.Value;
-                _textSwapUI.text = isRequester ? _youAskSwapMessage : _broAskyouSwapMessage;
+                OnChangeAskText?.Invoke(isRequester);
             }
 
             if (next > prev)
@@ -193,7 +177,6 @@ namespace Managers
         
         private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
         {
-            int safeLevel = Mathf.Clamp(_currentSurchargeLevel.Value, 0, _damageSurchargeData.Count - 1);
             _infoCombo.color = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
             _infoCombo.gameObject.SetActive(next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count-1);
         }

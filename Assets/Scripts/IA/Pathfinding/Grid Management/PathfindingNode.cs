@@ -16,4 +16,15 @@ public class PathfindingNode
         this.gridPosition = gridPos;
         this.position = position;
     }
+
+    public PathfindingNode Copy()
+    {
+        PathfindingNode node = new PathfindingNode(index, gridPosition, position, wallAvoidance);
+        node.neighborsIndex = new List<int>(neighborsIndex);
+        /*foreach (int neighborIndex in neighborsIndex)
+        {
+            node.neighborsIndex.Add(neighborIndex);
+        }*/
+        return node;
+    }
 }

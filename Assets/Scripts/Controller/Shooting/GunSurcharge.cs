@@ -1,10 +1,11 @@
 using System;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Controller
 {
-    public class GunSurcharge : MonoBehaviour
+    public class GunSurcharge : MonoBusListener
     {
         [SerializeField] private GunBridgePlayer _gunBridge;
 
@@ -12,15 +13,11 @@ namespace Controller
         [SerializeField] private bool _isOverload = false;
         [SerializeField] private float _elapsedTimeOverload = 0;
         private float _currentOverloadTimer = 0;
-        [SerializeField] private Image _infoOverload;
 
-        private EventBus _bus;
-
-        private void Awake()
-        {
-            _bus = EventBusInitialiser.instance.Bus;
-        }
-
+        
+        public Action<bool, float> OnOverloadTimeUpdate;
+        public Action<Color> OnInfoOverloadSetColor;
+        
         public void SetOverloadStats(bool state, float overloadTime, float dmg_Multi, float rate_Multi, int newAmmoAmount = -1)
         {
             _currentOverloadTimer = overloadTime;
@@ -37,11 +34,13 @@ namespace Controller
             OverloadTimer();
         }
 
+        public void SetColorImage(Color color)
+        {
+            OnInfoOverloadSetColor?.Invoke(color);
+        }
+
         private void OverloadTimer()
         {
-            _infoOverload.gameObject.SetActive(_isOverload);
-            _infoOverload.fillAmount = _elapsedTimeOverload / _currentOverloadTimer;
-            
             if (_isOverload)
             {
                 if (_elapsedTimeOverload > 0)
@@ -50,13 +49,16 @@ namespace Controller
                 }
                 else
                 {
-                    _bus.InvokeEvent(new EndOVerload());
+                    InvokeEvent(new EndOverloadEvent());
                     _isOverload = false;
-                    SetOverloadStats(false, 0, 1, 1); 
+                    SetOverloadStats(false, 0, 1, 1);
                 }
             }
+
+            OnOverloadTimeUpdate?.Invoke(_isOverload, _elapsedTimeOverload/_currentOverloadTimer);
         }
 
     }
-    public struct EndOVerload {}
+
+    public struct EndOverloadEvent{}
 }

@@ -1,18 +1,44 @@
 using FishNet.Object;
+using GunDecorator;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
-public class BulletBehaviour : NetworkBehaviour
+public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
-
     [HideInInspector] public GameObject p_markPrefab;
-    private GameObject _currentMark;
+    [HideInInspector] public bool p_isExplosive;
+    [HideInInspector] public float p_explosionRadius;
+    [HideInInspector] public bool p_isCritical;
+    [SerializeField] private GameObject _explosionVFX;
+    private GunController _gunController;
+    private Vector3 _targetPoint;
+    private NetworkObject _targetNetworkObject;
+    private bool _finalCheckDone;
+    
+    private bool _hasHit = false;
 
     private void FixedUpdate()
     {
         DetectCollision();
         Move();
+    }
+
+    public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
+        float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target)
+    {
+        p_damage = damage;
+        p_speed = speed;
+        p_markPrefab = markPrefab;
+        p_isExplosive = isExplosive;
+        p_explosionRadius = explosionRadius;
+        _gunController = gun;
+        p_isCritical = isCritical;
+        _targetPoint = targetPoint;
+        _targetNetworkObject = target;
+        
+        Destroy(gameObject, 3f);
     }
 
     private void Move()
@@ -22,21 +48,53 @@ public class BulletBehaviour : NetworkBehaviour
 
     private void DetectCollision()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 
-                (p_speed * Time.fixedDeltaTime), ~LayerMask.NameToLayer("Owner"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit,
+                p_speed * Time.fixedDeltaTime, ~LayerMask.NameToLayer("Owner"), 
+                QueryTriggerInteraction.Ignore))
         {
-            HitTarget(hit);
+            if (p_isExplosive)
+            {
+                if (_explosionVFX != null)
+                    Destroy(Instantiate(_explosionVFX, transform.position, 
+                        Quaternion.identity), 3f);
+
+                if (_gunController.IsServerInitialized)
+                    Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
+            }
+            else
+            {
+                if (_gunController.IsServerInitialized)
+                {
+                    if (_targetNetworkObject != null && 
+                        _targetNetworkObject.TryGetComponent<IDamagable>(out var d))
+                    {
+                        bool crit = d.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
+                        _gunController.TriggerHitMark(crit || p_isCritical);
+                    }
+                }
+                
+                GameObject hitMark = Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
+                
+                Destroy(hitMark, 1f);
+            }
+
+            Destroy(gameObject);
         }
     }
 
-    private void HitTarget(RaycastHit hit)
+    public void Explosed(GameObject vfx, float radius, int damage)
     {
-        Destroy(Instantiate(p_markPrefab, hit.point + hit.normal * 0.1f, Quaternion.LookRotation(hit.normal)), 3f);
-        if (hit.collider.TryGetComponent<IDamagable>(out IDamagable iDamagable))
+        if (vfx != null)
+            Instantiate(vfx, transform.position, Quaternion.identity);
+        
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+        foreach (Collider c in colliders)
         {
-            iDamagable.TakeDamage((int)p_damage);
+            if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
+                _gunController.TriggerHitMark(crit || p_isCritical);
+            }
         }
-        NetworkObject.Despawn(gameObject);
-        Destroy(gameObject);
     }
 }

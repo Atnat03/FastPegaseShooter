@@ -1,0 +1,48 @@
+using System.Collections;
+using UnityEngine;
+
+namespace GunDecorator.ChargedModules
+{
+    public class SalveChargedModule : ChargedParentModule
+    {
+        [Header("Salve")] 
+        [SerializeField] private float _intervaleCharge = 0.05f;
+        
+        public override void TryShootCharging()
+        {
+            if (_charging)
+            {
+                int numberBulletShoot = (int)Mathf.Lerp(0, _numberBulletInCharge, _charginTimer / _timeToCharge);
+
+                _ammoModule.SetBulletData(new BulletData
+                {
+                    IsExplosive = _isExplosifAmmo,
+                    IsCritical = _gunController.IsOverload,
+                    ExplosionRadius = _explosionRadius
+                });
+                
+                StartCoroutine(ShootSalve(numberBulletShoot));
+            }
+            
+            ResetCharging();
+        }
+
+        IEnumerator ShootSalve(int numberBullet)
+        {
+            for (int i = 0; i < numberBullet; i++)
+            {
+                _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
+                _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
+                
+                _gunController.PlaySound("Charged");
+                
+                _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
+                _gunController.RecoilModule?.SetIsRecoil(true);
+                
+                yield return new WaitForSeconds(_intervaleCharge);
+            }
+            
+            _ammoModule.ResetBulletData();
+        }
+    }
+}

@@ -1,3 +1,4 @@
+using FishNet.Object;
 using UnityEngine;
 
 namespace GunDecorator
@@ -6,6 +7,14 @@ namespace GunDecorator
     {
         public void TryShoot();
         public void Shooting();
+
+        public void CancelShooting();
+        
+        public float FireRate { get; }
+        public IAmmoModule AmmoModule { get; }
+        
+        public void SetDirectionModifier(Vector3 direction);
+        public void SetBulletOffset(Vector3 offset);
     }
     
     public interface IReloadModule
@@ -16,17 +25,35 @@ namespace GunDecorator
         
         public bool IsReloading { get; }
         public void SetAmmo(int value);
+        public void StopReload();
     }
 
     public interface IRecoilModule
     {
-        public void Recoil();
+        public void Recoil(Transform model, float time, bool isFullAuto, float multiplier = 1, float newX = 1);
+        public void SetIsRecoil(bool value);
     }
 
     public interface IAmmoModule
     {
-        public void SpawnBullet();
+        public void SpawnBullet(Vector3 direction, Vector3 offset);
         public void SetDamage(float multiplierDmg);
+        public void SetBulletData(BulletData data);
+        public void ResetBulletData();
+    }
+
+    public class BulletData
+    {
+        public bool IsExplosive { get; set; }
+        public bool IsCritical { get; set; }
+        public float ExplosionRadius { get; set; }
+    }
+    
+    public interface IAmmoExplosif
+    {
+        public void Explosed(GameObject vfx, float raduis, int damage);
+        public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
+            float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target);
     }
 
     public interface ISecondModule
@@ -35,5 +62,11 @@ namespace GunDecorator
         public void SetNext(ISecondModule next);
         public void DoAdditionnalEffect();
         public void Shooting();
+    }
+
+    public interface IHitMarkerModule
+    {
+        public void HitMark();
+        public void HitMarkCritique();
     }
 }

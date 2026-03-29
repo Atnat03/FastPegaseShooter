@@ -1,4 +1,5 @@
 using GunDecorator;
+using GunDecorator.ChargedModules;
 using UnityEditor;
 using UnityEngine;
 
@@ -96,6 +97,18 @@ public class GunModuleCustomInspector : Editor
             else if (module is IAmmoModule)
             {
                 moduleColorProp.colorValue = Color.yellow;
+            }
+            else if (module is IHitMarkerModule)
+            {
+                moduleColorProp.colorValue = Color.magenta;
+            }
+            else if (module is ChargedParentModule)
+            {
+                moduleColorProp.colorValue = Color.cyan;
+            }
+            else if (module is VisualChargedModule)
+            {
+                moduleColorProp.colorValue = Color.cadetBlue;
             }
         }
 

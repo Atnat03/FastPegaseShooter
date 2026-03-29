@@ -1,20 +1,17 @@
 using System;
-using System.Collections;
-using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using ScriptableObjectsDefinitions;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
-public class PlayerHealth : NetworkBehaviour
+public class PlayerHealth : NetworkBusListener
 {
 	#region Properties
 
 	public float CurrentHealth => _currentHealth.Value;
 	public bool IsDead => _isDead.Value;
+
+	public bool IsCritik => _isCritik;
 	
 	#endregion
 
@@ -27,19 +24,21 @@ public class PlayerHealth : NetworkBehaviour
 	[SerializeField] private float _healthBase = 100;
 	[SerializeField] private PlayerAnimation _playerAnimation;
 	[SerializeField] private float _timeToRespawn = 5;
-	private Vector3 _respawnPosition;
-	private Quaternion _respawnRotation;
-
-	[Header("UI")]
-	[SerializeField] private Image _healthBar;
-	[SerializeField] private Image _deathImage;
+	[SerializeField, Range(0f, 1f)] private float _critikStep = 0.5f;
+	private bool _initialized = false;
+	bool _isCritik = false;
+	
 	private float _targetHealthFill;
-	
-	[SerializeField] private SoundsDataSO _soundsData;
-	private AudioSource _audioSource;
-	
-	private EventBus _bus;
 
+
+	private Vector3 _startPos;
+	
+	//Action
+	public Action<float> OnUpdateHealth;
+	public Action OnStartWarning;
+	public Action<bool> OnKOPlayer;
+	public Action OnTakeDamage;
+	
 	#endregion
 
 
@@ -47,27 +46,24 @@ public class PlayerHealth : NetworkBehaviour
 	
 	public override void OnStartServer()
 	{
-		_currentHealth.Value = _healthBase;
-		
-		_bus = EventBusInitialiser.instance.Bus;
-		_bus.Subscribe((PlayerTakeDamageEvent data) => TakeDamage(data));
-		_bus.Subscribe((AddHealthFromBarEvent data) => AddHealth(data));
+		if (!_initialized)
+		{
+			_currentHealth.Value = _healthBase;
+			_initialized = true;
+		}
+
+		ListenToEvent<PlayerTakeDamageEvent>(TakeDamage);
+		ListenToEvent<AddHealthFromBarEvent>(AddHealth); 
 	}
 
 	public override void OnStartClient()
 	{
-		_bus = EventBusInitialiser.instance.Bus;
-		
 		_currentHealth.OnChange += OnHealthChange;
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
 		
-		_respawnPosition = Vector3.zero;
-		_respawnRotation = Quaternion.identity;
-		
-		_audioSource = GetComponent<AudioSource>();
-		
-		_deathImage.gameObject.SetActive(false);
+		if (IsOwner)
+			_startPos = transform.position;
 	}
 
 	private void Update()
@@ -85,9 +81,10 @@ public class PlayerHealth : NetworkBehaviour
     
 		if (IsOwner)
 		{
-			_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _targetHealthFill, Time.deltaTime * 25);
+			OnUpdateHealth?.Invoke(_targetHealthFill);
 		}
 	}
+
 
 	[Server]
 	void TakeDamage(PlayerTakeDamageEvent data)
@@ -98,8 +95,8 @@ public class PlayerHealth : NetworkBehaviour
 		
 		float newHealth = _currentHealth.Value - data.value;
 
-		PlayHurtSoundObserverRpc();
-
+		ApplyVolumeDamagedEffectTargetRpc(Owner);
+		
 		if (newHealth <= 0)
 		{
 			Death();
@@ -110,12 +107,13 @@ public class PlayerHealth : NetworkBehaviour
 		}
 	}
 
-	[ObserversRpc]
-	private void PlayHurtSoundObserverRpc()
+	[TargetRpc]
+	private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
 	{
-		AudioClip clip = SoundManager.GetAudioClip(_soundsData, "Hurt");
-		SoundManager.PlaySound(clip, _audioSource);
+		OnTakeDamage?.Invoke();
+		
 	}
+
 
 	[Server]
 	void AddHealth(AddHealthFromBarEvent data)
@@ -143,9 +141,8 @@ public class PlayerHealth : NetworkBehaviour
 		_respawnTimer.Value = 0;
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
-		
-		transform.position = _respawnPosition;
-		transform.rotation = _respawnRotation;
+
+		transform.position = _startPos;
 
 		NotifyRespawnRpc(NetworkObject);
 	}
@@ -153,26 +150,37 @@ public class PlayerHealth : NetworkBehaviour
 	[ObserversRpc]
 	private void NotifyDeathRpc(NetworkObject playerN)
 	{
-		_bus.InvokeEvent(new OnPlayerDeathEvent { playerN = playerN });
+		InvokeEvent(new OnPlayerDeathEvent { playerN = playerN });
 	}
 	
 	[ObserversRpc]
 	private void NotifyRespawnRpc(NetworkObject playerN)
 	{
-		_bus.InvokeEvent(new OnPlayerRespawnEvent { playerN = playerN });
+		InvokeEvent(new OnPlayerRespawnEvent { playerN = playerN });
 	}
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
 	{
 		if (!IsOwner) return;
-		
+    
 		_targetHealthFill = next / _healthBase;
+
+		if (_targetHealthFill <= _critikStep)
+		{
+			_isCritik = true;
+			OnStartWarning?.Invoke();
+		}
+		else
+		{
+			_isCritik = false;
+		}
 	}
+
 	
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{
 		_playerAnimation.SetDeadAnim(next);
-		_deathImage.gameObject.SetActive(next);
+		OnKOPlayer?.Invoke(next);
 	}
 	
 	private void OnRespawnTimerChange(float prev, float next, bool asServer)

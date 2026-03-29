@@ -15,9 +15,9 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0.4723467, g: 0.6415094, b: 0.46297613, a: 1}
+  m_FogColor: {r: 0.4324048, g: 0.43245766, b: 0.745283, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.012
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 1, g: 0.514151, b: 0.54609746, a: 1}
@@ -1943,7 +1943,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 79.4
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -1969,13 +1969,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502772102}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.802403, y: 4.025549, z: 4.134107}
+  m_LocalRotation: {x: -0.0272263, y: -0, z: -0, w: 0.9996293}
+  m_LocalPosition: {x: -9.72, y: 18.03, z: 13.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -3.12, y: 0, z: 0}
 --- !u!1001 &510210751
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2450,15 +2450,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bce712aa26d8afe44a5de5f7cfa13409, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.89
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bce712aa26d8afe44a5de5f7cfa13409, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bce712aa26d8afe44a5de5f7cfa13409, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.65
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bce712aa26d8afe44a5de5f7cfa13409, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2487,6 +2487,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: bce712aa26d8afe44a5de5f7cfa13409, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 101.593
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: bce712aa26d8afe44a5de5f7cfa13409, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: bce712aa26d8afe44a5de5f7cfa13409, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5837,6 +5841,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3896911936274831108, guid: 91249709fce89eb47bc65da19706dd8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4204405226963140973, guid: 91249709fce89eb47bc65da19706dd8c, type: 3}
       propertyPath: _spawnablePrefabs
       value: 
@@ -8881,9 +8889,9 @@ Light:
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_Bias: 10
+    m_NormalBias: 0
+    m_NearPlane: 0.1
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -8952,12 +8960,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UsePipelineSettings: 1
+  m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 2
   m_CustomShadowLayers: 0
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
-  m_SoftShadowQuality: 0
+  m_SoftShadowQuality: 3
   m_RenderingLayersMask:
     serializedVersion: 0
     m_Bits: 1
