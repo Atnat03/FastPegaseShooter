@@ -26,6 +26,16 @@ namespace GunDecorator
         [SerializeField, Tooltip("Cercle pour le temps de reload")] private Image _imageReload;
         
         public Coroutine p_reloadCoroutine = null;
+        
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is ReloadSetting s)
+            {
+                _autoReload = s.isAutoReload;
+                _magazineSize = s.magazineSize;
+                reloadDuration = s.reloadDuration;
+            }
+        }
 
         public override void Initialize(GunController gun)
         {

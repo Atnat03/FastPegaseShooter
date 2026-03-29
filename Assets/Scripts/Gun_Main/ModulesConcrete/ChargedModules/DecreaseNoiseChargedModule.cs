@@ -8,6 +8,23 @@ namespace GunDecorator.ChargedModules
         [SerializeField] private AnimationCurve _noiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
         [SerializeField] private float _startMaxNoiseAngle = 10;
         
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is ChargedDecreaseNoiseSetting s)
+            {
+                _isExplosifAmmo = s.IsExplosifAmmo;
+                _explosionRadius = s.explosionRadius;
+                _deadZoneStartCharging = s.DeadZoneStartCharging;
+                _recoilChargedMultiplier =  s.recoilChargedMultiplier;
+                _recoilX = s.RecoilX;
+                _timeToCharge = s.timeToCharge;
+                _isFullMultiplicator = s.IsFullMultiplicator;
+                _numberBulletInCharge = s.NumberBulletInCharged;
+                _noiseEvolutionCurve = s.NoiseEvolutionCurve;
+                _startMaxNoiseAngle = s.startMaxNoiseAngle;
+            }
+        }
+        
         public override void TryShootCharging()
         {
             if (_charging)

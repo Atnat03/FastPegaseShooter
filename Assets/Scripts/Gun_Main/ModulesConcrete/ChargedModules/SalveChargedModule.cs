@@ -8,6 +8,22 @@ namespace GunDecorator.ChargedModules
         [Header("Salve")] 
         [SerializeField] private float _intervaleCharge = 0.05f;
         
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is ChargedSalveSetting s)
+            {
+                _isExplosifAmmo = s.IsExplosifAmmo;
+                _explosionRadius = s.explosionRadius;
+                _deadZoneStartCharging = s.DeadZoneStartCharging;
+                _recoilChargedMultiplier =  s.recoilChargedMultiplier;
+                _recoilX = s.RecoilX;
+                _timeToCharge = s.timeToCharge;
+                _isFullMultiplicator = s.IsFullMultiplicator;
+                _numberBulletInCharge = s.NumberBulletInCharged;
+                _intervaleCharge = s.intervaleCharge;
+            }
+        }
+        
         public override void TryShootCharging()
         {
             if (_charging)
