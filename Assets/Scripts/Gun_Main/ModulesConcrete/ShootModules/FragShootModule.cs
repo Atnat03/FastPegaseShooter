@@ -11,6 +11,8 @@ namespace GunDecorator
         public IAmmoModule AmmoModule => _ammoModule;
         public bool IsExplosed => _isExplosedAmmo;
 
+        public bool CanShoot => _canShoot;
+
         [SerializeField][Tooltip("liste de l'ensemble des modificateurs appliqués au tir (l'ordre eut changer le comportement du tir)")] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
         
@@ -22,6 +24,9 @@ namespace GunDecorator
         [SerializeField][Tooltip("le nombre de balles tirées a chaque tir")] private float _numberBulletSpread;
         [SerializeField, Range(0, 60)][Tooltip("l'angle de propagation maximum que les balles peuvent prendre par rapport a l'orientation du canon")] private float _spreadAngle;
         private bool _isExplosedAmmo = false;
+        
+        float _elapsedFireTime = 0;
+        private bool _canShoot = true;
         
         public override void SetVariable(GunSetting setting)
         {
@@ -51,9 +56,25 @@ namespace GunDecorator
             if(_ammoType != null)
                 _ammoModule = (IAmmoModule)_ammoType;
         }
+        
+        private void Update()
+        {
+            if (_elapsedFireTime > 0)
+            {
+                _elapsedFireTime -= Time.deltaTime;
+                
+                _canShoot = false;
+            }
+            else
+            {
+                _canShoot = true;
+            }
+        }
 
         public void TryShoot()
         {
+            _elapsedFireTime = FireRate;
+            
             if (_additionalEffectModule.Count == 0)
             {
                 Shooting();

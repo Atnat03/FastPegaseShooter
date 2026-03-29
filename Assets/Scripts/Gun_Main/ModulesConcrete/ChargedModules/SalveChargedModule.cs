@@ -45,12 +45,12 @@ namespace GunDecorator.ChargedModules
 
         IEnumerator ShootSalve(int numberBullet)
         {
+            _gunController.PlaySound("Charged");
+            
             for (int i = 0; i < numberBullet; i++)
             {
                 _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
-                
-                _gunController.PlaySound("Charged");
                 
                 _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);
