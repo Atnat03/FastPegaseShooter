@@ -81,6 +81,7 @@ namespace GunDecorator
             _imageReload.fillAmount = 1;
             
             _gunController?._animator.SetTrigger("Reload");
+            _gunController?.PlaySound("Reload");
             
             _isReloading = true;
             
