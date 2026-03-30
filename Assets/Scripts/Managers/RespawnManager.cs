@@ -5,7 +5,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public class RespawnManager : NetworkBehaviour
+public class RespawnManager : NetworkBusListener
 {
 	#region Properties
 
@@ -20,9 +20,6 @@ public class RespawnManager : NetworkBehaviour
 	[Header("UI")] 
 	[SerializeField] private GameObject _playerUIEnd;
 	
-	private EventBus _bus;
-	
-
 	#endregion
 
 
@@ -31,9 +28,9 @@ public class RespawnManager : NetworkBehaviour
 	public override void OnStartServer()
 	{
 		//Bus
-		_bus = EventBusInitialiser.instance.Bus;
-		_bus.Subscribe((OnPlayerDeathEvent data) => CheckAllPlayerDead(data));
-		_bus.Subscribe((OnPlayerRespawnEvent data) => PlayerRespawn(data));
+
+		ListenToEvent<OnPlayerDeathEvent>(CheckAllPlayerDead);
+		ListenToEvent<OnPlayerRespawnEvent>(PlayerRespawn);
 	}
 
 	public override void OnStartClient()

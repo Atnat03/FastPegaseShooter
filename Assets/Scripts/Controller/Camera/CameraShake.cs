@@ -4,19 +4,16 @@ using FishNet.Object;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class CameraShake : NetworkBehaviour
+public class CameraShake : NetworkBusListener
 {
-    EventBus _bus;
     private Coroutine _currentShake;
     private Vector3 _initialLocalPos;
     
     public void Awake()
     {
-        _bus = EventBusInitialiser.instance.Bus;
-        
         _initialLocalPos = transform.localPosition;
 
-        _bus.Subscribe((OnCameraShakeEvent data) => Shake(data));
+        ListenToEvent<OnCameraShakeEvent>(Shake);
     }
 
     public void Shake(OnCameraShakeEvent data)

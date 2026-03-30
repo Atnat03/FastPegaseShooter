@@ -3,7 +3,7 @@ using FishNet.Connection;
 using FishNet.Object;
 using UnityEngine;
 
-public class PlayerPositionCaster : NetworkBehaviour
+public class PlayerPositionCaster : NetworkBusListener
 {
     [SerializeField] private float _movementCastingThreshold = 0.5f;
     private Transform _playerTransform;
@@ -42,7 +42,7 @@ public class PlayerPositionCaster : NetworkBehaviour
     [ObserversRpc]
     void PlayerPositionCastingObserverRPC(Vector3 position, int playerId)
     {
-        EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId));
+        InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId));
     }
 
     private void OnDrawGizmos()

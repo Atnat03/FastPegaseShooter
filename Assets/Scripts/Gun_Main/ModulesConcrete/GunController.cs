@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
@@ -16,7 +13,6 @@ public interface IGun
     public void TryReload();
     public void TryCharging();
     public void TryShootCharged();
-
     public void Disable(bool state);
 }
 
@@ -26,18 +22,18 @@ public interface ISurcharge
     public int GetCurrentAmmo();
     public void SetAmmo(int value);
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
-    public bool IsOverload { get; }
     public MeshRenderer ModelGun { get; }
     public void StopReload();
 }
 
 namespace GunDecorator
 {
-    public class GunController : NetworkBehaviour, IGun, ISurcharge
+    public class GunController : NetworkBusListener, IGun, ISurcharge
     {
         public bool IsOverload => _isOverload.Value;
         public float SurchargeMultiplierDamage { get; set; }
         public float SurchargeMultiplierRate { get; set; }
+        public bool IsFullAuto => _isFullAuto;
         
         public IRecoilModule RecoilModule => _recoilModule;
         
@@ -52,25 +48,24 @@ namespace GunDecorator
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
         
         [SerializeField, Tooltip("Model 3d de l'arme")] 
-        public MeshRenderer _model;
+        private MeshRenderer _model;
         [SerializeField, Tooltip("Audio Source de l'arme")] 
         public AudioSource _source;
         [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")] 
         public SoundsDataSO _soundData;
-        [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
-
-        [SerializeField, Tooltip("Camera shake setting : {x = duration du shake || y = magnitude du shake}")] Vector2 _cameraShakeSettings = new Vector2(0.05f, 0.1f);
         
-        private bool ShootingInputPressed;
+        [SerializeField, Tooltip("Animation du modele de l'arme")] 
+        public Animator _animator;
+        
+        [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
+        [SerializeField][Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
+        
+        private bool ShootingInputPressed = true;
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-
-        private EventBus _bus;
-
+        
         private void Awake()
         {
-            _bus = EventBusInitialiser.instance.Bus;
-            
             //On récupere tout les types de modules possible et potentiellement sur l'arme
             _shootModule = GetComponents<IShootModule>();
             _reloadModule = GetComponent<IReloadModule>();
@@ -92,36 +87,30 @@ namespace GunDecorator
             
             //On appele la fonction shoot du module de shoot actuellement équipé
             ShootingInputPressed = true;
-            
+
+            ApplyShoot();
+        }
+
+        public void ApplyShoot()
+        {
+            if (!ShootingInputPressed) return;
+
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 foreach (IShootModule s in _shootModule)
                 {
-                    if (s is { IsFullAuto: true })
+                    if (IsFullAuto)
                     {
                         StartCoroutine(ShootingCoroutine(s));
                         continue;
                     }
                     s?.TryShoot();
-                    _recoilModule?.Recoil(_model.transform, 0.1f);
+                    
+                    _recoilModule?.Recoil(_model.transform, 0.1f, false);
                     _recoilModule?.SetIsRecoil(true);
+                    
                     SetAmmo(GetCurrentAmmo() - 1);
                     PlayMuzzleFlash();
-                }
-            }
-            
-            _bus.InvokeEvent(new OnCameraShakeEvent
-            {
-                player = NetworkObject,
-                duration = _cameraShakeSettings.x,
-                magnitude = _cameraShakeSettings.y
-            });
-
-            if (GetCurrentAmmo() <= 0)
-            {
-                if (_reloadModule.AutoReload)
-                {
-                    TryReload();
                 }
             }
         }
@@ -134,8 +123,10 @@ namespace GunDecorator
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 PlayMuzzleFlash();
-                _recoilModule?.Recoil(_model.transform, s.FireRate);
+                
+                _recoilModule?.Recoil(_model.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
+                
                 SetAmmo(GetCurrentAmmo() - 1);
                 
                 yield return new WaitForSeconds(s.FireRate);
@@ -185,9 +176,7 @@ namespace GunDecorator
             if (_reloadModule.IsReloading) return;
             
             _reloadModule?.Reload();
-
-            AudioClip clip = SoundManager.GetAudioClip(_soundData,"Reload");
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            PlaySound("Reload");
         }
 
         public void TriggerHitMark(bool isCritique = false)
@@ -217,10 +206,30 @@ namespace GunDecorator
             _model.gameObject.SetActive(state);
         }
 
+        public void PlaySound(string sound)
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            SoundManager.PlaySound(clip, _source, 0.5f);
+            
+            PlaySoundServerRpc(sound);
+        }
+
+        [ServerRpc]
+        void PlaySoundServerRpc(string sound)
+        {
+            PlaySoundObserverRpc(sound);
+        }
+
+        [ObserversRpc(ExcludeOwner = true)]
+        void PlaySoundObserverRpc(string sound)
+        {
+            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            SoundManager.PlaySound(clip, _source, 0.5f);
+        }
+
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {
-            Debug.Log("Play Muzzle flash");
             _muzzleFlash.Play();
         }
 

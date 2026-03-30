@@ -68,7 +68,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
                     if (_targetNetworkObject != null && 
                         _targetNetworkObject.TryGetComponent<IDamagable>(out var d))
                     {
-                        bool crit = d.TakeDamage((int)p_damage, p_isCritical);
+                        bool crit = d.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
                         _gunController.TriggerHitMark(crit || p_isCritical);
                     }
                 }
@@ -92,7 +92,7 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                bool crit = damagable.TakeDamage((int)p_damage, p_isCritical);
+                bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
                 _gunController.TriggerHitMark(crit || p_isCritical);
             }
         }
