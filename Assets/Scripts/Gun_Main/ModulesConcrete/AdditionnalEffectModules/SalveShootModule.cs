@@ -16,6 +16,15 @@ namespace GunDecorator
         public void SetUpModule(IShootModule shootModule) => _shootModule = shootModule;
         public void SetNext(ISecondModule next) => _next = next;
 
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is S_SalveSetting s)
+            {
+                _numberShootPerSalve = s.numberShootPerSalve;
+                _intervalDuration = s.intervalDuration;
+            }
+        }
+        
         public void DoAdditionnalEffect()
         {
             StartCoroutine(MultipleShoot());

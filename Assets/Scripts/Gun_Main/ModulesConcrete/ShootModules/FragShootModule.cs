@@ -7,10 +7,11 @@ namespace GunDecorator
 {
     public class FragShootModule : GunModule, IShootModule
     {
-        public bool IsFullAuto => _isFullAuto;
         public float FireRate => _fireRate;
         public IAmmoModule AmmoModule => _ammoModule;
         public bool IsExplosed => _isExplosedAmmo;
+
+        public bool CanShoot => _canShoot;
 
         [SerializeField][Tooltip("liste de l'ensemble des modificateurs appliqués au tir (l'ordre eut changer le comportement du tir)")] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
@@ -18,13 +19,24 @@ namespace GunDecorator
         [SerializeField][Tooltip("type de la balle tirée par l'ensemble du module")] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
 
-        [SerializeField][Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
         [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
         
         [SerializeField][Tooltip("le nombre de balles tirées a chaque tir")] private float _numberBulletSpread;
         [SerializeField, Range(0, 60)][Tooltip("l'angle de propagation maximum que les balles peuvent prendre par rapport a l'orientation du canon")] private float _spreadAngle;
         private bool _isExplosedAmmo = false;
         
+        float _elapsedFireTime = 0;
+        private bool _canShoot = true;
+        
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is FragShootSetting s)
+            {
+                _fireRate = s.fireRate;
+                _numberBulletSpread = s.numberBulletSpread;
+                _spreadAngle = s.SpreadAngle;
+            }
+        }
         
         private void Start()
         {
@@ -44,9 +56,25 @@ namespace GunDecorator
             if(_ammoType != null)
                 _ammoModule = (IAmmoModule)_ammoType;
         }
+        
+        private void Update()
+        {
+            if (_elapsedFireTime > 0)
+            {
+                _elapsedFireTime -= Time.deltaTime;
+                
+                _canShoot = false;
+            }
+            else
+            {
+                _canShoot = true;
+            }
+        }
 
         public void TryShoot()
         {
+            _elapsedFireTime = FireRate;
+            
             if (_additionalEffectModule.Count == 0)
             {
                 Shooting();

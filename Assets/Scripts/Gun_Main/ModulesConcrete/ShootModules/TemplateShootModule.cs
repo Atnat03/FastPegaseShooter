@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FishNet.Object;
+using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace GunDecorator
     {
         public float FireRate => _fireRate;
         public IAmmoModule AmmoModule => _ammoModule;
+        
+        public bool CanShoot => _canShoot;
 
         [SerializeField][Tooltip("liste de l'ensemble des modificateurs appliqués au tir (l'ordre eut changer le comportement du tir)")] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
@@ -22,6 +25,17 @@ namespace GunDecorator
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
         private Vector3 _bulletOffset = Vector3.zero;
+        
+        float _elapsedFireTime = 0;
+        private bool _canShoot = true;
+
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is TemplateShootSetting shootSetting)
+            {
+                _fireRate = shootSetting.fireRate;
+            }
+        }
         
         private void Start()
         {
@@ -42,8 +56,24 @@ namespace GunDecorator
                 _ammoModule = (IAmmoModule)_ammoType;
         }
 
+        private void Update()
+        {
+            if (_elapsedFireTime > 0)
+            {
+                _elapsedFireTime -= Time.deltaTime;
+                
+                _canShoot = false;
+            }
+            else
+            {
+                _canShoot = true;
+            }
+        }
+
         public void TryShoot()
         {
+            _elapsedFireTime = FireRate;
+            
             if (_additionalEffectModule.Count == 0)
             {
                 Shooting();
