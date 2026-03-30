@@ -14,7 +14,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     /// bool => Is Critical Damages <br/>
     /// int => Taken damages amount
     /// </summary>
-    public Action<bool, int> OnLifeUpdate;
+    public Action<bool, int, int, int> OnLifeUpdate;
     public Action OnDeath;
     
     public Action<int, int> p_onHitPlayer;
@@ -71,7 +71,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     [ObserversRpc]
     protected void OnLifeUpdateObserverRPC(bool isCritical, int dmg)
     {
-        OnLifeUpdate?.Invoke(isCritical, dmg);
+        OnLifeUpdate?.Invoke(isCritical, dmg, p_life.Value, _life);
     }
     [ObserversRpc]
     protected void OnDeathObserverRPC()
