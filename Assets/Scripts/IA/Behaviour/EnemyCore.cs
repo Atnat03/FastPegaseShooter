@@ -10,16 +10,33 @@ public class EnemyCore : NetworkBusListener
     
     [SerializeField] private List<EnemyAttackingModule> _attackingModules = new List<EnemyAttackingModule>();
     [SerializeField] private List<EnemyLifeModule> _lifeModules = new List<EnemyLifeModule>();
+    [SerializeField] private List<EnemyTargetingModule> _targetingModules = new List<EnemyTargetingModule>();
     [SerializeField] private EnemyMovingModule _movingModule;
     
+    //Filled In Automatially
+    private List<ScoreTargetingModule> _scoreModules = new List<ScoreTargetingModule>();
+
     public Guid p_gridReaderId;
     [HideInInspector]public  int p_enemySpawnCost;
-
     public override void OnStartServer()
     {
         base.OnStartServer();
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
+        
+        foreach (EnemyTargetingModule targetModule in _targetingModules)
+        {
+            if(targetModule is ScoreTargetingModule scoreTargetModule)
+                _scoreModules.Add(scoreTargetModule);
+        }
+        
+        foreach (EnemyAttackingModule module in _attackingModules)
+            foreach (ScoreTargetingModule scoreModule in _scoreModules)
+                module.p_onHitPlayer += scoreModule.OnHitPlayer;
+        
+        foreach (EnemyLifeModule module in _lifeModules)
+            foreach (ScoreTargetingModule scoreModule in _scoreModules)
+                module.p_onHitPlayer += scoreModule.OnDamageTaken;
     }
 
     public override void OnStopServer()
@@ -44,6 +61,9 @@ public class EnemyCore : NetworkBusListener
     private void OnNetworkTick()
     {
         foreach(EnemyAttackingModule module in _attackingModules)
+            module.OnNetworkTick();
+
+        foreach (EnemyTargetingModule module in _targetingModules)
             module.OnNetworkTick();
         
         _movingModule.OnNetworkTick();

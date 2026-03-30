@@ -1,4 +1,5 @@
 using System;
+using Controller;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
@@ -16,12 +17,16 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     public Action<bool, int> OnLifeUpdate;
     public Action OnDeath;
     
-    [HideInInspector] public float p_damageMultiplier = 1;
+    public Action<int, int> p_onHitPlayer;
+    
+    
+    [HideInInspector] private float p_damageMultiplier = 1;
 
-    public virtual bool TakeDamage(int rawDamageAmount, bool isCritical = false)
+    public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
     {
         if (IsServerInitialized)
         {
+            p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
             OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
         }
         return isCritical;
@@ -38,6 +43,9 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
         base.OnStartServer();
         p_life.Value = _life;
         p_life.OnChange += OnLifeChanged;
+        
+        ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
+        ListenToEvent((EndOverloadEvent EOE) => p_damageMultiplier = 1);
     }
 
     public override void OnStopServer()

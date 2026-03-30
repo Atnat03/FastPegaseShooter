@@ -31,7 +31,6 @@ public static class ImpactSurface
 {
     public static SurfaceType GetSurfaceType(string tag)
     {
-        Debug.Log(tag);
         switch (tag)
         {
             case "Enemy": return SurfaceType.Enemy;

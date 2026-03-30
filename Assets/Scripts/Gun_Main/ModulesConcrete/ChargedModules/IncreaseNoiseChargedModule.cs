@@ -19,7 +19,8 @@ namespace GunDecorator.ChargedModules
                     ExplosionRadius = _explosionRadius
                 });
 
-                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, _recoilChargedMultiplier);
+                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
+                _gunController.RecoilModule?.SetIsRecoil(true);
 
                 ApplyShoot();
             }
@@ -45,8 +46,7 @@ namespace GunDecorator.ChargedModules
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
             }
                             
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Charged");
-            SoundManager.PlaySound(clip, _gunController._source, 0.5f);
+            _gunController.PlaySound("Charged");
         }
     }
 }
