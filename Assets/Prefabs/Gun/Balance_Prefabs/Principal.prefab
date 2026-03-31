@@ -197,8 +197,8 @@ MonoBehaviour:
   - {fileID: 3242460607509936072}
   - {fileID: 4622992160538828633}
   - {fileID: 4634684563791320979}
-  - {fileID: 4831827870365603956}
-  - {fileID: 4574882201610578249}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 871696745003016237}
   - {fileID: 1824837495481286687}
   - {fileID: 3910421565823945444}
@@ -554,10 +554,11 @@ MonoBehaviour:
   _componentIndexCache: 10
   _addedNetworkObject: {fileID: 8391645365069655725}
   _networkObjectCache: {fileID: 8391645365069655725}
+  _settings: {fileID: 0}
   _model: {fileID: 6047232286497617289}
-  p_source: {fileID: 652532201359401791}
-  p_soundData: {fileID: 11400000, guid: bed84edcd44ad494b8bcf63c31debaab, type: 2}
-  p_animator: {fileID: 6131868467922300051}
+  _source: {fileID: 0}
+  _soundData: {fileID: 0}
+  _animator: {fileID: 0}
   _muzzleFlash: {fileID: 3588143161274860127}
   _isFullAuto: 0
   p_authorizedToShoot: 1
@@ -957,11 +958,10 @@ GameObject:
   - component: {fileID: 4622992160538828633}
   - component: {fileID: 436963864913153984}
   - component: {fileID: 4634684563791320979}
-  - component: {fileID: 4831827870365603956}
-  - component: {fileID: 4574882201610578249}
   - component: {fileID: 871696745003016237}
   - component: {fileID: 1824837495481286687}
   - component: {fileID: 3910421565823945444}
+  - component: {fileID: 2693510114115177691}
   m_Layer: 11
   m_Name: ShotgunSniper
   m_TagString: Untagged
@@ -1000,10 +1000,11 @@ MonoBehaviour:
   _componentIndexCache: 19
   _addedNetworkObject: {fileID: 8391645365069655725}
   _networkObjectCache: {fileID: 8391645365069655725}
+  _settings: {fileID: 0}
   _model: {fileID: 8480240266963790232}
-  p_source: {fileID: 436963864913153984}
-  p_soundData: {fileID: 11400000, guid: 376eb2d5da950c64c8f7abf6d416e1e0, type: 2}
-  p_animator: {fileID: 3655357440945544217}
+  _source: {fileID: 0}
+  _soundData: {fileID: 0}
+  _animator: {fileID: 0}
   _muzzleFlash: {fileID: 958775187233696503}
   _isFullAuto: 0
   p_authorizedToShoot: 1
@@ -1212,54 +1213,11 @@ MonoBehaviour:
   moduleName: FragShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
   _secondModule:
-  - {fileID: 4574882201610578249}
-  _ammoType: {fileID: 4831827870365603956}
-  _isFullAuto: 1
+  - {fileID: 0}
+  _ammoType: {fileID: 2693510114115177691}
   _fireRate: 1.25
   _numberBulletSpread: 9
   _spreadAngle: 12
---- !u!114 &4831827870365603956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4512721028681548522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1c10d552aef42cf9e8fb79047b90af4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.PhysicAmmoModule
-  _componentIndexCache: 23
-  _addedNetworkObject: {fileID: 8391645365069655725}
-  _networkObjectCache: {fileID: 8391645365069655725}
-  moduleName: PhysicAmmoModule
-  moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  _ammoPrefab: {fileID: 3802455011104058996, guid: 5fc7d17e86614ec42881b36f255fbdca, type: 3}
-  _spawnPoint: {fileID: 5162150506457825021}
-  _camera: {fileID: 0}
-  _bulletMass: 1
-  _damages: 6
-  _bulletThrowForce: 100
-  _BulletSpeed: 50
---- !u!114 &4574882201610578249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4512721028681548522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 24
-  _addedNetworkObject: {fileID: 8391645365069655725}
-  _networkObjectCache: {fileID: 8391645365069655725}
-  moduleName: ExplosifAmmoModule
-  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
-  _radiusExplosion: 2
 --- !u!114 &871696745003016237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1321,7 +1279,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8391645365069655725}
   moduleName: DecreaseNoiseChargedModule
   moduleColor: {r: 0, g: 1, b: 1, a: 1}
-  _ammoType: {fileID: 4831827870365603956}
+  _ammoType: {fileID: 2693510114115177691}
   _isExplosifAmmo: 0
   _explosionRadius: 1
   _timeToCharge: 1
@@ -1355,6 +1313,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _startMaxNoiseAngle: 10
+--- !u!114 &2693510114115177691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4512721028681548522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.DefaultRaycastAmmoModuleRealTimeObstacleDetection
+  _componentIndexCache: 5
+  _addedNetworkObject: {fileID: 8391645365069655725}
+  _networkObjectCache: {fileID: 0}
+  moduleName: DefaultRaycastAmmoModuleRealTimeObstacleDetection
+  moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _camera: {fileID: 0}
+  BulletPrefab: {fileID: 9013429817892366803, guid: c7bdca4a53385554f8a8047df87cc680, type: 3}
+  _spawnPoint: {fileID: 8619370617974846897}
+  _maxDistance: 2000
+  _damages: 3
+  _BulletSpeed: 50
+  _impactVFXData: {fileID: 11400000, guid: fa51d249e5d6f104e9e152faba21b25a, type: 2}
 --- !u!1 &4829844116131341197
 GameObject:
   m_ObjectHideFlags: 0
@@ -1790,10 +1772,11 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8391645365069655725}
   _networkObjectCache: {fileID: 8391645365069655725}
+  _settings: {fileID: 0}
   _model: {fileID: 4537327131681164176}
-  p_source: {fileID: 6267435612650773968}
-  p_soundData: {fileID: 11400000, guid: 65bd5cf42144b4241ad32c45f4c56e43, type: 2}
-  p_animator: {fileID: 3716681304194427283}
+  _source: {fileID: 0}
+  _soundData: {fileID: 0}
+  _animator: {fileID: 0}
   _muzzleFlash: {fileID: 3210921662057479224}
   _isFullAuto: 1
   p_authorizedToShoot: 1
@@ -2205,10 +2188,11 @@ MonoBehaviour:
   _componentIndexCache: 28
   _addedNetworkObject: {fileID: 8391645365069655725}
   _networkObjectCache: {fileID: 8391645365069655725}
+  _settings: {fileID: 0}
   _model: {fileID: 6928691019075758927}
-  p_source: {fileID: 7859643571414359670}
-  p_soundData: {fileID: 11400000, guid: baba7f4aad2773f45b57a042e622a26d, type: 2}
-  p_animator: {fileID: 6219127574244318747}
+  _source: {fileID: 0}
+  _soundData: {fileID: 0}
+  _animator: {fileID: 0}
   _muzzleFlash: {fileID: 3400955675133832890}
   _isFullAuto: 0
   p_authorizedToShoot: 1

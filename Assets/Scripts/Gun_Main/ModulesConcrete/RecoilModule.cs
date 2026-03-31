@@ -55,6 +55,22 @@ public class RecoilModule : GunModule, IRecoilModule
     
     #endregion
 
+    public override void SetVariable(GunSetting setting)
+    {
+        if (setting is RecoilSetting s)
+        {
+            _recoilCurve = s.recoilXCurve;
+            _recoilX = s.recoilX;
+            _recoilY = s.recoilY;
+            _recoilZ = s.recoilZ;
+            _returnSpeed = s.returnSpeed;
+            _snapiness = s.snapiness;
+            _z_recoilDistance = s.z_recoilDistance;
+            _z_returnSpeed = s.z_returnSpeed;
+            _maxZKickback = s.maxZKickback;
+        }
+    }
+    
     void Start()
     {
         _initialLocalPos = _gunController.ModelGun.transform.localPosition;

@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
@@ -22,7 +24,7 @@ public interface ISurcharge
     public int GetCurrentAmmo();
     public void SetAmmo(int value);
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
-    public MeshRenderer ModelGun { get; }
+    public Renderer ModelGun { get; }
     public void StopReload();
 }
 
@@ -37,7 +39,7 @@ namespace GunDecorator
         
         public IRecoilModule RecoilModule => _recoilModule;
         
-        public MeshRenderer ModelGun => _model;
+        public Renderer ModelGun => _model;
 
         private IShootModule[] _shootModule;
         private IReloadModule _reloadModule;
@@ -46,9 +48,12 @@ namespace GunDecorator
         private ChargedParentModule _chargedModule;
 
         private readonly SyncVar<bool> _isOverload = new SyncVar<bool>(false);
+
+        [SerializeField, Tooltip("ScriptableObject contenant les settings de l'arme équilibré")]
+        private GunModuleSettingsSO _settings;
         
         [SerializeField, Tooltip("Model 3d de l'arme")] 
-        private MeshRenderer _model;
+        private Renderer _model;
         [SerializeField, Tooltip("Audio Source de l'arme")] 
         public AudioSource _source;
         [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")] 
@@ -73,10 +78,25 @@ namespace GunDecorator
             _hitMarkerModule = GetComponent<IHitMarkerModule>();
             _chargedModule = GetComponent<ChargedParentModule>();
 
+            List<GunModule> modules = GetComponents<GunModule>().ToList();
+
             //On initialise tout les modules de l'arme
-            foreach (GunModule module in GetComponents<GunModule>())
+            foreach (GunModule module in modules)
             {
                 module.Initialize(this);
+            }
+
+            if(_settings != null)
+            {
+                foreach (GunSetting s in _settings.modulesList)
+                {
+                    GunModule found = modules.Find(x => x.GetType().Name == s.displayName);
+
+                    if (found != null)
+                    {
+                        found.SetVariable(s);
+                    }
+                }
             }
         }
 
@@ -99,6 +119,8 @@ namespace GunDecorator
             {
                 foreach (IShootModule s in _shootModule)
                 {
+                    if (!s.CanShoot) return;
+                    
                     if (IsFullAuto)
                     {
                         StartCoroutine(ShootingCoroutine(s));
@@ -111,6 +133,8 @@ namespace GunDecorator
                     
                     SetAmmo(GetCurrentAmmo() - 1);
                     PlayMuzzleFlash();
+                    
+                    _animator?.SetTrigger("Shoot");
                 }
             }
         }
@@ -128,6 +152,8 @@ namespace GunDecorator
                 _recoilModule?.SetIsRecoil(true);
                 
                 SetAmmo(GetCurrentAmmo() - 1);
+                
+                _animator?.SetTrigger("Shoot");
                 
                 yield return new WaitForSeconds(s.FireRate);
                 
@@ -176,7 +202,6 @@ namespace GunDecorator
             if (_reloadModule.IsReloading) return;
             
             _reloadModule?.Reload();
-            PlaySound("Reload");
         }
 
         public void TriggerHitMark(bool isCritique = false)
@@ -209,6 +234,9 @@ namespace GunDecorator
         public void PlaySound(string sound)
         {
             AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+
+            if (clip == null) return;
+            
             SoundManager.PlaySound(clip, _source, 0.5f);
             
             PlaySoundServerRpc(sound);

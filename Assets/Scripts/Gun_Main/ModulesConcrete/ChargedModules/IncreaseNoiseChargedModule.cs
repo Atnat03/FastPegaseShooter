@@ -1,4 +1,6 @@
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GunDecorator.ChargedModules
 {
@@ -7,6 +9,23 @@ namespace GunDecorator.ChargedModules
         [Header("Salve")] 
         [SerializeField] private AnimationCurve _noiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
         [SerializeField] private float _maximumNoiseAngle = 10;
+        
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is ChargedIncreaseNoiseSetting s)
+            {
+                _isExplosifAmmo = s.IsExplosifAmmo;
+                _explosionRadius = s.explosionRadius;
+                _deadZoneStartCharging = s.DeadZoneStartCharging;
+                _recoilChargedMultiplier =  s.recoilChargedMultiplier;
+                _recoilX = s.RecoilX;
+                _timeToCharge = s.timeToCharge;
+                _isFullMultiplicator = s.IsFullMultiplicator;
+                _numberBulletInCharge = s.NumberBulletInCharged;
+                _noiseEvolutionCurve = s.NoiseEvolutionCurve;
+                _maximumNoiseAngle = s.maxNoiseAngle;
+            }
+        }
         
         public override void TryShootCharging()
         {
