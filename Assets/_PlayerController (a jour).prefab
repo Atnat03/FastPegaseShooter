@@ -1869,7 +1869,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2624057951769441985}
   serializedVersion: 5
-  m_Mass: 3
+  m_Mass: 2.85
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1925,44 +1925,44 @@ MonoBehaviour:
   dashUnlocked: 1
   superJumpUnlocked: 0
   slopeSlideUnlocked: 1
-  cameraSpringHalfLife: 0.075
-  cameraSpringFrequency: 22.5
-  rollSmoothing: 15
+  cameraSpringHalfLife: 0.02
+  cameraSpringFrequency: 36
+  rollSmoothing: 40
   mouseSensitivity: 0.2
   verticalLimit: 75
   moveSpeed: 9.5
   groundMomentumFactor: 2
-  sideStepImpulseForce: 3
+  sideStepImpulseForce: 0
   wallDetectionRange: 0
   walkableSlopeAngle: 45
   maxStepHeight: 1
-  gravityBonusForceAscending: 3
-  gravityBonusForceFalling: 10
+  gravityBonusForceAscending: 40
+  gravityBonusForceFalling: 4.5
   walkingHeadbobAmplitude: 0.075
   walkingHeadbobFrequency: 15
   wallRidingHeadbobAmplitude: 0.1
   wallRidingHeadbobFrequency: 25
   headbobStopReturningSpeed: 5
-  jumpForce: 22.5
-  airControlForce: 3
-  maxAirSpeed: 6
-  airDrag: 0.5
+  jumpForce: 44
+  airControlForce: 5.5
+  maxAirSpeed: 9.5
+  airDrag: 0
   bufferJumpTime: 0.2
   coyoteTimeDuration: 0.2
   landSnapVelocity: 50
   airJumpCount: 1
-  superJumpInputMaxDelay: 0.5
-  superJumpVerticalForce: 30
-  superJumpHorizontalForce: 6
+  superJumpInputMaxDelay: 0
+  superJumpVerticalForce: 0
+  superJumpHorizontalForce: 0
   superJumpEnergyCost: 20
-  wallRideDetectionRange: 0.5
+  wallRideDetectionRange: 0.6
   wallRidingDuration: 1.5
   wallRideCooldownChangeSide: 0.2
-  wallRideCooldownSameSide: 2
-  wallRidingSpeed: 10
+  wallRideCooldownSameSide: 0.6
+  wallRidingSpeed: 11
   minSpeedToWallRide: 1
-  wallJumpVerticalForce: 27
-  wallJumpHorizontalForce: 18
+  wallJumpVerticalForce: 44
+  wallJumpHorizontalForce: 25
   headtiltIntensity: 7
   crouchSpeed: 5
   cameraOffsetWhenCrouching: 0.75
@@ -1973,11 +1973,11 @@ MonoBehaviour:
   - {fileID: 3153661936363678950}
   topHeightCrouchedCollider: {fileID: 4821877748357995787}
   slideSpeed: 15
-  slideMinTimeDuration: 1
-  slideMaxTimeDuration: 3
-  slideJumpVerticalForce: 19.5
+  slideMinTimeDuration: 0.2
+  slideMaxTimeDuration: 2.8
+  slideJumpVerticalForce: 48
   slideJumpHorizontalForce: 2
-  slideCooldown: 2
+  slideCooldown: 0.2
   coyoteSlideDuration: 0.1
   CameraSlideFOV: 85
   slidingBackToNormalSpeedDelay: 1
@@ -1986,14 +1986,14 @@ MonoBehaviour:
   dashCooldown: 0.75
   dashEnergyCost: 20
   minSlopeAngleToSlopeSlide: 10
-  slopeSlideMaxSpeed: 11
+  slopeSlideMaxSpeed: 17
   slopeInfluenceOnRotation: 3
   slopeInfluenceOnVelocity: 0.075
   _castWidth: 0.5
   _castMaxDistance: 20
   _grapplingSpeed: 40
-  _grappleRedirectionSpeed: 8
-  _endGrappleImpulseForce: 30
+  _grappleRedirectionSpeed: 40
+  _endGrappleImpulseForce: 45
   grounded: 0
   leftSideAgainstWall: 0
   rightSideAgainstWall: 0
@@ -2122,7 +2122,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584269958260193225
+  _initializedTimestamp: -8584266393351177692
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -2138,7 +2138,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 7
+  <PrefabId>k__BackingField: 8
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 6683661854146624352
   SceneId: 0
@@ -9190,6 +9190,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8391645365069655725, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
       propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391645365069655725, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: <IsNested>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391645365069655725, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: <PrefabId>k__BackingField
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391645365069655725, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
+      propertyPath: <ComponentIndex>k__BackingField
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8391645365069655725, guid: f7667f6f8128c3b4cb86d25d07ea79f4, type: 3}
