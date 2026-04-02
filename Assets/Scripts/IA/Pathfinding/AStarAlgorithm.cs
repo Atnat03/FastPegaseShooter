@@ -5,48 +5,51 @@ public class AStarAlgorithm : MonoBehaviour
 {
     public List<PathfindingNode> FindPathFromGrid(List<PathfindingNode> grid, PathfindingNode startNode, PathfindingNode targetNode)
     {
-        List<AStarNode> toSearch = new List<AStarNode>() { new AStarNode
-        {
-            Node = startNode
-        } };
-        List<AStarNode> searched = new List<AStarNode>();
+        //Creating a SortedSet where elements are ordered by F, then H
+        //last return is a security.
+        SortedSet<AStarNode> toSearch = new SortedSet<AStarNode>(
+            Comparer<AStarNode>.Create((a, b) =>
+            {
+                int result = a.F.CompareTo(b.F);
+                if (result != 0)
+                    return result;
+                
+                result = a.H.CompareTo(b.H);
+                if(result != 0)
+                    return result;
+                
+                return a.Node.GetHashCode().CompareTo(b.Node.GetHashCode());
+            }));
+        Dictionary<PathfindingNode, AStarNode> toSearchHash = new Dictionary<PathfindingNode, AStarNode>();
+
+        AStarNode firstNode = new AStarNode { Node = startNode }; 
+        toSearch.Add(firstNode);
+        toSearchHash.Add(firstNode.Node, firstNode);
+        
+        HashSet<PathfindingNode> searched = new HashSet<PathfindingNode>();
 
         while (toSearch.Count > 0)
         {
-            AStarNode currentNode = toSearch[0];
-            foreach (AStarNode node in toSearch)
-            {
-                if (node.F < currentNode.F || (node.F == currentNode.F && node.H < currentNode.H))
-                {
-                    currentNode = node;
-                }
-            }
+            AStarNode currentNode = toSearch.Min; //toSearch[0];
             
-            searched.Add(currentNode);
+            searched.Add(currentNode.Node);
             toSearch.Remove(currentNode);
+            toSearchHash.Remove(currentNode.Node);
 
             if (currentNode.Node == targetNode)
             {
-                AStarNode currentPathTile = currentNode;
-                List<PathfindingNode> path = new List<PathfindingNode>() {currentPathTile.Node};
-                while (currentPathTile.Node != startNode)
-                {
-                    currentPathTile = currentPathTile.toStart;
-                    path.Add(currentPathTile.Node);
-                }
-                return path;
+                return ReconstructPath(currentNode, startNode);
             }
 
             //Check for walkability here by only selecting walkable nodes
             foreach (int neighbor in currentNode.Node.neighborsIndex)
             {
-                if(DoContainNode(searched, grid[neighbor]).Item1) continue;
-                
-                bool inSearch = DoContainNode(toSearch, grid[neighbor]).Item1;
+                if(searched.Contains(grid[neighbor])) continue;
+
+                bool inSearch = toSearchHash.ContainsKey(grid[neighbor]);
                 int costToNeighbor = currentNode.G + GetDistance(currentNode.Node, grid[neighbor]);
                 
-                (bool, AStarNode) doContains = DoContainNode(toSearch, grid[neighbor]);
-                if (!inSearch || (doContains.Item1 && costToNeighbor < doContains.Item2.G))
+                if(!inSearch || (inSearch && costToNeighbor < toSearchHash[grid[neighbor]].G))
                 {
                     if (!inSearch)
                     {
@@ -60,12 +63,17 @@ public class AStarAlgorithm : MonoBehaviour
                             F = costToNeighbor + distToTarget
                         };
                         toSearch.Add(newNode);
+                        toSearchHash.Add(newNode.Node, newNode);
                     }
                     else
                     {
-                        doContains.Item2.G = costToNeighbor;
-                        doContains.Item2.F = doContains.Item2.G + doContains.Item2.H; 
-                        doContains.Item2.toStart = currentNode;
+                        toSearch.Remove(toSearchHash[grid[neighbor]]);
+                        
+                        toSearchHash[grid[neighbor]].G = costToNeighbor;
+                        toSearchHash[grid[neighbor]].F = toSearchHash[grid[neighbor]].G + toSearchHash[grid[neighbor]].H; 
+                        toSearchHash[grid[neighbor]].toStart = currentNode;
+
+                        toSearch.Add(toSearchHash[grid[neighbor]]);
                     }
                 }
             }
@@ -73,14 +81,18 @@ public class AStarAlgorithm : MonoBehaviour
         return null;
     }
 
-    (bool,AStarNode) DoContainNode(List<AStarNode> list, PathfindingNode node)
+    private List<PathfindingNode> ReconstructPath(AStarNode currentNode, PathfindingNode startNode)
     {
-        foreach (AStarNode n in list)
-            if (n.Node == node) return (true,n);
-        
-        return (false, new AStarNode());
+        AStarNode currentPathTile = currentNode;
+        List<PathfindingNode> path = new List<PathfindingNode>() {currentPathTile.Node};
+        while (currentPathTile.Node != startNode)
+        {
+            currentPathTile = currentPathTile.toStart;
+            path.Add(currentPathTile.Node);
+        }
+        return path;
     }
-    
+
     int GetDistance(PathfindingNode nodeA, PathfindingNode nodeB)
     {
         const int diagonalCost = 14;

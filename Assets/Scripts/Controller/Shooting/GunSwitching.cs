@@ -11,10 +11,12 @@ using Random = UnityEngine.Random;
 public class GunSwitching : NetworkBehaviour
 {
 	#region Properties
-
 	public bool IsMainGun => _isMainGun.Value;
 	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun.Value];
 	public GameObject CurrentSecondaryGun => _secondaryGunsList[_currentSecondaryGun.Value];
+	public IGun IGunMain => _currentMainIGun;
+	public IGun IGunSecondary => _currentSecondIGun;
+	public ISurcharge ISurchargeMain => _currentISurcharge;
 	public int CurrentMainGunIndex => _currentMainGun.Value;
 
 	public bool IsSwitching => !_canSwitch;
@@ -38,6 +40,10 @@ public class GunSwitching : NetworkBehaviour
 
 	public Action OnStartSwitchGun;
 	public Action OnEndSwitchGun;
+
+	private IGun _currentMainIGun;
+	private IGun _currentSecondIGun;
+	private ISurcharge _currentISurcharge;
 	
 	#endregion
 
@@ -60,11 +66,15 @@ public class GunSwitching : NetworkBehaviour
 		{
 			_secondaryGunsList.Add(gun.gameObject);
 		}
-
-		UpdateVisual(true);
 		
 		_currentMainGun.Value = startIndex;
 		_currentSecondaryGun.Value = startIndex;
+		
+		UpdateVisual(true);
+		
+		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
+		_currentSecondIGun = CurrentSecondaryGun.GetComponent<IGun>();
 	}
 	
 	[ServerRpc]
@@ -120,8 +130,7 @@ public class GunSwitching : NetworkBehaviour
 			yield return null;
 		}
 
-		if(IsServerInitialized)
-			ActivateCurrentGun(list, index);
+		ActivateCurrentGun(list, index);
 	
 		_mainGunParent.SetActive(isMain);
 		_secondaryGunParent.SetActive(!isMain);
@@ -177,6 +186,11 @@ public class GunSwitching : NetworkBehaviour
        
 		if (next < _mainGunsList.Count)
 		{
+			_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+			_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
+			
+			_currentISurcharge.StopReload();
+			
 			if (IsOwner)
 			{
 				CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
@@ -195,13 +209,18 @@ public class GunSwitching : NetworkBehaviour
 	{
 		if (_secondaryGunsList == null || _secondaryGunsList.Count == 0) return;
        
+		_currentSecondIGun = CurrentSecondaryGun.GetComponent<IGun>();
+		
 		if (next < _secondaryGunsList.Count && !IsMainGun)
 		{
 			ActivateCurrentGun(_secondaryGunsList, next);
 		}
 	}
-	
-	public void ChangeCurrentGun_Secondary(int newIndex) => _currentSecondaryGun.Value = newIndex;
+
+	public void ChangeCurrentGun_Secondary(int newIndex)
+	{
+		_currentSecondaryGun.Value = newIndex;
+	} 
 
 	
 	#endregion

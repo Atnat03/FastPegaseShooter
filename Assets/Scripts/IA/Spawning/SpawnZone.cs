@@ -9,7 +9,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
-public class SpawnZone : NetworkBehaviour
+public class SpawnZone : NetworkBusListener
 {
     [SerializeField] private int _budgetMin;
     [SerializeField] private int _budgetMax;
@@ -28,21 +28,29 @@ public class SpawnZone : NetworkBehaviour
     private PathfindingGridReader _gridReader;
     private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
 
-    private Action _unsubscribeAction;
+    public Action<SpawnZone> p_onSpawnZoneComplete;
+
 
     public override void OnStartServer()
     {
         _gridReader = GetComponent<PathfindingGridReader>();
         
-        EventBusInitialiser.instance.Bus.Subscribe((EnemyDyingEvent EDE) =>
+        ListenToEvent<EnemyDyingEvent>(EDE =>
         {
             if (EDE.p_gridReaderId == _gridReader.p_id)
             {
                 _currentBudget -= EDE.p_enemySpawnCost;
+                _spawnedEnemies.Remove(EDE.p_enemyCore);
+                
+                if (IsSpawnZoneComplete())
+                {
+                    p_onSpawnZoneComplete?.Invoke(this);
+                }
             }
+            
         });
 
-        _unsubscribeAction = EventBusInitialiser.instance.Bus.Subscribe((PlayerPositionUpdateEvent PPUE) =>
+        ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
         {
             for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
             {
@@ -50,12 +58,6 @@ public class SpawnZone : NetworkBehaviour
                 else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition, _gridReader);
             }
         });
-    }
-
-    public override void OnStopServer()
-    {
-        _unsubscribeAction?.Invoke();
-        base.OnStopServer();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -146,4 +148,10 @@ public class SpawnZone : NetworkBehaviour
             }
         }
     }
+
+    bool IsSpawnZoneComplete()
+    {
+        return _spawnedEnemies.Count == 0 && spawnMobsFirstWave.Count == 0 && spawnMobs.Count == 0;
+    }
+    
 }

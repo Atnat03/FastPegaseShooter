@@ -1,17 +1,14 @@
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 
-public class CheckpointManager : MonoBehaviour
+public class CheckpointManager : MonoBusListener
 {
     [SerializeField] private List<Checkpoint> _checkpoints = new List<Checkpoint>();
     Dictionary<GameObject, int> playerCheckpoints = new Dictionary<GameObject, int>();
-    private EventBus _bus;
 
     void Awake()
     {
-        _bus = EventBusInitialiser.instance.Bus;
-        _bus.Subscribe((OnPlayerDeathEvent data) => RespawnPlayer(data));
+        ListenToEvent<OnPlayerDeathEvent>(RespawnPlayer);
     }
 
     void Start()

@@ -27,6 +27,8 @@ public class SpawnPlayer : NetworkBehaviour
 
     private void OnDisable()
     {
+        if (InstanceFinder.SceneManager == null) return;
+        
         InstanceFinder.SceneManager.OnLoadEnd -= OnSceneLoadEnd;
         InstanceFinder.ServerManager.OnRemoteConnectionState -= OnPlayerConnectionState;
     }

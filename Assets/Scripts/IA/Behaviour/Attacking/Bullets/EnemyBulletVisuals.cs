@@ -2,7 +2,7 @@ using System;
 using FishNet;
 using UnityEngine;
 
-public class EnemyBulletVisuals : MonoBehaviour
+public class EnemyBulletVisuals : MonoBusListener
 {
     private Vector3 _startPos;
     private Vector3 _direction;
@@ -12,9 +12,8 @@ public class EnemyBulletVisuals : MonoBehaviour
 
     private int _bulletId;
 
-    private Action _unsubscribeAction;
 
-    public void SetupVariables(Vector3 startPos, Vector3 direction, float speed, float spawnTime, int bulletId, float damage)
+    public void SetupVariables(Vector3 startPos, Vector3 direction, float speed, float bulletSize, float spawnTime, int bulletId, float damage)
     {
         _startPos = startPos;
         _direction = direction;
@@ -25,13 +24,13 @@ public class EnemyBulletVisuals : MonoBehaviour
         _bulletId = bulletId;
         
         transform.position = _startPos;
+        transform.localScale = Vector3.one * bulletSize;
         
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
-        _unsubscribeAction = EventBusInitialiser.instance.Bus.Subscribe((BulletDestructionEvent BDE) =>
+        ListenToEvent<BulletDestructionEvent>(BDE =>
         {
             if (this != null && BDE.p_bulletId == _bulletId)
             {
-                _unsubscribeAction();
                 KillBullet();
             }
         });
@@ -42,9 +41,11 @@ public class EnemyBulletVisuals : MonoBehaviour
         if(gameObject != null)
             Destroy(gameObject);
     }
-
-    private void OnDestroy()
+    
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+        
         if(InstanceFinder.TimeManager != null)
             InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }
