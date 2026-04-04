@@ -15,13 +15,20 @@ MonoBehaviour:
   modulesList:
   - rid: 8760679503559655524
   - rid: 8760679503559655525
-  - rid: 8760679503559655527
   - rid: 8760679503559655531
-  - rid: 8760679503559655532
   - rid: 8760679503559655533
+  - rid: 5185309627850162263
   references:
     version: 2
     RefIds:
+    - rid: 5185309627850162263
+      type: {class: RaycastAmmoSetting, ns: , asm: Assembly-CSharp}
+      data:
+        displayName: RaycastAmmoModule
+        headerColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+        maxDistance: 10
+        damages: 8
+        bulletSpeed: 35
     - rid: 8760679503559655524
       type: {class: ReloadSetting, ns: , asm: Assembly-CSharp}
       data:
@@ -40,65 +47,41 @@ MonoBehaviour:
           m_Curve:
           - serializedVersion: 3
             time: 0
-            value: 0
+            value: 5
             inSlope: 0
             outSlope: 0
-            tangentMode: 0
+            tangentMode: 34
             weightedMode: 0
             inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 8.231104
-            value: 3.3971164
-            inSlope: 1.3231156
-            outSlope: 1.3231156
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
             outWeight: 0.33333334
           - serializedVersion: 3
-            time: 10
-            value: 10
-            inSlope: 2
-            outSlope: 2
-            tangentMode: 0
+            time: 1
+            value: 5
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 34
             weightedMode: 0
-            inWeight: 0
+            inWeight: 0.33333334
             outWeight: 0
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        recoilX: 5
-        recoilY: 0.25
-        recoilZ: 0.35
-        returnSpeed: 6
+        recoilX: 25
+        recoilY: 0
+        recoilZ: 0
+        returnSpeed: 20
         snapiness: 15
-        z_recoilDistance: 0.15
+        z_recoilDistance: 0.5
         z_returnSpeed: 8
-        maxZKickback: 0.15
-    - rid: 8760679503559655527
-      type: {class: S_ExplosifSetting, ns: , asm: Assembly-CSharp}
-      data:
-        displayName: ExplosifAmmoModule
-        headerColor: {r: 0, g: 0.3921569, b: 0, a: 1}
-        explosionRadius: 2
+        maxZKickback: 0.3
     - rid: 8760679503559655531
       type: {class: FragShootSetting, ns: , asm: Assembly-CSharp}
       data:
         displayName: FragShootModule
         headerColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-        fireRate: 1.25
-        numberBulletSpread: 9
-        SpreadAngle: 12
-    - rid: 8760679503559655532
-      type: {class: PhysicAmmoSetting, ns: , asm: Assembly-CSharp}
-      data:
-        displayName: PhysicAmmoModule
-        headerColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-        damages: 1
-        mass: 6
-        bulletThrowForce: 100
-        bulletSpeed: 50
+        fireRate: 1
+        numberBulletSpread: 8
+        SpreadAngle: 8
     - rid: 8760679503559655533
       type: {class: ChargedDecreaseNoiseSetting, ns: , asm: Assembly-CSharp}
       data:
@@ -107,7 +90,7 @@ MonoBehaviour:
         IsExplosifAmmo: 0
         explosionRadius: 1
         timeToCharge: 1
-        DeadZoneStartCharging: 0.5
+        DeadZoneStartCharging: 0
         recoilChargedMultiplier: 1.25
         RecoilX: 2
         IsFullMultiplicator: 0.9
@@ -136,4 +119,4 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        startMaxNoiseAngle: 10
+        startMaxNoiseAngle: 8
