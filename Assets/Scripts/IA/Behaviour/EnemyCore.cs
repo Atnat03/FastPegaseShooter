@@ -9,13 +9,13 @@ public class EnemyCore : NetworkBusListener
     [SerializeField] private float _maxEnemySwelling;
     private float _swellingAmount;
     
-    [SerializeField] private List<EnemyAttackingModule> _attackingModules = new List<EnemyAttackingModule>();
+    [SerializeField] private List<EnemyAttackModule> _attackingModules = new List<EnemyAttackModule>();
     [SerializeField] private List<EnemyLifeModule> _lifeModules = new List<EnemyLifeModule>();
-    [SerializeField] private List<EnemyTargetingModule> _targetingModules = new List<EnemyTargetingModule>();
+    [SerializeField] private List<EnemyTargetModule> _targetingModules = new List<EnemyTargetModule>();
     [SerializeField] private EnemyMovingModule _movingModule;
     
     //Filled In Automatially
-    private List<ScoreTargetingModule> _scoreModules = new List<ScoreTargetingModule>();
+    private List<ScoreTargetModule> _scoreModules = new List<ScoreTargetModule>();
 
     public Guid p_gridReaderId;
     public PathfindingRequestManager p_pathRequester;
@@ -27,18 +27,18 @@ public class EnemyCore : NetworkBusListener
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
         
-        foreach (EnemyTargetingModule targetModule in _targetingModules)
+        foreach (EnemyTargetModule targetModule in _targetingModules)
         {
-            if(targetModule is ScoreTargetingModule scoreTargetModule)
+            if(targetModule is ScoreTargetModule scoreTargetModule)
                 _scoreModules.Add(scoreTargetModule);
         }
         
-        foreach (EnemyAttackingModule module in _attackingModules)
-            foreach (ScoreTargetingModule scoreModule in _scoreModules)
+        foreach (EnemyAttackModule module in _attackingModules)
+            foreach (ScoreTargetModule scoreModule in _scoreModules)
                 module.p_onHitPlayer += scoreModule.OnHitPlayer;
         
         foreach (EnemyLifeModule module in _lifeModules)
-            foreach (ScoreTargetingModule scoreModule in _scoreModules)
+            foreach (ScoreTargetModule scoreModule in _scoreModules)
                 module.p_onHitPlayer += scoreModule.OnDamageTaken;
     }
 
@@ -49,7 +49,7 @@ public class EnemyCore : NetworkBusListener
     }
     public void InitialiseEnemy()
     {
-        foreach (EnemyAttackingModule module in _attackingModules)
+        foreach (EnemyAttackModule module in _attackingModules)
             module.InitialiseBehaviourModule(this);
         foreach (EnemyLifeModule module in _lifeModules)
             module.InitialiseBehaviourModule(this);
@@ -67,10 +67,10 @@ public class EnemyCore : NetworkBusListener
     
     private void OnNetworkTick()
     {
-        foreach(EnemyAttackingModule module in _attackingModules)
+        foreach(EnemyAttackModule module in _attackingModules)
             module.OnNetworkTick();
 
-        foreach (EnemyTargetingModule module in _targetingModules)
+        foreach (EnemyTargetModule module in _targetingModules)
             module.OnNetworkTick();
         
         _movingModule.OnNetworkTick();

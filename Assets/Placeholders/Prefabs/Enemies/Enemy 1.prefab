@@ -785,8 +785,8 @@ GameObject:
   - component: {fileID: 1710859028773061241}
   - component: {fileID: 4385027282801438809}
   - component: {fileID: 2460980101886863971}
-  - component: {fileID: 4639033686446523756}
   - component: {fileID: -2748586939674322534}
+  - component: {fileID: 4639033686446523756}
   - component: {fileID: 6912678073703625548}
   - component: {fileID: 1536957414134624642}
   - component: {fileID: 1891565403973585591}
@@ -862,10 +862,32 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _targetingModule: {fileID: 6912678073703625548}
+  _targetModule: {fileID: 6912678073703625548}
   _damage: 10
   _attackDelay: 2
   _maxPlayerDistance: 2
+--- !u!114 &-2748586939674322534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6ba93510160064a98da7ea092fae40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyShooting
+  _componentIndexCache: 3
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
+  _targetModule: {fileID: 6912678073703625548}
+  _damage: 10
+  _attackDelay: 2
+  _maxPlayerDistance: 10
+  _bulletSize: 0.2
+  _ammoSpeed: 1
+  _maxAmmoLifeTime: 10
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -883,28 +905,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8280671740658429549}
   _energyGainWhenTouch: 1
   _life: 100
---- !u!114 &-2748586939674322534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5911405418369916473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba6ba93510160064a98da7ea092fae40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyShooting
-  _componentIndexCache: 3
-  _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 8280671740658429549}
-  _targetingModule: {fileID: 6912678073703625548}
-  _damage: 10
-  _attackDelay: 2
-  _maxPlayerDistance: 10
-  _bulletSize: 0.2
-  _ammoSpeed: 1
-  _maxAmmoLifeTime: 10
 --- !u!114 &6912678073703625548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -944,7 +944,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _doFreezeWithoutTarget: 1
-  _targetingModule: {fileID: 6912678073703625548}
+  _targetModule: {fileID: 6912678073703625548}
   _speed: 3
   _idealDistance: 3
 --- !u!136 &1891565403973585591

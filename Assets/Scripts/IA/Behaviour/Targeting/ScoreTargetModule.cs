@@ -5,7 +5,7 @@ using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
-public class ScoreTargetingModule : EnemyTargetingModule
+public class ScoreTargetModule : EnemyTargetModule
 {
     [Header("Aggro")]
     [SerializeField] private int _aggroPointWhenInDetectZone;

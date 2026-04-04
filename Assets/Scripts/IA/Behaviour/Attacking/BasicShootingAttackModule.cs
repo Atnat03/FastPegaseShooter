@@ -4,9 +4,8 @@ using UnityEngine;
 using FishNet.Object;
 
 
-public class BasicShootingAttackModule : EnemyAttackingModule
+public class BasicShootingAttackModule : EnemyAttackModule
 {
-    [SerializeField] private float _maxPlayerDistance = 10f;
     [SerializeField] private float _bulletSize = 0.2f;
     [SerializeField] private float _ammoSpeed;
     [SerializeField] private float _maxAmmoLifeTime = 10f;
@@ -20,7 +19,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
         {
             _waitedTimeSinceAttack = 0;
 
-            Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
+            Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
             float length = delta.magnitude;
             Vector3 dir = delta / length;
             
@@ -32,7 +31,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
                 p_damage = _damage,
                 p_aliveTime = _maxAmmoLifeTime,
                 p_bulletSize = _bulletSize,
-                p_enemyAttackingModule = this
+                PEnemyAttackModule = this
             });
         }
     }
@@ -45,7 +44,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
         }
 
 
-        Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
+        Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
         float length = delta.magnitude;
         Vector3 dir = delta / length;
 
@@ -90,5 +89,5 @@ public struct EnemyShootingEvent
     public int p_damage;
     public float p_aliveTime;
     public float p_bulletSize;
-    public EnemyAttackingModule p_enemyAttackingModule;
+    public EnemyAttackModule PEnemyAttackModule;
 }

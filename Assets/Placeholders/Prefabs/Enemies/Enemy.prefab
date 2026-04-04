@@ -50,6 +50,11 @@ MonoBehaviour:
   _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
   _cumulatifDmg: 0
   _elapsedCumulativeDmgTime: 0
+  _lifeTMP: {fileID: 0}
+  _lifeBarRectTransform: {fileID: 0}
+  _lifeBarImage: {fileID: 0}
+  _fullLifeColor: {r: 0, g: 0, b: 0, a: 0}
+  _emptyLifeColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &4254373441047485720
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,7 +235,11 @@ MonoBehaviour:
   - {fileID: 5913997660152659872}
   _lifeModules:
   - {fileID: 4639033686446523756}
+  _targetingModules:
+  - {fileID: -3745771886591243004}
   _movingModule: {fileID: 4856717765235199756}
+  p_pathRequester: {fileID: 0}
+  p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
 --- !u!114 &4639033686446523756
 MonoBehaviour:
@@ -249,7 +258,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8280671740658429549}
   _energyGainWhenTouch: 1
   _life: 100
-  p_damageMultiplier: 1
 --- !u!114 &4856717765235199756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +273,8 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _targetingModule: {fileID: -3745771886591243004}
+  _doFreezeWithoutTarget: 1
+  _targetModule: {fileID: -3745771886591243004}
   _speed: 1
 --- !u!114 &5913997660152659872
 MonoBehaviour:
@@ -282,10 +291,11 @@ MonoBehaviour:
   _componentIndexCache: 3
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _targetingModule: {fileID: -3745771886591243004}
+  _targetModule: {fileID: -3745771886591243004}
   _damage: 10
   _attackDelay: 2
   _maxPlayerDistance: 10
+  _bulletSize: 0.2
   _ammoSpeed: 4
   _maxAmmoLifeTime: 10
 --- !u!114 &-3745771886591243004

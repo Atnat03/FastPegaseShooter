@@ -18,7 +18,7 @@ public class DistanceAwareMovingModule : EnemyMovingModule
     {
         //cuts Execution if the enemy is close enough from the player
         if(_path.Count > 1 &&
-           _targetingModule.GetTargetSqrDistance(transform.position) >= _idealDistance*_idealDistance)
+           _targetModule.GetTargetSqrDistance(transform.position) >= _idealDistance*_idealDistance)
         {
             transform.position = Vector3.Lerp(_lastPos, _path[^2].position, _t);
             _t += Time.deltaTime * _speed;

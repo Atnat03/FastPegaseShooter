@@ -15,11 +15,11 @@ public class EnemyBullet
 
     public int p_bulletId;
     public int p_bulletStrenght;
-    public EnemyAttackingModule p_attackingModule;
+    public EnemyAttackModule PAttackModule;
 
     public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float bulletSize,
         float serverSpawnTime, float maxLifeTime,
-        int bulletId, int strenght, EnemyAttackingModule attackingModule)
+        int bulletId, int strenght, EnemyAttackModule attackModule)
     {
         _startPos = startPos;
         _lastPosition = startPos;
@@ -29,7 +29,7 @@ public class EnemyBullet
         p_bulletId = bulletId;
         p_bulletStrenght = strenght;
         _maxLifeTime = maxLifeTime;
-        p_attackingModule = attackingModule;
+        PAttackModule = attackModule;
         _bulletSize = bulletSize;
     }
 
