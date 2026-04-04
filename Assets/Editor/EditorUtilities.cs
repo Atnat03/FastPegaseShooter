@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public static class EditorUtilities
+public sealed class EditorUtilities : Editor
 {
     //for direct list access
     public static void DrawList<T>(List<T> list, string listTitle, EditorListDrawerStyle listStyle, ref bool isOpened)
@@ -208,6 +208,34 @@ public static class EditorUtilities
         if (i == j) return;
 
         (list[i], list[j]) = (list[j], list[i]);
+    }
+    
+    //Dessiner une properties directement
+    public static void Draw(string propertyName, SerializedObject s)
+    {
+        SerializedProperty prop = s.FindProperty(propertyName);
+        if (prop != null)
+        {
+            EditorGUILayout.PropertyField(prop);
+            EditorGUILayout.Space(2);
+        }
+        else
+        {
+            EditorGUILayout.HelpBox($"Missing field: {propertyName}", MessageType.Warning);
+        }
+    }
+    
+    //Dessiner un outline autour d'un rect
+    public static void DrawOutline(Rect rect, Color color, float thickness)
+    {
+        Color old = GUI.color; 
+        GUI.color = color;
+
+        GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, thickness), Texture2D.whiteTexture);
+        GUI.DrawTexture(new Rect(rect.x, rect.yMax - thickness, rect.width, thickness), Texture2D.whiteTexture);
+        GUI.DrawTexture(new Rect(rect.x, rect.y, thickness, rect.height), Texture2D.whiteTexture);
+        GUI.DrawTexture(new Rect(rect.xMax - thickness, rect.y, thickness, rect.height), Texture2D.whiteTexture);
+        GUI.color = old;
     }
 }
 
