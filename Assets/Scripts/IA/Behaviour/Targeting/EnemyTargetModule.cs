@@ -3,6 +3,7 @@ using CustomConsole.Runtime.Logger;
 using FishNet;
 using UnityEngine;
 
+//[AddComponentMenu("EnemyBehaviour/Target")]
 public abstract class EnemyTargetModule : EnemyBehaviourModule
 {
     public int p_targetId { get; protected set; }

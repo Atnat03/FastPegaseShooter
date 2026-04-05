@@ -532,7 +532,6 @@ GameObject:
   m_Component:
   - component: {fileID: 277698847}
   - component: {fileID: 277698849}
-  - component: {fileID: 277698848}
   m_Layer: 0
   m_Name: Life
   m_TagString: Untagged
@@ -552,28 +551,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1246675482}
   m_Father: {fileID: 878397467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &277698848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277698846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dafc61926e9071341b8682c79684554e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeakPointLifeModule
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 878397466}
-  _networkObjectCache: {fileID: 0}
-  _energyGainWhenTouch: 1
-  _life: 0
-  _enemyLifeModule: {fileID: 0}
-  _eliteDamageMultWhenDestroyed: 1
 --- !u!114 &277698849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,7 +570,6 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
-  _energyGainWhenTouch: 1
   _life: 0
 --- !u!1 &355935910
 GameObject:
@@ -689,6 +669,172 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.32754, y: -0.03815, z: -1.24941}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &365425666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 365425672}
+  - component: {fileID: 365425671}
+  - component: {fileID: 365425670}
+  - component: {fileID: 365425669}
+  - component: {fileID: 365425668}
+  - component: {fileID: 365425667}
+  m_Layer: 0
+  m_Name: Enemy Demo 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &365425667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365425666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 099f65e195cc2e74fb0255db981497b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicTargetModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 365425671}
+  _networkObjectCache: {fileID: 0}
+  p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
+--- !u!114 &365425668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365425666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53783909ae03234408c4b1a8d6416c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DistanceAwareMovementModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 365425671}
+  _networkObjectCache: {fileID: 0}
+  _doFreezeWithoutTarget: 1
+  _targetModule: {fileID: 365425667}
+  _speed: 3
+  _idealDistance: 0
+--- !u!114 &365425669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365425666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e5492ed17c451d4885c1b50d3efafe8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicMovementModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 365425671}
+  _networkObjectCache: {fileID: 0}
+  _doFreezeWithoutTarget: 1
+  _targetModule: {fileID: 365425667}
+  _speed: 3
+--- !u!114 &365425670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365425666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f6b4475ac4843d4798768881fa904fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCore
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 365425671}
+  _networkObjectCache: {fileID: 0}
+  _maxEnemySwelling: 0
+  _attackingModules: []
+  _lifeModules: []
+  _targetingModules: []
+  _movementModule: {fileID: 0}
+  p_pathRequester: {fileID: 0}
+  p_gridReader: {fileID: 0}
+  p_enemySpawnCost: 0
+--- !u!114 &365425671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365425666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+  <IsNested>k__BackingField: 0
+  WasActiveDuringEdit: 1
+  WasActiveDuringEdit_Set1: 1
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  <PredictedOwner>k__BackingField: {fileID: 0}
+  NetworkBehaviours: []
+  InitializedParentNetworkBehaviour: {fileID: 0}
+  InitializedNestedNetworkObjects: []
+  RuntimeParentNetworkBehaviour: {fileID: 0}
+  RuntimeChildNetworkBehaviours: []
+  _isNetworked: 1
+  _isSpawnable: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _preventDespawnOnDisconnect: 0
+  _defaultDespawnType: 0
+  _initializedTimestamp: 0
+  NetworkObserver: {fileID: 0}
+  _enablePrediction: 0
+  _predictionType: 0
+  _localReconcileCorrectionType: 2
+  _graphicalObject: {fileID: 0}
+  _detachGraphicalObject: 0
+  _enableStateForwarding: 1
+  _networkTransform: {fileID: 0}
+  _ownerInterpolation: 1
+  _ownerSmoothedProperties: 255
+  _adaptiveInterpolation: 3
+  _spectatorSmoothedProperties: 255
+  _spectatorInterpolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  <PrefabId>k__BackingField: 65535
+  <SpawnableCollectionId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 0
+  SceneId: 4286577150
+  SerializedTransformProperties:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
+    Scale: {x: 0, y: 0, z: 0}
+    IsValid: 0
+--- !u!4 &365425672
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365425666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0001, y: 1.44475, z: 1.92668}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1137,11 +1283,11 @@ MonoBehaviour:
   - {fileID: 2112398800}
   _lifeModules:
   - {fileID: 277698849}
-  - {fileID: 277698848}
+  - {fileID: 0}
   _targetingModules:
   - {fileID: 1085526714}
   - {fileID: 1085526713}
-  _movingModule: {fileID: 1197237516}
+  _movementModule: {fileID: 1197237516}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
@@ -1370,7 +1516,7 @@ MonoBehaviour:
   _aggroPointWhenInDetectZone: 0
   _aggroPointPerDamageTaken: 0
   _aggroPointPerSecond: 0
-  _aggroPointPerDamageDealed: 0
+  _aggroPointPerDamageDealt: 0
   _aggroPointsThreshold: 0000000064000000c8000000
   _detectionZoneRadius: 0
   _aggroZoneRadius: 0
@@ -1491,6 +1637,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 207287454}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1246675481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1246675482}
+  - component: {fileID: 1246675483}
+  m_Layer: 0
+  m_Name: Life2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1246675482
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246675481}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 277698847}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1246675483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246675481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dafc61926e9071341b8682c79684554e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeakPointLifeModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 878397466}
+  _networkObjectCache: {fileID: 0}
+  _life: 10
+  _enemyLifeModule: {fileID: 277698849}
+  _eliteDamageMultWhenDestroyed: 1
 --- !u!1001 &1319515400
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1689,8 +1885,8 @@ MonoBehaviour:
   _attackDelay: 2
   _maxPlayerDistance: 10
   _bulletSize: 0.2
-  _ammoSpeed: 0
-  _maxAmmoLifeTime: 10
+  _bulletSpeed: 1
+  _maxBulletLifeTime: 10
 --- !u!114 &2112398801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1906,3 +2102,4 @@ SceneRoots:
   - {fileID: 355935913}
   - {fileID: 651685586}
   - {fileID: 878397467}
+  - {fileID: 365425672}

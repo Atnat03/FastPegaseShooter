@@ -3,6 +3,7 @@ using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
+[AddComponentMenu("EnemyBehaviour/Attack/BasicMeleeAttackModule")]
 public class BasicMeleeAttackModule : EnemyAttackModule
 {
     public override void OnNetworkTick()

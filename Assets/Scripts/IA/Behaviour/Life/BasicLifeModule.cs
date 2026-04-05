@@ -9,6 +9,7 @@ using FishNet.Object.Synchronizing;
 using TMPro;
 using UnityEngine;
 
+[AddComponentMenu("EnemyBehaviour/Life/BasicLifeModule")]
 public class BasicLifeModule : EnemyLifeModule
 {
 
@@ -23,7 +24,7 @@ public class BasicLifeModule : EnemyLifeModule
             p_life.Value -= damages;
             if (isCritical)
             {
-                InvokeEvent(new OnModifyEnergyEvent { value = _energyGainWhenTouch });
+                //
             }
         }
 

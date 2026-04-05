@@ -2,6 +2,7 @@ using FishNet.Managing;
 using FishNet.Object;
 using UnityEngine;
 
+
 public abstract class EnemyBehaviourModule : NetworkBusListener
 {
     protected EnemyCore _enemyCore;

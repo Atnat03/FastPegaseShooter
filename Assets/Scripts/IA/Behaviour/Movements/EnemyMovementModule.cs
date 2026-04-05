@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public abstract class EnemyMovingModule : EnemyBehaviourModule
+//[AddComponentMenu("EnemyBehaviour/Movement")]
+public abstract class EnemyMovementModule : EnemyBehaviourModule
 {
     //HideInInspector to prevent draw with "base.OnInspectorGUI"
     //SerializeField to get properties in custom inspector 

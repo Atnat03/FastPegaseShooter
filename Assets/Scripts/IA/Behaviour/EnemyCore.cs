@@ -4,6 +4,7 @@ using FishNet;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[AddComponentMenu("EnemyBehaviour/Core")]
 public class EnemyCore : NetworkBusListener
 {
     [SerializeField] private float _maxEnemySwelling;
@@ -12,7 +13,7 @@ public class EnemyCore : NetworkBusListener
     [SerializeField] private List<EnemyAttackModule> _attackingModules = new List<EnemyAttackModule>();
     [SerializeField] private List<EnemyLifeModule> _lifeModules = new List<EnemyLifeModule>();
     [SerializeField] private List<EnemyTargetModule> _targetingModules = new List<EnemyTargetModule>();
-    [SerializeField] private EnemyMovingModule _movingModule;
+    [SerializeField] private EnemyMovementModule _movementModule;
     
     //Filled In Automatially
     private List<ScoreTargetModule> _scoreModules = new List<ScoreTargetModule>();
@@ -54,7 +55,7 @@ public class EnemyCore : NetworkBusListener
         foreach (EnemyLifeModule module in _lifeModules)
             module.InitialiseBehaviourModule(this);
         
-        _movingModule.InitialiseBehaviourModule(this);
+        _movementModule?.InitialiseBehaviourModule(this);
     }
     
     public void SetInfos(Guid _readerId, PathfindingRequestManager pathfindingRequestManager, PathfindingGridReader pathfindingGridReader,  int cost)
@@ -73,11 +74,11 @@ public class EnemyCore : NetworkBusListener
         foreach (EnemyTargetModule module in _targetingModules)
             module.OnNetworkTick();
         
-        _movingModule.OnNetworkTick();
+        _movementModule?.OnNetworkTick();
     }
 
     public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
     {
-        _movingModule.OnPlayerMoving(playerObjectId, playerPosition);
+        _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
     }
 }

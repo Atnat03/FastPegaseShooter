@@ -125,7 +125,7 @@ public class EnemyBehaviourModuleInspector : Editor
                 EditorGUIUtility.SetIconForObject(monoScript, moduleIcon);
             }
 
-            foreach (Type t in GetDerivedTypes(typeof(EnemyMovingModule)))
+            foreach (Type t in GetDerivedTypes(typeof(EnemyMovementModule)))
             {
                 monoScript = GetMonoScriptFromType(t);
                 if (monoScript == null) return;

@@ -9,7 +9,7 @@ public class EnemyCoreInspector : Editor
     private SerializedProperty _attackingModules;
     private SerializedProperty _lifeModules;
     private SerializedProperty _targetModules;
-    private SerializedProperty _movingModule;
+    private SerializedProperty _movementModule;
     
     private SerializedProperty scriptProperty;
 
@@ -25,7 +25,7 @@ public class EnemyCoreInspector : Editor
         _attackingModules = serializedObject.FindProperty("_attackingModules");
         _lifeModules = serializedObject.FindProperty("_lifeModules");
         _targetModules = serializedObject.FindProperty("_targetingModules");
-        _movingModule = serializedObject.FindProperty("_movingModule");
+        _movementModule = serializedObject.FindProperty("_movementModule");
 
         _centeredTitleStyle = new GUIStyle
         {
@@ -80,7 +80,7 @@ public class EnemyCoreInspector : Editor
         
         GUILayout.BeginVertical("box");
         GUILayout.Label("Moving Module", _titleStyle);
-        EditorGUILayout.PropertyField(_movingModule);
+        EditorGUILayout.PropertyField(_movementModule);
         GUILayout.EndVertical();
         
         serializedObject.ApplyModifiedProperties();

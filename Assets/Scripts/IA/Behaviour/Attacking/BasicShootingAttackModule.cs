@@ -2,13 +2,14 @@ using System;
 using FishNet;
 using UnityEngine;
 using FishNet.Object;
+using UnityEngine.Serialization;
 
-
+[AddComponentMenu("EnemyBehaviour/Attack/BasicShootAttackModule")]
 public class BasicShootingAttackModule : EnemyAttackModule
 {
     [SerializeField] private float _bulletSize = 0.2f;
-    [SerializeField] private float _ammoSpeed;
-    [SerializeField] private float _maxAmmoLifeTime = 10f;
+    [SerializeField] private float _bulletSpeed = 1;
+    [SerializeField] private float _maxBulletLifeTime = 10f;
     
     
 
@@ -27,9 +28,9 @@ public class BasicShootingAttackModule : EnemyAttackModule
             {
                 p_startPos = transform.position + dir * 0.1f + Vector3.up * 0.5f,
                 p_direction = dir,
-                p_speed = _ammoSpeed,
+                p_speed = _bulletSpeed,
                 p_damage = _damage,
-                p_aliveTime = _maxAmmoLifeTime,
+                p_aliveTime = _maxBulletLifeTime,
                 p_bulletSize = _bulletSize,
                 PEnemyAttackModule = this
             });
