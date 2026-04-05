@@ -3,10 +3,8 @@ using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
-public class BasicMeleeAttackModule : EnemyAttackingModule
+public class BasicMeleeAttackModule : EnemyAttackModule
 {
-    [SerializeField] private float _maxPlayerDistance = 1.5f;
-    
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
@@ -14,7 +12,7 @@ public class BasicMeleeAttackModule : EnemyAttackingModule
         {
             _waitedTimeSinceAttack = 0;
             
-            if (InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(_targetingModule.p_targetId, out NetworkObject player))
+            if (InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(_targetModule.p_targetId, out NetworkObject player))
             {
                 //Empty event for now
                 InvokeEvent(new EnemyMeleeAttack());
@@ -39,13 +37,13 @@ public class BasicMeleeAttackModule : EnemyAttackingModule
         return true;
     }
     
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         if(!Application.isPlaying || !IsServerInitialized) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
         Gizmos.DrawSphere(_targetingModule.GetTargetPosition(), 0.1f);
-    }
+    }*/
 }
 
 public struct EnemyMeleeAttack

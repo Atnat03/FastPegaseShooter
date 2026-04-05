@@ -5,7 +5,7 @@ using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
-public class ScoreTargetingModule : EnemyTargetingModule
+public class ScoreTargetModule : EnemyTargetModule
 {
     [Header("Aggro")]
     [SerializeField] private int _aggroPointWhenInDetectZone;
@@ -140,11 +140,11 @@ public class ScoreTargetingModule : EnemyTargetingModule
             _playerAggroValue.Add(playerId, damages*_aggroPointPerDamageTaken);
     }
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.orange;
         Gizmos.DrawWireSphere(transform.position, _aggroZoneRadius);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _detectionZoneRadius);
-    }
+    }*/
 }

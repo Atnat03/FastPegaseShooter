@@ -6,11 +6,9 @@ public class DistanceAwareMovingModule : EnemyMovingModule
     private Vector3 _lastPos;
     private float _t;
 
-    public override void OnPlayerMoving(int playerObjectId, Vector3 playerPosition, PathfindingGridReader gridReader)
+    protected override void RecalculatePath()
     {
-        base.OnPlayerMoving(playerObjectId, playerPosition, gridReader);
-        
-        //only called when playerObjectId is the target
+        base.RecalculatePath();
         _lastPos = transform.position;
         _t = 0;
     }
@@ -20,7 +18,7 @@ public class DistanceAwareMovingModule : EnemyMovingModule
     {
         //cuts Execution if the enemy is close enough from the player
         if(_path.Count > 1 &&
-           _targetingModule.GetTargetSqrDistance(transform.position) >= _idealDistance*_idealDistance)
+           _targetModule.GetTargetSqrDistance(transform.position) >= _idealDistance*_idealDistance)
         {
             transform.position = Vector3.Lerp(_lastPos, _path[^2].position, _t);
             _t += Time.deltaTime * _speed;

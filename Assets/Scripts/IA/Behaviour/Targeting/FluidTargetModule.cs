@@ -1,7 +1,7 @@
 using FishNet;
 using UnityEngine;
 
-public class FluidTargetingModule : EnemyTargetingModule
+public class FluidTargetModule : EnemyTargetModule
 {
     protected override bool IsNewTargetValid(PlayerPositionUpdateEvent PPUE)
     {

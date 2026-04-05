@@ -3,10 +3,10 @@ using CustomConsole.Runtime.Logger;
 using FishNet;
 using UnityEngine;
 
-public abstract class EnemyTargetingModule : EnemyBehaviourModule
+public abstract class EnemyTargetModule : EnemyBehaviourModule
 {
     public int p_targetId { get; protected set; }
-    public Vector3 p_lastTargetPosition =  Vector3.negativeInfinity;
+    [HideInInspector] public Vector3 p_lastTargetPosition =  Vector3.negativeInfinity;
     protected virtual bool IsNewTargetValid(PlayerPositionUpdateEvent PPUE) => true;
 
     public override void OnStartServer()
