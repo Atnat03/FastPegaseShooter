@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(EnemyMovingModule), true)]
+[CustomEditor(typeof(EnemyMovementModule), true)]
 public class EnemyMovingModuleInspector : EnemyBehaviourModuleInspector
 {
     private SerializedProperty _doFreezeWithoutTarget;

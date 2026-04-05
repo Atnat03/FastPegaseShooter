@@ -1,8 +1,9 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicMovingModule : EnemyMovingModule
+[AddComponentMenu("EnemyBehaviour/Movement/DistanceAwareMovementModule")]
+public class DistanceAwareMovementModule : EnemyMovementModule
 {
+    [SerializeField] private float _idealDistance;
     private Vector3 _lastPos;
     private float _t;
 
@@ -16,7 +17,9 @@ public class BasicMovingModule : EnemyMovingModule
 
     protected override void MoveAlongPath()
     {
-        if(_path.Count > 1)
+        //cuts Execution if the enemy is close enough from the player
+        if(_path.Count > 1 &&
+           _targetModule.GetTargetSqrDistance(transform.position) >= _idealDistance*_idealDistance)
         {
             transform.position = Vector3.Lerp(_lastPos, _path[^2].position, _t);
             _t += Time.deltaTime * _speed;

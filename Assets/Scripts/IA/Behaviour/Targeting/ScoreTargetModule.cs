@@ -4,14 +4,16 @@ using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+[AddComponentMenu("EnemyBehaviour/Target/ScoreTargetModule")]
 public class ScoreTargetModule : EnemyTargetModule
 {
     [Header("Aggro")]
     [SerializeField] private int _aggroPointWhenInDetectZone;
     [SerializeField] private int _aggroPointPerDamageTaken;
     [SerializeField] private int _aggroPointPerSecond;
-    [SerializeField] private int _aggroPointPerDamageDealed;
+    [SerializeField] private int _aggroPointPerDamageDealt;
     [SerializeField] private List<int> _aggroPointsThreshold = new List<int>(){0,100,200};
     
     [Header("Zones")]
@@ -128,9 +130,9 @@ public class ScoreTargetModule : EnemyTargetModule
     public void OnHitPlayer(int playerId, int damages)
     {
         if(_playerAggroValue.ContainsKey(playerId))
-            _playerAggroValue[playerId] += damages*_aggroPointPerDamageDealed;
+            _playerAggroValue[playerId] += damages*_aggroPointPerDamageDealt;
         else 
-            _playerAggroValue.Add(playerId, damages*_aggroPointPerDamageDealed);
+            _playerAggroValue.Add(playerId, damages*_aggroPointPerDamageDealt);
     }
     public void OnDamageTaken(int playerId, int damages)
     {

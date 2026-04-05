@@ -1,7 +1,8 @@
 using FishNet;
 using UnityEngine;
 
-public class FluidTargetModule : EnemyTargetModule
+[AddComponentMenu("EnemyBehaviour/Target/BasicTargetModule")]
+public class BasicTargetModule : EnemyTargetModule
 {
     protected override bool IsNewTargetValid(PlayerPositionUpdateEvent PPUE)
     {

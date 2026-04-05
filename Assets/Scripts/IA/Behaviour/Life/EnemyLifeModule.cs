@@ -4,10 +4,13 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
+//[AddComponentMenu("EnemyBehaviour/Life")]
+[DisallowMultipleComponent]
 public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
 {
-    [SerializeField] protected float _energyGainWhenTouch = 1;
-    [SerializeField] private int _life;
+    //HideInInspector to prevent draw with "base.OnInspectorGUI"
+    //SerializeField to get properties in custom inspector
+    [HideInInspector][SerializeField] private int _life = 10;
     public readonly SyncVar<int> p_life = new SyncVar<int>();
     
     /// <summary>

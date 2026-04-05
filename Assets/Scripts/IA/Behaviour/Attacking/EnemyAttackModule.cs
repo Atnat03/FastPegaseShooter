@@ -3,6 +3,7 @@ using FishNet;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+//[AddComponentMenu("EnemyBehaviour/Attack")]
 public abstract class EnemyAttackModule : EnemyBehaviourModule
 {
     public Action<int, int> p_onHitPlayer;
