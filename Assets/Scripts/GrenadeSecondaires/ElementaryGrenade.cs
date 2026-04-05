@@ -62,7 +62,7 @@ public class ElementaryGrenade : MonoBehaviour
 
         if (distance <= 0f) return;
 
-        if (Physics.SphereCast(_lastPosition, 0.15f, direction.normalized, out hit,
+        if (Physics.SphereCast(_lastPosition, 0.1f, direction.normalized, out hit,
                 distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
         {
             if (_hasHit) return;
@@ -75,6 +75,8 @@ public class ElementaryGrenade : MonoBehaviour
                 if(!hit.collider.CompareTag("Player"))
                     d.TakeDamage(_damage, _networkIdAttacker);
             }
+            
+            Instantiate(_particlesExplosion, transform.position, Quaternion.identity);
 
             Destroy(gameObject);
         }
@@ -97,7 +99,7 @@ public class ElementaryGrenade : MonoBehaviour
             }
         }
         
-        Instantiate(_particlesExplosion, transform.position + other.contacts[0].normal * 0.2f, Quaternion.identity);
+        Instantiate(_particlesExplosion, transform.position, Quaternion.identity);
         
         Destroy(gameObject);
     }

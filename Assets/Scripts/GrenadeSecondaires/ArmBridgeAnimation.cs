@@ -16,7 +16,6 @@ public class ArmBridgeAnimation : NetworkBehaviour
                 Element.Fire => Color.red,
                 Element.Electric => Color.yellow,
                 Element.Ice => Color.blue,
-                _ => Color.white
             };
         }
         

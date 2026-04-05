@@ -14,6 +14,7 @@ namespace Controller
         [SerializeField] private GunBridgePlayer _bridgePlayer;
         [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private GrenadeThrower _grenadeThrower;
+        [SerializeField] private DroneThrower _droneThrower;
 
         private bool shootingInputPressed;
 
@@ -101,6 +102,16 @@ namespace Controller
             
             _grenadeThrower.TryThrowGrenade();
         }
+        
+        private void TryThrowDrone(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            Debug.Log("Throw drone input");
+            
+            _droneThrower.TryThrowDrone();
+        }
 
         void OnEnable()
         {
@@ -111,6 +122,7 @@ namespace Controller
             _playerInputAction.actions["Reload"].performed += Reloading;
             
             _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
+            _playerInputAction.actions["ThrowDrone"].performed += TryThrowDrone;
         }
 
 
@@ -123,6 +135,7 @@ namespace Controller
             _playerInputAction.actions["Reload"].performed -= Reloading;
             
             _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
+            _playerInputAction.actions["ThrowDrone"].performed -= TryThrowDrone;
         }
 
         #endregion

@@ -27,7 +27,6 @@ public class GrenadeThrower : NetworkBehaviour
     [SerializeField] private float _cooldown = 2f;
     [SerializeField] private int _damage = 10;
     [SerializeField] private float _throwForce = 10f;
-    [SerializeField] private Vector3 _directionThrow = new Vector3(0f, 0.5f, 1f);
     [SerializeField] private int _numberBounces = 2;
 
     [Header("Explosion")] 
