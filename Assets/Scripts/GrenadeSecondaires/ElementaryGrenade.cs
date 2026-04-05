@@ -13,6 +13,8 @@ public class ElementaryGrenade : MonoBehaviour
     private float _currentNumberTouch;
     private int _damage;
     private int _networkIdAttacker;
+    private const float SPAWN_GRACE = 0.05f;
+    private float _spawnTime;
     
     [Header("Effect")]
     private ParticleSystem _particlesExplosion;
@@ -49,10 +51,22 @@ public class ElementaryGrenade : MonoBehaviour
         _particlesExplosion = explosion;
     }
     
+    void Start()
+    {
+        _lastPosition = transform.position;
+        _spawnTime = Time.time;
+    }
+
     void FixedUpdate()
     {
-        /*DetectCollision();
-        _lastPosition = transform.position;*/
+        if (Time.time - _spawnTime < SPAWN_GRACE) 
+        {
+            _lastPosition = transform.position;
+            return;
+        }
+    
+        DetectCollision();
+        _lastPosition = transform.position;
     }
 
     private void DetectCollision()
@@ -62,8 +76,8 @@ public class ElementaryGrenade : MonoBehaviour
 
         if (distance <= 0f) return;
 
-        if (Physics.SphereCast(_lastPosition, 0.1f, direction.normalized, out hit,
-                distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
+        if (Physics.SphereCast(transform.position, 0.1f, direction.normalized, out hit,
+                distance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (_hasHit) return;
             _hasHit = true;
@@ -80,27 +94,5 @@ public class ElementaryGrenade : MonoBehaviour
 
             Destroy(gameObject);
         }
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        Collider[] cols = Physics.OverlapSphere(transform.position, _radius);
-
-        foreach (Collider col in cols)
-        {
-            // /!\ a remplacer par la nouvelle interface pour les effets des ennemis
-            
-            if (col.TryGetComponent(out IDamagable d))
-            {
-                Cons.Print("Grenade Collided with " + d.GetType().Name, ColorConsole.Grey);
-                
-                if(!col.CompareTag("Player"))
-                    d.TakeDamage(_damage, _networkIdAttacker);
-            }
-        }
-        
-        Instantiate(_particlesExplosion, transform.position, Quaternion.identity);
-        
-        Destroy(gameObject);
     }
 }
