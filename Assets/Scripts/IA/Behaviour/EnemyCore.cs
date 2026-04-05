@@ -54,7 +54,7 @@ public class EnemyCore : NetworkBusListener
         foreach (EnemyLifeModule module in _lifeModules)
             module.InitialiseBehaviourModule(this);
         
-        _movingModule.InitialiseBehaviourModule(this);
+        _movingModule?.InitialiseBehaviourModule(this);
     }
     
     public void SetInfos(Guid _readerId, PathfindingRequestManager pathfindingRequestManager, PathfindingGridReader pathfindingGridReader,  int cost)
@@ -73,11 +73,11 @@ public class EnemyCore : NetworkBusListener
         foreach (EnemyTargetModule module in _targetingModules)
             module.OnNetworkTick();
         
-        _movingModule.OnNetworkTick();
+        _movingModule?.OnNetworkTick();
     }
 
     public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
     {
-        _movingModule.OnPlayerMoving(playerObjectId, playerPosition);
+        _movingModule?.OnPlayerMoving(playerObjectId, playerPosition);
     }
 }
