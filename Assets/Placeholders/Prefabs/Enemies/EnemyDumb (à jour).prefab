@@ -176,7 +176,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8280671740658429549}
   _energyGainWhenTouch: 1
   _life: 60
-  p_damageMultiplier: 1
 --- !u!114 &4856717765235199756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,8 +191,9 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
+  _doFreezeWithoutTarget: 1
   _targetingModule: {fileID: 4005584926992846120}
-  _speed: 3
+  _speed: 35
 --- !u!114 &5913997660152659872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +213,7 @@ MonoBehaviour:
   _damage: 10
   _attackDelay: 2
   _maxPlayerDistance: 10
+  _bulletSize: 0.2
   _ammoSpeed: 12
   _maxAmmoLifeTime: 10
 --- !u!136 &1891565403973585591
@@ -261,6 +262,8 @@ MonoBehaviour:
   - {fileID: 4856717765235199756}
   - {fileID: 5913997660152659872}
   - {fileID: 6176439864006220930}
+  - {fileID: -5373042176863292788}
+  - {fileID: 4005584926992846120}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -271,7 +274,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584272227429962020
+  _initializedTimestamp: -8584261551177419294
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -287,7 +290,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 30
+  <PrefabId>k__BackingField: 19
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 11985662873391357865
   SceneId: 0
@@ -354,14 +357,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f6b4475ac4843d4798768881fa904fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCore
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _componentIndexCache: 4
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
   _maxEnemySwelling: 0
   _attackingModules:
   - {fileID: 5913997660152659872}
   _lifeModules:
   - {fileID: 4639033686446523756}
+  _targetingModules: []
   _movingModule: {fileID: 4856717765235199756}
   p_enemySpawnCost: 0
 --- !u!114 &4005584926992846120
@@ -376,9 +380,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099f65e195cc2e74fb0255db981497b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FluidTargetingModule
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _componentIndexCache: 5
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
   p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
 --- !u!1 &6364117521231957157
 GameObject:
