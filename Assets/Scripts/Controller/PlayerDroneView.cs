@@ -28,7 +28,7 @@ public class PlayerDroneView : NetworkBusListener
 
 	private void ActivatedDrone(DroneActivatedEvent data)
 	{
-		if (data.p_playerId != NetworkObject.ObjectId)
+		if (data.p_playerId != LocalConnection.ClientId)
 			return;
 		
 		_uiActivated.SetActive(data.p_isActivate);
