@@ -141,7 +141,7 @@ public class Drone : NetworkBusListener
 
 	void SearchTarget()
 	{
-		_targetPosition = _target.position + Vector3.up * 2f;
+		_targetPosition = _target.position;
 
 		elapsedTimeUpdateSearch = timeUpdateSearch;
 	}
@@ -162,39 +162,39 @@ public class Drone : NetworkBusListener
 			SearchTarget();
 		}
 		
-		transform.position = Vector3.MoveTowards(transform.position, _targetPosition, _speed * Time.deltaTime);
+		transform.position = Vector3.MoveTowards(transform.position, _targetPosition + Vector3.up * 2f, _speed * Time.deltaTime);
 	}
 	
 	private void OnTriggerEnter(Collider other)
 	{
-		if (IsServerInitialized)
+		if (!IsServerInitialized) return;
+		if (_IsActivated.Value) return;
+
+		if (other.TryGetComponent(out PlayerVisuelBridge player))
 		{
-			if (_IsActivated.Value) return;
-			
-			if (other.TryGetComponent(out PlayerVisuelBridge player))
+			if (player.Owner == null || !player.Owner.IsValid) return;
+        
+			if (player.Owner.ClientId != _idThrower)
 			{
-				if (player.ObjectId != _idThrower)
-				{
-					Cons.Print("Start activated Drone", ColorConsole.Blue);
-					
-					_idActivator = player.ObjectId;
-					_currentActivatedTime.Value = _timeToActivate;
-				}
+				Cons.Print("Start activated Drone", ColorConsole.Blue);
+				_idActivator = player.Owner.ClientId;
+				_currentActivatedTime.Value = _timeToActivate;
 			}
 		}
 	}
 
-	private void OnTriggerExit(Collider other)	
+	private void OnTriggerExit(Collider other)
 	{
-		if (IsServerInitialized)
+		if (!IsServerInitialized) return;
+
+		if (other.TryGetComponent(out PlayerVisuelBridge player))
 		{
-			if (other.TryGetComponent(out PlayerVisuelBridge player))
+			if (player.Owner == null || !player.Owner.IsValid) return;
+        
+			if (player.Owner.ClientId != _idThrower)
 			{
-				if (player.ObjectId != _idThrower)
-				{
-					Cons.Print("Stop activated Drone", ColorConsole.Blue);
-					_currentActivatedTime.Value = 0;
-				}
+				Cons.Print("Stop activated Drone", ColorConsole.Blue);
+				_currentActivatedTime.Value = 0;
 			}
 		}
 	}
