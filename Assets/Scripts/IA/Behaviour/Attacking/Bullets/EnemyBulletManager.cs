@@ -42,7 +42,7 @@ public class EnemyBulletManager : NetworkBusListener
                     playerN = playerHealth.NetworkObject,
                     value = _spawnedBullets[i].p_bulletStrenght
                 });
-                _spawnedBullets[i].p_attackingModule.p_onHitPlayer?.Invoke(
+                _spawnedBullets[i].PAttackModule.p_onHitPlayer?.Invoke(
                     playerHealth.NetworkObject.ObjectId,
                     _spawnedBullets[i].p_bulletStrenght);
                 
@@ -68,7 +68,7 @@ public class EnemyBulletManager : NetworkBusListener
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
         EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, ESE.p_direction, ESE.p_speed, ESE.p_bulletSize,
             networkTime, ESE.p_aliveTime,_lastBulletId,
-            ESE.p_damage, ESE.p_enemyAttackingModule);
+            ESE.p_damage, ESE.PEnemyAttackModule);
 
         _lastBulletId++;
         
