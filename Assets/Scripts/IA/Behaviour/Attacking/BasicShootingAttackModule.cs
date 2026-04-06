@@ -2,14 +2,14 @@ using System;
 using FishNet;
 using UnityEngine;
 using FishNet.Object;
+using UnityEngine.Serialization;
 
-
-public class BasicShootingAttackModule : EnemyAttackingModule
+[AddComponentMenu("EnemyBehaviour/Attack/BasicShootAttackModule")]
+public class BasicShootingAttackModule : EnemyAttackModule
 {
-    [SerializeField] private float _maxPlayerDistance = 10f;
     [SerializeField] private float _bulletSize = 0.2f;
-    [SerializeField] private float _ammoSpeed;
-    [SerializeField] private float _maxAmmoLifeTime = 10f;
+    [SerializeField] private float _bulletSpeed = 1;
+    [SerializeField] private float _maxBulletLifeTime = 10f;
     
     
 
@@ -20,7 +20,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
         {
             _waitedTimeSinceAttack = 0;
 
-            Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
+            Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
             float length = delta.magnitude;
             Vector3 dir = delta / length;
             
@@ -28,11 +28,11 @@ public class BasicShootingAttackModule : EnemyAttackingModule
             {
                 p_startPos = transform.position + dir * 0.1f + Vector3.up * 0.5f,
                 p_direction = dir,
-                p_speed = _ammoSpeed,
+                p_speed = _bulletSpeed,
                 p_damage = _damage,
-                p_aliveTime = _maxAmmoLifeTime,
+                p_aliveTime = _maxBulletLifeTime,
                 p_bulletSize = _bulletSize,
-                p_enemyAttackingModule = this
+                PEnemyAttackModule = this
             });
         }
     }
@@ -45,7 +45,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
         }
 
 
-        Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
+        Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
         float length = delta.magnitude;
         Vector3 dir = delta / length;
 
@@ -63,7 +63,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
     }
 
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         if(!Application.isPlaying || !IsServerInitialized) return;
         Gizmos.color = Color.yellow;
@@ -79,7 +79,7 @@ public class BasicShootingAttackModule : EnemyAttackingModule
         Gizmos.DrawWireSphere(origin, _bulletSize);
         Gizmos.DrawWireSphere(origin+dir*length, _bulletSize);
         Gizmos.DrawLine(origin, origin + dir * length);
-    }
+    }*/
 }
 
 public struct EnemyShootingEvent
@@ -90,5 +90,5 @@ public struct EnemyShootingEvent
     public int p_damage;
     public float p_aliveTime;
     public float p_bulletSize;
-    public EnemyAttackingModule p_enemyAttackingModule;
+    public EnemyAttackModule PEnemyAttackModule;
 }
