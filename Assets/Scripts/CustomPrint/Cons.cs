@@ -9,6 +9,11 @@ namespace MyPrint
 		
 		#region Classic Print
 		//Print avec une couleur et un style
+		
+		public static void Print(string msg)
+		{
+			Debug.Log(msg);
+		}
 		public static void Print(string msg, ColorConsole color, ConsoleStyle style)
 		{
 			(string, string) styleStr = ConsoleOption.GetStyle(style);
