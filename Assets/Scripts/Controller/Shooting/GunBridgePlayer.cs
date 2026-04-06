@@ -12,7 +12,7 @@ namespace Controller
         public int GetCurrentMainIndex => _gunSwitching.CurrentMainGunIndex;
         public int GetCurrentAmmo => CurrentMainSurchargeGun.GetCurrentAmmo();
         
-        private IGun CurrentGun => _gunSwitching.IsMainGun ? _gunSwitching.IGunMain : _gunSwitching.IGunSecondary;
+        private IGun CurrentGun => _gunSwitching.IGunMain;
         public ISurcharge CurrentMainSurchargeGun => _gunSwitching.ISurchargeMain;
         
         [SerializeField] private GunSwitching _gunSwitching;
@@ -80,13 +80,6 @@ namespace Controller
             CurrentGun.TryReload();
         }
         
-        public void SwitchGunType(bool state)
-        {
-            if (_localWantToSwitch) return;
-            
-            _gunSwitching.SwitchGunType(state);
-        }
-
         [ServerRpc]
         public void RequestSwapingGunServerRpc(NetworkObject playerNet, int gunIndex,int currentAmmo)
         {

@@ -27,10 +27,10 @@ namespace MyPrint
         {
             switch (color)
             {
-                case ColorConsole.Red: return "<color=red>";
-                case ColorConsole.Blue: return "<color=blue>";
-                case ColorConsole.Green: return "<color=green>";
-                case ColorConsole.Yellow: return "<color=yellow>";
+                case ColorConsole.Red: return "<color=#ff4040>";
+                case ColorConsole.Blue: return "<color=#5e9cff>";
+                case ColorConsole.Green: return "<color=#32821a>";
+                case ColorConsole.Yellow: return "<color=#eddf42>";
                 case ColorConsole.Orange: return "<color=orange>";
                 case ColorConsole.Pink: return "<color=#FFC0CB>";
                 case ColorConsole.Purple: return "<color=purple>";

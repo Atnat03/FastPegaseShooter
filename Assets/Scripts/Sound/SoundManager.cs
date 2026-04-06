@@ -25,4 +25,42 @@ public class SoundManager
 		source.volume = volume;
 		AudioSource.PlayClipAtPoint(clip, source.transform.position, source.volume);
 	}
+	
+	public static void PlaySoundAtPoint(SoundsDataSO data, string soundName, AudioSource source)
+	{
+		AudioClip clip = null;
+		float volume = 0.5f;
+
+		foreach (SoundData soundData in data.sounds)
+		{
+			if(soundData.soundName == soundName)
+			{
+				clip = soundData.audioClip;
+				volume = soundData.volume;
+			}
+		}
+		
+		source.pitch = 1f;
+		source.volume = volume;
+		AudioSource.PlayClipAtPoint(clip, source.transform.position, source.volume);
+	}
+	
+	public static void PlaySound(SoundsDataSO data, string soundName, AudioSource source)
+	{
+		AudioClip clip = null;
+		float volume = 0.5f;
+
+		foreach (SoundData soundData in data.sounds)
+		{
+			if(soundData.soundName == soundName)
+			{
+				clip = soundData.audioClip;
+				volume = soundData.volume;
+			}
+		}
+		
+		source.pitch = 1f;
+		source.volume = volume;
+		source.PlayOneShot(clip);
+	}
 }
