@@ -434,9 +434,10 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             {
                 stateMachine.ChangeState(ControlerState.SlopeSliding);
             }
-            else if (!justSlided && slideUnlocked)
+            else if (!justSlided && slideUnlocked )
             {
-                stateMachine.ChangeState(ControlerState.Sliding);
+                if(verticalInput > 0) stateMachine.ChangeState(ControlerState.Sliding);
+                else stateMachine.ChangeState(ControlerState.Crouching);
             }
         }
 
@@ -486,7 +487,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         if (playerInput.actions["Crouch"].WasPressedThisFrame())
         {
-            if (coyoteSlide && !justSlided && slideUnlocked) stateMachine.ChangeState(ControlerState.Sliding);
+            if (coyoteSlide && !justSlided && slideUnlocked && verticalInput > 0) stateMachine.ChangeState(ControlerState.Sliding);
             else stateMachine.ChangeState(ControlerState.Crouching);
         }
 
@@ -564,7 +565,14 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         {
             if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked)
                 stateMachine.ChangeState(ControlerState.SlopeSliding);
-            else stateMachine.ChangeState(ControlerState.Sliding);
+            else if (verticalInput > 0)
+            {
+                stateMachine.ChangeState(ControlerState.Sliding);
+            }
+            else
+            {
+                stateMachine.ChangeState(ControlerState.Crouching);
+            }
         }
 
 
@@ -1052,8 +1060,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         if (!mustSlide)
         {
-            if (!Physics.Raycast(topHeightCrouchedCollider.position, Vector3.up,
-                    Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
+            if (!Physics.SphereCast(topHeightCrouchedCollider.position, bodyRadius,Vector3.up,out RaycastHit hit ,Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
             {
                 if (playerInput.actions["Jump"].IsPressed())
                 {
@@ -1067,10 +1074,10 @@ public class FPSController : NetworkBusListener, IEnergyRequest
                     StartCoroutine(SlidingSlowDownCoroutine());
                 }
 
-                else if (verticalInput != 0f || horizontalInput != 0f)
+                /*else if (verticalInput != 0f || horizontalInput != 0f)
                 {
                     stateMachine.ChangeState(ControlerState.Moving);
-                }
+                }*/ //créé des merdes niveau redirection
 
                 else
                 {
