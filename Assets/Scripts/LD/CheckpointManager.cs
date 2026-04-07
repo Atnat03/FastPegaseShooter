@@ -34,6 +34,6 @@ public class CheckpointManager : MonoBusListener
 
     private void RespawnPlayer(OnPlayerDeathEvent data)
     {
-        data.playerN.transform.position = _checkpoints[playerCheckpoints[data.playerN.gameObject]].p_spawnPointTransform.position;
+        data.p_playerN.transform.position = _checkpoints[playerCheckpoints[data.p_playerN.gameObject]].p_spawnPointTransform.position;
     }
 }

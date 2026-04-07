@@ -222,13 +222,13 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             
             ListenToEvent<OnPlayerDeathEvent>(data =>
             {
-                if (data.playerN == NetworkObject)
+                if (data.p_playerN == NetworkObject)
                     SetDeadServerRpc(true);
             });
             
             ListenToEvent<OnPlayerRespawnEvent>(data =>
             {
-                if (data.playerN == NetworkObject)
+                if (data.p_playerN == NetworkObject)
                     SetDeadServerRpc(false);
             });
         }
