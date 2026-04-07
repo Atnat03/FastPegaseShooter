@@ -665,7 +665,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             bool isSameSide = currentSide == previousWallRideSide;
             bool canWallRide = (isSameSide && !justWallridedSameSide) || (!isSameSide && !justWallridedOtherSide);
 
-            if (canWallRide && rb.linearVelocity.y < 0)
+            if (canWallRide && rb.linearVelocity.y < 0 && verticalInput > 0)
             {
                 stateMachine.ChangeState(ControlerState.WallRiding);
                 mustHeadTilt = true;
@@ -823,6 +823,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
     void EnterWallRidingState()
     {
+        
         hasDashed = false; // ligne a retirer si on veut que le joueur doive toucher le sol avant de redasher
 
         wallRidingCoroutineRunning = true;
@@ -845,6 +846,12 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             cameraSpringTarget.rotation =
                 cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, headtiltIntensity);
             previousWallRideSide = wallRideSide.rightSide;
+        }
+
+        if (Vector3.Dot(horizontalVelocity, wallRidingDirection) < 0)
+        {
+            stateMachine.ChangeState(ControlerState.Falling);
+            return;
         }
 
         wallRidingCoroutine = StartCoroutine(WallRidingDurationCoroutine());
