@@ -21,7 +21,7 @@ public class PlayerDroneView : NetworkBusListener
 
 	#region Fonctions
 
-	public override void OnStartNetwork()
+	public void OnEnable()
 	{
 		ListenToEvent<DroneActivatedEvent>(ActivatedDrone);
 	}

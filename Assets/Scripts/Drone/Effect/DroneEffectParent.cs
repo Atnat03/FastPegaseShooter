@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -21,8 +22,9 @@ public abstract class DroneEffectParent : NetworkBusListener
 	private readonly SyncVar<bool> _isActivated = new(false);
 	protected List<PlayerVisuelBridge> _playerUnderEffect = new ();
 	
-	[Header("View")]
-	[SerializeField] private GameObject _view;
+	//Actions
+	public Action<float> OnActivatedDrone;
+	public Action OnUpdateEffect;
 	
 	#endregion
 
@@ -37,13 +39,15 @@ public abstract class DroneEffectParent : NetworkBusListener
 	private void OnActivatedChange(bool prev, bool next, bool asServer)
 	{
 		if(next)
-		{		
-			_view.SetActive(true);
+		{
+			OnActivatedDrone?.Invoke(_radius);
 		}
 	}
 
 	void Update()
 	{
+		if (!IsServerInitialized) return;
+		
 		_elapsedTimeApplyEffect -= Time.deltaTime;
 		
 		if(_elapsedTimeApplyEffect <= 0)
@@ -54,7 +58,15 @@ public abstract class DroneEffectParent : NetworkBusListener
 	}
 
 	protected virtual void ApplyEffect()
-	{ }
+	{
+		UpdateViewObserversRpc();
+	}
+
+	[ObserversRpc]
+	private void UpdateViewObserversRpc()
+	{
+		OnUpdateEffect?.Invoke();
+	}
 
 	public virtual void ApplyDeathEffect()
 	{ }

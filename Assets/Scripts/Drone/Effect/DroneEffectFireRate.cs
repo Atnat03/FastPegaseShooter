@@ -28,6 +28,8 @@ public class DroneEffectFireRate : DroneEffectParent
 
 	protected override void ApplyEffect()
 	{
+		base.ApplyEffect();
+		
 		foreach (PlayerVisuelBridge player in _playerUnderEffect)
 		{
 			Cons.Print(_playerUnderEffect.Count.ToString(), ColorConsole.Red);

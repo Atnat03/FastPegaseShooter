@@ -37,7 +37,7 @@ public class Drone : NetworkBusListener
 	private readonly SyncVar<float> _currentActivatedTime = new (0);
 	private readonly SyncVar<bool> _IsActivated = new (false);
 	private int _idThrower;
-	private int _idActivator;
+	private NetworkConnection _activatorConnection; // ✅ Stocker la connexion au lieu de l'ID
 
 	[Header("Follow")] 
 	[SerializeField] private float _speed = 5f;
@@ -55,10 +55,8 @@ public class Drone : NetworkBusListener
 	private DroneEffectParent _effect;
 	
 	private Vector3 _startPosition;
+		
 	
-	[Header("View")]
-	[SerializeField] private Transform _view;
-
 	#endregion
 
 	#region Fonctions
@@ -93,6 +91,9 @@ public class Drone : NetworkBusListener
 
 	private void OnActivatedTimerChange(float prev, float next, bool asServer)
 	{
+		// ✅ Calculer et envoyer au client concerné
+		if (_activatorConnection == null || !_activatorConnection.IsValid) return;
+		
 		bool activated = false;
 		float ratio = 0;
 		
@@ -102,11 +103,20 @@ public class Drone : NetworkBusListener
 			ratio = next / _timeToActivate;
 		}
 		
+		// ✅ Envoyer au client via TargetRpc
+		SendActivationUITargetRpc(_activatorConnection, activated, ratio);
+	}
+
+	// ✅ Nouveau TargetRpc pour envoyer l'UI au client
+	[TargetRpc]
+	private void SendActivationUITargetRpc(NetworkConnection target, bool isActivate, float ratioBar)
+	{
+		// Ce code s'exécute sur le client ciblé
 		InvokeEvent(new DroneActivatedEvent
 		{
-			p_playerId = _idActivator,
-			p_isActivate = activated,
-			p_ratioBar = ratio,
+			p_playerId = target.ClientId,
+			p_isActivate = isActivate,
+			p_ratioBar = ratioBar,
 		});
 	}
 
@@ -129,9 +139,7 @@ public class Drone : NetworkBusListener
 					Activated();
 				}
 			}
-
-			UpdateVisualObserversRpc();
-        
+			
 			return;
 		}
 		
@@ -146,14 +154,6 @@ public class Drone : NetworkBusListener
 		{
 			_pales.Rotate(Vector3.up * _speedPaleRotation * Time.deltaTime);
 		}
-	}
-	
-	[ObserversRpc]
-	private void UpdateVisualObserversRpc()
-	{
-		bool isThrower = (_idThrower == LocalConnection.ClientId);
-
-		_view.gameObject.SetActive(!isThrower && !_IsActivated.Value);
 	}
 
 	void Activated()
@@ -207,15 +207,11 @@ public class Drone : NetworkBusListener
 			if (player.Owner.ClientId != _idThrower)
 			{
 				Cons.Print("Start activated Drone", ColorConsole.Blue);
-				_idActivator = player.Owner.ClientId;
+				
+				_activatorConnection = player.Owner;
 				_target = player.transform;
 				
-				InvokeEvent(new DroneActivatedEvent
-				{
-					p_playerId = _idActivator,
-					p_isActivate = true,
-					p_ratioBar = 0f,
-				});
+				SendActivationUITargetRpc(_activatorConnection, true, 0f);
 				
 				_currentActivatedTime.Value = _timeToActivate;
 			}
@@ -233,7 +229,14 @@ public class Drone : NetworkBusListener
 			if (player.Owner.ClientId != _idThrower)
 			{
 				Cons.Print("Stop activated Drone", ColorConsole.Blue);
+				
+				if (_activatorConnection != null && _activatorConnection.IsValid)
+				{
+					SendActivationUITargetRpc(_activatorConnection, false, 0f);
+				}
+				
 				_currentActivatedTime.Value = 0;
+				_activatorConnection = null;
 			}
 		}
 	}
