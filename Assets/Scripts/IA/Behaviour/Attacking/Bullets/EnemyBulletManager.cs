@@ -39,8 +39,8 @@ public class EnemyBulletManager : NetworkBusListener
                 //here, apply target hitting logic
                 InvokeEvent(new PlayerTakeDamageEvent
                 {
-                    playerN = playerHealth.NetworkObject,
-                    value = _spawnedBullets[i].p_bulletStrenght
+                    p_playerN = playerHealth.NetworkObject,
+                    p_value = _spawnedBullets[i].p_bulletStrenght
                 });
                 _spawnedBullets[i].PAttackModule.p_onHitPlayer?.Invoke(
                     playerHealth.NetworkObject.ObjectId,
