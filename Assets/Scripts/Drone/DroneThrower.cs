@@ -1,6 +1,7 @@
 using System;
 using FishNet;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MyPrint;
 using UnityEngine;
 
@@ -26,8 +27,8 @@ public class DroneThrower : NetworkBehaviour
 	[SerializeField] private float _throwForce = 10f;
 	[SerializeField] private int _numberBounces = 2;
 
-	private bool _canThrow = true;
-	private float _elapsedTimeCooldown = 0f;
+	private readonly SyncVar<bool> _canThrow = new(true);
+	private readonly SyncVar<float> _elapsedTimeCooldown = new(0);
 
 	private DroneBullet _currentDroneInTerrain = null;
 	
@@ -41,39 +42,39 @@ public class DroneThrower : NetworkBehaviour
 
 	#region Fonctions
 
+	public override void OnStartNetwork()
+	{
+		_elapsedTimeCooldown.OnChange += OnCooldownValueChange;
+	}
+
+	private void OnCooldownValueChange(float prev, float next, bool asServer)
+	{
+		OnCooldownUpdate?.Invoke(next / _cooldown);
+	}
+
 	private void Update()
 	{
-		if (_elapsedTimeCooldown > 0)
+		if (!IsServerInitialized) return;
+		
+		if (_elapsedTimeCooldown.Value > 0)
 		{
-			_elapsedTimeCooldown -= Time.deltaTime;
-			_canThrow = false;
-            
-			OnCooldownUpdate?.Invoke(_elapsedTimeCooldown / _cooldown);
-            
-			if (_elapsedTimeCooldown <= 0f)
+			_elapsedTimeCooldown.Value -= Time.deltaTime;
+			_canThrow.Value = false;
+			
+			if (_elapsedTimeCooldown.Value <= 0f)
 			{
-				_canThrow = true;
+				_canThrow.Value = true;
 			}
 		}
 	}
 
 	public void TryThrowDrone()
 	{
-		if (_canThrow)
+		if (_canThrow.Value)
 		{
 			ThrowDroneServerRpc();
-			
-			if (_bridgeAnimation != null)
-			{
-				//_bridgeAnimation.StartThrow();
-			}
-			else
-			{
-			}
             
 			OnStartThrow?.Invoke();
-            
-			_elapsedTimeCooldown = _cooldown;
 		}
 	}
 
@@ -91,6 +92,8 @@ public class DroneThrower : NetworkBehaviour
     
 		drone.SetDrone(_dronePrefab, Owner.ClientId);
 		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * _throwForce, ForceMode.Impulse);
+		
+		_elapsedTimeCooldown.Value = _cooldown;
 	}
 	
 	#endregion

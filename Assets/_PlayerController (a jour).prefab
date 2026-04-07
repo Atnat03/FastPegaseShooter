@@ -3297,9 +3297,12 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _healthBase: 100
-  _playerAnimation: {fileID: 3465261579877272972}
   _timeToRespawn: 5
   _critikStep: 0.5
+  _playerInputAction: {fileID: 0}
+  _playerAnimation: {fileID: 3465261579877272972}
+  _selfHealingTime: 0
+  _healThrowingTimeThreshold: 1
 --- !u!114 &8101511114389266693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7070,7 +7073,8 @@ MonoBehaviour:
   _componentIndexCache: 9
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
-  _movementCastingThreshold: 1
+  _castingBeatDelay: 0.7
+  _castingPhysicalThreshold: 0.5
 --- !u!1 &6856656255395432402
 GameObject:
   m_ObjectHideFlags: 0
@@ -7510,8 +7514,10 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 0}
+  _droneThrower: {fileID: 931936587992237131}
   _uiActivated: {fileID: 9149842802044759819}
   _imageActivated: {fileID: 5753203537816109777}
+  _imageCooldown: {fileID: 1181157673011471921}
 --- !u!1 &7010684394084671937
 GameObject:
   m_ObjectHideFlags: 0
@@ -9346,6 +9352,7 @@ MonoBehaviour:
   _bridgeAnimation: {fileID: 2309493807037280383}
   _elementaryGrenadePrefab: {fileID: 7033959642892252244, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   _spawnPoint: {fileID: 446286405210506582}
+  _currentGun: {fileID: 3154577241410043838}
   _cooldown: 2
   _damage: 10
   _throwForce: 30
@@ -11389,7 +11396,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _playerHealth: {fileID: 5365301951764690734}
-  _playerEnergy: {fileID: 733889428415545954}
+  _playerGun: {fileID: 3154577241410043838}
 --- !u!4 &5424064157669341094 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6463582156032259737, guid: bb96394e9629f20408ea23d3760ba123, type: 3}
