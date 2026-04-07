@@ -90,7 +90,7 @@ public class DroneThrower : NetworkBehaviour
 		InstanceFinder.ServerManager.Spawn(drone.gameObject);
 		_currentDroneInTerrain = drone;
     
-		drone.SetDrone(_dronePrefab, Owner.ClientId);
+		drone.SetDrone(_dronePrefab, Owner);
 		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * _throwForce, ForceMode.Impulse);
 		
 		_elapsedTimeCooldown.Value = _cooldown;

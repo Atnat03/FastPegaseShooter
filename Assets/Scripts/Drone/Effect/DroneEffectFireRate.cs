@@ -40,6 +40,8 @@ public class DroneEffectFireRate : DroneEffectParent
 
 	protected override void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
 	{
+		base.StopApplicateEffect(playerVisuelBridge);
+		
 		playerVisuelBridge.PlayerGun.IGunMain.SetFireRate(-1);
 	}
 	

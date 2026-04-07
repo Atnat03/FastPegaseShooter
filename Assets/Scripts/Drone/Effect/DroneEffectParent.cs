@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
@@ -25,6 +26,7 @@ public abstract class DroneEffectParent : NetworkBusListener
 	//Actions
 	public Action<float> OnActivatedDrone;
 	public Action OnUpdateEffect;
+	public Action<NetworkConnection> OnEnableDrone;
 	
 	#endregion
 
@@ -34,6 +36,17 @@ public abstract class DroneEffectParent : NetworkBusListener
 	private void OnEnable()
 	{
 		_isActivated.OnChange += OnActivatedChange;
+	}
+
+	public override void OnStartNetwork()
+	{
+		UpdateStartVisuelObserverRpc();
+	}
+
+	[ObserversRpc]
+	void UpdateStartVisuelObserverRpc()
+	{
+		OnEnableDrone?.Invoke(Owner);
 	}
 
 	private void OnActivatedChange(bool prev, bool next, bool asServer)
@@ -70,10 +83,12 @@ public abstract class DroneEffectParent : NetworkBusListener
 
 	public virtual void ApplyDeathEffect()
 	{ }
-	
-	
+
+
 	protected virtual void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
-	{ }
+	{
+		playerVisuelBridge.PlayerDroneView.SetInfoUnderDrone(false);
+	}
 
 
 	public void OnTriggerStay(Collider other)
@@ -88,7 +103,10 @@ public abstract class DroneEffectParent : NetworkBusListener
 			PlayerVisuelBridge g = player;
 			
 			if(!_playerUnderEffect.Contains(g))
+			{
+				g.PlayerDroneView.SetInfoUnderDrone(true);
 				_playerUnderEffect.Add(g);
+			}
 		}
 	}
 	
@@ -103,7 +121,7 @@ public abstract class DroneEffectParent : NetworkBusListener
 		{
 			PlayerVisuelBridge g = player;
 			
-			if(!_playerUnderEffect.Contains(g))
+			if(_playerUnderEffect.Contains(g))
 			{
 				_playerUnderEffect.Remove(g);
 				StopApplicateEffect(g);
