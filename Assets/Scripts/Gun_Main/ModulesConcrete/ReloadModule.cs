@@ -66,6 +66,7 @@ namespace GunDecorator
                 p_reloadCoroutine = null;
                 _imageReload.gameObject.SetActive(false);
                 _isReloading = false;
+                _gunController?._animator.ResetTrigger("Reload");
             }
         }
 

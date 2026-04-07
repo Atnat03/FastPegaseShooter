@@ -22,6 +22,7 @@ public class GrenadeThrower : NetworkBehaviour
     [Header("Throw")]
     [SerializeField] private ElementaryGrenade _elementaryGrenadePrefab;
     [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private GunSwitching _currentGun;
     
     [Header("Settings")]
     [SerializeField] private float _cooldown = 2f;
@@ -67,6 +68,7 @@ public class GrenadeThrower : NetworkBehaviour
             if (_bridgeAnimation != null)
             {
                 _bridgeAnimation.StartThrow(_element);
+                _currentGun.ISurchargeMain.StopReload();
             }
             else
             {
@@ -95,6 +97,8 @@ public class GrenadeThrower : NetworkBehaviour
 
         Vector3 direction = _spawnPoint.forward;
         grenade.GetComponent<Rigidbody>().AddForce(direction * _throwForce, ForceMode.Impulse);
+        
+        _currentGun.ISurchargeMain.StopReload();
         
         OnThrow?.Invoke(grenade);
     }
