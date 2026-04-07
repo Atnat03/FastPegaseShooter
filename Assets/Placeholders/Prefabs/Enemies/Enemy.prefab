@@ -433,9 +433,9 @@ GameObject:
   - component: {fileID: 1710859028773061241}
   - component: {fileID: 1227236921369466688}
   - component: {fileID: 4639033686446523756}
-  - component: {fileID: 4856717765235199756}
+  - component: {fileID: -2128553134513661397}
+  - component: {fileID: 7503707722114149866}
   - component: {fileID: 5913997660152659872}
-  - component: {fileID: -3745771886591243004}
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: 6176439864006220930}
@@ -486,8 +486,8 @@ MonoBehaviour:
   _lifeModules:
   - {fileID: 4639033686446523756}
   _targetingModules:
-  - {fileID: -3745771886591243004}
-  _movementModule: {fileID: 4856717765235199756}
+  - {fileID: 0}
+  _movementModule: {fileID: 0}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
@@ -507,7 +507,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _life: 60
---- !u!114 &4856717765235199756
+--- !u!114 &-2128553134513661397
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -516,15 +516,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 5911405418369916473}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5492ed17c451d4885c1b50d3efafe8, type: 3}
+  m_Script: {fileID: 11500000, guid: 551daad7dd080364381524025b5adc95, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
-  _componentIndexCache: 2
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreTargetModule
+  _componentIndexCache: 255
   _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 0}
+  p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
+  _aggroPointWhenInDetectZone: 0
+  _aggroPointPerDamageTaken: 0
+  _aggroPointPerSecond: 0
+  _aggroPointPerDamageDealt: 0
+  _aggroPointsThreshold: 0000000064000000c8000000
+  _detectionZoneRadius: 0
+  _aggroZoneRadius: 0
+--- !u!114 &7503707722114149866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53783909ae03234408c4b1a8d6416c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DistanceAwareMovementModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 0}
   _doFreezeWithoutTarget: 1
-  _targetModule: {fileID: -3745771886591243004}
-  _speed: 5
+  _targetModule: {fileID: -2128553134513661397}
+  _speed: 3
+  _idealDistance: 0
 --- !u!114 &5913997660152659872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -540,29 +564,13 @@ MonoBehaviour:
   _componentIndexCache: 3
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _targetModule: {fileID: -3745771886591243004}
+  _targetModule: {fileID: -2128553134513661397}
   _damage: 10
   _attackDelay: 2
   _maxPlayerDistance: 10
   _bulletSize: 0.2
   _bulletSpeed: 1
   _maxBulletLifeTime: 10
---- !u!114 &-3745771886591243004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5911405418369916473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 099f65e195cc2e74fb0255db981497b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FluidTargetingModule
-  _componentIndexCache: 4
-  _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 8280671740658429549}
-  p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -607,9 +615,9 @@ MonoBehaviour:
   NetworkBehaviours:
   - {fileID: 1227236921369466688}
   - {fileID: 4639033686446523756}
-  - {fileID: 4856717765235199756}
+  - {fileID: 0}
   - {fileID: 5913997660152659872}
-  - {fileID: -3745771886591243004}
+  - {fileID: 0}
   - {fileID: 6176439864006220930}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
