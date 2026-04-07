@@ -1052,8 +1052,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         if (!mustSlide)
         {
-            if (!Physics.Raycast(topHeightCrouchedCollider.position, Vector3.up,
-                    Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
+            if (!Physics.SphereCast(topHeightCrouchedCollider.position, bodyRadius,Vector3.up,out RaycastHit hit ,Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
             {
                 if (playerInput.actions["Jump"].IsPressed())
                 {
@@ -1067,10 +1066,10 @@ public class FPSController : NetworkBusListener, IEnergyRequest
                     StartCoroutine(SlidingSlowDownCoroutine());
                 }
 
-                else if (verticalInput != 0f || horizontalInput != 0f)
+                /*else if (verticalInput != 0f || horizontalInput != 0f)
                 {
                     stateMachine.ChangeState(ControlerState.Moving);
-                }
+                }*/ //créé des merdes niveau redirection
 
                 else
                 {
