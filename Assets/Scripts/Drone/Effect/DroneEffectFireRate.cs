@@ -37,6 +37,11 @@ public class DroneEffectFireRate : DroneEffectParent
 			ApplyFireRateObserverRpc(player.Owner, _fireRateMultiplicator, player);
 		}
 	}
+
+	protected override void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
+	{
+		playerVisuelBridge.PlayerGun.IGunMain.SetFireRate(-1);
+	}
 	
 	[ObserversRpc]
 	private void ApplyFireRateObserverRpc(NetworkConnection target, float multiplier, PlayerVisuelBridge player)

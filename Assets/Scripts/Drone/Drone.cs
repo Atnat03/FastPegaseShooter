@@ -19,6 +19,8 @@ public class Drone : NetworkBusListener
 {
 	#region Properties
 
+	public int IdThrower => _idThrower;
+	
 	#endregion
 
 
@@ -37,14 +39,13 @@ public class Drone : NetworkBusListener
 	private readonly SyncVar<float> _currentActivatedTime = new (0);
 	private readonly SyncVar<bool> _IsActivated = new (false);
 	private int _idThrower;
-	private NetworkConnection _activatorConnection; // ✅ Stocker la connexion au lieu de l'ID
+	private NetworkConnection _activatorConnection;
 
 	[Header("Follow")] 
 	[SerializeField] private float _speed = 5f;
 	[SerializeField] private float _heightOffset = 2f;
 	private float _orbitAngle;
 	private Transform _target;
-	private int idActivated;
 	private Vector3 _targetPosition;
 	private float elapsedTimeUpdateSearch = 0;
 	private float timeUpdateSearch = 0.2f;
@@ -55,7 +56,7 @@ public class Drone : NetworkBusListener
 	private DroneEffectParent _effect;
 	
 	private Vector3 _startPosition;
-		
+	
 	
 	#endregion
 
@@ -91,7 +92,6 @@ public class Drone : NetworkBusListener
 
 	private void OnActivatedTimerChange(float prev, float next, bool asServer)
 	{
-		// ✅ Calculer et envoyer au client concerné
 		if (_activatorConnection == null || !_activatorConnection.IsValid) return;
 		
 		bool activated = false;
@@ -103,15 +103,12 @@ public class Drone : NetworkBusListener
 			ratio = next / _timeToActivate;
 		}
 		
-		// ✅ Envoyer au client via TargetRpc
 		SendActivationUITargetRpc(_activatorConnection, activated, ratio);
 	}
 
-	// ✅ Nouveau TargetRpc pour envoyer l'UI au client
 	[TargetRpc]
 	private void SendActivationUITargetRpc(NetworkConnection target, bool isActivate, float ratioBar)
 	{
-		// Ce code s'exécute sur le client ciblé
 		InvokeEvent(new DroneActivatedEvent
 		{
 			p_playerId = target.ClientId,

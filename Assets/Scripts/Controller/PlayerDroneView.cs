@@ -3,6 +3,11 @@ using MyPrint;
 using UnityEngine;
 using UnityEngine.UI;
 
+public struct DroneUpdateActivation
+{
+	public float p_ratio;
+}
+
 public class PlayerDroneView : NetworkBusListener
 {
 	#region Properties
@@ -12,18 +17,26 @@ public class PlayerDroneView : NetworkBusListener
 
 	#region Variables
 
+	[SerializeField] private DroneThrower _droneThrower;
+	
 	[Header("UI")]
 	[SerializeField] private GameObject _uiActivated;
 	[SerializeField] private Image _imageActivated;
+	[SerializeField] private Image _imageCooldown;
 
 	#endregion
-
-
+	
 	#region Fonctions
 
 	public void OnEnable()
 	{
 		ListenToEvent<DroneActivatedEvent>(ActivatedDrone);
+		_droneThrower.OnCooldownUpdate += UpdateCooldown;
+	}
+	
+	private void UpdateCooldown(float ratio)
+	{
+		_imageCooldown.fillAmount = 1 - ratio;
 	}
 
 	private void ActivatedDrone(DroneActivatedEvent data)

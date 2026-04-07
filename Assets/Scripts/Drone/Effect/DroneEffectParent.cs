@@ -70,6 +70,11 @@ public abstract class DroneEffectParent : NetworkBusListener
 
 	public virtual void ApplyDeathEffect()
 	{ }
+	
+	
+	protected virtual void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
+	{ }
+
 
 	public void OnTriggerStay(Collider other)
 	{
@@ -99,10 +104,13 @@ public abstract class DroneEffectParent : NetworkBusListener
 			PlayerVisuelBridge g = player;
 			
 			if(!_playerUnderEffect.Contains(g))
+			{
 				_playerUnderEffect.Remove(g);
+				StopApplicateEffect(g);
+			}
 		}
 	}
-
+	
 	public void Activated()
 	{
 		GetComponent<SphereCollider>().radius = _radius;

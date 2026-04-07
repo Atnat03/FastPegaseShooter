@@ -31,6 +31,7 @@ public class DroneView : NetworkBehaviour
 		_drone.OnActivatedDrone += OnActivatedDrone;
 		_drone.OnUpdateEffect += UpdatePosition;
 	}
+	
 	private void OnActivatedDrone(float radius)
 	{
 		_arrow.gameObject.SetActive(false);
