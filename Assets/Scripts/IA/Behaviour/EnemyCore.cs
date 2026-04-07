@@ -54,6 +54,8 @@ public class EnemyCore : NetworkBusListener
             module.InitialiseBehaviourModule(this);
         foreach (EnemyLifeModule module in _lifeModules)
             module.InitialiseBehaviourModule(this);
+        foreach (EnemyTargetModule module in _targetingModules)
+            module.InitialiseBehaviourModule(this);
         
         _movementModule?.InitialiseBehaviourModule(this);
     }
