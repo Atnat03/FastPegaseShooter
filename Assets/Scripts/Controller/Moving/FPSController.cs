@@ -222,13 +222,13 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             
             ListenToEvent<OnPlayerDeathEvent>(data =>
             {
-                if (data.playerN == NetworkObject)
+                if (data.p_playerN == NetworkObject)
                     SetDeadServerRpc(true);
             });
             
             ListenToEvent<OnPlayerRespawnEvent>(data =>
             {
-                if (data.playerN == NetworkObject)
+                if (data.p_playerN == NetworkObject)
                     SetDeadServerRpc(false);
             });
         }
@@ -1107,8 +1107,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
 
-        while (elapsedTime < slideMinTimeDuration &&
-               !(elapsedTime >= slideMaxTimeDuration && !playerInput.actions["Crouch"].IsPressed()))
+        while (elapsedTime < slideMinTimeDuration || (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed()))
         {
             elapsedTime += Time.deltaTime;
 
@@ -1342,7 +1341,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             stateMachine.ChangeState(ControlerState.Idle);
         }
 
-        if (playerInput.actions["Grapple"].WasPressedThisFrame() && singleClicGrapple)
+        if (playerInput.actions["DebugLeaveGrapple"].WasPressedThisFrame() && singleClicGrapple)
         {
             stateMachine.ChangeState(ControlerState.Idle);
             rb.linearVelocity = Vector3.zero;
