@@ -28,12 +28,23 @@ namespace GunDecorator.AmmoModules
         private float _bulletThrowForce = 100;
 
         [SerializeField, Tooltip("Vitesse logique de la balle utilisée par certains systèmes (ex: calculs d'impact ou trajectoire).")]
-        
         private float _BulletSpeed = 50;
+        
         private float _dmgToApply = 0;
         
         private BulletData _bulletData;
 
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is PhysicAmmoSetting s)
+            {
+                _bulletMass = s.mass;
+                _damages =  s.damages;
+                _bulletThrowForce = s.bulletThrowForce;
+                _BulletSpeed = s.bulletSpeed;
+            }
+        }
+        
         void Start()
         {
             _dmgToApply = _damages;

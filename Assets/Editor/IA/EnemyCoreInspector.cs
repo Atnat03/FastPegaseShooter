@@ -9,7 +9,9 @@ public class EnemyCoreInspector : Editor
     private SerializedProperty _attackingModules;
     private SerializedProperty _lifeModules;
     private SerializedProperty _targetModules;
-    private SerializedProperty _movingModule;
+    private SerializedProperty _movementModule;
+    
+    private SerializedProperty scriptProperty;
 
     private GUIStyle _centeredTitleStyle;
     private GUIStyle _titleStyle;
@@ -23,7 +25,7 @@ public class EnemyCoreInspector : Editor
         _attackingModules = serializedObject.FindProperty("_attackingModules");
         _lifeModules = serializedObject.FindProperty("_lifeModules");
         _targetModules = serializedObject.FindProperty("_targetingModules");
-        _movingModule = serializedObject.FindProperty("_movingModule");
+        _movementModule = serializedObject.FindProperty("_movementModule");
 
         _centeredTitleStyle = new GUIStyle
         {
@@ -43,27 +45,31 @@ public class EnemyCoreInspector : Editor
         {
             p_titleStyle = _titleStyle,
             p_label = (i => { return $"Element {i}";}),
-            p_removeColor = Color.crimson,
-            p_addColor = Color.aquamarine,
+            p_removeColor = new Color(0.85f, 0.25f, 0.2f),
+            p_addColor = new Color(0.52f, 0.82f, 0.96f),
             p_verticalMargin = 5
         };
         
-        /*Texture2D moduleIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/Icons/Energy.png");
+        scriptProperty = serializedObject.FindProperty("m_Script");
+        
+        Texture2D moduleIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/Icons/AI/Core.png");
         if (moduleIcon != null)
         {
             EditorGUIUtility.SetIconForObject(target, moduleIcon);
-        }*/
+        }
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-
-        //EnemyCore enemyCore = (EnemyCore)target;
+        
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.PropertyField(scriptProperty);
+        EditorGUI.EndDisabledGroup();
         
         GUILayout.Space(10);
         Rect rect = EditorGUILayout.GetControlRect(GUILayout.Height(60));
-        EditorGUI.DrawRect(rect, Color.aquamarine*0.6f);
+        EditorGUI.DrawRect(rect, new Color(0.93f, 0.43f, 0.28f)*0.8f);
         GUI.Label(rect, "Enemy Core", _centeredTitleStyle);
         GUILayout.Space(10);
 
@@ -74,7 +80,7 @@ public class EnemyCoreInspector : Editor
         
         GUILayout.BeginVertical("box");
         GUILayout.Label("Moving Module", _titleStyle);
-        EditorGUILayout.PropertyField(_movingModule);
+        EditorGUILayout.PropertyField(_movementModule);
         GUILayout.EndVertical();
         
         serializedObject.ApplyModifiedProperties();

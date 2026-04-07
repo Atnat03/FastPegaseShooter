@@ -15,5 +15,6 @@ namespace ScriptableObjectsDefinitions
     {
         public string soundName;
         public AudioClip audioClip;
+        public float volume = 0.5f;
     }
 }

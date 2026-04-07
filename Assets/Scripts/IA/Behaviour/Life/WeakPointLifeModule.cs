@@ -5,9 +5,13 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
+[AddComponentMenu("EnemyBehaviour/Life/WeakPointLifeModule")]
 public class WeakPointLifeModule : EnemyLifeModule
 {
-    [SerializeField] private EnemyLifeModule _enemyLifeModule;
+    //HideInInspector to prevent draw with "base.OnInspectorGUI"
+    //SerializeField to get properties in custom inspector
+    [HideInInspector][SerializeField] private EnemyLifeModule _enemyLifeModule;
+    
     [SerializeField] private float _eliteDamageMultWhenDestroyed = 1;
     
     [Server]

@@ -13,6 +13,8 @@ namespace Controller
         [SerializeField] private PlayerInput _playerInputAction;
         [SerializeField] private GunBridgePlayer _bridgePlayer;
         [SerializeField] private PlayerHealth _playerHealth;
+        [SerializeField] private GrenadeThrower _grenadeThrower;
+        [SerializeField] private DroneThrower _droneThrower;
 
         private bool shootingInputPressed;
 
@@ -82,33 +84,6 @@ namespace Controller
             }
         }
 
-        private void SwitchToMainGun(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-
-            _bridgePlayer.SwitchGunType(true);
-        }
-        
-        private void SwitchToSecondGun(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-
-            _bridgePlayer.SwitchGunType(false);
-        }
-        
-        private void SwitchScollGun(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            
-            float value = obj.ReadValue<float>();
-
-            if(value != 0)
-                _bridgePlayer.SwitchGunType(value > 0);
-        }
-
         private void RequestSwapingGun(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
@@ -120,17 +95,34 @@ namespace Controller
                 _bridgePlayer.GetCurrentAmmo);
         }
 
+        private void TryThrowGrenade(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _grenadeThrower.TryThrowGrenade();
+        }
+        
+        private void TryThrowDrone(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            Debug.Log("Throw drone input");
+            
+            _droneThrower.TryThrowDrone();
+        }
+
         void OnEnable()
         {
             _playerInputAction.actions["Shoot"].performed += Shooting;
             _playerInputAction.actions["Charge"].performed += Charging;
             
-            _playerInputAction.actions["SwitchMainGunType"].performed += SwitchToMainGun;
-            _playerInputAction.actions["SwitchSecondGunType"].performed += SwitchToSecondGun;
-            _playerInputAction.actions["SwitchGunScroll"].performed += SwitchScollGun;
- 
             _playerInputAction.actions["SwapGun"].performed += RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed += Reloading;
+            
+            _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
+            _playerInputAction.actions["ThrowDrone"].performed += TryThrowDrone;
         }
 
 
@@ -139,12 +131,11 @@ namespace Controller
             _playerInputAction.actions["Shoot"].performed -= Shooting;
             _playerInputAction.actions["Charge"].performed -= Charging;
             
-            _playerInputAction.actions["SwitchMainGunType"].performed -= SwitchToMainGun;
-            _playerInputAction.actions["SwitchSecondGunType"].performed -= SwitchToSecondGun;
-            _playerInputAction.actions["SwitchGunScroll"].performed -= SwitchScollGun;
-            
             _playerInputAction.actions["SwapGun"].performed -= RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed -= Reloading;
+            
+            _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
+            _playerInputAction.actions["ThrowDrone"].performed -= TryThrowDrone;
         }
 
         #endregion
