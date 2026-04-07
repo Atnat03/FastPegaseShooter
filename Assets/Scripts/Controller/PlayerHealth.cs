@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using CustomConsole.Runtime.Logger;
 using FishNet.Connection;
 using FishNet.Managing;
 using FishNet.Object;
@@ -31,8 +32,15 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private PlayerInput _playerInputAction;
 	[SerializeField] private PlayerAnimation _playerAnimation;
 
-	[Header("Healing")] [SerializeField] private float _selfHealingTime;
+	[Header("Healing")]
+	public Transform p_healThrowPoint;
+	public Transform p_healThrowDirection;
+	[SerializeField] private float _healthToGive = 30;
+	[SerializeField] private float _selfHealingTime = 2;
 	[SerializeField] private float _healThrowingTimeThreshold = 1;
+	public float p_healThrowRadius = 3;
+	[SerializeField] private LayerMask _throwHitLayerMask;
+	[SerializeField] private LayerMask _throwHealLayerMask;
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -40,7 +48,8 @@ public class PlayerHealth : NetworkBusListener
 	private Vector3 _startPos;
 	
 	private float _healKeyDownTime;
-	private float _healConsoPercent;
+	private bool _throwActivated;
+	[HideInInspector] public Vector3 p_healThrowLandingPos;
 	
 	//Action
 	public Action<float> OnUpdateHealth;
@@ -49,6 +58,9 @@ public class PlayerHealth : NetworkBusListener
 	public Action OnTakeDamage;
 	
 	public Action<float> OnSelfHealing;
+	public Action OnThrowingActivation;
+	public Action OnThrowing;
+	public Action<Vector3> OnHealThrowLanding;
 	
 	#endregion
 
@@ -105,6 +117,21 @@ public class PlayerHealth : NetworkBusListener
 		if (IsOwner)
 		{
 			OnUpdateHealth?.Invoke(_targetHealthFill);
+			if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold)
+			{
+				if (!_throwActivated)
+				{
+					OnThrowingActivation?.Invoke();
+					_throwActivated = true;
+				}
+				
+				if(Physics.Raycast(p_healThrowPoint.position, p_healThrowDirection.forward, out RaycastHit hit, 999f, _throwHitLayerMask))
+					p_healThrowLandingPos = hit.point;
+				else
+					p_healThrowLandingPos = p_healThrowPoint.position;
+				
+				Debug.DrawLine(p_healThrowPoint.position, p_healThrowLandingPos, Color.red, 2);
+			}
 		}
 	}
 
@@ -116,13 +143,27 @@ public class PlayerHealth : NetworkBusListener
 	{
 		if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold) //Throwing heal
 		{
-			
+			if(p_healThrowLandingPos != p_healThrowPoint.position)
+			{
+				CustomLogger.ImportantLog("throwing heal");
+				OnThrowing?.Invoke();
+
+				ThrowHealServerRpc(p_healThrowLandingPos, _healthToGive);
+			}
 		}
 		else //Self-healing
 		{
+			CustomLogger.ImportantLog("self heal");
 			OnSelfHealing?.Invoke(_selfHealingTime);
+			AddHealthServerRpc(new AddHealthToPlayer
+			{
+				p_playerId = OwnerId,
+				p_value = _healthToGive,
+				p_delay = _selfHealingTime
+			});
 		}
 		
+		_throwActivated = false;
 		_healKeyDownTime = float.MaxValue;
 	}
 
@@ -151,14 +192,40 @@ public class PlayerHealth : NetworkBusListener
 	private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
 	{
 		OnTakeDamage?.Invoke();
-		
 	}
 
+	[ServerRpc(RequireOwnership = false)]
+	void ThrowHealServerRpc(Vector3 landingPos, float lifeToAdd)
+	{
+		Collider[] colliders = Physics.OverlapSphere(landingPos, p_healThrowRadius, _throwHealLayerMask);
+		foreach (Collider collider in colliders)
+		{
+			CustomLogger.HighlightLog(collider.gameObject.name);
+			if (collider != null && collider.TryGetComponent(out PlayerVisuelBridge visualBridge))
+			{
+				visualBridge.PlayerHealth.AddHealth(new AddHealthToPlayer
+				{
+					p_delay = 0,
+					p_playerId = visualBridge.OwnerId,
+					p_value = lifeToAdd
+				});
+			}
+		}
+
+		ShowHealThrowObserverRpc(landingPos);
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	public void AddHealthServerRpc(AddHealthToPlayer data)
+	{
+		AddHealth(data);
+	}
 
 	[Server]
-	void AddHealth(AddHealthToPlayer data)
+	async void AddHealth(AddHealthToPlayer data)
 	{
 		if (_isDead.Value || data.p_playerId != OwnerId) return;
+		if(data.p_delay != 0) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
 
 		float newHealth = (_currentHealth.Value + data.p_value) > _healthBase ? _healthBase : _currentHealth.Value + data.p_value;
 		_currentHealth.Value = newHealth;
@@ -197,6 +264,12 @@ public class PlayerHealth : NetworkBusListener
 	private void NotifyRespawnRpc(NetworkObject playerN)
 	{
 		InvokeEvent(new OnPlayerRespawnEvent { p_playerN = playerN });
+	}
+
+	[ObserversRpc]
+	private void ShowHealThrowObserverRpc(Vector3 landingPos)
+	{
+		OnHealThrowLanding?.Invoke(landingPos);
 	}
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
@@ -239,6 +312,7 @@ public struct AddHealthToPlayer
 {
 	public int p_playerId; 
 	public float p_value;
+	public float p_delay;
 }
 
 public struct PlayerTakeDamageEvent
