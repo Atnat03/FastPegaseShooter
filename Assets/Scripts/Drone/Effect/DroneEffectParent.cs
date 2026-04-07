@@ -82,12 +82,23 @@ public abstract class DroneEffectParent : NetworkBusListener
 	}
 
 	public virtual void ApplyDeathEffect()
-	{ }
+	{
+		UpdateDeathEffect();
+	}
+
+	[ObserversRpc]
+	private void UpdateDeathEffect()
+	{
+		foreach (PlayerVisuelBridge p in _playerUnderEffect)
+		{
+			StopApplicateEffect(p);
+		}
+	}
 
 
 	protected virtual void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
 	{
-		playerVisuelBridge.PlayerDroneView.SetInfoUnderDrone(false);
+		SetUnderDroneTargetRpc(playerVisuelBridge.Owner, false);
 	}
 
 
@@ -104,7 +115,7 @@ public abstract class DroneEffectParent : NetworkBusListener
 			
 			if(!_playerUnderEffect.Contains(g))
 			{
-				g.PlayerDroneView.SetInfoUnderDrone(true);
+				SetUnderDroneTargetRpc(player.Owner, true);
 				_playerUnderEffect.Add(g);
 			}
 		}
@@ -124,7 +135,21 @@ public abstract class DroneEffectParent : NetworkBusListener
 			if(_playerUnderEffect.Contains(g))
 			{
 				_playerUnderEffect.Remove(g);
-				StopApplicateEffect(g);
+				SetUnderDroneTargetRpc(player.Owner, false);
+			}
+		}
+	}
+	
+	[TargetRpc]
+	private void SetUnderDroneTargetRpc(NetworkConnection target, bool state)
+	{
+		PlayerVisuelBridge[] players = FindObjectsOfType<PlayerVisuelBridge>();
+		foreach (var player in players)
+		{
+			if (player.IsOwner)
+			{
+				player.PlayerDroneView.SetInfoUnderDrone(state);
+				break;
 			}
 		}
 	}

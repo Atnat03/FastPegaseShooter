@@ -3,11 +3,6 @@ using MyPrint;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct DroneUpdateActivation
-{
-	public float p_ratio;
-}
-
 public class PlayerDroneView : NetworkBusListener
 {
 	#region Properties
@@ -53,12 +48,22 @@ public class PlayerDroneView : NetworkBusListener
 		_imageActivated.fillAmount = 1 - data.p_ratioBar;
 	}
 
+	
 	public void SetInfoUnderDrone(bool state)
 	{
-		_underDroneEffect.SetActive(state);
-		_baseFrame.gameObject.SetActive(state);
+		Debug.Log("SetInfoUnderDrone : " + state);
 		
-		_baseFrame.color = state ? _colorFrame : Color.white;
+		_underDroneEffect.SetActive(state);
+
+		if (state)
+		{
+			Debug.Log("_colorFrame : ");
+			_baseFrame.color = _colorFrame;
+		}
+		else
+		{
+			_baseFrame.color = Color.white;
+		}
 	}
 
 

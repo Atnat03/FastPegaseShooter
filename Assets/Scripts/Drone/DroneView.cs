@@ -77,5 +77,4 @@ public class DroneView : NetworkBehaviour
 		_droneEffect.OnUpdateEffect -= UpdatePosition;
 		_drone.OnIdThrowerChange -= UpdateVisibility;
 	}
-
 }

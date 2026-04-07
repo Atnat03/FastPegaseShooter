@@ -7,6 +7,7 @@ public class PlayerVisuelBridge : NetworkBehaviour
 
 	public PlayerHealth PlayerHealth => _playerHealth;
 	public GunSwitching PlayerGun => _playerGun;
+
 	public PlayerDroneView PlayerDroneView => _playerDroneView;
 	
 	#endregion
