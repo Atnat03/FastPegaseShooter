@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
@@ -18,7 +19,7 @@ public class DroneEffectFireRate : DroneEffectParent
 	
 	[Header("Multiplicateur")]
 	[SerializeField] private float _fireRateMultiplicator = 2f;
-
+	
 	
 	#endregion
 
@@ -31,14 +32,23 @@ public class DroneEffectFireRate : DroneEffectParent
 		{
 			Cons.Print(_playerUnderEffect.Count.ToString(), ColorConsole.Red);
 			player.PlayerGun.IGunMain.SetFireRate(_fireRateMultiplicator);
+			ApplyFireRateObserverRpc(player.Owner, _fireRateMultiplicator, player);
 		}
+	}
+	
+	[ObserversRpc]
+	private void ApplyFireRateObserverRpc(NetworkConnection target, float multiplier, PlayerVisuelBridge player)
+	{
+		if (target != LocalConnection) return;
+    
+		player.PlayerGun.IGunMain.SetFireRate(multiplier);
 	}
 
 	public override void ApplyDeathEffect()
 	{
 		foreach (PlayerVisuelBridge player in _playerUnderEffect)
 		{
-			player.PlayerGun.IGunMain.SetFireRate(-1);
+			ApplyFireRateObserverRpc(player.Owner, -1, player);
 		}
 	}
 	

@@ -209,6 +209,14 @@ public class Drone : NetworkBusListener
 				Cons.Print("Start activated Drone", ColorConsole.Blue);
 				_idActivator = player.Owner.ClientId;
 				_target = player.transform;
+				
+				InvokeEvent(new DroneActivatedEvent
+				{
+					p_playerId = _idActivator,
+					p_isActivate = true,
+					p_ratioBar = 0f,
+				});
+				
 				_currentActivatedTime.Value = _timeToActivate;
 			}
 		}
