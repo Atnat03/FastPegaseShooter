@@ -34883,6 +34883,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 36118087}
   _networkObjectCache: {fileID: 0}
+  _pathfindingRequestManager: {fileID: 1983142048}
   _budgetMin: 5
   _budgetMax: 10
   _currentBudget: 0
@@ -137015,7 +137016,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
   <IsNested>k__BackingField: 0
-  WasActiveDuringEdit: 0
+  WasActiveDuringEdit: 1
   WasActiveDuringEdit_Set1: 1
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
@@ -137071,6 +137072,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 616782812}
   _networkObjectCache: {fileID: 0}
+  _pathfindingRequestManager: {fileID: 1983142048}
   _budgetMin: 5
   _budgetMax: 10
   _currentBudget: 0
@@ -190734,6 +190736,7 @@ Transform:
   - {fileID: 1641645872}
   - {fileID: 1437961421}
   - {fileID: 1203999960}
+  - {fileID: 1983142049}
   - {fileID: 36118086}
   - {fileID: 616782816}
   - {fileID: 1405316278}
@@ -227503,7 +227506,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
   <IsNested>k__BackingField: 0
-  WasActiveDuringEdit: 0
+  WasActiveDuringEdit: 1
   WasActiveDuringEdit_Set1: 1
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
@@ -227559,6 +227562,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1405316274}
   _networkObjectCache: {fileID: 0}
+  _pathfindingRequestManager: {fileID: 1983142048}
   _budgetMin: 5
   _budgetMax: 10
   _currentBudget: 0
@@ -264036,6 +264040,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2145841714}
   m_LocalEulerAnglesHint: {x: 0, y: 75.507, z: 0}
+--- !u!1 &1983142047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1983142049}
+  - component: {fileID: 1983142048}
+  m_Layer: 2
+  m_Name: PathFindingREquestManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1983142048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983142047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe622f0044df4ec418ced2db57670814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PathfindingRequestManager
+  _maxRequestsPerFrame: 2
+--- !u!4 &1983142049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983142047}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.1946307, z: -0, w: 0.98087656}
+  m_LocalPosition: {x: 169.51921, y: 18.35, z: -202.85307}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1300857483}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1986770962
 Mesh:
   m_ObjectHideFlags: 0
