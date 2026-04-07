@@ -28,12 +28,19 @@ public class DroneEffectFireRate : DroneEffectParent
 
 	protected override void ApplyEffect()
 	{
+		base.ApplyEffect();
+		
 		foreach (PlayerVisuelBridge player in _playerUnderEffect)
 		{
 			Cons.Print(_playerUnderEffect.Count.ToString(), ColorConsole.Red);
 			player.PlayerGun.IGunMain.SetFireRate(_fireRateMultiplicator);
 			ApplyFireRateObserverRpc(player.Owner, _fireRateMultiplicator, player);
 		}
+	}
+
+	protected override void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
+	{
+		playerVisuelBridge.PlayerGun.IGunMain.SetFireRate(-1);
 	}
 	
 	[ObserversRpc]

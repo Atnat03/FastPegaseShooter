@@ -19,8 +19,8 @@ public class BasicMeleeAttackModule : EnemyAttackModule
                 InvokeEvent(new EnemyMeleeAttack());
                 InvokeEvent(new PlayerTakeDamageEvent
                 {
-                    playerN = player,
-                    value = _damage
+                    p_playerN = player,
+                    p_value = _damage
                 });
                 p_onHitPlayer?.Invoke(player.ObjectId, _damage);
             }
