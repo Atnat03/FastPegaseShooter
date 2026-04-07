@@ -1342,7 +1342,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             stateMachine.ChangeState(ControlerState.Idle);
         }
 
-        if (playerInput.actions["Grapple"].WasPressedThisFrame() && singleClicGrapple)
+        if (playerInput.actions["DebugLeaveGrapple"].WasPressedThisFrame() && singleClicGrapple)
         {
             stateMachine.ChangeState(ControlerState.Idle);
             rb.linearVelocity = Vector3.zero;
