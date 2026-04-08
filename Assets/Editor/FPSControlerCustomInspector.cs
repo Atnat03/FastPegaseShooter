@@ -125,6 +125,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpVerticalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpHorizontalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltIntensity"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpCoyoteDuration"));
         }, ref showWallRide);
 
         DrawSection("Crouch", new Color(0.8f, 1f, 0.8f), () =>

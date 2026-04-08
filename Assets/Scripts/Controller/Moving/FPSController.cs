@@ -101,7 +101,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     [SerializeField] float landSnapVelocity = 50f;
     [SerializeField] private int airJumpCount = 1;
 
-    [Header(("Super Jump"))] //new
+    [Header(("Super Jump"))]
     [SerializeField]
     [Tooltip("delai maximum avant le deuxieme trigger de l'input pour que le super jump s'active")]
     private float superJumpInputMaxDelay;
@@ -123,6 +123,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     [SerializeField] float wallJumpVerticalForce = 10f;
     [SerializeField] float wallJumpHorizontalForce = 7.5f;
     [SerializeField] float headtiltIntensity = 7f;
+    [SerializeField] float wallJumpCoyoteDuration = 0.2f;
 
     [Header("Crouch")] [SerializeField] float crouchSpeed = 5f;
     [SerializeField] float cameraOffsetWhenCrouching = 1f;
@@ -184,6 +185,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     bool hasJumped;
     bool bufferJump = false;
     bool coyoteJump = false;
+    bool coyoteWallJump = false;
     bool hasDashed = false;
     bool coyoteSlide = false;
     bool enoughtEnegyToDash = false;
@@ -434,9 +436,10 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             {
                 stateMachine.ChangeState(ControlerState.SlopeSliding);
             }
-            else if (!justSlided && slideUnlocked)
+            else if (!justSlided && slideUnlocked )
             {
-                stateMachine.ChangeState(ControlerState.Sliding);
+                if(verticalInput > 0) stateMachine.ChangeState(ControlerState.Sliding);
+                else stateMachine.ChangeState(ControlerState.Crouching);
             }
         }
 
@@ -486,7 +489,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         if (playerInput.actions["Crouch"].WasPressedThisFrame())
         {
-            if (coyoteSlide && !justSlided && slideUnlocked) stateMachine.ChangeState(ControlerState.Sliding);
+            if (coyoteSlide && !justSlided && slideUnlocked && verticalInput > 0) stateMachine.ChangeState(ControlerState.Sliding);
             else stateMachine.ChangeState(ControlerState.Crouching);
         }
 
@@ -564,7 +567,14 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         {
             if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked)
                 stateMachine.ChangeState(ControlerState.SlopeSliding);
-            else stateMachine.ChangeState(ControlerState.Sliding);
+            else if (verticalInput > 0)
+            {
+                stateMachine.ChangeState(ControlerState.Sliding);
+            }
+            else
+            {
+                stateMachine.ChangeState(ControlerState.Crouching);
+            }
         }
 
 
@@ -637,6 +647,11 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         if (playerInput.actions["Jump"].WasPressedThisFrame())
         {
             if (coyoteJump) Jump();
+            else if (coyoteWallJump)
+            {
+                WallJump(currentWallHit.normal);
+                coyoteWallJump = false;
+            }
             else if (currentAirJumpCount > 0)
             {
                 Jump();
@@ -657,7 +672,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             bool isSameSide = currentSide == previousWallRideSide;
             bool canWallRide = (isSameSide && !justWallridedSameSide) || (!isSameSide && !justWallridedOtherSide);
 
-            if (canWallRide && rb.linearVelocity.y < 0)
+            if (canWallRide && rb.linearVelocity.y < 0 && verticalInput > 0)
             {
                 stateMachine.ChangeState(ControlerState.WallRiding);
                 mustHeadTilt = true;
@@ -815,6 +830,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
     void EnterWallRidingState()
     {
+        
         hasDashed = false; // ligne a retirer si on veut que le joueur doive toucher le sol avant de redasher
 
         wallRidingCoroutineRunning = true;
@@ -839,6 +855,12 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             previousWallRideSide = wallRideSide.rightSide;
         }
 
+        if (Vector3.Dot(horizontalVelocity, wallRidingDirection) < 0)
+        {
+            stateMachine.ChangeState(ControlerState.Falling);
+            return;
+        }
+
         wallRidingCoroutine = StartCoroutine(WallRidingDurationCoroutine());
     }
 
@@ -850,6 +872,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             if (verticalInput == 0f || !DetectWall() || !wallRidingCoroutineRunning)
             {
                 stateMachine.ChangeState(ControlerState.Falling);
+                StartCoroutine(WallJumpCoyoteCoroutine());
             }
         }
         else
@@ -857,6 +880,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             if (verticalInput == 0f || (!leftSideAgainstWall && !rightSideAgainstWall) || !wallRidingCoroutineRunning)
             {
                 stateMachine.ChangeState(ControlerState.Falling);
+                StartCoroutine(WallJumpCoyoteCoroutine());
             }
         }
 
@@ -942,6 +966,13 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         yield return new WaitForSeconds(wallRideCooldownSameSide - wallRideCooldownChangeSide);
         justWallridedSameSide = false;
+    }
+    
+    IEnumerator WallJumpCoyoteCoroutine()
+    {
+        coyoteWallJump = true;
+        yield return new WaitForSeconds(wallJumpCoyoteDuration);
+        coyoteWallJump = false;
     }
 
     #endregion
@@ -1052,8 +1083,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         if (!mustSlide)
         {
-            if (!Physics.Raycast(topHeightCrouchedCollider.position, Vector3.up,
-                    Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
+            if (!Physics.SphereCast(topHeightCrouchedCollider.position, bodyRadius,Vector3.up,out RaycastHit hit ,Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
             {
                 if (playerInput.actions["Jump"].IsPressed())
                 {
@@ -1067,10 +1097,10 @@ public class FPSController : NetworkBusListener, IEnergyRequest
                     StartCoroutine(SlidingSlowDownCoroutine());
                 }
 
-                else if (verticalInput != 0f || horizontalInput != 0f)
+                /*else if (verticalInput != 0f || horizontalInput != 0f)
                 {
                     stateMachine.ChangeState(ControlerState.Moving);
-                }
+                }*/ //créé des merdes niveau redirection
 
                 else
                 {
