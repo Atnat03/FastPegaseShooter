@@ -34177,23 +34177,20 @@ MonoBehaviour:
   _currentBudget: 0
   spawnDelayFirstWave: 2
   spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
   spawnDelay: 2
   spawnMobs:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
   _spawnPoints:
   - {fileID: 889020731}
   - {fileID: 189813943}
@@ -124107,6 +124104,8 @@ GameObject:
   m_Component:
   - component: {fileID: 471150048}
   - component: {fileID: 471150047}
+  - component: {fileID: 471150049}
+  - component: {fileID: 471150050}
   m_Layer: 0
   m_Name: PathfindingRequestManager
   m_TagString: Untagged
@@ -124142,6 +124141,76 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &471150049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 471150046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd6a2859f6c82d43b3d191e2029b3c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBulletManager
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 471150050}
+  _networkObjectCache: {fileID: 0}
+  _bulletPrefab: {fileID: 4591400360090582569, guid: 563cd6461b623044c8d7fd34d0aecdac, type: 3}
+--- !u!114 &471150050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 471150046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+  <IsNested>k__BackingField: 0
+  WasActiveDuringEdit: 1
+  WasActiveDuringEdit_Set1: 1
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  <PredictedOwner>k__BackingField: {fileID: 0}
+  NetworkBehaviours: []
+  InitializedParentNetworkBehaviour: {fileID: 0}
+  InitializedNestedNetworkObjects: []
+  RuntimeParentNetworkBehaviour: {fileID: 0}
+  RuntimeChildNetworkBehaviours: []
+  _isNetworked: 1
+  _isSpawnable: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _preventDespawnOnDisconnect: 0
+  _defaultDespawnType: 0
+  _initializedTimestamp: 0
+  NetworkObserver: {fileID: 0}
+  _enablePrediction: 0
+  _predictionType: 0
+  _localReconcileCorrectionType: 2
+  _graphicalObject: {fileID: 0}
+  _detachGraphicalObject: 0
+  _enableStateForwarding: 1
+  _networkTransform: {fileID: 0}
+  _ownerInterpolation: 1
+  _ownerSmoothedProperties: 255
+  _adaptiveInterpolation: 3
+  _spectatorSmoothedProperties: 255
+  _spectatorInterpolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  <PrefabId>k__BackingField: 65535
+  <SpawnableCollectionId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 0
+  SceneId: 3743219711
+  SerializedTransformProperties:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
+    Scale: {x: 0, y: 0, z: 0}
+    IsValid: 0
 --- !u!43 &472811520
 Mesh:
   m_ObjectHideFlags: 0
@@ -127668,7 +127737,6 @@ GameObject:
   m_Component:
   - component: {fileID: 502772106}
   - component: {fileID: 502772105}
-  - component: {fileID: 502772104}
   - component: {fileID: 502772103}
   m_Layer: 0
   m_Name: Camera
@@ -127721,14 +127789,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &502772104
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 502772102}
-  m_Enabled: 1
 --- !u!20 &502772105
 Camera:
   m_ObjectHideFlags: 0
@@ -132225,23 +132285,20 @@ MonoBehaviour:
   _currentBudget: 0
   spawnDelayFirstWave: 2
   spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
   spawnDelay: 2
   spawnMobs:
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
   _spawnPoints:
   - {fileID: 63573517}
   - {fileID: 12798016}
@@ -219928,23 +219985,20 @@ MonoBehaviour:
   _currentBudget: 0
   spawnDelayFirstWave: 2
   spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
   spawnDelay: 2
   spawnMobs:
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
-  - {fileID: 11400000, guid: 22b5ea1179f756045af4f8576ab866fb, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
   _spawnPoints:
   - {fileID: 1814951144}
   - {fileID: 868787284}
