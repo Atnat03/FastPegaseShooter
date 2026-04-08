@@ -10,8 +10,7 @@ public class PlayerDroneView : NetworkBusListener
 	public DroneThrower DroneThrower => _droneThrower;
 	
 	#endregion
-
-
+	
 	#region Variables
 
 	[SerializeField] private DroneThrower _droneThrower;
@@ -32,13 +31,12 @@ public class PlayerDroneView : NetworkBusListener
 	public void OnEnable()
 	{
 		ListenToEvent<DroneActivatedEvent>(ActivatedDrone);
-		_droneThrower.OnCooldownUpdate += UpdateCooldown;
+		_droneThrower.OnThrow += ThrowDrone;
+		_droneThrower.OnGetDrone += GetDrone;
 	}
 
-	private void UpdateCooldown(float ratio)
-	{
-		_imageCooldown.fillAmount = 1 - ratio;
-	}
+	private void ThrowDrone() => _imageCooldown.gameObject.SetActive(false);
+	private void GetDrone() => _imageCooldown.gameObject.SetActive(true);
 
 	private void ActivatedDrone(DroneActivatedEvent data)
 	{
@@ -53,19 +51,10 @@ public class PlayerDroneView : NetworkBusListener
 	
 	public void SetInfoUnderDrone(bool state)
 	{
-		Debug.Log("SetInfoUnderDrone : " + state);
-		
-		_underDroneEffect.SetActive(state);
+		Cons.Print("SetInfoUnderDrone ", ColorConsole.Orange);
 
-		if (state)
-		{
-			Debug.Log("_colorFrame : ");
-			_baseFrame.color = _colorFrame;
-		}
-		else
-		{
-			_baseFrame.color = Color.white;
-		}
+		_underDroneEffect.SetActive(state);
+		_baseFrame.color = state ? _colorFrame : Color.white;
 	}
 
 

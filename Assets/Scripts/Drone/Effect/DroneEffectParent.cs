@@ -98,6 +98,8 @@ public abstract class DroneEffectParent : NetworkBusListener
 
 	protected virtual void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
 	{
+		Cons.Print("StopApplicateEffect base ", ColorConsole.Orange);
+
 		SetUnderDroneTargetRpc(playerVisuelBridge.Owner, false);
 	}
 
@@ -143,14 +145,12 @@ public abstract class DroneEffectParent : NetworkBusListener
 	[TargetRpc]
 	private void SetUnderDroneTargetRpc(NetworkConnection target, bool state)
 	{
-		PlayerVisuelBridge[] players = FindObjectsOfType<PlayerVisuelBridge>();
-		foreach (var player in players)
+		Cons.Print("SetUnderDroneTargetRpc ", ColorConsole.Orange);
+		PlayerVisuelBridge players = target.FirstObject.GetComponentInChildren<PlayerVisuelBridge>();
+		if (players.IsOwner)
 		{
-			if (player.IsOwner)
-			{
-				player.PlayerDroneView.SetInfoUnderDrone(state);
-				break;
-			}
+			players.PlayerDroneView.SetInfoUnderDrone(state);
+			players.PlayerGun.IGunMain.SetFireRate(-1);
 		}
 	}
 	

@@ -24,9 +24,12 @@ namespace Controller
             _elapsedTimeOverload = overloadTime;
             
             _isOverload = state;
+
+            ISurcharge gun = _gunBridge.CurrentMainSurchargeGun;
+            
             if(newAmmoAmount != -1)
-                _gunBridge.CurrentMainSurchargeGun.SetAmmo(newAmmoAmount);
-            _gunBridge.CurrentMainSurchargeGun.SetSurchargeStat(state, dmg_Multi, rate_Multi);
+                gun.SetAmmo(newAmmoAmount, false);
+            gun.SetSurchargeStat(state, dmg_Multi, rate_Multi);
         }
 
         private void Update()

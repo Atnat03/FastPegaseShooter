@@ -62,7 +62,7 @@ namespace GunDecorator.ChargedModules
                         0);
                 
                 _ammoModule.SpawnBullet(direction, Vector3.zero);
-                _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
+                _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1, _gunController.IsInfiniteAmmo);
             }
                             
             _gunController.PlaySound("Charged");

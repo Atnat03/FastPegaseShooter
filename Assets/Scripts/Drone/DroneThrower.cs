@@ -35,9 +35,8 @@ public class DroneThrower : NetworkBehaviour
 	private DroneBullet _currentDroneInTerrain = null;
 	
 	//Actions
-	public Action OnStartThrow;
-	public Action<float> OnCooldownUpdate;
-	public Action<DroneBullet> OnThrow;
+	public Action OnThrow;
+	public Action OnGetDrone;
 	
 	#endregion
 
@@ -47,7 +46,10 @@ public class DroneThrower : NetworkBehaviour
 	public override void OnStartNetwork()
 	{
 		if (IsServerInitialized)
+		{
 			_hasDrone = true;
+			OnGetDrone?.Invoke();
+		}
 	}
 
 	public void TryThrowDrone()
@@ -56,7 +58,7 @@ public class DroneThrower : NetworkBehaviour
 		{
 			ThrowDroneServerRpc();
 			_hasDrone = false;
-			OnStartThrow?.Invoke();
+			OnThrow?.Invoke();
 		}
 	}
 
@@ -81,6 +83,7 @@ public class DroneThrower : NetworkBehaviour
 	{
 		Cons.Print("GiveDroneBackTargetRpc " + target.ClientId, ColorConsole.Pink);
 		_hasDrone = true;
+		OnGetDrone?.Invoke();
 	}
 	
 	#endregion
