@@ -57,12 +57,10 @@ public class GunSwitching : NetworkBehaviour
 		{
 			_mainGunsList.Add(gun.gameObject);
 		}
-
-		int i = 0;
 		
-		_currentMainGun.Value = i;
+		_currentMainGun.Value = startIndex;
 		
-		ActivateCurrentGun(_mainGunsList, i);
+		ActivateCurrentGun(_mainGunsList, startIndex);
 		
 		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();

@@ -26,6 +26,8 @@ namespace GunDecorator.ChargedModules
         
         public override void TryShootCharging()
         {
+            base.TryShootCharging();
+            
             if (_charging)
             {
                 int numberBulletShoot = (int)Mathf.Lerp(0, _numberBulletInCharge, _charginTimer / _timeToCharge);
