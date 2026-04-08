@@ -101,7 +101,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     [SerializeField] float landSnapVelocity = 50f;
     [SerializeField] private int airJumpCount = 1;
 
-    [Header(("Super Jump"))] //new
+    [Header(("Super Jump"))]
     [SerializeField]
     [Tooltip("delai maximum avant le deuxieme trigger de l'input pour que le super jump s'active")]
     private float superJumpInputMaxDelay;
@@ -123,6 +123,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     [SerializeField] float wallJumpVerticalForce = 10f;
     [SerializeField] float wallJumpHorizontalForce = 7.5f;
     [SerializeField] float headtiltIntensity = 7f;
+    [SerializeField] float wallJumpCoyoteDuration = 0.2f;
 
     [Header("Crouch")] [SerializeField] float crouchSpeed = 5f;
     [SerializeField] float cameraOffsetWhenCrouching = 1f;
@@ -184,6 +185,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     bool hasJumped;
     bool bufferJump = false;
     bool coyoteJump = false;
+    bool coyoteWallJump = false;
     bool hasDashed = false;
     bool coyoteSlide = false;
     bool enoughtEnegyToDash = false;
@@ -645,6 +647,11 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         if (playerInput.actions["Jump"].WasPressedThisFrame())
         {
             if (coyoteJump) Jump();
+            else if (coyoteWallJump)
+            {
+                WallJump(currentWallHit.normal);
+                coyoteWallJump = false;
+            }
             else if (currentAirJumpCount > 0)
             {
                 Jump();
@@ -865,6 +872,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             if (verticalInput == 0f || !DetectWall() || !wallRidingCoroutineRunning)
             {
                 stateMachine.ChangeState(ControlerState.Falling);
+                StartCoroutine(WallJumpCoyoteCoroutine());
             }
         }
         else
@@ -872,6 +880,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             if (verticalInput == 0f || (!leftSideAgainstWall && !rightSideAgainstWall) || !wallRidingCoroutineRunning)
             {
                 stateMachine.ChangeState(ControlerState.Falling);
+                StartCoroutine(WallJumpCoyoteCoroutine());
             }
         }
 
@@ -957,6 +966,13 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         yield return new WaitForSeconds(wallRideCooldownSameSide - wallRideCooldownChangeSide);
         justWallridedSameSide = false;
+    }
+    
+    IEnumerator WallJumpCoyoteCoroutine()
+    {
+        coyoteWallJump = true;
+        yield return new WaitForSeconds(wallJumpCoyoteDuration);
+        coyoteWallJump = false;
     }
 
     #endregion
