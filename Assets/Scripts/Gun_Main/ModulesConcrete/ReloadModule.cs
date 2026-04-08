@@ -40,14 +40,14 @@ namespace GunDecorator
         public override void Initialize(GunController gun)
         {
             base.Initialize(gun);
-            SetAmmo(_magazineSize);
+            SetAmmo(_magazineSize, false);
         }
 
         private void Update()
         {
-            _ammoText.text = CurrentAmmo +  "/" + _magazineSize;
-            
             _currentAmmo = Mathf.Clamp(_currentAmmo, 0, _magazineSize);
+            
+            _ammoText.text = CurrentAmmo +  "/" + _magazineSize;
 
             if (_autoReload)
             {
@@ -99,7 +99,7 @@ namespace GunDecorator
             _imageReload.gameObject.SetActive(false);
             
             _isReloading = false;
-            SetAmmo(_magazineSize);
+            SetAmmo(_magazineSize, false);
             
             p_reloadCoroutine = null;
             
@@ -109,6 +109,10 @@ namespace GunDecorator
             }
         }
 
-        public void SetAmmo(int value) => _currentAmmo = Mathf.Min(value, _magazineSize);        
+        public void SetAmmo(int value, bool infiniteAmmo)
+        {
+            if(!infiniteAmmo)
+                _currentAmmo = Mathf.Min(value, _magazineSize);
+        }
     }
 }

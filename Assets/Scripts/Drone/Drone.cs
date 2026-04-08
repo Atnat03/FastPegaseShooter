@@ -19,7 +19,7 @@ public class Drone : NetworkBusListener
 {
 	#region Properties
 
-	public int IdThrower => _idThrower;
+	public NetworkConnection IdThrower => _idThrower.Value;
 	
 	#endregion
 
@@ -38,7 +38,7 @@ public class Drone : NetworkBusListener
 	[SerializeField] private float _activatedRange = 3f;
 	private readonly SyncVar<float> _currentActivatedTime = new (0);
 	private readonly SyncVar<bool> _IsActivated = new (false);
-	private int _idThrower;
+	private readonly SyncVar<NetworkConnection> _idThrower = new();
 	private NetworkConnection _activatorConnection;
 
 	[Header("Follow")] 
@@ -57,6 +57,8 @@ public class Drone : NetworkBusListener
 	
 	private Vector3 _startPosition;
 	
+	//Actions
+	public Action OnIdThrowerChange;
 	
 	#endregion
 
@@ -73,6 +75,12 @@ public class Drone : NetworkBusListener
 	{
 		_currentActivatedTime.OnChange += OnActivatedTimerChange;
 		_currentLifetime.OnChange += OnTimeLifeChange;
+		_idThrower.OnChange += OnThrowChange;
+	}
+
+	private void OnThrowChange(NetworkConnection prev, NetworkConnection next, bool asServer)
+	{
+		OnIdThrowerChange?.Invoke();
 	}
 
 	private void OnTimeLifeChange(float prev, float next, bool asServer)
@@ -82,11 +90,27 @@ public class Drone : NetworkBusListener
 			if(asServer)
 			{
 				_effect.ApplyDeathEffect();
+
+				if (_activatorConnection != null && _activatorConnection.IsValid)
+				{
+					PlayerVisuelBridge player = _activatorConnection.FirstObject.GetComponentInChildren<PlayerVisuelBridge>();
+					if (player != null)
+					{
+						DroneThrower thrower = player.PlayerDroneView.DroneThrower;
+						
+						Cons.Print("thrower : " + thrower._hasDrone);
+						
+						if (thrower != null)
+						{
+							thrower.GiveDroneBackTargetRpc(_activatorConnection);
+						}
+					}
+				}
+
 				InstanceFinder.ServerManager.Despawn(gameObject);
 			}
-			
-			Cons.Print("Instantiate VFX drone death");
 
+			Cons.Print("Instantiate VFX drone death");
 		}
 	}
 
@@ -171,9 +195,9 @@ public class Drone : NetworkBusListener
 		elapsedTimeUpdateSearch = timeUpdateSearch;
 	}
 	
-	public void SetThrower(int throwerId)
+	public void SetThrower(NetworkConnection throwerId)
 	{
-		_idThrower = throwerId;
+		_idThrower.Value = throwerId;
 	}
 	
 	private void FollowTarget()
@@ -201,7 +225,7 @@ public class Drone : NetworkBusListener
 		{
 			if (player.Owner == null || !player.Owner.IsValid) return;
         
-			if (player.Owner.ClientId != _idThrower)
+			if (player.Owner != _idThrower.Value)
 			{
 				Cons.Print("Start activated Drone", ColorConsole.Blue);
 				
@@ -223,7 +247,7 @@ public class Drone : NetworkBusListener
 		{
 			if (player.Owner == null || !player.Owner.IsValid) return;
         
-			if (player.Owner.ClientId != _idThrower)
+			if (player.Owner != _idThrower.Value)
 			{
 				Cons.Print("Stop activated Drone", ColorConsole.Blue);
 				

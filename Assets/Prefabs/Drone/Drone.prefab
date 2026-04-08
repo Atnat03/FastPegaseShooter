@@ -229,7 +229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2299987595998593334
 Transform:
   m_ObjectHideFlags: 0
@@ -404,12 +404,12 @@ GameObject:
   m_Component:
   - component: {fileID: 8929682755056789887}
   - component: {fileID: 377463757777460365}
+  - component: {fileID: 3915212322086202437}
+  - component: {fileID: 4547168566671981409}
   - component: {fileID: -5493960052707859141}
   - component: {fileID: 8818726042935124361}
   - component: {fileID: 5108090766972187050}
   - component: {fileID: 4803546888331958134}
-  - component: {fileID: 3915212322086202437}
-  - component: {fileID: 4547168566671981409}
   m_Layer: 15
   m_Name: Drone
   m_TagString: Untagged
@@ -457,12 +457,50 @@ MonoBehaviour:
   _amplitudeFloat: 0.25
   _pales: {fileID: 7320548747710136247}
   _speedPaleRotation: 360
-  _timeToActivate: 2
+  _timeToActivate: 3
   _activatedRangeDEBUG: 0
   _activatedRange: 3
   _speed: 10
   _heightOffset: 3
   _lifeTime: 10
+--- !u!114 &3915212322086202437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744278893536189639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d025929d9d3458c4591c0e22141f58e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneEffectFireRate
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 8818726042935124361}
+  _networkObjectCache: {fileID: 8818726042935124361}
+  _radius: 6
+  _applyEffectTimer: 0.5
+  _fireRateMultiplicator: 3
+--- !u!114 &4547168566671981409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744278893536189639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b350ac27c7abd4b83bfbf60c1e876f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneView
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 8818726042935124361}
+  _networkObjectCache: {fileID: 0}
+  _droneEffect: {fileID: 3915212322086202437}
+  _drone: {fileID: 377463757777460365}
+  _arrow: {fileID: 2299987595998593334}
+  _activated: {fileID: 5449062349875895755}
+  _applyEffect: {fileID: 423432041243385769}
 --- !u!114 &-5493960052707859141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,43 +652,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3915212322086202437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4744278893536189639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d025929d9d3458c4591c0e22141f58e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneEffectFireRate
-  _componentIndexCache: 2
-  _addedNetworkObject: {fileID: 8818726042935124361}
-  _networkObjectCache: {fileID: 8818726042935124361}
-  _radius: 3
-  _applyEffectTimer: 0.5
-  _fireRateMultiplicator: 3
---- !u!114 &4547168566671981409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4744278893536189639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2b350ac27c7abd4b83bfbf60c1e876f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneView
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 8818726042935124361}
-  _networkObjectCache: {fileID: 0}
-  _drone: {fileID: 3915212322086202437}
-  _arrow: {fileID: 2299987595998593334}
-  _activated: {fileID: 5449062349875895755}
-  _applyEffect: {fileID: 423432041243385769}
 --- !u!1 &5276635377639871676
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +759,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7637002987118595148
 Transform:
   m_ObjectHideFlags: 0

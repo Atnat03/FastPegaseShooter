@@ -1,5 +1,6 @@
 using System;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using MyPrint;
 using UnityEngine;
@@ -16,7 +17,7 @@ public class DroneBullet : NetworkBehaviour
 	Rigidbody rb;
 	private Drone _dronePrefab;
 	private bool _hasSpawned;
-	private int _throwerId;
+	private NetworkConnection _throwerId;
 	
 	#endregion
 
@@ -28,7 +29,7 @@ public class DroneBullet : NetworkBehaviour
 		rb = GetComponent<Rigidbody>();
 	}
 	
-	public void SetDrone(Drone dronePrefab, int throwerId)
+	public void SetDrone(Drone dronePrefab, NetworkConnection throwerId)
 	{
 		_dronePrefab = dronePrefab;
 		_throwerId = throwerId;
