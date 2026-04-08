@@ -41,6 +41,7 @@ public class PlayerHealth : NetworkBusListener
 	public float p_healThrowRadius = 3;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
+	[SerializeField] private float _healingCooldown = 5;
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -48,8 +49,10 @@ public class PlayerHealth : NetworkBusListener
 	private Vector3 _startPos;
 	
 	private float _healKeyDownTime;
+	private float _healActivationTime = float.MinValue;
 	private bool _throwActivated;
 	[HideInInspector] public Vector3 p_healThrowLandingPos;
+	private bool _canThrowHeal = true;
 	
 	//Action
 	public Action<float> OnUpdateHealth;
@@ -134,26 +137,31 @@ public class PlayerHealth : NetworkBusListener
 			}
 		}
 	}
+	
+	public void CancelHealThrowing() => _canThrowHeal = false;
 
 	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
+		if(!IsOwner || Time.time - _healActivationTime < _healingCooldown)return;
+		
 		_healKeyDownTime = Time.time;
 	}
 	async void HealKeyCanceled(InputAction.CallbackContext ctx)
 	{
+		if(!IsOwner || Time.time - _healActivationTime < _healingCooldown)return;
+		
 		if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold) //Throwing heal
 		{
-			if(p_healThrowLandingPos != p_healThrowPoint.position)
+			if(_canThrowHeal && p_healThrowLandingPos != p_healThrowPoint.position)
 			{
-				CustomLogger.ImportantLog("throwing heal");
 				OnThrowing?.Invoke();
-
+				
 				ThrowHealServerRpc(p_healThrowLandingPos, _healthToGive);
+				_healActivationTime = Time.time;
 			}
 		}
 		else //Self-healing
 		{
-			CustomLogger.ImportantLog("self heal");
 			OnSelfHealing?.Invoke(_selfHealingTime);
 			AddHealthServerRpc(new AddHealthToPlayer
 			{
@@ -161,10 +169,13 @@ public class PlayerHealth : NetworkBusListener
 				p_value = _healthToGive,
 				p_delay = _selfHealingTime
 			});
+			_healActivationTime = Time.time;
 		}
 		
+		_healActivationTime = Time.time;
 		_throwActivated = false;
 		_healKeyDownTime = float.MaxValue;
+		_canThrowHeal = true;
 	}
 
 	[Server]
