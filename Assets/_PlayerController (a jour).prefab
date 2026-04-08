@@ -164,6 +164,81 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &171587888003353344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7772465685023897658}
+  - component: {fileID: 3926618594655682570}
+  - component: {fileID: 5187019989933624607}
+  m_Layer: 5
+  m_Name: Bolt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7772465685023897658
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171587888003353344}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2046302676318640116}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -192.1, y: 25}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3926618594655682570
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171587888003353344}
+  m_CullTransparentMesh: 1
+--- !u!114 &5187019989933624607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171587888003353344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 7982b85524d921846a18e0bd57eb4e22, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &178092193857295503
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,6 +278,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 95887770681975012}
   - {fileID: 6950147987032705604}
   m_Father: {fileID: 571556432412497029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -218,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 19
+  _componentIndexCache: 18
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _settings: {fileID: 11400000, guid: ad605527a02d1c74091a2fe41d3fb5fe, type: 2}
@@ -241,7 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 20
+  _componentIndexCache: 19
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
@@ -261,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 21
+  _componentIndexCache: 20
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ReloadModule
@@ -283,7 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 22
+  _componentIndexCache: 21
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RecoilModule
@@ -448,7 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 23
+  _componentIndexCache: 22
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
@@ -470,7 +546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 24
+  _componentIndexCache: 23
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ExplosifAmmoModule
@@ -488,7 +564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 25
+  _componentIndexCache: 24
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: VisualChargedModule
@@ -510,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54694bd6bf22480cb93d2e412bbf17eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.SalveChargedModule
-  _componentIndexCache: 26
+  _componentIndexCache: 25
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: SalveChargedModule
@@ -524,6 +600,7 @@ MonoBehaviour:
   _recoilX: 2
   _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
+  _coolDownCharge: 0.5
   _intervaleCharge: 0.05
 --- !u!114 &8428071434140413335
 MonoBehaviour:
@@ -537,7 +614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.RaycastAmmoModule
-  _componentIndexCache: 27
+  _componentIndexCache: 26
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RaycastAmmoModule
@@ -759,10 +836,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d42132475a768644f909dd67b7b808e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 18
+  _componentIndexCache: 17
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _bridgeAnimation: {fileID: 2309493807037280383}
+  _playerEnergy: {fileID: 29235095159055250}
   _droneBulletPrefab: {fileID: 8685092666590929303, guid: b855bfe135ba86240955b14e2ba2c22a, type: 3}
   _dronePrefab: {fileID: 377463757777460365, guid: f1c05ad0ae4860046b6a4cb55f69529a, type: 3}
   _spawnPoint: {fileID: 8380329674851811601}
@@ -770,6 +848,9 @@ MonoBehaviour:
   _damage: 10
   _throwForce: 20
   _numberBounces: 2
+  _minThrowForce: 5
+  _maxThrowForce: 25
+  _maxChargeTime: 2
   _hasDrone: 0
 --- !u!1 &388540647123593872
 GameObject:
@@ -1078,6 +1159,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5844598946868237554}
   - {fileID: 5713673787109269162}
   m_Father: {fileID: 571556432412497029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1093,7 +1175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 45
+  _componentIndexCache: 44
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _settings: {fileID: 11400000, guid: 7472981f3b59c4b4595cae02794d2705, type: 2}
@@ -1116,7 +1198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 46
+  _componentIndexCache: 45
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
@@ -1136,7 +1218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 47
+  _componentIndexCache: 46
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ReloadModule
@@ -1158,7 +1240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 48
+  _componentIndexCache: 47
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RecoilModule
@@ -1314,7 +1396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 49
+  _componentIndexCache: 48
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
@@ -1336,7 +1418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 50
+  _componentIndexCache: 49
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: VisualChargedModule
@@ -1358,7 +1440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54694bd6bf22480cb93d2e412bbf17eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.SalveChargedModule
-  _componentIndexCache: 51
+  _componentIndexCache: 50
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: SalveChargedModule
@@ -1372,6 +1454,7 @@ MonoBehaviour:
   _recoilX: 2
   _isFullMultiplicator: 0.9
   _numberBulletInCharge: 5
+  _coolDownCharge: 0.5
   _intervaleCharge: 0.1
 --- !u!114 &5812551220895680502
 MonoBehaviour:
@@ -1385,7 +1468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.RaycastAmmoModule
-  _componentIndexCache: 52
+  _componentIndexCache: 51
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RaycastAmmoModule
@@ -1895,8 +1978,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 5844598946868237554}
+  m_Children: []
   m_Father: {fileID: 5713673787109269162}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3533599542118845136
@@ -2549,8 +2631,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.041999996, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3560423205210205096}
+  m_Children: []
   m_Father: {fileID: 1217779493801121915}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2630564380363589639
@@ -2632,6 +2713,42 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &1768220097572476205
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2672680362600320136}
+  m_Layer: 5
+  m_Name: Energy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2672680362600320136
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768220097572476205}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2046302676318640116}
+  m_Father: {fileID: 8144038627874155572}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1912353548440563132
 GameObject:
   m_ObjectHideFlags: 0
@@ -3284,7 +3401,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6973474630540668134}
   - {fileID: 7382578429459202604}
   m_Father: {fileID: 4098783735463633369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3478,7 +3594,6 @@ GameObject:
   - component: {fileID: 474458369723399952}
   - component: {fileID: 5365301951764690734}
   - component: {fileID: 8101511114389266693}
-  - component: {fileID: 733889428415545954}
   - component: {fileID: 1610322985881872505}
   - component: {fileID: 9063669021039574049}
   - component: {fileID: 29235095159055250}
@@ -3633,9 +3748,9 @@ MonoBehaviour:
   topHeightCrouchedCollider: {fileID: 4821877748357995787}
   slideSpeed: 15
   slideMinTimeDuration: 0.2
-  slideMaxTimeDuration: 0.6
+  slideMaxTimeDuration: 2.8
   slideJumpVerticalForce: 48
-  slideJumpHorizontalForce: 2.5
+  slideJumpHorizontalForce: 2
   slideCooldown: 0.2
   coyoteSlideDuration: 0.1
   CameraSlideFOV: 85
@@ -3648,7 +3763,7 @@ MonoBehaviour:
   slopeSlideMaxSpeed: 17
   slopeInfluenceOnRotation: 3
   slopeInfluenceOnVelocity: 0.075
-  _castWidth: 1.5
+  _castWidth: 0.5
   _castMaxDistance: 20
   _grapplingSpeed: 40
   _grappleRedirectionSpeed: 40
@@ -3759,7 +3874,6 @@ MonoBehaviour:
   - {fileID: 474458369723399952}
   - {fileID: 5365301951764690734}
   - {fileID: 8101511114389266693}
-  - {fileID: 733889428415545954}
   - {fileID: 1610322985881872505}
   - {fileID: 9063669021039574049}
   - {fileID: 29235095159055250}
@@ -3807,7 +3921,8 @@ MonoBehaviour:
   - {fileID: 3566868952504714884}
   - {fileID: 5812551220895680502}
   InitializedParentNetworkBehaviour: {fileID: 0}
-  InitializedNestedNetworkObjects: []
+  InitializedNestedNetworkObjects:
+  - {fileID: 0}
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
   _isNetworked: 1
@@ -3816,7 +3931,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584259473083083797
+  _initializedTimestamp: -8584259427619692126
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -3915,6 +4030,7 @@ MonoBehaviour:
   _throwHealLayerMask:
     serializedVersion: 2
     m_Bits: 192
+  _healingCooldown: 5
   p_healThrowLandingPos: {x: 0, y: 0, z: 0}
 --- !u!114 &8101511114389266693
 MonoBehaviour:
@@ -3933,21 +4049,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _interactDistance: 3
   _playerInput: {fileID: 997312506154426130}
---- !u!114 &733889428415545954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2624057951769441985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1e2cf96f8389eb42a20d35e5c1e0717, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerEnergy
-  _componentIndexCache: 6
-  _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 7927807153383519047}
 --- !u!114 &1610322985881872505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3960,7 +4061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f440f9cefd8a1ff4fa5aa6cf30dd5686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuSelectionArme
-  _componentIndexCache: 7
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   ui: {fileID: 5502996722305488882}
@@ -3984,7 +4085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b489913ede2d87443a831d112df3a322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 8
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   miniMapPrefab: {fileID: 3917025839657766944, guid: bf66a000b6af0cd46bc2cdeea9ba9cee, type: 3}
@@ -4001,9 +4102,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e2cf96f8389eb42a20d35e5c1e0717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEnergy
-  _componentIndexCache: 9
+  _componentIndexCache: 8
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
+  _maxEnergy: 100
+  _convertionTaux: 0.1
 --- !u!1 &2663657820374755588
 GameObject:
   m_ObjectHideFlags: 0
@@ -4111,7 +4214,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7440371559712646801}
-  m_Father: {fileID: 1762453285605443631}
+  m_Father: {fileID: 4098783735463633369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2771240253514392097
 GameObject:
@@ -4146,6 +4249,7 @@ RectTransform:
   - {fileID: 7691948469334937155}
   - {fileID: 5547932501633199265}
   - {fileID: 1725984786021615905}
+  - {fileID: 2672680362600320136}
   m_Father: {fileID: 7218313039823865412}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5045,9 +5149,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 460127598421320167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 600, y: -102.90986}
   m_SizeDelta: {x: 1200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3502548073959685141
@@ -5237,9 +5341,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 460127598421320167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 600, y: -336.63943}
   m_SizeDelta: {x: 1200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7964594179375702700
@@ -5442,12 +5546,12 @@ Transform:
   m_GameObject: {fileID: 3876899035425879768}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.521, z: 2.783}
-  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
+  m_LocalPosition: {x: 0, y: 0.1462, z: 0.5566}
+  m_LocalScale: {x: 0.6666666, y: 0.6666666, z: 0.6666666}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6437005039434205224}
-  m_Father: {fileID: 1382182635242063778}
+  m_Father: {fileID: 8314495479608476311}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4255987790164677789
 GameObject:
@@ -5590,6 +5694,108 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2074332437972243630}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4354854798385821139
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 645727648668030002}
+  - component: {fileID: 5784018416803831404}
+  - component: {fileID: 6595960242515063203}
+  - component: {fileID: 3510128652984047789}
+  m_Layer: 5
+  m_Name: Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &645727648668030002
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4354854798385821139}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2046302676318640116}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.0000076315, y: -0.000002861}
+  m_SizeDelta: {x: 500, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5784018416803831404
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4354854798385821139}
+  m_CullTransparentMesh: 1
+--- !u!114 &6595960242515063203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4354854798385821139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: b78d77a9b7b0ee746b59e0e146849247, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3510128652984047789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4354854798385821139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_Padding:
+    m_Left: 8
+    m_Right: 0
+    m_Top: -10
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: -45
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &4593884185793991368
 GameObject:
   m_ObjectHideFlags: 0
@@ -5960,6 +6166,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3560423205210205096}
   - {fileID: 1217779493801121915}
   m_Father: {fileID: 571556432412497029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5975,7 +6182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 37
+  _componentIndexCache: 36
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _settings: {fileID: 11400000, guid: 418245dc587db674abd3b0ff9f837937, type: 2}
@@ -5998,7 +6205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 38
+  _componentIndexCache: 37
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ReloadModule
@@ -6020,7 +6227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 39
+  _componentIndexCache: 38
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RecoilModule
@@ -6185,7 +6392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45db67dd1c8040edbc6fd3ca22e0271d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.FragShootModule
-  _componentIndexCache: 40
+  _componentIndexCache: 39
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: FragShootModule
@@ -6208,7 +6415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 41
+  _componentIndexCache: 40
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
@@ -6230,7 +6437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 42
+  _componentIndexCache: 41
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: VisualChargedModule
@@ -6252,7 +6459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af359fc3e59411da93c658f8239b885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.DecreaseNoiseChargedModule
-  _componentIndexCache: 43
+  _componentIndexCache: 42
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: DecreaseNoiseChargedModule
@@ -6266,6 +6473,7 @@ MonoBehaviour:
   _recoilX: 2
   _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
+  _coolDownCharge: 0.5
   _noiseEvolutionCurve:
     serializedVersion: 2
     m_Curve:
@@ -6303,7 +6511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.RaycastAmmoModule
-  _componentIndexCache: 44
+  _componentIndexCache: 43
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RaycastAmmoModule
@@ -6778,9 +6986,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 460127598421320167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 600, y: -180.81972}
   m_SizeDelta: {x: 1200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6121195134253262706
@@ -6922,6 +7130,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6973474630540668134}
   - {fileID: 1762453285605443631}
   m_Father: {fileID: 571556432412497029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6937,7 +7146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 28
+  _componentIndexCache: 27
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _settings: {fileID: 11400000, guid: f634933029542f0429c9dcfd3957e999, type: 2}
@@ -6960,7 +7169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 29
+  _componentIndexCache: 28
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
@@ -6981,7 +7190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 30
+  _componentIndexCache: 29
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ReloadModule
@@ -7003,7 +7212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 31
+  _componentIndexCache: 30
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RecoilModule
@@ -7150,7 +7359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 32
+  _componentIndexCache: 31
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
@@ -7172,7 +7381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 33
+  _componentIndexCache: 32
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ExplosifAmmoModule
@@ -7190,7 +7399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1c10d552aef42cf9e8fb79047b90af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.PhysicAmmoModule
-  _componentIndexCache: 34
+  _componentIndexCache: 33
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: PhysicAmmoModule
@@ -7214,7 +7423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 35
+  _componentIndexCache: 34
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: VisualChargedModule
@@ -7236,7 +7445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7943d687f9f4473a952dd4bcf848eba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.IncreaseNoiseChargedModule
-  _componentIndexCache: 36
+  _componentIndexCache: 35
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: IncreaseNoiseChargedModule
@@ -7250,6 +7459,7 @@ MonoBehaviour:
   _recoilX: 2
   _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
+  _coolDownCharge: 0.5
   _noiseEvolutionCurve:
     serializedVersion: 2
     m_Curve:
@@ -7578,6 +7788,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7617329841024663141}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5846440196699331008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3805422819890772828}
+  - component: {fileID: 4860633509009189851}
+  - component: {fileID: 4558353619347788056}
+  m_Layer: 5
+  m_Name: ValueEnergy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3805422819890772828
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5846440196699331008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2046302676318640116}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 4.4, y: 6.1}
+  m_SizeDelta: {x: 639.96, y: 121.33}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4860633509009189851
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5846440196699331008}
+  m_CullTransparentMesh: 1
+--- !u!114 &4558353619347788056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5846440196699331008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: fe004411296a9474abd1fa3968251332, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 0
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5885548554738642804
 GameObject:
   m_ObjectHideFlags: 0
@@ -7639,8 +7924,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 95887770681975012}
+  m_Children: []
   m_Father: {fileID: 6950147987032705604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8059661260357118479
@@ -7700,6 +7984,44 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6128018379006013303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2046302676318640116}
+  m_Layer: 5
+  m_Name: EnergyBar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2046302676318640116
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128018379006013303}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 645727648668030002}
+  - {fileID: 7772465685023897658}
+  - {fileID: 3805422819890772828}
+  m_Father: {fileID: 2672680362600320136}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -642.7, y: -323.4}
+  m_SizeDelta: {x: 474.438, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6136058537086652778
 GameObject:
   m_ObjectHideFlags: 0
@@ -7906,12 +8228,12 @@ Transform:
   m_GameObject: {fileID: 6404297399537238851}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.451, z: 0.802}
-  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
+  m_LocalPosition: {x: 0, y: 0.13529998, z: 0.24059999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 758602713541204306}
-  m_Father: {fileID: 479076571634009461}
+  m_Father: {fileID: 7262672497307624477}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6726259517488840193
 GameObject:
@@ -8139,7 +8461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2750003092e2f874cb28a87bd212efcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPositionCaster
-  _componentIndexCache: 11
+  _componentIndexCache: 10
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _castingBeatDelay: 0.7
@@ -8314,7 +8636,7 @@ Transform:
   m_GameObject: {fileID: 6945641284821780910}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.21, y: 0.57, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8668,7 +8990,8 @@ GameObject:
   - component: {fileID: 3556170799771328248}
   - component: {fileID: 4823317710188223472}
   - component: {fileID: 3143401594481829691}
-  m_Layer: 6
+  - component: {fileID: 5105748917152535591}
+  m_Layer: 7
   m_Name: PlayerControllerViews
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8704,6 +9027,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthView
   _playerHealth: {fileID: 5365301951764690734}
+  _droneThrower: {fileID: 931936587992237131}
   _healthBar: {fileID: 3134779535442495518}
   _deathImage: {fileID: 8235982739118108901}
   _damagedWarningImage: {fileID: 5315133112455716009}
@@ -8824,7 +9148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9dc4dc26ce023e4190f7abaed71e416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDroneView
-  _componentIndexCache: 10
+  _componentIndexCache: 9
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _droneThrower: {fileID: 931936587992237131}
@@ -8834,6 +9158,20 @@ MonoBehaviour:
   _underDroneEffect: {fileID: 623866028506417995}
   _baseFrame: {fileID: 2237517866183327866}
   _colorFrame: {r: 0, g: 1, b: 1, a: 1}
+--- !u!114 &5105748917152535591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6972727970303002869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb33c2860a9736449b79e74f10e37ccc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerEnergyView
+  _playerEnergy: {fileID: 29235095159055250}
+  _energyBar: {fileID: 4558353619347788056}
 --- !u!1 &7010684394084671937
 GameObject:
   m_ObjectHideFlags: 0
@@ -8976,9 +9314,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 460127598421320167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 600, y: -258.72958}
   m_SizeDelta: {x: 1200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &243768054216124819
@@ -9302,12 +9640,12 @@ Transform:
   m_GameObject: {fileID: 7982093504141222896}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.50333315, z: 2.555}
-  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
+  m_LocalPosition: {x: 0, y: 0.15099996, z: 0.7665}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1482680695385600104}
-  m_Father: {fileID: 6374406170783720874}
+  m_Father: {fileID: 9072926797070794938}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8121068319375699811
 GameObject:
@@ -9359,7 +9697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2e9a64614e6ee84795674a91f1a5b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraShake
-  _componentIndexCache: 13
+  _componentIndexCache: 12
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
 --- !u!1 &8149685527222359090
@@ -9411,7 +9749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 767434e683a0c8a45894327daa6bb753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunSwitching
-  _componentIndexCache: 14
+  _componentIndexCache: 13
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _mainGunParent: {fileID: 7010684394084671937}
@@ -9428,7 +9766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a65429ff79430aa97139d9aff98755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Controller.GunBridgePlayer
-  _componentIndexCache: 15
+  _componentIndexCache: 14
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _gunSwitching: {fileID: 3154577241410043838}
@@ -9783,9 +10121,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 460127598421320167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 600, y: -25}
   m_SizeDelta: {x: 1200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8182393746073536362
@@ -9907,7 +10245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6501983916300764592
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10790,7 +11128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b363760db08b3b64facdcd674ae91d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 17
+  _componentIndexCache: 16
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _element: 0
@@ -10926,13 +11264,68 @@ PrefabInstance:
       propertyPath: m_Name
       value: GrenadeElementaire
       objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: <IsNested>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: <PrefabId>k__BackingField
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: <AssetPathHash>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: <ComponentIndex>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4529339864843645274}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: InitializedParentNetworkBehaviour
+      value: 
+      objectReference: {fileID: 1792326860910464111}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: SerializedTransformProperties.Scale.x
+      value: 50.000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: SerializedTransformProperties.Scale.y
+      value: 50.000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: SerializedTransformProperties.Scale.z
+      value: 50.000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: SerializedTransformProperties.Position.x
+      value: 2.83
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: SerializedTransformProperties.Position.y
+      value: -4.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: SerializedTransformProperties.Position.z
+      value: 4.36
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8952334903469006644, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
     - {fileID: 4782461252697803144, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
     - {fileID: 7033959642892252244, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5082973326308634768, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4529339864843645274}
   m_SourcePrefab: {fileID: 100100000, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
 --- !u!4 &278331891298378960 stripped
 Transform:
@@ -10944,6 +11337,26 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3092209774603326017, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   m_PrefabInstance: {fileID: 1158505439156596224}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6240176814268882576 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5082973326308634768, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+  m_PrefabInstance: {fileID: 1158505439156596224}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4529339864843645274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6240176814268882576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6a39c46bf52104ba8efe3100bce3f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.EmptyNetworkBehaviour
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
 --- !u!1001 &1366108170947395903
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12837,7 +13250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b08554c9e79ac428946c345c43d31b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerVisuelBridge
-  _componentIndexCache: 12
+  _componentIndexCache: 11
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _playerHealth: {fileID: 5365301951764690734}
@@ -13212,7 +13625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41b63063a6013674daf8345a99a33510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 16
+  _componentIndexCache: 15
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _thrower: {fileID: 4147575701769871822}

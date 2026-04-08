@@ -1,8 +1,9 @@
 using System;
 using FishNet;
+using FishNet.Object;
 using UnityEngine;
 
-public class AlwaysInFrontOfCam : MonoBehaviour
+public class AlwaysInFrontOfCam : NetworkBehaviour
 {
 	#region Properties
 
@@ -14,25 +15,31 @@ public class AlwaysInFrontOfCam : MonoBehaviour
 	Camera cam;
 	[SerializeField] float _distanceMax = 100f;
 	[SerializeField] private bool _scaleModifier = true;
+	[SerializeField] private Vector2 _scaleMap = new Vector2(0.001f, 0.003f);
 	
 	#endregion
 
 
 	#region Fonctions
 
-	private void Awake()
+	public override void OnStartClient()
 	{
-		//cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponent<FPSController>().Camera;
+		cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponent<FPSController>().Camera;
 	}
 
 	private void LateUpdate()
 	{
 		if (cam != null)
 		{
-			transform.LookAt(cam.transform.position);
+			Vector3 directionToCamera = cam.transform.position - transform.position;
+			transform.rotation = Quaternion.LookRotation(-directionToCamera);
 			
-			if(_scaleModifier)
-				transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 10,  Vector3.Distance(cam.transform.position, transform.position) / _distanceMax);
+			if (_scaleModifier)
+			{
+				float distance = Vector3.Distance(cam.transform.position, transform.position);
+				float normalizedDistance = Mathf.Clamp01(distance / _distanceMax);
+				transform.localScale = Vector3.one * Mathf.Lerp(_scaleMap.x, _scaleMap.y, normalizedDistance);
+			}		
 		}
 	}
 

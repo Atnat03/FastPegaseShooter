@@ -1,54 +1,76 @@
 using System;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MyPrint;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class ElementaryGrenade : MonoBehaviour
+public class ElementaryGrenade : NetworkBehaviour
 {
     [SerializeField] private MeshRenderer _model;
     
-    private Element _element;
-    private float _radius;
+    private readonly SyncVar<Element> _element = new SyncVar<Element>();
+    private readonly SyncVar<float> _radius = new SyncVar<float>();
+    private readonly SyncVar<int> _damage = new SyncVar<int>();
+    private readonly SyncVar<int> _networkIdAttacker = new SyncVar<int>();
+    
     private float _maxNumberTouch;
     private float _currentNumberTouch;
-    private int _damage;
-    private int _networkIdAttacker;
-    private const float SPAWN_GRACE = 0.05f;
+    private const float SPAWN_GRACE = 0.2f;
     private float _spawnTime;
     
-    [Header("Effect")]
-    private ParticleSystem _particlesExplosion;
+    private ParticleSystem _particlesExplosionPrefab;
     
-    Vector3 _lastPosition;
-    bool _hasHit;
-    RaycastHit hit;
+    private Vector3 _lastPosition;
+    private bool _hasHit;
 
     public void Initialize(Element element, int damage, float radius, int numberWallTouch, int netID)
     {
-        _element = element;
-        _radius = radius;
+        _element.Value = element;
+        _radius.Value = radius;
         _maxNumberTouch = numberWallTouch;
         _currentNumberTouch = 0;
-        _damage = damage;
-        _networkIdAttacker = netID;
-        
-        Color GetColor(Element e)
-        {
-            return e switch
-            {
-                Element.Fire => Color.red,
-                Element.Electric => Color.yellow,
-                Element.Ice => Color.blue,
-                _ => Color.white
-            };
-        }
-        
-        _model.material.color = GetColor(_element);
+        _damage.Value = damage;
+        _networkIdAttacker.Value = netID;
     }
 
-    public void SetEffect(ParticleSystem explosion)
+    public override void OnStartClient()
     {
-        _particlesExplosion = explosion;
+        base.OnStartClient();
+        
+        UpdateVisuals();
+        
+        _element.OnChange += OnElementChanged;
+    }
+
+    public override void OnStopClient()
+    {
+        _element.OnChange -= OnElementChanged;
+        base.OnStopClient();
+    }
+
+    private void OnElementChanged(Element prev, Element next, bool asServer)
+    {
+        UpdateVisuals();
+    }
+
+    private void UpdateVisuals()
+    {
+        if (_model != null)
+        {
+            Color GetColor(Element e)
+            {
+                return e switch
+                {
+                    Element.Fire => Color.red,
+                    Element.Electric => Color.yellow,
+                    Element.Ice => Color.blue,
+                    _ => Color.white
+                };
+            }
+            
+            _model.material.color = GetColor(_element.Value);
+        }
     }
     
     void Start()
@@ -65,7 +87,11 @@ public class ElementaryGrenade : MonoBehaviour
             return;
         }
     
-        DetectCollision();
+        if (IsServerInitialized)
+        {
+            DetectCollision();
+        }
+        
         _lastPosition = transform.position;
     }
 
@@ -76,23 +102,54 @@ public class ElementaryGrenade : MonoBehaviour
 
         if (distance <= 0f) return;
 
-        if (Physics.SphereCast(transform.position, 0.1f, direction.normalized, out hit,
+        if (Physics.SphereCast(_lastPosition, 0.1f, direction.normalized, out RaycastHit hit,
                 distance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (_hasHit) return;
             _hasHit = true;
 
-            if (hit.collider.TryGetComponent(out IDamagable d))
-            {
-                Cons.Print("Grenade Collided with " + d.GetType().Name, ColorConsole.Grey);
-                
-                if(!hit.collider.CompareTag("Player"))
-                    d.TakeDamage(_damage, _networkIdAttacker);
-            }
-            
-            Instantiate(_particlesExplosion, transform.position, Quaternion.identity);
+            Cons.Print($"Grenade hit at {hit.point}", ColorConsole.Grey);
 
-            Destroy(gameObject);
+            ApplyExplosionDamage(hit.point);
+            
+            ExplodeObserversRpc(hit.point, hit.normal);
+
+            ServerManager.Despawn(gameObject);
         }
+    }
+
+    private void ApplyExplosionDamage(Vector3 explosionCenter)
+    {
+        Collider[] colliders = Physics.OverlapSphere(explosionCenter, _radius.Value);
+        
+        foreach (Collider c in colliders)
+        {
+            if (c.TryGetComponent(out IDamagable damagable))
+            {
+                Cons.Print($"Grenade damaged {c.name}", ColorConsole.Red);
+                damagable.TakeDamage(_networkIdAttacker.Value, _damage.Value);
+            }
+        }
+    }
+
+    [ObserversRpc]
+    private void ExplodeObserversRpc(Vector3 position, Vector3 normal)
+    {
+        if (_particlesExplosionPrefab != null)
+        {
+            ParticleSystem explosion = Instantiate(_particlesExplosionPrefab, position, Quaternion.LookRotation(normal));
+            Destroy(explosion.gameObject, 3f);
+        }
+    }
+
+    public void SetEffect(ParticleSystem particle)
+    {
+        _particlesExplosionPrefab = particle;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _radius.Value);
     }
 }

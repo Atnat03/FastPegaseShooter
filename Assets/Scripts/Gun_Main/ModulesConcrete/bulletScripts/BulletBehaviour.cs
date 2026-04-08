@@ -1,9 +1,10 @@
 using FishNet.Object;
 using GunDecorator;
+using MyPrint;
 using NUnit.Framework.Constraints;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
+public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
@@ -70,6 +71,16 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
                     {
                         bool crit = d.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
                         _gunController.TriggerHitMark(crit || p_isCritical);
+                        InvokeEvent(new AddEnergyEvent
+                        {
+                            p_player = _gunController.Owner,
+                            p_value = p_damage
+                        });
+
+                        if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
+                        {
+                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                        }
                     }
                 }
                 
@@ -94,6 +105,16 @@ public class BulletBehaviour : MonoBehaviour, IAmmoExplosif
             {
                 bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
                 _gunController.TriggerHitMark(crit || p_isCritical);
+                InvokeEvent(new AddEnergyEvent
+                {
+                    p_player = _gunController.Owner,
+                    p_value = p_damage
+                });
+                
+                if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
+                {
+                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                }
             }
         }
     }

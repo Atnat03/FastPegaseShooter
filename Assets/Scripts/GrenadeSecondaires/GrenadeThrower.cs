@@ -33,6 +33,7 @@ public class GrenadeThrower : NetworkBehaviour
     [Header("Explosion")] 
     [SerializeField] private float _explosionRadius = 3f;
     [SerializeField] private bool _showGizmoOnSpawnPoint = true;
+    ParticleSystem _particleSystem;
     
     private bool _canThrow = true;
     private float _elapsedTimeCooldown = 0f;
@@ -84,22 +85,25 @@ public class GrenadeThrower : NetworkBehaviour
     [ServerRpc]
     public void ThrowGrenadeServerRpc()
     {
-        ThrowGrenadeObserversRpc();
-    }
-
-    [ObserversRpc]
-    private void ThrowGrenadeObserversRpc()
-    {
-        Cons.Print("Throw grenade", ColorConsole.Green);
-        
         ElementaryGrenade grenade = Instantiate(_elementaryGrenadePrefab, _spawnPoint.position, _spawnPoint.rotation);
+        
+        ServerManager.Spawn(grenade.gameObject, Owner);
+
         grenade.Initialize(_element, _damage, _explosionRadius, _numberBounces, NetworkObject.ObjectId);
 
         Vector3 direction = _spawnPoint.forward;
         grenade.GetComponent<Rigidbody>().AddForce(direction * _throwForce, ForceMode.Impulse);
         
+        NotifyGrenadeThrown(grenade);
+    }
+
+    [ObserversRpc]
+    private void NotifyGrenadeThrown(ElementaryGrenade grenade)
+    {
+        Cons.Print("Grenade thrown", ColorConsole.Green);
+
         _currentGun.ISurchargeMain.StopReload();
-        
+
         OnThrow?.Invoke(grenade);
     }
 

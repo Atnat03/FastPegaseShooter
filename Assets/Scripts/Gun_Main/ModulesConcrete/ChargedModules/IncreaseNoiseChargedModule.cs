@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -64,7 +65,7 @@ namespace GunDecorator.ChargedModules
                 _ammoModule.SpawnBullet(direction, Vector3.zero);
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1, _gunController.IsInfiniteAmmo);
             }
-                            
+
             _gunController.PlaySound("Charged");
         }
     }
