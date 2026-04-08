@@ -108,9 +108,15 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             
-            Debug.Log("Throw drone input");
-            
             _droneThrower.TryThrowDrone();
+        }
+
+        private void StartThrowDrone(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _droneThrower.StartThrowDrone();
         }
 
         void OnEnable()
@@ -122,7 +128,9 @@ namespace Controller
             _playerInputAction.actions["Reload"].performed += Reloading;
             
             _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
-            _playerInputAction.actions["ThrowDrone"].performed += TryThrowDrone;
+            
+            _playerInputAction.actions["ThrowDrone"].performed += StartThrowDrone;
+            _playerInputAction.actions["ThrowDrone"].canceled += TryThrowDrone;
         }
 
 
@@ -135,7 +143,10 @@ namespace Controller
             _playerInputAction.actions["Reload"].performed -= Reloading;
             
             _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
-            _playerInputAction.actions["ThrowDrone"].performed -= TryThrowDrone;
+            
+            _playerInputAction.actions["ThrowDrone"].performed -= StartThrowDrone;
+            _playerInputAction.actions["ThrowDrone"].canceled -= TryThrowDrone;
+
         }
 
         #endregion

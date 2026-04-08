@@ -1,4 +1,5 @@
 using System;
+using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ public class DroneView : NetworkBehaviour
 
 	#region Variables
 
-	[SerializeField] private DroneEffectParent _drone;
+	[SerializeField] private DroneEffectParent _droneEffect;
+	[SerializeField] private Drone _drone;
 	
 	[Header("As to Activated")]
 	[SerializeField] private Transform _arrow;
@@ -28,8 +30,26 @@ public class DroneView : NetworkBehaviour
 
 	private void OnEnable()
 	{
-		_drone.OnActivatedDrone += OnActivatedDrone;
-		_drone.OnUpdateEffect += UpdatePosition;
+		_droneEffect.OnActivatedDrone += OnActivatedDrone;
+		_droneEffect.OnUpdateEffect += UpdatePosition;
+		_drone.OnIdThrowerChange += UpdateVisibility;
+	}
+	
+	public override void OnStartClient()
+	{
+		UpdateVisibility();
+	}
+	
+	private void UpdateVisibility()
+	{
+		if (!IsClientInitialized) return;
+
+		var localConnection = InstanceFinder.ClientManager.Connection;
+
+		bool isThrower = _drone.IdThrower == localConnection;
+
+		_arrow.gameObject.SetActive(!isThrower);
+		_activated.gameObject.SetActive(!isThrower);
 	}
 	
 	private void OnActivatedDrone(float radius)
@@ -53,8 +73,8 @@ public class DroneView : NetworkBehaviour
 	
 	private void OnDisable()
 	{
-		_drone.OnActivatedDrone -= OnActivatedDrone;
-		_drone.OnUpdateEffect -= UpdatePosition;
+		_droneEffect.OnActivatedDrone -= OnActivatedDrone;
+		_droneEffect.OnUpdateEffect -= UpdatePosition;
+		_drone.OnIdThrowerChange -= UpdateVisibility;
 	}
-
 }

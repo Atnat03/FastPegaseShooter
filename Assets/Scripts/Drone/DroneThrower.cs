@@ -1,8 +1,10 @@
 using System;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
+using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 
 public class DroneThrower : NetworkBehaviour
@@ -15,6 +17,7 @@ public class DroneThrower : NetworkBehaviour
 	#region Variables
 	
 	[SerializeField] private ArmBridgeAnimation _bridgeAnimation;
+	[SerializeField] private PlayerEnergy _playerEnergy;
 	
 	[Header("Throw")]
 	[SerializeField] private DroneBullet _droneBulletPrefab;
@@ -26,16 +29,24 @@ public class DroneThrower : NetworkBehaviour
 	[SerializeField] private int _damage = 10;
 	[SerializeField] private float _throwForce = 10f;
 	[SerializeField] private int _numberBounces = 2;
+	
+	[Header("Charge Throw")]
+	[SerializeField] private float _minThrowForce = 5f;
+	[SerializeField] private float _maxThrowForce = 25f;
+	[SerializeField] private float _maxChargeTime = 2f;
 
-	private readonly SyncVar<bool> _canThrow = new(true);
-	private readonly SyncVar<float> _elapsedTimeCooldown = new(0);
+	private float _currentChargeTime = 0f;
+	private bool _isCharging = false;
 
+	private readonly SyncVar<bool> _canThrow = new(false);
+
+	public bool _hasDrone = false;
+	
 	private DroneBullet _currentDroneInTerrain = null;
 	
 	//Actions
-	public Action OnStartThrow;
-	public Action<float> OnCooldownUpdate;
-	public Action<DroneBullet> OnThrow;
+	public Action OnThrow;
+	public Action OnGetDrone;
 	
 	#endregion
 
@@ -44,56 +55,70 @@ public class DroneThrower : NetworkBehaviour
 
 	public override void OnStartNetwork()
 	{
-		_elapsedTimeCooldown.OnChange += OnCooldownValueChange;
-	}
-
-	private void OnCooldownValueChange(float prev, float next, bool asServer)
-	{
-		OnCooldownUpdate?.Invoke(next / _cooldown);
-	}
-
-	private void Update()
-	{
-		if (!IsServerInitialized) return;
-		
-		if (_elapsedTimeCooldown.Value > 0)
+		if (IsServerInitialized)
 		{
-			_elapsedTimeCooldown.Value -= Time.deltaTime;
-			_canThrow.Value = false;
-			
-			if (_elapsedTimeCooldown.Value <= 0f)
-			{
-				_canThrow.Value = true;
-			}
+			_hasDrone = true;
+			OnGetDrone?.Invoke();
 		}
 	}
 
 	public void TryThrowDrone()
 	{
-		if (_canThrow.Value)
-		{
-			ThrowDroneServerRpc();
-            
-			OnStartThrow?.Invoke();
-		}
+		if (!_hasDrone) return;
+
+		_isCharging = false;
+
+		float chargeRatio = _currentChargeTime / _maxChargeTime;
+		float finalForce = Mathf.Lerp(_minThrowForce, _maxThrowForce, chargeRatio);
+
+		ThrowDroneServerRpc(finalForce);
+
+		_hasDrone = false;
+		OnThrow?.Invoke();
 	}
 
 	[ServerRpc]
-	void ThrowDroneServerRpc()
+	void ThrowDroneServerRpc(float force)
 	{
 		if (_currentDroneInTerrain != null)
 		{
 			InstanceFinder.ServerManager.Despawn(_currentDroneInTerrain.gameObject);
 		}
-		
+    
 		DroneBullet drone = Instantiate(_droneBulletPrefab, _spawnPoint.position, _spawnPoint.rotation);
 		InstanceFinder.ServerManager.Spawn(drone.gameObject);
 		_currentDroneInTerrain = drone;
+
+		drone.SetDrone(_dronePrefab, Owner, _playerEnergy);
     
-		drone.SetDrone(_dronePrefab, Owner.ClientId);
-		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * _throwForce, ForceMode.Impulse);
-		
-		_elapsedTimeCooldown.Value = _cooldown;
+		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * force, ForceMode.Impulse);
+	}
+
+	[TargetRpc]
+	public void GiveDroneBackTargetRpc(NetworkConnection target)
+	{
+		Cons.Print("GiveDroneBackTargetRpc " + target.ClientId, ColorConsole.Pink);
+		_hasDrone = true;
+		OnGetDrone?.Invoke();
+	}
+
+	public void StartThrowDrone()
+	{
+		if (!_hasDrone) return;
+
+		_isCharging = true;
+		_currentChargeTime = 0f;
+	}
+	
+	private void Update()
+	{
+		if (!IsOwner) return;
+
+		if (_isCharging)
+		{
+			_currentChargeTime += Time.deltaTime;
+			_currentChargeTime = Mathf.Clamp(_currentChargeTime, 0, _maxChargeTime);
+		}
 	}
 	
 	#endregion

@@ -4,7 +4,7 @@ using GunDecorator;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
+public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
@@ -64,6 +64,11 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
                     {
                         bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,  (int)p_damage, p_isCritical);
                         _gunController.TriggerHitMark(crit || p_isCritical);
+                        InvokeEvent(new AddEnergyEvent
+                        {
+                            p_player = _gunController.Owner,
+                            p_value = p_damage
+                        });
                     }
                 }
             }
@@ -84,6 +89,11 @@ public class BulletPhysicBehaviour : MonoBehaviour, IAmmoExplosif
             {
                 bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
                 _gunController.TriggerHitMark(crit || p_isCritical);
+                InvokeEvent(new AddEnergyEvent
+                {
+                    p_player = _gunController.Owner,
+                    p_value = p_damage
+                });
             }
         }
     }

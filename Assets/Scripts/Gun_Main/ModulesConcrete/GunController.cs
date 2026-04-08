@@ -23,7 +23,7 @@ public interface IGun
 public interface ISurcharge
 {
     public int GetCurrentAmmo();
-    public void SetAmmo(int value);
+    public void SetAmmo(int value, bool _infiniteAmmo);
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
     public Renderer ModelGun { get; }
     public void StopReload();
@@ -37,6 +37,7 @@ namespace GunDecorator
         public float SurchargeMultiplierDamage { get; set; }
         public float SurchargeMultiplierRate { get; set; }
         public bool IsFullAuto => _isFullAuto;
+        public bool IsInfiniteAmmo => _infiniteAmmo;
         
         public IRecoilModule RecoilModule => _recoilModule;
         
@@ -68,6 +69,7 @@ namespace GunDecorator
         
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
+        private bool _infiniteAmmo = false;
 
         [HideInInspector] public bool p_authorizedToShoot = true;
         
@@ -133,7 +135,7 @@ namespace GunDecorator
                 _recoilModule?.Recoil(_model.transform, 0.1f, false);
                 _recoilModule?.SetIsRecoil(true);
                     
-                SetAmmo(GetCurrentAmmo() - 1);
+                SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
                 PlayMuzzleFlash();
                     
                 _animator?.SetTrigger("Shoot");
@@ -154,7 +156,7 @@ namespace GunDecorator
                 _recoilModule?.Recoil(_model.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
                 
-                SetAmmo(GetCurrentAmmo() - 1);
+                SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
                 
                 _animator?.SetTrigger("Shoot");
                 
@@ -175,7 +177,7 @@ namespace GunDecorator
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
 
-        public void SetAmmo(int value) => _reloadModule.SetAmmo(value);
+        public void SetAmmo(int value, bool infiniteAmmo) => _reloadModule.SetAmmo(value, _infiniteAmmo);
 
         public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
         {
@@ -233,6 +235,8 @@ namespace GunDecorator
         public void SetFireRate(float multiplier)
         {
             _fireRateMultiplier = multiplier;
+            
+            _infiniteAmmo = multiplier == -1 ? false : true;
         }
 
         public void PlaySound(string sound)

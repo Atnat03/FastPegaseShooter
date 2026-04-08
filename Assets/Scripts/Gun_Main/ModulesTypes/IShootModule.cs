@@ -28,7 +28,7 @@ namespace GunDecorator
         public bool AutoReload { get; }
         
         public bool IsReloading { get; }
-        public void SetAmmo(int value);
+        public void SetAmmo(int value, bool infiniteAmmo);
         public void StopReload();
     }
 
