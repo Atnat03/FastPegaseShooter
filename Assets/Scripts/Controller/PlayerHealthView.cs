@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,14 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private CanvasGroup _damagedWarningImage;
 	[SerializeField] private Image _frameDeccordImage;
 	[SerializeField] private CanvasGroup _damagedImage;
+	
+	[Header("Healing")]
+	[SerializeField] private Image _selfHealingImage;
+	[SerializeField] private Color _selfHealingColor1;
+	[SerializeField] private Color _selfHealingColor2;
+	[SerializeField] private LineRenderer _healingTrajectoryLine;
+	[SerializeField] private GameObject _healingThrowPosObj;
+	
 	
 	[Header("Sound")]
 	[SerializeField] private SoundsDataSO _soundsData;
@@ -109,7 +118,50 @@ public class PlayerHealthView : MonoBehaviour
 		_damagedImage.alpha = 0f;
 	}
 
+	private async void OnSelfHealing(float selfHealingDelay)
+	{
+		float waitedTime = 0;
+		_selfHealingImage.gameObject.SetActive(true);
+		while (waitedTime < selfHealingDelay)
+		{
+			waitedTime += Time.deltaTime;
+			await Task.Delay(Mathf.FloorToInt(Time.deltaTime*1000));
+			
+			_selfHealingImage.fillAmount = waitedTime/selfHealingDelay;
+			_selfHealingImage.color = Color.Lerp(_selfHealingColor1, _selfHealingColor2, waitedTime/selfHealingDelay);
+		}
+		_selfHealingImage.gameObject.SetActive(false);
+	}
 
+	private void Update()
+	{
+		if (_healingTrajectoryLine.enabled)
+		{
+			Vector3 startPos = _playerHealth.p_healThrowPoint.position;
+			Vector3 endPos = _playerHealth.p_healThrowLandingPos;
+			Vector3 dir = (endPos-startPos).normalized;
+			_healingTrajectoryLine.SetPosition(0, startPos);
+			_healingTrajectoryLine.SetPosition(1, startPos+dir*0.3f);
+			_healingTrajectoryLine.SetPosition(2, endPos-dir*0.3f);
+			_healingTrajectoryLine.SetPosition(3, endPos);
+		}
+	}
+
+	private void OnThrowingActivation()
+	{
+		_healingTrajectoryLine.enabled = true;
+	}
+	private void OnThrowing()
+	{
+		_healingTrajectoryLine.enabled = false;
+	}
+	private async void OnHealThrowLanding(Vector3 pos)
+	{
+		GameObject orb = Instantiate(_healingThrowPosObj, pos, Quaternion.identity);
+		orb.transform.localScale = Vector3.one * _playerHealth.p_healThrowRadius;
+		await Task.Delay(3000);
+		Destroy(orb);
+	}
 
 	void OnEnable()
 	{
@@ -117,6 +169,12 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnStartWarning += StartWarning;
 		_playerHealth.OnKOPlayer += KoPlayerUI;
 		_playerHealth.OnTakeDamage += TakeDamageEffect;
+		
+		//Healing
+		_playerHealth.OnSelfHealing += OnSelfHealing;
+		_playerHealth.OnThrowingActivation += OnThrowingActivation;
+		_playerHealth.OnThrowing += OnThrowing;
+		_playerHealth.OnHealThrowLanding += OnHealThrowLanding;
 	}
 
 	void OnDisable()
@@ -125,6 +183,12 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnStartWarning -= StartWarning;
 		_playerHealth.OnKOPlayer -= KoPlayerUI;
 		_playerHealth.OnTakeDamage -= TakeDamageEffect;
+		
+		//Healing
+		_playerHealth.OnSelfHealing -= OnSelfHealing;
+		_playerHealth.OnThrowingActivation -= OnThrowingActivation;
+		_playerHealth.OnThrowing -= OnThrowing;
+		_playerHealth.OnHealThrowLanding -= OnHealThrowLanding;
 	}
 
 	#endregion
