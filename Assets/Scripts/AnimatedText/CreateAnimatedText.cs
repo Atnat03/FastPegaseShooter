@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -13,3 +15,5 @@ public class CreateAnimatedText
         obj.AddComponent<AnimatedText>();
     }
 }
+
+#endif

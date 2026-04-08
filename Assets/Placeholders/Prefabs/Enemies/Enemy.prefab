@@ -237,7 +237,7 @@ MonoBehaviour:
   - {fileID: 4639033686446523756}
   _targetingModules:
   - {fileID: -3745771886591243004}
-  _movingModule: {fileID: 4856717765235199756}
+  _movementModule: {fileID: 4856717765235199756}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
@@ -256,7 +256,6 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _energyGainWhenTouch: 1
   _life: 100
 --- !u!114 &4856717765235199756
 MonoBehaviour:
@@ -296,8 +295,8 @@ MonoBehaviour:
   _attackDelay: 2
   _maxPlayerDistance: 10
   _bulletSize: 0.2
-  _ammoSpeed: 4
-  _maxAmmoLifeTime: 10
+  _bulletSpeed: 1
+  _maxBulletLifeTime: 10
 --- !u!114 &-3745771886591243004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,7 +371,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584272566924190964
+  _initializedTimestamp: -8584260416815074740
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -388,7 +387,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 36
+  <PrefabId>k__BackingField: 25
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 17158645317297001745
   SceneId: 0

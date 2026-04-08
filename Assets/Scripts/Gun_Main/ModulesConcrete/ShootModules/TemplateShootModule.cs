@@ -9,7 +9,7 @@ namespace GunDecorator
 {
     public class TemplateShootModule : GunModule, IShootModule
     {
-        public float FireRate => _fireRate;
+        public float FireRate => _realFireRate;
         public IAmmoModule AmmoModule => _ammoModule;
         
         public bool CanShoot => _canShoot;
@@ -21,6 +21,7 @@ namespace GunDecorator
         protected IAmmoModule _ammoModule;
 
         [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
+        private float _realFireRate;
         
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
@@ -51,6 +52,8 @@ namespace GunDecorator
                     _additionalEffectModule.Add(secondModule);
                 }
             }
+
+            _realFireRate = _fireRate;
 
             if(_ammoType != null)
                 _ammoModule = (IAmmoModule)_ammoType;
@@ -106,6 +109,16 @@ namespace GunDecorator
         public void SetDirectionModifier(Vector3 direction) =>_directionModifier = direction;
         
         public void SetBulletOffset(Vector3 offset) =>_bulletOffset = offset;
-        
+        public void SetFireRate(float fireRateMultiplier)
+        {
+            if (Mathf.Approximately(fireRateMultiplier, -1))
+            {
+                _realFireRate = _fireRate;
+            }
+            else
+            {
+                _realFireRate = _fireRate / fireRateMultiplier;
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace GunDecorator
         
         public void SetDirectionModifier(Vector3 direction);
         public void SetBulletOffset(Vector3 offset);
+        void SetFireRate(float fireRateMultiplier);
     }
     
     public interface IReloadModule
