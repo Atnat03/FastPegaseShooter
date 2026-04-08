@@ -90,11 +90,27 @@ public class Drone : NetworkBusListener
 			if(asServer)
 			{
 				_effect.ApplyDeathEffect();
+
+				if (_activatorConnection != null && _activatorConnection.IsValid)
+				{
+					PlayerVisuelBridge player = _activatorConnection.FirstObject.GetComponentInChildren<PlayerVisuelBridge>();
+					if (player != null)
+					{
+						DroneThrower thrower = player.PlayerDroneView.DroneThrower;
+						
+						Cons.Print("thrower : " + thrower._hasDrone);
+						
+						if (thrower != null)
+						{
+							thrower.GiveDroneBackTargetRpc(_activatorConnection);
+						}
+					}
+				}
+
 				InstanceFinder.ServerManager.Despawn(gameObject);
 			}
-			
-			Cons.Print("Instantiate VFX drone death");
 
+			Cons.Print("Instantiate VFX drone death");
 		}
 	}
 

@@ -108,8 +108,6 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             
-            Debug.Log("Throw drone input");
-            
             _droneThrower.TryThrowDrone();
         }
 

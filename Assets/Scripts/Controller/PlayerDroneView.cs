@@ -7,6 +7,8 @@ public class PlayerDroneView : NetworkBusListener
 {
 	#region Properties
 
+	public DroneThrower DroneThrower => _droneThrower;
+	
 	#endregion
 
 

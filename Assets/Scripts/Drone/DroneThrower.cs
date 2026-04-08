@@ -1,5 +1,6 @@
 using System;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
@@ -27,9 +28,10 @@ public class DroneThrower : NetworkBehaviour
 	[SerializeField] private float _throwForce = 10f;
 	[SerializeField] private int _numberBounces = 2;
 
-	private readonly SyncVar<bool> _canThrow = new(true);
-	private readonly SyncVar<float> _elapsedTimeCooldown = new(0);
+	private readonly SyncVar<bool> _canThrow = new(false);
 
+	public bool _hasDrone = false;
+	
 	private DroneBullet _currentDroneInTerrain = null;
 	
 	//Actions
@@ -44,36 +46,16 @@ public class DroneThrower : NetworkBehaviour
 
 	public override void OnStartNetwork()
 	{
-		_elapsedTimeCooldown.OnChange += OnCooldownValueChange;
-	}
-
-	private void OnCooldownValueChange(float prev, float next, bool asServer)
-	{
-		OnCooldownUpdate?.Invoke(next / _cooldown);
-	}
-
-	private void Update()
-	{
-		if (!IsServerInitialized) return;
-		
-		if (_elapsedTimeCooldown.Value > 0)
-		{
-			_elapsedTimeCooldown.Value -= Time.deltaTime;
-			_canThrow.Value = false;
-			
-			if (_elapsedTimeCooldown.Value <= 0f)
-			{
-				_canThrow.Value = true;
-			}
-		}
+		if (IsServerInitialized)
+			_hasDrone = true;
 	}
 
 	public void TryThrowDrone()
 	{
-		if (_canThrow.Value)
+		if (_hasDrone)
 		{
 			ThrowDroneServerRpc();
-            
+			_hasDrone = false;
 			OnStartThrow?.Invoke();
 		}
 	}
@@ -91,9 +73,14 @@ public class DroneThrower : NetworkBehaviour
 		_currentDroneInTerrain = drone;
     
 		drone.SetDrone(_dronePrefab, Owner);
-		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * _throwForce, ForceMode.Impulse);
-		
-		_elapsedTimeCooldown.Value = _cooldown;
+		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * _throwForce, ForceMode.Impulse); 
+	}
+
+	[TargetRpc]
+	public void GiveDroneBackTargetRpc(NetworkConnection target)
+	{
+		Cons.Print("GiveDroneBackTargetRpc " + target.ClientId, ColorConsole.Pink);
+		_hasDrone = true;
 	}
 	
 	#endregion
