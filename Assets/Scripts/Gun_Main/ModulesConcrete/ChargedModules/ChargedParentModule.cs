@@ -30,6 +30,7 @@ namespace GunDecorator.ChargedModules
         #region Variables
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
+        IReloadModule _reloadModule;
 
         [SerializeField] protected bool _isExplosifAmmo = false;
         [SerializeField] protected float _explosionRadius = 1f;
@@ -41,12 +42,15 @@ namespace GunDecorator.ChargedModules
         [SerializeField] protected float _recoilX = 2f;
         [SerializeField] protected float _isFullMultiplicator = 0.9f;
         [SerializeField] protected int _numberBulletInCharge = 10;
+        [SerializeField] protected float _coolDownCharge = 0.5f;
         private bool _fullCharged = false;
         protected bool _charging = false;
         private bool _deadZoneCharge = false;
+        private bool _canCharge = true;
         
         protected float _charginTimer = 0;
         private float _elapsedTimeDeadZone = 0;
+        private float _elapsedCooldown = 0;
         
         //Action
         public Action OnStartCharging;
@@ -61,10 +65,29 @@ namespace GunDecorator.ChargedModules
         {
             if(_ammoType != null)
                 _ammoModule = (IAmmoModule)_ammoType;
+
+            _reloadModule = GetComponent<ReloadModule>();
         }
 
         private void Update()
         {
+            if (_elapsedCooldown > 0)
+            {
+                _elapsedCooldown -= Time.deltaTime;
+                _canCharge = false;
+                
+                if (_elapsedCooldown <= 0)
+                {
+                    _canCharge = true;
+                }
+            }
+            
+            
+            if (_reloadModule.IsReloading)
+            {
+                ResetCharging();
+            }
+            
             if (_deadZoneCharge)
             {
                 _elapsedTimeDeadZone += Time.deltaTime;
@@ -90,12 +113,17 @@ namespace GunDecorator.ChargedModules
 
         public void TryCharging()
         {
+            if (!_canCharge) return;
+            if (_reloadModule.IsReloading) return;
+            
             _deadZoneCharge = true;
         }
         
         public virtual void TryShootCharging()
         {
-            ResetCharging();
+            if (!_canCharge) return;
+            if (_reloadModule.IsReloading) return;
+            _elapsedCooldown = _coolDownCharge;
         }
 
         protected void ResetCharging()

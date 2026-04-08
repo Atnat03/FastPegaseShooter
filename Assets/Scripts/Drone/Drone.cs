@@ -14,10 +14,13 @@ public struct DroneActivatedEvent
 	public float p_ratioBar;
 }
 
+
 public class Drone : NetworkBusListener
 {
 	#region Properties
 
+	public NetworkConnection IdThrower => _idThrower.Value;
+	
 	#endregion
 
 
@@ -35,25 +38,28 @@ public class Drone : NetworkBusListener
 	[SerializeField] private float _activatedRange = 3f;
 	private readonly SyncVar<float> _currentActivatedTime = new (0);
 	private readonly SyncVar<bool> _IsActivated = new (false);
-	private int _idThrower;
-	private int _idActivator;
+	private readonly SyncVar<NetworkConnection> _idThrower = new();
+	private NetworkConnection _activatorConnection;
 
 	[Header("Follow")] 
 	[SerializeField] private float _speed = 5f;
-	[SerializeField] private float _orbitRadius = 2f;
-	[SerializeField] private float _orbitSpeed = 2f;
+	[SerializeField] private float _heightOffset = 2f;
 	private float _orbitAngle;
 	private Transform _target;
-	private int idActivated;
 	private Vector3 _targetPosition;
 	private float elapsedTimeUpdateSearch = 0;
 	private float timeUpdateSearch = 0.2f;
 	
+	[Header("Life")]
+	[SerializeField] private float _energyCostPerSeconde = 10f;
+	private PlayerEnergy _playerEnergy;
+	private DroneEffectParent _effect;
+	
 	private Vector3 _startPosition;
 	
-	[Header("View")]
-	[SerializeField] private Transform _view;
-
+	//Actions
+	public Action OnIdThrowerChange;
+	
 	#endregion
 
 	#region Fonctions
@@ -62,15 +68,25 @@ public class Drone : NetworkBusListener
 	{
 		_startPosition = transform.position;
 		GetComponent<SphereCollider>().radius = _activatedRange;
+		_effect = GetComponent<DroneEffectParent>();
 	}
 
 	public override void OnStartNetwork()
 	{
 		_currentActivatedTime.OnChange += OnActivatedTimerChange;
+		_idThrower.OnChange += OnThrowChange;
 	}
+	
+	private void OnThrowChange(NetworkConnection prev, NetworkConnection next, bool asServer)
+	{
+		OnIdThrowerChange?.Invoke();
+	}
+
 
 	private void OnActivatedTimerChange(float prev, float next, bool asServer)
 	{
+		if (_activatorConnection == null || !_activatorConnection.IsValid) return;
+		
 		bool activated = false;
 		float ratio = 0;
 		
@@ -80,11 +96,17 @@ public class Drone : NetworkBusListener
 			ratio = next / _timeToActivate;
 		}
 		
+		SendActivationUITargetRpc(_activatorConnection, activated, ratio);
+	}
+
+	[TargetRpc]
+	private void SendActivationUITargetRpc(NetworkConnection target, bool isActivate, float ratioBar)
+	{
 		InvokeEvent(new DroneActivatedEvent
 		{
-			p_playerId = _idActivator,
-			p_isActivate = activated,
-			p_ratioBar = ratio,
+			p_playerId = target.ClientId,
+			p_isActivate = isActivate,
+			p_ratioBar = ratioBar,
 		});
 	}
 
@@ -107,13 +129,49 @@ public class Drone : NetworkBusListener
 					Activated();
 				}
 			}
-
-			UpdateVisualObserversRpc();
-        
+			
 			return;
 		}
-
+		
+		if (_playerEnergy != null)
+		{
+			InvokeEvent(new AddEnergyEvent
+			{
+				p_player = _playerEnergy.Owner,
+				p_value = -_energyCostPerSeconde * Time.deltaTime
+			});
+		}
+		
+		if (_playerEnergy.CurrentEnergy <= 0)
+		{
+			Die();
+			return;
+		}
+		
 		FollowTarget();
+	}
+	
+	private void Die()
+	{
+		if (!IsServerInitialized) return;
+
+		_effect.ApplyDeathEffect();
+
+		if (_activatorConnection != null && _activatorConnection.IsValid)
+		{
+			PlayerVisuelBridge player = _activatorConnection.FirstObject.GetComponentInChildren<PlayerVisuelBridge>();
+			if (player != null)
+			{
+				DroneThrower thrower = player.PlayerDroneView.DroneThrower;
+
+				if (thrower != null)
+				{
+					thrower.GiveDroneBackTargetRpc(_activatorConnection);
+				}
+			}
+		}
+
+		InstanceFinder.ServerManager.Despawn(gameObject);
 	}
 
 	private void LateUpdate()
@@ -123,19 +181,15 @@ public class Drone : NetworkBusListener
 			_pales.Rotate(Vector3.up * _speedPaleRotation * Time.deltaTime);
 		}
 	}
-	
-	[ObserversRpc]
-	private void UpdateVisualObserversRpc()
-	{
-		bool isThrower = (_idThrower == LocalConnection.ClientId);
-
-		_view.gameObject.SetActive(!isThrower && !_IsActivated.Value);
-	}
 
 	void Activated()
 	{
 		_IsActivated.Value = true;
-		_target = InstanceFinder.ClientManager.Objects.Spawned[_idActivator].transform;
+		
+		_playerEnergy = _target.root.GetComponent<PlayerEnergy>();
+		
+		_effect?.Activated();
+
 		SearchTarget();
 	}
 
@@ -146,9 +200,9 @@ public class Drone : NetworkBusListener
 		elapsedTimeUpdateSearch = timeUpdateSearch;
 	}
 	
-	public void SetThrower(int throwerId)
+	public void SetThrower(NetworkConnection throwerId, PlayerEnergy energy)
 	{
-		_idThrower = throwerId;
+		_idThrower.Value = throwerId;
 	}
 	
 	private void FollowTarget()
@@ -162,7 +216,9 @@ public class Drone : NetworkBusListener
 			SearchTarget();
 		}
 		
-		transform.position = Vector3.MoveTowards(transform.position, _targetPosition + Vector3.up * 2f, _speed * Time.deltaTime);
+		Vector3 desiredPosition = _targetPosition + Vector3.up * _heightOffset;
+
+		transform.position = Vector3.Lerp(transform.position, desiredPosition, _speed * Time.deltaTime);	
 	}
 	
 	private void OnTriggerEnter(Collider other)
@@ -174,10 +230,15 @@ public class Drone : NetworkBusListener
 		{
 			if (player.Owner == null || !player.Owner.IsValid) return;
         
-			if (player.Owner.ClientId != _idThrower)
+			if (player.Owner != _idThrower.Value)
 			{
 				Cons.Print("Start activated Drone", ColorConsole.Blue);
-				_idActivator = player.Owner.ClientId;
+				
+				_activatorConnection = player.Owner;
+				_target = player.transform;
+				
+				SendActivationUITargetRpc(_activatorConnection, true, 0f);
+				
 				_currentActivatedTime.Value = _timeToActivate;
 			}
 		}
@@ -191,10 +252,17 @@ public class Drone : NetworkBusListener
 		{
 			if (player.Owner == null || !player.Owner.IsValid) return;
         
-			if (player.Owner.ClientId != _idThrower)
+			if (player.Owner != _idThrower.Value)
 			{
 				Cons.Print("Stop activated Drone", ColorConsole.Blue);
+				
+				if (_activatorConnection != null && _activatorConnection.IsValid)
+				{
+					SendActivationUITargetRpc(_activatorConnection, false, 0f);
+				}
+				
 				_currentActivatedTime.Value = 0;
+				_activatorConnection = null;
 			}
 		}
 	}

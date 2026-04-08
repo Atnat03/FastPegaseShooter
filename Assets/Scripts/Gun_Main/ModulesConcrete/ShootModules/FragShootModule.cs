@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using FishNet.Example.ColliderRollbacks;
 using FishNet.Object;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace GunDecorator
 {
     public class FragShootModule : GunModule, IShootModule
     {
-        public float FireRate => _fireRate;
+        public float FireRate => _realFireRate;
         public IAmmoModule AmmoModule => _ammoModule;
         public bool IsExplosed => _isExplosedAmmo;
 
@@ -20,6 +21,7 @@ namespace GunDecorator
         protected IAmmoModule _ammoModule;
 
         [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
+        private float _realFireRate;
         
         [SerializeField][Tooltip("le nombre de balles tirées a chaque tir")] private float _numberBulletSpread;
         [SerializeField, Range(0, 60)][Tooltip("l'angle de propagation maximum que les balles peuvent prendre par rapport a l'orientation du canon")] private float _spreadAngle;
@@ -52,6 +54,8 @@ namespace GunDecorator
                     _additionalEffectModule.Add(secondModule);
                 }
             }
+            
+            _realFireRate = _fireRate;
 
             if(_ammoType != null)
                 _ammoModule = (IAmmoModule)_ammoType;
@@ -121,6 +125,18 @@ namespace GunDecorator
         public void SetBulletOffset(Vector3 offset)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void SetFireRate(float fireRateMultiplier)
+        {
+            if (Mathf.Approximately(fireRateMultiplier, -1))
+            {
+                _realFireRate = _fireRate;
+            }
+            else
+            {
+                _realFireRate = _fireRate / fireRateMultiplier;
+            }
         }
     }
 }

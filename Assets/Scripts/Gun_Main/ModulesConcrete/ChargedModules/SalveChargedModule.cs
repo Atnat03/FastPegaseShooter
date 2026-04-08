@@ -26,6 +26,8 @@ namespace GunDecorator.ChargedModules
         
         public override void TryShootCharging()
         {
+            base.TryShootCharging();
+            
             if (_charging)
             {
                 int numberBulletShoot = (int)Mathf.Lerp(0, _numberBulletInCharge, _charginTimer / _timeToCharge);
@@ -50,7 +52,7 @@ namespace GunDecorator.ChargedModules
             for (int i = 0; i < numberBullet; i++)
             {
                 _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
-                _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
+                _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1, _gunController.IsInfiniteAmmo);
                 
                 _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);

@@ -18,6 +18,7 @@ namespace GunDecorator
         
         public void SetDirectionModifier(Vector3 direction);
         public void SetBulletOffset(Vector3 offset);
+        void SetFireRate(float fireRateMultiplier);
     }
     
     public interface IReloadModule
@@ -27,7 +28,7 @@ namespace GunDecorator
         public bool AutoReload { get; }
         
         public bool IsReloading { get; }
-        public void SetAmmo(int value);
+        public void SetAmmo(int value, bool infiniteAmmo);
         public void StopReload();
     }
 

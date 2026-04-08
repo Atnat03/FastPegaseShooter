@@ -150,18 +150,13 @@ public class EnergyManager : NetworkBusListener
     private void AddHealthObserversRpc()
     {
         Debug.Log("Add health");
-        InvokeEvent(new AddHealthFromBarEvent
+        InvokeEvent(new AddHealthToPlayer
         {
-            value = _healFromOneBar
+            p_value = _healFromOneBar
         });
     }
 
     #endregion
-}
-
-public struct AddHealthFromBarEvent
-{
-    public float value;
 }
 
 public struct OnModifyEnergyEvent
