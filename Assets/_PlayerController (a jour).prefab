@@ -3748,9 +3748,9 @@ MonoBehaviour:
   topHeightCrouchedCollider: {fileID: 4821877748357995787}
   slideSpeed: 15
   slideMinTimeDuration: 0.2
-  slideMaxTimeDuration: 2.8
+  slideMaxTimeDuration: 0.6
   slideJumpVerticalForce: 48
-  slideJumpHorizontalForce: 2
+  slideJumpHorizontalForce: 2.5
   slideCooldown: 0.2
   coyoteSlideDuration: 0.1
   CameraSlideFOV: 85
@@ -3763,10 +3763,10 @@ MonoBehaviour:
   slopeSlideMaxSpeed: 17
   slopeInfluenceOnRotation: 3
   slopeInfluenceOnVelocity: 0.075
-  _castWidth: 0.5
-  _castMaxDistance: 20
-  _grapplingSpeed: 40
-  _grappleRedirectionSpeed: 40
+  _castWidth: 1
+  _castMaxDistance: 50
+  _grapplingSpeed: 60
+  _grappleRedirectionSpeed: 60
   _endGrappleImpulseForce: 45
   grounded: 0
   leftSideAgainstWall: 0
@@ -3922,7 +3922,7 @@ MonoBehaviour:
   - {fileID: 5812551220895680502}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects:
-  - {fileID: 0}
+  - {fileID: 4984222935612760407}
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
   _isNetworked: 1
@@ -3931,7 +3931,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584259427619692126
+  _initializedTimestamp: -8584259356975734750
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -11337,6 +11337,17 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3092209774603326017, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   m_PrefabInstance: {fileID: 1158505439156596224}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4984222935612760407 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6140749167334838103, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+  m_PrefabInstance: {fileID: 1158505439156596224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6240176814268882576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
 --- !u!1 &6240176814268882576 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5082973326308634768, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
@@ -11356,7 +11367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.EmptyNetworkBehaviour
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 4984222935612760407}
 --- !u!1001 &1366108170947395903
 PrefabInstance:
   m_ObjectHideFlags: 0
