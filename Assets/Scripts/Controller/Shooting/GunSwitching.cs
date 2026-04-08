@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator;
+using MyPrint;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -15,6 +16,7 @@ public class GunSwitching : NetworkBehaviour
 	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun.Value];
 	public IGun IGunMain => _currentMainIGun;
 	public ISurcharge ISurchargeMain => _currentISurcharge;
+	
 	public int CurrentMainGunIndex => _currentMainGun.Value;
 
 	public bool IsSwitching => !_canSwitch;
@@ -24,6 +26,7 @@ public class GunSwitching : NetworkBehaviour
 	#region Variables
 
 	private readonly SyncVar<bool> _isMainGun = new SyncVar<bool>(true);
+	private readonly SyncVar<bool> _isPositiveChargedPlayer = new SyncVar<bool>(false);
 	
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
@@ -61,6 +64,10 @@ public class GunSwitching : NetworkBehaviour
 		
 		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
+
+		_isPositiveChargedPlayer.Value = startIndex == 0;
+		
+		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
 	}
 	
 	private void ActivateCurrentGun(List<GameObject> list, int index)
@@ -86,14 +93,18 @@ public class GunSwitching : NetworkBehaviour
 	public void ChangeCurrentGun_Main_ServerRpc(int newIndex)
 	{
 		if (!IsMainGun) return;
-		
-		ChangeCurrentGun_Main(newIndex);
+
+		if (_currentMainIGun != null)
+		{
+			_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
+		}
 	}
 
 	[Server]
 	void ChangeCurrentGun_Main(int newIndex)
 	{
 		_currentMainGun.Value = newIndex;
+		IGunMain.SetChargedPlayer(_isPositiveChargedPlayer.Value);
 	}
 		
 	private void OnCurrentGunMainChange(int prev, int next, bool asServer)

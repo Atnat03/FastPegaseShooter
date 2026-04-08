@@ -4363,17 +4363,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1527374256 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2421932575051063324, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
-  m_PrefabInstance: {fileID: 7853791551555895662}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eea4fab3ab5298a4eaf3d3f2c7d52765, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!1 &1560452714
 GameObject:
   m_ObjectHideFlags: 0
@@ -5628,18 +5617,22 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 2019655460}
   _networkObjectCache: {fileID: 0}
+  _pathfindingRequestManager: {fileID: 0}
   _budgetMin: 3
   _budgetMax: 6
   _currentBudget: 0
   spawnDelayFirstWave: 1
   spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
   spawnDelay: 3
-  spawnMobs: []
+  spawnMobs:
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
+  - {fileID: 11400000, guid: 5d96b1afa1a95524ea2186c4ca221ac0, type: 2}
   _spawnPoints:
   - {fileID: 499524539}
   - {fileID: 1812943799}
@@ -5960,7 +5953,7 @@ PrefabInstance:
     - target: {fileID: 207741499552690157, guid: 77a7e514e615582419116b198a9bc908, type: 3}
       propertyPath: _energyManager
       value: 
-      objectReference: {fileID: 1527374256}
+      objectReference: {fileID: 0}
     - target: {fileID: 3187266183578349374, guid: 77a7e514e615582419116b198a9bc908, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.27

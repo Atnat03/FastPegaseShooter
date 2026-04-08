@@ -9,20 +9,24 @@ namespace Controller
 {
     public class GunBridgePlayer : NetworkBusListener
     {
+        #region Properties
         public int GetCurrentMainIndex => _gunSwitching.CurrentMainGunIndex;
         public int GetCurrentAmmo => CurrentMainSurchargeGun.GetCurrentAmmo();
-        
         private IGun CurrentGun => _gunSwitching.IGunMain;
         public ISurcharge CurrentMainSurchargeGun => _gunSwitching.ISurchargeMain;
+        
+        #endregion
         
         [SerializeField] private GunSwitching _gunSwitching;
         [SerializeField] private GunSurcharge _gunSurcharge;
         
         private readonly SyncVar<bool> _wantToSwitch = new SyncVar<bool>();
+        
         private bool _localWantToSwitch = false;
         
         private Material _gunMaterial;
-        
+
+
         public override void OnStartClient()
         {
             base.OnStartClient();

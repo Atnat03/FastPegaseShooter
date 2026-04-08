@@ -1,5 +1,6 @@
 using FishNet.Object;
 using GunDecorator;
+using MyPrint;
 using NUnit.Framework.Constraints;
 using UnityEngine;
 
@@ -75,6 +76,11 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                             p_player = _gunController.Owner,
                             p_value = p_damage
                         });
+
+                        if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
+                        {
+                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                        }
                     }
                 }
                 
@@ -104,6 +110,11 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                     p_player = _gunController.Owner,
                     p_value = p_damage
                 });
+                
+                if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
+                {
+                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                }
             }
         }
     }

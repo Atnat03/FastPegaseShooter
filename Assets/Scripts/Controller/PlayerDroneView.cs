@@ -31,7 +31,7 @@ public class PlayerDroneView : NetworkBusListener
 	public void OnEnable()
 	{
 		ListenToEvent<DroneActivatedEvent>(ActivatedDrone);
-		_droneThrower.OnThrow += ThrowDrone;
+		_droneThrower.OnThrowing += ThrowDrone;
 		_droneThrower.OnGetDrone += GetDrone;
 	}
 
