@@ -846,6 +846,9 @@ MonoBehaviour:
   _damage: 10
   _throwForce: 20
   _numberBounces: 2
+  _minThrowForce: 5
+  _maxThrowForce: 25
+  _maxChargeTime: 2
   _hasDrone: 0
 --- !u!1 &388540647123593872
 GameObject:
@@ -3753,8 +3756,8 @@ MonoBehaviour:
   slidingBackToNormalSpeedDelay: 1
   dashSpeed: 5
   dashTimeDuration: 0.2
-  dashCooldown: 0.75
-  dashEnergyCost: 20
+  dashCooldown: 3
+  dashEnergyCost: 0
   minSlopeAngleToSlopeSlide: 10
   slopeSlideMaxSpeed: 17
   slopeInfluenceOnRotation: 3
@@ -11092,11 +11095,11 @@ MonoBehaviour:
   _elementaryGrenadePrefab: {fileID: 7033959642892252244, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   _spawnPoint: {fileID: 446286405210506582}
   _currentGun: {fileID: 3154577241410043838}
-  _cooldown: 2
+  _cooldown: 5
   _damage: 10
   _throwForce: 30
   _numberBounces: 2
-  _explosionRadius: 3
+  _explosionRadius: 15
   _showGizmoOnSpawnPoint: 0
 --- !u!114 &4462303824028094402
 MonoBehaviour:
