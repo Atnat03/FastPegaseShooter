@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator;
+using MyPrint;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -57,20 +58,18 @@ public class GunSwitching : NetworkBehaviour
 			_mainGunsList.Add(gun.gameObject);
 		}
 
-		startIndex = 0;
+		int i = 0;
 		
-		_currentMainGun.Value = startIndex;
+		_currentMainGun.Value = i;
 		
-		ActivateCurrentGun(_mainGunsList, startIndex);
+		ActivateCurrentGun(_mainGunsList, i);
 		
 		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
-	}
-	
-	public override void OnStartNetwork()
-	{
-		if (IsServerInitialized)
-			_isPositiveChargedPlayer.Value = true;
+
+		_isPositiveChargedPlayer.Value = startIndex == 0;
+		
+		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
 	}
 	
 	private void ActivateCurrentGun(List<GameObject> list, int index)

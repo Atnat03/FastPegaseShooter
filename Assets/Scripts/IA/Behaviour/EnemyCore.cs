@@ -27,22 +27,26 @@ public class EnemyCore : NetworkBusListener
     [HideInInspector] public int p_enemySpawnCost;
 
     #region Charges Variables
+
+    [Header("Charges")] 
+    [SerializeField] private int _explosionChargedDamage = 50;
     
-    [Header("Charges")]
     [SerializeField] private float _negativeChargeMax = 5;
-    [SerializeField] private float _currentN_charge = 0;
+    private readonly SyncVar<float> _currentN_charge = new SyncVar<float>();
     
     [SerializeField] private float _positiveChargeMax = 5;
-    [SerializeField] private float _currentP_charge = 0;
+    private readonly SyncVar<float> _currentP_charge = new SyncVar<float>();
     
     [SerializeField] private float _timeBeforeStatReset = 3f;
     private readonly SyncVar<float> _elapsedTimeReset = new(0);
 
-    [Header("UI Charges")] 
+    [Header("View")] 
     [SerializeField] private GameObject _positiveUI;
     [SerializeField] private Image _positiveCurValue;
     [SerializeField] private GameObject _negativeUI;
     [SerializeField] private Image _negativeCurValue;
+    
+    [SerializeField] private ParticleSystem _explosionParticle;
     
     #endregion
 
@@ -117,20 +121,18 @@ public class EnemyCore : NetworkBusListener
     {
         if (!IsServerInitialized)
             return;
-    
-        Debug.Log($"AddCharge called - Positive: {positive}, Current P: {_currentP_charge}, Current N: {_currentN_charge}");
-    
+        
         if (positive)
         {
-            _currentP_charge++;
+            _currentP_charge.Value++;
         }
         else
         {
-            _currentN_charge++;
+            _currentN_charge.Value++;
         }
 
         _elapsedTimeReset.Value = _timeBeforeStatReset;
-        UpdateUIObserversRpc();
+        CheckAllChargeAreFull();
     }
 
     private void Update()
@@ -144,26 +146,55 @@ public class EnemyCore : NetworkBusListener
 
             if (_elapsedTimeReset.Value <= 0)
             {
-                _currentP_charge = 0;
-                _currentN_charge = 0;
-                UpdateUIObserversRpc();
+                ResetAllCharged();
             }
         }
     }
 
-    [ObserversRpc]
-    private void UpdateUIObserversRpc()
+    private void ResetAllCharged()
     {
-        Debug.Log($"UpdateUI - IsClient: {IsClientInitialized}, P: {_currentP_charge}, N: {_currentN_charge}");
+        _currentP_charge.Value = 0;
+        _currentN_charge.Value = 0;
+    }
     
-        //UI parent
-        _positiveUI.SetActive(_currentP_charge > 0);
-        _negativeUI.SetActive(_currentN_charge > 0);
-    
-        //UI Image
-        _positiveCurValue.fillAmount = _currentP_charge / _positiveChargeMax;
-        _negativeCurValue.fillAmount = _currentN_charge / _negativeChargeMax;
+    private void CheckAllChargeAreFull()
+    {
+        if (_currentP_charge.Value >= _positiveChargeMax && _currentN_charge.Value >= _positiveChargeMax)
+        {
+            foreach (EnemyLifeModule life in _lifeModules)
+            {
+                life.TakeDamage(Owner.ClientId, _explosionChargedDamage);
+            }
+            
+            ResetAllCharged();
+            ExplosionObserversRpc();
+        }
     }
 
+    [ObserversRpc]
+    private void ExplosionObserversRpc()
+    {
+        Destroy(Instantiate(_explosionParticle, transform.position, Quaternion.identity), 2f);
+    }
+
+
+    private void OnEnable()
+    {
+        _currentP_charge.OnChange += OnPositiveChange;
+        _currentN_charge.OnChange += OnNegativeChange;
+    }
+
+    private void OnPositiveChange(float prev, float next, bool asServer)
+    {
+        _positiveUI.SetActive(next > 0);
+        _positiveCurValue.fillAmount = next / _positiveChargeMax;
+    }
+    
+    private void OnNegativeChange(float prev, float next, bool asServer)
+    {
+        _negativeUI.SetActive(next > 0);
+        _negativeCurValue.fillAmount = next / _negativeChargeMax;
+    }
+    
     #endregion
 }
