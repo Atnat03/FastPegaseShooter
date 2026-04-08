@@ -48,6 +48,7 @@ public class PlayerHealthView : MonoBehaviour
 	{
 		_deathImage.gameObject.SetActive(false);
 		_audioSource = GetComponent<AudioSource>();
+		_healingTrajectoryLine.enabled = false;
 	}
 	
 	private void UpdateHealth(float targetFill)
