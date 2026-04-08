@@ -16,6 +16,7 @@ public class PlayerHealthView : MonoBehaviour
 
 	[Header("References")]
 	[SerializeField] private PlayerHealth _playerHealth;
+	[SerializeField] private DroneThrower _droneThrower;
 	
 	[Header("UI")]
 	[SerializeField] private Image _healthBar;
@@ -30,7 +31,6 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private Color _selfHealingColor2;
 	[SerializeField] private LineRenderer _healingTrajectoryLine;
 	[SerializeField] private GameObject _healingThrowPosObj;
-	
 	
 	[Header("Sound")]
 	[SerializeField] private SoundsDataSO _soundsData;
@@ -49,7 +49,6 @@ public class PlayerHealthView : MonoBehaviour
 		_deathImage.gameObject.SetActive(false);
 		_audioSource = GetComponent<AudioSource>();
 	}
-	
 	
 	private void UpdateHealth(float targetFill)
 	{
@@ -175,6 +174,10 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnThrowingActivation += OnThrowingActivation;
 		_playerHealth.OnThrowing += OnThrowing;
 		_playerHealth.OnHealThrowLanding += OnHealThrowLanding;
+		
+		//Drone Throw
+		_droneThrower.OnThrowingActivation += OnThrowingActivation;
+		_droneThrower.OnThrowing += OnThrowing;
 	}
 
 	void OnDisable()
@@ -189,6 +192,10 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnThrowingActivation -= OnThrowingActivation;
 		_playerHealth.OnThrowing -= OnThrowing;
 		_playerHealth.OnHealThrowLanding -= OnHealThrowLanding;
+		
+		//Drone Throw
+		_droneThrower.OnThrowingActivation -= OnThrowingActivation;
+		_droneThrower.OnThrowing -= OnThrowing;
 	}
 
 	#endregion

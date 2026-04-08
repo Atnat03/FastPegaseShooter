@@ -24,6 +24,8 @@ public class AlwaysInFrontOfCam : NetworkBehaviour
 
 	public override void OnStartClient()
 	{
+		if (!IsOwner) return;
+		
 		cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponent<FPSController>().Camera;
 	}
 
@@ -31,7 +33,7 @@ public class AlwaysInFrontOfCam : NetworkBehaviour
 	{
 		if (cam != null)
 		{
-			transform.LookAt(cam.transform.position);
+			transform.rotation = Quaternion.LookRotation(cam.transform.position);
 			
 			if(_scaleModifier)
 				transform.localScale = Vector3.Lerp(Vector3.one * _scaleMap.x, Vector3.one * _scaleMap.y,  Vector3.Distance(cam.transform.position, transform.position) / _distanceMax);

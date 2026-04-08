@@ -846,6 +846,9 @@ MonoBehaviour:
   _damage: 10
   _throwForce: 20
   _numberBounces: 2
+  _minThrowForce: 5
+  _maxThrowForce: 25
+  _maxChargeTime: 2
   _hasDrone: 0
 --- !u!1 &388540647123593872
 GameObject:
@@ -8593,7 +8596,7 @@ Transform:
   m_GameObject: {fileID: 6945641284821780910}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.21, y: 0.57, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8948,7 +8951,7 @@ GameObject:
   - component: {fileID: 4823317710188223472}
   - component: {fileID: 3143401594481829691}
   - component: {fileID: 5105748917152535591}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: PlayerControllerViews
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8984,6 +8987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthView
   _playerHealth: {fileID: 5365301951764690734}
+  _droneThrower: {fileID: 931936587992237131}
   _healthBar: {fileID: 3134779535442495518}
   _deathImage: {fileID: 8235982739118108901}
   _damagedWarningImage: {fileID: 5315133112455716009}

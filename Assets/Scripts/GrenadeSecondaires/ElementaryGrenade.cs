@@ -86,8 +86,7 @@ public class ElementaryGrenade : MonoBehaviour
             {
                 Cons.Print("Grenade Collided with " + d.GetType().Name, ColorConsole.Grey);
                 
-                if(!hit.collider.CompareTag("Player"))
-                    d.TakeDamage(_damage, _networkIdAttacker);
+                d.TakeDamage(_damage, _networkIdAttacker);
             }
             
             Instantiate(_particlesExplosion, transform.position, Quaternion.identity);

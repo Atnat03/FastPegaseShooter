@@ -37,6 +37,7 @@ public class DroneThrower : NetworkBehaviour
 
 	private float _currentChargeTime = 0f;
 	private bool _isCharging = false;
+	private bool _isCanceled = false;
 
 	private readonly SyncVar<bool> _canThrow = new(false);
 
@@ -45,7 +46,8 @@ public class DroneThrower : NetworkBehaviour
 	private DroneBullet _currentDroneInTerrain = null;
 	
 	//Actions
-	public Action OnThrow;
+	public Action OnThrowing;
+	public Action OnThrowingActivation;
 	public Action OnGetDrone;
 	
 	#endregion
@@ -65,16 +67,17 @@ public class DroneThrower : NetworkBehaviour
 	public void TryThrowDrone()
 	{
 		if (!_hasDrone) return;
-
+		if (_isCanceled) return;
+		
 		_isCharging = false;
 
 		float chargeRatio = _currentChargeTime / _maxChargeTime;
 		float finalForce = Mathf.Lerp(_minThrowForce, _maxThrowForce, chargeRatio);
-
+		
 		ThrowDroneServerRpc(finalForce);
 
 		_hasDrone = false;
-		OnThrow?.Invoke();
+		OnThrowing?.Invoke();
 	}
 
 	[ServerRpc]
@@ -108,6 +111,16 @@ public class DroneThrower : NetworkBehaviour
 
 		_isCharging = true;
 		_currentChargeTime = 0f;
+		
+		OnThrowingActivation?.Invoke();
+	}
+
+	public void CancelThrow()
+	{
+		_cancelOffsetTime = 0;
+		_isCanceled = true;
+		_isCharging = false;
+		_currentChargeTime = 0;
 	}
 	
 	private void Update()
@@ -119,7 +132,19 @@ public class DroneThrower : NetworkBehaviour
 			_currentChargeTime += Time.deltaTime;
 			_currentChargeTime = Mathf.Clamp(_currentChargeTime, 0, _maxChargeTime);
 		}
+
+		if (_isCanceled)
+		{
+			_cancelOffsetTime +=  Time.deltaTime;
+
+			if (_cancelOffsetTime >= 0.5f)
+			{
+				_isCanceled = false;
+			}
+		}
 	}
-	
+
+	private float _cancelOffsetTime = 0;
+
 	#endregion
 }
