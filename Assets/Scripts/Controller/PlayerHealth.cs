@@ -50,6 +50,7 @@ public class PlayerHealth : NetworkBusListener
 	private float _healKeyDownTime;
 	private bool _throwActivated;
 	[HideInInspector] public Vector3 p_healThrowLandingPos;
+	private bool _canThrowHeal = true;
 	
 	//Action
 	public Action<float> OnUpdateHealth;
@@ -134,16 +135,22 @@ public class PlayerHealth : NetworkBusListener
 			}
 		}
 	}
+	
+	public void CancelHealThrowing() => _canThrowHeal = false;
 
 	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
+		if(!IsOwner)return;
+		
 		_healKeyDownTime = Time.time;
 	}
-	async void HealKeyCanceled(InputAction.CallbackContext ctx)
+	void HealKeyCanceled(InputAction.CallbackContext ctx)
 	{
+		if(!IsOwner)return;
+		
 		if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold) //Throwing heal
 		{
-			if(p_healThrowLandingPos != p_healThrowPoint.position)
+			if(_canThrowHeal && p_healThrowLandingPos != p_healThrowPoint.position)
 			{
 				CustomLogger.ImportantLog("throwing heal");
 				OnThrowing?.Invoke();
@@ -165,6 +172,7 @@ public class PlayerHealth : NetworkBusListener
 		
 		_throwActivated = false;
 		_healKeyDownTime = float.MaxValue;
+		_canThrowHeal = true;
 	}
 
 	[Server]
