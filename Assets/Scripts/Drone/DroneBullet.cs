@@ -18,6 +18,7 @@ public class DroneBullet : NetworkBehaviour
 	private Drone _dronePrefab;
 	private bool _hasSpawned;
 	private NetworkConnection _throwerId;
+	private PlayerEnergy _playerEnergy;
 	
 	#endregion
 
@@ -29,10 +30,11 @@ public class DroneBullet : NetworkBehaviour
 		rb = GetComponent<Rigidbody>();
 	}
 	
-	public void SetDrone(Drone dronePrefab, NetworkConnection throwerId)
+	public void SetDrone(Drone dronePrefab, NetworkConnection throwerId, PlayerEnergy playerEnergy)
 	{
 		_dronePrefab = dronePrefab;
 		_throwerId = throwerId;
+		_playerEnergy = playerEnergy;
 	}
 	
 	private void OnCollisionEnter(Collision collision)
@@ -54,7 +56,7 @@ public class DroneBullet : NetworkBehaviour
 	{
 		Drone droneInstance = Instantiate(_dronePrefab, transform.position, Quaternion.identity);
 		InstanceFinder.ServerManager.Spawn(droneInstance.gameObject);
-		droneInstance.SetThrower(_throwerId);
+		droneInstance.SetThrower(_throwerId, _playerEnergy);
 	}
 
 	#endregion
