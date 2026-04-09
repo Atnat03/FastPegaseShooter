@@ -14,7 +14,9 @@ public class BasicLifeViewer : MonoBehaviour
     [SerializeField] private float _elapsedCumulativeDmgTime = 0;
     private TextMeshProUGUI _hitMarker;
 
+    [Header("Life")]
     [SerializeField] private TextMeshProUGUI _lifeTMP;
+    [SerializeField] private GameObject _lifeBarParent;
     [SerializeField] private Image _lifeBarImage;
     [SerializeField] private Color _fullLifeColor;
     [SerializeField] private Color _emptyLifeColor;
@@ -25,13 +27,13 @@ public class BasicLifeViewer : MonoBehaviour
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
         _lifeBarImage.color = _fullLifeColor;
         
-        _lifeBarImage.gameObject.SetActive(false);
+        _lifeBarParent.gameObject.SetActive(false);
         _lifeTMP.gameObject.SetActive(false);
     }
     
     public void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
-        _lifeBarImage.gameObject.SetActive(true);
+        _lifeBarParent.gameObject.SetActive(true);
         _lifeTMP.gameObject.SetActive(true);
         
         _cumulatifDmg += dmg;

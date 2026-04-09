@@ -9,11 +9,9 @@ public class GrenadeThrowerView : MonoBehaviour
     [SerializeField] private Image _imageCooldown;
     
     //Fire
-    [SerializeField] private ParticleSystem _impactParticlesFire;
-    //Electik
-    [SerializeField] private ParticleSystem _impactParticlesElectic;
+    [SerializeField] private ParticleSystem _impactParticlesPositive;
     //Ice
-    [SerializeField] private ParticleSystem _impactParticlesIce;
+    [SerializeField] private ParticleSystem _impactParticlesNegative;
     
     private void UpdateCooldown(float ratio)
     {
@@ -22,17 +20,16 @@ public class GrenadeThrowerView : MonoBehaviour
     
     private void ThrowGrenade(ElementaryGrenade grenade)
     {
-        ParticleSystem GetExplosion(Element e)
+        ParticleSystem GetExplosion(MagneticCharge e)
         {
             return e switch
             {
-                Element.Fire => _impactParticlesFire,
-                Element.Electric => _impactParticlesElectic,
-                Element.Ice => _impactParticlesIce,
+                MagneticCharge.Positive => _impactParticlesPositive,
+                MagneticCharge.Negative => _impactParticlesNegative,
             };
         }
         
-        grenade.SetEffect(GetExplosion(_thrower.Element));
+        grenade.SetEffect(GetExplosion(_thrower.MagneticCharge));
     }
     
     void OnEnable()

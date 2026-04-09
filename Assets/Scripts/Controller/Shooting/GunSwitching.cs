@@ -21,6 +21,8 @@ public class GunSwitching : NetworkBehaviour
 
 	public bool IsSwitching => !_canSwitch;
 	
+	public bool IsPositive => _isPositiveChargedPlayer.Value;
+	
 	#endregion
 	
 	#region Variables

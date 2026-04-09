@@ -174,7 +174,7 @@ public class EnemyCore : NetworkBusListener
     [ObserversRpc]
     private void ExplosionObserversRpc()
     {
-        Destroy(Instantiate(_explosionParticle, transform.position, Quaternion.identity), 2f);
+        Destroy(Instantiate(_explosionParticle, transform.position + Vector3.up, Quaternion.identity), 2f);
     }
 
 
