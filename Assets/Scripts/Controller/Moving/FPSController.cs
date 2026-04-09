@@ -1669,7 +1669,7 @@ public class FPSController : NetworkBusListener
         SetLayerRecursively(_playerVisual, LayerMask.NameToLayer("Owner"));
     }
 
-    void SetLayerRecursively(GameObject obj, int newLayer)
+    public static void SetLayerRecursively(GameObject obj, int newLayer)
     {
         obj.layer = newLayer;
 

@@ -8,7 +8,7 @@ public class GrenadeThrowerCustomInspector : Editor
     {
         serializedObject.Update();
 
-        SerializedProperty enumProp = serializedObject.FindProperty("_element");
+        SerializedProperty enumProp = serializedObject.FindProperty("magneticCharge");
 
         //Enum
         DrawEnum(enumProp);
@@ -19,6 +19,7 @@ public class GrenadeThrowerCustomInspector : Editor
         EditorUtilities.Draw("_spawnPoint", serializedObject);
         EditorUtilities.Draw("_currentGun", serializedObject);
         EditorUtilities.Draw("_cooldown", serializedObject);
+        EditorUtilities.Draw("_damage", serializedObject);
         EditorUtilities.Draw("_throwForce", serializedObject);
         EditorUtilities.Draw("_explosionRadius", serializedObject);
         EditorUtilities.Draw("_showGizmoOnSpawnPoint", serializedObject);
@@ -28,15 +29,14 @@ public class GrenadeThrowerCustomInspector : Editor
     
     private void DrawEnum(SerializedProperty enumProp)
     {
-        Element element = (Element)enumProp.enumValueIndex;
+        MagneticCharge magneticCharge = (MagneticCharge)enumProp.enumValueIndex;
 
-        Color GetColor(Element e)
+        Color GetColor(MagneticCharge e)
         {
             return e switch
             {
-                Element.Fire => Color.softRed,
-                Element.Electric => Color.yellow,
-                Element.Ice => Color.softBlue,
+                MagneticCharge.Positive => Color.softRed,
+                MagneticCharge.Negative => Color.softBlue,
                 _ => Color.white
             };
         }
@@ -55,12 +55,12 @@ public class GrenadeThrowerCustomInspector : Editor
 
         GUILayout.BeginVertical();
 
-        foreach (Element type in System.Enum.GetValues(typeof(Element)))
+        foreach (MagneticCharge type in System.Enum.GetValues(typeof(MagneticCharge)))
         {
             if (count % columns == 0)
                 GUILayout.BeginHorizontal();
 
-            bool isSelected = type == element;
+            bool isSelected = type == magneticCharge;
 
             Rect rect = GUILayoutUtility.GetRect(buttonWidth, buttonHeight);
 

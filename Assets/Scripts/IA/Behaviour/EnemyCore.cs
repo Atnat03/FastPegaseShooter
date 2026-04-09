@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using MyPrint;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -36,9 +37,6 @@ public class EnemyCore : NetworkBusListener
     
     [SerializeField] private float _positiveChargeMax = 5;
     private readonly SyncVar<float> _currentP_charge = new SyncVar<float>();
-    
-    [SerializeField] private float _timeBeforeStatReset = 3f;
-    private readonly SyncVar<float> _elapsedTimeReset = new(0);
 
     [Header("View")] 
     [SerializeField] private GameObject _positiveUI;
@@ -53,39 +51,66 @@ public class EnemyCore : NetworkBusListener
     
     public override void OnStartServer()
     {
-        base.OnStartServer();
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
 
         foreach (EnemyTargetModule targetModule in _targetingModules)
         {
-            if (targetModule is ScoreTargetModule scoreTargetModule)
+            if (targetModule != null && targetModule is ScoreTargetModule scoreTargetModule)
                 _scoreModules.Add(scoreTargetModule);
         }
 
         foreach (EnemyAttackModule module in _attackingModules)
-        foreach (ScoreTargetModule scoreModule in _scoreModules)
-            module.p_onHitPlayer += scoreModule.OnHitPlayer;
+        {
+            if (module == null) continue;
+            foreach (ScoreTargetModule scoreModule in _scoreModules)
+            {
+                if (scoreModule != null)
+                    module.p_onHitPlayer += scoreModule.OnHitPlayer;
+            }
+        }
 
         foreach (EnemyLifeModule module in _lifeModules)
-        foreach (ScoreTargetModule scoreModule in _scoreModules)
-            module.p_onHitPlayer += scoreModule.OnDamageTaken;
+        {
+            if (module == null) continue;
+            foreach (ScoreTargetModule scoreModule in _scoreModules)
+            {
+                if (scoreModule != null)
+                    module.p_onHitPlayer += scoreModule.OnDamageTaken;
+            }
+        }
     }
 
     public override void OnStopServer()
     {
         InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
-        base.OnStopServer();
     }
 
     public void InitialiseEnemy()
     {
         foreach (EnemyAttackModule module in _attackingModules)
-            module.InitialiseBehaviourModule(this);
+        {
+            if (module != null)
+                module.InitialiseBehaviourModule(this);
+            else
+                Debug.LogWarning($"Null EnemyAttackModule found in {gameObject.name}");
+        }
+    
         foreach (EnemyLifeModule module in _lifeModules)
-            module.InitialiseBehaviourModule(this);
+        {
+            if (module != null)
+                module.InitialiseBehaviourModule(this);
+            else
+                Debug.LogWarning($"Null EnemyLifeModule found in {gameObject.name}");
+        }
+    
         foreach (EnemyTargetModule module in _targetingModules)
-            module.InitialiseBehaviourModule(this);
+        {
+            if (module != null)
+                module.InitialiseBehaviourModule(this);
+            else
+                Debug.LogWarning($"Null EnemyTargetModule found in {gameObject.name}");
+        }
 
         _movementModule?.InitialiseBehaviourModule(this);
     }
@@ -102,10 +127,16 @@ public class EnemyCore : NetworkBusListener
     private void OnNetworkTick()
     {
         foreach (EnemyAttackModule module in _attackingModules)
-            module.OnNetworkTick();
+        {
+            if (module != null)
+                module.OnNetworkTick();
+        }
 
         foreach (EnemyTargetModule module in _targetingModules)
-            module.OnNetworkTick();
+        {
+            if (module != null)
+                module.OnNetworkTick();
+        }
 
         _movementModule?.OnNetworkTick();
     }
@@ -117,38 +148,21 @@ public class EnemyCore : NetworkBusListener
 
     #region Charges
 
-    public void AddCharge(bool positive)
+    public void AddCharge(bool positive, float value)
     {
         if (!IsServerInitialized)
             return;
         
         if (positive)
         {
-            _currentP_charge.Value++;
+            _currentP_charge.Value += value;
         }
         else
         {
-            _currentN_charge.Value++;
+            _currentN_charge.Value += value;
         }
 
-        _elapsedTimeReset.Value = _timeBeforeStatReset;
         CheckAllChargeAreFull();
-    }
-
-    private void Update()
-    {
-        if(!IsServerInitialized)
-            return;
-        
-        if (_elapsedTimeReset.Value > 0)
-        {
-            _elapsedTimeReset.Value -= Time.deltaTime;
-
-            if (_elapsedTimeReset.Value <= 0)
-            {
-                ResetAllCharged();
-            }
-        }
     }
 
     private void ResetAllCharged()
@@ -159,7 +173,7 @@ public class EnemyCore : NetworkBusListener
     
     private void CheckAllChargeAreFull()
     {
-        if (_currentP_charge.Value >= _positiveChargeMax && _currentN_charge.Value >= _positiveChargeMax)
+        if (_currentP_charge.Value >= _positiveChargeMax && _currentN_charge.Value >= _negativeChargeMax)
         {
             foreach (EnemyLifeModule life in _lifeModules)
             {
@@ -174,9 +188,8 @@ public class EnemyCore : NetworkBusListener
     [ObserversRpc]
     private void ExplosionObserversRpc()
     {
-        Destroy(Instantiate(_explosionParticle, transform.position, Quaternion.identity), 2f);
+        Destroy(Instantiate(_explosionParticle, transform.position + Vector3.up, Quaternion.identity), 2f);
     }
-
 
     private void OnEnable()
     {

@@ -57,14 +57,16 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
             
             if (_explosionVFX != null && p_isExplosive)
             {
-                Cons.Print("Explosion", ColorConsole.Red, ConsoleStyle.Bold);
                 Instantiate(_explosionVFX, transform.position, Quaternion.identity);
             }
 
             if (InstanceFinder.IsServerStarted)
             {
                 if (p_isExplosive)
+                {
                     Explosed(p_explosionRadius, (int)p_damage);
+                    return;
+                }
                 else
                 {
                     if (hit.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
@@ -79,7 +81,8 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                         
                         if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
                         {
-                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                            Cons.Print("Charge", ColorConsole.Red);
+                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                         }
                     }
                 }
@@ -95,7 +98,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
 
         bool isHit = false;
         bool crit = false;
-        
+    
         foreach (Collider c in colliders)
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
@@ -107,15 +110,15 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                     p_value = p_damage
                 });
                 
-                isHit = true;
-                
-                if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
+                if (c.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
-                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                 }
+            
+                isHit = true;
             }
         }
-        
+    
         if(isHit)
             _gunController.TriggerHitMark(crit || p_isCritical);
     }

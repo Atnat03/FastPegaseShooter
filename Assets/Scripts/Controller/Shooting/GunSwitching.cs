@@ -21,6 +21,8 @@ public class GunSwitching : NetworkBehaviour
 
 	public bool IsSwitching => !_canSwitch;
 	
+	public bool IsPositive => _isPositiveChargedPlayer.Value;
+	
 	#endregion
 	
 	#region Variables
@@ -37,8 +39,10 @@ public class GunSwitching : NetworkBehaviour
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
 
+	//Actions
 	public Action OnStartSwitchGun;
 	public Action OnEndSwitchGun;
+	public Action<bool> OnSwapGun;
 
 	private IGun _currentMainIGun;
 	private ISurcharge _currentISurcharge;
@@ -68,8 +72,24 @@ public class GunSwitching : NetworkBehaviour
 		_isPositiveChargedPlayer.Value = startIndex == 0;
 		
 		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
+		
+		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
 	}
-	
+
+	private void ChangeMagneticCharge()
+	{
+		if (!IsServerInitialized) return;
+		
+		_isPositiveChargedPlayer.Value = !_isPositiveChargedPlayer.Value;
+		UpdateUIChargeObserversRpc();
+	}
+
+	[ObserversRpc]
+	private void UpdateUIChargeObserversRpc()
+	{
+		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
+	}
+
 	private void ActivateCurrentGun(List<GameObject> list, int index)
 	{
 		for (int i = 0; i < list.Count; i++)
@@ -95,6 +115,7 @@ public class GunSwitching : NetworkBehaviour
 		if (!IsMainGun) return;
 		
 		ChangeCurrentGun_Main(newIndex);
+		ChangeMagneticCharge();
 
 		if (_currentMainIGun != null)
 		{
@@ -145,6 +166,15 @@ public class GunSwitching : NetworkBehaviour
 		yield return new WaitForSeconds(1f);
 
 		ActivateCurrentGun(_mainGunsList, _currentMainGun.Value);
+
+		GunController g = CurrentMainGun.GetComponent<GunController>();
+		
+		Cons.PrintBool(g != null, "Gun controller not null");
+		
+		if (g.IsFullAuto)
+		{
+			g.ApplyShoot();
+		}
 	}
 
 	private void OnEnable()

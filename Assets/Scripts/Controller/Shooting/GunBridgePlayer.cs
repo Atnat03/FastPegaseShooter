@@ -3,6 +3,7 @@ using System.Collections;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Managers;
+using MyPrint;
 using UnityEngine;
 
 namespace Controller
@@ -19,6 +20,7 @@ namespace Controller
         
         [SerializeField] private GunSwitching _gunSwitching;
         [SerializeField] private GunSurcharge _gunSurcharge;
+        [SerializeField] private GrenadeThrower _grenadeThrower;
         
         private readonly SyncVar<bool> _wantToSwitch = new SyncVar<bool>();
         
@@ -45,6 +47,7 @@ namespace Controller
             
             int startIndex = OwnerId % 2;
             _gunSwitching.Initialize(startIndex);
+            _grenadeThrower.Initialize(startIndex);
 
             _gunSwitching.OnStartSwitchGun += StopReloadGun;
         }
@@ -130,6 +133,7 @@ namespace Controller
             }
 
             _gunSwitching.ChangeCurrentGun_Main_ServerRpc(data.gunIndex);
+            _grenadeThrower.ChangeMagneticChargeServerRpc();
 
             _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
             

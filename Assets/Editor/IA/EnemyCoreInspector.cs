@@ -86,7 +86,6 @@ public class EnemyCoreInspector : Editor
         EditorUtilities.Draw("_explosionChargedDamage", serializedObject);
         EditorUtilities.Draw("_negativeChargeMax", serializedObject);
         EditorUtilities.Draw("_positiveChargeMax", serializedObject);
-        EditorUtilities.Draw("_timeBeforeStatReset", serializedObject);
         EditorUtilities.Draw("_positiveUI", serializedObject);
         EditorUtilities.Draw("_positiveCurValue", serializedObject);
         EditorUtilities.Draw("_negativeUI", serializedObject);

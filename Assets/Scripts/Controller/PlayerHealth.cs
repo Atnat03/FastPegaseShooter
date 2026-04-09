@@ -64,6 +64,7 @@ public class PlayerHealth : NetworkBusListener
 	public Action OnThrowingActivation;
 	public Action OnThrowing;
 	public Action<Vector3> OnHealThrowLanding;
+	public Action<float> OnUpdateCooldown;
 	
 	#endregion
 
@@ -120,6 +121,17 @@ public class PlayerHealth : NetworkBusListener
 		if (IsOwner)
 		{
 			OnUpdateHealth?.Invoke(_targetHealthFill);
+			
+			float remainingCooldown = _healingCooldown - (Time.time - _healActivationTime);
+			if (remainingCooldown > 0)
+			{
+				OnUpdateCooldown?.Invoke(remainingCooldown / _healingCooldown);
+			}
+			else
+			{
+				OnUpdateCooldown?.Invoke(0);
+			}
+			
 			if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold)
 			{
 				if (!_throwActivated)
