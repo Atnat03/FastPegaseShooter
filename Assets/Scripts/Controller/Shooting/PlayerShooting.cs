@@ -112,6 +112,14 @@ namespace Controller
             _grenadeThrower.TryThrowGrenade();
         }
         
+        private void OnGrenadeThrown(ElementaryGrenade g)
+        {
+            if (_playerInputAction.actions["Shoot"].IsPressed())
+            {
+                _bridgePlayer.TryShootWithCurrentGun();
+            }
+        }
+        
         private void TryThrowDrone(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
@@ -160,6 +168,7 @@ namespace Controller
             _playerInputAction.actions["Reload"].performed += Reloading;
             
             _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
+            _grenadeThrower.OnThrow += OnGrenadeThrown;
             
             _playerInputAction.actions["ThrowDrone"].performed += StartThrowDrone;
             _playerInputAction.actions["ThrowDrone"].canceled += TryThrowDrone;
@@ -178,6 +187,7 @@ namespace Controller
             _playerInputAction.actions["Reload"].performed -= Reloading;
             
             _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
+            _grenadeThrower.OnThrow -= OnGrenadeThrown;
             
             _playerInputAction.actions["ThrowDrone"].performed -= StartThrowDrone;
             _playerInputAction.actions["ThrowDrone"].canceled -= TryThrowDrone;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,6 +107,14 @@ namespace GunDecorator
                         found.SetVariable(s);
                     }
                 }
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (IsFullAuto && ShootingInputPressed)
+            {
+                ApplyShoot();
             }
         }
 
