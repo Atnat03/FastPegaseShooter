@@ -14,20 +14,12 @@ public class MiniMap : NetworkBehaviour
 
 		if (!IsOwner)
 		{
-			miniMapSprite.color = Color.orange;
-			return;
+			miniMapPrefab.gameObject.SetActive(false);
+			miniMapSprite.color = Color.yellow;
 		}
-
-		SpawnMiniMapCamera();
-	}
-
-	private void SpawnMiniMapCamera()
-	{
-		miniMapSprite.color = Color.deepSkyBlue;
-		
-		_spawnedCam = Instantiate(miniMapPrefab, transform, true);
-
-		_spawnedCam.transform.position = transform.position + Vector3.up * 10f;
-		_spawnedCam.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+		else
+		{
+			miniMapSprite.color = Color.cornflowerBlue;
+		}
 	}
 }
