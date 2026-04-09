@@ -51,39 +51,66 @@ public class EnemyCore : NetworkBusListener
     
     public override void OnStartServer()
     {
-        base.OnStartServer();
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
 
         foreach (EnemyTargetModule targetModule in _targetingModules)
         {
-            if (targetModule is ScoreTargetModule scoreTargetModule)
+            if (targetModule != null && targetModule is ScoreTargetModule scoreTargetModule)
                 _scoreModules.Add(scoreTargetModule);
         }
 
         foreach (EnemyAttackModule module in _attackingModules)
-        foreach (ScoreTargetModule scoreModule in _scoreModules)
-            module.p_onHitPlayer += scoreModule.OnHitPlayer;
+        {
+            if (module == null) continue;
+            foreach (ScoreTargetModule scoreModule in _scoreModules)
+            {
+                if (scoreModule != null)
+                    module.p_onHitPlayer += scoreModule.OnHitPlayer;
+            }
+        }
 
         foreach (EnemyLifeModule module in _lifeModules)
-        foreach (ScoreTargetModule scoreModule in _scoreModules)
-            module.p_onHitPlayer += scoreModule.OnDamageTaken;
+        {
+            if (module == null) continue;
+            foreach (ScoreTargetModule scoreModule in _scoreModules)
+            {
+                if (scoreModule != null)
+                    module.p_onHitPlayer += scoreModule.OnDamageTaken;
+            }
+        }
     }
 
     public override void OnStopServer()
     {
         InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
-        base.OnStopServer();
     }
 
     public void InitialiseEnemy()
     {
         foreach (EnemyAttackModule module in _attackingModules)
-            module.InitialiseBehaviourModule(this);
+        {
+            if (module != null)
+                module.InitialiseBehaviourModule(this);
+            else
+                Debug.LogWarning($"Null EnemyAttackModule found in {gameObject.name}");
+        }
+    
         foreach (EnemyLifeModule module in _lifeModules)
-            module.InitialiseBehaviourModule(this);
+        {
+            if (module != null)
+                module.InitialiseBehaviourModule(this);
+            else
+                Debug.LogWarning($"Null EnemyLifeModule found in {gameObject.name}");
+        }
+    
         foreach (EnemyTargetModule module in _targetingModules)
-            module.InitialiseBehaviourModule(this);
+        {
+            if (module != null)
+                module.InitialiseBehaviourModule(this);
+            else
+                Debug.LogWarning($"Null EnemyTargetModule found in {gameObject.name}");
+        }
 
         _movementModule?.InitialiseBehaviourModule(this);
     }
@@ -100,10 +127,16 @@ public class EnemyCore : NetworkBusListener
     private void OnNetworkTick()
     {
         foreach (EnemyAttackModule module in _attackingModules)
-            module.OnNetworkTick();
+        {
+            if (module != null)
+                module.OnNetworkTick();
+        }
 
         foreach (EnemyTargetModule module in _targetingModules)
-            module.OnNetworkTick();
+        {
+            if (module != null)
+                module.OnNetworkTick();
+        }
 
         _movementModule?.OnNetworkTick();
     }
@@ -140,7 +173,7 @@ public class EnemyCore : NetworkBusListener
     
     private void CheckAllChargeAreFull()
     {
-        if (_currentP_charge.Value >= _positiveChargeMax && _currentN_charge.Value >= _positiveChargeMax)
+        if (_currentP_charge.Value >= _positiveChargeMax && _currentN_charge.Value >= _negativeChargeMax)
         {
             foreach (EnemyLifeModule life in _lifeModules)
             {

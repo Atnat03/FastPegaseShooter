@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using FishNet.Object;
 using MyPrint;
 using UnityEngine;
@@ -15,6 +16,9 @@ namespace Controller
         [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private GrenadeThrower _grenadeThrower;
         [SerializeField] private DroneThrower _droneThrower;
+        
+        private bool _canShoot = true;
+
 
         private bool shootingInputPressed;
 
@@ -33,6 +37,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(!_canShoot) return;
 
             if (_bridgePlayer != null)
             {
@@ -55,6 +60,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(!_canShoot) return;
             
             if (_bridgePlayer != null)
             {
@@ -77,6 +83,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(!_canShoot) return;
 
             if (_bridgePlayer != null)
             {
@@ -88,6 +95,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(!_canShoot) return;
 
             _bridgePlayer.RequestSwapingGunServerRpc(
                 this,
@@ -99,6 +107,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(!_canShoot) return;
             
             _grenadeThrower.TryThrowGrenade();
         }
@@ -107,6 +116,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(!_canShoot) return;
             
             _droneThrower.TryThrowDrone();
         }
@@ -127,6 +137,19 @@ namespace Controller
             
             _droneThrower.CancelThrow();
         }
+        
+        private void StopShooting(float duration)
+        {
+            StartCoroutine(StopShootingWait(duration));
+        }
+        
+        IEnumerator StopShootingWait(float duration)
+        {
+            _canShoot = false;
+            
+            yield return new WaitForSeconds(duration);
+            _canShoot = true;
+        }
 
         void OnEnable()
         {
@@ -141,6 +164,9 @@ namespace Controller
             _playerInputAction.actions["ThrowDrone"].performed += StartThrowDrone;
             _playerInputAction.actions["ThrowDrone"].canceled += TryThrowDrone;
             _playerInputAction.actions["Shoot"].performed += CancelThrow;
+            
+            //Stop Shoot
+            _playerHealth.OnUpdateHealth += StopShooting;
         }
 
         void OnDisable()
@@ -156,8 +182,12 @@ namespace Controller
             _playerInputAction.actions["ThrowDrone"].performed -= StartThrowDrone;
             _playerInputAction.actions["ThrowDrone"].canceled -= TryThrowDrone;
             _playerInputAction.actions["Shoot"].performed -= CancelThrow;
+            
+            //Stop Shoot
+            _playerHealth.OnUpdateHealth -= StopShooting;
         }
 
+        
         #endregion
     }
 }
