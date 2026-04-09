@@ -156,7 +156,6 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashTimeDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashCooldown"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("dashEnergyCost"));
         }, ref showDash);
 
         DrawSection("Slope Slide", new Color(1f, 0.75f, 0.4f), () =>

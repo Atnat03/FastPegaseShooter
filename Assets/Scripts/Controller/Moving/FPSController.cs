@@ -5,12 +5,7 @@ using UnityEngine.InputSystem;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 
-public struct RequestEnergyEvent
-{
-    public IEnergyRequest requester;
-}
-
-public class FPSController : NetworkBusListener, IEnergyRequest
+public class FPSController : NetworkBusListener
 {
     // prévoir une variable de smoothing (acceleration / deceleration) pour le dash si possible en animation curve
 
@@ -146,7 +141,6 @@ public class FPSController : NetworkBusListener, IEnergyRequest
     [Header("Dash")] [SerializeField] float dashSpeed = 5f;
     [SerializeField] float dashTimeDuration = 0.2f;
     [SerializeField] float dashCooldown;
-    [SerializeField] private float dashEnergyCost = 20f;
 
     [Header("Slope Slide")] [SerializeField]
     float minSlopeAngleToSlopeSlide = 11f;
@@ -498,8 +492,6 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            InvokeEvent(new RequestEnergyEvent { requester = this });
-
             if (enoughtEnegyToDash)
                 stateMachine.ChangeState(ControlerState.Dashing);
         }
@@ -582,8 +574,6 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            InvokeEvent(new RequestEnergyEvent { requester = this });
-
             if (enoughtEnegyToDash)
                 stateMachine.ChangeState(ControlerState.Dashing);
         }
@@ -684,8 +674,6 @@ public class FPSController : NetworkBusListener, IEnergyRequest
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            InvokeEvent(new RequestEnergyEvent { requester = this });
-
             if (enoughtEnegyToDash)
                 stateMachine.ChangeState(ControlerState.Dashing);
         }
@@ -1221,9 +1209,7 @@ public class FPSController : NetworkBusListener, IEnergyRequest
             if (verticalInput == 0f && horizontalInput == 0f) dashingDirection = _camera.transform.forward;
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
-
-        InvokeEvent(new OnModifyEnergyEvent { value = -dashEnergyCost });
-
+        
         dashingDirection *= dashSpeed;
         StartCoroutine(DashingCoroutine());
     }
@@ -1688,12 +1674,6 @@ public class FPSController : NetworkBusListener, IEnergyRequest
         {
             SetLayerRecursively(child.gameObject, newLayer);
         }
-    }
-
-    public void OnGetEnergy(float energy)
-    {
-        Debug.Log("OnGetEnergy");
-        enoughtEnegyToDash = energy - dashEnergyCost >= 0;
     }
 
     [ServerRpc]
