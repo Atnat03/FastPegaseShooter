@@ -166,6 +166,13 @@ public class GunSwitching : NetworkBehaviour
 		yield return new WaitForSeconds(1f);
 
 		ActivateCurrentGun(_mainGunsList, _currentMainGun.Value);
+
+		GunController g = CurrentMainGun.GetComponent<GunController>();
+		
+		if (g.IsFullAuto)
+		{
+			g.ApplyShoot();
+		}
 	}
 
 	private void OnEnable()
