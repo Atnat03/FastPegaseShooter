@@ -1509,7 +1509,6 @@ public class FPSController : NetworkBusListener
             {
                 if (Vector3.Dot(horizontalVelocity, playerFeet.position - stepHit.point) < 0.3)
                 {
-                    Debug.Log("step");
                     float stepHeight = stepHit.point.y - playerFeet.position.y;
 
                     if (stepHeight > 0 && stepHeight <= maxStepHeight)
