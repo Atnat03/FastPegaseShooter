@@ -37,9 +37,6 @@ public class EnemyCore : NetworkBusListener
     
     [SerializeField] private float _positiveChargeMax = 5;
     private readonly SyncVar<float> _currentP_charge = new SyncVar<float>();
-    
-    [SerializeField] private float _timeBeforeStatReset = 3f;
-    private readonly SyncVar<float> _elapsedTimeReset = new(0);
 
     [Header("View")] 
     [SerializeField] private GameObject _positiveUI;
@@ -132,24 +129,7 @@ public class EnemyCore : NetworkBusListener
             _currentN_charge.Value += value;
         }
 
-        _elapsedTimeReset.Value = _timeBeforeStatReset;
         CheckAllChargeAreFull();
-    }
-
-    private void Update()
-    {
-        if(!IsServerInitialized)
-            return;
-        
-        if (_elapsedTimeReset.Value > 0)
-        {
-            _elapsedTimeReset.Value -= Time.deltaTime;
-
-            if (_elapsedTimeReset.Value <= 0)
-            {
-                ResetAllCharged();
-            }
-        }
     }
 
     private void ResetAllCharged()
