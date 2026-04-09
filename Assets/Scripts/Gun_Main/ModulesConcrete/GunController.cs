@@ -110,14 +110,6 @@ namespace GunDecorator
             }
         }
 
-        private void OnEnable()
-        {
-            if (IsFullAuto && ShootingInputPressed)
-            {
-                ApplyShoot();
-            }
-        }
-
         public void TryFire()
         {
             if (_chargedModule != null)

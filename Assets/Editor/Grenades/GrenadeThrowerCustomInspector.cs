@@ -19,6 +19,7 @@ public class GrenadeThrowerCustomInspector : Editor
         EditorUtilities.Draw("_spawnPoint", serializedObject);
         EditorUtilities.Draw("_currentGun", serializedObject);
         EditorUtilities.Draw("_cooldown", serializedObject);
+        EditorUtilities.Draw("_damage", serializedObject);
         EditorUtilities.Draw("_throwForce", serializedObject);
         EditorUtilities.Draw("_explosionRadius", serializedObject);
         EditorUtilities.Draw("_showGizmoOnSpawnPoint", serializedObject);
