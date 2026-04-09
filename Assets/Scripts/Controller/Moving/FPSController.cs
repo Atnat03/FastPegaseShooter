@@ -183,7 +183,6 @@ public class FPSController : NetworkBusListener
     bool coyoteWallJump = false;
     bool hasDashed = false;
     bool coyoteSlide = false;
-    bool enoughtEnegyToDash = false;
     bool enoughtEnegyToDoubleJump = false;
     bool isFreeze = false;
     private readonly SyncVar<bool> isDead = new SyncVar<bool>(false);
@@ -492,8 +491,7 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            if (enoughtEnegyToDash)
-                stateMachine.ChangeState(ControlerState.Dashing);
+            stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
@@ -573,9 +571,8 @@ public class FPSController : NetworkBusListener
 
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
-        {
-            if (enoughtEnegyToDash)
-                stateMachine.ChangeState(ControlerState.Dashing);
+        { 
+            stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
@@ -674,8 +671,7 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
         {
-            if (enoughtEnegyToDash)
-                stateMachine.ChangeState(ControlerState.Dashing);
+            stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
