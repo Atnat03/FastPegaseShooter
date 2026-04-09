@@ -15,35 +15,30 @@ public class BasicLifeViewer : MonoBehaviour
     private TextMeshProUGUI _hitMarker;
 
     [SerializeField] private TextMeshProUGUI _lifeTMP;
-    [SerializeField] private RectTransform _lifeBarRectTransform;
     [SerializeField] private Image _lifeBarImage;
     [SerializeField] private Color _fullLifeColor;
     [SerializeField] private Color _emptyLifeColor;
     
     
-
     void Awake()
     {
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
-        _lifeBarRectTransform.anchorMax = new Vector2(1, 0.5f);
         _lifeBarImage.color = _fullLifeColor;
         
-        _lifeBarRectTransform.gameObject.SetActive(false);
         _lifeBarImage.gameObject.SetActive(false);
         _lifeTMP.gameObject.SetActive(false);
     }
     
     public void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
-        _lifeBarRectTransform.gameObject.SetActive(true);
         _lifeBarImage.gameObject.SetActive(true);
         _lifeTMP.gameObject.SetActive(true);
         
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
         _lifeTMP.text = $"{lifeAmount}/{fullLife}";
-        _lifeBarRectTransform.anchorMax = new Vector2(percentage, 0.5f);
         _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, percentage);
+        _lifeBarImage.fillAmount = percentage;
 
         if (_elapsedCumulativeDmgTime <= 0)
         {

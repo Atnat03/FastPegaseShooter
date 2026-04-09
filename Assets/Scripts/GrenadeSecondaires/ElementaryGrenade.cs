@@ -102,7 +102,7 @@ public class ElementaryGrenade : NetworkBehaviour
 
         if (distance <= 0f) return;
 
-        if (Physics.SphereCast(_lastPosition, 0.1f, direction.normalized, out RaycastHit hit,
+        if (Physics.SphereCast(transform.position, 0.1f, direction.normalized, out RaycastHit hit,
                 distance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (_hasHit) return;

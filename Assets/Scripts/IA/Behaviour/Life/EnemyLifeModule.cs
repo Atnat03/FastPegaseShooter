@@ -76,6 +76,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     {
         OnLifeUpdate?.Invoke(isCritical, dmg, p_life.Value, _life);
     }
+    
     [ObserversRpc]
     protected void OnDeathObserverRPC()
     {

@@ -8619,13 +8619,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1400761342311452599}
   - component: {fileID: 1292535258909843473}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1400761342311452599
 Transform:
   m_ObjectHideFlags: 0
@@ -8634,10 +8634,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6945641284821780910}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.21, y: 0.57, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2113718159364479104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8692,9 +8692,9 @@ LineRenderer:
   m_MaskInteraction: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.1
@@ -8712,7 +8712,7 @@ LineRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.5
-        value: 0.5
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -8733,8 +8733,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0.49822432, g: 1, b: 0.3537736, a: 1}
+      key1: {r: 1, g: 0.48584908, b: 0.48584908, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -8758,7 +8758,7 @@ LineRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
@@ -8768,7 +8768,7 @@ LineRenderer:
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 0
+  m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
 --- !u!1 &6959854995878992326
@@ -9033,8 +9033,8 @@ MonoBehaviour:
   _frameDeccordImage: {fileID: 2237517866183327866}
   _damagedImage: {fileID: 7192287140023277596}
   _selfHealingImage: {fileID: 534198916471793597}
-  _selfHealingColor1: {r: 0.2226317, g: 1, b: 0, a: 1}
-  _selfHealingColor2: {r: 0.9384973, g: 1, b: 0, a: 1}
+  _selfHealingColor1: {r: 0.8018868, g: 0.6509434, b: 0, a: 1}
+  _selfHealingColor2: {r: 0.18523192, g: 1, b: 0, a: 1}
   _healingTrajectoryLine: {fileID: 1292535258909843473}
   _healingThrowPosObj: {fileID: 36607885238878194, guid: 7382029bf5c03294488da66ede17c86b, type: 3}
   _soundsData: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}
@@ -11203,6 +11203,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 30507841948031240}
     m_Modifications:
+    - target: {fileID: -4750392419808689300, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: _addedNetworkObject
+      value: 
+      objectReference: {fileID: 7927807153383519047}
+    - target: {fileID: -4750392419808689300, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: _networkObjectCache
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1427363929612995280, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
       propertyPath: m_LocalScale.x
       value: 50.000004
