@@ -6,6 +6,18 @@ public class ArmBridgeAnimation : NetworkBehaviour
     [SerializeField] private GrenadeThrower _thrower;
     [SerializeField] private Animator _animator;
     [SerializeField] private MeshRenderer _ballInHand;
+
+    public override void OnStartClient()
+    {
+        if (IsOwner)
+        {
+            FPSController.SetLayerRecursively(gameObject, LayerMask.NameToLayer("Other"));
+        }
+        else
+        {
+            FPSController.SetLayerRecursively(gameObject, LayerMask.NameToLayer("Owner"));
+        }
+    }
     
     public void StartThrow(MagneticCharge e)
     {
