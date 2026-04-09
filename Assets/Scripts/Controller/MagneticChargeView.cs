@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +15,11 @@ public class MagneticChargeView : MonoBehaviour
 	[SerializeField] private GunSwitching _gunSwitching;
 	
 	[Header("UI")]
-	[SerializeField] private Image _imageCurrentCharge;
-	[SerializeField] private Sprite _positiveSprite;
-	[SerializeField] private Sprite _negativeSprite;
+	[SerializeField] private Transform _imagePositive;
+	[SerializeField] private Image _imageSelectPositive;
+	[SerializeField] private Transform _imageNegative;
+	[SerializeField] private Image _imageSelectNegative;
+	[SerializeField] private Material _materialLine;
 
 	#endregion
 
@@ -30,7 +33,33 @@ public class MagneticChargeView : MonoBehaviour
 
 	private void UpdateUI(bool positive)
 	{
-		_imageCurrentCharge.sprite = positive ? _positiveSprite : _negativeSprite;
+		StartCoroutine(AnimationChargeSwap(positive));
+	}
+
+	IEnumerator AnimationChargeSwap(bool positive)
+	{
+		float duration = 0.5f;
+		float elapsedTime = 0f;
+
+		_imageSelectPositive.gameObject.SetActive(positive);
+		_imageSelectNegative.gameObject.SetActive(!positive);
+		
+		Vector3 negativeTargetScale = positive ? Vector3.one : Vector3.one * 1.2f;
+		Vector3 positiveTargetScale = positive ? Vector3.one * 1.2f : Vector3.one;
+		
+		while (elapsedTime < duration)
+		{
+			elapsedTime += Time.deltaTime;
+			
+			_imagePositive.localScale = Vector3.Lerp(_imagePositive.localScale, positiveTargetScale, elapsedTime / duration);
+			_imageNegative.localScale = Vector3.Lerp(_imagePositive.localScale, negativeTargetScale, elapsedTime / duration);
+			
+			yield return null;
+		}
+
+		_materialLine.SetFloat("_Speed", positive ? 1 : -1);
+		_materialLine.SetColor("_Color", positive ? Color.red : Color.dodgerBlue);
+		
 	}
 
 	#endregion
