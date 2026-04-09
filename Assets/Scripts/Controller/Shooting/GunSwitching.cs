@@ -169,6 +169,8 @@ public class GunSwitching : NetworkBehaviour
 
 		GunController g = CurrentMainGun.GetComponent<GunController>();
 		
+		Cons.PrintBool(g != null, "Gun controller not null");
+		
 		if (g.IsFullAuto)
 		{
 			g.ApplyShoot();
