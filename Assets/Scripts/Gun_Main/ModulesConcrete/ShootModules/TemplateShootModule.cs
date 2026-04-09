@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FishNet.Object;
+using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 
@@ -8,10 +9,10 @@ namespace GunDecorator
 {
     public class TemplateShootModule : GunModule, IShootModule
     {
-
-        public bool IsFullAuto => _isFullAuto;
-        public float FireRate => _fireRate;
+        public float FireRate => _realFireRate;
         public IAmmoModule AmmoModule => _ammoModule;
+        
+        public bool CanShoot => _canShoot;
 
         [SerializeField][Tooltip("liste de l'ensemble des modificateurs appliqués au tir (l'ordre eut changer le comportement du tir)")] protected MonoBehaviour[] _secondModule;
         List<ISecondModule> _additionalEffectModule;
@@ -19,12 +20,23 @@ namespace GunDecorator
         [SerializeField][Tooltip("type de la balle tirée par l'ensemble du module")] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
 
-        [SerializeField][Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
         [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
+        private float _realFireRate;
         
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
         private Vector3 _bulletOffset = Vector3.zero;
+        
+        float _elapsedFireTime = 0;
+        private bool _canShoot = true;
+
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is TemplateShootSetting shootSetting)
+            {
+                _fireRate = shootSetting.fireRate;
+            }
+        }
         
         private void Start()
         {
@@ -41,12 +53,30 @@ namespace GunDecorator
                 }
             }
 
+            _realFireRate = _fireRate;
+
             if(_ammoType != null)
                 _ammoModule = (IAmmoModule)_ammoType;
         }
 
+        private void Update()
+        {
+            if (_elapsedFireTime > 0)
+            {
+                _elapsedFireTime -= Time.deltaTime;
+                
+                _canShoot = false;
+            }
+            else
+            {
+                _canShoot = true;
+            }
+        }
+
         public void TryShoot()
         {
+            _elapsedFireTime = FireRate;
+            
             if (_additionalEffectModule.Count == 0)
             {
                 Shooting();
@@ -68,27 +98,27 @@ namespace GunDecorator
                 _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
                 
                 _ammoModule.ResetBulletData();
-                
-                PlayerShootSound();
             }
-        }
 
-        [ServerRpc]
-        void PlayerShootSound()
-        {
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Shoot");
-            SoundManager.PlaySound(clip, _gunController._source, 0.5f);
+            _gunController.PlaySound("Shoot");
         }
         
-        
-        
-
         public void CancelShooting()
         { }
         
         public void SetDirectionModifier(Vector3 direction) =>_directionModifier = direction;
         
         public void SetBulletOffset(Vector3 offset) =>_bulletOffset = offset;
-        
+        public void SetFireRate(float fireRateMultiplier)
+        {
+            if (Mathf.Approximately(fireRateMultiplier, -1))
+            {
+                _realFireRate = _fireRate;
+            }
+            else
+            {
+                _realFireRate = _fireRate / fireRateMultiplier;
+            }
+        }
     }
 }

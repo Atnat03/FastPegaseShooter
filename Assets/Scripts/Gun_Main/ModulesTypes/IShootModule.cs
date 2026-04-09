@@ -10,12 +10,15 @@ namespace GunDecorator
 
         public void CancelShooting();
         
-        public bool IsFullAuto { get; }
         public float FireRate { get; }
+        public bool CanShoot { get; }
+        
         public IAmmoModule AmmoModule { get; }
+        
         
         public void SetDirectionModifier(Vector3 direction);
         public void SetBulletOffset(Vector3 offset);
+        void SetFireRate(float fireRateMultiplier);
     }
     
     public interface IReloadModule
@@ -25,13 +28,13 @@ namespace GunDecorator
         public bool AutoReload { get; }
         
         public bool IsReloading { get; }
-        public void SetAmmo(int value);
+        public void SetAmmo(int value, bool infiniteAmmo);
         public void StopReload();
     }
 
     public interface IRecoilModule
     {
-        public void Recoil(Transform model, float time, float multiplier = 1);
+        public void Recoil(Transform model, float time, bool isFullAuto, float multiplier = 1, float newX = 1);
         public void SetIsRecoil(bool value);
     }
 

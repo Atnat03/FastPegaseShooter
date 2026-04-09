@@ -21,10 +21,10 @@ namespace Managers
         public Color colorJauge;
     }
     
-    public class SwapGunManager : NetworkBehaviour
+    public class SwapGunManager : NetworkBusListener
     {
         [SerializeField] private float _timeToAcceptSwap = 2f;
-        private readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
+        public readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
         [SerializeField] private float _swapingTime;
         
         [SerializeField] 
@@ -36,22 +36,15 @@ namespace Managers
         [SerializeField] private bool _isCombo = false;
         [SerializeField] private Image _infoCombo;
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
-        
-        [Header("UI")]
-        [SerializeField] private GameObject _barUI;
-        [SerializeField] private Image _valueImage;
-        [SerializeField] private TextMeshProUGUI _textSwapUI;
-        [SerializeField] private string _youAskSwapMessage;
-        [SerializeField] private string _broAskyouSwapMessage;
-        [SerializeField] private Image _surchargeImage;
-        
+
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
         private int _firstGunAmmo = -1;
         private float _displayedTime = 0f;
         private float _targetTime = 0f;
         
-        private EventBus _bus;
+        public Action<float> OnUpdateAskBroSwap;
+        public Action<bool> OnChangeAskText;
 
         public override void OnStartServer()
         {
@@ -60,28 +53,18 @@ namespace Managers
             _elapsedTimeForCombo.Value = 0;
             _elapsedTime.Value = 0;
             
-            InitBus();
-            _bus.Subscribe((CallSwapGunEvent data) => CheckCanSwapServerRpc(data));
-            _bus.Subscribe((EndOverloadEvent data) =>
-            {
-                _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo;
-            });
+            ListenToEvent<CallSwapGunEvent>(CheckCanSwapServerRpc);
+            ListenToEvent<EndOverloadEvent>(data => _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo);
         }
 
         public override void OnStartClient()
         {
             base.OnStartClient();
             
-            InitBus();
             _elapsedTime.OnChange += OnElapsedTimeChanged;
             _elapsedTimeForCombo.OnChange += OnElapsedComboTimeChanged;
         }
         
-        private void InitBus()
-        {
-            _bus = EventBusInitialiser.instance.Bus;
-        }
-
         private void Update()
         {
             if (IsServerInitialized)
@@ -111,7 +94,7 @@ namespace Managers
                 if (_displayedTime < 0) _displayedTime = 0;
             }
         
-            _valueImage.fillAmount = _displayedTime / _timeToAcceptSwap;
+            OnUpdateAskBroSwap?.Invoke(_displayedTime / _timeToAcceptSwap);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -154,7 +137,7 @@ namespace Managers
         [TargetRpc]
         private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo, Color color)
         {
-            _bus.InvokeEvent(new SwapingGunEvent
+            InvokeEvent(new SwapingGunEvent
             {
                 dataSurcharge = _damageSurchargeData[_currentSurchargeLevel.Value],
                 gunIndex = newIndex,
@@ -166,7 +149,7 @@ namespace Managers
 
         void ResetTimer()
         {
-            _bus.InvokeEvent(new EndTimerSwapEvent()
+            InvokeEvent(new EndTimerSwapEvent()
             {
                 player = _player
             });
@@ -181,12 +164,11 @@ namespace Managers
         private void OnElapsedTimeChanged(float prev, float next, bool asServer)
         {
             _targetTime = next;
-            _barUI.SetActive(next > 0);
 
             if (next > 0)
             {
                 bool isRequester = LocalConnection.ClientId == _firstPlayerOwnerId.Value;
-                _textSwapUI.text = isRequester ? _youAskSwapMessage : _broAskyouSwapMessage;
+                OnChangeAskText?.Invoke(isRequester);
             }
 
             if (next > prev)

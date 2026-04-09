@@ -1,13 +1,32 @@
+using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GunDecorator.ChargedModules
 {
     public class IncreaseNoiseChargedModule : ChargedParentModule
     {
         [Header("Salve")] 
-        [SerializeField] private int _numberBulletInCharge = 10;
         [SerializeField] private AnimationCurve _noiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
         [SerializeField] private float _maximumNoiseAngle = 10;
+        
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is ChargedIncreaseNoiseSetting s)
+            {
+                _isExplosifAmmo = s.IsExplosifAmmo;
+                _explosionRadius = s.explosionRadius;
+                _deadZoneStartCharging = s.DeadZoneStartCharging;
+                _recoilChargedMultiplier =  s.recoilChargedMultiplier;
+                _recoilX = s.RecoilX;
+                _timeToCharge = s.timeToCharge;
+                _isFullMultiplicator = s.IsFullMultiplicator;
+                _numberBulletInCharge = s.NumberBulletInCharged;
+                _noiseEvolutionCurve = s.NoiseEvolutionCurve;
+                _maximumNoiseAngle = s.maxNoiseAngle;
+            }
+        }
         
         public override void TryShootCharging()
         {
@@ -20,7 +39,8 @@ namespace GunDecorator.ChargedModules
                     ExplosionRadius = _explosionRadius
                 });
 
-                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, _recoilChargedMultiplier);
+                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
+                _gunController.RecoilModule?.SetIsRecoil(true);
 
                 ApplyShoot();
             }
@@ -43,11 +63,10 @@ namespace GunDecorator.ChargedModules
                         0);
                 
                 _ammoModule.SpawnBullet(direction, Vector3.zero);
-                _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1);
+                _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1, _gunController.IsInfiniteAmmo);
             }
-                            
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"Charged");
-            SoundManager.PlaySound(clip, _gunController._source, 0.5f);
+
+            _gunController.PlaySound("Charged");
         }
     }
 }

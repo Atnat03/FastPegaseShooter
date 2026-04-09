@@ -10,6 +10,15 @@ namespace GunDecorator
         [Header("Explosion")] 
         [SerializeField, Tooltip("Taille de la zone d'explosion")] private float _radiusExplosion;
 
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is S_ExplosifSetting s)
+            {
+                _radiusExplosion = s.explosionRadius;
+            }
+        }
+        
+        
         public void SetUpModule(IShootModule shootModule)
         {
             _shootModule = shootModule;

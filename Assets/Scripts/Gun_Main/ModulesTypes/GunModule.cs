@@ -1,5 +1,5 @@
 using FishNet.Object;
-using UnityEditor;
+using MyPrint;
 using UnityEngine;
 
 namespace  GunDecorator
@@ -17,6 +17,11 @@ namespace  GunDecorator
         public virtual void Initialize(GunController gun)
         {
             _gunController = gun;
+        }
+
+        public virtual void SetVariable(GunSetting setting)
+        {
+            Debug.Log("Setting up variable");
         }
     }
 

@@ -1,22 +1,21 @@
 using System;
-using System.Collections;
-using FishNet;
+using System.Threading.Tasks;
+using CustomConsole.Runtime.Logger;
 using FishNet.Connection;
+using FishNet.Managing;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using ScriptableObjectsDefinitions;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
-public class PlayerHealth : NetworkBehaviour
+public class PlayerHealth : NetworkBusListener
 {
 	#region Properties
 
 	public float CurrentHealth => _currentHealth.Value;
 	public bool IsDead => _isDead.Value;
+
+	public bool IsCritik => _isCritik;
 	
 	#endregion
 
@@ -26,31 +25,46 @@ public class PlayerHealth : NetworkBehaviour
 	private readonly SyncVar<float> _currentHealth =  new SyncVar<float>();
 	private readonly SyncVar<bool> _isDead =  new SyncVar<bool>(false);
 	private readonly SyncVar<float> _respawnTimer =  new SyncVar<float>(0);
+	
 	[SerializeField] private float _healthBase = 100;
-	[SerializeField] private PlayerAnimation _playerAnimation;
 	[SerializeField] private float _timeToRespawn = 5;
 	[SerializeField, Range(0f, 1f)] private float _critikStep = 0.5f;
-	private Vector3 _respawnPosition;
-	private Quaternion _respawnRotation;
+	[SerializeField] private PlayerInput _playerInputAction;
+	[SerializeField] private PlayerAnimation _playerAnimation;
+
+	[Header("Healing")]
+	public Transform p_healThrowPoint;
+	public Transform p_healThrowDirection;
+	[SerializeField] private float _healthToGive = 30;
+	[SerializeField] private float _selfHealingTime = 2;
+	[SerializeField] private float _healThrowingTimeThreshold = 1;
+	public float p_healThrowRadius = 3;
+	[SerializeField] private LayerMask _throwHitLayerMask;
+	[SerializeField] private LayerMask _throwHealLayerMask;
+	[SerializeField] private float _healingCooldown = 5;
+	
 	private bool _initialized = false;
-	bool IsCritik = false;
-	
-	[Header("UI")]
-	[SerializeField] private Image _healthBar;
-	[SerializeField] private Image _deathImage;
+	private bool _isCritik = false;
 	private float _targetHealthFill;
-	[SerializeField] private CanvasGroup _damagedWarningImage;
-	[SerializeField] private Image _frameDeccordImage;
-	float _elapsedTimeShowWarning = 0;
-	bool _isShowedWarning = false;
-
-	[SerializeField] private CanvasGroup _damagedImage;
+	private Vector3 _startPos;
 	
-	[SerializeField] private SoundsDataSO _soundsData;
-	private AudioSource _audioSource;
+	private float _healKeyDownTime;
+	private float _healActivationTime = float.MinValue;
+	private bool _throwActivated;
+	[HideInInspector] public Vector3 p_healThrowLandingPos;
+	private bool _canThrowHeal = true;
 	
-	private EventBus _bus;
-
+	//Action
+	public Action<float> OnUpdateHealth;
+	public Action OnStartWarning;
+	public Action<bool> OnKOPlayer;
+	public Action OnTakeDamage;
+	
+	public Action<float> OnSelfHealing;
+	public Action OnThrowingActivation;
+	public Action OnThrowing;
+	public Action<Vector3> OnHealThrowLanding;
+	
 	#endregion
 
 
@@ -63,29 +77,31 @@ public class PlayerHealth : NetworkBehaviour
 			_currentHealth.Value = _healthBase;
 			_initialized = true;
 		}
-		
-		_bus = EventBusInitialiser.instance.Bus;
-		_bus.Subscribe((PlayerTakeDamageEvent data) => TakeDamage(data));
-		_bus.Subscribe((AddHealthFromBarEvent data) => AddHealth(data));
+
+		ListenToEvent<PlayerTakeDamageEvent>(TakeDamage);
+		ListenToEvent<AddHealthToPlayer>(AddHealth);
 	}
 
 	public override void OnStartClient()
 	{
-		_bus = EventBusInitialiser.instance.Bus;
-		
 		_currentHealth.OnChange += OnHealthChange;
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
 		
 		if (IsOwner)
-		{
-			_respawnPosition = transform.position;
-			_respawnRotation = transform.rotation;
-		}
-		
-		_audioSource = GetComponent<AudioSource>();
-		
-		_deathImage.gameObject.SetActive(false);
+			_startPos = transform.position;
+	}
+
+	private void OnEnable()
+	{
+		_playerInputAction.actions["Heal"].performed += HealKeyPerformed;
+		_playerInputAction.actions["Heal"].canceled += HealKeyCanceled;
+	}
+
+	private void OnDisable()
+	{
+		_playerInputAction.actions["Heal"].performed -= HealKeyPerformed;
+		_playerInputAction.actions["Heal"].canceled -= HealKeyCanceled;
 	}
 
 	private void Update()
@@ -103,43 +119,76 @@ public class PlayerHealth : NetworkBehaviour
     
 		if (IsOwner)
 		{
-			_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _targetHealthFill, Time.deltaTime * 25);
-			ShowWarning();
+			OnUpdateHealth?.Invoke(_targetHealthFill);
+			if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold)
+			{
+				if (!_throwActivated)
+				{
+					OnThrowingActivation?.Invoke();
+					_throwActivated = true;
+				}
+				
+				if(Physics.Raycast(p_healThrowPoint.position, p_healThrowDirection.forward, out RaycastHit hit, 999f, _throwHitLayerMask))
+					p_healThrowLandingPos = hit.point;
+				else
+					p_healThrowLandingPos = p_healThrowPoint.position;
+				
+				Debug.DrawLine(p_healThrowPoint.position, p_healThrowLandingPos, Color.red, 2);
+			}
 		}
 	}
+	
+	public void CancelHealThrowing() => _canThrowHeal = false;
 
-	void ShowWarning()
+	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
-		_frameDeccordImage.color = IsCritik ? Color.red : Color.white;
-		_damagedWarningImage.gameObject.SetActive(IsCritik);
-
-		if (IsCritik)
+		if(!IsOwner || Time.time - _healActivationTime < _healingCooldown)return;
+		
+		_healKeyDownTime = Time.time;
+	}
+	async void HealKeyCanceled(InputAction.CallbackContext ctx)
+	{
+		if(!IsOwner || Time.time - _healActivationTime < _healingCooldown)return;
+		
+		if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold) //Throwing heal
 		{
-			_elapsedTimeShowWarning -= Time.deltaTime;
-
-			if (_elapsedTimeShowWarning <= 0)
+			if(_canThrowHeal && p_healThrowLandingPos != p_healThrowPoint.position)
 			{
-				_isShowedWarning = !_isShowedWarning;
-				_elapsedTimeShowWarning = 1f;
+				OnThrowing?.Invoke();
+				
+				ThrowHealServerRpc(p_healThrowLandingPos, _healthToGive);
+				_healActivationTime = Time.time;
 			}
-			
-			_damagedWarningImage.alpha = Mathf.Sin(_elapsedTimeShowWarning * Mathf.PI);
 		}
+		else //Self-healing
+		{
+			OnSelfHealing?.Invoke(_selfHealingTime);
+			AddHealthServerRpc(new AddHealthToPlayer
+			{
+				p_playerId = OwnerId,
+				p_value = _healthToGive,
+				p_delay = _selfHealingTime
+			});
+			_healActivationTime = Time.time;
+		}
+		
+		_healActivationTime = Time.time;
+		_throwActivated = false;
+		_healKeyDownTime = float.MaxValue;
+		_canThrowHeal = true;
 	}
 
 	[Server]
 	void TakeDamage(PlayerTakeDamageEvent data)
 	{
-		if (data.playerN.ObjectId != NetworkObject.ObjectId) return;
+		if (data.p_playerN.ObjectId != NetworkObject.ObjectId) return;
 		
 		if (IsDead) return;
 		
-		float newHealth = _currentHealth.Value - data.value;
+		float newHealth = _currentHealth.Value - data.p_value;
 
 		ApplyVolumeDamagedEffectTargetRpc(Owner);
-
-		PlayHurtSoundObserverRpc();
-
+		
 		if (newHealth <= 0)
 		{
 			Death();
@@ -153,41 +202,43 @@ public class PlayerHealth : NetworkBehaviour
 	[TargetRpc]
 	private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
 	{
-		StartCoroutine(ApplyVolumeDamagedEffect());
+		OnTakeDamage?.Invoke();
 	}
-	
-	IEnumerator ApplyVolumeDamagedEffect()
+
+	[ServerRpc(RequireOwnership = false)]
+	void ThrowHealServerRpc(Vector3 landingPos, float lifeToAdd)
 	{
-		float time = 0.5f;
-		float elapsedTime = 0f;
-
-		while (elapsedTime < time)
+		Collider[] colliders = Physics.OverlapSphere(landingPos, p_healThrowRadius, _throwHealLayerMask);
+		foreach (Collider collider in colliders)
 		{
-			elapsedTime += Time.deltaTime;
-
-			float t = elapsedTime / time;
-			_damagedImage.alpha = Mathf.Sin(t * Mathf.PI);
-
-			yield return null;
+			CustomLogger.HighlightLog(collider.gameObject.name);
+			if (collider != null && collider.TryGetComponent(out PlayerVisuelBridge visualBridge))
+			{
+				visualBridge.PlayerHealth.AddHealth(new AddHealthToPlayer
+				{
+					p_delay = 0,
+					p_playerId = visualBridge.OwnerId,
+					p_value = lifeToAdd
+				});
+			}
 		}
 
-		_damagedImage.alpha = 0f;
+		ShowHealThrowObserverRpc(landingPos);
 	}
-	
 
-	[ObserversRpc]
-	private void PlayHurtSoundObserverRpc()
+	[ServerRpc(RequireOwnership = false)]
+	public void AddHealthServerRpc(AddHealthToPlayer data)
 	{
-		AudioClip clip = SoundManager.GetAudioClip(_soundsData, "Hurt");
-		SoundManager.PlaySound(clip, _audioSource);
+		AddHealth(data);
 	}
 
 	[Server]
-	void AddHealth(AddHealthFromBarEvent data)
+	async void AddHealth(AddHealthToPlayer data)
 	{
-		if (_isDead.Value) return;
+		if (_isDead.Value || data.p_playerId != OwnerId) return;
+		if(data.p_delay != 0) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
 
-		float newHealth = (_currentHealth.Value + data.value) > _healthBase ? _healthBase : _currentHealth.Value + data.value;
+		float newHealth = (_currentHealth.Value + data.p_value) > _healthBase ? _healthBase : _currentHealth.Value + data.p_value;
 		_currentHealth.Value = newHealth;
 	}
 
@@ -208,9 +259,8 @@ public class PlayerHealth : NetworkBehaviour
 		_respawnTimer.Value = 0;
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
-		
-		transform.position = _respawnPosition;
-		transform.rotation = _respawnRotation;
+
+		transform.position = _startPos;
 
 		NotifyRespawnRpc(NetworkObject);
 	}
@@ -218,13 +268,19 @@ public class PlayerHealth : NetworkBehaviour
 	[ObserversRpc]
 	private void NotifyDeathRpc(NetworkObject playerN)
 	{
-		_bus.InvokeEvent(new OnPlayerDeathEvent { playerN = playerN });
+		InvokeEvent(new OnPlayerDeathEvent { p_playerN = playerN });
 	}
 	
 	[ObserversRpc]
 	private void NotifyRespawnRpc(NetworkObject playerN)
 	{
-		_bus.InvokeEvent(new OnPlayerRespawnEvent { playerN = playerN });
+		InvokeEvent(new OnPlayerRespawnEvent { p_playerN = playerN });
+	}
+
+	[ObserversRpc]
+	private void ShowHealThrowObserverRpc(Vector3 landingPos)
+	{
+		OnHealThrowLanding?.Invoke(landingPos);
 	}
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
@@ -235,13 +291,12 @@ public class PlayerHealth : NetworkBehaviour
 
 		if (_targetHealthFill <= _critikStep)
 		{
-			IsCritik = true;
-			_elapsedTimeShowWarning = 1f;
+			_isCritik = true;
+			OnStartWarning?.Invoke();
 		}
 		else
 		{
-			IsCritik = false;
-			_damagedWarningImage.alpha = 0f;
+			_isCritik = false;
 		}
 	}
 
@@ -249,7 +304,7 @@ public class PlayerHealth : NetworkBehaviour
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{
 		_playerAnimation.SetDeadAnim(next);
-		_deathImage.gameObject.SetActive(next);
+		OnKOPlayer?.Invoke(next);
 	}
 	
 	private void OnRespawnTimerChange(float prev, float next, bool asServer)
@@ -264,18 +319,25 @@ public class PlayerHealth : NetworkBehaviour
 	}
 }
 
+public struct AddHealthToPlayer
+{
+	public int p_playerId; 
+	public float p_value;
+	public float p_delay;
+}
+
 public struct PlayerTakeDamageEvent
 {
-	public NetworkObject playerN;
-	public float value;
+	public NetworkObject p_playerN;
+	public float p_value;
 }
 
 public struct OnPlayerDeathEvent
 {
-	public NetworkObject playerN;
+	public NetworkObject p_playerN;
 }
 
 public struct OnPlayerRespawnEvent
 {
-	public NetworkObject playerN;
+	public NetworkObject p_playerN;
 }

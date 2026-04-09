@@ -26,16 +26,36 @@ namespace GunDecorator
         [SerializeField, Tooltip("Cercle pour le temps de reload")] private Image _imageReload;
         
         public Coroutine p_reloadCoroutine = null;
+        
+        public override void SetVariable(GunSetting setting)
+        {
+            if (setting is ReloadSetting s)
+            {
+                _autoReload = s.isAutoReload;
+                _magazineSize = s.magazineSize;
+                reloadDuration = s.reloadDuration;
+            }
+        }
 
         public override void Initialize(GunController gun)
         {
             base.Initialize(gun);
-            SetAmmo(_magazineSize);
+            SetAmmo(_magazineSize, false);
         }
 
         private void Update()
         {
+            _currentAmmo = Mathf.Clamp(_currentAmmo, 0, _magazineSize);
+            
             _ammoText.text = CurrentAmmo +  "/" + _magazineSize;
+
+            if (_autoReload)
+            {
+                if (_currentAmmo <= 0)
+                {
+                    Reload();
+                }
+            }
         }
 
         public void StopReload()
@@ -46,6 +66,7 @@ namespace GunDecorator
                 p_reloadCoroutine = null;
                 _imageReload.gameObject.SetActive(false);
                 _isReloading = false;
+                _gunController?._animator.ResetTrigger("Reload");
             }
         }
 
@@ -59,6 +80,9 @@ namespace GunDecorator
         {
             _imageReload.gameObject.SetActive(true);
             _imageReload.fillAmount = 1;
+            
+            _gunController?._animator.SetTrigger("Reload");
+            _gunController?.PlaySound("Reload");
             
             _isReloading = true;
             
@@ -75,11 +99,20 @@ namespace GunDecorator
             _imageReload.gameObject.SetActive(false);
             
             _isReloading = false;
-            SetAmmo(_magazineSize);
+            SetAmmo(_magazineSize, false);
             
             p_reloadCoroutine = null;
+            
+            if (_gunController.IsFullAuto)
+            {
+                _gunController.ApplyShoot();
+            }
         }
 
-        public void SetAmmo(int value) => _currentAmmo = Mathf.Min(value, _magazineSize);        
+        public void SetAmmo(int value, bool infiniteAmmo)
+        {
+            if(!infiniteAmmo)
+                _currentAmmo = Mathf.Min(value, _magazineSize);
+        }
     }
 }

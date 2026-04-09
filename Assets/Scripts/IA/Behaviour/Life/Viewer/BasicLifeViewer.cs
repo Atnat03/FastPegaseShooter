@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BasicLifeViewer : MonoBehaviour
 {
@@ -12,16 +13,37 @@ public class BasicLifeViewer : MonoBehaviour
     [SerializeField] private int _cumulatifDmg = 0;
     [SerializeField] private float _elapsedCumulativeDmgTime = 0;
     private TextMeshProUGUI _hitMarker;
+
+    [SerializeField] private TextMeshProUGUI _lifeTMP;
+    [SerializeField] private RectTransform _lifeBarRectTransform;
+    [SerializeField] private Image _lifeBarImage;
+    [SerializeField] private Color _fullLifeColor;
+    [SerializeField] private Color _emptyLifeColor;
+    
     
 
     void Awake()
     {
-        _enemyLifeModule.OnLifeUpdate += TriggerHitMarkObserversRpc;
+        _enemyLifeModule.OnLifeUpdate += LifeUpdating;
+        _lifeBarRectTransform.anchorMax = new Vector2(1, 0.5f);
+        _lifeBarImage.color = _fullLifeColor;
+        
+        _lifeBarRectTransform.gameObject.SetActive(false);
+        _lifeBarImage.gameObject.SetActive(false);
+        _lifeTMP.gameObject.SetActive(false);
     }
     
-    public void TriggerHitMarkObserversRpc(bool IsCritical, int dmg)
+    public void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
+        _lifeBarRectTransform.gameObject.SetActive(true);
+        _lifeBarImage.gameObject.SetActive(true);
+        _lifeTMP.gameObject.SetActive(true);
+        
         _cumulatifDmg += dmg;
+        float percentage = lifeAmount / (float)fullLife;
+        _lifeTMP.text = $"{lifeAmount}/{fullLife}";
+        _lifeBarRectTransform.anchorMax = new Vector2(percentage, 0.5f);
+        _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, percentage);
 
         if (_elapsedCumulativeDmgTime <= 0)
         {

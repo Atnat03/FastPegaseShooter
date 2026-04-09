@@ -2,15 +2,17 @@ using System;
 using FishNet.Connection;
 using FishNet.Object;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class PlayerPositionCaster : NetworkBehaviour
+public class PlayerPositionCaster : NetworkBusListener
 {
-    [SerializeField] private float _movementCastingThreshold = 0.5f;
+    [SerializeField] private float _castingBeatDelay = 0.7f;
+    [SerializeField] private float _castingPhysicalThreshold = 0.5f;
     private Transform _playerTransform;
     private NetworkObject _networkObject;
     private Vector3 _playerPosition;
     
-    
+    private float _castingBeatTimer;
 
     public override void OnStartClient()
     {
@@ -25,9 +27,12 @@ public class PlayerPositionCaster : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (_playerTransform && (_playerTransform.position - _playerPosition).sqrMagnitude >
-            _movementCastingThreshold * _movementCastingThreshold)
+        _castingBeatTimer += Time.fixedDeltaTime;
+        if (_playerTransform &&
+            ((_playerTransform.position - _playerPosition).sqrMagnitude > _castingPhysicalThreshold * _castingPhysicalThreshold) ||
+            _castingBeatTimer >= _castingBeatDelay)
         {
+            _castingBeatTimer = 0;
             _playerPosition = _playerTransform.position;
             PlayerPositionCastingServerRPC(_playerPosition);
         }
@@ -42,7 +47,7 @@ public class PlayerPositionCaster : NetworkBehaviour
     [ObserversRpc]
     void PlayerPositionCastingObserverRPC(Vector3 position, int playerId)
     {
-        EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId));
+        InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId));
     }
 
     private void OnDrawGizmos()
@@ -50,7 +55,7 @@ public class PlayerPositionCaster : NetworkBehaviour
         if(Application.isPlaying)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(_playerPosition, _movementCastingThreshold);
+            Gizmos.DrawWireSphere(_playerPosition, _castingPhysicalThreshold);
         }
     }
 }

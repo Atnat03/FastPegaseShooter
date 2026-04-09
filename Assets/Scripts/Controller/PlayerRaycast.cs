@@ -14,18 +14,11 @@ public class PlayerRaycast : NetworkBehaviour
 	[SerializeField] private float _interactDistance = 3;
 	private Camera _camera;
 	[SerializeField] private PlayerInput _playerInput;
-
-	private EventBus _bus;
-
+	
 	#endregion
-
-
+	
 	#region Fonctions
-
-	public override void OnStartServer()
-	{
-		_bus = EventBusInitialiser.instance.Bus;
-	}
+	
 
 	public override void OnStartClient()
 	{

@@ -1,6 +1,6 @@
 using System;
 using FishNet.Object;
-using GunDecorator;
+using MyPrint;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +13,8 @@ namespace Controller
         [SerializeField] private PlayerInput _playerInputAction;
         [SerializeField] private GunBridgePlayer _bridgePlayer;
         [SerializeField] private PlayerHealth _playerHealth;
+        [SerializeField] private GrenadeThrower _grenadeThrower;
+        [SerializeField] private DroneThrower _droneThrower;
 
         private bool shootingInputPressed;
 
@@ -22,7 +24,7 @@ namespace Controller
 
         void Update()
         {
-            if(_playerInputAction.actions["Shoot"].WasReleasedThisFrame())CancelShooting();
+            if (_playerInputAction.actions["Shoot"].WasReleasedThisFrame()) CancelShooting();
             if(_playerInputAction.actions["Charge"].WasReleasedThisFrame())ShootCharged();
         }
         
@@ -82,14 +84,6 @@ namespace Controller
             }
         }
 
-        private void SwitchGunType(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-
-            _bridgePlayer.SwitchGunType();
-        }
-
         private void RequestSwapingGun(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
@@ -101,23 +95,67 @@ namespace Controller
                 _bridgePlayer.GetCurrentAmmo);
         }
 
+        private void TryThrowGrenade(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _grenadeThrower.TryThrowGrenade();
+        }
+        
+        private void TryThrowDrone(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _droneThrower.TryThrowDrone();
+        }
+
+        private void StartThrowDrone(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _droneThrower.StartThrowDrone();
+        }
+        
+        
+        private void CancelThrow(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _droneThrower.CancelThrow();
+        }
+
         void OnEnable()
         {
             _playerInputAction.actions["Shoot"].performed += Shooting;
             _playerInputAction.actions["Charge"].performed += Charging;
-            _playerInputAction.actions["SwitchGunType"].performed += SwitchGunType;
+            
             _playerInputAction.actions["SwapGun"].performed += RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed += Reloading;
+            
+            _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
+            
+            _playerInputAction.actions["ThrowDrone"].performed += StartThrowDrone;
+            _playerInputAction.actions["ThrowDrone"].canceled += TryThrowDrone;
+            _playerInputAction.actions["Shoot"].performed += CancelThrow;
         }
-
 
         void OnDisable()
         {
             _playerInputAction.actions["Shoot"].performed -= Shooting;
             _playerInputAction.actions["Charge"].performed -= Charging;
-            _playerInputAction.actions["SwitchGunType"].performed -= SwitchGunType;
+            
             _playerInputAction.actions["SwapGun"].performed -= RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed -= Reloading;
+            
+            _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
+            
+            _playerInputAction.actions["ThrowDrone"].performed -= StartThrowDrone;
+            _playerInputAction.actions["ThrowDrone"].canceled -= TryThrowDrone;
+            _playerInputAction.actions["Shoot"].performed -= CancelThrow;
         }
 
         #endregion
