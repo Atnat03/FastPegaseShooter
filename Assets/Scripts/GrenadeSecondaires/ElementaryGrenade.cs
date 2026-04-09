@@ -111,12 +111,10 @@ public class ElementaryGrenade : NetworkBusListener
         {
             if (_hasHit) return;
             _hasHit = true;
-
-            Cons.Print($"Grenade hit at {hit.point}", ColorConsole.Grey);
-
-            ApplyExplosionDamage(hit.point);
             
             ExplodeObserversRpc(hit.point, hit.normal);
+            
+            ApplyExplosionDamage(hit.point);
 
             ServerManager.Despawn(gameObject);
         }
@@ -130,7 +128,6 @@ public class ElementaryGrenade : NetworkBusListener
         {
             if (c.TryGetComponent(out IDamagable damagable))
             {
-                Cons.Print($"Grenade damaged {c.name}", ColorConsole.Red);
                 damagable.TakeDamage(_networkIdAttacker.Value, _damage.Value);
                 
                 InvokeEvent(new AddEnergyEvent

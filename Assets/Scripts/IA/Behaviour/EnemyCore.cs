@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using MyPrint;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;

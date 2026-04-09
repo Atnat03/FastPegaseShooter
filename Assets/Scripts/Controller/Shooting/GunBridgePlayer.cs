@@ -132,6 +132,7 @@ namespace Controller
             }
 
             _gunSwitching.ChangeCurrentGun_Main_ServerRpc(data.gunIndex);
+            _grenadeThrower.ChangeMagneticChargeServerRpc();
 
             _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
             

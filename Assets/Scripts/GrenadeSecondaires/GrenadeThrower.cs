@@ -114,6 +114,14 @@ public class GrenadeThrower : NetworkBehaviour
 
         OnThrow?.Invoke(grenade);
     }
+    
+    [ServerRpc]
+    public void ChangeMagneticChargeServerRpc()
+    {
+        if (!IsServerInitialized) return;
+
+        magneticCharge = magneticCharge == MagneticCharge.Positive ? MagneticCharge.Negative : MagneticCharge.Positive;
+    }
 
     private void OnDrawGizmosSelected()
     {
