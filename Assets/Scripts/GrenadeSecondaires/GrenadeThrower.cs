@@ -46,8 +46,7 @@ public class GrenadeThrower : NetworkBehaviour
     #endregion
 
     #region Functions
-
-
+    
     public void Initialize(int startIndex)
     {
         magneticCharge = (MagneticCharge)startIndex;
@@ -76,6 +75,7 @@ public class GrenadeThrower : NetworkBehaviour
             if (_bridgeAnimation != null)
             {
                 _bridgeAnimation.StartThrow(magneticCharge);
+                _currentGun.IGunMain.TryCancelShooting();
                 _currentGun.ISurchargeMain.StopReload();
             }
             else

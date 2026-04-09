@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
+using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -108,6 +110,14 @@ namespace GunDecorator
             }
         }
 
+        private void OnEnable()
+        {
+            if (IsFullAuto && ShootingInputPressed)
+            {
+                ApplyShoot();
+            }
+        }
+
         public void TryFire()
         {
             if (_chargedModule != null)
@@ -115,18 +125,18 @@ namespace GunDecorator
             
             //On appele la fonction shoot du module de shoot actuellement équipé
             ShootingInputPressed = true;
-
+            
             ApplyShoot();
         }
 
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
-
+            
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 if (!_shootModule.CanShoot) return;
-
+                
                 _shootModule.SetFireRate(_fireRateMultiplier);
                     
                 if (IsFullAuto)
@@ -177,6 +187,8 @@ namespace GunDecorator
             _shootModule?.CancelShooting();
             
             _recoilModule?.SetIsRecoil(false);
+            
+            p_authorizedToShoot = true;
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;

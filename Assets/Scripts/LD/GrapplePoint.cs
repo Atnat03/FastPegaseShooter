@@ -16,10 +16,11 @@ public class GrapplePoint : MonoBehaviour
         _canvas.SetActive(false);
     }
     
-    void Update() 
+    void Update()
     {
-        if(p_playerTransform!=null) _canvas.transform.LookAt(p_playerTransform);
-        _canvas.SetActive(p_mustShowCanvas); 
+        if(p_playerTransform!=null) 
+            _canvas.transform.LookAt(p_playerTransform);
+        _canvas.SetActive(p_mustShowCanvas);
     }
     
 }

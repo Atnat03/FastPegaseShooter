@@ -38,7 +38,7 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(!_canShoot) return;
-
+            
             if (_bridgePlayer != null)
             {
                 _bridgePlayer.TryShootWithCurrentGun();
@@ -108,8 +108,16 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(!_canShoot) return;
-            
+    
             _grenadeThrower.TryThrowGrenade();
+        }
+        
+        private void OnGrenadeThrown(ElementaryGrenade g)
+        {
+            if (_playerInputAction.actions["Shoot"].IsPressed())
+            {
+                _bridgePlayer.TryShootWithCurrentGun();
+            }
         }
         
         private void TryThrowDrone(InputAction.CallbackContext obj)
@@ -160,6 +168,7 @@ namespace Controller
             _playerInputAction.actions["Reload"].performed += Reloading;
             
             _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
+            _grenadeThrower.OnThrow += OnGrenadeThrown;
             
             _playerInputAction.actions["ThrowDrone"].performed += StartThrowDrone;
             _playerInputAction.actions["ThrowDrone"].canceled += TryThrowDrone;
@@ -178,6 +187,7 @@ namespace Controller
             _playerInputAction.actions["Reload"].performed -= Reloading;
             
             _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
+            _grenadeThrower.OnThrow -= OnGrenadeThrown;
             
             _playerInputAction.actions["ThrowDrone"].performed -= StartThrowDrone;
             _playerInputAction.actions["ThrowDrone"].canceled -= TryThrowDrone;
