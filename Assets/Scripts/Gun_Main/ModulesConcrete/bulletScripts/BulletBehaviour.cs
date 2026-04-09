@@ -60,7 +60,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                         Quaternion.identity), 3f);
 
                 if (_gunController.IsServerInitialized)
-                    Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
+                    Explosed(p_explosionRadius, (int)p_damage);
             }
             else
             {
@@ -79,7 +79,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
                         if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
                         {
-                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                         }
                     }
                 }
@@ -93,10 +93,10 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         }
     }
 
-    public void Explosed(GameObject vfx, float radius, int damage)
+    public void Explosed(float radius, int damage)
     {
-        if (vfx != null)
-            Instantiate(vfx, transform.position, Quaternion.identity);
+        if (_explosionVFX != null)
+            Instantiate(_explosionVFX, transform.position, Quaternion.identity);
         
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
         foreach (Collider c in colliders)
@@ -113,7 +113,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 
                 if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
-                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                 }
             }
         }

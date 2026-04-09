@@ -51,7 +51,7 @@ public class EnergyManager : NetworkBusListener
     {
         ListenToEvent<OnModifyEnergyEvent>(data => ModifyEnergyServerRpc(data.value));
         
-        ListenToEvent<RequestEnergyEvent>(data => data.requester.OnGetEnergy(_currentEnergy.Value));
+        //ListenToEvent<RequestEnergyEvent>(data => data.requester.OnGetEnergy(_currentEnergy.Value));
         
 
         _totalBars = Mathf.CeilToInt(_energyMax / _valueOneBar);

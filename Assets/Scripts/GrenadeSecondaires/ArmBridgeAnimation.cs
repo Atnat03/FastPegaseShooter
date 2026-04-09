@@ -7,15 +7,14 @@ public class ArmBridgeAnimation : NetworkBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private MeshRenderer _ballInHand;
     
-    public void StartThrow(Element e)
+    public void StartThrow(MagneticCharge e)
     {
-        Color GetColor(Element e)
+        Color GetColor(MagneticCharge e)
         {
             return e switch
             {
-                Element.Fire => Color.red,
-                Element.Electric => Color.yellow,
-                Element.Ice => Color.blue,
+                MagneticCharge.Positive => Color.red,
+                MagneticCharge.Negative => Color.blue,
             };
         }
         

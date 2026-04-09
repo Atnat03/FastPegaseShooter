@@ -19,21 +19,19 @@ public class GrenadeThrowerViewCustomInspector : Editor
         
         EditorUtilities.Draw("_imageCooldown", serializedObject);
 
-        Element element = thrower.Element;
+        MagneticCharge magneticCharge = thrower.MagneticCharge;
         
-        string propertyName = element switch
+        string propertyName = magneticCharge switch
         {
-            Element.Fire => "_impactParticlesFire",
-            Element.Electric => "_impactParticlesElectic",
-            Element.Ice => "_impactParticlesIce",
+            MagneticCharge.Positive => "_impactParticlesPositive",
+            MagneticCharge.Negative => "_impactParticlesNegative",
             _ => null
         };
 
-        BoxGUI bgColor = element switch
+        BoxGUI bgColor = magneticCharge switch
         {
-            Element.Fire => new BoxGUI("Fire", Color.red),
-            Element.Electric => new BoxGUI("Electric", Color.yellow),
-            Element.Ice => new BoxGUI("Ice", Color.softBlue),
+            MagneticCharge.Positive => new BoxGUI("Positive", Color.red),
+            MagneticCharge.Negative => new BoxGUI("Negative", Color.softBlue),
             _ => new BoxGUI("NULL", Color.white)
         };
 

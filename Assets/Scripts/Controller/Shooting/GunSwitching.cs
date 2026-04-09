@@ -21,6 +21,8 @@ public class GunSwitching : NetworkBehaviour
 
 	public bool IsSwitching => !_canSwitch;
 	
+	public bool IsPositive => _isPositiveChargedPlayer.Value;
+	
 	#endregion
 	
 	#region Variables
@@ -93,6 +95,8 @@ public class GunSwitching : NetworkBehaviour
 	public void ChangeCurrentGun_Main_ServerRpc(int newIndex)
 	{
 		if (!IsMainGun) return;
+		
+		ChangeCurrentGun_Main(newIndex);
 
 		if (_currentMainIGun != null)
 		{
