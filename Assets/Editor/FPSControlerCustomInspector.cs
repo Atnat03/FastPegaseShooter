@@ -79,7 +79,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("moveSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("groundMomentumFactor"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("sideStepImpulseForce"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRange"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRangeForSteps"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("walkableSlopeAngle"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceAscending"));
