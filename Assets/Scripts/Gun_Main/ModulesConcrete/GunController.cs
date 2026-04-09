@@ -78,7 +78,12 @@ namespace GunDecorator
         private readonly SyncVar<bool> _isPositivePlayerCharge = new SyncVar<bool>(false);
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-        
+
+        private void OnEnable()
+        {
+            _animator.ResetTrigger("Reload");
+        }
+
         private void Awake()
         {
             //On récupere tout les types de modules possible et potentiellement sur l'arme
