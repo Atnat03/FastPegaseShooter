@@ -1,5 +1,80 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &319040271865120057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1555601268612501370}
+  - component: {fileID: 5504050074583743897}
+  - component: {fileID: 3524518394284368886}
+  m_Layer: 0
+  m_Name: EnemyLifeBack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1555601268612501370
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319040271865120057}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8689701157547584739}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -0.000000029802322, y: 0.12}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5504050074583743897
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319040271865120057}
+  m_CullTransparentMesh: 1
+--- !u!114 &3524518394284368886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319040271865120057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.8105139, b: 0.7971698, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: ed2cf3c2117b5ca4aa44f9735319a635, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 0
+  m_FillAmount: 0.78
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &548667574049249763
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +264,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 3.708}
+  m_AnchoredPosition: {x: 0, y: 4.181}
   m_SizeDelta: {x: 1, y: 1.0467}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4834274079030879799
@@ -272,7 +347,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8280671740658429549}
   _distanceMax: 100
   _scaleModifier: 1
-  _scaleMap: {x: 2, y: 8}
+  _scaleMap: {x: 3, y: 15}
 --- !u!1 &1292797473318539313
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,6 +478,10 @@ MonoBehaviour:
   _lifeBarImage: {fileID: 5817380698926473615}
   _fullLifeColor: {r: 1, g: 0.5203989, b: 0.4198113, a: 1}
   _emptyLifeColor: {r: 0.7264151, g: 0, b: 0, a: 1}
+  _fillSpeedBarFront: 2
+  _lifeBarSecondImage: {fileID: 3524518394284368886}
+  _fillSpeedBarBack: 0.5
+  _timeBeforeSecondBarUpdate: 0.5
 --- !u!1 &3359734161389045365
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,6 +586,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4555807611047137874}
+  - {fileID: 1555601268612501370}
   - {fileID: 5923562154839887779}
   - {fileID: 7525514002880719527}
   m_Father: {fileID: 5686232191803980998}
@@ -581,7 +661,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100/100
+  m_text: 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -761,8 +841,8 @@ MonoBehaviour:
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
   _explosionChargedDamage: 50
-  _negativeChargeMax: 3
-  _positiveChargeMax: 3
+  _negativeChargeMax: 50
+  _positiveChargeMax: 50
   _timeBeforeStatReset: 6
   _positiveUI: {fileID: 7673480079608821774}
   _positiveCurValue: {fileID: 862171321979648340}

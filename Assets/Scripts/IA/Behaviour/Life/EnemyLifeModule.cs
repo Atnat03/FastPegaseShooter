@@ -18,12 +18,18 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     /// int => Taken damages amount
     /// </summary>
     public Action<bool, int, int, int> OnLifeUpdate;
+    public Action<int> OnLifeStart;
     public Action OnDeath;
     
     public Action<int, int> p_onHitPlayer;
     
     
     [HideInInspector] private float p_damageMultiplier = 1;
+
+    private void OnEnable()
+    {
+        OnLifeUpdateObserverRPC();
+    }
 
     public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
     {
@@ -75,6 +81,12 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     protected void OnLifeUpdateObserverRPC(bool isCritical, int dmg)
     {
         OnLifeUpdate?.Invoke(isCritical, dmg, p_life.Value, _life);
+    }
+    
+    [ObserversRpc]
+    protected void OnLifeUpdateObserverRPC()
+    {
+        OnLifeStart?.Invoke(p_life.Value);
     }
     
     [ObserversRpc]

@@ -79,7 +79,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                         
                         if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
                         {
-                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                         }
                     }
                 }
@@ -111,7 +111,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                 
                 if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
-                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                 }
             }
         }

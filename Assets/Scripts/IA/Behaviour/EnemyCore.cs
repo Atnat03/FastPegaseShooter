@@ -117,18 +117,18 @@ public class EnemyCore : NetworkBusListener
 
     #region Charges
 
-    public void AddCharge(bool positive)
+    public void AddCharge(bool positive, float value)
     {
         if (!IsServerInitialized)
             return;
         
         if (positive)
         {
-            _currentP_charge.Value++;
+            _currentP_charge.Value += value;
         }
         else
         {
-            _currentN_charge.Value++;
+            _currentN_charge.Value += value;
         }
 
         _elapsedTimeReset.Value = _timeBeforeStatReset;
@@ -176,7 +176,6 @@ public class EnemyCore : NetworkBusListener
     {
         Destroy(Instantiate(_explosionParticle, transform.position + Vector3.up, Quaternion.identity), 2f);
     }
-
 
     private void OnEnable()
     {

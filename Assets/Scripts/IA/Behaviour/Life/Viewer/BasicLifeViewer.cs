@@ -1,4 +1,5 @@
 using TMPro;
+using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,27 +21,44 @@ public class BasicLifeViewer : MonoBehaviour
     [SerializeField] private Image _lifeBarImage;
     [SerializeField] private Color _fullLifeColor;
     [SerializeField] private Color _emptyLifeColor;
+    [SerializeField] private float _fillSpeedBarFront = 10f;
+    
+    [SerializeField] private Image _lifeBarSecondImage;
+    [SerializeField] private float _fillSpeedBarBack = 5f;
+    [SerializeField] private float _timeBeforeSecondBarUpdate = 0.5f;
+    private float _secondBarUpdateTime = 0;
+    
+    private float _frontFill = 1;
+    private float _backFill = 1;
     
     
     void Awake()
     {
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
+        _enemyLifeModule.OnLifeStart += SetUI;
         _lifeBarImage.color = _fullLifeColor;
-        
-        _lifeBarParent.gameObject.SetActive(false);
-        _lifeTMP.gameObject.SetActive(false);
+    }
+
+    void SetUI(int baseLife)
+    {
+        _lifeTMP.text = $"{baseLife}/{baseLife}";
+        _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, 1);
     }
     
-    public void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
+    private void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
-        _lifeBarParent.gameObject.SetActive(true);
-        _lifeTMP.gameObject.SetActive(true);
-        
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
         _lifeTMP.text = $"{lifeAmount}/{fullLife}";
         _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, percentage);
-        _lifeBarImage.fillAmount = percentage;
+
+        //Percentage fills
+        _frontFill = percentage;
+
+        if (percentage < _backFill)
+        {
+            _secondBarUpdateTime = _timeBeforeSecondBarUpdate;
+        }        _secondBarUpdateTime = _timeBeforeSecondBarUpdate;
 
         if (_elapsedCumulativeDmgTime <= 0)
         {
@@ -60,6 +78,25 @@ public class BasicLifeViewer : MonoBehaviour
 
     private void Update()
     {
+        _lifeBarImage.fillAmount = Mathf.MoveTowards(
+            _lifeBarImage.fillAmount,
+            _frontFill,
+            _fillSpeedBarFront * Time.deltaTime
+        );
+
+        if (_secondBarUpdateTime > 0)
+        {
+            _secondBarUpdateTime -= Time.deltaTime;
+        }
+        else
+        {
+            _lifeBarSecondImage.fillAmount = Mathf.MoveTowards(
+                _lifeBarSecondImage.fillAmount,
+                _frontFill,
+                _fillSpeedBarBack * Time.deltaTime
+            );
+        }
+        
         if (_elapsedCumulativeDmgTime > 0)
         {
             _elapsedCumulativeDmgTime -= Time.deltaTime;
