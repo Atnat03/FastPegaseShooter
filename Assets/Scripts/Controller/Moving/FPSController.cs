@@ -401,7 +401,7 @@ public class FPSController : NetworkBusListener
     {
         // grapplepoints 
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner", "Ignore Raycast"),
+                out RaycastHit hit, _castMaxDistance,  LayerMask.GetMask("Default"),
                 QueryTriggerInteraction.Collide))
         {
             currentLookedGrapplePoint = hit.collider.GetComponent<GrapplePoint>();
@@ -499,7 +499,7 @@ public class FPSController : NetworkBusListener
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default", "Ignore Raycast"),
+                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -580,7 +580,7 @@ public class FPSController : NetworkBusListener
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default", "Ignore Raycast"),
+                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -679,7 +679,7 @@ public class FPSController : NetworkBusListener
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default", "Ignore Raycast"),
+                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -884,7 +884,7 @@ public class FPSController : NetworkBusListener
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default", "Ignore Raycast"),
+                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -1344,7 +1344,7 @@ public class FPSController : NetworkBusListener
     void EnterGrappleState()
     {
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner", "Ignore Raycast"),
+                out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
                 QueryTriggerInteraction.Collide))
         {
             GrapplePoint grapplePoint;
