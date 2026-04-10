@@ -137,6 +137,7 @@ public class FPSController : NetworkBusListener
     [SerializeField] float coyoteSlideDuration = .1f;
     [SerializeField] private float CameraSlideFOV = 50;
     [SerializeField] private float slidingBackToNormalSpeedDelay = .5f;
+    [SerializeField] private float redirectionPowerAfterSliding = 2f;
 
     [Header("Dash")] [SerializeField] float dashSpeed = 5f;
     [SerializeField] float dashTimeDuration = 0.2f;
@@ -599,7 +600,7 @@ public class FPSController : NetworkBusListener
 
         if (horizontalVelocity.magnitude > moveSpeed)
         {
-            velocity = Vector3.MoveTowards(horizontalVelocity, velocity, groundMomentumFactor * Time.deltaTime);
+            velocity = Vector3.MoveTowards(velocity.normalized * horizontalVelocity.magnitude, velocity, groundMomentumFactor * Time.deltaTime);
         }
 
         velocity = AlignVelocityToWall(velocity);
@@ -1004,13 +1005,15 @@ public class FPSController : NetworkBusListener
         horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
         verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
-        Vector3 velocity = move;
+        Vector3 velocity;
         if (!slowingDownFromSliding)
         {
+            velocity = move;
             velocity *= crouchSpeed;
         }
         else
         {
+            velocity = Vector3.Lerp(horizontalVelocity.normalized, move, redirectionPowerAfterSliding*Time.deltaTime);
             velocity *= slowingFromSlideSpeed;
         }
 
@@ -1125,8 +1128,7 @@ public class FPSController : NetworkBusListener
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
 
-        while (elapsedTime < slideMinTimeDuration ||
-               (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed()))
+        while (elapsedTime < slideMinTimeDuration || (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed() && verticalInput > 0))
         {
             elapsedTime += Time.deltaTime;
 
