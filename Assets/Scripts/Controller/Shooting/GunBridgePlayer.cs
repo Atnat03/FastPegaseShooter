@@ -27,8 +27,7 @@ namespace Controller
         private bool _localWantToSwitch = false;
         
         private Material _gunMaterial;
-
-
+        
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -46,16 +45,19 @@ namespace Controller
             }
             
             int startIndex = OwnerId % 2;
-            _gunSwitching.Initialize(startIndex);
             _grenadeThrower.Initialize(startIndex);
+            _gunSwitching.Initialize(startIndex);
 
             _gunSwitching.OnStartSwitchGun += StopReloadGun;
         }
 
         public void TryShootWithCurrentGun()
         {
+            if (_gunSwitching == null || _gunSwitching.IGunMain == null)
+                return;
+
             if (_gunSwitching.IsSwitching) return;
-            
+    
             CurrentGun.TryFire();
         }
 

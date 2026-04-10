@@ -11,6 +11,7 @@ namespace MyPrint
         Purple,
         Black,
         Grey,
+        Cyan,
         White
     }
 
@@ -36,6 +37,7 @@ namespace MyPrint
                 case ColorConsole.Purple: return "<color=purple>";
                 case ColorConsole.Black: return "<color=black>";
                 case ColorConsole.Grey: return "<color=grey>";
+                case ColorConsole.Cyan: return "<color=#00FFFF>";
                 case ColorConsole.White:
                 default: return "<color=white>";
             }
