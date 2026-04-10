@@ -1125,8 +1125,7 @@ public class FPSController : NetworkBusListener
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
 
-        while (elapsedTime < slideMinTimeDuration ||
-               (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed()))
+        while (elapsedTime < slideMinTimeDuration || (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed() && verticalInput > 0))
         {
             elapsedTime += Time.deltaTime;
 
