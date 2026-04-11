@@ -17,9 +17,7 @@ public class SpawnPlayer2 : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-
         InstanceFinder.ServerManager.OnRemoteConnectionState += OnClientState;
-
         Invoke(nameof(SpawnHost), 0.1f);
     }
 
@@ -28,7 +26,6 @@ public class SpawnPlayer2 : NetworkBehaviour
         foreach (var kvp in InstanceFinder.ServerManager.Clients)
         {
             int clientId = kvp.Key;
-
             if (!spawnedClients.Contains(clientId))
             {
                 SpawnPlayer(clientId);
@@ -36,11 +33,10 @@ public class SpawnPlayer2 : NetworkBehaviour
             }
         }
     }
-    
+
     public override void OnStopServer()
     {
         base.OnStopServer();
-
         if (InstanceFinder.ServerManager != null)
             InstanceFinder.ServerManager.OnRemoteConnectionState -= OnClientState;
     }
@@ -50,7 +46,6 @@ public class SpawnPlayer2 : NetworkBehaviour
         if (args.ConnectionState == RemoteConnectionState.Started)
         {
             int clientId = conn.ClientId;
-
             if (!spawnedClients.Contains(clientId))
             {
                 SpawnPlayer(clientId);
@@ -69,11 +64,10 @@ public class SpawnPlayer2 : NetworkBehaviour
         }
 
         Transform spawn = spawnPoints[Mathf.Abs(clientId) % spawnPoints.Length];
-
         GameObject obj = Instantiate(playerPrefab, spawn.position, spawn.rotation);
-
         InstanceFinder.ServerManager.Spawn(obj, InstanceFinder.ServerManager.Clients[clientId]);
 
+        // ✅ Plus rien à faire ici — PlayerSetup.OnStartClient() s'en charge
         Debug.Log($"Spawned player for client {clientId}");
     }
 }

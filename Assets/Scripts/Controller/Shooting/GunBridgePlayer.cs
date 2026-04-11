@@ -28,27 +28,32 @@ namespace Controller
         
         private Material _gunMaterial;
         
+        private bool _isInitialized = false;
+        
         public override void OnStartClient()
         {
             base.OnStartClient();
-            
+
             if (IsOwner)
             {
                 ListenToEvent<SwapingGunEvent>(SwapingGun);
                 ListenToEvent<EndTimerSwapEvent>(EndTimerSwap);
-                
                 _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
             }
             else
             {
                 SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
             }
-            
-            int startIndex = OwnerId % 2;
-            _grenadeThrower.Initialize(startIndex);
-            _gunSwitching.Initialize(startIndex);
 
             _gunSwitching.OnStartSwitchGun += StopReloadGun;
+        }
+
+        public void InitializeWithGunId(int gunId)
+        {
+            Debug.Log($"InitializeWithGunId | gunId={gunId} | IsServer={IsServerInitialized}");
+            _grenadeThrower.Initialize(gunId);
+            _gunSwitching.Initialize(gunId);
+            _isInitialized = true;
         }
 
         public void TryShootWithCurrentGun()
@@ -57,6 +62,7 @@ namespace Controller
                 return;
 
             if (_gunSwitching.IsSwitching) return;
+            if (!_isInitialized) return;
     
             CurrentGun.TryFire();
         }
@@ -64,6 +70,7 @@ namespace Controller
         public void TryCancelShooting()
         {
             if (_gunSwitching.IsSwitching) return;
+            if (!_isInitialized) return;
             
             CurrentGun.TryCancelShooting();
         }
@@ -71,6 +78,7 @@ namespace Controller
         public void TryChargeWithCurrentGun()
         {             
             if (_gunSwitching.IsSwitching) return;
+            if (!_isInitialized) return;
 
             CurrentGun.TryCharging();
         }
@@ -78,6 +86,7 @@ namespace Controller
         public void TryShootChargeShooting()
         {
             if (_gunSwitching.IsSwitching) return;
+            if (!_isInitialized) return;
             
             CurrentGun.TryShootCharged();
         }
@@ -85,6 +94,7 @@ namespace Controller
         public void TryReload()
         {
             if (_gunSwitching.IsSwitching) return;
+            if (!_isInitialized) return;
             
             CurrentGun.TryReload();
         }

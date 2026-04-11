@@ -228,14 +228,16 @@ public class FPSController : NetworkBusListener
                 if (data.p_playerN == NetworkObject)
                     SetDeadServerRpc(false);
             });
+            
+            ListenToEvent<OnPauseEvent>(data =>
+            {
+                isFreeze = data.p_isPause;
+            });
         }
         else
         {
             _camera.gameObject.SetActive(false);
         }
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         yaw = transform.eulerAngles.y;
         pitch = cameraParentTransform.localEulerAngles.x;
