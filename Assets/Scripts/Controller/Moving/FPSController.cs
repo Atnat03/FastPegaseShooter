@@ -70,7 +70,7 @@ public class FPSController : NetworkBusListener
     [SerializeField] float moveSpeed;
     [SerializeField] float groundMomentumFactor = 2f;
     [SerializeField] float sideStepImpulseForce;
-    [SerializeField] float wallDetectionRange = 0.65f;
+    [SerializeField] float wallDetectionRangeForSteps = 0.65f;
     [SerializeField] float walkableSlopeAngle = 45f;
     [SerializeField] float maxStepHeight = .2f;
     [SerializeField] private float gravityBonusForceAscending = 3f;
@@ -137,6 +137,7 @@ public class FPSController : NetworkBusListener
     [SerializeField] float coyoteSlideDuration = .1f;
     [SerializeField] private float CameraSlideFOV = 50;
     [SerializeField] private float slidingBackToNormalSpeedDelay = .5f;
+    [SerializeField] private float redirectionPowerAfterSliding = 2f;
 
     [Header("Dash")] [SerializeField] float dashSpeed = 5f;
     [SerializeField] float dashTimeDuration = 0.2f;
@@ -227,14 +228,16 @@ public class FPSController : NetworkBusListener
                 if (data.p_playerN == NetworkObject)
                     SetDeadServerRpc(false);
             });
+            
+            ListenToEvent<OnPauseEvent>(data =>
+            {
+                isFreeze = data.p_isPause;
+            });
         }
         else
         {
             _camera.gameObject.SetActive(false);
         }
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         yaw = transform.eulerAngles.y;
         pitch = cameraParentTransform.localEulerAngles.x;
@@ -400,7 +403,8 @@ public class FPSController : NetworkBusListener
     {
         // grapplepoints 
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner", "Ignore Raycast"), QueryTriggerInteraction.Collide))
+                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner", "Ignore Raycast"),
+                QueryTriggerInteraction.Collide))
         {
             currentLookedGrapplePoint = hit.collider.GetComponent<GrapplePoint>();
             if (currentLookedGrapplePoint != null)
@@ -571,7 +575,7 @@ public class FPSController : NetworkBusListener
 
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
-        { 
+        {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
 
@@ -598,7 +602,7 @@ public class FPSController : NetworkBusListener
 
         if (horizontalVelocity.magnitude > moveSpeed)
         {
-            velocity = Vector3.MoveTowards(horizontalVelocity, velocity, groundMomentumFactor * Time.deltaTime);
+            velocity = Vector3.MoveTowards(velocity.normalized * horizontalVelocity.magnitude, velocity, groundMomentumFactor * Time.deltaTime);
         }
 
         velocity = AlignVelocityToWall(velocity);
@@ -1003,13 +1007,15 @@ public class FPSController : NetworkBusListener
         horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
         verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
-        Vector3 velocity = move;
+        Vector3 velocity;
         if (!slowingDownFromSliding)
         {
+            velocity = move;
             velocity *= crouchSpeed;
         }
         else
         {
+            velocity = Vector3.Lerp(horizontalVelocity.normalized, move, redirectionPowerAfterSliding*Time.deltaTime);
             velocity *= slowingFromSlideSpeed;
         }
 
@@ -1124,8 +1130,7 @@ public class FPSController : NetworkBusListener
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
 
-        while (elapsedTime < slideMinTimeDuration ||
-               (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed()))
+        while (elapsedTime < slideMinTimeDuration || (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed() && verticalInput > 0))
         {
             elapsedTime += Time.deltaTime;
 
@@ -1183,6 +1188,7 @@ public class FPSController : NetworkBusListener
             _camera.fieldOfView = Mathf.Lerp(startFOV, _cameraDefaultFOV, t);
             yield return null;
         }
+
         _camera.fieldOfView = _cameraDefaultFOV;
     }
 
@@ -1205,7 +1211,7 @@ public class FPSController : NetworkBusListener
             if (verticalInput == 0f && horizontalInput == 0f) dashingDirection = _camera.transform.forward;
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
-        
+
         dashingDirection *= dashSpeed;
         StartCoroutine(DashingCoroutine());
     }
@@ -1340,7 +1346,8 @@ public class FPSController : NetworkBusListener
     void EnterGrappleState()
     {
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner", "Ignore Raycast"), QueryTriggerInteraction.Collide))
+                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner", "Ignore Raycast"),
+                QueryTriggerInteraction.Collide))
         {
             GrapplePoint grapplePoint;
             if (hit.collider.TryGetComponent<GrapplePoint>(out grapplePoint))
@@ -1483,7 +1490,7 @@ public class FPSController : NetworkBusListener
         Collider[] hits = Physics.OverlapCapsule(
             point1,
             point2,
-            bodyRadius + wallDetectionRange,
+            bodyRadius,
             ~LayerMask.GetMask("Owner"),
             QueryTriggerInteraction.Ignore
         );
@@ -1504,13 +1511,17 @@ public class FPSController : NetworkBusListener
 
             if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.3f))
             {
-                float stepHeight = stepHit.point.y - playerFeet.position.y;
-
-                if (stepHeight > 0 && stepHeight <= maxStepHeight)
+                if (Vector3.Dot(horizontalVelocity, playerFeet.position - stepHit.point) < 0.3)
                 {
-                    rb.position += Vector3.up * (maxStepHeight - stepHeight);
-                    continue;
+                    float stepHeight = stepHit.point.y - playerFeet.position.y;
+
+                    if (stepHeight > 0 && stepHeight <= maxStepHeight)
+                    {
+                        rb.position += Vector3.up * (maxStepHeight - stepHeight);
+                        continue;
+                    }
                 }
+
             }
 
             float slopeAngle = Vector3.Angle(normal, Vector3.up);

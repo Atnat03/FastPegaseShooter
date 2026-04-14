@@ -14,12 +14,16 @@ public class MagneticChargeView : MonoBehaviour
 
 	[SerializeField] private GunSwitching _gunSwitching;
 	
+	[Header("Particles")]
+	[SerializeField] private ParticleSystem _positiveParticles;
+	[SerializeField] private ParticleSystem _negativeParticles;
+    /*
 	[Header("UI")]
 	[SerializeField] private Transform _imagePositive;
 	[SerializeField] private Image _imageSelectPositive;
 	[SerializeField] private Transform _imageNegative;
 	[SerializeField] private Image _imageSelectNegative;
-	[SerializeField] private Material _materialLine;
+	[SerializeField] private Material _materialLine;*/
 
 	#endregion
 
@@ -33,10 +37,13 @@ public class MagneticChargeView : MonoBehaviour
 
 	private void UpdateUI(bool positive)
 	{
-		StartCoroutine(AnimationChargeSwap(positive));
+		_positiveParticles.gameObject.SetActive(positive);
+		_negativeParticles.gameObject.SetActive(!positive);
+		
+		//StartCoroutine(AnimationChargeSwap(positive));
 	}
 
-	IEnumerator AnimationChargeSwap(bool positive)
+	/*IEnumerator AnimationChargeSwap(bool positive)
 	{
 		float duration = 0.5f;
 		float elapsedTime = 0f;
@@ -60,7 +67,7 @@ public class MagneticChargeView : MonoBehaviour
 		_materialLine.SetFloat("_Speed", positive ? 1 : -1);
 		_materialLine.SetColor("_Color", positive ? Color.red : Color.dodgerBlue);
 		
-	}
+	}*/
 
 	#endregion
 }

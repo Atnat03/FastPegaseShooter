@@ -78,7 +78,12 @@ namespace GunDecorator
         private readonly SyncVar<bool> _isPositivePlayerCharge = new SyncVar<bool>(false);
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-        
+
+        private void OnEnable()
+        {
+            _animator.ResetTrigger("Reload");
+        }
+
         private void Awake()
         {
             //On récupere tout les types de modules possible et potentiellement sur l'arme
@@ -112,12 +117,12 @@ namespace GunDecorator
 
         public void TryFire()
         {
+            Debug.Log($"TryFire | Ammo: {GetCurrentAmmo()} | IsReloading: {_reloadModule.IsReloading} | CanShoot: {_shootModule.CanShoot} | AuthorizedToShoot: {p_authorizedToShoot}");
+    
             if (_chargedModule != null)
                 if (_chargedModule.IsCharging) return;
-            
-            //On appele la fonction shoot du module de shoot actuellement équipé
+    
             ShootingInputPressed = true;
-            
             ApplyShoot();
         }
 
