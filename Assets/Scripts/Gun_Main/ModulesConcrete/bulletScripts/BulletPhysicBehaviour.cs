@@ -1,6 +1,7 @@
 using FishNet;
 using FishNet.Object;
 using GunDecorator;
+using MyPrint;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -53,11 +54,19 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
         {
             if (_hasHit) return;
             _hasHit = true;
+            
+            if (_explosionVFX != null && p_isExplosive)
+            {
+                Instantiate(_explosionVFX, transform.position, Quaternion.identity);
+            }
 
             if (InstanceFinder.IsServerStarted)
             {
                 if (p_isExplosive)
-                    Explosed(_explosionVFX, p_explosionRadius, (int)p_damage);
+                {
+                    Explosed(p_explosionRadius, (int)p_damage);
+                    return;
+                }
                 else
                 {
                     if (hit.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
@@ -72,7 +81,8 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                         
                         if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
                         {
-                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                            Cons.Print("Charge", ColorConsole.Red);
+                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                         }
                     }
                 }
@@ -82,29 +92,34 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
         }
     }
 
-    public void Explosed(GameObject vfx, float radius, int damage)
+    public void Explosed(float radius, int damage)
     {
-        if (vfx != null)
-            Instantiate(vfx, transform.position, Quaternion.identity);
-        
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+
+        bool isHit = false;
+        bool crit = false;
+    
         foreach (Collider c in colliders)
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
-                _gunController.TriggerHitMark(crit || p_isCritical);
+                crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
                 InvokeEvent(new AddEnergyEvent
                 {
                     p_player = _gunController.Owner,
                     p_value = p_damage
                 });
                 
-                if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
+                if (c.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
-                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge);
+                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                 }
+            
+                isHit = true;
             }
         }
+    
+        if(isHit)
+            _gunController.TriggerHitMark(crit || p_isCritical);
     }
 }

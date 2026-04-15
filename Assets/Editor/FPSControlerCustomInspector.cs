@@ -79,7 +79,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("moveSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("groundMomentumFactor"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("sideStepImpulseForce"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRange"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallDetectionRangeForSteps"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("walkableSlopeAngle"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceAscending"));
@@ -149,6 +149,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("coyoteSlideDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("CameraSlideFOV"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("slidingBackToNormalSpeedDelay"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("redirectionPowerAfterSliding"));
         }, ref showSlide);
 
         DrawSection("Dash", new Color(0.6f, 1f, 1f), () =>
@@ -156,7 +157,6 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashTimeDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashCooldown"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("dashEnergyCost"));
         }, ref showDash);
 
         DrawSection("Slope Slide", new Color(1f, 0.75f, 0.4f), () =>

@@ -3,21 +3,22 @@ using FishNet.Object;
 using MyPrint;
 using UnityEngine;
 
-public enum Element {Fire, Electric, Ice}
+public enum MagneticCharge {Positive, Negative}
 
 [RequireComponent(typeof(GrenadeThrowerView))]
 public class GrenadeThrower : NetworkBehaviour
 {
     #region Properties
     
-    public Element Element => _element;
+    public MagneticCharge MagneticCharge => magneticCharge;
 
     #endregion
     
     #region Variables
 
-    [SerializeField] private Element _element;
+    [SerializeField] private MagneticCharge magneticCharge;
     [SerializeField] private ArmBridgeAnimation _bridgeAnimation;
+    [SerializeField] private GunSwitching _gunSwitching;
     
     [Header("Throw")]
     [SerializeField] private ElementaryGrenade _elementaryGrenadePrefab;
@@ -46,6 +47,11 @@ public class GrenadeThrower : NetworkBehaviour
 
     #region Functions
     
+    public void Initialize(int startIndex)
+    {
+        magneticCharge = (MagneticCharge)startIndex;
+    }
+
     private void Update()
     {
         if (_elapsedTimeCooldown > 0)
@@ -68,7 +74,8 @@ public class GrenadeThrower : NetworkBehaviour
         {
             if (_bridgeAnimation != null)
             {
-                _bridgeAnimation.StartThrow(_element);
+                _bridgeAnimation.StartThrow(magneticCharge);
+                _currentGun.IGunMain.TryCancelShooting();
                 _currentGun.ISurchargeMain.StopReload();
             }
             else
@@ -89,10 +96,8 @@ public class GrenadeThrower : NetworkBehaviour
         
         ServerManager.Spawn(grenade.gameObject, Owner);
 
-        grenade.Initialize(_element, _damage, _explosionRadius, _numberBounces, NetworkObject.ObjectId);
-
-        Vector3 direction = _spawnPoint.forward;
-        grenade.GetComponent<Rigidbody>().AddForce(direction * _throwForce, ForceMode.Impulse);
+        grenade.Initialize(magneticCharge, _damage, _explosionRadius, _numberBounces, NetworkObject.ObjectId, 
+            magneticCharge == MagneticCharge.Positive, Owner);
         
         NotifyGrenadeThrown(grenade);
     }
@@ -101,10 +106,21 @@ public class GrenadeThrower : NetworkBehaviour
     private void NotifyGrenadeThrown(ElementaryGrenade grenade)
     {
         Cons.Print("Grenade thrown", ColorConsole.Green);
-
+        
+        Vector3 direction = _spawnPoint.forward;
+        grenade.GetComponent<Rigidbody>().AddForce(direction * _throwForce, ForceMode.Impulse);
+        
         _currentGun.ISurchargeMain.StopReload();
 
         OnThrow?.Invoke(grenade);
+    }
+    
+    [ServerRpc]
+    public void ChangeMagneticChargeServerRpc()
+    {
+        if (!IsServerInitialized) return;
+
+        magneticCharge = magneticCharge == MagneticCharge.Positive ? MagneticCharge.Negative : MagneticCharge.Positive;
     }
 
     private void OnDrawGizmosSelected()
@@ -117,4 +133,5 @@ public class GrenadeThrower : NetworkBehaviour
     }
 
     #endregion
+
 }

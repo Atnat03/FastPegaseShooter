@@ -1,37 +1,42 @@
 using System;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class ElementaryGrenade : NetworkBehaviour
+public class ElementaryGrenade : NetworkBusListener
 {
     [SerializeField] private MeshRenderer _model;
     
-    private readonly SyncVar<Element> _element = new SyncVar<Element>();
+    private readonly SyncVar<MagneticCharge> _element = new SyncVar<MagneticCharge>();
     private readonly SyncVar<float> _radius = new SyncVar<float>();
     private readonly SyncVar<int> _damage = new SyncVar<int>();
     private readonly SyncVar<int> _networkIdAttacker = new SyncVar<int>();
+    private readonly SyncVar<bool> _isPositive = new SyncVar<bool>();
+    private readonly SyncVar<NetworkConnection> _thrower = new SyncVar<NetworkConnection>();
     
     private float _maxNumberTouch;
     private float _currentNumberTouch;
     private const float SPAWN_GRACE = 0.2f;
     private float _spawnTime;
     
+    
     private ParticleSystem _particlesExplosionPrefab;
     
     private Vector3 _lastPosition;
     private bool _hasHit;
 
-    public void Initialize(Element element, int damage, float radius, int numberWallTouch, int netID)
+    public void Initialize(MagneticCharge magneticCharge, int damage, float radius, int numberWallTouch, int netID, bool isPositive, NetworkConnection thrower)
     {
-        _element.Value = element;
+        _element.Value = magneticCharge;
         _radius.Value = radius;
         _maxNumberTouch = numberWallTouch;
         _currentNumberTouch = 0;
         _damage.Value = damage;
         _networkIdAttacker.Value = netID;
+        _isPositive.Value = isPositive;
+        _thrower.Value = thrower;
     }
 
     public override void OnStartClient()
@@ -49,7 +54,7 @@ public class ElementaryGrenade : NetworkBehaviour
         base.OnStopClient();
     }
 
-    private void OnElementChanged(Element prev, Element next, bool asServer)
+    private void OnElementChanged(MagneticCharge prev, MagneticCharge next, bool asServer)
     {
         UpdateVisuals();
     }
@@ -58,13 +63,12 @@ public class ElementaryGrenade : NetworkBehaviour
     {
         if (_model != null)
         {
-            Color GetColor(Element e)
+            Color GetColor(MagneticCharge e)
             {
                 return e switch
                 {
-                    Element.Fire => Color.red,
-                    Element.Electric => Color.yellow,
-                    Element.Ice => Color.blue,
+                    MagneticCharge.Positive => Color.red,
+                    MagneticCharge.Negative => Color.blue,
                     _ => Color.white
                 };
             }
@@ -102,17 +106,15 @@ public class ElementaryGrenade : NetworkBehaviour
 
         if (distance <= 0f) return;
 
-        if (Physics.SphereCast(_lastPosition, 0.1f, direction.normalized, out RaycastHit hit,
+        if (Physics.SphereCast(transform.position, 0.1f, direction.normalized, out RaycastHit hit,
                 distance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (_hasHit) return;
             _hasHit = true;
-
-            Cons.Print($"Grenade hit at {hit.point}", ColorConsole.Grey);
-
-            ApplyExplosionDamage(hit.point);
             
             ExplodeObserversRpc(hit.point, hit.normal);
+            
+            ApplyExplosionDamage(hit.point);
 
             ServerManager.Despawn(gameObject);
         }
@@ -126,8 +128,18 @@ public class ElementaryGrenade : NetworkBehaviour
         {
             if (c.TryGetComponent(out IDamagable damagable))
             {
-                Cons.Print($"Grenade damaged {c.name}", ColorConsole.Red);
                 damagable.TakeDamage(_networkIdAttacker.Value, _damage.Value);
+                
+                InvokeEvent(new AddEnergyEvent
+                {
+                    p_player = _thrower.Value,
+                    p_value = _damage.Value
+                });
+                        
+                if (c.TryGetComponent<EnemyCore>(out var enemyCore))
+                {
+                    enemyCore.AddCharge(_isPositive.Value, _damage.Value);
+                }
             }
         }
     }

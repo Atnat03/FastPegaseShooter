@@ -55,7 +55,8 @@ public class PlayerHealth : NetworkBusListener
 	private bool _canThrowHeal = true;
 	
 	//Action
-	public Action<float> OnUpdateHealth;
+	public Action<float> OnUpdateHealthUI;
+	public Action<float> OnUpdateHealth;	
 	public Action OnStartWarning;
 	public Action<bool> OnKOPlayer;
 	public Action OnTakeDamage;
@@ -64,6 +65,7 @@ public class PlayerHealth : NetworkBusListener
 	public Action OnThrowingActivation;
 	public Action OnThrowing;
 	public Action<Vector3> OnHealThrowLanding;
+	public Action<float> OnUpdateCooldown;
 	
 	#endregion
 
@@ -119,7 +121,16 @@ public class PlayerHealth : NetworkBusListener
     
 		if (IsOwner)
 		{
-			OnUpdateHealth?.Invoke(_targetHealthFill);
+			float remainingCooldown = _healingCooldown - (Time.time - _healActivationTime);
+			if (remainingCooldown > 0)
+			{
+				OnUpdateCooldown?.Invoke(remainingCooldown / _healingCooldown);
+			}
+			else
+			{
+				OnUpdateCooldown?.Invoke(0);
+			}
+			
 			if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold)
 			{
 				if (!_throwActivated)
@@ -203,6 +214,7 @@ public class PlayerHealth : NetworkBusListener
 	private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
 	{
 		OnTakeDamage?.Invoke();
+		OnUpdateHealth?.Invoke(1f);
 	}
 
 	[ServerRpc(RequireOwnership = false)]
@@ -288,6 +300,8 @@ public class PlayerHealth : NetworkBusListener
 		if (!IsOwner) return;
     
 		_targetHealthFill = next / _healthBase;
+		
+		OnUpdateHealthUI?.Invoke(_targetHealthFill);
 
 		if (_targetHealthFill <= _critikStep)
 		{

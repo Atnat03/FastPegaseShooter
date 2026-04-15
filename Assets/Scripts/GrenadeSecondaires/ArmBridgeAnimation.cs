@@ -6,16 +6,27 @@ public class ArmBridgeAnimation : NetworkBehaviour
     [SerializeField] private GrenadeThrower _thrower;
     [SerializeField] private Animator _animator;
     [SerializeField] private MeshRenderer _ballInHand;
-    
-    public void StartThrow(Element e)
+
+    public override void OnStartClient()
     {
-        Color GetColor(Element e)
+        if (IsOwner)
+        {
+            FPSController.SetLayerRecursively(gameObject, LayerMask.NameToLayer("Other"));
+        }
+        else
+        {
+            FPSController.SetLayerRecursively(gameObject, LayerMask.NameToLayer("Owner"));
+        }
+    }
+    
+    public void StartThrow(MagneticCharge e)
+    {
+        Color GetColor(MagneticCharge e)
         {
             return e switch
             {
-                Element.Fire => Color.red,
-                Element.Electric => Color.yellow,
-                Element.Ice => Color.blue,
+                MagneticCharge.Positive => Color.red,
+                MagneticCharge.Negative => Color.blue,
             };
         }
         

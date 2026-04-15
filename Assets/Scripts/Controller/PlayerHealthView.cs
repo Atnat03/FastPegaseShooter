@@ -24,6 +24,7 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private CanvasGroup _damagedWarningImage;
 	[SerializeField] private Image _frameDeccordImage;
 	[SerializeField] private CanvasGroup _damagedImage;
+	[SerializeField] private Image _cooldownHealImage;
 	
 	[Header("Healing")]
 	[SerializeField] private Image _selfHealingImage;
@@ -162,6 +163,12 @@ public class PlayerHealthView : MonoBehaviour
 		await Task.Delay(3000);
 		Destroy(orb);
 	}
+	
+	
+	private void UpdateCooldownHeal(float ratio)
+	{
+		_cooldownHealImage.fillAmount = 1 - ratio;
+	}
 
 	void OnEnable()
 	{
@@ -175,6 +182,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnThrowingActivation += OnThrowingActivation;
 		_playerHealth.OnThrowing += OnThrowing;
 		_playerHealth.OnHealThrowLanding += OnHealThrowLanding;
+		_playerHealth.OnUpdateCooldown += UpdateCooldownHeal;
 		
 		//Drone Throw
 		_droneThrower.OnThrowingActivation += OnThrowingActivation;
@@ -193,6 +201,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnThrowingActivation -= OnThrowingActivation;
 		_playerHealth.OnThrowing -= OnThrowing;
 		_playerHealth.OnHealThrowLanding -= OnHealThrowLanding;
+		_playerHealth.OnUpdateCooldown -= UpdateCooldownHeal;
 		
 		//Drone Throw
 		_droneThrower.OnThrowingActivation -= OnThrowingActivation;

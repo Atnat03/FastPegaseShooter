@@ -24,8 +24,7 @@ namespace GunDecorator
                 s.color = _hitMarkerColor;
             }
             
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"HitMark");
-            SoundManager.PlaySound(clip, _gunController._source, 0.1f);
+            SoundManager.PlaySound(_gunController._soundData, "HitMark", _gunController._source);
             
             Destroy(s, 0.1f);
         }
@@ -38,8 +37,7 @@ namespace GunDecorator
                 s.color = _hitMarkerCritiqueColor;
             }
             
-            AudioClip clip = SoundManager.GetAudioClip(_gunController._soundData,"HitMark");
-            SoundManager.PlaySound(clip, _gunController._source, 0.1f);
+            SoundManager.PlaySound(_gunController._soundData, "HitMark", _gunController._source);
             
             Destroy(s, 0.1f);
         }
