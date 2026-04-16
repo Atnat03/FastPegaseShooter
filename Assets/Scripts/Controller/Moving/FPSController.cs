@@ -403,14 +403,20 @@ public class FPSController : NetworkBusListener
     {
         // grapplepoints 
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance,  LayerMask.GetMask("Default"),
+                out RaycastHit hit, Mathf.Infinity,  LayerMask.GetMask("Default"),
                 QueryTriggerInteraction.Collide))
         {
             currentLookedGrapplePoint = hit.collider.GetComponent<GrapplePoint>();
             if (currentLookedGrapplePoint != null)
             {
-                currentLookedGrapplePoint.p_mustShowCanvas = true;
-                currentLookedGrapplePoint.p_playerTransform = cameraParentTransform;
+                if (Vector3.Distance(transform.position, hit.point) < currentLookedGrapplePoint.detectableDistance)
+                {
+                    _castMaxDistance = currentLookedGrapplePoint.detectableDistance;
+                    _grapplingSpeed = currentLookedGrapplePoint.grappleSpeed;
+                    _endGrappleImpulseForce = currentLookedGrapplePoint.endGrappleImpulseForce;
+                    currentLookedGrapplePoint.p_mustShowCanvas = true;
+                    currentLookedGrapplePoint.p_playerTransform = cameraParentTransform;
+                }
             }
         }
         else if (currentLookedGrapplePoint != null)

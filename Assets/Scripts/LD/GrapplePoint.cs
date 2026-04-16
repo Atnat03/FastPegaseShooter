@@ -9,6 +9,9 @@ public class GrapplePoint : MonoBehaviour
     [HideInInspector]public Transform p_playerTransform;
     [HideInInspector]public bool p_mustShowCanvas = false;
      public Transform p_targetTransform;
+     public float detectableDistance = 50f;
+     public float grappleSpeed = 50f;
+     public float endGrappleImpulseForce = 50;
 
      private float elapsedTime = 0;
 
