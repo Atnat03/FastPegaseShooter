@@ -35,14 +35,14 @@ namespace Controller
 
         private void Shooting(InputAction.CallbackContext obj)
         {
+            Debug.Log($"Shooting called | IsOwner: {IsOwner} | IsDead: {_playerHealth.IsDead} | CanShoot: {_canShoot} | IsInitialized: {_bridgePlayer != null}");
+    
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
-            if(!_canShoot) return;
-            
+            if (!_canShoot) return;
+
             if (_bridgePlayer != null)
-            {
                 _bridgePlayer.TryShootWithCurrentGun();
-            }
         }
 
         private void CancelShooting()
@@ -148,6 +148,8 @@ namespace Controller
         
         private void StopShooting(float duration)
         {
+            Debug.Log($"StopShooting called with duration: {duration}");
+            if (duration <= 0) return;
             StartCoroutine(StopShootingWait(duration));
         }
         

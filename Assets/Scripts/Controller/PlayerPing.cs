@@ -12,7 +12,8 @@ public class PlayerPing : NetworkBehaviour
 	[SerializeField] private PlayerInput _playerInput;
 	
 	[Header("Ping")]
-	[SerializeField] private GameObject _pingPrefab;
+	[SerializeField] private Ping _pingNormalPrefab;
+	[SerializeField] private Ping _pingEnemyPrefab;
 	[SerializeField] private float _cooldownLifePing = 5f;
 	[SerializeField] private float _timerBetweenPing = 2f;
 	float _elapsedTime = 0f;
@@ -43,26 +44,34 @@ public class PlayerPing : NetworkBehaviour
 		{
 			_elapsedTime = _timerBetweenPing;
 
+			bool isNormal = !hit.collider.TryGetComponent(out EnemyCore e);
+
 			if (IsServerInitialized)
-				AddPingObserverRpc(hit.point);
+				AddPingObserverRpc(hit.point + hit.normal * 0.1f, isNormal);
 			else
 			{
-				AddPingServerRpc(hit.point);
+				AddPingServerRpc(hit.point + hit.normal * 0.1f, isNormal);
 			}
 		}
 	}
 
 	[ServerRpc]
-	void AddPingServerRpc(Vector3 point)
+	void AddPingServerRpc(Vector3 point, bool isNormal)
 	{
-		AddPingObserverRpc(point);
+		AddPingObserverRpc(point, isNormal);
 	}
 
 
 	[ObserversRpc]
-	void AddPingObserverRpc(Vector3 pos)
+	void AddPingObserverRpc(Vector3 pos, bool isNormal)
 	{
-		Destroy(Instantiate(_pingPrefab, pos, Quaternion.identity), _cooldownLifePing);
+		Ping prefab = isNormal ? _pingNormalPrefab : _pingEnemyPrefab;
+		
+		Ping ping = Instantiate(prefab, pos, Quaternion.identity).GetComponent<Ping>();
+		
+		ping.SetTarget(transform);
+		
+		Destroy(ping.gameObject, _cooldownLifePing);
 	}
 	
 	#endregion

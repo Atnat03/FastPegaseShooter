@@ -51,7 +51,7 @@ public class GunSwitching : NetworkBehaviour
 
 	#region Fonctions
 
-	public void Initialize(int startIndex)
+	public override void OnStartNetwork()
 	{
 		_currentMainGun.OnChange += OnCurrentGunMainChange;
 		
@@ -61,6 +61,11 @@ public class GunSwitching : NetworkBehaviour
 		{
 			_mainGunsList.Add(gun.gameObject);
 		}
+	}
+	
+	public void Initialize(int startIndex)
+	{
+		Cons.Print("Initialize", ColorConsole.Pink);
 		
 		_currentMainGun.Value = startIndex;
 		
@@ -114,6 +119,8 @@ public class GunSwitching : NetworkBehaviour
 	{
 		if (!IsMainGun) return;
 		
+		Cons.Print("change gun", ColorConsole.Orange);
+		
 		ChangeCurrentGun_Main(newIndex);
 		ChangeMagneticCharge();
 
@@ -124,7 +131,7 @@ public class GunSwitching : NetworkBehaviour
 	}
 
 	[Server]
-	void ChangeCurrentGun_Main(int newIndex)
+	public void ChangeCurrentGun_Main(int newIndex)
 	{
 		_currentMainGun.Value = newIndex;
 		IGunMain.SetChargedPlayer(_isPositiveChargedPlayer.Value);
