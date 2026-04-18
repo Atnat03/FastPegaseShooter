@@ -170,10 +170,7 @@ public class FPSControlerCustomInspector : Editor
         DrawSection("Grappling", Color.aliceBlue, () =>
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_castWidth"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("_castMaxDistance"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("_grapplingSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_grappleRedirectionSpeed"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("_endGrappleImpulseForce"));
         }, ref showGapple);
 
         serializedObject.ApplyModifiedProperties();
