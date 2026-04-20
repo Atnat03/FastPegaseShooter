@@ -24,12 +24,6 @@ public class GunSetting
     public class TemplateShootSetting : GunSetting
     {
         public float fireRate;
-    }
-
-    //FragShoot
-    public class FragShootSetting : GunSetting
-    {
-        public float fireRate;
         public float numberBulletSpread;
         [Range(0, 30)]public float SpreadAngle;
     }

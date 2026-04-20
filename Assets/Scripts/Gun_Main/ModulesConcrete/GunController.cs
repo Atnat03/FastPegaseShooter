@@ -117,8 +117,6 @@ namespace GunDecorator
 
         public void TryFire()
         {
-            Debug.Log($"TryFire | Ammo: {GetCurrentAmmo()} | IsReloading: {_reloadModule.IsReloading} | CanShoot: {_shootModule.CanShoot} | AuthorizedToShoot: {p_authorizedToShoot}");
-    
             if (_chargedModule != null)
                 if (_chargedModule.IsCharging) return;
     

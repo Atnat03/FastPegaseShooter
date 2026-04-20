@@ -32,12 +32,12 @@ namespace GunDecorator
         
         public override void SetVariable(GunSetting setting)
         {
-            if (setting is FragShootSetting s)
+            /*if (setting is FragShootSetting s)
             {
                 _fireRate = s.fireRate;
                 _numberBulletSpread = s.numberBulletSpread;
                 _spreadAngle = s.SpreadAngle;
-            }
+            }*/
         }
         
         private void Start()

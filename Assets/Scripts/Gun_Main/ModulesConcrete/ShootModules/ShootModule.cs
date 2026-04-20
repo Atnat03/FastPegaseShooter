@@ -4,10 +4,11 @@ using FishNet.Object;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GunDecorator
 {
-    public class TemplateShootModule : GunModule, IShootModule
+    public class ShootModule : GunModule, IShootModule
     {
         public float FireRate => _realFireRate;
         public IAmmoModule AmmoModule => _ammoModule;
@@ -23,6 +24,9 @@ namespace GunDecorator
         [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
         private float _realFireRate;
         
+        [SerializeField][Tooltip("le nombre de balles tirées a chaque tir")] private float _numberBulletSpread;
+        [SerializeField, Range(0, 60)][Tooltip("l'angle de propagation maximum que les balles peuvent prendre par rapport a l'orientation du canon")] private float _spreadAngle;
+        
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
         private Vector3 _bulletOffset = Vector3.zero;
@@ -32,9 +36,11 @@ namespace GunDecorator
 
         public override void SetVariable(GunSetting setting)
         {
-            if (setting is TemplateShootSetting shootSetting)
+            if (setting is TemplateShootSetting s)
             {
-                _fireRate = shootSetting.fireRate;
+                _fireRate = s.fireRate;
+                _numberBulletSpread = s.numberBulletSpread;
+                _spreadAngle = s.SpreadAngle;
             }
         }
         
@@ -91,16 +97,25 @@ namespace GunDecorator
             _additionalEffectModule[0].DoAdditionnalEffect();
         }
         
-        public void Shooting()
+       public void Shooting()
         {
             if (_ammoModule != null)
             {
-                _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
+                for (int i = 0; i < _numberBulletSpread; i++)
+                {
+                    Vector3 direction = 
+                            new Vector3(
+                                Random.Range(-_spreadAngle, _spreadAngle),
+                                Random.Range(-_spreadAngle, _spreadAngle),
+                                0);
+                    
+                    _ammoModule.SpawnBullet(direction, Vector3.zero);
+                }
                 
                 _ammoModule.ResetBulletData();
-            }
 
-            _gunController.PlaySound("Shoot");
+                _gunController.PlaySound("Shoot");
+            }
         }
         
         public void CancelShooting()
