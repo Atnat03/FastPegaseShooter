@@ -10191,7 +10191,6 @@ GameObject:
   - component: {fileID: 9063669021039574049}
   - component: {fileID: 29235095159055250}
   - component: {fileID: 724598524445695768}
-  - component: {fileID: 6313838160142872527}
   - component: {fileID: 3416649172374725845}
   m_Layer: 6
   m_Name: _PlayerController (pauseUI)
@@ -10495,7 +10494,7 @@ MonoBehaviour:
   - {fileID: 9063669021039574049}
   - {fileID: 29235095159055250}
   - {fileID: 724598524445695768}
-  - {fileID: 6313838160142872527}
+  - {fileID: 0}
   - {fileID: 3416649172374725845}
   - {fileID: 3143401594481829691}
   - {fileID: 6242588292436510613}
@@ -10748,23 +10747,6 @@ MonoBehaviour:
   _pingEnemyPrefab: {fileID: 2271719971796679177, guid: a726912b1d095ca49a8f4a2fdc5803eb, type: 3}
   _cooldownLifePing: 5
   _timerBetweenPing: 2
---- !u!114 &6313838160142872527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2624057951769441985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63c8b63484741c94cb4c3f7c1225b07a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  _componentIndexCache: 10
-  _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 7927807153383519047}
-  _pauseUI: {fileID: 7612771937129543399}
-  _playerInput: {fileID: 997312506154426130}
 --- !u!114 &3416649172374725845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11095,7 +11077,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3861543128669996318
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11130,7 +11112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 297b9c5d13baa0445a2160b6075cc89b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _playerPause: {fileID: 6313838160142872527}
+  _playerPause: {fileID: 0}
   _fpsController: {fileID: 1792326860910464111}
   _mouseSensitivitySlider: {fileID: 8439440444764698376}
   _mouseSensitivityText: {fileID: 4901415066546733149}
@@ -17712,6 +17694,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4380250540461788439}
+  - component: {fileID: 5688743792912459711}
   m_Layer: 5
   m_Name: pauseMainPanel
   m_TagString: Untagged
@@ -17742,6 +17725,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5688743792912459711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6897904836882724036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61a293b758535a499f383a9f5ff5b13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &6945641284821780910
 GameObject:
   m_ObjectHideFlags: 0
@@ -23610,8 +23605,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5972057617514744547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -23724,7 +23719,7 @@ RectTransform:
   m_Father: {fileID: 3619950257564063013}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -24015,6 +24010,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 300954366712035217}
+  - component: {fileID: 2534570547984325822}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -24043,6 +24039,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000091553, y: -0.0025482}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2534570547984325822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7612771937129543399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c8b63484741c94cb4c3f7c1225b07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _componentIndexCache: 10
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 7927807153383519047}
+  _pauseUIPanels:
+  - {fileID: 5688743792912459711}
+  - {fileID: 5929471040124554476}
+  _playerInput: {fileID: 997312506154426130}
 --- !u!1 &7654427447990518306
 GameObject:
   m_ObjectHideFlags: 0
@@ -24709,7 +24724,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit
+  m_text: Back to lobby
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -25064,7 +25079,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6313838160142872527}
+      - m_Target: {fileID: 2534570547984325822}
         m_TargetAssemblyTypeName: PlayerPause, Assembly-CSharp
         m_MethodName: UpdatePause
         m_Mode: 1
@@ -26725,6 +26740,18 @@ PrefabInstance:
       objectReference: {fileID: 7927807153383519047}
     - target: {fileID: -4750392419808689300, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
       propertyPath: _networkObjectCache
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 266708624374712089, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266708624374712089, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: _initializedTimestamp
+      value: -8584249048346111418
+      objectReference: {fileID: 0}
+    - target: {fileID: 266708624374712089, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[0]'
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1427363929612995280, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}

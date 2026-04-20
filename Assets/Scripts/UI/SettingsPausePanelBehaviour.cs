@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingsPanelBehaviour : MonoBehaviour
+public class SettingsPausePanelBehaviour : PausePanel
 {
     [SerializeField] PlayerPause _playerPause;
     [SerializeField] FPSController _fpsController;
@@ -18,7 +18,7 @@ public class SettingsPanelBehaviour : MonoBehaviour
     Resolution[] _resolutions;
     private List<Resolution> _selectedResolutions = new();
     
-    void Start()
+    public override void Init()
     {
         _resolutions = Screen.resolutions;
         List<string> resolutionListString = new List<string>();
@@ -49,24 +49,14 @@ public class SettingsPanelBehaviour : MonoBehaviour
         float savedSens = PlayerPrefs.GetFloat("MouseSensitivity", _mouseSensitivityMaxValue / 2f);
         _mouseSensitivitySlider.value = savedSens;
         _mouseSensitivityText.text = savedSens.ToString("F0");
-        _fpsController.mouseSensitivity = Mathf.Lerp(0, _mouseSensitivityMaxValue, savedSens / _mouseSensitivitySlider.maxValue);
+        _fpsController.mouseSensitivity = Mathf.Lerp(0, _mouseSensitivityMaxValue, _mouseSensitivitySlider.value / _mouseSensitivitySlider.maxValue);;
         
         ChangeResolution();
 
         gameObject.SetActive(false);
     }
 
-    void OnEnable()
-    {
-        _playerPause.OnPause += OnPause;
-    }
-
-    void OnDisable()
-    {
-        _playerPause.OnPause -= OnPause;
-    }
-
-    void OnPause(bool isPause)
+    public override void OnPause(bool isPause)
     {
         gameObject.SetActive(false);
     }
