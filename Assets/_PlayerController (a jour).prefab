@@ -15656,9 +15656,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 10
+  MaxDistance: 100
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -15798,7 +15798,9 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 0}
   _fps: {fileID: 1792326860910464111}
-  _soundsData: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}
+  _ping: {fileID: 724598524445695768}
+  _soundsDataFps: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}
+  _soundsDataPing: {fileID: 11400000, guid: bf8dd7580f1b9cc41aab2d4c4ca8b961, type: 2}
   _audioSource: {fileID: 4823317710188223472}
   _frequency: 15
   _dashCooldownImage: {fileID: 4517072716920338193}
@@ -23270,7 +23272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755247e13557f7d4dba3be4e7148942e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _imageCooldown: {fileID: 4517072716920338193}
+  _imageCooldown: {fileID: 3090745708699314534}
   _impactParticlesPositive: {fileID: 7348166546262929581, guid: 0785a27b929fe9d428d3b3bd4e76b2d0, type: 3}
   _impactParticlesNegative: {fileID: 7348166546262929581, guid: 6fd482c1cf34aef478e4f8ade4b3afa9, type: 3}
 --- !u!1 &8919689117758490666
@@ -23585,6 +23587,14 @@ PrefabInstance:
       objectReference: {fileID: 7927807153383519047}
     - target: {fileID: -4750392419808689300, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
       propertyPath: _networkObjectCache
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 266708624374712089, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266708624374712089, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[0]'
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1427363929612995280, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}

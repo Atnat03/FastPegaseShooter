@@ -15,7 +15,9 @@ public class FPSControllerView : NetworkBusListener
 	#region Variables
 
 	[SerializeField] private FPSController _fps;
-	[SerializeField] private SoundsDataSO _soundsData;
+	[SerializeField] private PlayerPing _ping;
+	[SerializeField] private SoundsDataSO _soundsDataFps;
+	[SerializeField] private SoundsDataSO _soundsDataPing;
 	[SerializeField] private AudioSource _audioSource;
 
 	[Header("Footsteps")] 
@@ -43,11 +45,34 @@ public class FPSControllerView : NetworkBusListener
 		_fps.OnLanding += Landing;
 
 		_fps.OnGrappling += Grappling;
+
+		_ping.OnPinging += Pinging;
+	}
+	
+	private void OnDisable()
+	{
+		_fps.OnDash -= Dash;
+		_fps.OnUpdateDashCooldown -= UpdateDashCooldown;
+
+		_fps.OnFootstep -= Footsteps;
+
+		_fps.OnJump -= Jump;
+		_fps.OnLanding -= Landing;
+
+		_fps.OnGrappling -= Grappling;
+
+		_ping.OnPinging -= Pinging;
+	}
+
+	private void Pinging(bool isNormal)
+	{
+		string s = isNormal ? "Normal" : "Enemy";
+		SoundManager.PlaySound(_soundsDataPing, s, _audioSource);
 	}
 
 	private void Grappling()
 	{
-		SoundManager.PlaySound(_soundsData, "Grapple", _audioSource);
+		SoundManager.PlaySound(_soundsDataFps, "Grapple", _audioSource);
 	}
 
 	private void Landing()
@@ -116,7 +141,7 @@ public class FPSControllerView : NetworkBusListener
 	[ObserversRpc]
 	private void PlaySoundObserversRpc(string clip)
 	{
-		SoundManager.PlaySound(_soundsData, clip, _audioSource);
+		SoundManager.PlaySound(_soundsDataFps, clip, _audioSource);
 	}
 	
 	#endregion
