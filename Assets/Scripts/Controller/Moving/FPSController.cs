@@ -65,7 +65,7 @@ public class FPSController : NetworkBusListener
     [SerializeField] float cameraSpringFrequency = 22.5f;
     [SerializeField] float rollSmoothing = 15f;
 
-    [Header("movement")] [SerializeField] float mouseSensitivity = 2f;
+    [Header("movement")] public float mouseSensitivity = 2f;
     [SerializeField] float verticalLimit = 80f;
     [SerializeField] float moveSpeed;
     [SerializeField] float groundMomentumFactor = 2f;

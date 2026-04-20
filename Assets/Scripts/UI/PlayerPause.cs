@@ -12,11 +12,18 @@ public class PlayerPause : NetworkBusListener
 {
     [SerializeField] private GameObject _pauseUI;
     [SerializeField] private PlayerInput _playerInput;
+    
+    public Action<bool> OnPause;
 
     private bool _isPause;
 
     
     private void UpdatePause(InputAction.CallbackContext obj)
+    {
+        UpdatePause();
+    }
+    
+    public void UpdatePause()
     {
         if (!IsOwner) return;
         
@@ -27,6 +34,7 @@ public class PlayerPause : NetworkBusListener
         Cursor.lockState = _isPause ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = _isPause;
         
+        OnPause?.Invoke(_isPause);
         InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
     }
     
