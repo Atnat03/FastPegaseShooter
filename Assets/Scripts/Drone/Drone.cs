@@ -23,7 +23,6 @@ public class Drone : NetworkBusListener
 	
 	#endregion
 
-
 	#region Variables
 
 	[Header("Vol Stationnaire")] 

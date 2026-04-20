@@ -24,6 +24,7 @@ public class SwapGunManagerView : NetworkBehaviour
 	[SerializeField] private string _youAskSwapMessage;
 	[SerializeField] private string _broAskyouSwapMessage;
 
+	[SerializeField] private Image _infoCombo;
 	
 	#endregion
 
@@ -35,7 +36,17 @@ public class SwapGunManagerView : NetworkBehaviour
 		_manager.OnUpdateAskBroSwap += UpdateUI;
 		_manager._elapsedTime.OnChange += OnElapsedTimeChanged;
 		_manager.OnChangeAskText += ChangeAskText;
+		_manager.OnComboUpdate += UpdateCombo;
 	}
+	
+	private void OnDisable()
+	{
+		_manager.OnUpdateAskBroSwap -= UpdateUI;
+		_manager._elapsedTime.OnChange -= OnElapsedTimeChanged;
+		_manager.OnChangeAskText -= ChangeAskText;
+		_manager.OnComboUpdate -= UpdateCombo;
+	}
+
 
 	private void ChangeAskText(bool isRequester)
 	{
@@ -50,6 +61,13 @@ public class SwapGunManagerView : NetworkBehaviour
 	private void UpdateUI(float ratio)
 	{
 		_valueImage.fillAmount = ratio;
+	}
+
+	private void UpdateCombo(bool activate, Color colorJauge)
+	{
+		_infoCombo.color = colorJauge;
+		_infoCombo.gameObject.SetActive(activate);
+
 	}
 
 	#endregion

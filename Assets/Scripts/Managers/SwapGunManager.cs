@@ -31,10 +31,8 @@ namespace Managers
         private List<SurchargeData> _damageSurchargeData = new List<SurchargeData>();
         private readonly SyncVar<int> _currentSurchargeLevel = new SyncVar<int>();
         private readonly SyncVar<int> _firstPlayerOwnerId = new SyncVar<int>(-1);
-        
-        [Header("Combo")]
-        [SerializeField] private bool _isCombo = false;
-        [SerializeField] private Image _infoCombo;
+
+        private bool _isCombo = false;
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
 
         private NetworkObject _player = null;
@@ -45,6 +43,7 @@ namespace Managers
         
         public Action<float> OnUpdateAskBroSwap;
         public Action<bool> OnChangeAskText;
+        public Action<bool, Color> OnComboUpdate;
 
         public override void OnStartServer()
         {
@@ -177,8 +176,10 @@ namespace Managers
         
         private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
         {
-            _infoCombo.color = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
-            _infoCombo.gameObject.SetActive(next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count-1);
+            bool a = next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count - 1;
+            Color c = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
+            
+            OnComboUpdate?.Invoke(a, c);
         }
     }
 }

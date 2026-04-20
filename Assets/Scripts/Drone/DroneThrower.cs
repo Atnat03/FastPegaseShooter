@@ -23,12 +23,6 @@ public class DroneThrower : NetworkBehaviour
 	[SerializeField] private DroneBullet _droneBulletPrefab;
 	[SerializeField] private Drone _dronePrefab;
 	[SerializeField] private Transform _spawnPoint;
-    
-	[Header("Settings")]
-	[SerializeField] private float _cooldown = 2f;
-	[SerializeField] private int _damage = 10;
-	[SerializeField] private float _throwForce = 10f;
-	[SerializeField] private int _numberBounces = 2;
 	
 	[Header("Charge Throw")]
 	[SerializeField] private float _minThrowForce = 5f;
