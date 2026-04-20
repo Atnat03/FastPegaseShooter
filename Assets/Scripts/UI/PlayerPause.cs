@@ -15,7 +15,12 @@ public class PlayerPause : NetworkBusListener
     
     public Action<bool> OnPause;
 
-    private bool _isPause;
+    private bool _isPause = false;
+
+    void Start()
+    {
+        _pauseUI.SetActive(_isPause);
+    }
 
     
     private void UpdatePause(InputAction.CallbackContext obj)
