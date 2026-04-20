@@ -34,7 +34,8 @@ namespace Managers
 
         private bool _isCombo = false;
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
-
+        [SerializeField] private Image _infoCombo;
+        
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
         private int _firstGunAmmo = -1;
@@ -179,7 +180,8 @@ namespace Managers
             bool a = next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count - 1;
             Color c = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
             
-            OnComboUpdate?.Invoke(a, c);
+            _infoCombo.color = c;
+            _infoCombo.gameObject.SetActive(a);
         }
     }
 }

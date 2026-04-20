@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MyPrint;
 using PlasticGui.WorkspaceWindow.Items;
 using ScriptableObjectsDefinitions;
@@ -34,7 +35,7 @@ public class SFX_Tool : EditorWindow
 
     void OnGUI()
     {
-        EditorGUI.DrawRect(new Rect(0, 0, position.width, position.height), GetColor(PaletteColor.Black));
+        EditorGUI.DrawRect(new Rect(0, 0, position.width, position.height), GetColor(PaletteColor.Noir));
         
         Title();
         Variable();
@@ -59,7 +60,7 @@ public class SFX_Tool : EditorWindow
         GUILayout.BeginHorizontal();
         
         GUIStyle style = new GUIStyle(GUI.skin.button);
-        style.normal.background = MakeTex(2, 2, GetColor(PaletteColor.Green));
+        style.normal.background = MakeTex(2, 2, GetColor(PaletteColor.BleuCanard));
         
         if (GUILayout.Button("Select Sound Data", style, GUILayout.Height(30)))
         {
@@ -74,7 +75,7 @@ public class SFX_Tool : EditorWindow
         boxStyle.alignment = TextAnchor.MiddleCenter;
         boxStyle.fontSize = 16;
         boxStyle.normal.textColor = Color.black;
-        boxStyle.normal.background = MakeTex(2, 2, GetColor(PaletteColor.Yellow));
+        boxStyle.normal.background = MakeTex(2, 2, GetColor(PaletteColor.Blanc));
 
         GUILayout.Box(
             _data != null ? _data.name : "No Data Selected",
@@ -141,7 +142,7 @@ public class SFX_Tool : EditorWindow
             
             GUILayout.Space(8);
 
-            Rect sliderRect = GUILayoutUtility.GetRect(60, 400);
+            Rect sliderRect = GUILayoutUtility.GetRect(60, 380);
 
             s.volume = CustomVerticalSlider.Draw(
                 sliderRect,
@@ -150,6 +151,10 @@ public class SFX_Tool : EditorWindow
                 1f,
                 _sliderThumbTex
             );
+            
+            GUILayout.Space(16);
+            
+            s.type = (SoundType)EditorGUILayout.EnumPopup("Type",s.type);
             
             GUILayout.Space(16);
             
@@ -170,7 +175,7 @@ public class SFX_Tool : EditorWindow
 
                 source.Play();
 
-                Destroy(tempGO, 2f);
+                DestroyImmediate(tempGO);
             }
             
             GUIStyle deleteStyle = new GUIStyle(GUI.skin.button);
@@ -215,7 +220,7 @@ public class SFX_Tool : EditorWindow
 
         GUIStyle button = new GUIStyle(GUI.skin.button);
         button.normal.textColor = Color.white;
-        button.normal.background = MakeTex(2, 2, GetColor(PaletteColor.DarkGreen));
+        button.normal.background = MakeTex(2, 2, GetColor(PaletteColor.BleuClair));
         
         if (GUILayout.Button("Add Sound", button, GUILayout.Height(30)))
         {
@@ -254,17 +259,18 @@ public class SFX_Tool : EditorWindow
 
         switch (p)
         {
-            case PaletteColor.Yellow:        ColorUtility.TryParseHtmlString("#FFDE42", out color); return color;
-            case PaletteColor.Green:        ColorUtility.TryParseHtmlString("#4C5C2D", out color); return color;
-            case PaletteColor.Black:        ColorUtility.TryParseHtmlString("#1B0C0C", out color); return color;
-            case PaletteColor.DarkGreen:    ColorUtility.TryParseHtmlString("#313E17", out color); return color;
+            case PaletteColor.BleuMarine:        ColorUtility.TryParseHtmlString("#1C2942", out color); return color;
+            case PaletteColor.BleuCanard:        ColorUtility.TryParseHtmlString("#3B556D", out color); return color;
+            case PaletteColor.BleuClair:        ColorUtility.TryParseHtmlString("#5FC2BA", out color); return color;
+            case PaletteColor.Blanc:    return Color.white;
+            case PaletteColor.Noir:    return Color.black;
             default: return Color.white;
         }
     }
 
     public enum PaletteColor
     {
-        Yellow, Green, DarkGreen, Black
+        BleuMarine, BleuCanard, BleuClair, Blanc, Noir
     }
     
     private void DrawOutline(Rect rect, float thickness, Color color)

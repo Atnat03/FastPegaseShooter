@@ -16,5 +16,13 @@ namespace ScriptableObjectsDefinitions
         public string soundName;
         public AudioClip audioClip;
         public float volume = 0.5f;
+        public SoundType type = SoundType.Global;
+    }
+
+    [Serializable]
+    public enum SoundType
+    {
+        Global,
+        Spatial,
     }
 }
