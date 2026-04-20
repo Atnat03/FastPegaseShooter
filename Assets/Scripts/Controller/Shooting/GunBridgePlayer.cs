@@ -80,6 +80,7 @@ namespace Controller
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
 
+            TryCancelShooting();
             CurrentGun.TryCharging();
         }
 

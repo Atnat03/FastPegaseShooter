@@ -325,6 +325,8 @@ MonoBehaviour:
   _secondModule: []
   _ammoType: {fileID: 8428071434140413335}
   _fireRate: 0.1
+  _numberBulletSpread: 0
+  _spreadAngle: 0
 --- !u!114 &8711017196874581574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,6 +1119,8 @@ MonoBehaviour:
   _secondModule: []
   _ammoType: {fileID: 5812551220895680502}
   _fireRate: 0.1
+  _numberBulletSpread: 0
+  _spreadAngle: 0
 --- !u!114 &1869490300898767730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9335,7 +9339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
   <IsNested>k__BackingField: 0
-  WasActiveDuringEdit: 1
+  WasActiveDuringEdit: 0
   WasActiveDuringEdit_Set1: 1
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
@@ -9383,7 +9387,7 @@ MonoBehaviour:
   - {fileID: 7744048412683742324}
   - {fileID: 6500108499577103005}
   - {fileID: 3954904171555899916}
-  - {fileID: 3934804178846433990}
+  - {fileID: 0}
   - {fileID: 8850256140603045240}
   - {fileID: 8041650522221974858}
   - {fileID: 4651678768051478449}
@@ -12174,11 +12178,11 @@ GameObject:
   - component: {fileID: 6500108499577103005}
   - component: {fileID: 3954904171555899916}
   - component: {fileID: 8132065868563438229}
-  - component: {fileID: 3934804178846433990}
   - component: {fileID: 8850256140603045240}
   - component: {fileID: 8041650522221974858}
   - component: {fileID: 4651678768051478449}
   - component: {fileID: 7048642797284340988}
+  - component: {fileID: 4693748091335889128}
   m_Layer: 11
   m_Name: ShotgunSniper
   m_TagString: Untagged
@@ -12413,29 +12417,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3934804178846433990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5218239709253605311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45db67dd1c8040edbc6fd3ca22e0271d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.FragShootModule
-  _componentIndexCache: 42
-  _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 7927807153383519047}
-  moduleName: FragShootModule
-  moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule:
-  - {fileID: 0}
-  _ammoType: {fileID: 7048642797284340988}
-  _fireRate: 1.25
-  _numberBulletSpread: 9
-  _spreadAngle: 12
 --- !u!114 &8850256140603045240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12556,6 +12537,28 @@ MonoBehaviour:
   _damages: 5
   _BulletSpeed: 50
   _impactVFXData: {fileID: 11400000, guid: fa51d249e5d6f104e9e152faba21b25a, type: 2}
+--- !u!114 &4693748091335889128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5218239709253605311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  moduleName: TemplateShootModule
+  moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
+  _secondModule: []
+  _ammoType: {fileID: 7048642797284340988}
+  _fireRate: 1
+  _numberBulletSpread: 8
+  _spreadAngle: 8
 --- !u!1 &5293877357180756991
 GameObject:
   m_ObjectHideFlags: 0
@@ -13376,6 +13379,8 @@ MonoBehaviour:
   - {fileID: 6154372736321769268}
   _ammoType: {fileID: 219218631671859702}
   _fireRate: 0.6
+  _numberBulletSpread: 0
+  _spreadAngle: 0
 --- !u!114 &7557458434173687512
 MonoBehaviour:
   m_ObjectHideFlags: 0

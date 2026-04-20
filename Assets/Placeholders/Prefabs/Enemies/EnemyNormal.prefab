@@ -159,7 +159,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1507555186049823902}
-  - component: {fileID: 5088391788898574782}
   m_Layer: 16
   m_Name: UI
   m_TagString: Untagged
@@ -183,24 +182,6 @@ Transform:
   - {fileID: 5686232191803980998}
   m_Father: {fileID: 1710859028773061241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5088391788898574782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4952267729204389824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fd37eadeed8c574bba4e12cadbadf39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  _componentIndexCache: 7
-  _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 8280671740658429549}
-  _distanceMax: 100
-  _scaleModifier: 1
-  _scaleMap: {x: 1, y: 5}
 --- !u!1 &5911405418369916473
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,7 +366,7 @@ MonoBehaviour:
   - {fileID: 6176439864006220930}
   - {fileID: 1616473552808334993}
   - {fileID: 4698517845500844215}
-  - {fileID: 5088391788898574782}
+  - {fileID: 0}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -867,7 +848,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4907568637477498329, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 3.628
+      value: 3.659
       objectReference: {fileID: 0}
     - target: {fileID: 4907568637477498329, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -885,10 +866,17 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7891381051146059061, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.26
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1998820330115211322, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2573279949911093507}
   m_SourcePrefab: {fileID: 100100000, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
 --- !u!114 &862171321979648340 stripped
 MonoBehaviour:
@@ -901,6 +889,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!1 &1247388389267009829 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1998820330115211322, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+  m_PrefabInstance: {fileID: 788870599977750815}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2573279949911093507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247388389267009829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd37eadeed8c574bba4e12cadbadf39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _componentIndexCache: 7
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
+  _distanceMax: 100
+  _scaleModifier: 1
+  _scaleMap: {x: 2, y: 10}
 --- !u!114 &2490265651124825619 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2917649538054012684, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}

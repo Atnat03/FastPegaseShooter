@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GunsSway : MonoBehaviour
+public class GunsSway : MonoBusListener
 {
     [Header("Sway")]
     [SerializeField] private PlayerInput _playerInput;
@@ -26,16 +26,24 @@ public class GunsSway : MonoBehaviour
     
     private Vector3 _initialPosition;
     private float _bobTimer;
-    
+
+    private bool _hasSway = true;
     
     void Start()
     {
         _initialPosition = transform.localPosition;
         _playerRB = _playerInput.GetComponent<Rigidbody>();
+        
+        ListenToEvent<OnPauseEvent>(data =>
+        {
+            _hasSway = !data.p_isPause;
+        });
     }
 
     void LateUpdate()
     {
+        if (!_hasSway) return;
+        
         #region Sway
         
         float mouseX = _playerInput.actions["Look"].ReadValue<Vector2>().x;

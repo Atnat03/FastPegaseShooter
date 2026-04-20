@@ -232,6 +232,7 @@ public class FPSController : NetworkBusListener
             ListenToEvent<OnPauseEvent>(data =>
             {
                 isFreeze = data.p_isPause;
+                rb.linearVelocity = isFreeze ? Vector3.zero : rb.linearVelocity;
             });
         }
         else

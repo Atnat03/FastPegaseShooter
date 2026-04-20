@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace Controller
 {
-    public class PlayerShooting : NetworkBehaviour
+    public class PlayerShooting : NetworkBusListener
     {
         #region Variables
 
@@ -26,17 +26,22 @@ namespace Controller
 
         #region Fonctions
 
+        private void Start()
+        {
+            ListenToEvent<OnPauseEvent>(data =>
+            {
+                _canShoot = !data.p_isPause;
+            });
+        }
+
         void Update()
         {
             if (_playerInputAction.actions["Shoot"].WasReleasedThisFrame()) CancelShooting();
             if(_playerInputAction.actions["Charge"].WasReleasedThisFrame())ShootCharged();
         }
-        
 
         private void Shooting(InputAction.CallbackContext obj)
         {
-            Debug.Log($"Shooting called | IsOwner: {IsOwner} | IsDead: {_playerHealth.IsDead} | CanShoot: {_canShoot} | IsInitialized: {_bridgePlayer != null}");
-    
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if (!_canShoot) return;
@@ -148,7 +153,6 @@ namespace Controller
         
         private void StopShooting(float duration)
         {
-            Debug.Log($"StopShooting called with duration: {duration}");
             if (duration <= 0) return;
             StartCoroutine(StopShootingWait(duration));
         }
