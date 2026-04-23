@@ -1394,9 +1394,11 @@ public class FPSController : NetworkBusListener
 
     Vector3 grappleDirection;
     private float grappleStartingDistance;
+    private float grappleTimer;
 
     void EnterGrappleState()
     {
+        grappleTimer = 0f;
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
                 out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
                 QueryTriggerInteraction.Collide))
@@ -1422,11 +1424,18 @@ public class FPSController : NetworkBusListener
 
     void GrappleUpdate()
     {
-        if (!(Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.75f
-              && (playerInput.actions["Grapple"].IsPressed() || singleClicGrapple)
-              && !(Vector3.Distance(transform.position, _currentGrapplePoint.position) < grappleStartingDistance &&
-                   rb.linearVelocity.magnitude < 0.05f)))
+        float distance = Vector3.Distance(transform.position, _currentGrapplePoint.position);
+        grappleTimer += Time.deltaTime;
+
+        bool ignoreStartCheck = grappleTimer < 0.2f;
+        
+        bool isFarEnough = distance > 0.75f;
+        bool inputValid = playerInput.actions["Grapple"].IsPressed() || singleClicGrapple;
+        bool isStuckAtStart = !ignoreStartCheck && distance < grappleStartingDistance && rb.linearVelocity.magnitude < 0.05f;
+
+        if (!isFarEnough || !inputValid || isStuckAtStart)
         {
+
             rb.linearVelocity = Vector3.zero;
             rb.AddForce(grappleDirection * _endGrappleImpulseForce, ForceMode.Impulse);
             _currentGrapplePoint = null;

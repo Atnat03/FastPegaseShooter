@@ -26,7 +26,7 @@ public class PlayerRaycast : NetworkBehaviour
 		_camera = GetComponent<FPSController>().Camera;
 		_playerInput = GetComponent<PlayerInput>();
 
-		_playerInput.actions["Interact"].performed += CheckRaycast;
+		//_playerInput.actions["Interact"].performed += CheckRaycast;
 	}
 
 	private void CheckRaycast(InputAction.CallbackContext obj)
