@@ -116,8 +116,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd37eadeed8c574bba4e12cadbadf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 0}
   _distanceMax: 100
   _scaleModifier: 1
+  _scaleMap: {x: 0.001, y: 0.003}
 --- !u!1 &1575274878813837563
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,10 +325,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: ed2cf3c2117b5ca4aa44f9735319a635, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -845,6 +849,14 @@ MonoBehaviour:
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
+  _explosionChargedDamage: 50
+  _negativeChargeMax: 5
+  _positiveChargeMax: 5
+  _positiveUI: {fileID: 0}
+  _positiveCurValue: {fileID: 0}
+  _negativeUI: {fileID: 0}
+  _negativeCurValue: {fileID: 0}
+  _explosionParticle: {fileID: 0}
 --- !u!114 &2460980101886863971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1256,10 +1268,14 @@ MonoBehaviour:
   _cumulatifDmg: 0
   _elapsedCumulativeDmgTime: 0
   _lifeTMP: {fileID: 8838920003505348040}
-  _lifeBarRectTransform: {fileID: 2321877886111589878}
+  _lifeBarParent: {fileID: 0}
   _lifeBarImage: {fileID: 7477918164592477288}
   _fullLifeColor: {r: 0.113805294, g: 1, b: 0, a: 1}
   _emptyLifeColor: {r: 1, g: 0, b: 0, a: 1}
+  _fillSpeedBarFront: 10
+  _lifeBarSecondImage: {fileID: 0}
+  _fillSpeedBarBack: 5
+  _timeBeforeSecondBarUpdate: 0.5
 --- !u!114 &7388347016383583870
 MonoBehaviour:
   m_ObjectHideFlags: 0

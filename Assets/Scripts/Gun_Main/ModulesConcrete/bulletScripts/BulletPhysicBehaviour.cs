@@ -73,7 +73,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                     {
                         bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,  (int)p_damage, p_isCritical);
                         _gunController.TriggerHitMark(crit || p_isCritical);
-                        InvokeEvent(new AddEnergyEvent
+                        InvokeEvent(new ModifyEnergyEvent
                         {
                             p_player = _gunController.Owner,
                             p_value = p_damage
@@ -104,7 +104,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
                 crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
-                InvokeEvent(new AddEnergyEvent
+                InvokeEvent(new ModifyEnergyEvent
                 {
                     p_player = _gunController.Owner,
                     p_value = p_damage

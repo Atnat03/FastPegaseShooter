@@ -23,12 +23,12 @@ public class PlayerEnergyView : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_playerEnergy.OnAddEnergy += UpdateEnergy;
+		_playerEnergy.OnModifyEnergy += UpdateEnergy;
 	}
 
 	private void OnDisable()
 	{
-		_playerEnergy.OnAddEnergy -= UpdateEnergy;
+		_playerEnergy.OnModifyEnergy -= UpdateEnergy;
 
 	}
 
