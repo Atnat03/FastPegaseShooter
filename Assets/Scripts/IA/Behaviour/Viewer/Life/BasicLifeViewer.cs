@@ -11,8 +11,8 @@ public class BasicLifeViewer : MonoBehaviour
     [SerializeField] private Transform _hitMarkerParent;
     [SerializeField] private TextMeshProUGUI _textDmg;
     [SerializeField] private TextMeshProUGUI _textDmgCritique;
-    [SerializeField] private int _cumulatifDmg = 0;
-    [SerializeField] private float _elapsedCumulativeDmgTime = 0;
+    private int _cumulatifDmg = 0;
+    private float _elapsedCumulativeDmgTime = 0;
     private TextMeshProUGUI _hitMarker;
 
     [Header("Life")]
@@ -34,18 +34,25 @@ public class BasicLifeViewer : MonoBehaviour
     void Awake()
     {
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
-        _enemyLifeModule.OnLifeStart += SetUI;
         _lifeBarImage.color = _fullLifeColor;
+        
+        _lifeTMP.enabled = false;
+        _lifeBarImage.enabled = false;
+        _lifeBarSecondImage.enabled = false;
     }
 
-    void SetUI(int baseLife)
+    /*void SetUI(int baseLife)
     {
         _lifeTMP.text = $"{baseLife}/{baseLife}";
         _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, 1);
-    }
+    }*/
     
     private void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
+        _lifeTMP.enabled = true;
+        _lifeBarImage.enabled = true;
+        _lifeBarSecondImage.enabled = true;
+        
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
         _lifeTMP.text = $"{lifeAmount}/{fullLife}";
