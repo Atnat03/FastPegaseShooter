@@ -3,16 +3,9 @@ using UnityEngine;
 
 public class GameStatsManager : NetworkBusListener
 {
-    public static GameStatsManager instance;
     public readonly Dictionary<int, PlayerStats> playerStats = new Dictionary<int, PlayerStats>();
     
     bool _initialized = false;
-
-    void Awake()
-    {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
-    }
 
     public override void OnStartServer()
     {
