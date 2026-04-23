@@ -123,7 +123,7 @@ namespace GunDecorator
                         );
                     
                     _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
-
+                    
                     _directionModifier = Vector3.zero;
                 }
                 

@@ -21,9 +21,7 @@ namespace GunDecorator
         private int _currentAmmo = 0;
         private bool _isReloading = false;
         
-        [Header("UI")]
-        [SerializeField, Tooltip("Text des balles actuelles + max balles")] private TextMeshProUGUI _ammoText;
-        [SerializeField, Tooltip("Cercle pour le temps de reload")] private Image _imageReload;
+
         
         public Coroutine p_reloadCoroutine = null;
         
@@ -47,8 +45,6 @@ namespace GunDecorator
         {
             _currentAmmo = Mathf.Clamp(_currentAmmo, 0, _magazineSize);
             
-            _ammoText.text = CurrentAmmo +  "/" + _magazineSize;
-
             if (_autoReload)
             {
                 if (_currentAmmo <= 0)
@@ -64,9 +60,10 @@ namespace GunDecorator
             {
                 StopCoroutine(p_reloadCoroutine);
                 p_reloadCoroutine = null;
-                _imageReload.gameObject.SetActive(false);
                 _isReloading = false;
                 _gunController?._animator.ResetTrigger("Reload");
+                
+                _gunController?.OnEndReload?.Invoke();
             }
         }
 
@@ -78,25 +75,14 @@ namespace GunDecorator
 
         IEnumerator ReloadCoroutine()
         {
-            _imageReload.gameObject.SetActive(true);
-            _imageReload.fillAmount = 1;
+            _gunController?.OnStartReload?.Invoke(reloadDuration);
             
             _gunController?._animator.SetTrigger("Reload");
             _gunController?.PlaySound("Reload");
             
             _isReloading = true;
-            
-            float duration = reloadDuration;
-            float elapsedTime = duration;
 
-            while (elapsedTime > 0)
-            {
-                elapsedTime -= Time.deltaTime;
-                _imageReload.fillAmount = elapsedTime / duration;
-                yield return null;
-            }
-            
-            _imageReload.gameObject.SetActive(false);
+            yield return new WaitForSeconds(reloadDuration);
             
             _isReloading = false;
             SetAmmo(_magazineSize, false);
@@ -114,6 +100,8 @@ namespace GunDecorator
         {
             if(!infiniteAmmo)
                 _currentAmmo = Mathf.Min(value, _magazineSize);
+            
+            _gunController.OnShootAmmo?.Invoke(_currentAmmo, _magazineSize);
         }
     }
 }
