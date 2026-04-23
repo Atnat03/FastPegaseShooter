@@ -17,7 +17,6 @@ public class BasicLifeViewer : MonoBehaviour
 
     [Header("Life")]
     [SerializeField] private TextMeshProUGUI _lifeTMP;
-    [SerializeField] private GameObject _lifeBarParent;
     [SerializeField] private Image _lifeBarImage;
     [SerializeField] private Color _fullLifeColor;
     [SerializeField] private Color _emptyLifeColor;
