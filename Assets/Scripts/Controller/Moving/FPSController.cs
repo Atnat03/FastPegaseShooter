@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -1338,7 +1339,7 @@ public class FPSController : NetworkBusListener
                 Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
         {
             if (playerInput.actions["Crouch"].WasReleasedThisFrame()) stateMachine.ChangeState(ControlerState.Idle);
-            if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(); // au besoin, faire une autre fonction
+            if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(true); // au besoin, faire une autre fonction
             if (Vector3.Angle(groundedHit.normal, Vector3.up) < minSlopeAngleToSlopeSlide)
                 stateMachine.ChangeState(ControlerState.Idle);
         }
@@ -1531,6 +1532,7 @@ public class FPSController : NetworkBusListener
     private Vector3 point2;
     private CapsuleCollider capsule;
 
+    [SuppressMessage("ReSharper", "Unity.PreferNonAllocApi")]
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
         if (velocity.sqrMagnitude == 0) return velocity;
@@ -1689,7 +1691,7 @@ public class FPSController : NetworkBusListener
         stateMachine.ChangeState(ControlerState.Falling);
     }
 
-    void SlideJump()
+    void SlideJump(bool slopeSlide = false)
     {
         hasJumped = true;
         coyoteJump = false;
@@ -1697,8 +1699,12 @@ public class FPSController : NetworkBusListener
         mustSlide = false;
         StartCoroutine(JumpAntiLagCoroutine());
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-        rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
-            ForceMode.Impulse);
+        if (slopeSlide)
+            rb.AddForce(Vector3.up * slideJumpVerticalForce,
+                ForceMode.Impulse);
+        else
+            rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
+                ForceMode.Impulse);
     }
 
     void Crouch()
