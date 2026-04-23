@@ -20,14 +20,8 @@ public class DroneThrower : NetworkBehaviour
 	[SerializeField] private PlayerEnergy _playerEnergy;
 	
 	[Header("Throw")]
-	[SerializeField] private DroneBullet _droneBulletPrefab;
 	[SerializeField] private Drone _dronePrefab;
 	[SerializeField] private Transform _spawnPoint;
-	
-	[Header("Charge Throw")]
-	[SerializeField] private float _minThrowForce = 5f;
-	[SerializeField] private float _maxThrowForce = 25f;
-	[SerializeField] private float _maxChargeTime = 2f;
 
 	private float _currentChargeTime = 0f;
 	private bool _isCharging = false;
@@ -41,7 +35,6 @@ public class DroneThrower : NetworkBehaviour
 	
 	//Actions
 	public Action OnThrowing;
-	public Action OnThrowingActivation;
 	public Action OnGetDrone;
 	
 	#endregion
@@ -64,31 +57,30 @@ public class DroneThrower : NetworkBehaviour
 		if (_isCanceled) return;
 		
 		_isCharging = false;
-
-		float chargeRatio = _currentChargeTime / _maxChargeTime;
-		float finalForce = Mathf.Lerp(_minThrowForce, _maxThrowForce, chargeRatio);
 		
-		ThrowDroneServerRpc(finalForce);
+		ThrowDroneServerRpc();
 
 		_hasDrone = false;
 		OnThrowing?.Invoke();
 	}
 
 	[ServerRpc]
-	void ThrowDroneServerRpc(float force)
+	void ThrowDroneServerRpc()
 	{
 		if (_currentDroneInTerrain != null)
 		{
 			InstanceFinder.ServerManager.Despawn(_currentDroneInTerrain.gameObject);
 		}
+		
+		Cons.Print("Drone Lancé !!", ColorConsole.Blue, ConsoleStyle.Bold);
     
-		DroneBullet drone = Instantiate(_droneBulletPrefab, _spawnPoint.position, _spawnPoint.rotation);
+		/*
 		InstanceFinder.ServerManager.Spawn(drone.gameObject);
 		_currentDroneInTerrain = drone;
 
 		drone.SetDrone(_dronePrefab, Owner, _playerEnergy);
     
-		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * force, ForceMode.Impulse);
+		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * force, ForceMode.Impulse);*/
 	}
 
 	[TargetRpc]
@@ -98,47 +90,69 @@ public class DroneThrower : NetworkBehaviour
 		_hasDrone = true;
 		OnGetDrone?.Invoke();
 	}
-
-	public void StartThrowDrone()
+	
+	public float range = 20f;
+	public float aimAngle = 0.95f; 
+	public LayerMask targetLayer;
+	public Camera _camera;
+	public GameObject _uiTarget;
+	
+	Transform GetTarget()
 	{
-		if (!_hasDrone) return;
+		Collider[] targets = Physics.OverlapSphere(
+			_camera.transform.position,
+			range,
+			targetLayer
+		);
 
-		_isCharging = true;
-		_currentChargeTime = 0f;
-		
-		OnThrowingActivation?.Invoke();
+		Transform bestTarget = null;
+		float bestScore = aimAngle;
+
+		foreach (Collider col in targets)
+		{
+			Vector3 dir = (col.transform.position - _camera.transform.position).normalized;
+
+			float dot = Vector3.Dot(_camera.transform.forward, dir);
+
+			if (dot > bestScore)
+			{
+				bestScore = dot;
+				bestTarget = col.transform;
+			}
+		}
+
+		return bestTarget;
 	}
 
-	public void CancelThrow()
-	{
-		_cancelOffsetTime = 0;
-		_isCanceled = true;
-		_isCharging = false;
-		_currentChargeTime = 0;
-	}
+	private Transform target = null;
 	
 	private void Update()
 	{
 		if (!IsOwner) return;
+		
+		target = GetTarget();
 
-		if (_isCharging)
+		if (target)
 		{
-			_currentChargeTime += Time.deltaTime;
-			_currentChargeTime = Mathf.Clamp(_currentChargeTime, 0, _maxChargeTime);
+			Cons.Print("Player trouvé", ColorConsole.Cyan);
+			_uiTarget.SetActive(true);
+			
+			Vector3 screenPos = _camera.WorldToScreenPoint(target.position + Vector3.up);
+			RectTransformUtility.ScreenPointToLocalPointInRectangle(
+				_uiTarget.transform.parent as RectTransform,
+				screenPos,
+				_camera,
+				out Vector2 localPos
+			);
+
+			_uiTarget.GetComponent<RectTransform>().localPosition = localPos;
 		}
-
-		if (_isCanceled)
+		else
 		{
-			_cancelOffsetTime +=  Time.deltaTime;
-
-			if (_cancelOffsetTime >= 0.5f)
-			{
-				_isCanceled = false;
-			}
+			Cons.Print("Player pas en range", ColorConsole.Cyan);
+			_uiTarget.SetActive(false);
 		}
 	}
-
-	private float _cancelOffsetTime = 0;
 
 	#endregion
 }
