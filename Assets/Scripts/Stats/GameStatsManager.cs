@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameStatsManager : NetworkBusListener
 {
     public readonly Dictionary<int, PlayerStats> playerStats = new Dictionary<int, PlayerStats>();
-    
     bool _initialized = false;
+
+    public Action<int> onRegisterPlayer;
 
     public override void OnStartServer()
     {
@@ -18,7 +20,11 @@ public class GameStatsManager : NetworkBusListener
         ListenToEvent<OnPlayerDeathEvent>(RegisterDeath);
     }
 
-    void RegisterPlayer(int playerIndex) => playerStats.Add(playerIndex, new PlayerStats());
+    public void RegisterPlayer(int playerIndex)
+    {
+        playerStats.Add(playerIndex, new PlayerStats());
+        onRegisterPlayer?.Invoke(playerIndex);
+    }
     
     void UnregisterPlayer(int playerIndex) => playerStats.Remove(playerIndex);
     
@@ -55,20 +61,10 @@ public class GameStatsManager : NetworkBusListener
 
 public class PlayerStats
 {
-    public float p_damagesDealt;
-    public float p_criticalDamagesDealt;
-    public int p_killCount;
-    public int p_deathCount;
-    public float p_selfHealthRegen;
-    public float p_broHealthRegen;
-
-    public PlayerStats()
-    {
-        p_selfHealthRegen = 0;
-        p_deathCount = 0;
-        p_criticalDamagesDealt = 0;
-        p_killCount = 0;
-        p_deathCount = 0;
-        p_selfHealthRegen = 0;
-    }
+    public float p_damagesDealt = 0;
+    public float p_criticalDamagesDealt = 0;
+    public int p_killCount = 0;
+    public int p_deathCount = 0;
+    public float p_selfHealthRegen = 0;
+    public float p_broHealthRegen = 0;
 }
