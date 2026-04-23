@@ -143,6 +143,12 @@ public class ElementaryGrenade : NetworkBusListener
                     p_value = _damage.Value
                 });
                         
+                InvokeEvent(new OnPlayerDoDamage
+                {
+                    playerID = _thrower.Value.ClientId,
+                    damageAmount = _damage.Value,
+                });
+                        
                 if (c.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
                     enemyCore.AddCharge(_isPositive.Value, _damage.Value);
