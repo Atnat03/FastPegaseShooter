@@ -19,6 +19,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
     private NetworkObject _targetNetworkObject;
 
     private bool _hasHit = false;
+    private bool _hasMark = false;
 
     private void FixedUpdate()
     {
@@ -146,23 +147,25 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
+        bool crit = false;
+        bool hit = false;
+        
         foreach (Collider c in colliders)
         {
             if (!c.TryGetComponent<IDamagable>(out IDamagable damagable))
                 continue;
 
-            bool crit = damagable.TakeDamage(
+            crit = damagable.TakeDamage(
                 _gunController.NetworkObject.ObjectId,
                 damage,
                 p_isCritical);
-
-            _gunController.TriggerHitMark(crit || p_isCritical);
-
             InvokeEvent(new AddEnergyEvent
             {
                 p_player = _gunController.Owner,
                 p_value = p_damage
             });
+
+            hit = true;
 
             if (_targetNetworkObject != null &&
                 _targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
@@ -170,5 +173,8 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
             }
         }
+        
+        if(hit)
+            _gunController.TriggerHitMark(crit || p_isCritical);
     }
 }

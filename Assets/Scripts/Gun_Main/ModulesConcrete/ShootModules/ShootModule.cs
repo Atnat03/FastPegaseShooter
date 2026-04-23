@@ -113,8 +113,6 @@ namespace GunDecorator
                             Random.Range(-_spreadAngle, _spreadAngle),
                             0);
                     }
-
-                    Cons.Print("Noise : " + _directionModifier, ColorConsole.Orange);
                     
                     Vector2 radius = Random.insideUnitCircle * _radiusOffset;
                     _bulletOffset = new Vector3(
