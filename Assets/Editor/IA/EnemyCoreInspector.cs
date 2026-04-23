@@ -15,10 +15,13 @@ public class EnemyCoreInspector : Editor
 
     private GUIStyle _centeredTitleStyle;
     private GUIStyle _titleStyle;
+    
     private EditorListDrawerStyle _listStyle;
+    private EditorListDrawerStyle _lifeListStyle;
 
     private bool _attackListOpened = true;
     private bool _lifeListOpened = true;
+    private bool _targetListOpened = true;
     private void OnEnable()
     {
         _maxEnemySwelling = serializedObject.FindProperty("_maxEnemySwelling");
@@ -41,10 +44,23 @@ public class EnemyCoreInspector : Editor
             fontSize = 18
         };
         _titleStyle.normal.textColor = Color.white;
+        
         _listStyle = new EditorListDrawerStyle
         {
             p_titleStyle = _titleStyle,
             p_label = (i => { return $"Element {i}";}),
+            p_removeColor = new Color(0.85f, 0.25f, 0.2f),
+            p_addColor = new Color(0.52f, 0.82f, 0.96f),
+            p_verticalMargin = 5
+        };
+        _lifeListStyle = new EditorListDrawerStyle
+        {
+            p_titleStyle = _titleStyle,
+            p_label = (i =>
+            {
+                if(i==0) return "Main Module";
+                else return $"Element {i}";
+            }),
             p_removeColor = new Color(0.85f, 0.25f, 0.2f),
             p_addColor = new Color(0.52f, 0.82f, 0.96f),
             p_verticalMargin = 5
@@ -75,22 +91,20 @@ public class EnemyCoreInspector : Editor
 
         EditorGUILayout.PropertyField(_maxEnemySwelling);
         EditorUtilities.DrawList(_attackingModules, "Attacking Modules", _listStyle, ref _attackListOpened);
-        EditorUtilities.DrawList(_lifeModules, "Life Modules", _listStyle, ref _lifeListOpened);
-        EditorUtilities.DrawList(_targetModules, "Target Modules", _listStyle, ref _lifeListOpened);
+        EditorUtilities.DrawList(_lifeModules, "Life Modules", _lifeListStyle, ref _lifeListOpened);
+        EditorUtilities.DrawList(_targetModules, "Target Modules", _listStyle, ref _targetListOpened);
         
         GUILayout.BeginVertical("box");
         GUILayout.Label("Moving Module", _titleStyle);
         EditorGUILayout.PropertyField(_movementModule);
         GUILayout.EndVertical();
         
+        GUILayout.Space(10);
+        GUILayout.Label("Charges", _titleStyle);
+        
         EditorUtilities.Draw("_explosionChargedDamage", serializedObject);
-        EditorUtilities.Draw("_negativeChargeMax", serializedObject);
-        EditorUtilities.Draw("_positiveChargeMax", serializedObject);
-        EditorUtilities.Draw("_positiveUI", serializedObject);
-        EditorUtilities.Draw("_positiveCurValue", serializedObject);
-        EditorUtilities.Draw("_negativeUI", serializedObject);
-        EditorUtilities.Draw("_negativeCurValue", serializedObject);
-        EditorUtilities.Draw("_explosionParticle", serializedObject);
+        EditorUtilities.Draw("p_negativeChargeMax", serializedObject);
+        EditorUtilities.Draw("p_positiveChargeMax", serializedObject);
         
         serializedObject.ApplyModifiedProperties();
     }

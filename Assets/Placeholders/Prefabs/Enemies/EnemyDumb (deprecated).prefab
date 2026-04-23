@@ -115,8 +115,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd37eadeed8c574bba4e12cadbadf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AlwaysInFrontOfCam
+  _componentIndexCache: 6
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
   _distanceMax: 100
   _scaleModifier: 1
+  _scaleMap: {x: 0.001, y: 0.003}
 --- !u!1 &5911405418369916473
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +139,7 @@ GameObject:
   - component: {fileID: 8280671740658429549}
   - component: {fileID: 6176439864006220930}
   m_Layer: 0
-  m_Name: "EnemyDumb (\xE0 jour)"
+  m_Name: EnemyDumb (deprecated)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -185,6 +189,11 @@ MonoBehaviour:
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
+  _explosionChargedDamage: 50
+  p_negativeChargeMax: 5
+  p_currentNegativeCharge: 0
+  p_positiveChargeMax: 5
+  p_currentPositiveCharge: 0
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,6 +314,7 @@ MonoBehaviour:
   - {fileID: 5913997660152659872}
   - {fileID: 4005584926992846120}
   - {fileID: 6176439864006220930}
+  - {fileID: 3001975185029246049}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -315,7 +325,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584259610962915543
+  _initializedTimestamp: -8584246523755434206
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -331,9 +341,9 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 21
+  <PrefabId>k__BackingField: 22
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 11985662873391357865
+  <AssetPathHash>k__BackingField: 801263075727813227
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 1.94671, y: 0.0011500008, z: 4.24618}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EliteWeakPointViewer : MonoBehaviour
+public class PVBagViewer : MonoBehaviour
 {
     [SerializeField] private EnemyLifeModule _enemyLifeModule;
 
