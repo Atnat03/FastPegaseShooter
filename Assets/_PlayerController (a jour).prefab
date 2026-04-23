@@ -258,6 +258,7 @@ GameObject:
   - component: {fileID: 4936551050646408444}
   - component: {fileID: 6547442255424585383}
   - component: {fileID: 8428071434140413335}
+  - component: {fileID: 2220289887676329509}
   m_Layer: 11
   m_Name: Mitraillette lourde
   m_TagString: Untagged
@@ -322,11 +323,14 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule: []
+  _secondModule:
+  - {fileID: 2220289887676329509}
   _ammoType: {fileID: 8428071434140413335}
   _fireRate: 0.1
   _numberBulletSpread: 1
   _spreadAngle: 0
+  _radiusOffset: 0
+  DEBUG_spawnPoint: {fileID: 95887770681975012}
 --- !u!114 &8711017196874581574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,6 +632,59 @@ MonoBehaviour:
   _damages: 5
   _BulletSpeed: 50
   _impactVFXData: {fileID: 11400000, guid: fa51d249e5d6f104e9e152faba21b25a, type: 2}
+--- !u!114 &2220289887676329509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178092193857295503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfebb13a32584806874c4535aa257a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.NoiseModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  moduleName: NoiseModule
+  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+  _curveNoiseOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7271282
+      value: 0.4084152
+      inSlope: 1.4843032
+      outSlope: 1.4843032
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _timeToAccessMaxNoise: 2
+  _maxOffsetX: 1
+  _maxOffsetY: 1
 --- !u!1 &212850209436903139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1160,6 +1217,8 @@ MonoBehaviour:
   _fireRate: 0.1
   _numberBulletSpread: 0
   _spreadAngle: 0
+  _radiusOffset: 0.5
+  DEBUG_spawnPoint: {fileID: 0}
 --- !u!114 &1869490300898767730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13106,6 +13165,8 @@ MonoBehaviour:
   _fireRate: 1
   _numberBulletSpread: 8
   _spreadAngle: 8
+  _radiusOffset: 0.5
+  DEBUG_spawnPoint: {fileID: 0}
 --- !u!1 &5293877357180756991
 GameObject:
   m_ObjectHideFlags: 0
@@ -13760,8 +13821,10 @@ MonoBehaviour:
   - {fileID: 6154372736321769268}
   _ammoType: {fileID: 219218631671859702}
   _fireRate: 0.6
-  _numberBulletSpread: 0
+  _numberBulletSpread: 1
   _spreadAngle: 0
+  _radiusOffset: 0.2
+  DEBUG_spawnPoint: {fileID: 6973474630540668134}
 --- !u!114 &7557458434173687512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13807,13 +13870,31 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 3
+      value: 0
       inSlope: 0
       outSlope: 0
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 8.231104
+      value: 3.3971164
+      inSlope: 1.3231156
+      outSlope: 1.3231156
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
       outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 10
+      value: 10
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

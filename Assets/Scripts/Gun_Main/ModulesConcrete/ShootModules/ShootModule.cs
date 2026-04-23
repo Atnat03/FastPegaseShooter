@@ -12,7 +12,7 @@ namespace GunDecorator
     {
         public float FireRate => _realFireRate;
         public IAmmoModule AmmoModule => _ammoModule;
-        
+        public float RadiusOffset => _radiusOffset;
         public bool CanShoot => _canShoot;
 
         [SerializeField][Tooltip("liste de l'ensemble des modificateurs appliqués au tir (l'ordre eut changer le comportement du tir)")] protected MonoBehaviour[] _secondModule;
@@ -24,8 +24,11 @@ namespace GunDecorator
         [SerializeField][Tooltip("si '_isFullAuto' est actif, détermine l'interval en seconde entre deux tirs")]private float _fireRate;
         private float _realFireRate;
         
-        [SerializeField][Tooltip("le nombre de balles tirées a chaque tir")] private float _numberBulletSpread;
-        [SerializeField, Range(0, 60)][Tooltip("l'angle de propagation maximum que les balles peuvent prendre par rapport a l'orientation du canon")] private float _spreadAngle;
+        [SerializeField][Tooltip("le nombre de balles tirées a chaque tir")] private float _numberBulletSpread = 1;
+        [SerializeField, Range(0, 60)][Tooltip("l'angle de propagation maximum que les balles peuvent prendre par rapport a l'orientation du canon")] private float _spreadAngle = 1;
+        [SerializeField, Range(0, 0.5f)][Tooltip("l'angle de propagation maximum que les balles peuvent prendre par rapport a l'orientation du canon")] private float _radiusOffset = 0f;
+        
+        [SerializeField] Transform DEBUG_spawnPoint;
         
         private BulletData _currentBulletConfig;
         private Vector3 _directionModifier = Vector3.zero;
@@ -88,12 +91,12 @@ namespace GunDecorator
                 Shooting();
                 return;
             }
-
+            
             for (int i = 0; i < _additionalEffectModule.Count - 1; i++)
                 _additionalEffectModule[i].SetNext(_additionalEffectModule[i + 1]);
 
             _additionalEffectModule[^1].SetNext(null);
-
+            
             _additionalEffectModule[0].DoAdditionnalEffect();
         }
         
@@ -103,13 +106,25 @@ namespace GunDecorator
             {
                 for (int i = 0; i < _numberBulletSpread; i++)
                 {
-                    Vector3 direction = 
-                            new Vector3(
-                                Random.Range(-_spreadAngle, _spreadAngle),
-                                Random.Range(-_spreadAngle, _spreadAngle),
-                                0);
+                    if(_directionModifier == Vector3.zero)
+                    {
+                        _directionModifier = new Vector3(
+                            Random.Range(-_spreadAngle, _spreadAngle),
+                            Random.Range(-_spreadAngle, _spreadAngle),
+                            0);
+                    }
+
+                    Cons.Print("Noise : " + _directionModifier, ColorConsole.Orange);
                     
-                    _ammoModule.SpawnBullet(direction, Vector3.zero);
+                    Vector2 radius = Random.insideUnitCircle * _radiusOffset;
+                    _bulletOffset = new Vector3(
+                        radius.x,
+                        radius.y, 0
+                        );
+                    
+                    _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
+
+                    _directionModifier = Vector3.zero;
                 }
                 
                 _ammoModule.ResetBulletData();
@@ -117,11 +132,13 @@ namespace GunDecorator
                 _gunController.PlaySound("Shoot");
             }
         }
-        
+
         public void CancelShooting()
-        { }
+        {
+            _additionalEffectModule[0].CancelShooting();
+        }
         
-        public void SetDirectionModifier(Vector3 direction) =>_directionModifier = direction;
+        public void SetDirectionModifier(Vector3 direction) => _directionModifier = direction;
         
         public void SetBulletOffset(Vector3 offset) =>_bulletOffset = offset;
         public void SetFireRate(float fireRateMultiplier)
@@ -133,6 +150,15 @@ namespace GunDecorator
             else
             {
                 _realFireRate = _fireRate / fireRateMultiplier;
+            }
+        }
+            
+        private void OnDrawGizmosSelected()
+        {
+            if(DEBUG_spawnPoint != null)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireSphere(DEBUG_spawnPoint.position, _radiusOffset);
             }
         }
     }

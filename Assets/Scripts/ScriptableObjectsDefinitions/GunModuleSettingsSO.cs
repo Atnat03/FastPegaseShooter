@@ -26,6 +26,7 @@ public class GunSetting
         public float fireRate;
         public float numberBulletSpread;
         [Range(0, 30)]public float SpreadAngle;
+        [Range(0, 0.5f)] public float RadiusOffset = 0f;
     }
 
     //RaycastAmmo
@@ -82,8 +83,10 @@ public class GunSetting
     //Noise
     public class S_NoiseSetting : GunSetting
     {
-        public float MaxOffsetX;
-        public float MaxOffsetY;
+        public float MaxOffsetX = 2;
+        public float MaxOffsetY = 2;
+        public float TimeToAccessMaxNoise = 1;
+        public AnimationCurve CurveNoiseOverTime = new AnimationCurve(new Keyframe(0,  0), new Keyframe(1, 1));
     }
 
     //Salve

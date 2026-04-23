@@ -105,6 +105,7 @@ namespace GunDecorator
             
             if (_gunController.IsFullAuto)
             {
+                _gunController.ResetNoise();
                 _gunController.ApplyShoot();
             }
         }

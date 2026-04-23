@@ -283,5 +283,7 @@ namespace GunDecorator
         public void StopReload() => _reloadModule.StopReload();
 
         public void SetChargedPlayer(bool b) => _isPositivePlayerCharge.Value = b;
+
+        public void ResetNoise() => _shootModule?.CancelShooting();
     }
 }
