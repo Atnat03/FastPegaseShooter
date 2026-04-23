@@ -7,8 +7,7 @@ public class PlayerRaycast : NetworkBehaviour
 	#region Properties
 
 	#endregion
-
-
+	
 	#region Variables
 
 	[SerializeField] private float _interactDistance = 3;
