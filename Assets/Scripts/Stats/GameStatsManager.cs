@@ -9,7 +9,7 @@ public class GameStatsManager : NetworkBusListener
 
     public Action<int> onRegisterPlayer;
 
-    public override void OnStartServer()
+    public override void OnStartClient()
     {
         if (!_initialized)
         {
@@ -18,6 +18,7 @@ public class GameStatsManager : NetworkBusListener
         
         ListenToEvent<AddHealthToPlayer>(RegisterHealthRegen);
         ListenToEvent<OnPlayerDeathEvent>(RegisterDeath);
+        ListenToEvent<OnPlayerDoDamage>(RegisterDamages);
     }
 
     public void RegisterPlayer(int playerIndex)
@@ -28,11 +29,11 @@ public class GameStatsManager : NetworkBusListener
     
     void UnregisterPlayer(int playerIndex) => playerStats.Remove(playerIndex);
     
-    void RegisterDamages(int playerIndex, float value, bool isCritical = false)
+    void RegisterDamages(OnPlayerDoDamage data)
     {
-        if (!playerStats.ContainsKey(playerIndex))RegisterPlayer(playerIndex);
-        playerStats[playerIndex].p_damagesDealt +=  value;
-        if (isCritical) playerStats[playerIndex].p_criticalDamagesDealt +=  value;
+        if (!playerStats.ContainsKey(data.playerID))RegisterPlayer(data.playerID);
+        playerStats[data.playerID].p_damagesDealt +=  data.damageAmount;
+        if (data.isCritical) playerStats[data.playerID].p_criticalDamagesDealt +=  data.damageAmount;
     }
 
     void RegisterKill(int playerIndex)

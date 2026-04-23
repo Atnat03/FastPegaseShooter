@@ -6,7 +6,7 @@ using UnityEngine;
 public enum MagneticCharge {Positive, Negative}
 
 [RequireComponent(typeof(GrenadeThrowerView))]
-public class GrenadeThrower : NetworkBehaviour
+public class GrenadeThrower : NetworkBusListener
 {
     #region Properties
     
@@ -18,11 +18,13 @@ public class GrenadeThrower : NetworkBehaviour
 
     [SerializeField] private MagneticCharge magneticCharge;
     [SerializeField] private ArmBridgeAnimation _bridgeAnimation;
+    [SerializeField] private PlayerEnergy _playerEnergy;
     
     [Header("Throw")]
     [SerializeField] private ElementaryGrenade _elementaryGrenadePrefab;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private GunSwitching _currentGun;
+    [SerializeField] private float _throwEnergyCost;
     
     [Header("Settings")]
     [SerializeField] private float _cooldown = 2f;
@@ -69,7 +71,7 @@ public class GrenadeThrower : NetworkBehaviour
 
     public void TryThrowGrenade()
     {
-        if (_canThrow)
+        if (_canThrow && _playerEnergy.CurrentEnergy >= _throwEnergyCost)
         {
             if (_bridgeAnimation != null)
             {
@@ -85,6 +87,12 @@ public class GrenadeThrower : NetworkBehaviour
             OnStartThrow?.Invoke();
             
             _elapsedTimeCooldown = _cooldown;
+            
+            InvokeEvent(new ModifyEnergyEvent
+            {
+                p_player = Owner,
+                p_value = -_throwEnergyCost
+            });
         }
     }
 
