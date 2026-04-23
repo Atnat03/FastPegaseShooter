@@ -1443,7 +1443,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
   moduleColor: {r: 1, g: 0, b: 1, a: 1}
-  _hitMarkerParent: {fileID: 0}
+  _hitMarkerParent: {fileID: 151235120164938203}
   _hitMarkerPrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
@@ -9753,19 +9753,18 @@ MonoBehaviour:
   _critikStep: 0.5
   _playerInputAction: {fileID: 997312506154426130}
   _playerAnimation: {fileID: 3465261579877272972}
+  _playerEnergy: {fileID: 0}
   p_healThrowPoint: {fileID: 2316828313444862460}
   p_healThrowDirection: {fileID: 6291573982660001099}
   _healthToGive: 30
-  _selfHealingTime: 1
-  _healThrowingTimeThreshold: 1
   p_healThrowRadius: 3
+  _healThrowCost: 10
   _throwHitLayerMask:
     serializedVersion: 2
     m_Bits: 65335
   _throwHealLayerMask:
     serializedVersion: 2
     m_Bits: 192
-  _healingCooldown: 5
   p_healThrowLandingPos: {x: 0, y: 0, z: 0}
 --- !u!114 &8101511114389266693
 MonoBehaviour:
@@ -16024,15 +16023,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthView
   _playerHealth: {fileID: 5365301951764690734}
   _droneThrower: {fileID: 931936587992237131}
+  _healthVisualFillingSpeed: 1
   _healthBar: {fileID: 3134779535442495518}
   _deathImage: {fileID: 8235982739118108901}
   _damagedWarningImage: {fileID: 5315133112455716009}
   _frameDeccordImage: {fileID: 2237517866183327866}
   _damagedImage: {fileID: 7192287140023277596}
   _cooldownHealImage: {fileID: 1897999391278995240}
-  _selfHealingImage: {fileID: 534198916471793597}
-  _selfHealingColor1: {r: 0.8018868, g: 0.6509434, b: 0, a: 1}
-  _selfHealingColor2: {r: 0.18523192, g: 1, b: 0, a: 1}
   _healingTrajectoryLine: {fileID: 1292535258909843473}
   _healingThrowPosObj: {fileID: 36607885238878194, guid: 7382029bf5c03294488da66ede17c86b, type: 3}
   _soundsData: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}

@@ -117,7 +117,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
             _gunController.TriggerHitMark(crit || p_isCritical);
 
-            InvokeEvent(new AddEnergyEvent
+            InvokeEvent(new ModifyEnergyEvent
             {
                 p_player = _gunController.Owner,
                 p_value = p_damage
@@ -159,7 +159,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 _gunController.NetworkObject.ObjectId,
                 damage,
                 p_isCritical);
-            InvokeEvent(new AddEnergyEvent
+            InvokeEvent(new ModifyEnergyEvent
             {
                 p_player = _gunController.Owner,
                 p_value = p_damage
