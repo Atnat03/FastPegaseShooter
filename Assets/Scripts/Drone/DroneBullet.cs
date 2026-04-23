@@ -56,7 +56,7 @@ public class DroneBullet : NetworkBehaviour
 	{
 		Drone droneInstance = Instantiate(_dronePrefab, transform.position, Quaternion.identity);
 		InstanceFinder.ServerManager.Spawn(droneInstance.gameObject);
-		droneInstance.SetThrower(_throwerId, _playerEnergy);
+		//droneInstance.SetThrower(_throwerId, _playerEnergy);
 	}
 
 	#endregion

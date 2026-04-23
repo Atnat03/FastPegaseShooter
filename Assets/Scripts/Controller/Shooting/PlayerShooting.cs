@@ -133,23 +133,6 @@ namespace Controller
             
             _droneThrower.TryThrowDrone();
         }
-
-        private void StartThrowDrone(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            
-            _droneThrower.StartThrowDrone();
-        }
-        
-        
-        private void CancelThrow(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            
-            _droneThrower.CancelThrow();
-        }
         
         private void StopShooting(float duration)
         {
@@ -176,9 +159,7 @@ namespace Controller
             _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
             _grenadeThrower.OnThrow += OnGrenadeThrown;
             
-            _playerInputAction.actions["ThrowDrone"].performed += StartThrowDrone;
-            _playerInputAction.actions["ThrowDrone"].canceled += TryThrowDrone;
-            _playerInputAction.actions["Shoot"].performed += CancelThrow;
+            _playerInputAction.actions["ThrowDrone"].performed += TryThrowDrone;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth += StopShooting;
@@ -195,9 +176,7 @@ namespace Controller
             _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
             _grenadeThrower.OnThrow -= OnGrenadeThrown;
             
-            _playerInputAction.actions["ThrowDrone"].performed -= StartThrowDrone;
-            _playerInputAction.actions["ThrowDrone"].canceled -= TryThrowDrone;
-            _playerInputAction.actions["Shoot"].performed -= CancelThrow;
+            _playerInputAction.actions["ThrowDrone"].performed -= TryThrowDrone;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth -= StopShooting;

@@ -185,7 +185,6 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnUpdateCooldown += UpdateCooldownHeal;
 		
 		//Drone Throw
-		_droneThrower.OnThrowingActivation += OnThrowingActivation;
 		_droneThrower.OnThrowing += OnThrowing;
 	}
 
@@ -204,7 +203,6 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnUpdateCooldown -= UpdateCooldownHeal;
 		
 		//Drone Throw
-		_droneThrower.OnThrowingActivation -= OnThrowingActivation;
 		_droneThrower.OnThrowing -= OnThrowing;
 	}
 
