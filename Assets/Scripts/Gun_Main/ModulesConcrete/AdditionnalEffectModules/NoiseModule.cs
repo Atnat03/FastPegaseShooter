@@ -47,6 +47,9 @@ namespace GunDecorator
             float y = Random.Range(-_maxOffsetY, _maxOffsetY);
             
             _shootModule.SetDirectionModifier(new Vector3(x, y, 1) * t);
+            
+            _gunController.OnShootNoise?.Invoke(t);
+            
             Shooting();
         }
 
@@ -62,6 +65,7 @@ namespace GunDecorator
         {
             isShooting = false;
             _elapsedSpam = 0;
+            _gunController.OnShootNoise?.Invoke(0);
         }
 
         private void Update()

@@ -41,11 +41,8 @@ namespace GunDecorator
         public float SurchargeMultiplierRate { get; set; }
         public bool IsFullAuto => _isFullAuto;
         public bool IsInfiniteAmmo => _infiniteAmmo;
-
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
-        
         public IRecoilModule RecoilModule => _recoilModule;
-        
         public Renderer ModelGun => _model;
 
         private IShootModule _shootModule;
@@ -78,7 +75,13 @@ namespace GunDecorator
         private readonly SyncVar<bool> _isPositivePlayerCharge = new SyncVar<bool>(false);
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-
+        
+        //Action
+        public Action<int, int> OnShootAmmo;
+        public Action<float> OnShootNoise;
+        public Action<float> OnStartReload;
+        public Action OnEndReload;
+        
         private void OnEnable()
         {
             _animator.ResetTrigger("Reload");

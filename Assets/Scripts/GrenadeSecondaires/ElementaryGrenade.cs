@@ -137,7 +137,7 @@ public class ElementaryGrenade : NetworkBusListener
             {
                 damagable.TakeDamage(_networkIdAttacker.Value, _damage.Value);
                 
-                InvokeEvent(new AddEnergyEvent
+                InvokeEvent(new ModifyEnergyEvent
                 {
                     p_player = _thrower.Value,
                     p_value = _damage.Value

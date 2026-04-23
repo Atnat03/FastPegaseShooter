@@ -93,7 +93,7 @@ public class Drone : NetworkBusListener
 		
 		if (_playerEnergy != null)
 		{
-			InvokeEvent(new AddEnergyEvent
+			InvokeEvent(new ModifyEnergyEvent
 			{
 				p_player = _playerEnergy.Owner,
 				p_value = -_energyCostPerSeconde * Time.deltaTime

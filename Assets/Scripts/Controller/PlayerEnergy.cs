@@ -4,7 +4,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public struct AddEnergyEvent
+public struct ModifyEnergyEvent
 {
 	public NetworkConnection p_player;
 	public float p_value;
@@ -32,7 +32,7 @@ public class PlayerEnergy : NetworkBusListener
 	private readonly SyncVar<float> _currentEnergy = new();
 	
 	//Actions
-	public Action<float> OnAddEnergy;
+	public Action<float> OnModifyEnergy;
 	
 	#endregion
 
@@ -43,7 +43,7 @@ public class PlayerEnergy : NetworkBusListener
 	{
 		_currentEnergy.OnChange += OnEnergyChanged;
 
-		ListenToEvent<AddEnergyEvent>(AddEnergy);
+		ListenToEvent<ModifyEnergyEvent>(ModifyEnergy);
 		ListenToEvent<SetEnergyEvent>(SetEnergy);
 
 		if (IsServerInitialized)
@@ -67,11 +67,12 @@ public class PlayerEnergy : NetworkBusListener
 		}
 	}
 
-	private void AddEnergy(AddEnergyEvent data)
+	private void ModifyEnergy(ModifyEnergyEvent data)
 	{
 		if (data.p_player == Owner)
 		{
-			float ratio = data.p_value * _convertionTaux;
+			//if >0 uses conversionTaux, else uses raw value
+			float ratio = data.p_value > 0 ? data.p_value * _convertionTaux : data.p_value;
 			_currentEnergy.Value += ratio;
 			
 			_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
@@ -80,7 +81,7 @@ public class PlayerEnergy : NetworkBusListener
 		}
 	}
 	
-	void UpdateUI() =>OnAddEnergy?.Invoke(_currentEnergy.Value / _maxEnergy);
+	void UpdateUI() =>OnModifyEnergy?.Invoke(_currentEnergy.Value / _maxEnergy);
 	
 	#endregion
 }
