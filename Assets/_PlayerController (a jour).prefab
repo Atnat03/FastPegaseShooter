@@ -842,16 +842,17 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _bridgeAnimation: {fileID: 2309493807037280383}
   _playerEnergy: {fileID: 29235095159055250}
+  _gunSwitching: {fileID: 3154577241410043838}
   _dronePrefab: {fileID: 377463757777460365, guid: f1c05ad0ae4860046b6a4cb55f69529a, type: 3}
   _spawnPoint: {fileID: 8380329674851811601}
-  _hasDrone: 0
-  range: 20
-  aimAngle: 0.9
-  targetLayer:
+  _range: 50
+  _aimAngle: 0.97
+  _targetLayer:
     serializedVersion: 2
     m_Bits: 128
   _camera: {fileID: 3061844143884342809}
   _uiTarget: {fileID: 3595022601666599641}
+  _hasDrone: 0
 --- !u!1 &468744743360818723
 GameObject:
   m_ObjectHideFlags: 0
@@ -9789,7 +9790,7 @@ MonoBehaviour:
   _componentIndexCache: 10
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
-  _pauseUI: {fileID: 7612771937129543399}
+  _pauseUIPanels: []
   _playerInput: {fileID: 997312506154426130}
 --- !u!114 &3416649172374725845
 MonoBehaviour:
@@ -9997,13 +9998,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2811233865256104695}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.08715578, y: 0, z: 0, w: 0.9961947}
-  m_LocalPosition: {x: 0.11880875, y: 0.017740786, z: 1.068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.328, y: -0.026, z: 0.859}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7356716144275768380}
-  m_LocalEulerAnglesHint: {x: -10, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2844513247293980292
 GameObject:
   m_ObjectHideFlags: 0
@@ -21961,6 +21962,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _mainGunParent: {fileID: 7010684394084671937}
   _throwerGrenade: {fileID: 4147575701769871822}
+  _throwerDrone: {fileID: 931936587992237131}
 --- !u!114 &300968199624122896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23365,7 +23367,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   magneticCharge: 1
   _bridgeAnimation: {fileID: 2309493807037280383}
-  _gunSwitching: {fileID: 0}
   _elementaryGrenadePrefab: {fileID: 7033959642892252244, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   _spawnPoint: {fileID: 446286405210506582}
   _currentGun: {fileID: 3154577241410043838}
@@ -26053,6 +26054,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3952118585016700218}
     m_Modifications:
+    - target: {fileID: 844255977359690238, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4799643639750831679, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
       propertyPath: m_Name
       value: Arm
@@ -26223,6 +26228,7 @@ MonoBehaviour:
   _componentIndexCache: 18
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
-  _thrower: {fileID: 4147575701769871822}
+  _grenadeThrower: {fileID: 4147575701769871822}
+  _droneThrower: {fileID: 931936587992237131}
   _animator: {fileID: 4616227668612083950}
   _ballInHand: {fileID: 4249826739577011265}

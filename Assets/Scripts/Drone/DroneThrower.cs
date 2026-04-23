@@ -18,11 +18,20 @@ public class DroneThrower : NetworkBehaviour
 	
 	[SerializeField] private ArmBridgeAnimation _bridgeAnimation;
 	[SerializeField] private PlayerEnergy _playerEnergy;
+	[SerializeField] private GunSwitching _gunSwitching;
 	
 	[Header("Throw")]
 	[SerializeField] private Drone _dronePrefab;
 	[SerializeField] private Transform _spawnPoint;
 
+	[Header("Detection Bro")]
+	[SerializeField] private float _range = 50f;
+	[SerializeField] private float _aimAngle = 0.95f; 
+	[SerializeField] private LayerMask _targetLayer;
+	[SerializeField] private Camera _camera;
+	[SerializeField] private GameObject _uiTarget;
+	private Transform _target = null;
+	
 	private float _currentChargeTime = 0f;
 	private bool _isCharging = false;
 	private bool _isCanceled = false;
@@ -31,7 +40,7 @@ public class DroneThrower : NetworkBehaviour
 
 	public bool _hasDrone = false;
 	
-	private DroneBullet _currentDroneInTerrain = null;
+	private Drone _currentDroneInTerrain = null;
 	
 	//Actions
 	public Action OnThrowing;
@@ -55,17 +64,30 @@ public class DroneThrower : NetworkBehaviour
 	{
 		if (!_hasDrone) return;
 		if (_isCanceled) return;
+		if (_target == null) return;
 		
 		_isCharging = false;
 		
-		ThrowDroneServerRpc();
+		NetworkObject targetNetObj = _target.GetComponent<NetworkObject>()
+		                             ?? _target.GetComponentInParent<NetworkObject>();
+		
+		if (_bridgeAnimation != null)
+		{
+			_bridgeAnimation.StartThrowDrone(targetNetObj);
+			_gunSwitching.IGunMain.TryCancelShooting();
+			_gunSwitching.ISurchargeMain.StopReload();
+		}
+		else
+		{
+			ThrowDroneServerRpc(targetNetObj);
+		}
 
 		_hasDrone = false;
 		OnThrowing?.Invoke();
 	}
 
 	[ServerRpc]
-	void ThrowDroneServerRpc()
+	public void ThrowDroneServerRpc(NetworkObject targetNetObj)
 	{
 		if (_currentDroneInTerrain != null)
 		{
@@ -73,14 +95,11 @@ public class DroneThrower : NetworkBehaviour
 		}
 		
 		Cons.Print("Drone Lancé !!", ColorConsole.Blue, ConsoleStyle.Bold);
-    
-		/*
-		InstanceFinder.ServerManager.Spawn(drone.gameObject);
-		_currentDroneInTerrain = drone;
-
-		drone.SetDrone(_dronePrefab, Owner, _playerEnergy);
-    
-		drone.GetComponent<Rigidbody>().AddForce(_spawnPoint.forward * force, ForceMode.Impulse);*/
+		
+		_currentDroneInTerrain = Instantiate(_dronePrefab, _spawnPoint.position, Quaternion.identity);
+		InstanceFinder.ServerManager.Spawn(_currentDroneInTerrain.gameObject);
+		
+		_currentDroneInTerrain.SetTarget(targetNetObj.transform);
 	}
 
 	[TargetRpc]
@@ -91,22 +110,16 @@ public class DroneThrower : NetworkBehaviour
 		OnGetDrone?.Invoke();
 	}
 	
-	public float range = 20f;
-	public float aimAngle = 0.95f; 
-	public LayerMask targetLayer;
-	public Camera _camera;
-	public GameObject _uiTarget;
-	
 	Transform GetTarget()
 	{
 		Collider[] targets = Physics.OverlapSphere(
 			_camera.transform.position,
-			range,
-			targetLayer
+			_range,
+			_targetLayer
 		);
 
 		Transform bestTarget = null;
-		float bestScore = aimAngle;
+		float bestScore = _aimAngle;
 
 		foreach (Collider col in targets)
 		{
@@ -123,25 +136,31 @@ public class DroneThrower : NetworkBehaviour
 
 		return bestTarget;
 	}
-
-	private Transform target = null;
 	
 	private void Update()
 	{
 		if (!IsOwner) return;
-		
-		target = GetTarget();
 
-		if (target)
+		if (!_hasDrone)
+		{
+			_uiTarget.SetActive(false);
+			return;
+		}
+		
+		_target = GetTarget();
+
+		if (_target)
 		{
 			Cons.Print("Player trouvé", ColorConsole.Cyan);
 			_uiTarget.SetActive(true);
 			
-			Vector3 screenPos = _camera.WorldToScreenPoint(target.position + Vector3.up);
+			Vector3 screenPos = _camera.WorldToScreenPoint(_target.position + Vector3.up);
+			Canvas canvas = _uiTarget.GetComponentInParent<Canvas>();
+
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(
-				_uiTarget.transform.parent as RectTransform,
+				canvas.transform as RectTransform,
 				screenPos,
-				_camera,
+				canvas.worldCamera,
 				out Vector2 localPos
 			);
 

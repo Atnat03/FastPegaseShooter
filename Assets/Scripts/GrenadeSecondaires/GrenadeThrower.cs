@@ -18,7 +18,6 @@ public class GrenadeThrower : NetworkBehaviour
 
     [SerializeField] private MagneticCharge magneticCharge;
     [SerializeField] private ArmBridgeAnimation _bridgeAnimation;
-    [SerializeField] private GunSwitching _gunSwitching;
     
     [Header("Throw")]
     [SerializeField] private ElementaryGrenade _elementaryGrenadePrefab;
