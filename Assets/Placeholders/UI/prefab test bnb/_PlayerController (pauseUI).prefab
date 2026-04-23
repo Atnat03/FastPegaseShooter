@@ -327,6 +327,8 @@ MonoBehaviour:
   _fireRate: 0.1
   _numberBulletSpread: 1
   _spreadAngle: 0
+  _radiusOffset: 0
+  DEBUG_spawnPoint: {fileID: 0}
 --- !u!114 &8711017196874581574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,8 +349,6 @@ MonoBehaviour:
   _autoReload: 1
   _magazineSize: 60
   reloadDuration: 1
-  _ammoText: {fileID: 5027534421189645300}
-  _imageReload: {fileID: 815123897057752124}
 --- !u!114 &3922907166694532266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,12 +926,16 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _bridgeAnimation: {fileID: 2309493807037280383}
   _playerEnergy: {fileID: 29235095159055250}
-  _droneBulletPrefab: {fileID: 8685092666590929303, guid: b855bfe135ba86240955b14e2ba2c22a, type: 3}
+  _gunSwitching: {fileID: 0}
   _dronePrefab: {fileID: 377463757777460365, guid: f1c05ad0ae4860046b6a4cb55f69529a, type: 3}
   _spawnPoint: {fileID: 8380329674851811601}
-  _minThrowForce: 5
-  _maxThrowForce: 25
-  _maxChargeTime: 2
+  _range: 50
+  _aimAngle: 0.95
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _camera: {fileID: 0}
+  _uiTarget: {fileID: 0}
   _hasDrone: 0
 --- !u!1 &401051950006682706
 GameObject:
@@ -1459,6 +1463,8 @@ MonoBehaviour:
   _fireRate: 0.1
   _numberBulletSpread: 0
   _spreadAngle: 0
+  _radiusOffset: 0
+  DEBUG_spawnPoint: {fileID: 0}
 --- !u!114 &1869490300898767730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1479,8 +1485,6 @@ MonoBehaviour:
   _autoReload: 1
   _magazineSize: 6
   reloadDuration: 0.5
-  _ammoText: {fileID: 5027534421189645300}
-  _imageReload: {fileID: 815123897057752124}
 --- !u!114 &4123589606864636569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1894,7 +1898,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3319,7 +3323,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4288,7 +4292,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11480,19 +11484,18 @@ MonoBehaviour:
   _critikStep: 0.5
   _playerInputAction: {fileID: 997312506154426130}
   _playerAnimation: {fileID: 3465261579877272972}
+  _playerEnergy: {fileID: 0}
   p_healThrowPoint: {fileID: 2316828313444862460}
   p_healThrowDirection: {fileID: 6291573982660001099}
   _healthToGive: 30
-  _selfHealingTime: 1
-  _healThrowingTimeThreshold: 1
   p_healThrowRadius: 3
+  _healThrowCost: 10
   _throwHitLayerMask:
     serializedVersion: 2
     m_Bits: 65335
   _throwHealLayerMask:
     serializedVersion: 2
     m_Bits: 192
-  _healingCooldown: 5
   p_healThrowLandingPos: {x: 0, y: 0, z: 0}
 --- !u!114 &8101511114389266693
 MonoBehaviour:
@@ -12441,7 +12444,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12956,7 +12959,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -15661,7 +15664,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -15818,8 +15821,6 @@ MonoBehaviour:
   _autoReload: 1
   _magazineSize: 6
   reloadDuration: 4
-  _ammoText: {fileID: 5027534421189645300}
-  _imageReload: {fileID: 815123897057752124}
 --- !u!114 &3954904171555899916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16127,6 +16128,8 @@ MonoBehaviour:
   _fireRate: 1
   _numberBulletSpread: 8
   _spreadAngle: 8
+  _radiusOffset: 0
+  DEBUG_spawnPoint: {fileID: 0}
 --- !u!1 &5293877357180756991
 GameObject:
   m_ObjectHideFlags: 0
@@ -17100,7 +17103,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -17261,6 +17264,8 @@ MonoBehaviour:
   _fireRate: 0.6
   _numberBulletSpread: 0
   _spreadAngle: 0
+  _radiusOffset: 0
+  DEBUG_spawnPoint: {fileID: 0}
 --- !u!114 &7557458434173687512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17281,8 +17286,6 @@ MonoBehaviour:
   _autoReload: 1
   _magazineSize: 8
   reloadDuration: 3
-  _ammoText: {fileID: 5027534421189645300}
-  _imageReload: {fileID: 815123897057752124}
 --- !u!114 &7731343862291320824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17888,7 +17891,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -18250,7 +18253,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 324}
+  m_AnchoredPosition: {x: 0, y: 350}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1135943836565695986
@@ -18308,8 +18311,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -18924,7 +18927,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -20163,15 +20166,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthView
   _playerHealth: {fileID: 5365301951764690734}
   _droneThrower: {fileID: 931936587992237131}
+  _healthVisualFillingSpeed: 1
   _healthBar: {fileID: 3134779535442495518}
   _deathImage: {fileID: 8235982739118108901}
   _damagedWarningImage: {fileID: 5315133112455716009}
   _frameDeccordImage: {fileID: 2237517866183327866}
   _damagedImage: {fileID: 7192287140023277596}
   _cooldownHealImage: {fileID: 1897999391278995240}
-  _selfHealingImage: {fileID: 534198916471793597}
-  _selfHealingColor1: {r: 0.8018868, g: 0.6509434, b: 0, a: 1}
-  _selfHealingColor2: {r: 0.18523192, g: 1, b: 0, a: 1}
   _healingTrajectoryLine: {fileID: 1292535258909843473}
   _healingThrowPosObj: {fileID: 36607885238878194, guid: 7382029bf5c03294488da66ede17c86b, type: 3}
   _soundsData: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}
@@ -20388,7 +20389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -20635,7 +20636,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -26791,6 +26792,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _mainGunParent: {fileID: 7010684394084671937}
   _throwerGrenade: {fileID: 4147575701769871822}
+  _throwerDrone: {fileID: 0}
 --- !u!114 &300968199624122896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27510,7 +27512,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Player not logged yet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -28504,7 +28506,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 318}
+  m_AnchoredPosition: {x: 0, y: 350}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4032111072025019425
@@ -28535,7 +28537,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: moi
+  m_text: Self
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -28562,8 +28564,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -28800,7 +28802,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   magneticCharge: 1
   _bridgeAnimation: {fileID: 2309493807037280383}
-  _gunSwitching: {fileID: 0}
   _elementaryGrenadePrefab: {fileID: 7033959642892252244, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   _spawnPoint: {fileID: 446286405210506582}
   _currentGun: {fileID: 3154577241410043838}
@@ -31861,6 +31862,7 @@ MonoBehaviour:
   _componentIndexCache: 18
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
-  _thrower: {fileID: 4147575701769871822}
+  _grenadeThrower: {fileID: 0}
+  _droneThrower: {fileID: 0}
   _animator: {fileID: 4616227668612083950}
   _ballInHand: {fileID: 4249826739577011265}
