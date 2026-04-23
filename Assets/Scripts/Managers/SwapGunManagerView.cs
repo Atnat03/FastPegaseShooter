@@ -36,6 +36,14 @@ public class SwapGunManagerView : NetworkBehaviour
 		_manager._elapsedTime.OnChange += OnElapsedTimeChanged;
 		_manager.OnChangeAskText += ChangeAskText;
 	}
+	
+	private void OnDisable()
+	{
+		_manager.OnUpdateAskBroSwap -= UpdateUI;
+		_manager._elapsedTime.OnChange -= OnElapsedTimeChanged;
+		_manager.OnChangeAskText -= ChangeAskText;
+	}
+
 
 	private void ChangeAskText(bool isRequester)
 	{
@@ -51,6 +59,6 @@ public class SwapGunManagerView : NetworkBehaviour
 	{
 		_valueImage.fillAmount = ratio;
 	}
-
+	
 	#endregion
 }

@@ -25,11 +25,11 @@ namespace GunDecorator.ChargedModules
         }
 
         #endregion
-
         
         #region Variables
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
+        protected ShootModule _shootModule;
         IReloadModule _reloadModule;
 
         [SerializeField] protected bool _isExplosifAmmo = false;
@@ -67,6 +67,7 @@ namespace GunDecorator.ChargedModules
                 _ammoModule = (IAmmoModule)_ammoType;
 
             _reloadModule = GetComponent<ReloadModule>();
+            _shootModule = GetComponent<ShootModule>();
         }
 
         private void Update()

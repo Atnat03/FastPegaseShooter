@@ -66,6 +66,7 @@ namespace GunDecorator
         public void SetNext(ISecondModule next);
         public void DoAdditionnalEffect();
         public void Shooting();
+        public void CancelShooting();
     }
 
     public interface IHitMarkerModule
