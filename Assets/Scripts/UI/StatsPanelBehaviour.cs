@@ -14,7 +14,7 @@ public class StatsPanelBehaviour : NetworkBehaviour
     Dictionary<int, PlayerStatsDisplay> playerStatsDisplayDict = new Dictionary<int, PlayerStatsDisplay>();
     [SerializeField] GameObject _statsPanel;
     
-    public override void OnStartClient()
+    public override void OnStartServer()
     {
         _gameStatsManager.onRegisterPlayer += RegisterPlayer;
         

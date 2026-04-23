@@ -3,13 +3,6 @@ using GunDecorator;
 using MyPrint;
 using UnityEngine;
 
-public struct OnPlayerDoDamage
-{
-    public int playerID;
-    public int damageAmount;
-    public bool isCritical;
-}
-
 public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 {
     [HideInInspector] public float p_damage;
@@ -107,13 +100,6 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         {
             ApplyDamage();
         }
-        
-        InvokeEvent(new OnPlayerDoDamage
-        {
-            playerID = _gunController.OwnerId,
-            damageAmount = (int)p_damage,
-            isCritical = p_isCritical,
-        });
 
         CreateHitMark(hit);
     }
@@ -173,18 +159,10 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 _gunController.NetworkObject.ObjectId,
                 damage,
                 p_isCritical);
-            
-            InvokeEvent(new OnPlayerDoDamage
+            InvokeEvent(new ModifyEnergyEvent
             {
-                playerID = _gunController.OwnerId,
-                damageAmount = (int)p_damage,
-                isCritical = p_isCritical,
-            });
-            
-            InvokeEvent(new OnPlayerDoDamage
-            {
-                playerID = _gunController.OwnerId,
-                damageAmount = (int)p_damage,
+                p_player = _gunController.Owner,
+                p_value = p_damage
             });
 
             hit = true;
