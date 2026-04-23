@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FishNet.Object;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
@@ -6,17 +7,17 @@ public class SoundManager : NetworkBehaviour
 {
 	public static AudioClip GetAudioClip(SoundsDataSO data, string soundName)
 	{
-		AudioClip clip = null;
+		List<AudioClip> clip = new List<AudioClip>();
 
 		foreach (SoundData soundData in data.sounds)
 		{
 			if(soundData.soundName == soundName)
 			{
-				clip = soundData.audioClip;
+				clip.Add(soundData.audioClip);
 			}
 		}
 		
-		return clip;
+		return clip[Random.Range(0, clip.Count)];
 	}
 	
 	public static void PlaySound(AudioClip clip, AudioSource source, float volume = 0.5f, float pitch = 1f)
@@ -28,7 +29,7 @@ public class SoundManager : NetworkBehaviour
 	
 	public static void PlaySound(SoundsDataSO data, string soundName, AudioSource source)
 	{
-		AudioClip clip = null;
+		List<AudioClip> clip = new List<AudioClip>();
 		float volume = 0.5f;
 		SoundType t = SoundType.Global;
 
@@ -36,16 +37,18 @@ public class SoundManager : NetworkBehaviour
 		{
 			if(soundData.soundName == soundName)
 			{
-				clip = soundData.audioClip;
+				clip.Add(soundData.audioClip);
 				volume = soundData.volume;
 				t = soundData.type;
 			}
 		}
 
+		AudioClip c = clip[Random.Range(0, clip.Count)];
+		
 		switch (t)
 		{
-			case SoundType.Global: PlayGlobalSound(volume, clip, source); break;
-			case SoundType.Spatial: PlaySpatialSound(volume, clip, source); break;
+			case SoundType.Spatial: PlaySpatialSound(volume, c, source); break;
+			case SoundType.Global: PlayGlobalSound(volume, c, source); break;
 		}
 	}
 

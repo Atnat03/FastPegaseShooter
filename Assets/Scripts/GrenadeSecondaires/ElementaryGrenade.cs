@@ -3,11 +3,13 @@ using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
+using ScriptableObjectsDefinitions;
 using UnityEngine;
 
 public class ElementaryGrenade : NetworkBusListener
 {
     [SerializeField] private MeshRenderer _model;
+    [SerializeField] private SoundsDataSO _soundData;
     
     private readonly SyncVar<MagneticCharge> _element = new SyncVar<MagneticCharge>();
     private readonly SyncVar<float> _radius = new SyncVar<float>();
@@ -21,11 +23,16 @@ public class ElementaryGrenade : NetworkBusListener
     private const float SPAWN_GRACE = 0.2f;
     private float _spawnTime;
     
-    
     private ParticleSystem _particlesExplosionPrefab;
+    private AudioSource _audioSource;
     
     private Vector3 _lastPosition;
     private bool _hasHit;
+
+    void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     public void Initialize(MagneticCharge magneticCharge, int damage, float radius, int numberWallTouch, int netID, bool isPositive, NetworkConnection thrower)
     {
@@ -149,6 +156,9 @@ public class ElementaryGrenade : NetworkBusListener
     {
         if (_particlesExplosionPrefab != null)
         {
+            string clip = _isPositive.Value ? "Positive" : "Negative";
+            SoundManager.PlaySound(_soundData, "Explosion " + clip, _audioSource);
+            
             ParticleSystem explosion = Instantiate(_particlesExplosionPrefab, position, Quaternion.LookRotation(normal));
             Destroy(explosion.gameObject, 3f);
         }

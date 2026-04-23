@@ -118,6 +118,7 @@ public class SFX_Tool : EditorWindow
             
 
             GUIStyle style=new GUIStyle(GUI.skin.box){alignment=TextAnchor.MiddleCenter};
+            style.normal.textColor = Color.white;
             
             //Id
             GUILayout.Label(i.ToString(), style, GUILayout.ExpandWidth(true), GUILayout.Height(20), GUILayout.ExpandWidth(true));
