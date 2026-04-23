@@ -45,7 +45,7 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if (!_canShoot) return;
-
+            
             if (_bridgePlayer != null)
                 _bridgePlayer.TryShootWithCurrentGun();
         }

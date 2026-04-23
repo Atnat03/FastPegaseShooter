@@ -45,5 +45,8 @@ namespace GunDecorator
             else
                 _shootModule.Shooting();
         }
+
+        public void CancelShooting()
+        { }
     }
 }

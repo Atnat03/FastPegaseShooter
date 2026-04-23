@@ -50,7 +50,6 @@ namespace Controller
 
         public void InitializeWithGunId(int gunId)
         {
-            Debug.Log($"InitializeWithGunId | gunId={gunId} | IsServer={IsServerInitialized}");
             _grenadeThrower.Initialize(gunId);
             _gunSwitching.Initialize(gunId);
             _isInitialized = true;
@@ -63,7 +62,7 @@ namespace Controller
 
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
-    
+            
             CurrentGun.TryFire();
         }
 

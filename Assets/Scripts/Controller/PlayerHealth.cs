@@ -56,7 +56,7 @@ public class PlayerHealth : NetworkBusListener
 	
 	//Action
 	public Action<float> OnUpdateHealthUI;
-	public Action<float> OnUpdateHealth;	
+	public Action<float> OnUpdateHealth;
 	public Action OnStartWarning;
 	public Action<bool> OnKOPlayer;
 	public Action OnTakeDamage;

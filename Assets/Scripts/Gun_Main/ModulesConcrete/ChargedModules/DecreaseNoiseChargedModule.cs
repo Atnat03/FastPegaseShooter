@@ -70,7 +70,13 @@ namespace GunDecorator.ChargedModules
                         Random.Range(-angle, angle),
                         0);
                 
-                _ammoModule.SpawnBullet(direction, Vector3.zero);
+                Vector2 radius = Random.insideUnitCircle * _shootModule.RadiusOffset;
+                Vector3 _bulletOffset = new Vector3(
+                    radius.x,
+                    radius.y, 0
+                );
+                
+                _ammoModule.SpawnBullet(direction, _bulletOffset);
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1, _gunController.IsInfiniteAmmo);
             }
 
