@@ -41,6 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3713966253822234235}
+  - component: {fileID: 7915011757532816662}
   - component: {fileID: 2105214549607011887}
   m_Layer: 0
   m_Name: Viewers
@@ -64,6 +65,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1710859028773061241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7915011757532816662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3792104244958736791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8bb6fc06bc27864485f45f788669d0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCoreViewer
+  _enemyCore: {fileID: 1227236921369466688}
+  _positiveUI: {fileID: 2172671982911471561}
+  _positiveCurValue: {fileID: 9199799529436561043}
+  _negativeUI: {fileID: 2223401561715668379}
+  _negativeCurValue: {fileID: 6256766211940018644}
+  _explosionParticle: {fileID: 1509239389167855855, guid: b2408256d1f9a414c91f7f086978e655, type: 3}
 --- !u!114 &2105214549607011887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,10 +99,7 @@ MonoBehaviour:
   _hitMarkerParent: {fileID: 0}
   _textDmg: {fileID: 769879031349949937, guid: db53057fdd2066748b797f06e5df7027, type: 3}
   _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
-  _cumulatifDmg: 0
-  _elapsedCumulativeDmgTime: 0
   _lifeTMP: {fileID: 1167859077468925769}
-  _lifeBarParent: {fileID: 3714750574747029244}
   _lifeBarImage: {fileID: 2657176826086352456}
   _fullLifeColor: {r: 0.6666667, g: 0.20000002, b: 0.16470589, a: 1}
   _emptyLifeColor: {r: 0.2264151, g: 0.020315934, b: 0, a: 1}
@@ -160,13 +176,10 @@ MonoBehaviour:
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
   _explosionChargedDamage: 50
-  _negativeChargeMax: 25
-  _positiveChargeMax: 25
-  _positiveUI: {fileID: 2172671982911471561}
-  _positiveCurValue: {fileID: 9199799529436561043}
-  _negativeUI: {fileID: 2223401561715668379}
-  _negativeCurValue: {fileID: 6256766211940018644}
-  _explosionParticle: {fileID: 1509239389167855855, guid: b2408256d1f9a414c91f7f086978e655, type: 3}
+  p_negativeChargeMax: 5
+  p_currentNegativeCharge: 0
+  p_positiveChargeMax: 5
+  p_currentPositiveCharge: 0
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -583,6 +596,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7406204131462875368}
     m_Modifications:
+    - target: {fileID: 1053794820482192422, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1998820330115211322, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
       propertyPath: m_Name
       value: CanvasEnemy
@@ -667,6 +684,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5558739934647080996, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293554044461696879, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7199695653630279578, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
@@ -727,11 +752,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &3714750574747029244 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5558739934647080996, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
-  m_PrefabInstance: {fileID: 9127087201099929304}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4229657263425649409 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4907568637477498329, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
