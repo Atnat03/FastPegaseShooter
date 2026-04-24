@@ -83,7 +83,7 @@ public class Drone : NetworkBusListener
 		{
 			FollowTarget(_speedNoActivated);
 			
-			if(Vector3.Distance(transform.position, _target.position) < 1f)
+			if(Vector3.Distance(transform.position, _target.position + Vector3.up * _heightOffset) < 1f)
 				Activated();
 
 			return;
