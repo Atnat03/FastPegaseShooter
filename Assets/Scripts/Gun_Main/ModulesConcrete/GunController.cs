@@ -80,10 +80,18 @@ namespace GunDecorator
         [HideInInspector] public bool p_authorizedToShoot = true;
         
         //Action
+        
+        //Shoot
         public Action<int, int> OnShootAmmo;
         public Action<float> OnShootNoise;
+        
+        //Reloading
         public Action<float> OnStartReload;
         public Action OnEndReload;
+        
+        //Charging
+        public Action<float> OnCharging;
+        public Action OnStopCharging;
         
         private void OnEnable()
         {

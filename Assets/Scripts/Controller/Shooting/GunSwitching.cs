@@ -106,8 +106,8 @@ public class GunSwitching : NetworkBehaviour
 			else
 				list[i].gameObject.SetActive(false);
 		}
-		
-		IGunMain.SetReticule(_reticuleManager);
+
+		IGunMain?.SetReticule(_reticuleManager);
 	}
 
 	public void DesactivateAllMainGun()
