@@ -14,6 +14,7 @@ public class FPSController : NetworkBusListener
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
 
     public Camera Camera => _camera;
+    public Rigidbody Rb => rb;
 
     public bool IsFreeze
     {

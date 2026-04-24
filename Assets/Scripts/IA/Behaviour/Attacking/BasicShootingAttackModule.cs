@@ -16,42 +16,38 @@ public class BasicShootingAttackModule : EnemyAttackModule
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
-        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack())
+        if (_waitedTimeSinceAttack >= _attackDelay)
         {
-            _waitedTimeSinceAttack = 0;
-
             Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
             float length = delta.magnitude;
             Vector3 dir = delta / length;
+
+            Vector3 shootingPos = transform.position + Vector3.up * 0.5f;
             
-            InvokeEvent(new EnemyShootingEvent
-            {
-                p_startPos = transform.position + dir * 0.1f + Vector3.up * 0.5f,
-                p_direction = dir,
-                p_speed = _bulletSpeed,
-                p_damage = _damage,
-                p_aliveTime = _maxBulletLifeTime,
-                p_bulletSize = _bulletSize,
-                PEnemyAttackModule = this
-            });
+            if(!CanAttack(shootingPos, dir)) return;
+            _waitedTimeSinceAttack = 0;
+            
+            InvokeEvent(new EnemyShootingEvent(
+                shootingPos, 
+                dir, 
+                _bulletSpeed, 
+                _damage, 
+                _bulletSize, 
+                _maxBulletLifeTime, 
+                this));
         }
     }
 
-    protected override bool CanAttack()
+    protected override bool CanAttack(Vector3 shootingPos, Vector3 projectileDir)
     {
         if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
         {
             return false;
         }
 
-
-        Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
-        float length = delta.magnitude;
-        Vector3 dir = delta / length;
-
-        Vector3 origin = transform.position + dir * 0.1f + Vector3.up * 0.5f;
-        Debug.DrawLine(origin,origin + dir * length, Color.red, _attackDelay);
-        if (Physics.Raycast(origin, dir, out RaycastHit hit, length, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
+        Debug.DrawLine(shootingPos,shootingPos + projectileDir * _maxPlayerDistance, Color.red, _attackDelay);
+        
+        if (Physics.Raycast(shootingPos, projectileDir, out RaycastHit hit, _maxPlayerDistance, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -85,10 +81,29 @@ public class BasicShootingAttackModule : EnemyAttackModule
 public struct EnemyShootingEvent
 {
     public Vector3 p_startPos;
-    public Vector3 p_direction;
-    public float p_speed;
-    public int p_damage;
-    public float p_aliveTime;
+    public Vector3 p_generalDirection;
+    public int p_bulletAmount;
+    public float p_shootingSpreadAngle;
+    
+    public EnemyAttackModule p_enemyAttackModule;
+    
+    public float p_bulletSpeed;
+    public int p_bulletDamage;
     public float p_bulletSize;
-    public EnemyAttackModule PEnemyAttackModule;
+    public float p_bulletMaxAliveTime;
+
+    public EnemyShootingEvent(Vector3 startPos, Vector3 dir, float bSpeed, int bDamage, float bSize, float bLifeTime, EnemyAttackModule attackModule, int bAmount = 1, float spreadAngle = 0)
+    {
+        p_startPos = startPos;
+        p_generalDirection = dir;
+        
+        p_bulletAmount = bAmount;
+        p_shootingSpreadAngle = spreadAngle;
+        
+        p_bulletSpeed = bSpeed;
+        p_bulletDamage = bDamage;
+        p_bulletSize = bSize;
+        p_bulletMaxAliveTime = bLifeTime;
+        p_enemyAttackModule = attackModule;
+    }
 }
