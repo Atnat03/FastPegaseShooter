@@ -59,7 +59,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
             {
                 Instantiate(_explosionVFX, transform.position, Quaternion.identity);
             }
-            
+
             if (InstanceFinder.IsServerStarted)
             {
                 if (p_isExplosive)
@@ -73,18 +73,10 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                     {
                         bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,  (int)p_damage, p_isCritical);
                         _gunController.TriggerHitMark(crit || p_isCritical);
-                        
                         InvokeEvent(new ModifyEnergyEvent
                         {
                             p_player = _gunController.Owner,
                             p_value = p_damage
-                        });
-                        
-                        InvokeEvent(new OnPlayerDoDamage
-                        {
-                            playerID = _gunController.OwnerId,
-                            damageAmount = (int)p_damage,
-                            isCritical = p_isCritical,
                         });
                         
                         if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
@@ -122,13 +114,6 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                 {
                     enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                 }
-                
-                InvokeEvent(new OnPlayerDoDamage
-                {
-                    playerID = _gunController.OwnerId,
-                    damageAmount = (int)p_damage,
-                    isCritical = p_isCritical,
-                });
             
                 isHit = true;
             }
