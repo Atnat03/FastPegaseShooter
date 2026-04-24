@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4660385558512272094}
   - component: {fileID: 6325006552558930708}
   - component: {fileID: 1894198244629999496}
+  - component: {fileID: 4435703796212555158}
   m_Layer: 0
   m_Name: "\U0001F308CoopManager"
   m_TagString: Untagged
@@ -69,7 +70,6 @@ MonoBehaviour:
     overloadDuration: 10
     timeToCombo: 3
     colorJauge: {r: 0.9009558, g: 1, b: 0, a: 1}
-  _isCombo: 0
   _infoCombo: {fileID: 5540293941858202540}
 --- !u!114 &4660385558512272094
 MonoBehaviour:
@@ -114,8 +114,6 @@ MonoBehaviour:
   - {fileID: 4495569384548324198}
   - {fileID: 4660385558512272094}
   - {fileID: 1894198244629999496}
-  - {fileID: 0}
-  - {fileID: 0}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -126,7 +124,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584259532827275625
+  _initializedTimestamp: -8584245847010330733
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -142,7 +140,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 20
+  <PrefabId>k__BackingField: 22
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 11948202327552370993
   SceneId: 0
@@ -167,6 +165,21 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 6325006552558930708}
   _networkObjectCache: {fileID: 6325006552558930708}
   _playerUIEnd: {fileID: 5918345945357455960}
+--- !u!114 &4435703796212555158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195821754654841656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bfc9a6b0db71c84696ea4df79aa327f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerEnergyRegistry
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 6325006552558930708}
+  _networkObjectCache: {fileID: 0}
 --- !u!1 &1648326429967676846
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,7 +405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5259311270935763389
 RectTransform:
   m_ObjectHideFlags: 0

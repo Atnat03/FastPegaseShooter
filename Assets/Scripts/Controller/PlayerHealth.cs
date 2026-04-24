@@ -54,7 +54,7 @@ public class PlayerHealth : NetworkBusListener
 	//Action
 	public Action<float> OnUpdateHealth;	
 	public Action OnStartWarning;
-	public Action<bool> OnKOPlayer;
+	public Action<bool, float> OnKOPlayer;
 	public Action OnTakeDamage;
 	
 	public Action OnThrowingVisualActivation;
@@ -290,7 +290,10 @@ public class PlayerHealth : NetworkBusListener
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{
 		_playerAnimation.SetDeadAnim(next);
-		OnKOPlayer?.Invoke(next);
+		if (IsOwner)
+		{
+			OnKOPlayer?.Invoke(next, _timeToRespawn);
+		}
 	}
 	
 	private void OnRespawnTimerChange(float prev, float next, bool asServer)

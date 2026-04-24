@@ -20,6 +20,7 @@ public interface IGun
     public void Disable(bool state);
     public void SetFireRate(float multiplier);
     public void SetChargedPlayer(bool b);
+    public void SetReticule(ReticulesManager manager);
 }
 
 
@@ -68,6 +69,8 @@ namespace GunDecorator
         
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
         [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
+
+        [SerializeField] private int _reticuleID = 0;
         
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
@@ -288,5 +291,10 @@ namespace GunDecorator
         public void SetChargedPlayer(bool b) => _isPositivePlayerCharge.Value = b;
 
         public void ResetNoise() => _shootModule?.CancelShooting();
+        
+        public void SetReticule(ReticulesManager manager)
+        {
+            manager.ActivateReticules(_reticuleID);
+        }
     }
 }

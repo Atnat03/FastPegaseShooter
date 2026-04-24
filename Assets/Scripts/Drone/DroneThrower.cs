@@ -7,7 +7,7 @@ using MyPrint;
 using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 
-public class DroneThrower : NetworkBehaviour
+public class DroneThrower : NetworkBusListener
 {
 	#region Properties
 
@@ -23,6 +23,7 @@ public class DroneThrower : NetworkBehaviour
 	[Header("Throw")]
 	[SerializeField] private Drone _dronePrefab;
 	[SerializeField] private Transform _spawnPoint;
+	[SerializeField] private int _costToThrowDrone = 50;
 
 	[Header("Detection Bro")]
 	[SerializeField] private float _range = 50f;
@@ -47,8 +48,7 @@ public class DroneThrower : NetworkBehaviour
 	public Action OnGetDrone;
 	
 	#endregion
-
-
+	
 	#region Fonctions
 
 	public override void OnStartNetwork()
@@ -65,11 +65,21 @@ public class DroneThrower : NetworkBehaviour
 		if (!_hasDrone) return;
 		if (_isCanceled) return;
 		if (_target == null) return;
+		if (_playerEnergy.CurrentEnergy - _costToThrowDrone < 0) return;
 		
 		_isCharging = false;
 		
 		NetworkObject targetNetObj = _target.GetComponent<NetworkObject>()
 		                             ?? _target.GetComponentInParent<NetworkObject>();
+		
+		if (_playerEnergy != null)
+		{
+			InvokeEvent(new ModifyEnergyEvent
+			{
+				p_player = _playerEnergy.Owner,
+				p_value = -_costToThrowDrone
+			});
+		}
 		
 		if (_bridgeAnimation != null)
 		{
