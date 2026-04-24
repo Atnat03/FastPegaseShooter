@@ -15,7 +15,7 @@ public class EnemyBullet
 
     public int p_bulletId;
     public int p_bulletStrenght;
-    public EnemyAttackModule PAttackModule;
+    public EnemyAttackModule p_attackModule;
 
     public EnemyBullet(Vector3 startPos, Vector3 direction, float speed, float bulletSize,
         float serverSpawnTime, float maxLifeTime,
@@ -29,7 +29,7 @@ public class EnemyBullet
         p_bulletId = bulletId;
         p_bulletStrenght = strenght;
         _maxLifeTime = maxLifeTime;
-        PAttackModule = attackModule;
+        p_attackModule = attackModule;
         _bulletSize = bulletSize;
     }
 

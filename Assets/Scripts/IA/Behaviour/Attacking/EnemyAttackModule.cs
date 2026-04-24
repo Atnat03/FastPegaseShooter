@@ -16,7 +16,7 @@ public abstract class EnemyAttackModule : EnemyBehaviourModule
     [HideInInspector][SerializeField] protected float _maxPlayerDistance = 10f;
     protected float _waitedTimeSinceAttack;
 
-    protected abstract bool CanAttack();
+    protected abstract bool CanAttack(Vector3 shootingPos, Vector3 projectileDir);
 
     public virtual void OnNetworkTick()
     {

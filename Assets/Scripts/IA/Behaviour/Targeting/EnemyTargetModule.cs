@@ -1,18 +1,34 @@
 using System;
 using CustomConsole.Runtime.Logger;
 using FishNet;
+using FishNet.Object;
 using UnityEngine;
 
 //[AddComponentMenu("EnemyBehaviour/Target")]
 public abstract class EnemyTargetModule : EnemyBehaviourModule
 {
-    public int p_targetId { get; protected set; }
+    private int _targetId;
+    public FPSController p_fpsController {get; private set;}
+    public int p_targetId
+    {
+        get => _targetId;
+        set
+        {
+            _targetId = value;
+
+            FPSController fpsController = null;
+            GetTargetNetworkObject()?.TryGetComponent(out fpsController);
+            p_fpsController = fpsController;
+        }
+    }
+
     [HideInInspector] public Vector3 p_lastTargetPosition =  Vector3.negativeInfinity;
     protected virtual bool IsNewTargetValid(PlayerPositionUpdateEvent PPUE) => true;
 
     public override void OnStartServer()
     {
         base.OnStartServer();
+        p_targetId = -1;
         ListenToEvent((PlayerPositionUpdateEvent PPUE) => OnPlayerPositionUpdate(PPUE));
     }
 
@@ -32,10 +48,18 @@ public abstract class EnemyTargetModule : EnemyBehaviourModule
     }
     public virtual Vector3 GetTargetPosition()
     {
-        if(InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(p_targetId, out var value))
-            return value.transform.position;
+        NetworkObject networkObject = GetTargetNetworkObject();
+        if(networkObject)
+            return networkObject.transform.position;
         
         return Vector3.positiveInfinity; 
+    }
+    public virtual NetworkObject GetTargetNetworkObject()
+    {
+        if(InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(p_targetId, out var networkObject))
+            return networkObject;
+        
+        return null;
     }
 
     public virtual bool HasTarget() => true;
