@@ -33,39 +33,33 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private PlayerAnimation _playerAnimation;
 
 	[Header("Healing")]
+	[SerializeField] private PlayerEnergy _playerEnergy;
 	public Transform p_healThrowPoint;
 	public Transform p_healThrowDirection;
 	[SerializeField] private float _healthToGive = 30;
-	[SerializeField] private float _selfHealingTime = 2;
-	[SerializeField] private float _healThrowingTimeThreshold = 1;
 	public float p_healThrowRadius = 3;
+	[SerializeField] private float _healThrowCost = 10;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
-	[SerializeField] private float _healingCooldown = 5;
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
 	private float _targetHealthFill;
 	private Vector3 _startPos;
-	
-	private float _healKeyDownTime;
-	private float _healActivationTime = float.MinValue;
-	private bool _throwActivated;
+
+	private bool _isHealKeyDown;
 	[HideInInspector] public Vector3 p_healThrowLandingPos;
 	private bool _canThrowHeal = true;
 	
 	//Action
-	public Action<float> OnUpdateHealthUI;
 	public Action<float> OnUpdateHealth;	
 	public Action OnStartWarning;
-	public Action<bool> OnKOPlayer;
+	public Action<bool, float> OnKOPlayer;
 	public Action OnTakeDamage;
 	
-	public Action<float> OnSelfHealing;
-	public Action OnThrowingActivation;
+	public Action OnThrowingVisualActivation;
 	public Action OnThrowing;
 	public Action<Vector3> OnHealThrowLanding;
-	public Action<float> OnUpdateCooldown;
 	
 	#endregion
 
@@ -121,30 +115,14 @@ public class PlayerHealth : NetworkBusListener
     
 		if (IsOwner)
 		{
-			float remainingCooldown = _healingCooldown - (Time.time - _healActivationTime);
-			if (remainingCooldown > 0)
+			if (_isHealKeyDown)
 			{
-				OnUpdateCooldown?.Invoke(remainingCooldown / _healingCooldown);
-			}
-			else
-			{
-				OnUpdateCooldown?.Invoke(0);
-			}
-			
-			if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold)
-			{
-				if (!_throwActivated)
-				{
-					OnThrowingActivation?.Invoke();
-					_throwActivated = true;
-				}
-				
-				if(Physics.Raycast(p_healThrowPoint.position, p_healThrowDirection.forward, out RaycastHit hit, 999f, _throwHitLayerMask))
+				if(Physics.Raycast(p_healThrowPoint.position, p_healThrowDirection.forward, out RaycastHit hit, 999f, _throwHitLayerMask, QueryTriggerInteraction.Ignore))
 					p_healThrowLandingPos = hit.point;
 				else
 					p_healThrowLandingPos = p_healThrowPoint.position;
 				
-				Debug.DrawLine(p_healThrowPoint.position, p_healThrowLandingPos, Color.red, 2);
+				//Debug.DrawLine(p_healThrowPoint.position, p_healThrowLandingPos, Color.red, 2);
 			}
 		}
 	}
@@ -153,39 +131,34 @@ public class PlayerHealth : NetworkBusListener
 
 	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
-		if(!IsOwner || Time.time - _healActivationTime < _healingCooldown)return;
-		
-		_healKeyDownTime = Time.time;
+		if(!IsOwner)return;
+
+		if (_playerEnergy.CurrentEnergy < _healThrowCost)
+		{
+			CustomLogger.ImportantLog($"Energy amount : {_playerEnergy.CurrentEnergy}");
+			return;
+		}
+
+		OnThrowingVisualActivation?.Invoke();
+		_isHealKeyDown = true;
 	}
-	async void HealKeyCanceled(InputAction.CallbackContext ctx)
+	void HealKeyCanceled(InputAction.CallbackContext ctx)
 	{
-		if(!IsOwner || Time.time - _healActivationTime < _healingCooldown)return;
+		if(!(IsOwner || _isHealKeyDown))return;
 		
-		if (Time.time - _healKeyDownTime > _healThrowingTimeThreshold) //Throwing heal
+		if (_playerEnergy.CurrentEnergy < _healThrowCost)
 		{
-			if(_canThrowHeal && p_healThrowLandingPos != p_healThrowPoint.position)
-			{
-				OnThrowing?.Invoke();
-				
-				ThrowHealServerRpc(p_healThrowLandingPos, _healthToGive);
-				_healActivationTime = Time.time;
-			}
-		}
-		else //Self-healing
-		{
-			OnSelfHealing?.Invoke(_selfHealingTime);
-			AddHealthServerRpc(new AddHealthToPlayer
-			{
-				p_playerId = OwnerId,
-				p_value = _healthToGive,
-				p_delay = _selfHealingTime
-			});
-			_healActivationTime = Time.time;
+			return;
 		}
 		
-		_healActivationTime = Time.time;
-		_throwActivated = false;
-		_healKeyDownTime = float.MaxValue;
+		if(_canThrowHeal && p_healThrowLandingPos != p_healThrowPoint.position)
+		{
+			OnThrowing?.Invoke();
+			
+			ThrowHealServerRpc(p_healThrowLandingPos, _healthToGive, Owner);
+		}
+		
+		_isHealKeyDown = false;
 		_canThrowHeal = true;
 	}
 
@@ -218,12 +191,16 @@ public class PlayerHealth : NetworkBusListener
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	void ThrowHealServerRpc(Vector3 landingPos, float lifeToAdd)
+	void ThrowHealServerRpc(Vector3 landingPos, float lifeToAdd, NetworkConnection throwerConnection)
 	{
+		InvokeEvent(new ModifyEnergyEvent
+		{
+			p_player = throwerConnection,
+			p_value = -_healThrowCost
+		});
 		Collider[] colliders = Physics.OverlapSphere(landingPos, p_healThrowRadius, _throwHealLayerMask);
 		foreach (Collider collider in colliders)
 		{
-			CustomLogger.HighlightLog(collider.gameObject.name);
 			if (collider != null && collider.TryGetComponent(out PlayerVisuelBridge visualBridge))
 			{
 				visualBridge.PlayerHealth.AddHealth(new AddHealthToPlayer
@@ -236,12 +213,6 @@ public class PlayerHealth : NetworkBusListener
 		}
 
 		ShowHealThrowObserverRpc(landingPos);
-	}
-
-	[ServerRpc(RequireOwnership = false)]
-	public void AddHealthServerRpc(AddHealthToPlayer data)
-	{
-		AddHealth(data);
 	}
 
 	[Server]
@@ -299,9 +270,10 @@ public class PlayerHealth : NetworkBusListener
 	{
 		if (!IsOwner) return;
     
+		CustomLogger.ImportantLog("healChange");
 		_targetHealthFill = next / _healthBase;
 		
-		OnUpdateHealthUI?.Invoke(_targetHealthFill);
+		OnUpdateHealth?.Invoke(_targetHealthFill);
 
 		if (_targetHealthFill <= _critikStep)
 		{
@@ -318,7 +290,10 @@ public class PlayerHealth : NetworkBusListener
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{
 		_playerAnimation.SetDeadAnim(next);
-		OnKOPlayer?.Invoke(next);
+		if (IsOwner)
+		{
+			OnKOPlayer?.Invoke(next, _timeToRespawn);
+		}
 	}
 	
 	private void OnRespawnTimerChange(float prev, float next, bool asServer)

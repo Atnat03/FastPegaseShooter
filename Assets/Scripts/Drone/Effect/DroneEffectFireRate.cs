@@ -32,7 +32,6 @@ public class DroneEffectFireRate : DroneEffectParent
 		
 		foreach (PlayerVisuelBridge player in _playerUnderEffect)
 		{
-			Cons.Print(_playerUnderEffect.Count.ToString(), ColorConsole.Red);
 			player.PlayerGun.IGunMain.SetFireRate(_fireRateMultiplicator);
 			ApplyFireRateObserverRpc(player.Owner, _fireRateMultiplicator, player);
 		}
@@ -41,9 +40,7 @@ public class DroneEffectFireRate : DroneEffectParent
 	protected override void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
 	{
 		base.StopApplicateEffect(playerVisuelBridge);
-
-		Cons.Print("StopApplicateEffect ", ColorConsole.Orange);
-
+		
 		playerVisuelBridge.PlayerGun.IGunMain.SetFireRate(-1);
 
 		ResetFireRateObserverRpc(playerVisuelBridge.Owner, playerVisuelBridge);
@@ -61,7 +58,6 @@ public class DroneEffectFireRate : DroneEffectParent
 	{
 		foreach (PlayerVisuelBridge player in _playerUnderEffect)
 		{
-			Cons.Print("Apply death Effect ", ColorConsole.Orange);
 			StopApplicateEffect(player);
 		}
 	}

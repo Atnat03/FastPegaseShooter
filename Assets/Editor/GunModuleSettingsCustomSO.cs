@@ -124,14 +124,6 @@ public class GunModuleSettingsCustomSO : Editor
             template.displayName = "TemplateShootModule";
             template.headerColor = Color.dodgerBlue;
         }
-
-        
-        if (instance is FragShootSetting frag)
-        {
-            frag.displayName = "FragShootModule";
-            frag.headerColor = Color.dodgerBlue;
-        }
-
         
         if (instance is RaycastAmmoSetting raycast)
         {

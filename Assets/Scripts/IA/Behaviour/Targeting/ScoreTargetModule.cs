@@ -33,7 +33,6 @@ public class ScoreTargetModule : EnemyTargetModule
     public override void OnStartServer()
     {
         base.OnStartServer();
-        p_targetId = -1;
         _currentThreshold = 0;
     }
 

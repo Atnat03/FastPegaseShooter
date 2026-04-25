@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using CustomConsole.Runtime.Logger;
+using MyPrint;
 using ScriptableObjectsDefinitions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,17 +22,22 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private DroneThrower _droneThrower;
 	
 	[Header("UI")]
+	[SerializeField] private float _healthVisualFillingSpeed = 1;
 	[SerializeField] private Image _healthBar;
-	[SerializeField] private Image _deathImage;
 	[SerializeField] private CanvasGroup _damagedWarningImage;
 	[SerializeField] private Image _frameDeccordImage;
 	[SerializeField] private CanvasGroup _damagedImage;
 	[SerializeField] private Image _cooldownHealImage;
 	
+	[Header("Dead")]
+	[SerializeField] private GameObject _normalCanva;
+	[SerializeField] private GameObject _deathCanva;
+	[SerializeField] private TextMeshProUGUI _deathTimer;
+	[SerializeField] private Camera _normalCamera;
+	[SerializeField] private Camera _deathCamera;
+	[SerializeField] private Transform[] _deathCameraOffsets;
+	
 	[Header("Healing")]
-	[SerializeField] private Image _selfHealingImage;
-	[SerializeField] private Color _selfHealingColor1;
-	[SerializeField] private Color _selfHealingColor2;
 	[SerializeField] private LineRenderer _healingTrajectoryLine;
 	[SerializeField] private GameObject _healingThrowPosObj;
 	
@@ -39,6 +47,8 @@ public class PlayerHealthView : MonoBehaviour
 	
 	float _elapsedTimeShowWarning = 0;
 	bool _isShowedWarning = false;
+
+	private float _healTargetFillAmount = 1;
 	
 	#endregion
 
@@ -47,14 +57,16 @@ public class PlayerHealthView : MonoBehaviour
 
 	private void Start()
 	{
-		_deathImage.gameObject.SetActive(false);
+		_deathCanva.gameObject.SetActive(false);
+		_deathCamera.gameObject.SetActive(false);
 		_audioSource = GetComponent<AudioSource>();
 		_healingTrajectoryLine.enabled = false;
+		_healingTrajectoryLine.positionCount = 4;
 	}
 	
 	private void UpdateHealth(float targetFill)
 	{
-		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, targetFill, Time.deltaTime * 25);
+		_healTargetFillAmount = targetFill;
 		ShowWarning();
 	}
 	
@@ -83,9 +95,50 @@ public class PlayerHealthView : MonoBehaviour
 		}
 	}
 
-	private void KoPlayerUI(bool state)
+	private Coroutine _koCoroutine;
+
+	private void KoPlayerUI(bool state, float duration)
 	{
-		_deathImage.gameObject.SetActive(state);
+		_deathCanva.gameObject.SetActive(state);
+		_deathCamera.gameObject.SetActive(state);
+		
+		if (_koCoroutine != null)
+		{
+			StopCoroutine(_koCoroutine);
+			_koCoroutine = null;
+		}
+
+		if (state)
+		{
+			_koCoroutine = StartCoroutine(KoAnimation(duration));
+		}
+		else
+		{
+			_deathCamera.transform.position = _deathCameraOffsets[0].position;
+			_deathCamera.transform.rotation = _deathCameraOffsets[0].rotation;
+			_deathTimer.text = "";
+		}
+	}
+
+	IEnumerator KoAnimation(float duration)
+	{
+		float elapsedTime = 0;
+
+		while (elapsedTime < duration)
+		{
+			elapsedTime += Time.deltaTime;
+
+			_deathTimer.text = (duration - elapsedTime).ToString("F2");
+			_deathCamera.transform.position = Vector3.Lerp(_deathCamera.transform.position, _deathCameraOffsets[1].position, elapsedTime / duration);
+			_deathCamera.transform.rotation = Quaternion.Lerp(_deathCamera.transform.rotation, _deathCameraOffsets[1].rotation, elapsedTime / duration);
+
+			yield return null;
+		}
+
+		_deathTimer.text = "0.00";
+		_koCoroutine = null;
+		
+		_frameDeccordImage.color = Color.white;
 	}
 
 	private void StartWarning()
@@ -119,21 +172,6 @@ public class PlayerHealthView : MonoBehaviour
 		_damagedImage.alpha = 0f;
 	}
 
-	private async void OnSelfHealing(float selfHealingDelay)
-	{
-		float waitedTime = 0;
-		_selfHealingImage.gameObject.SetActive(true);
-		while (waitedTime < selfHealingDelay)
-		{
-			waitedTime += Time.deltaTime;
-			await Task.Delay(Mathf.FloorToInt(Time.deltaTime*1000));
-			
-			_selfHealingImage.fillAmount = waitedTime/selfHealingDelay;
-			_selfHealingImage.color = Color.Lerp(_selfHealingColor1, _selfHealingColor2, waitedTime/selfHealingDelay);
-		}
-		_selfHealingImage.gameObject.SetActive(false);
-	}
-
 	private void Update()
 	{
 		if (_healingTrajectoryLine.enabled)
@@ -146,9 +184,10 @@ public class PlayerHealthView : MonoBehaviour
 			_healingTrajectoryLine.SetPosition(2, endPos-dir*0.3f);
 			_healingTrajectoryLine.SetPosition(3, endPos);
 		}
+		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _healTargetFillAmount, Time.deltaTime * _healthVisualFillingSpeed);
 	}
 
-	private void OnThrowingActivation()
+	private void OnThrowingVisualActivation()
 	{
 		_healingTrajectoryLine.enabled = true;
 	}
@@ -160,14 +199,8 @@ public class PlayerHealthView : MonoBehaviour
 	{
 		GameObject orb = Instantiate(_healingThrowPosObj, pos, Quaternion.identity);
 		orb.transform.localScale = Vector3.one * _playerHealth.p_healThrowRadius;
-		await Task.Delay(3000);
+		await Task.Delay(1000);
 		Destroy(orb);
-	}
-	
-	
-	private void UpdateCooldownHeal(float ratio)
-	{
-		_cooldownHealImage.fillAmount = 1 - ratio;
 	}
 
 	void OnEnable()
@@ -178,14 +211,12 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnTakeDamage += TakeDamageEffect;
 		
 		//Healing
-		_playerHealth.OnSelfHealing += OnSelfHealing;
-		_playerHealth.OnThrowingActivation += OnThrowingActivation;
+		_playerHealth.OnThrowingVisualActivation += OnThrowingVisualActivation;
 		_playerHealth.OnThrowing += OnThrowing;
 		_playerHealth.OnHealThrowLanding += OnHealThrowLanding;
-		_playerHealth.OnUpdateCooldown += UpdateCooldownHeal;
 		
 		//Drone Throw
-		_droneThrower.OnThrowingActivation += OnThrowingActivation;
+		//_droneThrower.OnThrowingActivation += OnThrowingVisualActivation;
 		_droneThrower.OnThrowing += OnThrowing;
 	}
 
@@ -197,14 +228,12 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnTakeDamage -= TakeDamageEffect;
 		
 		//Healing
-		_playerHealth.OnSelfHealing -= OnSelfHealing;
-		_playerHealth.OnThrowingActivation -= OnThrowingActivation;
+		_playerHealth.OnThrowingVisualActivation -= OnThrowingVisualActivation;
 		_playerHealth.OnThrowing -= OnThrowing;
 		_playerHealth.OnHealThrowLanding -= OnHealThrowLanding;
-		_playerHealth.OnUpdateCooldown -= UpdateCooldownHeal;
 		
 		//Drone Throw
-		_droneThrower.OnThrowingActivation -= OnThrowingActivation;
+		//_droneThrower.OnThrowingActivation -= OnThrowingVisualActivation;
 		_droneThrower.OnThrowing -= OnThrowing;
 	}
 

@@ -16,11 +16,18 @@ public class PlayerPing : NetworkBehaviour
 	[SerializeField] private Ping _pingEnemyPrefab;
 	[SerializeField] private float _cooldownLifePing = 5f;
 	[SerializeField] private float _timerBetweenPing = 2f;
+	
 	float _elapsedTime = 0f;
 	private bool _canPing = true;
 
 	private GameObject _currentPing;
+	
+	public Action<bool> OnPinging;
 
+	#endregion
+	
+	#region Fonctions
+	
 	private void Update()
 	{
 		if (_elapsedTime > 0)
@@ -68,16 +75,15 @@ public class PlayerPing : NetworkBehaviour
 		Ping prefab = isNormal ? _pingNormalPrefab : _pingEnemyPrefab;
 		
 		Ping ping = Instantiate(prefab, pos, Quaternion.identity).GetComponent<Ping>();
-		
-		ping.SetTarget(transform);
+
+		if (Camera.main != null)
+			ping.SetTarget(Camera.main.transform);
+
+		OnPinging?.Invoke(isNormal);
 		
 		Destroy(ping.gameObject, _cooldownLifePing);
 	}
 	
-	#endregion
-
-	#region Fonctions
-
 	private void OnEnable()
 	{
 		_playerInput.actions["Ping"].performed += AddPing;
