@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +14,7 @@ public class FPSController : NetworkBusListener
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
 
     public Camera Camera => _camera;
+    public Rigidbody Rb => rb;
 
     public bool IsFreeze
     {
@@ -65,12 +68,12 @@ public class FPSController : NetworkBusListener
     [SerializeField] float cameraSpringFrequency = 22.5f;
     [SerializeField] float rollSmoothing = 15f;
 
-    [Header("movement")] [SerializeField] float mouseSensitivity = 2f;
+    [Header("movement")] public float mouseSensitivity = 2f;
     [SerializeField] float verticalLimit = 80f;
     [SerializeField] float moveSpeed;
     [SerializeField] float groundMomentumFactor = 2f;
     [SerializeField] float sideStepImpulseForce;
-    [SerializeField] float wallDetectionRange = 0.65f;
+    [SerializeField] float wallDetectionRangeForSteps = 0.65f;
     [SerializeField] float walkableSlopeAngle = 45f;
     [SerializeField] float maxStepHeight = .2f;
     [SerializeField] private float gravityBonusForceAscending = 3f;
@@ -137,8 +140,9 @@ public class FPSController : NetworkBusListener
     [SerializeField] float coyoteSlideDuration = .1f;
     [SerializeField] private float CameraSlideFOV = 50;
     [SerializeField] private float slidingBackToNormalSpeedDelay = .5f;
+    [SerializeField] private float redirectionPowerAfterSliding = 2f;
 
-    [Header("Dash")] [SerializeField] float dashSpeed = 5f;
+    [Header("Dash")] [SerializeField] AnimationCurve dashSpeed;
     [SerializeField] float dashTimeDuration = 0.2f;
     [SerializeField] float dashCooldown;
 
@@ -150,10 +154,10 @@ public class FPSController : NetworkBusListener
     [SerializeField] float slopeInfluenceOnVelocity = .75f;
 
     [Header("Grapple")] [SerializeField] private float _castWidth = .5f;
-    [SerializeField] private float _castMaxDistance = 100f;
-    [SerializeField] private float _grapplingSpeed = 15;
+     private float _castMaxDistance = 100f;
+     private float _grapplingSpeed = 15;
     [SerializeField] float _grappleRedirectionSpeed = 8f;
-    [SerializeField] private float _endGrappleImpulseForce = 3f;
+     private float _endGrappleImpulseForce = 3f;
 
     #endregion
 
@@ -204,6 +208,21 @@ public class FPSController : NetworkBusListener
 
     #endregion
 
+    #region Actions
+
+    public Action OnDash;
+    public Action<float> OnUpdateDashCooldown;
+
+    public Action OnDoubleJump;
+
+    public Action OnFootstep;
+    public Action OnJump;
+    public Action OnLanding;
+    public Action OnGrappling;
+    
+    #endregion
+    
+    
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -227,14 +246,17 @@ public class FPSController : NetworkBusListener
                 if (data.p_playerN == NetworkObject)
                     SetDeadServerRpc(false);
             });
+            
+            ListenToEvent<OnPauseEvent>(data =>
+            {
+                isFreeze = data.p_isPause;
+                rb.linearVelocity = isFreeze ? Vector3.zero : rb.linearVelocity;
+            });
         }
         else
         {
             _camera.gameObject.SetActive(false);
         }
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         yaw = transform.eulerAngles.y;
         pitch = cameraParentTransform.localEulerAngles.x;
@@ -400,13 +422,20 @@ public class FPSController : NetworkBusListener
     {
         // grapplepoints 
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner", "Ignore Raycast"), QueryTriggerInteraction.Collide))
+                out RaycastHit hit, Mathf.Infinity,  LayerMask.GetMask("Default"),
+                QueryTriggerInteraction.Collide))
         {
             currentLookedGrapplePoint = hit.collider.GetComponent<GrapplePoint>();
             if (currentLookedGrapplePoint != null)
             {
-                currentLookedGrapplePoint.p_mustShowCanvas = true;
-                currentLookedGrapplePoint.p_playerTransform = cameraParentTransform;
+                if (Vector3.Distance(transform.position, hit.point) < currentLookedGrapplePoint.detectableDistance)
+                {
+                    _castMaxDistance = currentLookedGrapplePoint.detectableDistance;
+                    _grapplingSpeed = currentLookedGrapplePoint.grappleSpeed;
+                    _endGrappleImpulseForce = currentLookedGrapplePoint.endGrappleImpulseForce;
+                    currentLookedGrapplePoint.p_mustShowCanvas = true;
+                    currentLookedGrapplePoint.p_playerTransform = cameraParentTransform;
+                }
             }
         }
         else if (currentLookedGrapplePoint != null)
@@ -497,7 +526,7 @@ public class FPSController : NetworkBusListener
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default", "Ignore Raycast"),
+                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -571,14 +600,14 @@ public class FPSController : NetworkBusListener
 
 
         if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
-        { 
+        {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default", "Ignore Raycast"),
+                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -598,12 +627,14 @@ public class FPSController : NetworkBusListener
 
         if (horizontalVelocity.magnitude > moveSpeed)
         {
-            velocity = Vector3.MoveTowards(horizontalVelocity, velocity, groundMomentumFactor * Time.deltaTime);
+            velocity = Vector3.MoveTowards(velocity.normalized * horizontalVelocity.magnitude, velocity, groundMomentumFactor * Time.deltaTime);
         }
 
         velocity = AlignVelocityToWall(velocity);
 
         rb.linearVelocity = InterpolateSlope(velocity);
+
+        OnFootstep?.Invoke();
     }
 
 
@@ -677,7 +708,7 @@ public class FPSController : NetworkBusListener
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default", "Ignore Raycast"),
+                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -762,6 +793,9 @@ public class FPSController : NetworkBusListener
         hasJumped = false;
         mustHeadTilt = false;
         _playerAnimation.SetFallingAnim(false);
+        
+        OnLanding?.Invoke();
+        
         StartCoroutine(CoyoteSlideCoroutine());
     }
 
@@ -882,7 +916,7 @@ public class FPSController : NetworkBusListener
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default", "Ignore Raycast"),
+                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -901,6 +935,8 @@ public class FPSController : NetworkBusListener
         Vector3 velocity = move * wallRidingSpeed;
 
         rb.linearVelocity = velocity;
+        
+        OnFootstep?.Invoke();
     }
 
     void ExitWallRidingState()
@@ -1003,13 +1039,15 @@ public class FPSController : NetworkBusListener
         horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
         verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
-        Vector3 velocity = move;
+        Vector3 velocity;
         if (!slowingDownFromSliding)
         {
+            velocity = move;
             velocity *= crouchSpeed;
         }
         else
         {
+            velocity = Vector3.Lerp(horizontalVelocity.normalized, move, redirectionPowerAfterSliding*Time.deltaTime);
             velocity *= slowingFromSlideSpeed;
         }
 
@@ -1124,8 +1162,7 @@ public class FPSController : NetworkBusListener
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
 
-        while (elapsedTime < slideMinTimeDuration ||
-               (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed()))
+        while (elapsedTime < slideMinTimeDuration || (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed() && verticalInput > 0))
         {
             elapsedTime += Time.deltaTime;
 
@@ -1183,6 +1220,7 @@ public class FPSController : NetworkBusListener
             _camera.fieldOfView = Mathf.Lerp(startFOV, _cameraDefaultFOV, t);
             yield return null;
         }
+
         _camera.fieldOfView = _cameraDefaultFOV;
     }
 
@@ -1205,8 +1243,10 @@ public class FPSController : NetworkBusListener
             if (verticalInput == 0f && horizontalInput == 0f) dashingDirection = _camera.transform.forward;
             else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
         }
+
+        OnDash?.Invoke();
         
-        dashingDirection *= dashSpeed;
+        dashingDirection = dashingDirection.normalized * dashSpeed.Evaluate(0);
         StartCoroutine(DashingCoroutine());
     }
 
@@ -1221,9 +1261,7 @@ public class FPSController : NetworkBusListener
 
     void DashingFixedUpdate()
     {
-        dashingDirection = AlignVelocityToWall(dashingDirection);
-        dashingDirection = InterpolateSlope(dashingDirection);
-        rb.linearVelocity += dashingDirection;
+        
     }
 
     void DashingExitState()
@@ -1242,14 +1280,35 @@ public class FPSController : NetworkBusListener
     IEnumerator DashingCoroutine()
     {
         isDashing = true;
-        yield return new WaitForSeconds(dashTimeDuration);
+        float elapsedTime = 0;
+        while (elapsedTime < dashTimeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            dashingDirection = dashingDirection.normalized * dashSpeed.Evaluate(elapsedTime);
+            dashingDirection = AlignVelocityToWall(dashingDirection);
+            dashingDirection = InterpolateSlope(dashingDirection);
+            rb.linearVelocity = dashingDirection;
+            yield return null;
+        }
         isDashing = false;
     }
 
     IEnumerator DashCooldownCoroutine()
     {
         justDashed = true;
-        yield return new WaitForSeconds(dashCooldown);
+        float t = 0;
+
+        while (t < dashCooldown)
+        {
+            t += Time.deltaTime;
+            
+            float ratio = t / dashCooldown;
+            
+            OnUpdateDashCooldown?.Invoke(ratio);
+            
+            yield return null;
+        }
+        
         justDashed = false;
     }
 
@@ -1281,7 +1340,7 @@ public class FPSController : NetworkBusListener
                 Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
         {
             if (playerInput.actions["Crouch"].WasReleasedThisFrame()) stateMachine.ChangeState(ControlerState.Idle);
-            if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(); // au besoin, faire une autre fonction
+            if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(true); // au besoin, faire une autre fonction
             if (Vector3.Angle(groundedHit.normal, Vector3.up) < minSlopeAngleToSlopeSlide)
                 stateMachine.ChangeState(ControlerState.Idle);
         }
@@ -1336,11 +1395,14 @@ public class FPSController : NetworkBusListener
 
     Vector3 grappleDirection;
     private float grappleStartingDistance;
+    private float grappleTimer;
 
     void EnterGrappleState()
     {
+        grappleTimer = 0f;
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, ~LayerMask.GetMask("Owner", "Ignore Raycast"), QueryTriggerInteraction.Collide))
+                out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                QueryTriggerInteraction.Collide))
         {
             GrapplePoint grapplePoint;
             if (hit.collider.TryGetComponent<GrapplePoint>(out grapplePoint))
@@ -1350,6 +1412,9 @@ public class FPSController : NetworkBusListener
                 grappleDirection = _currentGrapplePoint.position - transform.position;
                 grappleStartingDistance = grappleDirection.magnitude;
                 grappleDirection.Normalize();
+                
+                OnGrappling?.Invoke();
+                
                 return;
             }
         }
@@ -1360,11 +1425,18 @@ public class FPSController : NetworkBusListener
 
     void GrappleUpdate()
     {
-        if (!(Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.75f
-              && (playerInput.actions["Grapple"].IsPressed() || singleClicGrapple)
-              && !(Vector3.Distance(transform.position, _currentGrapplePoint.position) < grappleStartingDistance &&
-                   rb.linearVelocity.magnitude < 0.05f)))
+        float distance = Vector3.Distance(transform.position, _currentGrapplePoint.position);
+        grappleTimer += Time.deltaTime;
+
+        bool ignoreStartCheck = grappleTimer < 0.2f;
+        
+        bool isFarEnough = distance > 0.75f;
+        bool inputValid = playerInput.actions["Grapple"].IsPressed() || singleClicGrapple;
+        bool isStuckAtStart = !ignoreStartCheck && distance < grappleStartingDistance && rb.linearVelocity.magnitude < 0.05f;
+
+        if (!isFarEnough || !inputValid || isStuckAtStart)
         {
+
             rb.linearVelocity = Vector3.zero;
             rb.AddForce(grappleDirection * _endGrappleImpulseForce, ForceMode.Impulse);
             _currentGrapplePoint = null;
@@ -1470,6 +1542,7 @@ public class FPSController : NetworkBusListener
     private Vector3 point2;
     private CapsuleCollider capsule;
 
+    [SuppressMessage("ReSharper", "Unity.PreferNonAllocApi")]
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
         if (velocity.sqrMagnitude == 0) return velocity;
@@ -1483,7 +1556,7 @@ public class FPSController : NetworkBusListener
         Collider[] hits = Physics.OverlapCapsule(
             point1,
             point2,
-            bodyRadius + wallDetectionRange,
+            bodyRadius,
             ~LayerMask.GetMask("Owner"),
             QueryTriggerInteraction.Ignore
         );
@@ -1504,13 +1577,17 @@ public class FPSController : NetworkBusListener
 
             if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.3f))
             {
-                float stepHeight = stepHit.point.y - playerFeet.position.y;
-
-                if (stepHeight > 0 && stepHeight <= maxStepHeight)
+                if (Vector3.Dot(horizontalVelocity, playerFeet.position - stepHit.point) < 0.3)
                 {
-                    rb.position += Vector3.up * (maxStepHeight - stepHeight);
-                    continue;
+                    float stepHeight = stepHit.point.y - playerFeet.position.y;
+
+                    if (stepHeight > 0 && stepHeight <= maxStepHeight)
+                    {
+                        rb.position += Vector3.up * (maxStepHeight - stepHeight);
+                        continue;
+                    }
                 }
+
             }
 
             float slopeAngle = Vector3.Angle(normal, Vector3.up);
@@ -1558,6 +1635,7 @@ public class FPSController : NetworkBusListener
 
     void Jump()
     {
+        OnJump?.Invoke();
         hasJumped = true;
         coyoteJump = false;
         bufferJump = false;
@@ -1601,11 +1679,13 @@ public class FPSController : NetworkBusListener
         {
             currentAirJumpCount =
                 Mathf.Min(currentAirJumpCount++,
-                    airJumpCount); // parce que le joueur vient d'en dépenser un si il etait dans les airs pour commencer son superJump
+                    airJumpCount);
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce,
                 ForceMode.Impulse);
             InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
+            
+            OnDoubleJump?.Invoke();
         }
     }
 
@@ -1621,7 +1701,7 @@ public class FPSController : NetworkBusListener
         stateMachine.ChangeState(ControlerState.Falling);
     }
 
-    void SlideJump()
+    void SlideJump(bool slopeSlide = false)
     {
         hasJumped = true;
         coyoteJump = false;
@@ -1629,8 +1709,12 @@ public class FPSController : NetworkBusListener
         mustSlide = false;
         StartCoroutine(JumpAntiLagCoroutine());
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-        rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
-            ForceMode.Impulse);
+        if (slopeSlide)
+            rb.AddForce(Vector3.up * slideJumpVerticalForce,
+                ForceMode.Impulse);
+        else
+            rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
+                ForceMode.Impulse);
     }
 
     void Crouch()

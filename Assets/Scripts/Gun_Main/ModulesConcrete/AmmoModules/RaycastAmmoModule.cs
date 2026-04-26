@@ -1,4 +1,5 @@
 using FishNet.Object;
+using MyPrint;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -41,13 +42,21 @@ namespace GunDecorator.AmmoModules
 
         public void SpawnBullet(Vector3 direction, Vector3 offset)
         {
-            Vector3 spreadDirection = _camera.transform.rotation * Quaternion.Euler(direction.y, direction.x, 0) * Vector3.forward;
             Ray cameraRay;
+            Vector3 spreadDirection;
             
-            if(direction != Vector3.zero)
+            if (direction != Vector3.zero)
+            {
+                spreadDirection = _camera.transform.rotation 
+                                          * Quaternion.Euler(direction.y, direction.x, 0) 
+                                          * Vector3.forward;
                 cameraRay = new Ray(_camera.transform.position, spreadDirection);
-            
-            cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            }
+            else
+            {
+                cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+                spreadDirection = cameraRay.direction;
+            }
 
             RaycastHit hit;
             Vector3 targetPoint;
@@ -97,7 +106,7 @@ namespace GunDecorator.AmmoModules
             GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
-                    isCritical, targetPoint, target);
+                    isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge);
         }
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;

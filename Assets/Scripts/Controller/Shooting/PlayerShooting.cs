@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace Controller
 {
-    public class PlayerShooting : NetworkBehaviour
+    public class PlayerShooting : NetworkBusListener
     {
         #region Variables
 
@@ -26,23 +26,28 @@ namespace Controller
 
         #region Fonctions
 
+        private void Start()
+        {
+            ListenToEvent<OnPauseEvent>(data =>
+            {
+                _canShoot = !data.p_isPause;
+            });
+        }
+
         void Update()
         {
             if (_playerInputAction.actions["Shoot"].WasReleasedThisFrame()) CancelShooting();
             if(_playerInputAction.actions["Charge"].WasReleasedThisFrame())ShootCharged();
         }
-        
 
         private void Shooting(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
-            if(!_canShoot) return;
+            if (!_canShoot) return;
             
             if (_bridgePlayer != null)
-            {
                 _bridgePlayer.TryShootWithCurrentGun();
-            }
         }
 
         private void CancelShooting()
@@ -128,26 +133,10 @@ namespace Controller
             
             _droneThrower.TryThrowDrone();
         }
-
-        private void StartThrowDrone(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            
-            _droneThrower.StartThrowDrone();
-        }
-        
-        
-        private void CancelThrow(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            
-            _droneThrower.CancelThrow();
-        }
         
         private void StopShooting(float duration)
         {
+            if (duration <= 0) return;
             StartCoroutine(StopShootingWait(duration));
         }
         
@@ -170,9 +159,7 @@ namespace Controller
             _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
             _grenadeThrower.OnThrow += OnGrenadeThrown;
             
-            _playerInputAction.actions["ThrowDrone"].performed += StartThrowDrone;
-            _playerInputAction.actions["ThrowDrone"].canceled += TryThrowDrone;
-            _playerInputAction.actions["Shoot"].performed += CancelThrow;
+            _playerInputAction.actions["ThrowDrone"].performed += TryThrowDrone;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth += StopShooting;
@@ -189,9 +176,7 @@ namespace Controller
             _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
             _grenadeThrower.OnThrow -= OnGrenadeThrown;
             
-            _playerInputAction.actions["ThrowDrone"].performed -= StartThrowDrone;
-            _playerInputAction.actions["ThrowDrone"].canceled -= TryThrowDrone;
-            _playerInputAction.actions["Shoot"].performed -= CancelThrow;
+            _playerInputAction.actions["ThrowDrone"].performed -= TryThrowDrone;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth -= StopShooting;

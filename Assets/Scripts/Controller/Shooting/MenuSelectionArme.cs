@@ -23,8 +23,8 @@ public class MenuSelectionArme : NetworkBehaviour
 	[SerializeField] private Color _selectedColor;
 	
 	#endregion
-
-
+	
+	
 	#region Fonctions
 
 	// ⚠️ c'est crade mais c'est pour le debug 
@@ -38,22 +38,27 @@ public class MenuSelectionArme : NetworkBehaviour
 	void ChangeGun1(InputAction.CallbackContext obj)
 	{
 		if (!IsOwner) return;
-		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(0); ActivateUI(0); 
+		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(0);
+		ActivateUI(0); 
+		_gunSwitching.ISurchargeMain.StopReload();
 	}
 	void ChangeGun2(InputAction.CallbackContext obj) 
 	{ 		
 		if (!IsOwner) return;
 		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(1);ActivateUI(1);
+		_gunSwitching.ISurchargeMain.StopReload();
 	}
 	void ChangeGun3(InputAction.CallbackContext obj) 
 	{ 		
 		if (!IsOwner) return;
 		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(2);ActivateUI(2);
+		_gunSwitching.ISurchargeMain.StopReload();
 	}
 	void ChangeGun4(InputAction.CallbackContext obj) 
 	{
 		if (!IsOwner) return;
 		_gunSwitching.ChangeCurrentGun_Main_ServerRpc(3);ActivateUI(3);
+		_gunSwitching.ISurchargeMain.StopReload();
 	}
 
 	void ActivateUI(int index)

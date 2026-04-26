@@ -25,11 +25,11 @@ namespace GunDecorator.ChargedModules
         }
 
         #endregion
-
         
         #region Variables
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
+        protected ShootModule _shootModule;
         IReloadModule _reloadModule;
 
         [SerializeField] protected bool _isExplosifAmmo = false;
@@ -67,6 +67,7 @@ namespace GunDecorator.ChargedModules
                 _ammoModule = (IAmmoModule)_ammoType;
 
             _reloadModule = GetComponent<ReloadModule>();
+            _shootModule = GetComponent<ShootModule>();
         }
 
         private void Update()
@@ -104,8 +105,11 @@ namespace GunDecorator.ChargedModules
                 }
                 
                 _charginTimer += Time.deltaTime;
+
+                float ratio = _charginTimer / _timeToCharge;
                 
-                OnCharging?.Invoke(_charginTimer / _timeToCharge);
+                OnCharging?.Invoke(ratio);
+                _gunController?.OnCharging?.Invoke(ratio);
                 
                 IsFullCharged = _charginTimer >= _timeToCharge * _isFullMultiplicator;
             }
@@ -137,6 +141,7 @@ namespace GunDecorator.ChargedModules
             _triggerActionStart = false;
             
             OnEndCharging?.Invoke();
+            _gunController?.OnStopCharging?.Invoke();
         }
     }
 }

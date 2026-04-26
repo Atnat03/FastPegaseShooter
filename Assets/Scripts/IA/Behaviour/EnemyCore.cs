@@ -20,7 +20,7 @@ public class EnemyCore : NetworkBusListener
     [SerializeField] private EnemyMovementModule _movementModule;
     
     //Filled In Automatially
-    private List<ScoreTargetModule> _scoreModules = new List<ScoreTargetModule>();
+    //private List<ScoreTargetModule> _scoreModules = new List<ScoreTargetModule>();
 
     public Guid p_gridReaderId;
     public PathfindingRequestManager p_pathRequester;
@@ -28,24 +28,22 @@ public class EnemyCore : NetworkBusListener
     [HideInInspector] public int p_enemySpawnCost;
 
     #region Charges Variables
-
-    [Header("Charges")] 
+    
     [SerializeField] private int _explosionChargedDamage = 50;
     
-    [SerializeField] private float _negativeChargeMax = 5;
-    private readonly SyncVar<float> _currentN_charge = new SyncVar<float>();
+    public float p_negativeChargeMax = 5;
+    public float p_currentNegativeCharge;
     
-    [SerializeField] private float _positiveChargeMax = 5;
-    private readonly SyncVar<float> _currentP_charge = new SyncVar<float>();
+    public float p_positiveChargeMax = 5;
+    public float p_currentPositiveCharge;
+    #endregion
 
-    [Header("View")] 
-    [SerializeField] private GameObject _positiveUI;
-    [SerializeField] private Image _positiveCurValue;
-    [SerializeField] private GameObject _negativeUI;
-    [SerializeField] private Image _negativeCurValue;
-    
-    [SerializeField] private ParticleSystem _explosionParticle;
-    
+    #region Actions
+
+    public Action p_OnChargeExplosion;
+    public Action p_OnPositiveChargeChange;
+    public Action p_OnNegativeChargeChange;
+
     #endregion
 
     
@@ -54,26 +52,29 @@ public class EnemyCore : NetworkBusListener
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
 
+        
+        //Initialising Score Target Module
+        List<ScoreTargetModule> scoreModules = new List<ScoreTargetModule>();
         foreach (EnemyTargetModule targetModule in _targetingModules)
         {
             if (targetModule != null && targetModule is ScoreTargetModule scoreTargetModule)
-                _scoreModules.Add(scoreTargetModule);
+                scoreModules.Add(scoreTargetModule);
         }
 
         foreach (EnemyAttackModule module in _attackingModules)
         {
             if (module == null) continue;
-            foreach (ScoreTargetModule scoreModule in _scoreModules)
+            foreach (ScoreTargetModule scoreModule in scoreModules)
             {
                 if (scoreModule != null)
                     module.p_onHitPlayer += scoreModule.OnHitPlayer;
             }
         }
-
+        
         foreach (EnemyLifeModule module in _lifeModules)
         {
             if (module == null) continue;
-            foreach (ScoreTargetModule scoreModule in _scoreModules)
+            foreach (ScoreTargetModule scoreModule in scoreModules)
             {
                 if (scoreModule != null)
                     module.p_onHitPlayer += scoreModule.OnDamageTaken;
@@ -148,37 +149,39 @@ public class EnemyCore : NetworkBusListener
 
     #region Charges
 
+    [Server]
     public void AddCharge(bool positive, float value)
     {
-        if (!IsServerInitialized)
-            return;
-        
         if (positive)
         {
-            _currentP_charge.Value += value;
+            p_currentPositiveCharge += value;
+            OnPositiveChangeObserverRpc();
         }
         else
         {
-            _currentN_charge.Value += value;
+            p_currentNegativeCharge += value;
+            OnNegativeChangeObserverRpc();
         }
 
         CheckAllChargeAreFull();
     }
 
+    [Server]
     private void ResetAllCharged()
     {
-        _currentP_charge.Value = 0;
-        _currentN_charge.Value = 0;
+        p_currentPositiveCharge = 0;
+        p_currentNegativeCharge = 0;
     }
     
+    [Server]
     private void CheckAllChargeAreFull()
     {
-        if (_currentP_charge.Value >= _positiveChargeMax && _currentN_charge.Value >= _negativeChargeMax)
+        if (p_currentPositiveCharge >= p_positiveChargeMax && p_currentNegativeCharge >= p_negativeChargeMax)
         {
-            foreach (EnemyLifeModule life in _lifeModules)
-            {
-                life.TakeDamage(Owner.ClientId, _explosionChargedDamage);
-            }
+            //life module at position 0 is considered to be the main life module
+            // => There is feedback in the inspector
+            _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage);
+            
             
             ResetAllCharged();
             ExplosionObserversRpc();
@@ -188,25 +191,18 @@ public class EnemyCore : NetworkBusListener
     [ObserversRpc]
     private void ExplosionObserversRpc()
     {
-        Destroy(Instantiate(_explosionParticle, transform.position + Vector3.up, Quaternion.identity), 2f);
+        p_OnChargeExplosion?.Invoke();
     }
 
-    private void OnEnable()
+    [ObserversRpc]
+    private void OnPositiveChangeObserverRpc()
     {
-        _currentP_charge.OnChange += OnPositiveChange;
-        _currentN_charge.OnChange += OnNegativeChange;
+        p_OnPositiveChargeChange?.Invoke();
     }
-
-    private void OnPositiveChange(float prev, float next, bool asServer)
+    [ObserversRpc]
+    private void OnNegativeChangeObserverRpc()
     {
-        _positiveUI.SetActive(next > 0);
-        _positiveCurValue.fillAmount = next / _positiveChargeMax;
-    }
-    
-    private void OnNegativeChange(float prev, float next, bool asServer)
-    {
-        _negativeUI.SetActive(next > 0);
-        _negativeCurValue.fillAmount = next / _negativeChargeMax;
+        p_OnNegativeChargeChange?.Invoke();
     }
     
     #endregion

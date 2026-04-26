@@ -60,6 +60,7 @@ namespace GunDecorator.ChargedModules
                 yield return new WaitForSeconds(_intervaleCharge);
             }
             
+            _gunController?.OnStopCharging?.Invoke();
             _ammoModule.ResetBulletData();
         }
     }

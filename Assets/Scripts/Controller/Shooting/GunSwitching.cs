@@ -33,6 +33,8 @@ public class GunSwitching : NetworkBehaviour
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
 	[SerializeField] private GrenadeThrower _throwerGrenade;
+	[SerializeField] private DroneThrower _throwerDrone;
+	[SerializeField] private ReticulesManager _reticuleManager;
 
 	private bool _canSwitch = true;
 	private List<GameObject> _mainGunsList;
@@ -51,7 +53,7 @@ public class GunSwitching : NetworkBehaviour
 
 	#region Fonctions
 
-	public void Initialize(int startIndex)
+	public override void OnStartNetwork()
 	{
 		_currentMainGun.OnChange += OnCurrentGunMainChange;
 		
@@ -61,6 +63,11 @@ public class GunSwitching : NetworkBehaviour
 		{
 			_mainGunsList.Add(gun.gameObject);
 		}
+	}
+	
+	public void Initialize(int startIndex)
+	{
+		Cons.Print("Initialize", ColorConsole.Pink);
 		
 		_currentMainGun.Value = startIndex;
 		
@@ -99,6 +106,8 @@ public class GunSwitching : NetworkBehaviour
 			else
 				list[i].gameObject.SetActive(false);
 		}
+
+		IGunMain?.SetReticule(_reticuleManager);
 	}
 
 	public void DesactivateAllMainGun()
@@ -114,6 +123,8 @@ public class GunSwitching : NetworkBehaviour
 	{
 		if (!IsMainGun) return;
 		
+		Cons.Print("change gun", ColorConsole.Orange);
+		
 		ChangeCurrentGun_Main(newIndex);
 		ChangeMagneticCharge();
 
@@ -124,7 +135,7 @@ public class GunSwitching : NetworkBehaviour
 	}
 
 	[Server]
-	void ChangeCurrentGun_Main(int newIndex)
+	public void ChangeCurrentGun_Main(int newIndex)
 	{
 		_currentMainGun.Value = newIndex;
 		IGunMain.SetChargedPlayer(_isPositiveChargedPlayer.Value);
@@ -169,6 +180,8 @@ public class GunSwitching : NetworkBehaviour
 
 		GunController g = CurrentMainGun.GetComponent<GunController>();
 		
+		Cons.PrintBool(g != null, "Gun controller not null");
+		
 		if (g.IsFullAuto)
 		{
 			g.ApplyShoot();
@@ -178,11 +191,14 @@ public class GunSwitching : NetworkBehaviour
 	private void OnEnable()
 	{
 		_throwerGrenade.OnStartThrow += DesactivateGunWhenThrow;
+		_throwerDrone.OnThrowing += DesactivateGunWhenThrow;
+		
 	}
 	
 	private void OnDisable()
 	{
 		_throwerGrenade.OnStartThrow -= DesactivateGunWhenThrow;
+		_throwerDrone.OnThrowing -= DesactivateGunWhenThrow;
 	}
 
 	#endregion
