@@ -118,13 +118,14 @@ GameObject:
   - component: {fileID: 1710859028773061241}
   - component: {fileID: 1227236921369466688}
   - component: {fileID: 4639033686446523756}
+  - component: {fileID: -2585620934281341367}
   - component: {fileID: 4856717765235199756}
   - component: {fileID: -3745771886591243004}
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: 6176439864006220930}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: EnemyMedium
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +167,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8280671740658429549}
   _maxEnemySwelling: 0
   _attackingModules:
-  - {fileID: 0}
+  - {fileID: -2585620934281341367}
   _lifeModules:
   - {fileID: 4639033686446523756}
   _targetingModules:
@@ -195,7 +196,31 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _life: 150
+  _life: 180
+--- !u!114 &-2585620934281341367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1438ebc3a6f0dce4bbb71d4cbcd12b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PredictiveShootingAttackModule
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 8280671740658429549}
+  _targetModule: {fileID: -3745771886591243004}
+  _damage: 6
+  _attackDelay: 2
+  _maxPlayerDistance: 10
+  _bulletSize: 0.2
+  _bulletSpeed: 10
+  _maxBulletLifeTime: 10
+  _bulletAmount: 2
+  _shootingSpreadAngle: 12
 --- !u!114 &4856717765235199756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,12 +233,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5492ed17c451d4885c1b50d3efafe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _doFreezeWithoutTarget: 1
   _targetModule: {fileID: -3745771886591243004}
-  _speed: 30
+  _speed: 10
 --- !u!114 &-3745771886591243004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,11 +299,11 @@ MonoBehaviour:
   NetworkBehaviours:
   - {fileID: 1227236921369466688}
   - {fileID: 4639033686446523756}
+  - {fileID: -2585620934281341367}
   - {fileID: 4856717765235199756}
-  - {fileID: 0}
   - {fileID: -3745771886591243004}
   - {fileID: 6176439864006220930}
-  - {fileID: 0}
+  - {fileID: 1602071577645785696}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -289,7 +314,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584258678663697046
+  _initializedTimestamp: -8584243344898179637
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -305,9 +330,9 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 25
+  <PrefabId>k__BackingField: 11
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 17158645317297001745
+  <AssetPathHash>k__BackingField: 6527335413324497915
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 1.94671, y: 0.0011500008, z: 4.24618}
