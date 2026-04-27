@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Lave : NetworkBusListener
 {
-    [SerializeField] private float _damage = 10;
+    [SerializeField] private float _damage = 10000000;
     [SerializeField] private float _timeTickDamage = 1;
     
     private Dictionary<NetworkObject, float> _playerTimers = new Dictionary<NetworkObject, float>();
