@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using UnityEngine.PlayerLoop;
 
 public class FPSController : NetworkBusListener
 {
@@ -251,7 +252,10 @@ public class FPSController : NetworkBusListener
             ListenToEvent<OnPauseEvent>(data =>
             {
                 isFreeze = data.p_isPause;
-                rb.linearVelocity = isFreeze ? Vector3.zero : rb.linearVelocity;
+                horizontalInput = 0f;
+                verticalInput = 0f;
+                StartCoroutine(OnPauseCoroutine());
+                //rb.linearVelocity = isFreeze ? Vector3.zero : rb.linearVelocity;
             });
         }
         else
@@ -362,11 +366,12 @@ public class FPSController : NetworkBusListener
         if (!IsOwner) return;
 
         if (isDead.Value) return;
-        if (IsFreeze) return;
+        //if (IsFreeze) return;
 
-        UpdateInputs();
+        if (!IsFreeze)UpdateInputs();
+        UpdateGameContext();
         UpdateLdInteractions();
-        stateMachine?.Update();
+        if (!IsFreeze)stateMachine?.Update();
     }
 
     void FixedUpdate()
@@ -375,6 +380,7 @@ public class FPSController : NetworkBusListener
 
         if (isDead.Value) return;
         if (IsFreeze) return;
+        else rb.linearVelocity = Vector3.zero;
 
         stateMachine?.FixedUpdate();
     }
@@ -390,9 +396,8 @@ public class FPSController : NetworkBusListener
     }
 
 
-    void UpdateInputs() // appelé en update dans tout les states
+    void UpdateInputs() // appelé en update dans tout les states // update des inputs
     {
-        //inputs
         horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
         verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
@@ -402,9 +407,10 @@ public class FPSController : NetworkBusListener
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
+    }
 
-        //situation de jeu
-
+    void UpdateGameContext()// appelé en update dans tout les states // update de la situation situation de jeu
+    {
         grounded = (Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, 0.25f,
             ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore) && !justJumped);
 
@@ -1760,6 +1766,15 @@ public class FPSController : NetworkBusListener
     #endregion
 
     #region Other Fonctions
+
+    IEnumerator OnPauseCoroutine()
+    {
+        while (!grounded)
+        {
+            yield return null;
+        }
+        rb.linearVelocity = Vector3.zero;
+    }
 
     public void SetUpLayer()
     {
