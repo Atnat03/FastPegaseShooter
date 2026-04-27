@@ -107,7 +107,7 @@ public class FPSController : NetworkBusListener
 
     [SerializeField] private float superJumpVerticalForce;
     [SerializeField] private float superJumpHorizontalForce;
-    [SerializeField] private float superJumpEnergyCost = 20f;
+    [SerializeField] private float superJumpEnergyCost = 1f;
 
 
     [Header("wallRide")] [SerializeField] float wallRideDetectionRange = .5f;
@@ -142,7 +142,8 @@ public class FPSController : NetworkBusListener
     [SerializeField] private float slidingBackToNormalSpeedDelay = .5f;
     [SerializeField] private float redirectionPowerAfterSliding = 2f;
 
-    [Header("Dash")] [SerializeField] AnimationCurve dashSpeed;
+    [Header("Dash")] 
+    [SerializeField] AnimationCurve dashSpeed;
     [SerializeField] float dashTimeDuration = 0.2f;
     [SerializeField] float dashCooldown;
 
@@ -1683,7 +1684,7 @@ public class FPSController : NetworkBusListener
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce,
                 ForceMode.Impulse);
-            InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
+            InvokeEvent(new ModifyEnergyEvent { p_value = -superJumpEnergyCost });
             
             OnDoubleJump?.Invoke();
         }

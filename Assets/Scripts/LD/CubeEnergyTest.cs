@@ -22,7 +22,7 @@ namespace LD
             if (other.TryGetComponent<PlayerVisuelBridge>(out PlayerVisuelBridge player))
             {
                 float v = _type == EnergyDo.Add ? value : -value;
-                _energyManager.AddEnergy(v);
+                //_energyManager.AddEnergy(v);
             }
         }
     }
