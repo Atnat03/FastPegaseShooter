@@ -5,6 +5,7 @@ using FishNet.Connection;
 using FishNet.Managing.Scened;
 using FishNet.Object;
 using FishNet.Transporting;
+using MyPrint;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -55,22 +56,20 @@ public class SpawnPlayer : NetworkBehaviour
         SpawnPlayers(conn);
         _spawnedClients.Add(conn.ClientId);
     }
-
+    
     [Server]
     private void SpawnPlayers(NetworkConnection player)
     {
         Debug.Log("SpawnPlayers called");
-		
+   
         NetworkObject playerObj = Instantiate(_playerPrefab);
         InstanceFinder.ServerManager.Spawn(playerObj, player);
-		
-		Vector3 randomPos = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
-		
-        playerObj.transform.position = randomPos;
+        playerObj.transform.position = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
 
         FPSController fps = playerObj.GetComponent<FPSController>();
-        
-        if(fps!=null)
+        BroPointer pointer = playerObj.GetComponentInChildren<BroPointer>();
+    
+        if (fps != null)
             SetUpLayerTargetRpc(player, fps);
     }
     
