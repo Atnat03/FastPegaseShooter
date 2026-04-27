@@ -18,6 +18,11 @@ public class PlayerEnergy : NetworkBusListener
 	[SerializeField] private float _maxEnergy = 100f;
 	[SerializeField] private float _valueOneBar = 20f;
 	[SerializeField] private float _convertionTaux;
+	
+	[Header("Cost")]
+	public int p_costThrowGrenade = 1;
+	public int p_costThrowDrone = 2;
+	public int p_costThrowHeal = 1;
 
 	private int _totalBars;
 
