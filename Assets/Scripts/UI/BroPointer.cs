@@ -19,13 +19,11 @@ public class BroPointer : NetworkBehaviour
 	[SerializeField] private Camera _cam;
 	[SerializeField] float _borderSize = 100;
 	
-	[Header("View")]
-	[SerializeField] private Sprite _offScreenSprite;
-	[SerializeField] private Sprite _onScreenSprite;
-	
 	private Vector3 _targetPosition;
 	private Transform _target = null;
 	private Image _pointerImage;
+
+	private int _myIndex = 0;
 	
 	#endregion
 
@@ -37,6 +35,12 @@ public class BroPointer : NetworkBehaviour
 		_pointerImage = _pointerRectTransform.GetComponent<Image>();
 	}
 
+	public override void OnStartClient()
+	{
+		_myIndex = Owner.ClientId == 0 ? 1 : 0;
+		Cons.Print("StartClient "  + _myIndex, ColorConsole.Green);
+	}
+	
 	public void SetTarget(Transform target)
 	{
 		_target = target;
@@ -45,9 +49,29 @@ public class BroPointer : NetworkBehaviour
 		Cons.Print("Set target " + _targetPosition, ColorConsole.Green);
 	}
 
-	private void Update()
+	private void LateUpdate()
 	{
-		if (_target == null) return;
+		if (_target == null)
+		{
+			if (InstanceFinder.ClientManager.Clients.Count != 2)
+				return;
+
+			Transform t;
+			
+			if(IsServerInitialized)
+				t = InstanceFinder.ServerManager.Clients[_myIndex].FirstObject.transform;
+			else
+			{ 
+				t = InstanceFinder.ClientManager.Clients[_myIndex].FirstObject.transform;
+			}
+			
+			if (t != null)
+			{
+				SetTarget(t);
+			}
+		}
+		
+		Cons.Print("target "  + _target.name, ColorConsole.Green);
 		
 		Vector3 toPosition = _targetPosition;
 		Vector3 fromPosition = _cam.transform.position;
@@ -58,13 +82,16 @@ public class BroPointer : NetworkBehaviour
 		_pointerRectTransform.localEulerAngles = new Vector3(0f, 0f, angle);
 		
 		Vector3 targetPositionScreenPoint = _cam.WorldToScreenPoint(_targetPosition);
+		
+		if (targetPositionScreenPoint.z < 0)
+			targetPositionScreenPoint *= -1;
+		
 		bool isOffScreen = targetPositionScreenPoint.x <= _borderSize || targetPositionScreenPoint.x >= Screen.width - _borderSize
 		                 || targetPositionScreenPoint.y <= _borderSize || targetPositionScreenPoint.y >= Screen.height - _borderSize;
 
 		if (isOffScreen)
 		{
 			RotatePointer();
-			_pointerImage.sprite = _offScreenSprite;
 			Vector3 cappedTargetScreenPosition = targetPositionScreenPoint;
 			if(cappedTargetScreenPosition.x <= _borderSize) cappedTargetScreenPosition.x = _borderSize;
 			if(cappedTargetScreenPosition.x >= Screen.width - _borderSize) cappedTargetScreenPosition.x = Screen.width - _borderSize;
@@ -84,7 +111,6 @@ public class BroPointer : NetworkBehaviour
 		}
 		else
 		{
-			_pointerImage.sprite = _onScreenSprite;
 			Vector2 localPoint;
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(
 				_pointerRectTransform.parent as RectTransform,
@@ -94,10 +120,15 @@ public class BroPointer : NetworkBehaviour
 			);
 
 			_pointerRectTransform.localPosition = localPoint;
-			_pointerRectTransform.localPosition = new Vector3(_pointerRectTransform.localPosition.x, _pointerRectTransform.localPosition.y, 0);
+
+			float yPos = _pointerRectTransform.localPosition.y + 100f;
+			
+			_pointerRectTransform.localPosition = new Vector3(_pointerRectTransform.localPosition.x, yPos, 0);
 			
 			_pointerRectTransform.localEulerAngles = Vector3.zero;
 		}
+
+		_target = null;
 	}
 
 	private void RotatePointer()
