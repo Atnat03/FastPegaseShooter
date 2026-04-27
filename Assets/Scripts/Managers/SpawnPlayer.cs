@@ -67,7 +67,6 @@ public class SpawnPlayer : NetworkBehaviour
         playerObj.transform.position = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
 
         FPSController fps = playerObj.GetComponent<FPSController>();
-        BroPointer pointer = playerObj.GetComponentInChildren<BroPointer>();
     
         if (fps != null)
             SetUpLayerTargetRpc(player, fps);
