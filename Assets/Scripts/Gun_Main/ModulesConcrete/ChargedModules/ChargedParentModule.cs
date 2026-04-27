@@ -121,6 +121,7 @@ namespace GunDecorator.ChargedModules
             if (_reloadModule.IsReloading) return;
             
             _deadZoneCharge = true;
+            _elapsedTimeDeadZone = 0;
         }
         
         public virtual void TryShootCharging()

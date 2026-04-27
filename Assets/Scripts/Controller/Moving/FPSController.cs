@@ -380,7 +380,6 @@ public class FPSController : NetworkBusListener
 
         if (isDead.Value) return;
         if (IsFreeze) return;
-        else rb.linearVelocity = Vector3.zero;
 
         stateMachine?.FixedUpdate();
     }
