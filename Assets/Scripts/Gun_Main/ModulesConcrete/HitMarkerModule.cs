@@ -1,3 +1,4 @@
+using MyPrint;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +27,7 @@ namespace GunDecorator
             
             SoundManager.PlaySound(_gunController._soundData, "HitMark", _gunController._source);
             
-            Destroy(s, 0.1f);
+            Destroy(s.gameObject, 0.5f);
         }
 
         public void HitMarkCritique()
@@ -39,7 +40,7 @@ namespace GunDecorator
             
             SoundManager.PlaySound(_gunController._soundData, "HitMark", _gunController._source);
             
-            Destroy(s, 0.1f);
+            Destroy(s.gameObject, 0.5f);
         }
     }
 }
