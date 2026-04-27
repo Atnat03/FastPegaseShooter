@@ -71,9 +71,9 @@ public class PlayerEnergy : NetworkBusListener
 	{
 		if (data.p_player != Owner) return;
 
-		float value = data.p_value > 0 ? data.p_value * _convertionTaux : data.p_value;
+		_currentEnergy.Value += data.p_value;
 
-		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + value, 0, _maxEnergy);
+		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
 
 		UpdateUI(_currentEnergy.Value);
 	}

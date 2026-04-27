@@ -243,7 +243,8 @@ public class PlayerHealth : NetworkBusListener
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
 
-		transform.position = _startPos;
+		if (IsOwner)
+			transform.position = new Vector3(30,0,-23.5f);
 
 		NotifyRespawnRpc(NetworkObject);
 	}
