@@ -17,7 +17,7 @@ public class SettingsPausePanelBehaviour : PausePanel
 
     Resolution[] _resolutions;
     private List<Resolution> _selectedResolutions = new();
-    
+
     public override void Init()
     {
         _resolutions = Screen.resolutions;
@@ -39,17 +39,22 @@ public class SettingsPausePanelBehaviour : PausePanel
 
         // load des playerprefs
         
-        int savedResolution = PlayerPrefs.GetInt("ResolutionIndex", 0);
-        _resolutionDropdown.value = savedResolution;
+        //resolution
+        if (PlayerPrefs.HasKey("ResolutionIndex")) _resolutionDropdown.value = PlayerPrefs.GetInt("ResolutionIndex", 0);
+        else _resolutionDropdown.value = _resolutionDropdown.options.Count - 1;
         _resolutionDropdown.RefreshShownValue();
-        
+
+        //fullscreen ?
         bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
         _fullscreenToggle.isOn = isFullscreen;
-        
-        float savedSens = PlayerPrefs.GetFloat("MouseSensitivity", _mouseSensitivityMaxValue / 2f);
+
+        //sensibilité
+        float savedSens;
+        if(PlayerPrefs.HasKey("MouseSensitivity"))savedSens = PlayerPrefs.GetFloat("MouseSensitivity");
+        else savedSens = 50;
         _mouseSensitivitySlider.value = savedSens;
         _mouseSensitivityText.text = savedSens.ToString("F0");
-        _fpsController.mouseSensitivity = Mathf.Lerp(0, _mouseSensitivityMaxValue, _mouseSensitivitySlider.value / _mouseSensitivitySlider.maxValue);;
+        _fpsController.mouseSensitivity = Mathf.Lerp(0, _mouseSensitivityMaxValue, _mouseSensitivitySlider.value / _mouseSensitivitySlider.maxValue);
         
         ChangeResolution();
 
@@ -63,21 +68,29 @@ public class SettingsPausePanelBehaviour : PausePanel
 
     public void ChangeResolution()
     {
-        Screen.SetResolution(_selectedResolutions[_resolutionDropdown.value].width, _selectedResolutions[_resolutionDropdown.value].height, _fullscreenToggle.isOn);
-        
+        Screen.SetResolution(_selectedResolutions[_resolutionDropdown.value].width,
+            _selectedResolutions[_resolutionDropdown.value].height, _fullscreenToggle.isOn);
+
         PlayerPrefs.SetInt("ResolutionIndex", _resolutionDropdown.value);
         PlayerPrefs.SetInt("Fullscreen", _fullscreenToggle.isOn ? 1 : 0);
         PlayerPrefs.Save();
-    } 
+    }
 
     public void ChangeMouseSensibility()
     {
-        _fpsController.mouseSensitivity = Mathf.Lerp(0, _mouseSensitivityMaxValue, _mouseSensitivitySlider.value / _mouseSensitivitySlider.maxValue);
+        _fpsController.mouseSensitivity = Mathf.Lerp(0, _mouseSensitivityMaxValue,
+            _mouseSensitivitySlider.value / _mouseSensitivitySlider.maxValue);
         _mouseSensitivityText.text = _mouseSensitivitySlider.value.ToString("F0");
-        
+
         PlayerPrefs.SetFloat("MouseSensitivity", _mouseSensitivitySlider.value);
         PlayerPrefs.Save();
     }
 
     public void QuitPanel() => gameObject.SetActive(false);
+
+    [ContextMenu("ResetAllPlayerPrefs")]
+    public void ResetSetting()
+    {
+        PlayerPrefs.DeleteAll();
+    }
 }

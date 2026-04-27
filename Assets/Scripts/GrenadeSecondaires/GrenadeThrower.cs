@@ -71,7 +71,7 @@ public class GrenadeThrower : NetworkBusListener
 
     public void TryThrowGrenade()
     {
-        if (_canThrow && _playerEnergy.CurrentEnergy >= _throwEnergyCost)
+        if (_canThrow && _playerEnergy.CanThrow(_throwEnergyCost))
         {
             if (_bridgeAnimation != null)
             {
@@ -91,7 +91,7 @@ public class GrenadeThrower : NetworkBusListener
             InvokeEvent(new ModifyEnergyEvent
             {
                 p_player = Owner,
-                p_value = -_throwEnergyCost
+                p_value = -(_throwEnergyCost * _playerEnergy.EnergyOneBar)
             });
         }
     }
