@@ -33,7 +33,6 @@ public class FPSController : NetworkBusListener
     [SerializeField] Transform playerLeftSide;
     [SerializeField] Transform playerRightSide;
     [SerializeField] float bodyRadius = .6f;
-    [SerializeField] PlayerInput playerInput;
     [SerializeField] private GameObject _playerVisual;
     [SerializeField] private PlayerAnimation _playerAnimation;
 
@@ -397,11 +396,11 @@ public class FPSController : NetworkBusListener
 
     void UpdateInputs() // appelé en update dans tout les states // update des inputs
     {
-        horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
-        verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
 
-        float mouseX = playerInput.actions["Look"].ReadValue<Vector2>().x * mouseSensitivity;
-        float mouseY = playerInput.actions["Look"].ReadValue<Vector2>().y * mouseSensitivity;
+        float mouseX = Input.mousePositionDelta.x * mouseSensitivity;
+        float mouseY = Input.mousePositionDelta.y * mouseSensitivity;
 
         yaw += mouseX;
         pitch -= mouseY;
@@ -459,7 +458,7 @@ public class FPSController : NetworkBusListener
 
     void EnterIdleState()
     {
-        if (playerInput.actions["Crouch"].IsPressed())
+        if (Input.GetKey(KeyCode.LeftControl))
         {
             if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked)
             {
@@ -472,7 +471,7 @@ public class FPSController : NetworkBusListener
             }
         }
 
-        if (bufferJump && playerInput.actions["Jump"].IsPressed() &&
+        if (bufferJump && Input.GetKey(KeyCode.Space) &&
             stateMachine.previousState == stateMachine.GetState(ControlerState.Falling)) Jump();
 
         if (stateMachine.previousState != stateMachine.GetState(ControlerState.Grappling))
@@ -511,12 +510,12 @@ public class FPSController : NetworkBusListener
             stateMachine.ChangeState(ControlerState.Falling);
         }
 
-        if (playerInput.actions["Jump"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
         }
 
-        if (playerInput.actions["Crouch"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             if (coyoteSlide && !justSlided && slideUnlocked && verticalInput > 0)
                 stateMachine.ChangeState(ControlerState.Sliding);
@@ -524,12 +523,12 @@ public class FPSController : NetworkBusListener
         }
 
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !hasDashed && !justDashed && dashUnlocked)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
 
-        if (playerInput.actions["Grapple"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.E))
         {
             RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
@@ -589,12 +588,12 @@ public class FPSController : NetworkBusListener
             stateMachine.ChangeState(ControlerState.Falling);
         }
 
-        if (playerInput.actions["Jump"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
         }
 
-        if (playerInput.actions["Crouch"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked)
                 stateMachine.ChangeState(ControlerState.SlopeSliding);
@@ -609,12 +608,12 @@ public class FPSController : NetworkBusListener
         }
 
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !hasDashed && !justDashed && dashUnlocked)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
 
-        if (playerInput.actions["Grapple"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.E))
         {
             RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
@@ -678,7 +677,7 @@ public class FPSController : NetworkBusListener
             stateMachine.ChangeState(ControlerState.Idle);
         }
 
-        if (playerInput.actions["Jump"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (coyoteJump) Jump();
             else if (coyoteWallJump)
@@ -714,12 +713,12 @@ public class FPSController : NetworkBusListener
         }
 
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !hasDashed && !justDashed && dashUnlocked)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
 
-        if (playerInput.actions["Grapple"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.E))
         {
             RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
@@ -921,7 +920,7 @@ public class FPSController : NetworkBusListener
             }
         }
 
-        if (playerInput.actions["Jump"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             WallJump(currentWallHit.normal);
         }
@@ -931,7 +930,7 @@ public class FPSController : NetworkBusListener
             stateMachine.ChangeState(ControlerState.Idle);
         }
 
-        if (playerInput.actions["Grapple"].WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.E))
         {
             RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
@@ -1036,7 +1035,7 @@ public class FPSController : NetworkBusListener
             stateMachine.ChangeState(ControlerState.Falling);
         }
 
-        if (!playerInput.actions["Crouch"].IsPressed())
+        if (!Input.GetKey(KeyCode.LeftControl))
         {
             if (!Physics.Raycast(topHeightCrouchedCollider.position, Vector3.up,
                     Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
@@ -1058,8 +1057,8 @@ public class FPSController : NetworkBusListener
     {
         Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
 
-        horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
-        verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
 
         Vector3 velocity;
         if (!slowingDownFromSliding)
@@ -1121,7 +1120,7 @@ public class FPSController : NetworkBusListener
             return;
         }
 
-        if (playerInput.actions["Jump"].WasPressedThisFrame() && !jumpSlideOnEndOfSlide)
+        if (Input.GetKeyDown(KeyCode.Space) && !jumpSlideOnEndOfSlide)
         {
             SlideJump();
             stateMachine.ChangeState(ControlerState.Idle);
@@ -1133,13 +1132,13 @@ public class FPSController : NetworkBusListener
             if (!Physics.SphereCast(topHeightCrouchedCollider.position, bodyRadius, Vector3.up, out RaycastHit hit,
                     Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
             {
-                if (playerInput.actions["Jump"].IsPressed())
+                if (Input.GetKey(KeyCode.Space))
                 {
                     SlideJump();
                     stateMachine.ChangeState(ControlerState.Idle);
                 }
 
-                else if (playerInput.actions["Crouch"].IsPressed())
+                else if (Input.GetKey(KeyCode.LeftControl))
                 {
                     stateMachine.ChangeState(ControlerState.Crouching);
                     StartCoroutine(SlidingSlowDownCoroutine());
@@ -1184,7 +1183,7 @@ public class FPSController : NetworkBusListener
         float elapsedTime = 0;
         float startFOV = _camera.fieldOfView;
 
-        while (elapsedTime < slideMinTimeDuration || (elapsedTime < slideMaxTimeDuration && playerInput.actions["Crouch"].IsPressed() && verticalInput > 0))
+        while (elapsedTime < slideMinTimeDuration || (elapsedTime < slideMaxTimeDuration && Input.GetKey(KeyCode.LeftControl) && verticalInput > 0))
         {
             elapsedTime += Time.deltaTime;
 
@@ -1361,8 +1360,8 @@ public class FPSController : NetworkBusListener
         if (!Physics.Raycast(topHeightCrouchedCollider.position, Vector3.up,
                 Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
         {
-            if (playerInput.actions["Crouch"].WasReleasedThisFrame()) stateMachine.ChangeState(ControlerState.Idle);
-            if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(true); // au besoin, faire une autre fonction
+            if (Input.GetKeyUp(KeyCode.LeftControl)) stateMachine.ChangeState(ControlerState.Idle);
+            if (Input.GetKeyDown(KeyCode.Space)) SlideJump(true); // au besoin, faire une autre fonction
             if (Vector3.Angle(groundedHit.normal, Vector3.up) < minSlopeAngleToSlopeSlide)
                 stateMachine.ChangeState(ControlerState.Idle);
         }
@@ -1457,7 +1456,7 @@ public class FPSController : NetworkBusListener
         bool ignoreStartCheck = grappleTimer < 0.2f;
         
         bool isFarEnough = distance > 0.75f;
-        bool inputValid = playerInput.actions["Grapple"].IsPressed() || singleClicGrapple;
+        bool inputValid = Input.GetKey(KeyCode.E) || singleClicGrapple;
         bool isStuck = distance < grappleStartingDistance.magnitude && rb.linearVelocity.magnitude < 0.05f;
 
         if ((!isFarEnough || !inputValid || isStuck) && !ignoreStartCheck)
@@ -1470,7 +1469,7 @@ public class FPSController : NetworkBusListener
             return;
         }
 
-        if (playerInput.actions["DebugLeaveGrapple"].WasPressedThisFrame() && singleClicGrapple)
+        if (Input.GetKeyDown(KeyCode.P) && singleClicGrapple)
         {
             stateMachine.ChangeState(ControlerState.Idle);
             rb.linearVelocity = Vector3.zero;
@@ -1688,7 +1687,7 @@ public class FPSController : NetworkBusListener
         while (elapsedTime < superJumpInputMaxDelay && !grounded)
         {
             elapsedTime += Time.deltaTime;
-            if (playerInput.actions["Jump"].WasPressedThisFrame())
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 SuperJump();
                 yield break;
