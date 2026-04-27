@@ -7,8 +7,7 @@ public class PlayerRaycast : NetworkBehaviour
 	#region Properties
 
 	#endregion
-
-
+	
 	#region Variables
 
 	[SerializeField] private float _interactDistance = 3;
@@ -27,7 +26,7 @@ public class PlayerRaycast : NetworkBehaviour
 		_camera = GetComponent<FPSController>().Camera;
 		_playerInput = GetComponent<PlayerInput>();
 
-		_playerInput.actions["Interact"].performed += CheckRaycast;
+		//_playerInput.actions["Interact"].performed += CheckRaycast;
 	}
 
 	private void CheckRaycast(InputAction.CallbackContext obj)

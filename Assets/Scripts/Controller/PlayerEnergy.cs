@@ -4,7 +4,106 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public struct AddEnergyEvent
+public class PlayerEnergy : NetworkBusListener
+{
+	#region Properties
+
+	public float CurrentEnergy => _currentEnergy.Value;
+	public float EnergyOneBar => _valueOneBar;
+
+	#endregion
+
+	#region Variables
+
+	[SerializeField] private float _maxEnergy = 100f;
+	[SerializeField] private float _valueOneBar = 20f;
+	[SerializeField] private float _convertionTaux;
+
+	private int _totalBars;
+
+	private readonly SyncVar<float> _currentEnergy = new();
+
+	//Events UI
+	public Action<int> OnCreateBarUI;
+	public Action<int, float> OnUpdateUI;
+
+	#endregion
+
+	#region Fonctions
+
+	public override void OnStartNetwork()
+	{
+		_currentEnergy.OnChange += OnEnergyChanged;
+
+		ListenToEvent<ModifyEnergyEvent>(ModifyEnergy);
+		ListenToEvent<SetEnergyEvent>(SetEnergy);
+
+		_totalBars = Mathf.CeilToInt(_maxEnergy / _valueOneBar);
+
+		if (IsServerInitialized)
+			_currentEnergy.Value = _maxEnergy / 2f;
+
+		//Créer UI
+		OnCreateBarUI?.Invoke(_totalBars);
+
+		UpdateUI(_currentEnergy.Value);
+	}
+
+	private void OnEnergyChanged(float prev, float next, bool asServer)
+	{
+		UpdateUI(next);
+	}
+
+	private void SetEnergy(SetEnergyEvent data)
+	{
+		if (data.p_player != Owner) return;
+
+		_currentEnergy.Value = Mathf.Clamp(data.p_ratio * _maxEnergy, 0, _maxEnergy);
+		UpdateUI(_currentEnergy.Value);
+	}
+
+	private void ModifyEnergy(ModifyEnergyEvent data)
+	{
+		if (data.p_player != Owner) return;
+
+		float value = data.p_value > 0 ? data.p_value * _convertionTaux : data.p_value;
+
+		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + value, 0, _maxEnergy);
+
+		UpdateUI(_currentEnergy.Value);
+	}
+
+	private void UpdateUI(float energy)
+	{
+		energy = Mathf.Clamp(energy, 0f, _maxEnergy);
+
+		int activeBarIndex = Mathf.FloorToInt(energy / _valueOneBar);
+		float activeFill = (energy % _valueOneBar) / _valueOneBar;
+
+		//Cas énergie max
+		if (Mathf.Approximately(energy, _maxEnergy))
+		{
+			activeBarIndex = _totalBars - 1;
+			activeFill = 1f;
+		}
+
+		OnUpdateUI?.Invoke(activeBarIndex, activeFill);
+	}
+
+	public bool CanThrow(float nbBar)
+	{
+		return (CurrentEnergy - nbBar * _valueOneBar) >= 0;
+	}
+
+	#endregion
+}
+
+public struct AddHealthFromBarEvent
+{
+	public float value;
+}
+
+public struct ModifyEnergyEvent
 {
 	public NetworkConnection p_player;
 	public float p_value;
@@ -14,73 +113,4 @@ public struct SetEnergyEvent
 {
 	public NetworkConnection p_player;
 	public float p_ratio;
-}
-
-public class PlayerEnergy : NetworkBusListener
-{
-	#region Properties
-
-	public float CurrentEnergy => _currentEnergy.Value;
-	
-	#endregion
-
-
-	#region Variables
-
-	[SerializeField] private float _maxEnergy;
-	[SerializeField] private float _convertionTaux;
-	private readonly SyncVar<float> _currentEnergy = new();
-	
-	//Actions
-	public Action<float> OnAddEnergy;
-	
-	#endregion
-
-
-	#region Fonctions
-
-	public override void OnStartNetwork()
-	{
-		_currentEnergy.OnChange += OnEnergyChanged;
-
-		ListenToEvent<AddEnergyEvent>(AddEnergy);
-		ListenToEvent<SetEnergyEvent>(SetEnergy);
-
-		if (IsServerInitialized)
-			_currentEnergy.Value = _maxEnergy / 2f;
-	}
-	
-	private void OnEnergyChanged(float prev, float next, bool asServer)
-	{
-		UpdateUI();
-	}
-
-	private void SetEnergy(SetEnergyEvent data)
-	{
-		if (data.p_player == Owner)
-		{
-			_currentEnergy.Value = data.p_ratio * _maxEnergy;
-			
-			_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
-
-			UpdateUI();
-		}
-	}
-
-	private void AddEnergy(AddEnergyEvent data)
-	{
-		if (data.p_player == Owner)
-		{
-			float ratio = data.p_value * _convertionTaux;
-			_currentEnergy.Value += ratio;
-			
-			_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
-
-			UpdateUI();
-		}
-	}
-	
-	void UpdateUI() =>OnAddEnergy?.Invoke(_currentEnergy.Value / _maxEnergy);
-	
-	#endregion
 }

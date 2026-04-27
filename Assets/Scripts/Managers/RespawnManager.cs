@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using FishNet;
 using FishNet.Object;
@@ -7,66 +6,79 @@ using UnityEngine;
 
 public class RespawnManager : NetworkBusListener
 {
-	#region Properties
+    #region Variables
 
-	#endregion
+    private readonly HashSet<int> _deadPlayerIds = new HashSet<int>();
 
+    private readonly SyncVar<bool> _isGameOver = new SyncVar<bool>(false);
 
-	#region Variables
+    [Header("UI")]
+    [SerializeField] private GameObject _playerUIEnd;
 
-	private readonly SyncVar<int> _nbPlayerDead = new SyncVar<int>(0);
-	private readonly SyncVar<bool> _isGameOver = new SyncVar<bool>(false);
-
-	[Header("UI")] 
-	[SerializeField] private GameObject _playerUIEnd;
-	
-	#endregion
+    #endregion
 
 
-	#region Fonctions
+    #region Fonctions
 
-	public override void OnStartServer()
-	{
-		//Bus
+    public override void OnStartServer()
+    {
+        ListenToEvent<OnPlayerDeathEvent>(OnPlayerDied);
+        ListenToEvent<OnPlayerRespawnEvent>(OnPlayerRespawned);
+    }
 
-		ListenToEvent<OnPlayerDeathEvent>(CheckAllPlayerDead);
-		ListenToEvent<OnPlayerRespawnEvent>(PlayerRespawn);
-	}
+    public override void OnStartClient()
+    {
+        _playerUIEnd.SetActive(false);
+        _isGameOver.OnChange += OnGameOverChange;
+    }
+    
+    [Server]
+    private void OnPlayerDied(OnPlayerDeathEvent data)
+    {
+        _deadPlayerIds.Add(data.p_playerN.ObjectId);
 
-	public override void OnStartClient()
-	{
-		_playerUIEnd.SetActive(false);
+        int totalPlayers = ServerManager.Clients.Count;
 
-		_nbPlayerDead.OnChange += OnNbPlayerDeadChange;
-	}
+        if (_deadPlayerIds.Count >= totalPlayers && totalPlayers > 0)
+        {
+            _isGameOver.Value = true;
+            TriggerGameOverObserversRpc();
+        }
+    }
 
-	private void PlayerRespawn(OnPlayerRespawnEvent data)
-	{
-		_nbPlayerDead.Value = 0;
-	}
+    [Server]
+    private void OnPlayerRespawned(OnPlayerRespawnEvent data)
+    {
+        _deadPlayerIds.Remove(data.p_playerN.ObjectId);
 
-	private void CheckAllPlayerDead(OnPlayerDeathEvent data)
-	{
-		_nbPlayerDead.Value++;
-	}
-	
-	private void OnNbPlayerDeadChange(int prev, int next, bool asServer)
-	{
-		if(_nbPlayerDead.Value == InstanceFinder.ClientManager.Clients.Count)
-		{
-			Cursor.lockState = CursorLockMode.None;
-			Cursor.visible = true;
-			_isGameOver.Value = true;
-			_playerUIEnd.SetActive(true);
-		}
-	}
+        if (_deadPlayerIds.Count == 0)
+        {
+            _isGameOver.Value = false;
+        }
+    }
+    
+    [ObserversRpc]
+    private void TriggerGameOverObserversRpc()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        _playerUIEnd.SetActive(true);
+    }
+    
+    private void OnGameOverChange(bool prev, bool next, bool asServer)
+    {
+        if (!next)
+        {
+            _playerUIEnd.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
 
-	public void Quit()
-	{
-		Debug.Log("Quit");
-		Application.Quit();
-	}
+    public void Quit()
+    {
+        Application.Quit();
+    }
 
-
-	#endregion
+    #endregion
 }

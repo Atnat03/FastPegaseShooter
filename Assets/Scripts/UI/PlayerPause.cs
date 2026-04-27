@@ -10,19 +10,37 @@ public struct OnPauseEvent
 
 public class PlayerPause : NetworkBusListener
 {
-    [SerializeField] private GameObject _pauseUI;
+    [SerializeField] private PausePanel[] _pauseUIPanels;
     [SerializeField] private PlayerInput _playerInput;
+    
+    private bool _isPause = false;
 
-    private bool _isPause;
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (!IsOwner) return;
 
+        foreach (PausePanel panel in _pauseUIPanels)
+        {
+            panel.Init();
+        }
+    }
     
     private void UpdatePause(InputAction.CallbackContext obj)
+    {
+        UpdatePause();
+    }
+    
+    public void UpdatePause()
     {
         if (!IsOwner) return;
         
         _isPause = !_isPause;
         
-        _pauseUI.SetActive(_isPause);
+        foreach (PausePanel panel in _pauseUIPanels)
+        {
+            panel.OnPause(_isPause);
+        }
         
         Cursor.lockState = _isPause ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = _isPause;

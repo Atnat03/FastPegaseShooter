@@ -24,7 +24,8 @@ public class AlwaysInFrontOfCam : NetworkBehaviour
 
 	public override void OnStartClient()
 	{
-		cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponent<FPSController>().Camera;
+		//cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponent<FPSController>().Camera;
+		cam = Camera.main;
 	}
 
 	private void LateUpdate()

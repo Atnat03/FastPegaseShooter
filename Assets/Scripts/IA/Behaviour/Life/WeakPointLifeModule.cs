@@ -1,8 +1,6 @@
-using System;
 using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Life/WeakPointLifeModule")]
@@ -12,7 +10,7 @@ public class WeakPointLifeModule : EnemyLifeModule
     //SerializeField to get properties in custom inspector
     [HideInInspector][SerializeField] private EnemyLifeModule _enemyLifeModule;
     
-    [SerializeField] private float _eliteDamageMultWhenDestroyed = 1;
+    [SerializeField] private float _damageMult = 2;
     
     [Server]
     public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
@@ -20,27 +18,13 @@ public class WeakPointLifeModule : EnemyLifeModule
         base.TakeDamage(attackerObjectId, rawDamageAmount, isCritical);
         if (IsServerInitialized)
         {
-            int damages = GetDamageAmount(rawDamageAmount);
-            p_life.Value -= damages;
+            int damage = Mathf.RoundToInt(GetDamageAmount(rawDamageAmount) * _damageMult);
+            _enemyLifeModule.TakeDamage(attackerObjectId, damage, true);
             
-            if(p_life.Value <= 0)
-            {
-                int damage = Mathf.RoundToInt(GetDamageAmount(rawDamageAmount) * _eliteDamageMultWhenDestroyed);
-                CustomLogger.HighlightLog($"Weak point hit damages : {damage}");
-                _enemyLifeModule.TakeDamage(attackerObjectId, rawDamageAmount, isCritical);
-            }
+            
         }
 
         //Damages are always critical when done on weak point
         return true;
-    }
-
-    [Server]
-    public override void Death(int takenDamages)
-    {
-        base.Death(takenDamages);
-        
-        
-        InstanceFinder.ServerManager.Despawn(gameObject);
     }
 }

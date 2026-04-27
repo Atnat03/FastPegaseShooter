@@ -12,8 +12,21 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
     [HideInInspector] public bool p_isExplosive;
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
-    [SerializeField] private GameObject _explosionVFX;
     private GunController _gunController;
+    
+    [SerializeField] private GameObject _positiveExplosionVFX;
+    [SerializeField] private GameObject _negativeExplosionVFX;
+    
+    [Header("View")]    
+    [SerializeField]private MeshRenderer _meshRenderer;
+    [SerializeField]private Material _positiveMaterial;
+    [SerializeField] private Material _negativeMaterial;
+    
+    [SerializeField]private TrailRenderer _trailRenderer;
+    [SerializeField]private Gradient _positiveLineColor;
+    [SerializeField]private Gradient _negativeLineColor;
+
+    private GameObject _vfx;
     
     private bool _hasHit = false;
     RaycastHit hit;
@@ -21,7 +34,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
     private Vector3 _lastPosition;
 
     public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
-        float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target)
+        float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target, bool isPositive)
     {
         p_damage = damage;
         p_speed = speed;
@@ -29,6 +42,11 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
         p_explosionRadius = explosionRadius;
         _gunController = gun;
         p_isCritical = isCritical;
+        
+        _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
+        
+        _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
+        _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
     }
 
     void Start()
@@ -55,9 +73,9 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
             if (_hasHit) return;
             _hasHit = true;
             
-            if (_explosionVFX != null && p_isExplosive)
+            if (_vfx != null && p_isExplosive)
             {
-                Instantiate(_explosionVFX, transform.position, Quaternion.identity);
+                Instantiate(_vfx, transform.position, Quaternion.identity);
             }
 
             if (InstanceFinder.IsServerStarted)
@@ -73,7 +91,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                     {
                         bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,  (int)p_damage, p_isCritical);
                         _gunController.TriggerHitMark(crit || p_isCritical);
-                        InvokeEvent(new AddEnergyEvent
+                        InvokeEvent(new ModifyEnergyEvent
                         {
                             p_player = _gunController.Owner,
                             p_value = p_damage
@@ -104,7 +122,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
                 crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
-                InvokeEvent(new AddEnergyEvent
+                InvokeEvent(new ModifyEnergyEvent
                 {
                     p_player = _gunController.Owner,
                     p_value = p_damage

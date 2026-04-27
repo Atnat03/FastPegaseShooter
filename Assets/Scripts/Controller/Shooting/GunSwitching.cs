@@ -33,6 +33,8 @@ public class GunSwitching : NetworkBehaviour
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
 	[SerializeField] private GrenadeThrower _throwerGrenade;
+	[SerializeField] private DroneThrower _throwerDrone;
+	[SerializeField] private ReticulesManager _reticuleManager;
 
 	private bool _canSwitch = true;
 	private List<GameObject> _mainGunsList;
@@ -104,6 +106,8 @@ public class GunSwitching : NetworkBehaviour
 			else
 				list[i].gameObject.SetActive(false);
 		}
+
+		IGunMain?.SetReticule(_reticuleManager);
 	}
 
 	public void DesactivateAllMainGun()
@@ -187,11 +191,14 @@ public class GunSwitching : NetworkBehaviour
 	private void OnEnable()
 	{
 		_throwerGrenade.OnStartThrow += DesactivateGunWhenThrow;
+		_throwerDrone.OnThrowing += DesactivateGunWhenThrow;
+		
 	}
 	
 	private void OnDisable()
 	{
 		_throwerGrenade.OnStartThrow -= DesactivateGunWhenThrow;
+		_throwerDrone.OnThrowing -= DesactivateGunWhenThrow;
 	}
 
 	#endregion
