@@ -23,7 +23,6 @@ public class DroneThrower : NetworkBusListener
 	[Header("Throw")]
 	[SerializeField] private Drone _dronePrefab;
 	[SerializeField] private Transform _spawnPoint;
-	[SerializeField] private int _costToThrowDrone = 50;
 
 	[Header("Detection Bro")]
 	[SerializeField] private float _range = 50f;
@@ -65,7 +64,7 @@ public class DroneThrower : NetworkBusListener
 		if (!_hasDrone) return;
 		if (_isCanceled) return;
 		if (_target == null) return;
-		if (_playerEnergy.CurrentEnergy - _costToThrowDrone < 0) return;
+		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowDrone)) return;
 		
 		_isCharging = false;
 		
@@ -77,7 +76,7 @@ public class DroneThrower : NetworkBusListener
 			InvokeEvent(new ModifyEnergyEvent
 			{
 				p_player = _playerEnergy.Owner,
-				p_value = -_costToThrowDrone
+				p_value = -(_playerEnergy.p_costThrowDrone * _playerEnergy.EnergyOneBar)
 			});
 		}
 		

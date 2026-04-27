@@ -30,6 +30,8 @@ namespace Controller
         
         private bool _isInitialized = false;
         
+        private Coroutine _swapCoroutine;
+        
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -119,19 +121,23 @@ namespace Controller
         private void SwapingGun(SwapingGunEvent data)
         {
             ResetWantToSwitchServerRpc();
-            StartCoroutine(WaitBeforeSwapCoroutine(data));
+            
+            if (_swapCoroutine != null)
+                StopCoroutine(_swapCoroutine);
+            
+            _swapCoroutine = StartCoroutine(WaitBeforeSwapCoroutine(data));
         }
 
         IEnumerator WaitBeforeSwapCoroutine(SwapingGunEvent data)
         {
             CurrentMainSurchargeGun.StopReload();
-            
-            _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
             _gunSurcharge.SetColorImage(data.color);
-            
+
             int ammoToApply = data.currentAmmo;
 
-            _gunMaterial.SetFloat("_Dissolving", 0);
+            // ✅ Variable LOCALE — isolée de toute autre coroutine
+            Material matBefore = CurrentMainSurchargeGun.ModelGun.material;
+            matBefore.SetFloat("_Dissolving", 0);
 
             float duration = data.timeToSwap / 2;
             float elapsedTime = 0;
@@ -139,36 +145,37 @@ namespace Controller
             while (elapsedTime < duration)
             {
                 elapsedTime += Time.deltaTime;
-                _gunMaterial.SetFloat("_Dissolving", elapsedTime / duration);
-                
+                matBefore.SetFloat("_Dissolving", Mathf.Clamp01(elapsedTime / duration));
                 yield return null;
             }
 
             _gunSwitching.ChangeCurrentGun_Main_ServerRpc(data.gunIndex);
             _grenadeThrower.ChangeMagneticChargeServerRpc();
 
-            _gunMaterial = CurrentMainSurchargeGun.ModelGun.material;
-            
-            _gunMaterial.SetFloat("_Dissolving", 1);
-            
+            // ✅ Nouvelle référence locale après le swap
+            Material matAfter = CurrentMainSurchargeGun.ModelGun.material;
+            matAfter.SetFloat("_Dissolving", 1);
+
             elapsedTime = duration;
-            
-            while (elapsedTime >0)
+
+            while (elapsedTime > 0)
             {
                 elapsedTime -= Time.deltaTime;
-                _gunMaterial.SetFloat("_Dissolving", elapsedTime / duration);
-                
+                matAfter.SetFloat("_Dissolving", Mathf.Clamp01(elapsedTime / duration));
                 yield return null;
             }
-            
-            _gunMaterial.SetFloat("_Dissolving", 0);
-            
-            _gunSurcharge.SetOverloadStats(true, 
-                data.dataSurcharge.overloadDuration, 
-                data.dataSurcharge.damageMultiplier, 
+
+            matAfter.SetFloat("_Dissolving", 0);
+
+            _gunSurcharge.SetOverloadStats(true,
+                data.dataSurcharge.overloadDuration,
+                data.dataSurcharge.damageMultiplier,
                 data.dataSurcharge.cadenceMultiplier,
                 ammoToApply);
+
+            _swapCoroutine = null;
         }
+
 
         private void EndTimerSwap(EndTimerSwapEvent data)
         {
