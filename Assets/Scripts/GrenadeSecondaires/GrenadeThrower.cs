@@ -24,7 +24,6 @@ public class GrenadeThrower : NetworkBusListener
     [SerializeField] private ElementaryGrenade _elementaryGrenadePrefab;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private GunSwitching _currentGun;
-    [SerializeField] private float _throwEnergyCost;
     
     [Header("Settings")]
     [SerializeField] private float _cooldown = 2f;
@@ -71,7 +70,7 @@ public class GrenadeThrower : NetworkBusListener
 
     public void TryThrowGrenade()
     {
-        if (_canThrow && _playerEnergy.CanThrow(_throwEnergyCost))
+        if (_canThrow && _playerEnergy.CanThrow(_playerEnergy.p_costThrowGrenade))
         {
             if (_bridgeAnimation != null)
             {
@@ -91,7 +90,7 @@ public class GrenadeThrower : NetworkBusListener
             InvokeEvent(new ModifyEnergyEvent
             {
                 p_player = Owner,
-                p_value = -(_throwEnergyCost * _playerEnergy.EnergyOneBar)
+                p_value = -(_playerEnergy.p_costThrowGrenade * _playerEnergy.EnergyOneBar)
             });
         }
     }
