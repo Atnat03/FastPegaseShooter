@@ -38,6 +38,7 @@ public class PlayerHealth : NetworkBusListener
 	public Transform p_healThrowDirection;
 	[SerializeField] private float _healthToGive = 30;
 	public float p_healThrowRadius = 3;
+	[SerializeField] private float _healThrowCost = 20;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
 	
@@ -132,7 +133,7 @@ public class PlayerHealth : NetworkBusListener
 	{
 		if(!IsOwner)return;
 
-		if (_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
+		if (_playerEnergy.CanThrow(_healThrowCost))
 		{
 			CustomLogger.ImportantLog($"Energy amount : {_playerEnergy.CurrentEnergy}");
 			return;
@@ -145,7 +146,7 @@ public class PlayerHealth : NetworkBusListener
 	{
 		if(!(IsOwner || _isHealKeyDown))return;
 		
-		if (_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
+		if (_playerEnergy.CanThrow(_healThrowCost))
 		{
 			return;
 		}
@@ -195,7 +196,7 @@ public class PlayerHealth : NetworkBusListener
 		InvokeEvent(new ModifyEnergyEvent
 		{
 			p_player = throwerConnection,
-			p_value = -_playerEnergy.p_costThrowHeal
+			p_value = -_healThrowCost
 		});
 		Collider[] colliders = Physics.OverlapSphere(landingPos, p_healThrowRadius, _throwHealLayerMask);
 		foreach (Collider collider in colliders)

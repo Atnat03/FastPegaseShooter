@@ -94,6 +94,7 @@ public class GunSetting
     {
         public int numberShootPerSalve;
         public float intervalDuration;
+        [Range(0, 30)] public float noiseCharged = 5;
     }
 
 
