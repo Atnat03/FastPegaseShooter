@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Text.RegularExpressions;
 using FishNet;
 using FishNet.Connection;
@@ -46,11 +47,8 @@ public class Drone : NetworkBusListener
 	private float timeUpdateSearch = 0.2f;
 	
 	[Header("Life")]
-	[SerializeField] private float _energyCostPerSeconde = 10f;
-	private PlayerEnergy _playerEnergy;
+	[SerializeField] private float _durationLife = 10f;
 	private DroneEffectParent _effect;
-	
-	private Vector3 _startPosition;
 	
 	//Actions
 	public Action OnIdThrowerChange;
@@ -61,7 +59,6 @@ public class Drone : NetworkBusListener
 	
 	private void Awake()
 	{
-		_startPosition = transform.position;
 		_effect = GetComponent<DroneEffectParent>();
 	}
 
@@ -90,21 +87,6 @@ public class Drone : NetworkBusListener
 		}
 
 		FollowTarget(_speed);
-		
-		if (_playerEnergy != null)
-		{
-			InvokeEvent(new ModifyEnergyEvent
-			{
-				p_player = _playerEnergy.Owner,
-				p_value = -_energyCostPerSeconde * Time.deltaTime
-			});
-		}
-		
-		if (_playerEnergy.CurrentEnergy <= 0)
-		{
-			Die();
-		}
-		
 	}
 	
 	private void Die()
@@ -140,9 +122,16 @@ public class Drone : NetworkBusListener
 	{
 		_IsActivated.Value = true;
 		
-		_playerEnergy = _target.root.GetComponent<PlayerEnergy>();
-		
 		_effect?.Activated();
+
+		StartCoroutine(Living());
+	}
+
+	IEnumerator Living()
+	{
+		yield return new WaitForSeconds(_durationLife);
+		
+		Die();
 	}
 
 	public void SetTarget(Transform target)

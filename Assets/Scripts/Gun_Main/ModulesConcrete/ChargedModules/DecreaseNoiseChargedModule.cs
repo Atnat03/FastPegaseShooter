@@ -81,6 +81,7 @@ namespace GunDecorator.ChargedModules
             }
 
             _gunController.PlaySound("Charged");
+            _gunController?.OnStopCharging?.Invoke();
         }
     }
 }

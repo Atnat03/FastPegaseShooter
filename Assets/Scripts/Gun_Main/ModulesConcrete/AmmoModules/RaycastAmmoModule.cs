@@ -106,7 +106,7 @@ namespace GunDecorator.AmmoModules
             GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
-                    isCritical, targetPoint, target);
+                    isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge);
         }
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;

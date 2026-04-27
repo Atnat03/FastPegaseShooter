@@ -105,8 +105,11 @@ namespace GunDecorator.ChargedModules
                 }
                 
                 _charginTimer += Time.deltaTime;
+
+                float ratio = _charginTimer / _timeToCharge;
                 
-                OnCharging?.Invoke(_charginTimer / _timeToCharge);
+                OnCharging?.Invoke(ratio);
+                _gunController?.OnCharging?.Invoke(ratio);
                 
                 IsFullCharged = _charginTimer >= _timeToCharge * _isFullMultiplicator;
             }
@@ -118,6 +121,7 @@ namespace GunDecorator.ChargedModules
             if (_reloadModule.IsReloading) return;
             
             _deadZoneCharge = true;
+            _elapsedTimeDeadZone = 0;
         }
         
         public virtual void TryShootCharging()
@@ -138,6 +142,7 @@ namespace GunDecorator.ChargedModules
             _triggerActionStart = false;
             
             OnEndCharging?.Invoke();
+            _gunController?.OnStopCharging?.Invoke();
         }
     }
 }

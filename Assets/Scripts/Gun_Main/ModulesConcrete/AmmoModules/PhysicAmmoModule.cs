@@ -83,7 +83,8 @@ namespace GunDecorator.AmmoModules
             Vector3 targetPos = _spawnPoint.position + _spawnPoint.forward * 2000f;
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, isCritical, targetPos, null);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, 
+                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge);
 
             Destroy(newBullet, 5f);
         }

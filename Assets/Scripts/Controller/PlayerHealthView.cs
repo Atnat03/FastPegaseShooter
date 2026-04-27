@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using CustomConsole.Runtime.Logger;
+using MyPrint;
 using ScriptableObjectsDefinitions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,11 +24,18 @@ public class PlayerHealthView : MonoBehaviour
 	[Header("UI")]
 	[SerializeField] private float _healthVisualFillingSpeed = 1;
 	[SerializeField] private Image _healthBar;
-	[SerializeField] private Image _deathImage;
 	[SerializeField] private CanvasGroup _damagedWarningImage;
 	[SerializeField] private Image _frameDeccordImage;
 	[SerializeField] private CanvasGroup _damagedImage;
 	[SerializeField] private Image _cooldownHealImage;
+	
+	[Header("Dead")]
+	[SerializeField] private GameObject _normalCanva;
+	[SerializeField] private GameObject _deathCanva;
+	[SerializeField] private TextMeshProUGUI _deathTimer;
+	[SerializeField] private Camera _normalCamera;
+	[SerializeField] private Camera _deathCamera;
+	[SerializeField] private Transform[] _deathCameraOffsets;
 	
 	[Header("Healing")]
 	[SerializeField] private LineRenderer _healingTrajectoryLine;
@@ -48,7 +57,8 @@ public class PlayerHealthView : MonoBehaviour
 
 	private void Start()
 	{
-		_deathImage.gameObject.SetActive(false);
+		_deathCanva.gameObject.SetActive(false);
+		_deathCamera.gameObject.SetActive(false);
 		_audioSource = GetComponent<AudioSource>();
 		_healingTrajectoryLine.enabled = false;
 		_healingTrajectoryLine.positionCount = 4;
@@ -85,9 +95,50 @@ public class PlayerHealthView : MonoBehaviour
 		}
 	}
 
-	private void KoPlayerUI(bool state)
+	private Coroutine _koCoroutine;
+
+	private void KoPlayerUI(bool state, float duration)
 	{
-		_deathImage.gameObject.SetActive(state);
+		_deathCanva.gameObject.SetActive(state);
+		_deathCamera.gameObject.SetActive(state);
+		
+		if (_koCoroutine != null)
+		{
+			StopCoroutine(_koCoroutine);
+			_koCoroutine = null;
+		}
+
+		if (state)
+		{
+			_koCoroutine = StartCoroutine(KoAnimation(duration));
+		}
+		else
+		{
+			_deathCamera.transform.position = _deathCameraOffsets[0].position;
+			_deathCamera.transform.rotation = _deathCameraOffsets[0].rotation;
+			_deathTimer.text = "";
+		}
+	}
+
+	IEnumerator KoAnimation(float duration)
+	{
+		float elapsedTime = 0;
+
+		while (elapsedTime < duration)
+		{
+			elapsedTime += Time.deltaTime;
+
+			_deathTimer.text = (duration - elapsedTime).ToString("F2");
+			_deathCamera.transform.position = Vector3.Lerp(_deathCamera.transform.position, _deathCameraOffsets[1].position, elapsedTime / duration);
+			_deathCamera.transform.rotation = Quaternion.Lerp(_deathCamera.transform.rotation, _deathCameraOffsets[1].rotation, elapsedTime / duration);
+
+			yield return null;
+		}
+
+		_deathTimer.text = "0.00";
+		_koCoroutine = null;
+		
+		_frameDeccordImage.color = Color.white;
 	}
 
 	private void StartWarning()

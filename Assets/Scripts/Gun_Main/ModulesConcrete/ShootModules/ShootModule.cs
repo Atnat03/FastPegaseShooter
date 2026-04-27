@@ -133,7 +133,8 @@ namespace GunDecorator
 
         public void CancelShooting()
         {
-            _additionalEffectModule[0].CancelShooting();
+            if(_additionalEffectModule.Count != 0)
+                _additionalEffectModule[0].CancelShooting();
         }
         
         public void SetDirectionModifier(Vector3 direction) => _directionModifier = direction;
