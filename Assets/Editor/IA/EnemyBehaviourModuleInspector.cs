@@ -101,7 +101,7 @@ public class EnemyBehaviourModuleInspector : Editor
         return amount;
     }
     
-    //Only to give icone to abstract class in project
+    //Only to give icone to class in project
     [InitializeOnLoad]
     public static class EnemyBehaviourModuleIconSetter
     {

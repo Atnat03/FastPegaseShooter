@@ -30,7 +30,7 @@ public class EnemyLifeModuleInspector : EnemyBehaviourModuleInspector
                 gapLenght: 7));
 
         EditorGUILayout.PropertyField(_life);
-        if (target.GetType() == typeof(WeakPointLifeModule))
+        if (target.GetType() == typeof(PVBagLifeModule) || target.GetType() == typeof(WeakPointLifeModule))
         {
             Rect targetBlockRect = EditorUtilities.WrapInBlock(() =>
                 {
