@@ -1432,9 +1432,9 @@ public class FPSController : NetworkBusListener
         
         bool isFarEnough = distance > 0.75f;
         bool inputValid = playerInput.actions["Grapple"].IsPressed() || singleClicGrapple;
-        bool isStuckAtStart = !ignoreStartCheck && distance < grappleStartingDistance && rb.linearVelocity.magnitude < 0.05f;
+        bool isStuckAtStart = distance < grappleStartingDistance && rb.linearVelocity.magnitude < 0.05f;
 
-        if (!isFarEnough || !inputValid || isStuckAtStart)
+        if ((!isFarEnough || !inputValid || isStuckAtStart) && !ignoreStartCheck)
         {
 
             rb.linearVelocity = Vector3.zero;
