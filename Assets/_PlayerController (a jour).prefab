@@ -774,7 +774,7 @@ MonoBehaviour:
   moduleName: SalveChargedModule
   moduleColor: {r: 0, g: 1, b: 1, a: 1}
   _ammoType: {fileID: 8428071434140413335}
-  _isExplosifAmmo: 0
+  _isExplosifAmmo: 1
   _explosionRadius: 1
   _timeToCharge: 1
   _deadZoneStartCharging: 0.5
@@ -784,6 +784,7 @@ MonoBehaviour:
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
   _intervaleCharge: 0.05
+  _noiseCharged: 5
 --- !u!114 &8428071434140413335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1255,7 +1256,6 @@ MonoBehaviour:
   _gunSwitching: {fileID: 3154577241410043838}
   _dronePrefab: {fileID: 377463757777460365, guid: f1c05ad0ae4860046b6a4cb55f69529a, type: 3}
   _spawnPoint: {fileID: 8380329674851811601}
-  _costToThrowDrone: 2
   _range: 50
   _aimAngle: 0.97
   _targetLayer:
@@ -11763,7 +11763,6 @@ MonoBehaviour:
   p_healThrowDirection: {fileID: 6291573982660001099}
   _healthToGive: 30
   p_healThrowRadius: 3
-  _healThrowCost: 10
   _throwHitLayerMask:
     serializedVersion: 2
     m_Bits: 65335
@@ -11847,6 +11846,9 @@ MonoBehaviour:
   _maxEnergy: 100
   _valueOneBar: 20
   _convertionTaux: 0.1
+  p_costThrowGrenade: 1
+  p_costThrowDrone: 2
+  p_costThrowHeal: 1
 --- !u!114 &724598524445695768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30363,9 +30365,8 @@ MonoBehaviour:
   _elementaryGrenadePrefab: {fileID: 7033959642892252244, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   _spawnPoint: {fileID: 446286405210506582}
   _currentGun: {fileID: 3154577241410043838}
-  _throwEnergyCost: 1
   _cooldown: 1
-  _damage: 10
+  _damage: 100
   _throwForce: 30
   _numberBounces: 2
   _explosionRadius: 15
@@ -31393,6 +31394,7 @@ MonoBehaviour:
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
   _intervaleCharge: 0.05
+  _noiseCharged: 5
 --- !u!114 &2634165181546453424
 MonoBehaviour:
   m_ObjectHideFlags: 0
