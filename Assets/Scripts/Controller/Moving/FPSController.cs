@@ -525,8 +525,12 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
+            RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    QueryTriggerInteraction.Collide)
+                || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                    out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -606,8 +610,12 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
+            RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
+                    out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    QueryTriggerInteraction.Collide)
+                || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                    out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -707,8 +715,12 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
+            RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
+                    out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    QueryTriggerInteraction.Collide)
+                || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                    out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -915,8 +927,12 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
+            RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
+                    out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    QueryTriggerInteraction.Collide)
+                || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                    out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -1394,14 +1410,18 @@ public class FPSController : NetworkBusListener
     #region GrappleState
 
     Vector3 grappleDirection;
-    private float grappleStartingDistance;
+    Vector3 grappleStartingDistance;
     private float grappleTimer;
 
     void EnterGrappleState()
     {
+        RaycastHit hit;
         grappleTimer = 0f;
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                QueryTriggerInteraction.Collide)
+            || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                 QueryTriggerInteraction.Collide))
         {
             GrapplePoint grapplePoint;
@@ -1410,7 +1430,7 @@ public class FPSController : NetworkBusListener
                 _currentGrapplePoint = grapplePoint.p_targetTransform;
 
                 grappleDirection = _currentGrapplePoint.position - transform.position;
-                grappleStartingDistance = grappleDirection.magnitude;
+                grappleStartingDistance = grappleDirection;
                 grappleDirection.Normalize();
                 
                 OnGrappling?.Invoke();
@@ -1432,13 +1452,13 @@ public class FPSController : NetworkBusListener
         
         bool isFarEnough = distance > 0.75f;
         bool inputValid = playerInput.actions["Grapple"].IsPressed() || singleClicGrapple;
-        bool isStuckAtStart = distance < grappleStartingDistance && rb.linearVelocity.magnitude < 0.05f;
+        bool isStuck = distance < grappleStartingDistance.magnitude && rb.linearVelocity.magnitude < 0.05f;
 
-        if ((!isFarEnough || !inputValid || isStuckAtStart) && !ignoreStartCheck)
+        if ((!isFarEnough || !inputValid || isStuck) && !ignoreStartCheck)
         {
 
             rb.linearVelocity = Vector3.zero;
-            rb.AddForce(grappleDirection * _endGrappleImpulseForce, ForceMode.Impulse);
+            rb.AddForce(grappleStartingDistance.normalized * _endGrappleImpulseForce, ForceMode.Impulse);
             _currentGrapplePoint = null;
             stateMachine.ChangeState(ControlerState.Idle);
             return;
@@ -1457,8 +1477,9 @@ public class FPSController : NetworkBusListener
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
 
         Vector3 newDir = grappleDirection;
-        if (rb.linearVelocity.magnitude > 0.1 && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f &&
-            Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
+        if (rb.linearVelocity.magnitude > 0.1 
+            && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f 
+            && Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
         {
             newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection,
                 _grappleRedirectionSpeed * Time.fixedDeltaTime);
