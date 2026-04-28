@@ -79,6 +79,8 @@ public class FPSController : NetworkBusListener
     [SerializeField] float maxStepHeight = .2f;
     [SerializeField] private float gravityBonusForceAscending = 3f;
     [SerializeField] private float gravityBonusForceFalling = 3f;
+    [SerializeField] private GameObject[] idleLargerFeetColliders;
+    [SerializeField] private float largerFeetStayingDelay;
 
     [Header("headbob")] [SerializeField] float walkingHeadbobAmplitude = 0.05f;
     [SerializeField] float walkingHeadbobFrequency = 8f;
@@ -274,6 +276,7 @@ public class FPSController : NetworkBusListener
             onEnter: EnterIdleState,
             onUpdate: IdleUpdate,
             onFixedUpdate: IdleFixedUpdate,
+            onExit: ExitIdleState,
             onLateUpdate: IdleLateUpdate
         ));
 
@@ -492,6 +495,10 @@ public class FPSController : NetworkBusListener
             fellOffWallrinding = false;
             hasDashed = false;
             currentAirJumpCount = airJumpCount;
+            foreach (GameObject go in idleLargerFeetColliders)
+            {
+                go.SetActive(true);
+            }
         }
 
         if (stateMachine.previousState == stateMachine.GetState(ControlerState.Falling) && landSnap)
@@ -553,6 +560,11 @@ public class FPSController : NetworkBusListener
         rb.linearVelocity = Vector3.zero;
     }
 
+    void ExitIdleState()
+    {
+        StartCoroutine(LargerFeetStayingCoroutine());
+    }
+
     void IdleLateUpdate()
     {
         UpdateCameraPositionAndRotation();
@@ -566,6 +578,15 @@ public class FPSController : NetworkBusListener
         rollSmoothing = landSnapVelocity;
         yield return new WaitForSeconds(.2f);
         rollSmoothing = defaultSmooting;
+    }
+
+    IEnumerator LargerFeetStayingCoroutine()
+    {
+        yield return new  WaitForSeconds(largerFeetStayingDelay);
+        foreach (GameObject go in idleLargerFeetColliders)
+        {
+            go.SetActive(false);
+        }
     }
 
     #endregion
