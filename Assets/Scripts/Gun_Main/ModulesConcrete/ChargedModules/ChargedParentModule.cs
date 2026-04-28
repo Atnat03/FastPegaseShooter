@@ -36,6 +36,7 @@ namespace GunDecorator.ChargedModules
         [SerializeField] protected float _explosionRadius = 1f;
         
         [Header("Charging")]
+        [SerializeField] protected float _damageChargedMultiplicator = 10;
         [SerializeField] protected float _timeToCharge = 1;
         [SerializeField] protected float _deadZoneStartCharging = 0.5f;
         [SerializeField] protected float _recoilChargedMultiplier = 1.25f;

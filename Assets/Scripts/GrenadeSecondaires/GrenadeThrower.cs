@@ -86,13 +86,19 @@ public class GrenadeThrower : NetworkBusListener
             OnStartThrow?.Invoke();
             
             _elapsedTimeCooldown = _cooldown;
-            
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = Owner,
-                p_value = -(_playerEnergy.p_costThrowGrenade * _playerEnergy.EnergyOneBar)
-            });
+
+            ConsumeEnergyServerRpc(_playerEnergy.p_costThrowGrenade * _playerEnergy.EnergyOneBar);
         }
+    }
+    
+    [ServerRpc]
+    private void ConsumeEnergyServerRpc(float amount)
+    {
+        InvokeEvent(new ModifyEnergyEvent
+        {
+            p_player = Owner,
+            p_value = -amount
+        });
     }
 
     [ServerRpc]
@@ -111,8 +117,6 @@ public class GrenadeThrower : NetworkBusListener
     [ObserversRpc]
     private void NotifyGrenadeThrown(ElementaryGrenade grenade)
     {
-        Cons.Print("Grenade thrown", ColorConsole.Green);
-        
         Vector3 direction = _spawnPoint.forward;
         grenade.GetComponent<Rigidbody>().AddForce(direction * _throwForce, ForceMode.Impulse);
         

@@ -105,6 +105,7 @@ public class GunSetting
         public float explosionRadius;
 
         [Header("Charging")] 
+        public float _damageChargedMultiplicator = 10;
         public float timeToCharge = 1;
         public float DeadZoneStartCharging = 0.5f;
         public float recoilChargedMultiplier = 1.25f;
@@ -122,7 +123,8 @@ public class GunSetting
         public bool IsExplosifAmmo = false;
         public float explosionRadius;
 
-        [Header("Charging")] 
+        [Header("Charging")]
+        public float _damageChargedMultiplicator = 10;
         public float timeToCharge = 1;
         public float DeadZoneStartCharging = 0.5f;
         public float recoilChargedMultiplier = 1.25f;
@@ -142,6 +144,7 @@ public class GunSetting
         public float explosionRadius;
 
         [Header("Charging")] 
+        public float _damageChargedMultiplicator = 2;
         public float timeToCharge = 1;
         public float DeadZoneStartCharging = 0.5f;
         public float recoilChargedMultiplier = 1.25f;
