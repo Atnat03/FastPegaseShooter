@@ -93,6 +93,9 @@ public class FPSController : NetworkBusListener
     float horizontalInput;
     float verticalInput;
     float headbobTimer;
+    
+    private Vector3 YawForward => new Vector3(Mathf.Sin(yaw * Mathf.Deg2Rad), 0f, Mathf.Cos(yaw * Mathf.Deg2Rad));
+    private Vector3 YawRight => new Vector3(Mathf.Cos(yaw * Mathf.Deg2Rad), 0f, -Mathf.Sin(yaw * Mathf.Deg2Rad));
 
     [Header("jump")] [SerializeField] float jumpForce = 7.5f;
     [SerializeField] float airControlForce = 2f;
@@ -666,7 +669,7 @@ public class FPSController : NetworkBusListener
 
     void MovingFixedUpdate()
     {
-        Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+        Vector3 move = (YawForward * verticalInput + YawRight * horizontalInput).normalized;
 
         Vector3 velocity = move * moveSpeed;
         velocity.y = rb.linearVelocity.y;
@@ -774,7 +777,7 @@ public class FPSController : NetworkBusListener
     {
         Vector3 velocity = rb.linearVelocity;
 
-        Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+        Vector3 move = (YawForward * verticalInput + YawRight * horizontalInput).normalized;
 
         Vector3 desiredHorizontal = horizontalVelocity;
 
@@ -1088,7 +1091,7 @@ public class FPSController : NetworkBusListener
 
     void CrouchingFixedUpdate()
     {
-        Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+        Vector3 move = (YawForward * verticalInput + YawRight * horizontalInput).normalized;
 
         Vector3 velocity;
         if (!slowingDownFromSliding)
@@ -1292,7 +1295,7 @@ public class FPSController : NetworkBusListener
         else
         {
             if (verticalInput == 0f && horizontalInput == 0f) dashingDirection = _camera.transform.forward;
-            else dashingDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+            else dashingDirection = (YawForward * verticalInput + YawRight * horizontalInput).normalized;
         }
 
         OnDash?.Invoke();
@@ -1684,7 +1687,7 @@ public class FPSController : NetworkBusListener
 
     private void SideStep()
     {
-        Vector3 move = (transform.right * horizontalInput).normalized * sideStepImpulseForce;
+        Vector3 move = (YawRight * horizontalInput).normalized * sideStepImpulseForce;
         rb.AddForce(move, ForceMode.Impulse);
     }
 
@@ -1737,7 +1740,7 @@ public class FPSController : NetworkBusListener
                 Mathf.Min(currentAirJumpCount++,
                     airJumpCount);
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-            rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce,
+            rb.AddForce(Vector3.up * superJumpVerticalForce + YawForward * superJumpHorizontalForce,
                 ForceMode.Impulse);
             InvokeEvent(new ModifyEnergyEvent { p_value = -superJumpEnergyCost });
             
