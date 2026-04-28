@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Controller;
 using CustomConsole.Runtime.Logger;
 using FishNet.Connection;
 using FishNet.Managing;
@@ -31,6 +32,7 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField, Range(0f, 1f)] private float _critikStep = 0.5f;
 	[SerializeField] private PlayerInput _playerInputAction;
 	[SerializeField] private PlayerAnimation _playerAnimation;
+	[SerializeField] private GunSwitching _gunSwitching;
 
 	[Header("Healing")]
 	[SerializeField] private PlayerEnergy _playerEnergy;
@@ -115,7 +117,7 @@ public class PlayerHealth : NetworkBusListener
     
 		if (IsOwner)
 		{
-			if (_isHealKeyDown)
+			if (_isHealKeyDown && _playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
 			{
 				if(Physics.Raycast(p_healThrowPoint.position, p_healThrowDirection.forward, out RaycastHit hit, 999f, _throwHitLayerMask, QueryTriggerInteraction.Ignore))
 					p_healThrowLandingPos = hit.point;
@@ -133,7 +135,7 @@ public class PlayerHealth : NetworkBusListener
 	{
 		if(!IsOwner)return;
 
-		if (_playerEnergy.CanThrow(_healThrowCost))
+		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
 		{
 			CustomLogger.ImportantLog($"Energy amount : {_playerEnergy.CurrentEnergy}");
 			return;
@@ -146,7 +148,7 @@ public class PlayerHealth : NetworkBusListener
 	{
 		if(!(IsOwner || _isHealKeyDown))return;
 		
-		if (_playerEnergy.CanThrow(_healThrowCost))
+		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
 		{
 			return;
 		}
@@ -196,7 +198,7 @@ public class PlayerHealth : NetworkBusListener
 		InvokeEvent(new ModifyEnergyEvent
 		{
 			p_player = throwerConnection,
-			p_value = -_healThrowCost
+			p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),
 		});
 		Collider[] colliders = Physics.OverlapSphere(landingPos, p_healThrowRadius, _throwHealLayerMask);
 		foreach (Collider collider in colliders)
@@ -244,7 +246,10 @@ public class PlayerHealth : NetworkBusListener
 		_currentHealth.Value = _healthBase;
 
 		if (IsOwner)
-			transform.position = new Vector3(30,0,-23.5f);
+		{
+			transform.position = new Vector3(30, 0, -23.5f);
+			_gunSwitching.IGunMain.TryCancelShooting();
+		}
 
 		NotifyRespawnRpc(NetworkObject);
 	}
