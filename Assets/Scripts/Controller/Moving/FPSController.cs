@@ -236,6 +236,8 @@ public class FPSController : NetworkBusListener
             _camTransform = _camera.transform;
             _cameraDefaultFOV = _camera.fieldOfView;
             _camTransform.localPosition = Vector3.zero;
+            
+            rb.freezeRotation = true;
 
             ListenToEvent<OnPlayerDeathEvent>(data =>
             {
@@ -367,9 +369,10 @@ public class FPSController : NetworkBusListener
 
         if (isDead.Value) return;
         //if (IsFreeze) return;
-
+        
         if (!IsFreeze)UpdateInputs();
         UpdateGameContext();
+        
         UpdateLdInteractions();
         if (!IsFreeze)stateMachine?.Update();
     }
@@ -380,7 +383,9 @@ public class FPSController : NetworkBusListener
 
         if (isDead.Value) return;
         if (IsFreeze) return;
-
+        
+        rb.MoveRotation(Quaternion.Euler(0, yaw, 0));
+        
         stateMachine?.FixedUpdate();
     }
 
@@ -397,15 +402,21 @@ public class FPSController : NetworkBusListener
 
     void UpdateInputs() // appelé en update dans tout les states // update des inputs
     {
-        horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
-        verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
+        Vector2 rawInput = playerInput.actions["Move"].ReadValue<Vector2>();
+        
+        horizontalInput = Mathf.Abs(rawInput.x) > 0.1f ?  rawInput.x : 0;
+        verticalInput = Mathf.Abs(rawInput.y) > 0.1f ?  rawInput.y : 0;
 
-        float mouseX = playerInput.actions["Look"].ReadValue<Vector2>().x * mouseSensitivity;
-        float mouseY = playerInput.actions["Look"].ReadValue<Vector2>().y * mouseSensitivity;
+        Vector2 lookInput = playerInput.actions["Look"].ReadValue<Vector2>();
+
+        float mouseX = lookInput.x * mouseSensitivity;
+        float mouseY = lookInput.y * mouseSensitivity;
 
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
+        
+        transform.rotation = Quaternion.Euler(0, yaw, 0);
     }
 
     void UpdateGameContext()// appelé en update dans tout les states // update de la situation situation de jeu
@@ -1057,9 +1068,6 @@ public class FPSController : NetworkBusListener
     void CrouchingFixedUpdate()
     {
         Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
-
-        horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
-        verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
         Vector3 velocity;
         if (!slowingDownFromSliding)
