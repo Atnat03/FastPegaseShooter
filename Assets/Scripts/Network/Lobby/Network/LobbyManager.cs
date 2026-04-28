@@ -24,7 +24,6 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] TMP_InputField _playerNameTextField;
     [SerializeField] private NetworkManager _networkManager;
     [SerializeField] private NetworkSceneLoader _networkSceneLoader;
-    [SerializeField] private string _mapName;
     
     float _heartBeatTimer;
     [SerializeField] float _refreshUiTImer = 1f;
@@ -48,6 +47,7 @@ public class LobbyManager : MonoBehaviour
     private bool _isAuthenticated = false;
 
     public Action<List<Player>> OnUpdatePlayerList;
+    public Action<bool, int> OnSetLocalReadyPlayer;
     public Action OnJoinLobby;
     public Action OnAllPlayerReady;
     public Action<List<Lobby>> OnLobbyListChanged;
@@ -267,6 +267,12 @@ public class LobbyManager : MonoBehaviour
             }
 
             int maxPlayers = 12;
+            
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            string mapSceneName = System.IO.Path.GetFileNameWithoutExtension(
+              SceneUtility.GetScenePathByBuildIndex(currentSceneIndex + 1)
+            );           
+
 
             CreateLobbyOptions createLobbyOptions = new()
             {
@@ -275,7 +281,7 @@ public class LobbyManager : MonoBehaviour
                 Data = new Dictionary<string, DataObject>
                 {
                     { _keyGameMode, new DataObject(DataObject.VisibilityOptions.Public, "CaptureTheFlag") },
-                    { _keyMap, new DataObject(DataObject.VisibilityOptions.Public, _mapName) },
+                    { _keyMap, new DataObject(DataObject.VisibilityOptions.Public, mapSceneName) },
                     { _keyStartGameHostAddress, new DataObject(DataObject.VisibilityOptions.Member, "0") },
                     { _keyStartGamePort, new DataObject(DataObject.VisibilityOptions.Member, "7777") },
                     { "LobbyName", new DataObject(DataObject.VisibilityOptions.Public, lobbyName) },
@@ -608,8 +614,11 @@ public class LobbyManager : MonoBehaviour
       PlayerLocalData localData = PlayerLocalData.Instance;
       localData.SetPlayerData(myGun, myName, _joinedLobby.Players.Count);
 
-      string mapSceneName = _joinedLobby.Data[_keyMap].Value;
-
+      int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+      string mapSceneName = System.IO.Path.GetFileNameWithoutExtension(
+        SceneUtility.GetScenePathByBuildIndex(currentSceneIndex + 1)
+      );
+      
       string hostAddress = GetLocalIPAddress();
       ushort port = 7777;
 
@@ -643,10 +652,15 @@ public class LobbyManager : MonoBehaviour
     if (args.ConnectionState == FishNet.Transporting.RemoteConnectionState.Started)
     {
       StopAllCoroutines();
-        
       _networkManager.ServerManager.OnRemoteConnectionState -= OnClientConnectionState;
 
-      SceneLoadData sld = new SceneLoadData(_mapName);
+      int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        
+      string mapSceneName = System.IO.Path.GetFileNameWithoutExtension(
+        SceneUtility.GetScenePathByBuildIndex(currentSceneIndex + 1)
+      );
+        
+      SceneLoadData sld = new SceneLoadData(mapSceneName);
       sld.ReplaceScenes = ReplaceOption.All;
       InstanceFinder.SceneManager.LoadGlobalScenes(sld);
     }
@@ -743,6 +757,9 @@ public class LobbyManager : MonoBehaviour
       string current  = me.Data.ContainsKey("IsReady") ? me.Data["IsReady"].Value : "0";
       string newState = current == "0" ? "1" : "0";
 
+      int id = _joinedLobby.Players.IndexOf(me);
+      OnSetLocalReadyPlayer?.Invoke(newState == "1", id);
+      
       await LobbyService.Instance.UpdatePlayerAsync(
         _joinedLobby.Id,
         AuthenticationService.Instance.PlayerId,

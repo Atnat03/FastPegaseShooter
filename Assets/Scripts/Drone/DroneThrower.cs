@@ -73,11 +73,7 @@ public class DroneThrower : NetworkBusListener
 		
 		if (_playerEnergy != null)
 		{
-			InvokeEvent(new ModifyEnergyEvent
-			{
-				p_player = _playerEnergy.Owner,
-				p_value = -(_playerEnergy.p_costThrowDrone * _playerEnergy.EnergyOneBar)
-			});
+			ConsumeEnergyServerRpc(_playerEnergy.p_costThrowDrone * _playerEnergy.EnergyOneBar);
 		}
 		
 		if (_bridgeAnimation != null)
@@ -94,6 +90,16 @@ public class DroneThrower : NetworkBusListener
 		_hasDrone = false;
 		OnThrowing?.Invoke();
 	}
+	
+	[ServerRpc]
+	private void ConsumeEnergyServerRpc(float amount)
+	{
+		InvokeEvent(new ModifyEnergyEvent
+		{
+			p_player = Owner,
+			p_value = -amount
+		});
+	}
 
 	[ServerRpc]
 	public void ThrowDroneServerRpc(NetworkObject targetNetObj)
@@ -102,8 +108,6 @@ public class DroneThrower : NetworkBusListener
 		{
 			InstanceFinder.ServerManager.Despawn(_currentDroneInTerrain.gameObject);
 		}
-		
-		Cons.Print("Drone Lancé !!", ColorConsole.Blue, ConsoleStyle.Bold);
 		
 		_currentDroneInTerrain = Instantiate(_dronePrefab, _spawnPoint.position, Quaternion.identity);
 		InstanceFinder.ServerManager.Spawn(_currentDroneInTerrain.gameObject);
@@ -114,7 +118,6 @@ public class DroneThrower : NetworkBusListener
 	[TargetRpc]
 	public void GiveDroneBackTargetRpc(NetworkConnection target)
 	{
-		Cons.Print("GiveDroneBackTargetRpc " + target.ClientId, ColorConsole.Pink);
 		_hasDrone = true;
 		OnGetDrone?.Invoke();
 	}
@@ -160,7 +163,6 @@ public class DroneThrower : NetworkBusListener
 
 		if (_target)
 		{
-			Cons.Print("Player trouvé", ColorConsole.Cyan);
 			_uiTarget.SetActive(true);
 			
 			Vector3 screenPos = _camera.WorldToScreenPoint(_target.position + Vector3.up);
@@ -177,7 +179,6 @@ public class DroneThrower : NetworkBusListener
 		}
 		else
 		{
-			Cons.Print("Player pas en range", ColorConsole.Cyan);
 			_uiTarget.SetActive(false);
 		}
 	}

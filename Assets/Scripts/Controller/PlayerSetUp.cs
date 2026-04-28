@@ -13,15 +13,12 @@ public class PlayerSetup : NetworkBehaviour
         PlayerLocalData data = PlayerLocalData.Instance;
         int gunId = data != null ? data.LocalPlayerGunId : 0;
 
-        Debug.Log($"PlayerLocalData: gunId={gunId}");
         SendGunDataServerRpc(gunId);
     }
 
     [ServerRpc]
     private void SendGunDataServerRpc(int gunId)
     {
-        Debug.Log($"GunId reçu : {gunId} | _gunBridge={(_gunBridge == null ? "NULL" : "OK")}");
-
         if (_gunBridge == null)
         {
             Debug.LogError("_gunBridge est null côté serveur !");

@@ -19,6 +19,7 @@ public interface IGun
     public void TryShootCharged();
     public void Disable(bool state);
     public void SetFireRate(float multiplier);
+    public void SetInfiniteAmmo(bool infiniteAmmo);
     public void SetChargedPlayer(bool b);
     public void SetReticule(ReticulesManager manager);
 }
@@ -260,9 +261,9 @@ namespace GunDecorator
         public void SetFireRate(float multiplier)
         {
             _fireRateMultiplier = multiplier;
-            
-            _infiniteAmmo = multiplier == -1 ? false : true;
         }
+        
+        public void SetInfiniteAmmo(bool infiniteAmmo) => _infiniteAmmo = infiniteAmmo;
 
         public void PlaySound(string sound)
         {
