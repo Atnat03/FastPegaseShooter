@@ -6,19 +6,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class StatsPanelBehaviour : NetworkBehaviour
+public class StatsPanelBehaviour : NetworkBusListener
 {
     [SerializeField] PlayerInput _playerInput;
     [SerializeField] GameStatsManager _gameStatsManager;
     [SerializeField] List<PlayerStatsDisplay> playerStatsDisplayList = new();
-    Dictionary<int, PlayerStatsDisplay> playerStatsDisplayDict = new Dictionary<int, PlayerStatsDisplay>();
+    readonly Dictionary<int, PlayerStatsDisplay> playerStatsDisplayDict = new Dictionary<int, PlayerStatsDisplay>();
     [SerializeField] GameObject _statsPanel;
     
-    public override void OnStartServer()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
         _gameStatsManager.onRegisterPlayer += RegisterPlayer;
+        InvokeEvent(new OnplayerRegisterEvent{ownerId = OwnerId});
         
-        _gameStatsManager.RegisterPlayer(OwnerId);
         RefreshData();
         ClosePanel();
     }
@@ -39,7 +40,11 @@ public class StatsPanelBehaviour : NetworkBehaviour
         action.canceled -= ClosePanel;
     }
 
-    void RegisterPlayer(int playerIndex) => playerStatsDisplayDict.Add(playerIndex, playerIndex == OwnerId ? playerStatsDisplayList[0] : playerStatsDisplayList[1]);
+    void RegisterPlayer(int playerIndex)
+    {
+        
+        playerStatsDisplayDict.Add(playerIndex, playerIndex == OwnerId ? playerStatsDisplayList[0] : playerStatsDisplayList[1]);
+    } 
 
     void OpenPanel(InputAction.CallbackContext context) => OpenPanel();
     void OpenPanel()
@@ -67,10 +72,8 @@ public class StatsPanelBehaviour : NetworkBehaviour
     }
 
     void ClosePanel(InputAction.CallbackContext context) => ClosePanel();
-    void ClosePanel()
-    {
-        _statsPanel.SetActive(false);
-    }
+    void ClosePanel() => _statsPanel.SetActive(false);
+    
     
 }
 
