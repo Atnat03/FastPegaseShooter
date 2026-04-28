@@ -2,6 +2,7 @@ using System;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using MyPrint;
 using UnityEngine;
 
 public class PlayerEnergy : NetworkBusListener
@@ -69,13 +70,12 @@ public class PlayerEnergy : NetworkBusListener
 
 	private void ModifyEnergy(ModifyEnergyEvent data)
 	{
+		if (!IsServerInitialized) return;
 		if (data.p_player != Owner) return;
+		
+		_currentEnergy.Value += data.p_value;
 
-		float value = data.p_value > 0 ? data.p_value * _convertionTaux : data.p_value;
-
-		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value + value, 0, _maxEnergy);
-
-		UpdateUI(_currentEnergy.Value);
+		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
 	}
 
 	private void UpdateUI(float energy)
@@ -91,6 +91,7 @@ public class PlayerEnergy : NetworkBusListener
 			activeBarIndex = _totalBars - 1;
 			activeFill = 1f;
 		}
+		
 
 		OnUpdateUI?.Invoke(activeBarIndex, activeFill);
 	}

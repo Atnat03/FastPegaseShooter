@@ -143,7 +143,6 @@ public abstract class DroneEffectParent : NetworkBusListener
 	[TargetRpc]
 	private void SetUnderDroneTargetRpc(NetworkConnection target, bool state)
 	{
-		Cons.Print("SetUnderDroneTargetRpc ", ColorConsole.Orange);
 		PlayerVisuelBridge players = target.FirstObject.GetComponentInChildren<PlayerVisuelBridge>();
 		if (players.IsOwner)
 		{
