@@ -98,8 +98,6 @@ public abstract class DroneEffectParent : NetworkBusListener
 
 	protected virtual void StopApplicateEffect(PlayerVisuelBridge playerVisuelBridge)
 	{
-		Cons.Print("StopApplicateEffect base ", ColorConsole.Orange);
-
 		SetUnderDroneTargetRpc(playerVisuelBridge.Owner, false);
 	}
 

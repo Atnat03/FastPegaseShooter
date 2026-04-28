@@ -20,6 +20,7 @@ public interface IGun
     public void Disable(bool state);
     public void SetFireRate(float multiplier);
     public void SetChargedPlayer(bool b);
+    public void SetReticule(ReticulesManager manager);
 }
 
 
@@ -41,11 +42,8 @@ namespace GunDecorator
         public float SurchargeMultiplierRate { get; set; }
         public bool IsFullAuto => _isFullAuto;
         public bool IsInfiniteAmmo => _infiniteAmmo;
-
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
-        
         public IRecoilModule RecoilModule => _recoilModule;
-        
         public Renderer ModelGun => _model;
 
         private IShootModule _shootModule;
@@ -71,6 +69,8 @@ namespace GunDecorator
         
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
         [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
+
+        [SerializeField] private int _reticuleID = 0;
         
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
@@ -78,7 +78,21 @@ namespace GunDecorator
         private readonly SyncVar<bool> _isPositivePlayerCharge = new SyncVar<bool>(false);
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-
+        
+        //Action
+        
+        //Shoot
+        public Action<int, int> OnShootAmmo;
+        public Action<float> OnShootNoise;
+        
+        //Reloading
+        public Action<float> OnStartReload;
+        public Action OnEndReload;
+        
+        //Charging
+        public Action<float> OnCharging;
+        public Action OnStopCharging;
+        
         private void OnEnable()
         {
             _animator.ResetTrigger("Reload");
@@ -283,5 +297,12 @@ namespace GunDecorator
         public void StopReload() => _reloadModule.StopReload();
 
         public void SetChargedPlayer(bool b) => _isPositivePlayerCharge.Value = b;
+
+        public void ResetNoise() => _shootModule?.CancelShooting();
+        
+        public void SetReticule(ReticulesManager manager)
+        {
+            manager.ActivateReticules(_reticuleID);
+        }
     }
 }

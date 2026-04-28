@@ -76,7 +76,7 @@ public class EnergyManagerView : MonoBehaviour
 		}
 	}
 
-	private void OnEnable()
+	/*private void OnEnable()
 	{
 		_energyManager.OnCreateBarUI += CreateUI;
 		_energyManager.OnUpdateUI += UpdateUI;
@@ -87,7 +87,7 @@ public class EnergyManagerView : MonoBehaviour
 	{
 		_energyManager.OnCreateBarUI -= CreateUI;
 		_energyManager.OnUpdateUI -= UpdateUI;
-	}
+	}*/
 
 	#endregion
 }

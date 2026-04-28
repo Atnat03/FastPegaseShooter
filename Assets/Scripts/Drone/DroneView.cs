@@ -15,10 +15,6 @@ public class DroneView : NetworkBehaviour
 	[SerializeField] private DroneEffectParent _droneEffect;
 	[SerializeField] private Drone _drone;
 	
-	[Header("As to Activated")]
-	[SerializeField] private Transform _arrow;
-	[SerializeField] private GameObject _activated;
-	
 	[Header("ApplysEffect")]
 	[SerializeField] private ParticleSystem _applyEffect;
 
@@ -47,16 +43,10 @@ public class DroneView : NetworkBehaviour
 		var localConnection = InstanceFinder.ClientManager.Connection;
 
 		bool isThrower = _drone.IdThrower == localConnection;
-
-		_arrow.gameObject.SetActive(!isThrower);
-		_activated.gameObject.SetActive(!isThrower);
 	}
 	
 	private void OnActivatedDrone(float radius)
 	{
-		_arrow.gameObject.SetActive(false);
-		_activated.gameObject.SetActive(false);
-		
 		_applyEffect.gameObject.SetActive(true);
 		_applyEffect.transform.localScale = Vector3.one * 4f * radius;
 	}

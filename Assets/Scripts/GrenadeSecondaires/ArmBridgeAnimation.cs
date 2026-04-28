@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class ArmBridgeAnimation : NetworkBehaviour
 {
-    [SerializeField] private GrenadeThrower _thrower;
+    [SerializeField] private GrenadeThrower _grenadeThrower;
+    [SerializeField] private DroneThrower _droneThrower;
     [SerializeField] private Animator _animator;
     [SerializeField] private MeshRenderer _ballInHand;
+    
+    private NetworkObject _targetDrone;
 
     public override void OnStartClient()
     {
@@ -37,6 +40,18 @@ public class ArmBridgeAnimation : NetworkBehaviour
 
     public void Throw()
     {
-        _thrower.ThrowGrenadeServerRpc();
+        _grenadeThrower.ThrowGrenadeServerRpc();
+    }
+
+    public void StartThrowDrone(NetworkObject target)
+    {
+        _animator.SetTrigger("Drone");
+        _targetDrone = target;
+    }
+    
+    public void DroneThrowAnim()
+    {
+        _droneThrower.ThrowDroneServerRpc(_targetDrone);
+        _targetDrone = null;
     }
 }

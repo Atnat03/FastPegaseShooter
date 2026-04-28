@@ -137,7 +137,7 @@ public class ElementaryGrenade : NetworkBusListener
             {
                 damagable.TakeDamage(_networkIdAttacker.Value, _damage.Value);
                 
-                InvokeEvent(new AddEnergyEvent
+                InvokeEvent(new ModifyEnergyEvent
                 {
                     p_player = _thrower.Value,
                     p_value = _damage.Value
@@ -160,6 +160,7 @@ public class ElementaryGrenade : NetworkBusListener
             SoundManager.PlaySound(_soundData, "Explosion " + clip, _audioSource);
             
             ParticleSystem explosion = Instantiate(_particlesExplosionPrefab, position, Quaternion.LookRotation(normal));
+            explosion.transform.localScale = Vector3.one * _radius.Value / 2;
             Destroy(explosion.gameObject, 3f);
         }
     }

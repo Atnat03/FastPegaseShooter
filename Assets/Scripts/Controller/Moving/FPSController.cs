@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using UnityEngine.PlayerLoop;
 
 public class FPSController : NetworkBusListener
 {
@@ -13,6 +15,7 @@ public class FPSController : NetworkBusListener
     // dans la mesure du possible, faire un jump qui prévoit la montée, la duree a l'apex et la redécente
 
     public Camera Camera => _camera;
+    public Rigidbody Rb => rb;
 
     public bool IsFreeze
     {
@@ -105,7 +108,7 @@ public class FPSController : NetworkBusListener
 
     [SerializeField] private float superJumpVerticalForce;
     [SerializeField] private float superJumpHorizontalForce;
-    [SerializeField] private float superJumpEnergyCost = 20f;
+    [SerializeField] private float superJumpEnergyCost = 1f;
 
 
     [Header("wallRide")] [SerializeField] float wallRideDetectionRange = .5f;
@@ -140,7 +143,8 @@ public class FPSController : NetworkBusListener
     [SerializeField] private float slidingBackToNormalSpeedDelay = .5f;
     [SerializeField] private float redirectionPowerAfterSliding = 2f;
 
-    [Header("Dash")] [SerializeField] AnimationCurve dashSpeed;
+    [Header("Dash")] 
+    [SerializeField] AnimationCurve dashSpeed;
     [SerializeField] float dashTimeDuration = 0.2f;
     [SerializeField] float dashCooldown;
 
@@ -248,7 +252,10 @@ public class FPSController : NetworkBusListener
             ListenToEvent<OnPauseEvent>(data =>
             {
                 isFreeze = data.p_isPause;
-                rb.linearVelocity = isFreeze ? Vector3.zero : rb.linearVelocity;
+                horizontalInput = 0f;
+                verticalInput = 0f;
+                StartCoroutine(OnPauseCoroutine());
+                //rb.linearVelocity = isFreeze ? Vector3.zero : rb.linearVelocity;
             });
         }
         else
@@ -359,11 +366,12 @@ public class FPSController : NetworkBusListener
         if (!IsOwner) return;
 
         if (isDead.Value) return;
-        if (IsFreeze) return;
+        //if (IsFreeze) return;
 
-        UpdateInputs();
+        if (!IsFreeze)UpdateInputs();
+        UpdateGameContext();
         UpdateLdInteractions();
-        stateMachine?.Update();
+        if (!IsFreeze)stateMachine?.Update();
     }
 
     void FixedUpdate()
@@ -387,9 +395,8 @@ public class FPSController : NetworkBusListener
     }
 
 
-    void UpdateInputs() // appelé en update dans tout les states
+    void UpdateInputs() // appelé en update dans tout les states // update des inputs
     {
-        //inputs
         horizontalInput = playerInput.actions["Move"].ReadValue<Vector2>().x;
         verticalInput = playerInput.actions["Move"].ReadValue<Vector2>().y;
 
@@ -399,17 +406,18 @@ public class FPSController : NetworkBusListener
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
+    }
 
-        //situation de jeu
-
+    void UpdateGameContext()// appelé en update dans tout les states // update de la situation situation de jeu
+    {
         grounded = (Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, 0.25f,
             ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore) && !justJumped);
 
 
         leftSideAgainstWall = Physics.Raycast(playerLeftSide.position, playerLeftSide.forward,
-            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
+            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner", "NotWallridable"), QueryTriggerInteraction.Ignore);
         rightSideAgainstWall = Physics.Raycast(playerRightSide.position, playerRightSide.forward,
-            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
+            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner", "NotWallridable"), QueryTriggerInteraction.Ignore);
 
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
     }
@@ -523,8 +531,12 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
+            RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    QueryTriggerInteraction.Collide)
+                || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                    out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -604,8 +616,12 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
+            RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
+                    out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    QueryTriggerInteraction.Collide)
+                || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                    out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -705,8 +721,12 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
+            RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
+                    out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    QueryTriggerInteraction.Collide)
+                || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                    out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -913,8 +933,12 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
+            RaycastHit hit;
             if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                    out RaycastHit hit, _castMaxDistance,LayerMask.GetMask("Default"),
+                    out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                    QueryTriggerInteraction.Collide)
+                || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                    out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                     QueryTriggerInteraction.Collide))
             {
                 if (hit.collider.GetComponent<GrapplePoint>() != null)
@@ -1338,7 +1362,7 @@ public class FPSController : NetworkBusListener
                 Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
         {
             if (playerInput.actions["Crouch"].WasReleasedThisFrame()) stateMachine.ChangeState(ControlerState.Idle);
-            if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(); // au besoin, faire une autre fonction
+            if (playerInput.actions["Jump"].WasPressedThisFrame()) SlideJump(true); // au besoin, faire une autre fonction
             if (Vector3.Angle(groundedHit.normal, Vector3.up) < minSlopeAngleToSlopeSlide)
                 stateMachine.ChangeState(ControlerState.Idle);
         }
@@ -1392,12 +1416,18 @@ public class FPSController : NetworkBusListener
     #region GrappleState
 
     Vector3 grappleDirection;
-    private float grappleStartingDistance;
+    Vector3 grappleStartingDistance;
+    private float grappleTimer;
 
     void EnterGrappleState()
     {
+        RaycastHit hit;
+        grappleTimer = 0f;
         if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                out hit, _castMaxDistance, LayerMask.GetMask("Default"),
+                QueryTriggerInteraction.Collide)
+            || Physics.Raycast(cameraParentTransform.position, cameraParentTransform.forward, 
+                out hit, _castMaxDistance ,LayerMask.GetMask("Default"),
                 QueryTriggerInteraction.Collide))
         {
             GrapplePoint grapplePoint;
@@ -1406,7 +1436,7 @@ public class FPSController : NetworkBusListener
                 _currentGrapplePoint = grapplePoint.p_targetTransform;
 
                 grappleDirection = _currentGrapplePoint.position - transform.position;
-                grappleStartingDistance = grappleDirection.magnitude;
+                grappleStartingDistance = grappleDirection;
                 grappleDirection.Normalize();
                 
                 OnGrappling?.Invoke();
@@ -1421,13 +1451,20 @@ public class FPSController : NetworkBusListener
 
     void GrappleUpdate()
     {
-        if (!(Vector3.Distance(transform.position, _currentGrapplePoint.position) > 0.75f
-              && (playerInput.actions["Grapple"].IsPressed() || singleClicGrapple)
-              && !(Vector3.Distance(transform.position, _currentGrapplePoint.position) < grappleStartingDistance &&
-                   rb.linearVelocity.magnitude < 0.05f)))
+        float distance = Vector3.Distance(transform.position, _currentGrapplePoint.position);
+        grappleTimer += Time.deltaTime;
+
+        bool ignoreStartCheck = grappleTimer < 0.2f;
+        
+        bool isFarEnough = distance > 0.75f;
+        bool inputValid = playerInput.actions["Grapple"].IsPressed() || singleClicGrapple;
+        bool isStuck = distance < grappleStartingDistance.magnitude && rb.linearVelocity.magnitude < 0.05f;
+
+        if ((!isFarEnough || !inputValid || isStuck) && !ignoreStartCheck)
         {
+
             rb.linearVelocity = Vector3.zero;
-            rb.AddForce(grappleDirection * _endGrappleImpulseForce, ForceMode.Impulse);
+            rb.AddForce(grappleStartingDistance.normalized * _endGrappleImpulseForce, ForceMode.Impulse);
             _currentGrapplePoint = null;
             stateMachine.ChangeState(ControlerState.Idle);
             return;
@@ -1446,8 +1483,9 @@ public class FPSController : NetworkBusListener
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
 
         Vector3 newDir = grappleDirection;
-        if (rb.linearVelocity.magnitude > 0.1 && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f &&
-            Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
+        if (rb.linearVelocity.magnitude > 0.1 
+            && Vector3.Angle(rb.linearVelocity, grappleDirection) > 10f 
+            && Vector3.Distance(transform.position, _currentGrapplePoint.position) > 2f)
         {
             newDir = Vector3.Slerp(rb.linearVelocity.normalized, grappleDirection,
                 _grappleRedirectionSpeed * Time.fixedDeltaTime);
@@ -1531,6 +1569,7 @@ public class FPSController : NetworkBusListener
     private Vector3 point2;
     private CapsuleCollider capsule;
 
+    [SuppressMessage("ReSharper", "Unity.PreferNonAllocApi")]
     Vector3 AlignVelocityToWall(Vector3 velocity, bool crouched = false)
     {
         if (velocity.sqrMagnitude == 0) return velocity;
@@ -1671,7 +1710,7 @@ public class FPSController : NetworkBusListener
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * superJumpVerticalForce + transform.forward * superJumpHorizontalForce,
                 ForceMode.Impulse);
-            InvokeEvent(new OnModifyEnergyEvent { value = -superJumpEnergyCost });
+            InvokeEvent(new ModifyEnergyEvent { p_value = -superJumpEnergyCost });
             
             OnDoubleJump?.Invoke();
         }
@@ -1689,7 +1728,7 @@ public class FPSController : NetworkBusListener
         stateMachine.ChangeState(ControlerState.Falling);
     }
 
-    void SlideJump()
+    void SlideJump(bool slopeSlide = false)
     {
         hasJumped = true;
         coyoteJump = false;
@@ -1697,8 +1736,12 @@ public class FPSController : NetworkBusListener
         mustSlide = false;
         StartCoroutine(JumpAntiLagCoroutine());
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-        rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
-            ForceMode.Impulse);
+        if (slopeSlide)
+            rb.AddForce(Vector3.up * slideJumpVerticalForce,
+                ForceMode.Impulse);
+        else
+            rb.AddForce(Vector3.up * slideJumpVerticalForce + horizontalVelocity * slideJumpHorizontalForce,
+                ForceMode.Impulse);
     }
 
     void Crouch()
@@ -1722,6 +1765,15 @@ public class FPSController : NetworkBusListener
     #endregion
 
     #region Other Fonctions
+
+    IEnumerator OnPauseCoroutine()
+    {
+        while (!grounded)
+        {
+            yield return null;
+        }
+        rb.linearVelocity = Vector3.zero;
+    }
 
     public void SetUpLayer()
     {

@@ -54,7 +54,7 @@ public class EnergyCuve : NetworkBusListener, IDamagable
     public void Death(int takenDamages)
     {
         if(!IsServerInitialized) return;
-        InvokeEvent<OnModifyEnergyEvent>(new OnModifyEnergyEvent { value = _energyToGive});
+        InvokeEvent<ModifyEnergyEvent>(new ModifyEnergyEvent { p_value = _energyToGive});
         OnDeathObserverRPC();
     }
     

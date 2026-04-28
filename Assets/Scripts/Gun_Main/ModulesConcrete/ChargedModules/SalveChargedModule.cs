@@ -7,6 +7,7 @@ namespace GunDecorator.ChargedModules
     {
         [Header("Salve")] 
         [SerializeField] private float _intervaleCharge = 0.05f;
+        [SerializeField, Range(0, 30)] private float _noiseCharged = 5;
         
         public override void SetVariable(GunSetting setting)
         {
@@ -51,7 +52,12 @@ namespace GunDecorator.ChargedModules
             
             for (int i = 0; i < numberBullet; i++)
             {
-                _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
+                Vector3 spread = new Vector3(
+                    Random.Range(-_noiseCharged, _noiseCharged),
+                    Random.Range(-_noiseCharged, _noiseCharged),
+                    0);
+                
+                _ammoModule.SpawnBullet(spread, Vector3.zero);
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1, _gunController.IsInfiniteAmmo);
                 
                 _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
@@ -60,6 +66,7 @@ namespace GunDecorator.ChargedModules
                 yield return new WaitForSeconds(_intervaleCharge);
             }
             
+            _gunController?.OnStopCharging?.Invoke();
             _ammoModule.ResetBulletData();
         }
     }

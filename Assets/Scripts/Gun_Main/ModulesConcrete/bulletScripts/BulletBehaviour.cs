@@ -12,13 +12,26 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
 
-    [SerializeField] private GameObject _explosionVFX;
+    [SerializeField] private GameObject _positiveExplosionVFX;
+    [SerializeField] private GameObject _negativeExplosionVFX;
 
+    [Header("View")]    
+    [SerializeField]private MeshRenderer _meshRenderer;
+    [SerializeField]private Material _positiveMaterial;
+    [SerializeField] private Material _negativeMaterial;
+    
+    [SerializeField]private TrailRenderer _trailenderer;
+    [SerializeField]private Gradient _positiveLineColor;
+    [SerializeField]private Gradient _negativeLineColor;
+    
+    private GameObject _vfx;
+    
     private GunController _gunController;
     private Vector3 _targetPoint;
     private NetworkObject _targetNetworkObject;
 
     private bool _hasHit = false;
+    private bool _hasMark = false;
 
     private void FixedUpdate()
     {
@@ -37,7 +50,8 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         GunController gun,
         bool isCritical,
         Vector3 targetPoint,
-        NetworkObject target)
+        NetworkObject target,
+        bool isPositive)
     {
         p_damage = damage;
         p_speed = speed;
@@ -48,6 +62,11 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         p_isCritical = isCritical;
         _targetPoint = targetPoint;
         _targetNetworkObject = target;
+
+        _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
+        
+        _trailenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
+        _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
 
         Destroy(gameObject, 3f);
     }
@@ -86,8 +105,8 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private void HandleExplosion()
     {
-        if (_explosionVFX != null)
-            Destroy(Instantiate(_explosionVFX, transform.position, Quaternion.identity), 3f);
+        if(_vfx != null)
+            Destroy(Instantiate(_vfx, transform.position, Quaternion.identity), 3f);
 
         if (_gunController.IsServerInitialized)
             Explosed(p_explosionRadius, (int)p_damage);
@@ -116,7 +135,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
             _gunController.TriggerHitMark(crit || p_isCritical);
 
-            InvokeEvent(new AddEnergyEvent
+            InvokeEvent(new ModifyEnergyEvent
             {
                 p_player = _gunController.Owner,
                 p_value = p_damage
@@ -141,28 +160,30 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     public void Explosed(float radius, int damage)
     {
-        if (_explosionVFX != null)
-            Instantiate(_explosionVFX, transform.position, Quaternion.identity);
+        if(_vfx != null)
+            Instantiate(_vfx, transform.position, Quaternion.identity);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
+        bool crit = false;
+        bool hit = false;
+        
         foreach (Collider c in colliders)
         {
             if (!c.TryGetComponent<IDamagable>(out IDamagable damagable))
                 continue;
 
-            bool crit = damagable.TakeDamage(
+            crit = damagable.TakeDamage(
                 _gunController.NetworkObject.ObjectId,
                 damage,
                 p_isCritical);
-
-            _gunController.TriggerHitMark(crit || p_isCritical);
-
-            InvokeEvent(new AddEnergyEvent
+            InvokeEvent(new ModifyEnergyEvent
             {
                 p_player = _gunController.Owner,
                 p_value = p_damage
             });
+
+            hit = true;
 
             if (_targetNetworkObject != null &&
                 _targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
@@ -170,5 +191,8 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
             }
         }
+        
+        if(hit)
+            _gunController.TriggerHitMark(crit || p_isCritical);
     }
 }
