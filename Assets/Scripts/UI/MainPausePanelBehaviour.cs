@@ -11,4 +11,9 @@ public class MainPausePanelBehaviour : PausePanel
     {
         gameObject.SetActive(isPause);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
