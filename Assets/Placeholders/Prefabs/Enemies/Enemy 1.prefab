@@ -50,7 +50,7 @@ GameObject:
   - component: {fileID: 884032417087958138}
   - component: {fileID: 4124110413769053486}
   - component: {fileID: 8656423359014822480}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 1050325306669984856}
   - component: {fileID: 4829705511523928905}
   - component: {fileID: 8838920003505348040}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Life text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 2321877886111589878}
   - component: {fileID: 1846171336190497970}
   - component: {fileID: 7477918164592477288}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,7 +386,7 @@ GameObject:
   - component: {fileID: 161794585651235708}
   - component: {fileID: 1267449697482659097}
   - component: {fileID: 4531288954403815074}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: PVBag (1)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -534,7 +534,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584243024482683296
+  _initializedTimestamp: -8584242174018117518
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -568,7 +568,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7118404291989148995}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: PV Bags
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -681,7 +681,7 @@ GameObject:
   - component: {fileID: 9140594166941636969}
   - component: {fileID: 5649207193664968631}
   - component: {fileID: 6070405561741422876}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Weak Point (1)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -811,7 +811,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584243024482683296
+  _initializedTimestamp: -8584242174018117518
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -900,7 +900,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4034669122735167816}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: DmgParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -940,7 +940,7 @@ GameObject:
   - component: {fileID: 8938089939356473104}
   - component: {fileID: 8676698036849061702}
   - component: {fileID: 621410928043515991}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: PVBag
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -1088,7 +1088,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584243024482683296
+  _initializedTimestamp: -8584242174018117518
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1205,7 +1205,7 @@ GameObject:
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: -8997744782067408838}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Enemy 1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -1287,7 +1287,7 @@ MonoBehaviour:
   _bulletSize: 0.2
   _bulletSpeed: 10
   _maxBulletLifeTime: 10
-  _bulletAmount: 20
+  _bulletAmount: 1
   _shootingSpreadAngle: 7
 --- !u!114 &4639033686446523756
 MonoBehaviour:
@@ -1345,9 +1345,45 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8280671740658429549}
   _doFreezeWithoutTarget: 1
   _targetModule: {fileID: 6912678073703625548}
-  _speed: 3
-  _nodeValidationDistance: 0.01
-  _steering: 0.5
+  _speed: 10
+  _nodeValidationDistance: 1
+  _seekSteeringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _seekSteeringStrenght: 60
+  _WallViewDistance: 1
+  _agentWidth: 0.4
+  _wallSteeringStrenght: 200
+  _ignoredLayers:
+    serializedVersion: 2
+    m_Bits: 2147549376
+  _enemyViewDistance: 60
+  _enemySteeringStrenght: 30
+  _enemyLayers:
+    serializedVersion: 2
+    m_Bits: 65536
+  _maxSkippingStep: 3
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1411,7 +1447,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584243024482683296
+  _initializedTimestamp: -8584242174018117518
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1493,7 +1529,7 @@ GameObject:
   - component: {fileID: 7334294301029598172}
   - component: {fileID: 906739907246505463}
   - component: {fileID: 1972305671944957275}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1661,7 +1697,7 @@ GameObject:
   - component: {fileID: 4639484058934551347}
   - component: {fileID: 8885746821826891717}
   - component: {fileID: 4338066039894778116}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Weak Point
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -1791,7 +1827,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584243024482683296
+  _initializedTimestamp: -8584242174018117518
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1918,7 +1954,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8220791991863241335}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: WeakPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1951,7 +1987,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2118052366023865933}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2068,7 +2104,7 @@ GameObject:
   - component: {fileID: 5346405171015881183}
   - component: {fileID: 7388347016383583870}
   - component: {fileID: 8394527351532065358}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Viewers
   m_TagString: Untagged
   m_Icon: {fileID: 0}

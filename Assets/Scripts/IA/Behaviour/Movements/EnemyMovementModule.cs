@@ -35,8 +35,10 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         {
             if(!_enemyCore.p_pathRequester) return;
             
-            _isPathUpdateRequested = true;
-            _enemyCore.p_pathRequester.RegisterPathRequest(new PathRequest{p_AuthorizePathRequest = RecalculatePath});
+            _isPathUpdateRequested = _enemyCore.p_pathRequester.TryRegisterPathRequest(
+                new PathRequest(
+                    _path.Count > 0 ?Vector3.SqrMagnitude(_path[0].position - _targetPosition) : float.MaxValue,
+                    RecalculatePath));
         }
     }
 

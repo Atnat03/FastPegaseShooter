@@ -38,21 +38,21 @@ public class EnemyBulletManager : NetworkBusListener
             if(_spawnedBullets[i].MoveForward(serverTime, out PlayerHealth playerHealth))
             {
                 //here, apply target hitting logic
-                InvokeEvent(new PlayerTakeDamageEvent
+                if(playerHealth != null)
                 {
-                    p_playerN = playerHealth.NetworkObject,
-                    p_value = _spawnedBullets[i].p_bulletStrenght
-                });
-                _spawnedBullets[i].p_attackModule.p_onHitPlayer?.Invoke(
-                    playerHealth.NetworkObject.ObjectId,
-                    _spawnedBullets[i].p_bulletStrenght);
+                    InvokeEvent(new PlayerTakeDamageEvent
+                    {
+                        p_playerN = playerHealth.NetworkObject,
+                        p_value = _spawnedBullets[i].p_bulletStrenght
+                    });
+                    _spawnedBullets[i].p_attackModule.p_onHitPlayer?.Invoke(
+                        playerHealth.NetworkObject.ObjectId,
+                        _spawnedBullets[i].p_bulletStrenght);
+                }
                 
-                
-                //EnemyBullet bullet = _spawnedBullets[i];
-                //playerHealth.TakeDamage(bullet.p_bulletStrenght);
                 KillVisualBulletObserverRPC(_spawnedBullets[i].p_bulletId);
                 
-                //replace RemoveAt by "swap remove" for performences
+                //replace RemoveAt by "swap remove" for performances
                 _spawnedBullets.RemoveAt(i);
             }
             else if (_spawnedBullets[i].ShouldBeDestroyed(serverTime))
