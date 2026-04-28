@@ -13,6 +13,7 @@ namespace GunDecorator.ChargedModules
         {
             if (setting is ChargedSalveSetting s)
             {
+                _damageChargedMultiplicator = s._damageChargedMultiplicator;
                 _isExplosifAmmo = s.IsExplosifAmmo;
                 _explosionRadius = s.explosionRadius;
                 _deadZoneStartCharging = s.DeadZoneStartCharging;
@@ -49,6 +50,8 @@ namespace GunDecorator.ChargedModules
         IEnumerator ShootSalve(int numberBullet)
         {
             _gunController.PlaySound("Charged");
+
+            _ammoModule.SetDamage(_damageChargedMultiplicator);
             
             for (int i = 0; i < numberBullet; i++)
             {
@@ -68,6 +71,7 @@ namespace GunDecorator.ChargedModules
             
             _gunController?.OnStopCharging?.Invoke();
             _ammoModule.ResetBulletData();
+            _ammoModule.SetDamage(1);
         }
     }
 }
