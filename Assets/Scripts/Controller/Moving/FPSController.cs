@@ -415,9 +415,9 @@ public class FPSController : NetworkBusListener
 
 
         leftSideAgainstWall = Physics.Raycast(playerLeftSide.position, playerLeftSide.forward,
-            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
+            out leftSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner", "NotWallridable"), QueryTriggerInteraction.Ignore);
         rightSideAgainstWall = Physics.Raycast(playerRightSide.position, playerRightSide.forward,
-            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
+            out rightSideHit, wallRideDetectionRange, ~LayerMask.GetMask("Owner", "NotWallridable"), QueryTriggerInteraction.Ignore);
 
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
     }
