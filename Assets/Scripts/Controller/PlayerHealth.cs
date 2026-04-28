@@ -111,7 +111,7 @@ public class PlayerHealth : NetworkBusListener
 				if (_respawnTimer.Value > 0)
 					_respawnTimer.Value -= Time.deltaTime;
 				else
-					RespawnObserverRpc();
+					Respawn();
 			}
 		}
     
@@ -235,9 +235,8 @@ public class PlayerHealth : NetworkBusListener
 
 		NotifyDeathRpc(NetworkObject);
 	}
-	
-	[ObserversRpc]
-	private void RespawnObserverRpc()
+
+	void Respawn()
 	{
 		Debug.Log("Respawn");
 		
@@ -245,13 +244,23 @@ public class PlayerHealth : NetworkBusListener
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
 
+		transform.position = new Vector3(30, 0, -23.5f);
+		
+		RespawnObserverRpc();
+	}
+	
+	[ObserversRpc]
+	private void RespawnObserverRpc()
+	{
+		Debug.Log("RespawnObserverRpc");
+		
 		if (IsOwner)
 		{
 			transform.position = new Vector3(30, 0, -23.5f);
 			_gunSwitching.IGunMain.TryCancelShooting();
 		}
 
-		NotifyRespawnRpc(NetworkObject);
+		InvokeEvent(new OnPlayerRespawnEvent { p_playerN = NetworkObject });
 	}
 	
 	[ObserversRpc]
@@ -260,11 +269,6 @@ public class PlayerHealth : NetworkBusListener
 		InvokeEvent(new OnPlayerDeathEvent { p_playerN = playerN });
 	}
 	
-	[ObserversRpc]
-	private void NotifyRespawnRpc(NetworkObject playerN)
-	{
-		InvokeEvent(new OnPlayerRespawnEvent { p_playerN = playerN });
-	}
 
 	[ObserversRpc]
 	private void ShowHealThrowObserverRpc(Vector3 landingPos)
