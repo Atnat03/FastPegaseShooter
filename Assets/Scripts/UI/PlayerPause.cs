@@ -42,8 +42,11 @@ public class PlayerPause : NetworkBusListener
             panel.OnPause(_isPause);
         }
         
-        Cursor.lockState = _isPause ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = _isPause;
+        if(_isPause && Cursor.visible == false)
+        {
+            Cursor.lockState = _isPause ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = _isPause;
+        }
         
         InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
     }

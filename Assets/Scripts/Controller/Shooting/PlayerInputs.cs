@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace Controller
 {
-    public class PlayerShooting : NetworkBusListener
+    public class PlayerInputs : NetworkBusListener
     {
         #region Variables
 
@@ -147,6 +147,14 @@ namespace Controller
             yield return new WaitForSeconds(duration);
             _canShoot = true;
         }
+        
+        private void Interact(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+
+            InvokeEvent(new OnPlayerInteract());
+        }
 
         void OnEnable()
         {
@@ -163,6 +171,9 @@ namespace Controller
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth += StopShooting;
+            
+            //Interact
+            _playerInputAction.actions["Grapple"].performed += Interact;
         }
 
         void OnDisable()
@@ -180,9 +191,13 @@ namespace Controller
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth -= StopShooting;
+            
+            //Interact
+            _playerInputAction.actions["Grapple"].performed -= Interact;
         }
 
-        
         #endregion
     }
+    
+    public struct OnPlayerInteract{}
 }
