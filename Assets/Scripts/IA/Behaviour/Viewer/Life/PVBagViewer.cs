@@ -6,7 +6,7 @@ public class PVBagViewer : MonoBehaviour
 
     void Awake()
     {
-        _enemyLifeModule.OnDeathViewer += WeakPointDestroyedObserverRPC;
+        _enemyLifeModule.OnDeath += WeakPointDestroyedObserverRPC;
     }
 
     void WeakPointDestroyedObserverRPC()
