@@ -12,6 +12,7 @@ public class PlayerPause : NetworkBusListener
 {
     [SerializeField] private PausePanel[] _pauseUIPanels;
     [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private FPSController _fpsController;
     
     private bool _isPause = false;
 
@@ -42,13 +43,12 @@ public class PlayerPause : NetworkBusListener
             panel.OnPause(_isPause);
         }
         
-        if(_isPause && Cursor.visible == false)
-        {
-            Cursor.lockState = _isPause ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = _isPause;
-        }
+        if(_isPause)
+            CursorManager.instance.PushState(CursorState.UI, _fpsController);
+        else
+            CursorManager.instance.PopState(_fpsController);
         
-        InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
+        //InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
     }
     
     

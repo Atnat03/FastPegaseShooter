@@ -19,11 +19,13 @@ public class BorneGunSelection : NetworkBusListener
 
 	[Header("Zone")]
 	[SerializeField] private Vector3 _zoneSize;
+	[SerializeField] private Transform _zoneMesh;
 	[SerializeField] private bool _showGIZMOS = true;
 	private List<PlayerVisuelBridge> _playerList = new List<PlayerVisuelBridge>();
 	private BoxCollider _collider;
 	private readonly SyncVar<int> _numberPlayer = new SyncVar<int>(0);
-	private readonly SyncVar<bool> _canOpenSwap = new SyncVar<bool>(false);
+	private readonly SyncVar<bool> _canOpenSelect = new SyncVar<bool>(false);
+	private readonly SyncVar<bool> _alreadySelect = new SyncVar<bool>(false);
 	
 	#endregion
 
@@ -34,6 +36,7 @@ public class BorneGunSelection : NetworkBusListener
 	{
 		_collider = GetComponent<BoxCollider>();
 		_collider.size = _zoneSize;
+		_zoneMesh.localScale = _zoneSize;
 	}
 	
 	public override void OnStartServer()
@@ -48,10 +51,13 @@ public class BorneGunSelection : NetworkBusListener
 
 	private void PlayerInteract(OnPlayerInteract data)
 	{
-		if (_canOpenSwap.Value)
+		if (_canOpenSelect.Value)
 		{
 			if(IsServerInitialized)
+			{
+				_alreadySelect.Value = true;
 				AllPlayerInZoneObserversRpc();
+			}
 			else
 			{
 				AllPlayerInZoneServerRpc();
@@ -64,9 +70,10 @@ public class BorneGunSelection : NetworkBusListener
 		if (next == InstanceFinder.ServerManager.Clients.Count)
 		{
 			if (asServer)
-				_canOpenSwap.Value = true;
-			
-			InvokeEvent(new OnAllPlayerCanSelectGun());
+			{
+				_canOpenSelect.Value = true;
+				CanInteractToOpenObserversRpc();
+			}
 		}
 	}
 
@@ -82,10 +89,17 @@ public class BorneGunSelection : NetworkBusListener
 		Cons.Print("All player in zone", ColorConsole.Cyan);
 		InvokeEvent(new OnAllPlayerAtBorne());
 	}
+
+	[ObserversRpc]
+	void CanInteractToOpenObserversRpc()
+	{
+		InvokeEvent(new OnAllPlayerCanSelectGun());
+	}
 	
 	public void OnTriggerEnter(Collider other)
 	{
 		if (!IsServerInitialized) return;
+		if (_alreadySelect.Value) return;
 		
 		if (other.TryGetComponent(out PlayerVisuelBridge player))
 		{
@@ -97,6 +111,7 @@ public class BorneGunSelection : NetworkBusListener
 	public void OnTriggerExit(Collider other)
 	{
 		if (!IsServerInitialized) return;
+		if (_alreadySelect.Value) return;
 		
 		if (other.TryGetComponent(out PlayerVisuelBridge player))
 		{
