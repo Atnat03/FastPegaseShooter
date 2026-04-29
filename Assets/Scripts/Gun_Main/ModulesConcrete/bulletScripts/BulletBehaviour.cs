@@ -129,7 +129,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         if (_targetNetworkObject.TryGetComponent<IDamagable>(out var d))
         {
             bool crit = d.TakeDamage(
-                _gunController.NetworkObject.ObjectId,
+                _gunController.OwnerId,
                 (int)p_damage,
                 p_isCritical);
 
@@ -140,7 +140,16 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 p_player = _gunController.Owner,
                 p_value = p_damage
             });
+            
+            InvokeEvent(new OnPlayerDoDamage
+            {
+                p_ownerId = _gunController.OwnerId,
+                p_value = p_damage,
+                p_critical = p_isCritical
+            });
 
+            _gunController.AddPercentageCharge();
+            
             if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
             {
                 enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
@@ -174,15 +183,25 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 continue;
 
             crit = damagable.TakeDamage(
-                _gunController.NetworkObject.ObjectId,
+                _gunController.OwnerId,
                 damage,
                 p_isCritical);
+            
             InvokeEvent(new ModifyEnergyEvent
             {
                 p_player = _gunController.Owner,
                 p_value = p_damage
             });
 
+            InvokeEvent(new OnPlayerDoDamage
+            {
+                p_ownerId = _gunController.OwnerId,
+                p_value = p_damage,
+                p_critical = p_isCritical
+            });
+            
+            _gunController.AddPercentageCharge();
+            
             hit = true;
 
             if (_targetNetworkObject != null &&

@@ -2,6 +2,7 @@ using System;
 using Controller;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using MyPrint;
 using UnityEngine;
 
 //[AddComponentMenu("EnemyBehaviour/Life")]
@@ -18,7 +19,8 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     /// int => Taken damages amount
     /// </summary>
     public Action<bool, int, int, int> OnLifeUpdate;
-    public Action OnDeath;
+    public Action OnDeathViewer;
+    public Action<int> OnDeath;
     
     public Action<int, int> p_onHitPlayer;
     
@@ -31,6 +33,11 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
         {
             p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
             OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
+
+            if (p_life.Value - GetDamageAmount(rawDamageAmount) <= 0)
+            {
+                OnDeath?.Invoke(attackerObjectId);
+            }
         }
         return isCritical;
     }
@@ -80,6 +87,6 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     [ObserversRpc]
     protected void OnDeathObserverRPC()
     {
-        OnDeath?.Invoke();
+        OnDeathViewer?.Invoke();
     }
 }

@@ -25,6 +25,8 @@ namespace GunDecorator.AmmoModules
         private Vector3 bulletDirection;
         private float travelTime;
         
+        private Vector3 _finalSpawnPoint;
+        
         public override void SetVariable(GunSetting setting)
         {
             if (setting is RaycastAmmoSetting s)
@@ -62,11 +64,18 @@ namespace GunDecorator.AmmoModules
             Vector3 targetPoint;
             NetworkObject damagableObject = null;
             string touchTag = "Default";
-
+            _finalSpawnPoint = _spawnPoint.position;
+            Vector3 camPos = _camera.transform.position;
+            
             if (Physics.Raycast(cameraRay, out hit, _maxDistance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
             {
                 targetPoint = hit.point;
                 touchTag = hit.collider.gameObject.tag;
+
+                if ((targetPoint - camPos).sqrMagnitude < (_finalSpawnPoint - camPos).sqrMagnitude)
+                {
+                    _finalSpawnPoint = targetPoint;
+                }
 
                 if (hit.collider.TryGetComponent<NetworkObject>(out NetworkObject iDamagable))
                     damagableObject = iDamagable;
@@ -77,7 +86,7 @@ namespace GunDecorator.AmmoModules
             }
 
             bulletDirection = spreadDirection.normalized;
-            travelTime = Vector3.Distance(_spawnPoint.position, targetPoint) / _BulletSpeed;
+            travelTime = Vector3.Distance(_finalSpawnPoint, targetPoint) / _BulletSpeed;
 
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
@@ -97,7 +106,7 @@ namespace GunDecorator.AmmoModules
         private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, NetworkObject target = null)
         {
-            GameObject newBullet = Instantiate(BulletPrefab, _spawnPoint.position + offset, Quaternion.LookRotation(direction));
+            GameObject newBullet = Instantiate(BulletPrefab, _finalSpawnPoint + offset, Quaternion.LookRotation(direction));
             Destroy(newBullet, travel + .5f);
     
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();

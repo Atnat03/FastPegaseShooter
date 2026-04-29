@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace Controller
 {
-    public class PlayerShooting : NetworkBusListener
+    public class PlayerInputs : NetworkBusListener
     {
         #region Variables
 
@@ -37,7 +37,6 @@ namespace Controller
         void Update()
         {
             if (_playerInputAction.actions["Shoot"].WasReleasedThisFrame()) CancelShooting();
-            if(_playerInputAction.actions["Charge"].WasReleasedThisFrame())ShootCharged();
         }
 
         private void Shooting(InputAction.CallbackContext obj)
@@ -61,19 +60,7 @@ namespace Controller
             }
         }
         
-        private void Charging(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            if(!_canShoot) return;
-            
-            if (_bridgePlayer != null)
-            {
-                _bridgePlayer.TryChargeWithCurrentGun();
-            }
-        }
-        
-        private void ShootCharged()
+        private void ShootCharged(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
@@ -147,11 +134,19 @@ namespace Controller
             yield return new WaitForSeconds(duration);
             _canShoot = true;
         }
+        
+        private void Interact(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+
+            InvokeEvent(new OnPlayerInteract());
+        }
 
         void OnEnable()
         {
             _playerInputAction.actions["Shoot"].performed += Shooting;
-            _playerInputAction.actions["Charge"].performed += Charging;
+            _playerInputAction.actions["Charge"].performed += ShootCharged;
             
             _playerInputAction.actions["SwapGun"].performed += RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed += Reloading;
@@ -163,12 +158,15 @@ namespace Controller
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth += StopShooting;
+            
+            //Interact
+            _playerInputAction.actions["Grapple"].performed += Interact;
         }
 
         void OnDisable()
         {
             _playerInputAction.actions["Shoot"].performed -= Shooting;
-            _playerInputAction.actions["Charge"].performed -= Charging;
+            _playerInputAction.actions["Charge"].performed -= ShootCharged;
             
             _playerInputAction.actions["SwapGun"].performed -= RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed -= Reloading;
@@ -180,9 +178,13 @@ namespace Controller
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth -= StopShooting;
+            
+            //Interact
+            _playerInputAction.actions["Grapple"].performed -= Interact;
         }
 
-        
         #endregion
     }
+    
+    public struct OnPlayerInteract{}
 }

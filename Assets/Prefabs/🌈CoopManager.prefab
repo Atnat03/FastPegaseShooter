@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4660385558512272094}
   - component: {fileID: 6325006552558930708}
   - component: {fileID: 1894198244629999496}
+  - component: {fileID: 1039354952693192919}
   m_Layer: 0
   m_Name: "\U0001F308CoopManager"
   m_TagString: Untagged
@@ -58,17 +59,17 @@ MonoBehaviour:
     cadenceMultiplier: 1
     overloadDuration: 10
     timeToCombo: 3
-    colorJauge: {r: 1, g: 1, b: 1, a: 1}
+    colorJauge: {r: 0.18498743, g: 1, b: 0, a: 1}
   - damageMultiplier: 2
     cadenceMultiplier: 1.15
     overloadDuration: 10
     timeToCombo: 3
-    colorJauge: {r: 0.17174888, g: 1, b: 0, a: 1}
+    colorJauge: {r: 0.8624314, g: 1, b: 0, a: 1}
   - damageMultiplier: 2.55
     cadenceMultiplier: 1.25
     overloadDuration: 10
     timeToCombo: 3
-    colorJauge: {r: 0.9009558, g: 1, b: 0, a: 1}
+    colorJauge: {r: 1, g: 0.58867174, b: 0, a: 1}
   _infoCombo: {fileID: 5540293941858202540}
 --- !u!114 &4660385558512272094
 MonoBehaviour:
@@ -123,7 +124,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584243277286472737
+  _initializedTimestamp: -8584241351714619860
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -139,7 +140,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 23
+  <PrefabId>k__BackingField: 24
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 11948202327552370993
   SceneId: 0
@@ -164,6 +165,18 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 6325006552558930708}
   _networkObjectCache: {fileID: 6325006552558930708}
   _playerUIEnd: {fileID: 5918345945357455960}
+--- !u!114 &1039354952693192919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195821754654841656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02dcf3c689f2a3c48997bb78c5f56927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CursorManager
 --- !u!1 &1648326429967676846
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,10 +417,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4528305968162622228}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -400}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5414272922165202214
 CanvasRenderer:
@@ -430,7 +443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.09919691, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.09803939, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -16,11 +16,8 @@ namespace GunDecorator.ChargedModules
                 _damageChargedMultiplicator = s._damageChargedMultiplicator;
                 _isExplosifAmmo = s.IsExplosifAmmo;
                 _explosionRadius = s.explosionRadius;
-                _deadZoneStartCharging = s.DeadZoneStartCharging;
                 _recoilChargedMultiplier =  s.recoilChargedMultiplier;
                 _recoilX = s.RecoilX;
-                _timeToCharge = s.timeToCharge;
-                _isFullMultiplicator = s.IsFullMultiplicator;
                 _numberBulletInCharge = s.NumberBulletInCharged;
                 _intervaleCharge = s.intervaleCharge;
             }
@@ -30,19 +27,16 @@ namespace GunDecorator.ChargedModules
         {
             base.TryShootCharging();
             
-            if (_charging)
+            if (!_fullCharge) return;
+            
+            _ammoModule.SetBulletData(new BulletData
             {
-                int numberBulletShoot = (int)Mathf.Lerp(0, _numberBulletInCharge, _charginTimer / _timeToCharge);
-
-                _ammoModule.SetBulletData(new BulletData
-                {
-                    IsExplosive = _isExplosifAmmo,
-                    IsCritical = _gunController.IsOverload,
-                    ExplosionRadius = _explosionRadius
-                });
+                IsExplosive = _isExplosifAmmo,
+                IsCritical = _gunController.IsOverload,
+                ExplosionRadius = _explosionRadius
+            });
                 
-                StartCoroutine(ShootSalve(numberBulletShoot));
-            }
+            StartCoroutine(ShootSalve(_numberBulletInCharge));
             
             ResetCharging();
         }
@@ -61,7 +55,6 @@ namespace GunDecorator.ChargedModules
                     0);
                 
                 _ammoModule.SpawnBullet(spread, Vector3.zero);
-                _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1, _gunController.IsInfiniteAmmo);
                 
                 _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);
