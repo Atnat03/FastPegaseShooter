@@ -1301,6 +1301,7 @@ public class FPSController : NetworkBusListener
     private bool isDashing;
     private bool justDashed;
     Vector3 dashingDirection;
+    Vector3 startDashingDirection;
 
     void EnterDashingState()
     {
@@ -1317,6 +1318,7 @@ public class FPSController : NetworkBusListener
         OnDash?.Invoke();
         
         dashingDirection = dashingDirection.normalized * dashSpeed.Evaluate(0);
+        startDashingDirection =  dashingDirection.normalized;
         StartCoroutine(DashingCoroutine());
     }
 
@@ -1359,7 +1361,7 @@ public class FPSController : NetworkBusListener
             dashingDirection = InterpolateSlope(dashingDirection);
             if(Physics.Raycast(transform.position,dashingDirection, out RaycastHit hit,  dashingDirection.magnitude * Time.deltaTime + bodyRadius/2, ~LayerMask.GetMask("Owner")))
             {
-                dashingDirection = Vector3.ProjectOnPlane(dashingDirection, hit.normal);
+                dashingDirection = Vector3.ProjectOnPlane(startDashingDirection * dashSpeed.Evaluate(elapsedTime), hit.normal);
             }
             rb.linearVelocity = dashingDirection;
             yield return null;
