@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -96,7 +97,7 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyAttackModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyAttackModule found in {gameObject.name}");
         }
     
         foreach (EnemyLifeModule module in _lifeModules)
@@ -104,7 +105,7 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyLifeModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyLifeModule found in {gameObject.name}");
         }
     
         foreach (EnemyTargetModule module in _targetingModules)
@@ -112,7 +113,7 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyTargetModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyTargetModule found in {gameObject.name}");
         }
 
         _movementModule?.InitialiseBehaviourModule(this);
@@ -156,6 +157,8 @@ public class EnemyCore : NetworkBusListener
         
     private void DeathEvent(int playerObjectId)
     {
+        CustomLogger.ImportantLog("Clear path reservation on death");
+        ClearPathReservation();
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
     }
 

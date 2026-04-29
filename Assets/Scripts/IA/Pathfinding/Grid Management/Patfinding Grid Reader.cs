@@ -130,6 +130,7 @@ public class PathfindingGridReader : MonoBehaviour
                 _clearQueue.Enqueue((n, dist + 1));
             }
         }
+        VariableChanged = true;
     }
 
     Guid GenerateNewGuid()

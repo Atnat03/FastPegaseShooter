@@ -47,7 +47,9 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
 
     public void ClearPathReservation()
     {
+        if (_pathReservationId < 0) return;
         _enemyCore.p_gridReader.ClearPathReservation(_pathReservationId);
+        _pathReservationId = -1;
     }
 
     protected virtual void RecalculatePath()
