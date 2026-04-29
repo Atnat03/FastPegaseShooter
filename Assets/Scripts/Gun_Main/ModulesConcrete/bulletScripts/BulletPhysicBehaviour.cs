@@ -97,6 +97,13 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                             p_value = p_damage
                         });
                         
+                        InvokeEvent(new OnPlayerDoDamage
+                        {
+                            p_ownerId = _gunController.OwnerId,
+                            p_value = p_damage,
+                            p_critical = p_isCritical
+                        });
+                        
                         if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
                         {
                             Cons.Print("Charge", ColorConsole.Red);
@@ -126,6 +133,13 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                 {
                     p_player = _gunController.Owner,
                     p_value = p_damage
+                });
+                
+                InvokeEvent(new OnPlayerDoDamage
+                {
+                    p_ownerId = _gunController.OwnerId,
+                    p_value = p_damage,
+                    p_critical = p_isCritical
                 });
                 
                 if (c.TryGetComponent<EnemyCore>(out var enemyCore))

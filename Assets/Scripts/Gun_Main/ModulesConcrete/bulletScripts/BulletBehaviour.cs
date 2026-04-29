@@ -140,6 +140,13 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 p_player = _gunController.Owner,
                 p_value = p_damage
             });
+            
+            InvokeEvent(new OnPlayerDoDamage
+            {
+                p_ownerId = _gunController.OwnerId,
+                p_value = p_damage,
+                p_critical = p_isCritical
+            });
 
             if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
             {
@@ -183,6 +190,13 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 p_value = p_damage
             });
 
+            InvokeEvent(new OnPlayerDoDamage
+            {
+                p_ownerId = _gunController.OwnerId,
+                p_value = p_damage,
+                p_critical = p_isCritical
+            });
+            
             hit = true;
 
             if (_targetNetworkObject != null &&

@@ -20,10 +20,10 @@ public class GameStatsManager : NetworkBusListener
         
         ListenToEvent<AddHealthToPlayer>(RegisterHealthRegen);
         ListenToEvent<OnPlayerDeathEvent>(RegisterDeath);
-        ListenToEvent<OnplayerRegisterEvent>(RegisterPlayer);
+        ListenToEvent<OnPlayerRegisterEvent>(RegisterPlayer);
+        ListenToEvent<OnPlayerDoDamage>(RegisterDamages);
     }
-
-    void RegisterPlayer(OnplayerRegisterEvent evnt) => RegisterPlayer(evnt.ownerId);
+    void RegisterPlayer(OnPlayerRegisterEvent evnt) => RegisterPlayer(evnt.ownerId);
     void RegisterPlayer(int playerIndex)
     {
         if (!playersID.Contains(playerIndex))
@@ -31,17 +31,21 @@ public class GameStatsManager : NetworkBusListener
             playersID.Add(playerIndex);
             playerStats.Add(playerIndex, new PlayerStats());
             onRegisterPlayer?.Invoke(playerIndex);
-            InvokeEvent(new OnplayerRegisterEvent{ownerId = OwnerId});
+            InvokeEvent(new OnPlayerRegisterEvent{ownerId = OwnerId});
         }
     }
     
     void UnregisterPlayer(int playerIndex) => playerStats.Remove(playerIndex);
     
-    void RegisterDamages(int playerIndex, float value, bool isCritical = false)
+    void RegisterDamages(OnPlayerDoDamage data)
     {
-        if (!playerStats.ContainsKey(playerIndex))RegisterPlayer(playerIndex);
-        playerStats[playerIndex].p_damagesDealt +=  value;
-        if (isCritical) playerStats[playerIndex].p_criticalDamagesDealt +=  value;
+        if (!playerStats.ContainsKey(data.p_ownerId))
+            RegisterPlayer(data.p_ownerId);
+        
+        playerStats[data.p_ownerId].p_damagesDealt +=  data.p_value;
+        
+        if (data.p_critical)
+            playerStats[data.p_ownerId].p_criticalDamagesDealt +=  data.p_value;
     }
 
     void RegisterKill(int playerIndex)
@@ -65,7 +69,6 @@ public class GameStatsManager : NetworkBusListener
         if(playerIndex == OwnerId)playerStats[playerIndex].p_selfHealthRegen +=  value;
         else playerStats[playerIndex].p_broHealthRegen +=  value;
     }
-
 }
 
 public class PlayerStats
@@ -78,7 +81,14 @@ public class PlayerStats
     public float p_broHealthRegen = 0;
 }
 
-public struct OnplayerRegisterEvent
+public struct OnPlayerRegisterEvent
 {
     public int ownerId;
+}
+
+public struct OnPlayerDoDamage
+{
+    public int p_ownerId;
+    public float p_value;
+    public bool p_critical;
 }
