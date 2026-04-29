@@ -1353,6 +1353,10 @@ public class FPSController : NetworkBusListener
             dashingDirection = dashingDirection.normalized * dashSpeed.Evaluate(elapsedTime);
             dashingDirection = AlignVelocityToWall(dashingDirection);
             dashingDirection = InterpolateSlope(dashingDirection);
+            if(Physics.Raycast(transform.position,dashingDirection, out RaycastHit hit,  dashingDirection.magnitude * Time.deltaTime + bodyRadius/2, ~LayerMask.GetMask("Owner")))
+            {
+                dashingDirection = Vector3.ProjectOnPlane(dashingDirection, hit.normal);
+            }
             rb.linearVelocity = dashingDirection;
             yield return null;
         }
