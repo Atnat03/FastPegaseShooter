@@ -104,6 +104,8 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                             p_critical = p_isCritical
                         });
                         
+                        _gunController.AddPercentageCharge();
+                        
                         if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
                         {
                             enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);

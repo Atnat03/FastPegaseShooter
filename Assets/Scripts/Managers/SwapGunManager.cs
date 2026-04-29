@@ -35,6 +35,8 @@ namespace Managers
         private bool _isCombo = false;
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
         [SerializeField] private Image _infoCombo;
+
+        [SerializeField] private bool _instantSwapWithoutBroConsentement;
         
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
