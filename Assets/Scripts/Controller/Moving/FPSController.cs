@@ -584,7 +584,7 @@ public class FPSController : NetworkBusListener
 
     void IdleFixedUpdate()
     {
-        rb.linearVelocity = Vector3.zero;
+        if (stateMachine.previousState != stateMachine.GetState(ControlerState.Dashing))rb.linearVelocity = Vector3.zero;
     }
 
     void ExitIdleState()

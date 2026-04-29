@@ -24,6 +24,7 @@ public class GrenadeThrower : NetworkBusListener
     [SerializeField] private ElementaryGrenade _elementaryGrenadePrefab;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private GunSwitching _currentGun;
+    [SerializeField] private Camera _camera;
     
     [Header("Settings")]
     [SerializeField] private float _cooldown = 2f;
@@ -38,6 +39,8 @@ public class GrenadeThrower : NetworkBusListener
     
     private bool _canThrow = true;
     private float _elapsedTimeCooldown = 0f;
+    
+    float _finalThrowForce = 0f;
     
     //Action
     public Action OnStartThrow;
@@ -104,7 +107,9 @@ public class GrenadeThrower : NetworkBusListener
     [ServerRpc]
     public void ThrowGrenadeServerRpc()
     {
-        ElementaryGrenade grenade = Instantiate(_elementaryGrenadePrefab, _spawnPoint.position, _spawnPoint.rotation);
+        Vector3 finalSpawnPoint = GetSpawnPoint();
+        
+        ElementaryGrenade grenade = Instantiate(_elementaryGrenadePrefab, finalSpawnPoint, _spawnPoint.rotation);
         
         ServerManager.Spawn(grenade.gameObject, Owner);
 
@@ -114,11 +119,35 @@ public class GrenadeThrower : NetworkBusListener
         NotifyGrenadeThrown(grenade);
     }
 
+    private Vector3 GetSpawnPoint()
+    {
+        Ray cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        RaycastHit hit;
+        Vector3 camPos = _camera.transform.position;
+        Vector3 targetPoint;
+            
+        Vector3 finalSpawnPoint = _spawnPoint.position;
+        _finalThrowForce = _throwForce;
+        
+        if (Physics.Raycast(cameraRay, out hit, 2000, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
+        {
+            targetPoint = hit.point;
+
+            if ((targetPoint - camPos).sqrMagnitude < (finalSpawnPoint - camPos).sqrMagnitude)
+            {
+                finalSpawnPoint = targetPoint - (_spawnPoint.forward * 0.5f);
+                _finalThrowForce = _throwForce / 5;
+            }
+        }
+
+        return finalSpawnPoint;
+    }
+
     [ObserversRpc]
     private void NotifyGrenadeThrown(ElementaryGrenade grenade)
     {
-        Vector3 direction = _spawnPoint.forward;
-        grenade.GetComponent<Rigidbody>().AddForce(direction * _throwForce, ForceMode.Impulse);
+        Vector3 direction = _camera.transform.forward;
+        grenade.GetComponent<Rigidbody>().AddForce(direction * _finalThrowForce, ForceMode.Impulse);
         
         _currentGun.ISurchargeMain.StopReload();
 
