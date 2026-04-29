@@ -54,6 +54,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpSlideOnEndOfSlide"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("singleClicGrapple"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("omnidirectionalWallRide"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("forwardWalllrideBeginning"));
         }, ref showParameters);
 
         DrawSection("Unlocked Capacities", new Color(1f, 0.85f, 0.6f), () =>
@@ -128,6 +129,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpHorizontalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltIntensity"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpCoyoteDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideForwardTolerenceAngle"));
         }, ref showWallRide);
 
         DrawSection("Crouch", new Color(0.8f, 1f, 0.8f), () =>

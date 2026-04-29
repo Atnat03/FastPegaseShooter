@@ -43,6 +43,9 @@ public class SoundManager : NetworkBehaviour
 			}
 		}
 
+		if (clip.Count == 0)
+			return;
+		
 		AudioClip c = clip[Random.Range(0, clip.Count)];
 		
 		switch (t)

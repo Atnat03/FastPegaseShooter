@@ -12,6 +12,7 @@ namespace GunDecorator.ChargedModules
         {
             if (setting is ChargedDecreaseNoiseSetting s)
             {
+                _damageChargedMultiplicator = s._damageChargedMultiplicator;
                 _isExplosifAmmo = s.IsExplosifAmmo;
                 _explosionRadius = s.explosionRadius;
                 _deadZoneStartCharging = s.DeadZoneStartCharging;
@@ -61,6 +62,7 @@ namespace GunDecorator.ChargedModules
         private void ApplyMultipleShoot(int numberBulletShoot)
         {
             float angle = Mathf.Lerp(0, _startMaxNoiseAngle, _noiseEvolutionCurve.Evaluate(_charginTimer / _timeToCharge));
+            
             
             for (int i = 0; i < numberBulletShoot; i++)
             {

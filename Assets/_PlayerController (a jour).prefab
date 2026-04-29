@@ -716,6 +716,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
 --- !u!114 &3961050023182892889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -776,6 +777,7 @@ MonoBehaviour:
   _ammoType: {fileID: 8428071434140413335}
   _isExplosifAmmo: 1
   _explosionRadius: 1
+  _damageChargedMultiplicator: 10
   _timeToCharge: 1
   _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25
@@ -3951,8 +3953,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4896006490099193176}
   - {fileID: 4788565289539315160}
+  - {fileID: 4896006490099193176}
   - {fileID: 4808302530464539788}
   - {fileID: 763151360234931442}
   m_Father: {fileID: 7218313039823865412}
@@ -11016,7 +11018,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: G
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11895,7 +11897,7 @@ MonoBehaviour:
   _critikStep: 0.5
   _playerInputAction: {fileID: 997312506154426130}
   _playerAnimation: {fileID: 3465261579877272972}
-  _gunSwitching: {fileID: 0}
+  _gunSwitching: {fileID: 3154577241410043838}
   _playerEnergy: {fileID: 29235095159055250}
   p_healThrowPoint: {fileID: 2316828313444862460}
   p_healThrowDirection: {fileID: 6291573982660001099}
@@ -15195,7 +15197,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3
+  m_text: C
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -16164,10 +16166,10 @@ RectTransform:
   - {fileID: 151250659670826675}
   - {fileID: 3624127471084549953}
   - {fileID: 4449945953776610088}
-  - {fileID: 2793027203835923361}
   - {fileID: 9191809643291239655}
   - {fileID: 5250701195303613360}
   - {fileID: 5635560887367885246}
+  - {fileID: 2793027203835923361}
   m_Father: {fileID: 6363322599526773559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -17706,6 +17708,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
 --- !u!114 &8041650522221974858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17748,6 +17751,7 @@ MonoBehaviour:
   _ammoType: {fileID: 7048642797284340988}
   _isExplosifAmmo: 0
   _explosionRadius: 1
+  _damageChargedMultiplicator: 10
   _timeToCharge: 1
   _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25
@@ -17887,8 +17891,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 89.71292, y: 68.75402}
-  m_SizeDelta: {x: 196.258, y: 43.015}
+  m_AnchoredPosition: {x: 49.5, y: -2.6}
+  m_SizeDelta: {x: 195.458, y: 55.812}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7551234029201438826
 CanvasRenderer:
@@ -17927,8 +17931,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -17945,10 +17949,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.63
-  m_fontSizeBase: 33.63
+  m_fontSize: 49.95
+  m_fontSizeBase: 47.43
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -18720,6 +18724,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
 --- !u!114 &6154372736321769268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18804,6 +18809,7 @@ MonoBehaviour:
   _ammoType: {fileID: 219218631671859702}
   _isExplosifAmmo: 0
   _explosionRadius: 1
+  _damageChargedMultiplicator: 10
   _timeToCharge: 1
   _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25
@@ -19940,7 +19946,7 @@ RectTransform:
   m_GameObject: {fileID: 6128018379006013303}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 0.623224, y: 0.623224, z: 0.623224}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2153190538572324263}
@@ -19950,8 +19956,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -642.7, y: -323.4}
-  m_SizeDelta: {x: 474.438, y: 100}
+  m_AnchoredPosition: {x: 783, y: -326}
+  m_SizeDelta: {x: 415.566, y: 87.591}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6136058537086652778
 GameObject:
@@ -27574,7 +27580,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 721.793, y: -402.18793}
+  m_AnchoredPosition: {x: 727, y: -434}
   m_SizeDelta: {x: 463.853, y: 253.675}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7528671965059217519
@@ -29865,7 +29871,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2
+  m_text: F
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -31658,6 +31664,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &6473785062868642151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31718,6 +31725,7 @@ MonoBehaviour:
   _ammoType: {fileID: 2634165181546453424}
   _isExplosifAmmo: 0
   _explosionRadius: 1
+  _damageChargedMultiplicator: 10
   _timeToCharge: 1
   _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25

@@ -135,12 +135,19 @@ public class ElementaryGrenade : NetworkBusListener
         {
             if (c.TryGetComponent(out IDamagable damagable))
             {
-                damagable.TakeDamage(_networkIdAttacker.Value, _damage.Value);
+                damagable.TakeDamage(_thrower.Value.ClientId, _damage.Value);
                 
                 InvokeEvent(new ModifyEnergyEvent
                 {
                     p_player = _thrower.Value,
                     p_value = _damage.Value
+                });
+                
+                InvokeEvent(new OnPlayerDoDamage
+                {
+                    p_ownerId = _thrower.Value.ClientId,
+                    p_value = _damage.Value,
+                    p_critical = false
                 });
                         
                 if (c.TryGetComponent<EnemyCore>(out var enemyCore))

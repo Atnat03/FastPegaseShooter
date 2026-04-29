@@ -73,11 +73,7 @@ public class DroneThrower : NetworkBusListener
 		
 		if (_playerEnergy != null)
 		{
-			InvokeEvent(new ModifyEnergyEvent
-			{
-				p_player = _playerEnergy.Owner,
-				p_value = -(_playerEnergy.p_costThrowDrone * _playerEnergy.EnergyOneBar)
-			});
+			ConsumeEnergyServerRpc(_playerEnergy.p_costThrowDrone * _playerEnergy.EnergyOneBar);
 		}
 		
 		if (_bridgeAnimation != null)
@@ -93,6 +89,16 @@ public class DroneThrower : NetworkBusListener
 
 		_hasDrone = false;
 		OnThrowing?.Invoke();
+	}
+	
+	[ServerRpc]
+	private void ConsumeEnergyServerRpc(float amount)
+	{
+		InvokeEvent(new ModifyEnergyEvent
+		{
+			p_player = Owner,
+			p_value = -amount
+		});
 	}
 
 	[ServerRpc]
