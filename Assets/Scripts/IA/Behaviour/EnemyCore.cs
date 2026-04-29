@@ -125,6 +125,11 @@ public class EnemyCore : NetworkBusListener
         p_gridReader = pathfindingGridReader;
     }
 
+    public void ClearPathReservation()
+    {
+        _movementModule.ClearPathReservation();
+    }
+
     private void OnNetworkTick()
     {
         foreach (EnemyAttackModule module in _attackingModules)

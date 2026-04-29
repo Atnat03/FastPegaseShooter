@@ -444,8 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
   pathfindingGridSO: {fileID: 11400000, guid: b933e9225e40920408f2840e973b2db2, type: 2}
-  drawNodes: 1
-  drawNodesConnections: 1
+  VariableChanged: 1
 --- !u!114 &207287453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1065,6 +1064,8 @@ MonoBehaviour:
   _doFreezeWithoutTarget: 1
   _targetModule: {fileID: 365425667}
   _speed: 3
+  _traceWeight: 9
+  _traceSpread: 3
   _idealDistance: 0
 --- !u!114 &365425669
 MonoBehaviour:
@@ -1084,6 +1085,8 @@ MonoBehaviour:
   _doFreezeWithoutTarget: 1
   _targetModule: {fileID: 365425667}
   _speed: 3
+  _traceWeight: 9
+  _traceSpread: 3
 --- !u!114 &365425670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1721,6 +1724,7 @@ GameObject:
   - component: {fileID: 864013884}
   - component: {fileID: 864013889}
   - component: {fileID: 864013888}
+  - component: {fileID: 864013890}
   m_Layer: 0
   m_Name: Enemis Spawner 1
   m_TagString: Untagged
@@ -1841,9 +1845,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cef386ddb5932e40bf94a56237adfb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
-  pathfindingGridSO: {fileID: 11400000, guid: afcf8e258396c0947a32482531506420, type: 2}
-  drawNodes: 0
-  drawNodesConnections: 1
+  pathfindingGridSO: {fileID: 11400000, guid: b933e9225e40920408f2840e973b2db2, type: 2}
+  VariableChanged: 0
 --- !u!114 &864013887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1904,6 +1907,53 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 18.342417, y: 8.014089, z: 17.14975}
   m_Center: {x: 14.377837, y: 3.5070438, z: -7.1375446}
+--- !u!114 &864013890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864013879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c4c3930ecf31e843b6fff2c97f0bb92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PathfindingReaderVisualizer
+  drawNodes: 1
+  drawNodesConnections: 1
+  walkingCostGradient:
+    serializedVersion: 2
+    key0: {r: 0.43118766, g: 1, b: 0.4198113, a: 1}
+    key1: {r: 0.41960788, g: 1, b: 0.86901414, a: 1}
+    key2: {r: 0.7382393, g: 0.36320752, b: 1, a: 1}
+    key3: {r: 1, g: 0.2971698, b: 0.2971698, a: 0}
+    key4: {r: 0.9245283, g: 0.39684942, b: 0.39684942, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 22937
+    ctime2: 45875
+    ctime3: 65535
+    ctime4: 65535
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 65535
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: 0
+    m_NumColorKeys: 4
+    m_NumAlphaKeys: 2
+  upperWalkingCostValue: 10
+  nodeDrawSize: 0.4
+  needToRebuildMatrix: 0
 --- !u!1 &878397462
 GameObject:
   m_ObjectHideFlags: 0
@@ -2325,6 +2375,8 @@ MonoBehaviour:
   _doFreezeWithoutTarget: 1
   _targetModule: {fileID: 1085526714}
   _speed: 3
+  _traceWeight: 9
+  _traceSpread: 3
   _idealDistance: 0
 --- !u!114 &1197237517
 MonoBehaviour:
@@ -2344,6 +2396,8 @@ MonoBehaviour:
   _doFreezeWithoutTarget: 1
   _targetModule: {fileID: 1085526714}
   _speed: 3
+  _traceWeight: 9
+  _traceSpread: 3
 --- !u!1 &1206254294
 GameObject:
   m_ObjectHideFlags: 0
@@ -3095,7 +3149,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2126128914
 Transform:
   m_ObjectHideFlags: 0

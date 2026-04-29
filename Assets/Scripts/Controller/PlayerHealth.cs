@@ -280,7 +280,6 @@ public class PlayerHealth : NetworkBusListener
 	{
 		if (!IsOwner) return;
     
-		CustomLogger.ImportantLog("healChange");
 		_targetHealthFill = next / _healthBase;
 		
 		OnUpdateHealth?.Invoke(_targetHealthFill);
