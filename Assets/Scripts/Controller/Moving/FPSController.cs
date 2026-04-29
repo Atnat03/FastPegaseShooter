@@ -58,6 +58,10 @@ public class FPSController : NetworkBusListener
     [Tooltip("est ce que le joueur peut regarder partout quand il est en wallride sans quitter cet état")]
     [SerializeField]
     private bool omnidirectionalWallRide;
+    
+    [Tooltip("est ce que le player doit regarder dans la direction du wallride pour le commencer (sinon on peut commencer un wallride a l'envers)")]
+    [SerializeField] private bool forwardWalllrideBeginning = true; 
+        
 
     [Header("UnlockedCapacities")] public bool wallRideUnlocked = true;
     public bool slideUnlocked = true;
@@ -122,6 +126,9 @@ public class FPSController : NetworkBusListener
 
     [SerializeField] [Tooltip("la valeur doit etre superieur a 'wallRideCooldownChangeSide'")]
     private float wallRideCooldownSameSide = 2f;
+    
+    [SerializeField] [Tooltip("la valeur doit etre superieur a 'wallRideCooldownChangeSide'")]
+    private float wallRideForwardTolerenceAngle = 90f;
 
     [SerializeField] float wallRidingSpeed = 10f;
     [SerializeField] float minSpeedToWallRide = 1f;
@@ -400,7 +407,12 @@ public class FPSController : NetworkBusListener
         if (!IsOwner) return;
 
         if (isDead.Value) return;
-        if (IsFreeze) return;
+        if (IsFreeze)
+        {
+            Spring(ref camNextPos, ref camVelocity, cameraSpringTarget.position, cameraSpringHalfLife, cameraSpringFrequency, Time.deltaTime);
+            cameraParentTransform.position = camNextPos;
+            return;
+        }
 
         stateMachine?.LateUpdate();
     }
@@ -927,7 +939,7 @@ public class FPSController : NetworkBusListener
             previousWallRideSide = wallRideSide.rightSide;
         }
 
-        if (Vector3.Dot(horizontalVelocity, wallRidingDirection) < 0)
+        if (Vector3.Dot(horizontalVelocity, wallRidingDirection) < 0 || (forwardWalllrideBeginning && Vector3.Angle(wallRidingDirection, YawForward) > wallRideForwardTolerenceAngle))
         {
             stateMachine.ChangeState(ControlerState.Falling);
             return;
@@ -1341,6 +1353,10 @@ public class FPSController : NetworkBusListener
             dashingDirection = dashingDirection.normalized * dashSpeed.Evaluate(elapsedTime);
             dashingDirection = AlignVelocityToWall(dashingDirection);
             dashingDirection = InterpolateSlope(dashingDirection);
+            if(Physics.Raycast(transform.position,dashingDirection, out RaycastHit hit,  dashingDirection.magnitude * Time.deltaTime + bodyRadius/2, ~LayerMask.GetMask("Owner")))
+            {
+                dashingDirection = Vector3.ProjectOnPlane(dashingDirection, hit.normal);
+            }
             rb.linearVelocity = dashingDirection;
             yield return null;
         }
