@@ -11535,10 +11535,12 @@ MonoBehaviour:
   _playerAnimation: {fileID: 3465261579877272972}
   landSnap: 0
   dashVerticality: 1
+  groundNeededToDashAgain: 0
   clampedMaxAirSpeed: 0
   jumpSlideOnEndOfSlide: 0
   singleClicGrapple: 1
   omnidirectionalWallRide: 0
+  forwardWalllrideBeginning: 1
   wallRideUnlocked: 1
   slideUnlocked: 1
   dashUnlocked: 1
@@ -11581,6 +11583,7 @@ MonoBehaviour:
   wallRidingDuration: 1.5
   wallRideCooldownChangeSide: 0.2
   wallRideCooldownSameSide: 0.6
+  wallRideForwardTolerenceAngle: 90
   wallRidingSpeed: 11
   minSpeedToWallRide: 1
   wallJumpVerticalForce: 44
@@ -11752,9 +11755,9 @@ MonoBehaviour:
   - {fileID: 79945915510860574}
   - {fileID: 6242588292436510613}
   - {fileID: 6131818249512106227}
-  - {fileID: 1046026421483071524}
   - {fileID: 2390305771706270567}
   - {fileID: 6548709574648574542}
+  - {fileID: 1046026421483071524}
   - {fileID: 131834426877456924}
   - {fileID: 3154577241410043838}
   - {fileID: 300968199624122896}
@@ -11791,14 +11794,17 @@ MonoBehaviour:
   - {fileID: 7048642797284340988}
   - {fileID: 4693748091335889128}
   - {fileID: 7875450069064227382}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4188393265129028377}
+  - {fileID: 9103689300624622221}
+  - {fileID: 5085082601805186007}
+  - {fileID: 9108969561537642468}
+  - {fileID: 3877093541988288906}
+  - {fileID: 6473785062868642151}
+  - {fileID: 6064643404217225757}
+  - {fileID: 3491274505332219922}
+  - {fileID: 2634165181546453424}
+  - {fileID: 2225603457426565555}
+  - {fileID: 6190500001348373287}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects:
   - {fileID: 1414232106957678873}
@@ -11810,7 +11816,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584245799580734155
+  _initializedTimestamp: -8584241372498745343
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -11826,7 +11832,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 11
+  <PrefabId>k__BackingField: 12
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 6683661854146624352
   SceneId: 0
@@ -19839,7 +19845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c8b63484741c94cb4c3f7c1225b07a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 15
+  _componentIndexCache: 17
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _pauseUIPanels:
@@ -27669,7 +27675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed1e032fabf52d4ebfef66472e43f33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameStatsManager
-  _componentIndexCache: 16
+  _componentIndexCache: 15
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
 --- !u!114 &6548709574648574542
@@ -27684,7 +27690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ca2db9d3d90e643a5578c3a6e148c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 17
+  _componentIndexCache: 16
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _playerInput: {fileID: 997312506154426130}
@@ -31420,7 +31426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 24
+  _componentIndexCache: 54
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _settings: {fileID: 11400000, guid: 1b4fdfb7c56b59046951c35e1a6c450a, type: 2}
@@ -31444,7 +31450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 25
+  _componentIndexCache: 55
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
@@ -31469,7 +31475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 26
+  _componentIndexCache: 56
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ReloadModule
@@ -31489,7 +31495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 27
+  _componentIndexCache: 57
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RecoilModule
@@ -31654,7 +31660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 28
+  _componentIndexCache: 58
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
@@ -31677,7 +31683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 29
+  _componentIndexCache: 59
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ExplosifAmmoModule
@@ -31695,7 +31701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 30
+  _componentIndexCache: 60
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: VisualChargedModule
@@ -31717,7 +31723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54694bd6bf22480cb93d2e412bbf17eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.SalveChargedModule
-  _componentIndexCache: 31
+  _componentIndexCache: 61
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: SalveChargedModule
@@ -31747,7 +31753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.RaycastAmmoModule
-  _componentIndexCache: 32
+  _componentIndexCache: 62
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RaycastAmmoModule
@@ -31771,7 +31777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfebb13a32584806874c4535aa257a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.NoiseModule
-  _componentIndexCache: 33
+  _componentIndexCache: 63
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: NoiseModule
@@ -31824,7 +31830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4b7d44452b893544babb7d2c0a4e701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIGunModule
-  _componentIndexCache: 34
+  _componentIndexCache: 64
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: UIGunModule
@@ -31874,7 +31880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 266708624374712089, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
       propertyPath: _initializedTimestamp
-      value: -8584245799580734155
+      value: -8584241372498745343
       objectReference: {fileID: 0}
     - target: {fileID: 266708624374712089, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
       propertyPath: <IsNested>k__BackingField

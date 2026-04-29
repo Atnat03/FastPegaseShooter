@@ -44,6 +44,10 @@ public class FPSController : NetworkBusListener
     [SerializeField]
     private bool dashVerticality = false;
 
+    [Tooltip("apres avoir dash, le joueur doit toucher un mur ou le sol afin de pouvoir dasher de nouveau")]
+    [SerializeField]
+    private bool groundNeededToDashAgain;
+
     [Tooltip("empeche le player de dépasser la maxAirSpeed, le controller ne prend plus en compte le airDrag")]
     [SerializeField]
     private bool clampedMaxAirSpeed = false;
@@ -501,13 +505,11 @@ public class FPSController : NetworkBusListener
             }
         }
 
-        if (bufferJump && playerInput.actions["Jump"].IsPressed() &&
-            stateMachine.previousState == stateMachine.GetState(ControlerState.Falling)) Jump();
+        if (bufferJump && playerInput.actions["Jump"].IsPressed() && stateMachine.previousState == stateMachine.GetState(ControlerState.Falling)) Jump();
 
-        if (stateMachine.previousState != stateMachine.GetState(ControlerState.Grappling))
+        if (stateMachine.previousState != stateMachine.GetState(ControlerState.Dashing) && stateMachine.previousState != stateMachine.GetState(ControlerState.Grappling))
         {
-            if (!(stateMachine.previousState == stateMachine.GetState(ControlerState.Falling) &&
-                  (verticalInput != 0f || horizontalInput != 0f)))
+            if (!(stateMachine.previousState == stateMachine.GetState(ControlerState.Falling) && (verticalInput != 0f || horizontalInput != 0f)))
             {
                 rb.linearVelocity = Vector3.zero;
             }
@@ -557,7 +559,7 @@ public class FPSController : NetworkBusListener
         }
 
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !(hasDashed && groundNeededToDashAgain) && !justDashed && dashUnlocked)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
@@ -655,7 +657,7 @@ public class FPSController : NetworkBusListener
         }
 
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !(hasDashed && groundNeededToDashAgain) && !justDashed && dashUnlocked)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }
@@ -761,7 +763,7 @@ public class FPSController : NetworkBusListener
         }
 
 
-        if (playerInput.actions["Dash"].WasPressedThisFrame() && !hasDashed && !justDashed && dashUnlocked)
+        if (playerInput.actions["Dash"].WasPressedThisFrame() && !(hasDashed && groundNeededToDashAgain) && !justDashed && dashUnlocked)
         {
             stateMachine.ChangeState(ControlerState.Dashing);
         }

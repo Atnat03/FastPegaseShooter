@@ -50,6 +50,7 @@ public class FPSControlerCustomInspector : Editor
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("landSnap"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashVerticality"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("groundNeededToDashAgain"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("clampedMaxAirSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpSlideOnEndOfSlide"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("singleClicGrapple"));
