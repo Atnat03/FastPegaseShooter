@@ -59,7 +59,7 @@ namespace Controller
 
         public void TryShootWithCurrentGun()
         {
-            if (_gunSwitching == null || _gunSwitching.IGunMain == null)
+            if (!_gunSwitching.CurrentMainGun.activeInHierarchy)
                 return;
 
             if (_gunSwitching.IsSwitching) return;
