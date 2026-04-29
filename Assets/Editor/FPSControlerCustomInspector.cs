@@ -84,6 +84,8 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceAscending"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceFalling"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("idleLargerFeetColliders"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("largerFeetStayingDelay"));
         }, ref showMovement);
 
         DrawSection("Headbob", new Color(1f, 0.6f, 1f), () =>

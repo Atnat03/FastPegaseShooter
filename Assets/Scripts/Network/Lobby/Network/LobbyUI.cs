@@ -76,6 +76,8 @@ public class LobbyUI : MonoBehaviour
 		_playerList = new List<PlayerData>();
 		_playerUIList = new List<PlayerIconLobby>();
 
+		SetReady(false);
+
 		CloseLobbyCreation();
 	}
 
@@ -226,10 +228,10 @@ public class LobbyUI : MonoBehaviour
 			if(player.Data.TryGetValue("IsReady", out PlayerDataObject valueReady))
 				isReady = valueReady.Value == "1";
 			
-			if (player.Id == AuthenticationService.Instance.PlayerId)
+			/*if (player.Id == AuthenticationService.Instance.PlayerId)
 			{
 				SetReady(isReady);
-			}
+			}*/
 			
 			if (_playerList[i].Name != nom || _playerList[i].SkinId != skin || _playerList[i].IsReady != isReady)
 			{
@@ -264,13 +266,18 @@ public class LobbyUI : MonoBehaviour
 		}
 	}
 	
-	private void SetReady(bool state)
+	private void SetReady(bool state, int playerId = 0)
 	{
 		Color c = state ? _readyButtonColors[1] : _readyButtonColors[0];
 		string s = state ? _readyButtonTexts[1] : _readyButtonTexts[0];
 		
 		_readyButton.GetComponent<Image>().color = c;
 		_readyButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s;
+
+		if (_playerUIList.Count > 0)
+		{
+			_playerUIList[playerId].IsReady(state);
+		}
 	}
 
 	void SetStartingScreen()
@@ -289,6 +296,8 @@ public class LobbyUI : MonoBehaviour
 		_lobby.OnLobbyListChanged += UpdateLobbyListUI;
 
 		_lobby.OnSetGun += SetGunUI;
+
+		_lobby.OnSetLocalReadyPlayer += SetReady;
 	}
 
 	private void OnDisable()
@@ -300,5 +309,7 @@ public class LobbyUI : MonoBehaviour
 		_lobby.OnLobbyListChanged -= UpdateLobbyListUI;
 		
 		_lobby.OnSetGun -= SetGunUI;
+		
+		_lobby.OnSetLocalReadyPlayer -= SetReady;
 	}
 }

@@ -8,9 +8,11 @@ public class GameStatsManager : NetworkBusListener
     bool _initialized = false;
 
     public Action<int> onRegisterPlayer;
+    private List<int> playersID = new List<int>();
 
-    public override void OnStartServer()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
         if (!_initialized)
         {
             _initialized = true;
@@ -18,12 +20,19 @@ public class GameStatsManager : NetworkBusListener
         
         ListenToEvent<AddHealthToPlayer>(RegisterHealthRegen);
         ListenToEvent<OnPlayerDeathEvent>(RegisterDeath);
+        ListenToEvent<OnplayerRegisterEvent>(RegisterPlayer);
     }
 
-    public void RegisterPlayer(int playerIndex)
+    void RegisterPlayer(OnplayerRegisterEvent evnt) => RegisterPlayer(evnt.ownerId);
+    void RegisterPlayer(int playerIndex)
     {
-        playerStats.Add(playerIndex, new PlayerStats());
-        onRegisterPlayer?.Invoke(playerIndex);
+        if (!playersID.Contains(playerIndex))
+        {
+            playersID.Add(playerIndex);
+            playerStats.Add(playerIndex, new PlayerStats());
+            onRegisterPlayer?.Invoke(playerIndex);
+            InvokeEvent(new OnplayerRegisterEvent{ownerId = OwnerId});
+        }
     }
     
     void UnregisterPlayer(int playerIndex) => playerStats.Remove(playerIndex);
@@ -67,4 +76,9 @@ public class PlayerStats
     public int p_deathCount = 0;
     public float p_selfHealthRegen = 0;
     public float p_broHealthRegen = 0;
+}
+
+public struct OnplayerRegisterEvent
+{
+    public int ownerId;
 }
