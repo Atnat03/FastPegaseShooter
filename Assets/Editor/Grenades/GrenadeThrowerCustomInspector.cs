@@ -19,7 +19,7 @@ public class GrenadeThrowerCustomInspector : Editor
         EditorUtilities.Draw("_playerEnergy", serializedObject);
         EditorUtilities.Draw("_spawnPoint", serializedObject);
         EditorUtilities.Draw("_currentGun", serializedObject);
-        EditorUtilities.Draw("_throwEnergyCost", serializedObject);
+        EditorUtilities.Draw("_camera", serializedObject);
         EditorUtilities.Draw("_cooldown", serializedObject);
         EditorUtilities.Draw("_damage", serializedObject);
         EditorUtilities.Draw("_throwForce", serializedObject);
