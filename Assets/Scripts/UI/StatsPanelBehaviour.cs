@@ -18,7 +18,7 @@ public class StatsPanelBehaviour : NetworkBusListener
     {
         base.OnStartClient();
         _gameStatsManager.onRegisterPlayer += RegisterPlayer;
-        InvokeEvent(new OnPlayerRegisterEvent{ownerId = OwnerId});
+        InvokeEvent(new OnplayerRegisterEvent{ownerId = OwnerId});
         
         RefreshData();
         ClosePanel();
