@@ -129,7 +129,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         if (_targetNetworkObject.TryGetComponent<IDamagable>(out var d))
         {
             bool crit = d.TakeDamage(
-                _gunController.NetworkObject.ObjectId,
+                _gunController.OwnerId,
                 (int)p_damage,
                 p_isCritical);
 
@@ -181,7 +181,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 continue;
 
             crit = damagable.TakeDamage(
-                _gunController.NetworkObject.ObjectId,
+                _gunController.OwnerId,
                 damage,
                 p_isCritical);
             InvokeEvent(new ModifyEnergyEvent

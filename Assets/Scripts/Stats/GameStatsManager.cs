@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MyPrint;
 using UnityEngine;
 
 public class GameStatsManager : NetworkBusListener
@@ -22,6 +23,7 @@ public class GameStatsManager : NetworkBusListener
         ListenToEvent<OnPlayerDeathEvent>(RegisterDeath);
         ListenToEvent<OnPlayerRegisterEvent>(RegisterPlayer);
         ListenToEvent<OnPlayerDoDamage>(RegisterDamages);
+        ListenToEvent<OnPlayerDoKill>(RegisterKill);
     }
     void RegisterPlayer(OnPlayerRegisterEvent evnt) => RegisterPlayer(evnt.ownerId);
     void RegisterPlayer(int playerIndex)
@@ -48,10 +50,12 @@ public class GameStatsManager : NetworkBusListener
             playerStats[data.p_ownerId].p_criticalDamagesDealt +=  data.p_value;
     }
 
-    void RegisterKill(int playerIndex)
+    void RegisterKill(OnPlayerDoKill data)
     {
-        if (!playerStats.ContainsKey(playerIndex))RegisterPlayer(playerIndex);
-        playerStats[playerIndex].p_killCount++;
+        if (!playerStats.ContainsKey(data.p_owerId))
+            RegisterPlayer(data.p_owerId);
+        
+        playerStats[data.p_owerId].p_killCount++;
     } 
 
     void RegisterDeath(OnPlayerDeathEvent data) => RegisterDeath(data.p_playerN.OwnerId);
@@ -91,4 +95,9 @@ public struct OnPlayerDoDamage
     public int p_ownerId;
     public float p_value;
     public bool p_critical;
+}
+
+public struct OnPlayerDoKill
+{
+    public int p_owerId;
 }

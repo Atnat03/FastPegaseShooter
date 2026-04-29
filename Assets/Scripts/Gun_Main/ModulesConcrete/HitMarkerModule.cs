@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using MyPrint;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +18,16 @@ namespace GunDecorator
         [Header("Hit critique")]
         [SerializeField, Tooltip("Prefab visuel a instancié quand on réussi un tir critique")] private GameObject _hitMarkerCritiquePrefab;
         [SerializeField, Tooltip("Couleur du hitMarker critique")] private Color _hitMarkerCritiqueColor = Color.red;
-        
+
+        [Header("Kill")] 
+        [SerializeField] private GameObject _killMarkerPrefab;
+        GameObject _currentKillMarker = null;
+
+        private void Start()
+        {
+            ListenToEvent<OnPlayerDoKill>(PlayerDoKill);
+        }
+
         public void HitMark()
         {
             Image s = Instantiate(_hitMarkerPrefab, _hitMarkerParent).GetComponent<Image>();
@@ -41,6 +52,21 @@ namespace GunDecorator
             SoundManager.PlaySound(_gunController._soundData, "HitMark", _gunController._source);
             
             Destroy(s.gameObject, 0.5f);
+        }
+        
+        
+        private void PlayerDoKill(OnPlayerDoKill data)
+        {
+            if (_killMarkerPrefab == null) return;
+            if (data.p_owerId != _gunController.OwnerId) return;
+            if (_currentKillMarker == null);
+            
+            GameObject s = Instantiate(_killMarkerPrefab, _hitMarkerParent);
+            _currentKillMarker = s;
+            
+            SoundManager.PlaySound(_gunController._soundData, "Kill", _gunController._source);
+            
+            Destroy(_currentKillMarker.gameObject, 0.5f);
         }
     }
 }

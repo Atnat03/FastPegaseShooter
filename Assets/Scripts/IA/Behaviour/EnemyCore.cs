@@ -80,13 +80,15 @@ public class EnemyCore : NetworkBusListener
                     module.p_onHitPlayer += scoreModule.OnDamageTaken;
             }
         }
+
+        _lifeModules[0].OnDeath += DeathEvent;
     }
 
     public override void OnStopServer()
     {
         InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }
-
+    
     public void InitialiseEnemy()
     {
         foreach (EnemyAttackModule module in _attackingModules)
@@ -145,6 +147,11 @@ public class EnemyCore : NetworkBusListener
     public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
     {
         _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
+    }
+        
+    private void DeathEvent(int playerObjectId)
+    {
+        InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
     }
 
     #region Charges
