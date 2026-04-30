@@ -53,11 +53,11 @@ public class PlayerSelectGun : NetworkBusListener
 		_uiInput.SetActive(false);
 	}
 
-	private void CanSelectGun(OnAllPlayerCanSelectGun obj)
+	private void CanSelectGun(OnAllPlayerCanSelectGun data)
 	{
 		if (!IsOwner) return;
 		
-		_uiInput.SetActive(true);
+		_uiInput.SetActive(data.p_open);
 	}
 	
 	public void ChangeGun(int id)

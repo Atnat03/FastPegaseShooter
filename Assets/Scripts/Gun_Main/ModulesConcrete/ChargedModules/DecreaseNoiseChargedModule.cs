@@ -23,6 +23,10 @@ namespace GunDecorator.ChargedModules
         
         public override void TryShootCharging()
         {
+            base.TryShootCharging();
+            
+            if (!_fullCharge) return;
+            
                 _ammoModule.SetBulletData(new BulletData
                 {
                     IsExplosive = _isExplosifAmmo,
