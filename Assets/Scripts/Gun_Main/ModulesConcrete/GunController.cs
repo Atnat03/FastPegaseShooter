@@ -235,44 +235,30 @@ namespace GunDecorator
 
             _reloadModule?.Reload();
         }
-
-        public void TriggerHitMark(bool isCritique = false)
-        {
-            /*if (!isCritique)
-            {
-                _hitMarkerModule?.HitMark();
-            }
-            else
-            {
-                _hitMarkerModule?.HitMarkCritique();
-            }*/
-        }
         
         [ServerRpc(RequireOwnership = true)]
-        public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical)
+        public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
         {
-            Debug.Log($"[ServerRpc] RequestApplyDamage called - target: {target}, damage: {damage}");
-            ApplyDamage(target, damage, isCritical);
+            ApplyDamage(target, damage, isCritical, hadCharged);
         }
 
-        public void ApplyDamage(NetworkObject target, int damage, bool isCritical)
+        public void ApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
         {
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
 
             bool crit = d.TakeDamage(OwnerId, damage, isCritical);
             
-            
             if (target.TryGetComponent<EnemyCore>(out var enemyCore))
             {
                 enemyCore.AddCharge(IsPositivePlayerCharge, damage);
             }
 
-            ApplyDamageObservers(target, damage, isCritical);
+            ApplyDamageObservers(damage, isCritical, hadCharged);
         }
 
         [ObserversRpc]
-        private void ApplyDamageObservers(NetworkObject target, int damage, bool isCritical)
+        private void ApplyDamageObservers(int damage, bool isCritical, bool hadCharged)
         {
             InvokeEvent(new ModifyEnergyEvent
             {
@@ -287,7 +273,7 @@ namespace GunDecorator
                 p_critical = isCritical
             });
 
-            AddPercentageCharge();
+            AddPercentageCharge(hadCharged);
         }
         
         public void TryShootCharged()
@@ -348,10 +334,12 @@ namespace GunDecorator
             manager.ActivateReticules(_reticuleID);
         }
 
-        public void AddPercentageCharge()
+        public void AddPercentageCharge(bool hadPercentage = true)
         {
-            Cons.Print("Add percentage");
-            _chargedModule.AddPercentage();
+            if(hadPercentage)
+            {
+                _chargedModule.AddPercentage();
+            }
         }
 
     public void SetPercentageCharge(int percent) => _chargedModule.SetPercentage(percent);

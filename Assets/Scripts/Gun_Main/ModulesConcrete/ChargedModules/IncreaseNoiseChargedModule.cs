@@ -62,7 +62,7 @@ namespace GunDecorator.ChargedModules
                     radius.y, 0
                 );
                 
-                _ammoModule.SpawnBullet(direction, _bulletOffset);
+                _ammoModule.SpawnBullet(direction, _bulletOffset, false);
                 _gunController.SetAmmo(_gunController.GetCurrentAmmo() - 1, _gunController.IsInfiniteAmmo);
             }
 
