@@ -251,6 +251,7 @@ namespace GunDecorator
         [ServerRpc(RequireOwnership = true)]
         public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical)
         {
+            Debug.Log($"[ServerRpc] RequestApplyDamage called - target: {target}, damage: {damage}");
             ApplyDamage(target, damage, isCritical);
         }
 
@@ -260,7 +261,19 @@ namespace GunDecorator
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
 
             bool crit = d.TakeDamage(OwnerId, damage, isCritical);
+            
+            
+            if (target.TryGetComponent<EnemyCore>(out var enemyCore))
+            {
+                enemyCore.AddCharge(IsPositivePlayerCharge, damage);
+            }
 
+            ApplyDamageObservers(target, damage, isCritical);
+        }
+
+        [ObserversRpc]
+        private void ApplyDamageObservers(NetworkObject target, int damage, bool isCritical)
+        {
             InvokeEvent(new ModifyEnergyEvent
             {
                 p_player = Owner,
@@ -275,13 +288,8 @@ namespace GunDecorator
             });
 
             AddPercentageCharge();
-            
-            if (target.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                enemyCore.AddCharge(IsPositivePlayerCharge, damage);
-            }
         }
-
+        
         public void TryShootCharged()
         {
             _chargedModule?.TryShootCharging();
