@@ -170,12 +170,12 @@ public class EnemyCore : NetworkBusListener
         if (positive)
         {
             p_currentPositiveCharge += value;
-            OnPositiveChangeObserverRpc();
+            OnPositiveChangeObserverRpc(p_currentPositiveCharge);
         }
         else
         {
             p_currentNegativeCharge += value;
-            OnNegativeChangeObserverRpc();
+            OnNegativeChangeObserverRpc(p_currentNegativeCharge); 
         }
 
         CheckAllChargeAreFull();
@@ -183,6 +183,13 @@ public class EnemyCore : NetworkBusListener
 
     [Server]
     private void ResetAllCharged()
+    {
+        p_currentPositiveCharge = 0;
+        p_currentNegativeCharge = 0;
+        ResetChargesObserverRpc();
+    }
+    [ObserversRpc]
+    private void ResetChargesObserverRpc()
     {
         p_currentPositiveCharge = 0;
         p_currentNegativeCharge = 0;
@@ -208,15 +215,18 @@ public class EnemyCore : NetworkBusListener
     {
         p_OnChargeExplosion?.Invoke();
     }
-
+    
     [ObserversRpc]
-    private void OnPositiveChangeObserverRpc()
+    private void OnPositiveChangeObserverRpc(float value)
     {
+        p_currentPositiveCharge = value;
         p_OnPositiveChargeChange?.Invoke();
     }
+    
     [ObserversRpc]
-    private void OnNegativeChangeObserverRpc()
+    private void OnNegativeChangeObserverRpc(float value)
     {
+        p_currentNegativeCharge = value;
         p_OnNegativeChargeChange?.Invoke();
     }
     
