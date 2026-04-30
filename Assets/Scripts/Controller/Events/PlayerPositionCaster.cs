@@ -22,7 +22,7 @@ public class PlayerPositionCaster : NetworkBusListener
         _networkObject = GetComponentInParent<NetworkObject>();
         
         _playerPosition = _playerTransform.position;
-        PlayerPositionCastingServerRPC(_playerPosition);
+        PlayerPositionCastingServerRPC(_playerPosition, false);
     }
 
     private void FixedUpdate()
@@ -32,22 +32,22 @@ public class PlayerPositionCaster : NetworkBusListener
             ((_playerTransform.position - _playerPosition).sqrMagnitude > _castingPhysicalThreshold * _castingPhysicalThreshold) ||
             _castingBeatTimer >= _castingBeatDelay)
         {
-            _castingBeatTimer = 0;
             _playerPosition = _playerTransform.position;
-            PlayerPositionCastingServerRPC(_playerPosition);
+            PlayerPositionCastingServerRPC(_playerPosition, _castingBeatTimer >= _castingBeatDelay);
+            _castingBeatTimer = 0;
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void PlayerPositionCastingServerRPC(Vector3 position, NetworkConnection conn = null)
+    void PlayerPositionCastingServerRPC(Vector3 position, bool isHeartBeat, NetworkConnection conn = null)
     {
-        PlayerPositionCastingObserverRPC(position, conn.ClientId);
+        PlayerPositionCastingObserverRPC(position, conn.ClientId,isHeartBeat);
     }
     
     [ObserversRpc]
-    void PlayerPositionCastingObserverRPC(Vector3 position, int playerId)
+    void PlayerPositionCastingObserverRPC(Vector3 position, int playerId, bool isHeartBeat)
     {
-        InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId));
+        InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId, isHeartBeat));
     }
 
     private void OnDrawGizmos()
@@ -65,11 +65,13 @@ public struct PlayerPositionUpdateEvent
     public int p_playerId;
     public Vector3 p_playerPosition;
     public int p_networkObjectId;
+    public bool p_isHeartBeat;
 
-    public PlayerPositionUpdateEvent(int playerId, Vector3 playerPos, int networkObjectId)
+    public PlayerPositionUpdateEvent(int playerId, Vector3 playerPos, int networkObjectId, bool isHeartBeat)
     {
         p_playerId = playerId;
         p_playerPosition = playerPos;
         p_networkObjectId = networkObjectId;
+        p_isHeartBeat = isHeartBeat;
     }
 }

@@ -20,6 +20,10 @@ public class ConnectionWithCode : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _codeTextUI;
     [SerializeField] private GameObject _connectedUI;
     [SerializeField] private GameObject _gameCodeUI;
+    
+    [Header("Wrong code")]
+    [SerializeField] private GameObject _wrongCode;
+    [SerializeField] private Transform _wrongCodeParent;
 
     private void Awake()
     {
@@ -82,13 +86,10 @@ public class ConnectionWithCode : MonoBehaviour
         {
             addressToUse = GetIPFromCode();
         }
-
+        
         Debug.Log("Connexion à : " + addressToUse);
         InstanceFinder.TransportManager.Transport.SetClientAddress(addressToUse);
         _networkManager.ClientManager.StartConnection();
-
-        _connectedUI.SetActive(false);
-        _gameCodeUI.SetActive(true);
     }
 
     #endregion
@@ -151,6 +152,30 @@ public class ConnectionWithCode : MonoBehaviour
         }
 
         return "127.0.0.1";
+    }
+    
+    private void OnEnable()
+    {
+        _networkManager.ClientManager.OnClientConnectionState += OnClientConnectionState;
+    }
+
+    private void OnDisable()
+    {
+        _networkManager.ClientManager.OnClientConnectionState -= OnClientConnectionState;
+    }
+    
+    private void OnClientConnectionState(ClientConnectionStateArgs args)
+    {
+        if (args.ConnectionState == LocalConnectionState.Stopped)
+        {
+            Destroy(Instantiate(_wrongCode, _wrongCodeParent), 2f);
+        }
+        
+        if (args.ConnectionState == LocalConnectionState.Started)
+        {
+            _connectedUI.SetActive(false);
+            _gameCodeUI.SetActive(true);
+        }
     }
 
     #endregion

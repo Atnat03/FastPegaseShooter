@@ -17,6 +17,7 @@ public class PlayerHealth : NetworkBusListener
 	public bool IsDead => _isDead.Value;
 
 	public bool IsCritik => _isCritik;
+	public int OwnerId => Owner.ClientId;
 	
 	#endregion
 
@@ -85,9 +86,17 @@ public class PlayerHealth : NetworkBusListener
 		_currentHealth.OnChange += OnHealthChange;
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
-		
+
 		if (IsOwner)
 			_startPos = transform.position;
+
+		PlayerHealthManager.Instance?.Register(this);
+	}
+
+	public override void OnStopClient()
+	{
+		base.OnStopClient();
+		PlayerHealthManager.Instance?.Unregister(this);
 	}
 
 	private void OnEnable()
@@ -278,12 +287,11 @@ public class PlayerHealth : NetworkBusListener
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
 	{
-		if (!IsOwner) return;
-    
-		CustomLogger.ImportantLog("healChange");
 		_targetHealthFill = next / _healthBase;
-		
+    
 		OnUpdateHealth?.Invoke(_targetHealthFill);
+
+		if (!IsOwner) return;
 
 		if (_targetHealthFill <= _critikStep)
 		{

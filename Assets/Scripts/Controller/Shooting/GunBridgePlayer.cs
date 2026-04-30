@@ -59,7 +59,7 @@ namespace Controller
 
         public void TryShootWithCurrentGun()
         {
-            if (_gunSwitching == null || _gunSwitching.IGunMain == null)
+            if (!_gunSwitching.CurrentMainGun.activeInHierarchy)
                 return;
 
             if (_gunSwitching.IsSwitching) return;
@@ -76,15 +76,6 @@ namespace Controller
             CurrentGun.TryCancelShooting();
         }
         
-        public void TryChargeWithCurrentGun()
-        {             
-            if (_gunSwitching.IsSwitching) return;
-            if (!_isInitialized) return;
-
-            TryCancelShooting();
-            CurrentGun.TryCharging();
-        }
-
         public void TryShootChargeShooting()
         {
             if (_gunSwitching.IsSwitching) return;
@@ -135,7 +126,6 @@ namespace Controller
 
             int ammoToApply = data.currentAmmo;
 
-            // ✅ Variable LOCALE — isolée de toute autre coroutine
             Material matBefore = CurrentMainSurchargeGun.ModelGun.material;
             matBefore.SetFloat("_Dissolving", 0);
 
@@ -152,7 +142,6 @@ namespace Controller
             _gunSwitching.ChangeCurrentGun_Main_ServerRpc(data.gunIndex);
             _grenadeThrower.ChangeMagneticChargeServerRpc();
 
-            // ✅ Nouvelle référence locale après le swap
             Material matAfter = CurrentMainSurchargeGun.ModelGun.material;
             matAfter.SetFloat("_Dissolving", 1);
 

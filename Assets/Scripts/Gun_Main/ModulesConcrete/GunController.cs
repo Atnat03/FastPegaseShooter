@@ -15,10 +15,10 @@ public interface IGun
     public void TryFire();
     public void TryCancelShooting();
     public void TryReload();
-    public void TryCharging();
     public void TryShootCharged();
     public void Disable(bool state);
     public void SetFireRate(float multiplier);
+    public void SetInfiniteAmmo(bool infiniteAmmo);
     public void SetChargedPlayer(bool b);
     public void SetReticule(ReticulesManager manager);
 }
@@ -31,6 +31,7 @@ public interface ISurcharge
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
     public Renderer ModelGun { get; }
     public void StopReload();
+    public void SetPercentageCharge(int percent);
 }
 
 namespace GunDecorator
@@ -131,9 +132,6 @@ namespace GunDecorator
 
         public void TryFire()
         {
-            if (_chargedModule != null)
-                if (_chargedModule.IsCharging) return;
-    
             ShootingInputPressed = true;
             ApplyShoot();
         }
@@ -241,12 +239,7 @@ namespace GunDecorator
                 _hitMarkerModule?.HitMarkCritique();
             }
         }
-
-        public void TryCharging()
-        {
-            _chargedModule?.TryCharging();
-        }
-
+        
         public void TryShootCharged()
         {
             _chargedModule?.TryShootCharging();
@@ -260,9 +253,9 @@ namespace GunDecorator
         public void SetFireRate(float multiplier)
         {
             _fireRateMultiplier = multiplier;
-            
-            _infiniteAmmo = multiplier == -1 ? false : true;
         }
+        
+        public void SetInfiniteAmmo(bool infiniteAmmo) => _infiniteAmmo = infiniteAmmo;
 
         public void PlaySound(string sound)
         {
@@ -304,5 +297,8 @@ namespace GunDecorator
         {
             manager.ActivateReticules(_reticuleID);
         }
+
+        public void AddPercentageCharge() => _chargedModule.AddPercentage();
+        public void SetPercentageCharge(int percent) => _chargedModule.SetPercentage(percent);
     }
 }

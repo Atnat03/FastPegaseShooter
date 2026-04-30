@@ -7,6 +7,8 @@ public class EnemyMovingModuleInspector : EnemyBehaviourModuleInspector
     private SerializedProperty _doFreezeWithoutTarget;
     private SerializedProperty _targetModule;
     private SerializedProperty _speed;
+    private SerializedProperty _traceWeight;
+    private SerializedProperty _traceSpread;
     
     
     protected override void OnEnable()
@@ -16,6 +18,8 @@ public class EnemyMovingModuleInspector : EnemyBehaviourModuleInspector
         _doFreezeWithoutTarget = serializedObject.FindProperty("_doFreezeWithoutTarget");
         _targetModule = serializedObject.FindProperty("_targetModule");
         _speed = serializedObject.FindProperty("_speed");
+        _traceWeight = serializedObject.FindProperty("_traceWeight");
+        _traceSpread = serializedObject.FindProperty("_traceSpread");
     }
 
     protected override void DrawCustomFields()
@@ -32,6 +36,8 @@ public class EnemyMovingModuleInspector : EnemyBehaviourModuleInspector
 
         EditorGUILayout.PropertyField(_doFreezeWithoutTarget);
         EditorGUILayout.PropertyField(_speed);
+        EditorGUILayout.PropertyField(_traceWeight);
+        EditorGUILayout.PropertyField(_traceSpread);
 
         GUILayout.Space(10);
         Rect targetBlockRect = EditorUtilities.WrapInBlock(() =>

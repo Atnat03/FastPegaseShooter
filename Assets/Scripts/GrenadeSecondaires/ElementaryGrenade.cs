@@ -20,8 +20,6 @@ public class ElementaryGrenade : NetworkBusListener
     
     private float _maxNumberTouch;
     private float _currentNumberTouch;
-    private const float SPAWN_GRACE = 0.2f;
-    private float _spawnTime;
     
     private ParticleSystem _particlesExplosionPrefab;
     private AudioSource _audioSource;
@@ -87,17 +85,10 @@ public class ElementaryGrenade : NetworkBusListener
     void Start()
     {
         _lastPosition = transform.position;
-        _spawnTime = Time.time;
     }
 
     void FixedUpdate()
     {
-        if (Time.time - _spawnTime < SPAWN_GRACE) 
-        {
-            _lastPosition = transform.position;
-            return;
-        }
-    
         if (IsServerInitialized)
         {
             DetectCollision();
@@ -105,7 +96,7 @@ public class ElementaryGrenade : NetworkBusListener
         
         _lastPosition = transform.position;
     }
-
+    
     private void DetectCollision()
     {
         Vector3 direction = transform.position - _lastPosition;
@@ -113,7 +104,7 @@ public class ElementaryGrenade : NetworkBusListener
 
         if (distance <= 0f) return;
 
-        if (Physics.SphereCast(transform.position, 0.1f, direction.normalized, out RaycastHit hit,
+        if (Physics.SphereCast(_lastPosition, 0.1f, direction.normalized, out RaycastHit hit,
                 distance, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (_hasHit) return;
@@ -135,12 +126,19 @@ public class ElementaryGrenade : NetworkBusListener
         {
             if (c.TryGetComponent(out IDamagable damagable))
             {
-                damagable.TakeDamage(_networkIdAttacker.Value, _damage.Value);
+                damagable.TakeDamage(_thrower.Value.ClientId, _damage.Value);
                 
                 InvokeEvent(new ModifyEnergyEvent
                 {
                     p_player = _thrower.Value,
                     p_value = _damage.Value
+                });
+                
+                InvokeEvent(new OnPlayerDoDamage
+                {
+                    p_ownerId = _thrower.Value.ClientId,
+                    p_value = _damage.Value,
+                    p_critical = false
                 });
                         
                 if (c.TryGetComponent<EnemyCore>(out var enemyCore))

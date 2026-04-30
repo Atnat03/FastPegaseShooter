@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -80,13 +81,15 @@ public class EnemyCore : NetworkBusListener
                     module.p_onHitPlayer += scoreModule.OnDamageTaken;
             }
         }
+
+        _lifeModules[0].OnDeath += DeathEvent;
     }
 
     public override void OnStopServer()
     {
         InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }
-
+    
     public void InitialiseEnemy()
     {
         foreach (EnemyAttackModule module in _attackingModules)
@@ -94,7 +97,7 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyAttackModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyAttackModule found in {gameObject.name}");
         }
     
         foreach (EnemyLifeModule module in _lifeModules)
@@ -102,7 +105,7 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyLifeModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyLifeModule found in {gameObject.name}");
         }
     
         foreach (EnemyTargetModule module in _targetingModules)
@@ -110,7 +113,7 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyTargetModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyTargetModule found in {gameObject.name}");
         }
 
         _movementModule?.InitialiseBehaviourModule(this);
@@ -123,6 +126,11 @@ public class EnemyCore : NetworkBusListener
         p_enemySpawnCost = cost;
         p_pathRequester = pathfindingRequestManager;
         p_gridReader = pathfindingGridReader;
+    }
+
+    public void ClearPathReservation()
+    {
+        _movementModule.ClearPathReservation();
     }
 
     private void OnNetworkTick()
@@ -145,6 +153,13 @@ public class EnemyCore : NetworkBusListener
     public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
     {
         _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
+    }
+        
+    private void DeathEvent(int playerObjectId)
+    {
+        CustomLogger.ImportantLog("Clear path reservation on death");
+        ClearPathReservation();
+        InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
     }
 
     #region Charges
