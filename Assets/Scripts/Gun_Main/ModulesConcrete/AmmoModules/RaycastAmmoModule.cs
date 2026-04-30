@@ -42,7 +42,7 @@ namespace GunDecorator.AmmoModules
             _dmgToApply = _damages;
         }
 
-        public void SpawnBullet(Vector3 direction, Vector3 offset)
+        public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true)
         {
             Ray cameraRay;
             Vector3 spreadDirection;
@@ -91,20 +91,20 @@ namespace GunDecorator.AmmoModules
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
             
-            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, damagableObject);
+            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, damagableObject, hadCharged);
         }
         
         [ServerRpc]
         private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, NetworkObject target = null)
+            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, NetworkObject target = null, bool hadCharged = true)
         {
             bool isCritical = _gunController.IsOverload;
-            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, target);
+            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, target, hadCharged);
         }
 
         [ObserversRpc]
         private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, NetworkObject target = null)
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, NetworkObject target = null, bool hadCharged = true)
         {
             GameObject newBullet = Instantiate(BulletPrefab, _finalSpawnPoint + offset, Quaternion.LookRotation(direction));
             Destroy(newBullet, travel + .5f);
@@ -115,7 +115,7 @@ namespace GunDecorator.AmmoModules
             GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
-                    isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge);
+                    isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, hadCharged);
         }
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;

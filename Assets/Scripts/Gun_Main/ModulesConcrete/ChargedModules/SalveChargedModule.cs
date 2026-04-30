@@ -54,7 +54,7 @@ namespace GunDecorator.ChargedModules
                     Random.Range(-_noiseCharged, _noiseCharged),
                     0);
                 
-                _ammoModule.SpawnBullet(spread, Vector3.zero);
+                _ammoModule.SpawnBullet(spread, Vector3.zero, false);
                 
                 _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);
