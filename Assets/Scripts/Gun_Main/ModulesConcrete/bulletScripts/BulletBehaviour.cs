@@ -114,59 +114,16 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private void HandleDirectHit(RaycastHit hit)
     {
+        Debug.Log($"[Bullet] HasHit - target: {_targetNetworkObject}, isServer: {_gunController.IsServerInitialized}");
+    
         if (_gunController.IsServerInitialized)
-        {
-            _gunController.ApplyDamage(_targetNetworkObject,
-                (int)p_damage,
-                p_isCritical);
-        }
+            _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical);
         else
-        {
-            _gunController.RequestApplyDamage(
-                _targetNetworkObject,
-                (int)p_damage,
-                p_isCritical
-            );
-        }
+            _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical);
 
         CreateHitMark(hit);
     }
-
-    private void ApplyDamage()
-    {
-        if (_targetNetworkObject == null) return;
-
-        if (_targetNetworkObject.TryGetComponent<IDamagable>(out var d))
-        {
-            bool crit = d.TakeDamage(
-                _gunController.OwnerId,
-                (int)p_damage,
-                p_isCritical);
-
-            _gunController.TriggerHitMark(crit || p_isCritical);
-
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = _gunController.Owner,
-                p_value = p_damage
-            });
-            
-            InvokeEvent(new OnPlayerDoDamage
-            {
-                p_ownerId = _gunController.OwnerId,
-                p_value = p_damage,
-                p_critical = p_isCritical
-            });
-
-            _gunController.AddPercentageCharge();
-            
-            if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
-            }
-        }
-    }
-
+    
     private void CreateHitMark(RaycastHit hit)
     {
         GameObject hitMark = Instantiate(
@@ -189,53 +146,14 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         
         foreach (Collider c in colliders)
         {
-            if (!c.TryGetComponent<IDamagable>(out IDamagable damagable))
-                continue;
-            
+            if (!c.TryGetComponent<IDamagable>(out _)) continue;
+    
+            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
+
             if (_gunController.IsServerInitialized)
-            {
-                _gunController.ApplyDamage(_targetNetworkObject,
-                    (int)p_damage,
-                    p_isCritical);
-            }
+                _gunController.ApplyDamage(netObj, (int)p_damage, p_isCritical);
             else
-            {
-                _gunController.RequestApplyDamage(
-                    _targetNetworkObject,
-                    (int)p_damage,
-                    p_isCritical
-                );
-            }
-            
-            /*
-
-            crit = damagable.TakeDamage(
-                _gunController.OwnerId,
-                damage,
-                p_isCritical);
-            
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = _gunController.Owner,
-                p_value = p_damage
-            });
-
-            InvokeEvent(new OnPlayerDoDamage
-            {
-                p_ownerId = _gunController.OwnerId,
-                p_value = p_damage,
-                p_critical = p_isCritical
-            });
-            
-            _gunController.AddPercentageCharge();
-            
-            hit = true;
-
-            if (_targetNetworkObject != null &&
-                _targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
-            }*/
+                _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical);
         }
     }
 }
