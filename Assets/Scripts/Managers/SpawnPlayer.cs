@@ -60,8 +60,6 @@ public class SpawnPlayer : NetworkBehaviour
     [Server]
     private void SpawnPlayers(NetworkConnection player)
     {
-        Debug.Log("SpawnPlayers called");
-   
         NetworkObject playerObj = Instantiate(_playerPrefab);
         InstanceFinder.ServerManager.Spawn(playerObj, player);
         playerObj.transform.position = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;

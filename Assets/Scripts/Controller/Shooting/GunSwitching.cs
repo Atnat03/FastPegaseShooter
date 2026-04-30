@@ -67,7 +67,7 @@ public class GunSwitching : NetworkBehaviour
 	
 	public void Initialize(int startIndex)
 	{
-		Cons.Print("Initialize", ColorConsole.Pink);
+		Cons.Print("Connected", ColorConsole.Green);
 		
 		_currentMainGun.Value = startIndex;
 		
