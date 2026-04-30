@@ -44,7 +44,7 @@ namespace GunDecorator.ChargedModules
 
         private void ApplyShoot()
         {
-            _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
+            _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero, false);
 
             _gunController.PlaySound("Charged");
         }

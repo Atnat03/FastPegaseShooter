@@ -11,6 +11,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
     [HideInInspector] public bool p_isExplosive;
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
+    [HideInInspector] public bool p_hadCharged;
 
     [SerializeField] private GameObject _positiveExplosionVFX;
     [SerializeField] private GameObject _negativeExplosionVFX;
@@ -51,7 +52,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         bool isCritical,
         Vector3 targetPoint,
         NetworkObject target,
-        bool isPositive)
+        bool isPositive, bool hadCharged = true)
     {
         p_damage = damage;
         p_speed = speed;
@@ -62,6 +63,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         p_isCritical = isCritical;
         _targetPoint = targetPoint;
         _targetNetworkObject = target;
+        p_hadCharged = hadCharged;
 
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
         
@@ -114,12 +116,10 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        Debug.Log($"[Bullet] HasHit - target: {_targetNetworkObject}, isServer: {_gunController.IsServerInitialized}");
-    
         if (_gunController.IsServerInitialized)
-            _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical);
+            _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
         else
-            _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical);
+            _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
 
         CreateHitMark(hit);
     }
@@ -151,9 +151,9 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
             if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
 
             if (_gunController.IsServerInitialized)
-                _gunController.ApplyDamage(netObj, (int)p_damage, p_isCritical);
+                _gunController.ApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
             else
-                _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical);
+                _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
         }
     }
 }

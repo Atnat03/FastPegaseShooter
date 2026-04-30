@@ -53,7 +53,7 @@ namespace GunDecorator.AmmoModules
             _dmgToApply = _damages;
         }
         
-        public void SpawnBullet(Vector3 direction, Vector3 offset)
+        public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true)
         {
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
