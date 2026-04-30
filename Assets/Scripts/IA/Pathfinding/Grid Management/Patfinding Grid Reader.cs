@@ -118,7 +118,7 @@ public class PathfindingGridReader : MonoBehaviour
                 }
                 else
                 {
-                    CustomLogger.CCErrorLog($"NO MATCH {current} existing:{existing} vs weight:{weight}");
+                    //CustomLogger.CCErrorLog($"NO MATCH {current} existing:{existing} vs weight:{weight}");
                 }
             }
 
