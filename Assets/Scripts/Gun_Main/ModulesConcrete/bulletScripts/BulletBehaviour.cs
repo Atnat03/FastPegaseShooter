@@ -85,7 +85,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 transform.forward,
                 out RaycastHit hit,
                 distance,
-                ~LayerMask.NameToLayer("Owner"),
+                ~LayerMask.GetMask("Owner"),
                 QueryTriggerInteraction.Ignore))
             return;
 
@@ -116,7 +116,17 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
     {
         if (_gunController.IsServerInitialized)
         {
-            ApplyDamage();
+            _gunController.ApplyDamage(_targetNetworkObject,
+                (int)p_damage,
+                p_isCritical);
+        }
+        else
+        {
+            _gunController.RequestApplyDamage(
+                _targetNetworkObject,
+                (int)p_damage,
+                p_isCritical
+            );
         }
 
         CreateHitMark(hit);
@@ -181,6 +191,23 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         {
             if (!c.TryGetComponent<IDamagable>(out IDamagable damagable))
                 continue;
+            
+            if (_gunController.IsServerInitialized)
+            {
+                _gunController.ApplyDamage(_targetNetworkObject,
+                    (int)p_damage,
+                    p_isCritical);
+            }
+            else
+            {
+                _gunController.RequestApplyDamage(
+                    _targetNetworkObject,
+                    (int)p_damage,
+                    p_isCritical
+                );
+            }
+            
+            /*
 
             crit = damagable.TakeDamage(
                 _gunController.OwnerId,
@@ -208,10 +235,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 _targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
             {
                 enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
-            }
+            }*/
         }
-        
-        if(hit)
-            _gunController.TriggerHitMark(crit || p_isCritical);
     }
 }

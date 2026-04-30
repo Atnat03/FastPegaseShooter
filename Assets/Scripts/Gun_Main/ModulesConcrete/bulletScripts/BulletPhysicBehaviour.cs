@@ -147,6 +147,8 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                 {
                     enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                 }
+                
+                _gunController.AddPercentageCharge();
             
                 isHit = true;
             }

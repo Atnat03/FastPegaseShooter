@@ -26,6 +26,22 @@ namespace GunDecorator
         private void Start()
         {
             ListenToEvent<OnPlayerDoKill>(PlayerDoKill);
+            ListenToEvent<OnPlayerDoDamage>(MakeHitMarker);
+        }
+
+        private void MakeHitMarker(OnPlayerDoDamage data)
+        {
+            if(data.p_ownerId != _gunController.OwnerId)
+                return;
+
+            if (!data.p_critical)
+            {
+                HitMark();
+            }
+            else
+            {
+                HitMarkCritique();
+            }
         }
 
         public void HitMark()
