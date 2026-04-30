@@ -53,7 +53,7 @@ namespace GunDecorator.AmmoModules
             _dmgToApply = _damages;
         }
         
-        public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true)
+        public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged)
         {
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
@@ -89,17 +89,17 @@ namespace GunDecorator.AmmoModules
                 }
             }
             
-            SpawnVisualBulletServerRpc(direction, isExplosive, radius, offset, isCritical, _finalSpawnPoint);
+            SpawnVisualBulletServerRpc(direction, isExplosive, radius, offset, isCritical, _finalSpawnPoint, hadCharged);
         }
         
         [ServerRpc]
-        private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint)
+        private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
-            SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset, isCritical, spawnPoint);
+            SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
         }
         
         [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint)
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
             Vector3 baseDirection = _spawnPoint.forward;
             Vector3 spreadDirection = direction == Vector3.zero ? baseDirection : Quaternion.Euler(direction.y, direction.x, 0) * baseDirection;
@@ -116,7 +116,7 @@ namespace GunDecorator.AmmoModules
 
             IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, 
-                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge);
+                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge, hadCharged);
 
             Destroy(newBullet, 5f);
         }

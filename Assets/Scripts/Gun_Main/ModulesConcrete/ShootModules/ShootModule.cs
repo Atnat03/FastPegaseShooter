@@ -120,7 +120,7 @@ namespace GunDecorator
                         radius.y, 0
                         );
                     
-                    _ammoModule.SpawnBullet(_directionModifier, _bulletOffset);
+                    _ammoModule.SpawnBullet(_directionModifier, _bulletOffset, true);
                     
                     _directionModifier = Vector3.zero;
                 }

@@ -40,7 +40,7 @@ namespace GunDecorator
 
     public interface IAmmoModule
     {
-        public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true);
+        public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged);
         public void SetDamage(float multiplierDmg);
         public void SetBulletData(BulletData data);
         public void ResetBulletData();
