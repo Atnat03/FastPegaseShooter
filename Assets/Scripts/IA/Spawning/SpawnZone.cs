@@ -52,6 +52,8 @@ public class SpawnZone : NetworkBusListener
 
         ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
         {
+            if (PPUE.p_isHeartBeat) return; //Heart beat isn't usefull for pathfinding
+            
             for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
             {
                 if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);

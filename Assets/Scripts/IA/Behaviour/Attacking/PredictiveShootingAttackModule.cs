@@ -15,7 +15,7 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
     public override void OnNetworkTick()
     {
         base.OnNetworkTick();
-        if (_waitedTimeSinceAttack >= _attackDelay)
+        if (_waitedTimeSinceAttack >= _attackDelay && _targetModule.HasTarget())
         {
             Vector3 shootDir = Vector3.zero;
             Vector3 shootingPos = transform.position + Vector3.up * 0.5f;

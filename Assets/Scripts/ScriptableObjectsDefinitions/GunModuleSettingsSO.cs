@@ -106,11 +106,8 @@ public class GunSetting
 
         [Header("Charging")] 
         public float _damageChargedMultiplicator = 10;
-        public float timeToCharge = 1;
-        public float DeadZoneStartCharging = 0.5f;
         public float recoilChargedMultiplier = 1.25f;
         public float RecoilX = 2;
-        public float IsFullMultiplicator = 0.9f;
         public int NumberBulletInCharged = 10;
 
         [Header("Salve")]
@@ -125,15 +122,12 @@ public class GunSetting
 
         [Header("Charging")]
         public float _damageChargedMultiplicator = 10;
-        public float timeToCharge = 1;
-        public float DeadZoneStartCharging = 0.5f;
         public float recoilChargedMultiplier = 1.25f;
         public float RecoilX = 2;
-        public float IsFullMultiplicator = 0.9f;
         public int NumberBulletInCharged = 10;
 
         [Header("Noise")] 
-        public AnimationCurve NoiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
+        public float noiseAngle = 5;
         public float maxNoiseAngle = 10;
     }
 
@@ -145,15 +139,11 @@ public class GunSetting
 
         [Header("Charging")] 
         public float _damageChargedMultiplicator = 2;
-        public float timeToCharge = 1;
-        public float DeadZoneStartCharging = 0.5f;
         public float recoilChargedMultiplier = 1.25f;
         public float RecoilX = 2;
-        public float IsFullMultiplicator = 0.9f;
         public int NumberBulletInCharged = 10;
 
         [Header("Noise")] 
-        public AnimationCurve NoiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
         public float startMaxNoiseAngle = 10;
     }
 

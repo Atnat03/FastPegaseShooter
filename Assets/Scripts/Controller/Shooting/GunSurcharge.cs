@@ -9,7 +9,8 @@ namespace Controller
     {
         [SerializeField] private GunBridgePlayer _gunBridge;
 
-        [Header("Overloading")]
+        [Header("Overloading")] 
+        [SerializeField] private int _numberChargedShootWhenOverload = 2;
         [SerializeField] private bool _isOverload = false;
         [SerializeField] private float _elapsedTimeOverload = 0;
         private float _currentOverloadTimer = 0;
@@ -30,6 +31,7 @@ namespace Controller
             if(newAmmoAmount != -1)
                 gun.SetAmmo(newAmmoAmount, false);
             gun.SetSurchargeStat(state, dmg_Multi, rate_Multi);
+            gun.SetPercentageCharge(_numberChargedShootWhenOverload * 100);
         }
 
         private void Update()
