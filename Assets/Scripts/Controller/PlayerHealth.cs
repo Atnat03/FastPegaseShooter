@@ -17,6 +17,7 @@ public class PlayerHealth : NetworkBusListener
 	public bool IsDead => _isDead.Value;
 
 	public bool IsCritik => _isCritik;
+	public int OwnerId => Owner.ClientId;
 	
 	#endregion
 
@@ -85,9 +86,17 @@ public class PlayerHealth : NetworkBusListener
 		_currentHealth.OnChange += OnHealthChange;
 		_isDead.OnChange += OnDeadChange;
 		_respawnTimer.OnChange += OnRespawnTimerChange;
-		
+
 		if (IsOwner)
 			_startPos = transform.position;
+
+		PlayerHealthManager.Instance?.Register(this);
+	}
+
+	public override void OnStopClient()
+	{
+		base.OnStopClient();
+		PlayerHealthManager.Instance?.Unregister(this);
 	}
 
 	private void OnEnable()
@@ -111,7 +120,7 @@ public class PlayerHealth : NetworkBusListener
 				if (_respawnTimer.Value > 0)
 					_respawnTimer.Value -= Time.deltaTime;
 				else
-					RespawnObserverRpc();
+					Respawn();
 			}
 		}
     
@@ -235,9 +244,8 @@ public class PlayerHealth : NetworkBusListener
 
 		NotifyDeathRpc(NetworkObject);
 	}
-	
-	[ObserversRpc]
-	private void RespawnObserverRpc()
+
+	void Respawn()
 	{
 		Debug.Log("Respawn");
 		
@@ -245,13 +253,23 @@ public class PlayerHealth : NetworkBusListener
 		_isDead.Value = false;
 		_currentHealth.Value = _healthBase;
 
+		transform.position = new Vector3(30, 0, -23.5f);
+		
+		RespawnObserverRpc();
+	}
+	
+	[ObserversRpc]
+	private void RespawnObserverRpc()
+	{
+		Debug.Log("RespawnObserverRpc");
+		
 		if (IsOwner)
 		{
 			transform.position = new Vector3(30, 0, -23.5f);
 			_gunSwitching.IGunMain.TryCancelShooting();
 		}
 
-		NotifyRespawnRpc(NetworkObject);
+		InvokeEvent(new OnPlayerRespawnEvent { p_playerN = NetworkObject });
 	}
 	
 	[ObserversRpc]
@@ -260,11 +278,6 @@ public class PlayerHealth : NetworkBusListener
 		InvokeEvent(new OnPlayerDeathEvent { p_playerN = playerN });
 	}
 	
-	[ObserversRpc]
-	private void NotifyRespawnRpc(NetworkObject playerN)
-	{
-		InvokeEvent(new OnPlayerRespawnEvent { p_playerN = playerN });
-	}
 
 	[ObserversRpc]
 	private void ShowHealThrowObserverRpc(Vector3 landingPos)
@@ -274,12 +287,11 @@ public class PlayerHealth : NetworkBusListener
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
 	{
-		if (!IsOwner) return;
-    
-		CustomLogger.ImportantLog("healChange");
 		_targetHealthFill = next / _healthBase;
-		
+    
 		OnUpdateHealth?.Invoke(_targetHealthFill);
+
+		if (!IsOwner) return;
 
 		if (_targetHealthFill <= _critikStep)
 		{

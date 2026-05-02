@@ -321,7 +321,7 @@ public class PathfindingGridCreator : EditorWindow
             asset.nodes = new List<PathfindingNode>();
             foreach (PathfindingNode node in grid)
             {
-                PathfindingNode newNode = new PathfindingNode(node.index, node.gridPosition, node.position, node.wallAvoidance);
+                PathfindingNode newNode = new PathfindingNode(node.index, node.gridPosition, node.position, node.travelCost);
                 newNode.neighborsIndex = new List<int>(node.neighborsIndex);
                 asset.nodes.Add(newNode);
             }
@@ -484,7 +484,7 @@ public class PathfindingGridCreator : EditorWindow
                     currentNodeIndex,
                     new Vector2Int(i%zRaycastAmount, i/zRaycastAmount),
                     hits[j].point,
-                    0);
+                    1);
                 currentNodeIndex++;
                 nodesPerCell[i].Add(node);
                 nodes.Add(node);
@@ -512,7 +512,7 @@ public class PathfindingGridCreator : EditorWindow
         {
             if (nodes[i].neighborsIndex.Count < 8)
             {
-                nodes[i].wallAvoidance = wallAvoidanceDistance;
+                nodes[i].travelCost = wallAvoidanceDistance;
                 borderNodes.Add(i);
             }
         }
@@ -605,9 +605,9 @@ public class PathfindingGridCreator : EditorWindow
         
         foreach (int neighbor in nodes[node].neighborsIndex)
         {
-            if(nodes[neighbor].wallAvoidance < wallAvoidanceValue-1)
+            if(nodes[neighbor].travelCost < wallAvoidanceValue-1)
             {
-                nodes[neighbor].wallAvoidance = wallAvoidanceValue - 1;
+                nodes[neighbor].travelCost = wallAvoidanceValue - 1;
                 UpdateNeighboringNodesWallValue(neighbor, wallAvoidanceValue - 1);
             }
         }

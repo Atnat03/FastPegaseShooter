@@ -27,15 +27,15 @@ MonoBehaviour:
       data:
         displayName: NoiseModule
         headerColor: {r: 0, g: 0.3921569, b: 0, a: 1}
-        MaxOffsetX: 5
-        MaxOffsetY: 5
-        TimeToAccessMaxNoise: 2
+        MaxOffsetX: 10
+        MaxOffsetY: 10
+        TimeToAccessMaxNoise: 3
         CurveNoiseOverTime:
           serializedVersion: 2
           m_Curve:
           - serializedVersion: 3
-            time: 0.020832062
-            value: 0.99520874
+            time: 0
+            value: 0
             inSlope: -0.0028416202
             outSlope: -0.0028416202
             tangentMode: 0
@@ -43,22 +43,22 @@ MonoBehaviour:
             inWeight: 0.5636619
             outWeight: 0.1929544
           - serializedVersion: 3
-            time: 0.6894469
-            value: 0.45887896
-            inSlope: -1.3138467
-            outSlope: -1.3138467
+            time: 0.5
+            value: 0.5
+            inSlope: 2.628572
+            outSlope: 2.628572
             tangentMode: 0
             weightedMode: 0
-            inWeight: 0.17808516
+            inWeight: 0.08333331
             outWeight: 0.33822766
           - serializedVersion: 3
-            time: 0.9916687
-            value: -0.009548187
-            inSlope: 0.77106595
-            outSlope: 0.77106595
+            time: 1
+            value: 1
+            inSlope: 0.7147152
+            outSlope: 0.7147152
             tangentMode: 0
             weightedMode: 0
-            inWeight: 0.4961026
+            inWeight: 0.39154518
             outWeight: 0.38490272
           m_PreInfinity: 2
           m_PostInfinity: 2
@@ -130,12 +130,10 @@ MonoBehaviour:
       data:
         displayName: SalveChargedModule
         headerColor: {r: 0, g: 1, b: 1, a: 1}
-        IsExplosifAmmo: 0
+        IsExplosifAmmo: 1
         explosionRadius: 1
-        timeToCharge: 0.6
-        DeadZoneStartCharging: 0
+        _damageChargedMultiplicator: 10
         recoilChargedMultiplier: 0
         RecoilX: 0
-        IsFullMultiplicator: 0.9
         NumberBulletInCharged: 10
         intervaleCharge: 0.02

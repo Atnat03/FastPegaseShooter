@@ -33,6 +33,7 @@ public class DroneEffectFireRate : DroneEffectParent
 		foreach (PlayerVisuelBridge player in _playerUnderEffect)
 		{
 			player.PlayerGun.IGunMain.SetFireRate(_fireRateMultiplicator);
+			player.PlayerGun.IGunMain.SetInfiniteAmmo(true);
 			ApplyFireRateObserverRpc(player.Owner, _fireRateMultiplicator, player);
 		}
 	}
@@ -42,6 +43,7 @@ public class DroneEffectFireRate : DroneEffectParent
 		base.StopApplicateEffect(playerVisuelBridge);
 		
 		playerVisuelBridge.PlayerGun.IGunMain.SetFireRate(-1);
+		playerVisuelBridge.PlayerGun.IGunMain.SetInfiniteAmmo(false);
 
 		ResetFireRateObserverRpc(playerVisuelBridge.Owner, playerVisuelBridge);
 	}
@@ -52,6 +54,8 @@ public class DroneEffectFireRate : DroneEffectParent
 		if (target != LocalConnection) return;
     
 		player.PlayerGun.IGunMain.SetFireRate(multiplier);
+		player.PlayerGun.IGunMain.SetInfiniteAmmo(true);
+
 	}
 
 	public override void ApplyDeathEffect()
@@ -66,6 +70,7 @@ public class DroneEffectFireRate : DroneEffectParent
 	private void ResetFireRateObserverRpc(NetworkConnection target, PlayerVisuelBridge player)
 	{
 		player.PlayerGun.IGunMain.SetFireRate(-1);
+		player.PlayerGun.IGunMain.SetInfiniteAmmo(false);
 	}
 	
 	#endregion

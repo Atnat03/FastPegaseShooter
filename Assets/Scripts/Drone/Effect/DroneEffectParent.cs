@@ -148,6 +148,7 @@ public abstract class DroneEffectParent : NetworkBusListener
 		{
 			players.PlayerDroneView.SetInfoUnderDrone(state);
 			players.PlayerGun.IGunMain.SetFireRate(-1);
+			players.PlayerGun.IGunMain.SetInfiniteAmmo(false);
 		}
 	}
 	

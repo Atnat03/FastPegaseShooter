@@ -15,10 +15,10 @@ public interface IGun
     public void TryFire();
     public void TryCancelShooting();
     public void TryReload();
-    public void TryCharging();
     public void TryShootCharged();
     public void Disable(bool state);
     public void SetFireRate(float multiplier);
+    public void SetInfiniteAmmo(bool infiniteAmmo);
     public void SetChargedPlayer(bool b);
     public void SetReticule(ReticulesManager manager);
 }
@@ -31,6 +31,7 @@ public interface ISurcharge
     public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
     public Renderer ModelGun { get; }
     public void StopReload();
+    public void SetPercentageCharge(int percent);
 }
 
 namespace GunDecorator
@@ -56,43 +57,49 @@ namespace GunDecorator
 
         [SerializeField, Tooltip("ScriptableObject contenant les settings de l'arme équilibré")]
         private GunModuleSettingsSO _settings;
-        
-        [SerializeField, Tooltip("Model 3d de l'arme")] 
+
+        [SerializeField, Tooltip("Model 3d de l'arme")]
         private Renderer _model;
-        [SerializeField, Tooltip("Audio Source de l'arme")] 
+
+        [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
-        [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")] 
+
+        [SerializeField,
+         Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
         public SoundsDataSO _soundData;
-        
-        [SerializeField, Tooltip("Animation du modele de l'arme")] 
+
+        [SerializeField, Tooltip("Animation du modele de l'arme")]
         public Animator _animator;
-        
-        [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
-        [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
+
+        [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
+        public VisualEffect _muzzleFlash; // test
+
+        [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]
+        private bool _isFullAuto;
 
         [SerializeField] private int _reticuleID = 0;
-        
+
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
         private bool _infiniteAmmo = false;
         private readonly SyncVar<bool> _isPositivePlayerCharge = new SyncVar<bool>(false);
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-        
+
         //Action
-        
+
         //Shoot
         public Action<int, int> OnShootAmmo;
         public Action<float> OnShootNoise;
-        
+
         //Reloading
         public Action<float> OnStartReload;
         public Action OnEndReload;
-        
+
         //Charging
         public Action<float> OnCharging;
         public Action OnStopCharging;
-        
+
         private void OnEnable()
         {
             _animator.ResetTrigger("Reload");
@@ -115,7 +122,7 @@ namespace GunDecorator
                 module.Initialize(this);
             }
 
-            if(_settings != null)
+            if (_settings != null)
             {
                 foreach (GunSetting s in _settings.modulesList)
                 {
@@ -131,9 +138,6 @@ namespace GunDecorator
 
         public void TryFire()
         {
-            if (_chargedModule != null)
-                if (_chargedModule.IsCharging) return;
-    
             ShootingInputPressed = true;
             ApplyShoot();
         }
@@ -141,26 +145,27 @@ namespace GunDecorator
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
-            
+
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 if (!_shootModule.CanShoot) return;
-                
+
                 _shootModule.SetFireRate(_fireRateMultiplier);
-                    
+
                 if (IsFullAuto)
                 {
                     StartCoroutine(ShootingCoroutine(_shootModule));
                     return;
                 }
+
                 _shootModule?.TryShoot();
-                    
+
                 _recoilModule?.Recoil(_model.transform, 0.1f, false);
                 _recoilModule?.SetIsRecoil(true);
-                    
+
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
                 PlayMuzzleFlash();
-                    
+
                 _animator?.SetTrigger("Shoot");
             }
         }
@@ -171,32 +176,32 @@ namespace GunDecorator
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
                 _shootModule.SetFireRate(_fireRateMultiplier);
-                
+
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 PlayMuzzleFlash();
-                
+
                 _recoilModule?.Recoil(_model.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
-                
+
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
-                
+
                 _animator?.SetTrigger("Shoot");
-                
+
                 yield return new WaitForSeconds(s.FireRate);
-                
-                p_authorizedToShoot =  true;
+
+                p_authorizedToShoot = true;
             }
         }
-        
+
 
         public void TryCancelShooting()
         {
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
-            
+
             _recoilModule?.SetIsRecoil(false);
-            
+
             p_authorizedToShoot = true;
         }
 
@@ -211,6 +216,7 @@ namespace GunDecorator
                 SetSurchargeStatServerRpc(isOverload, dmgMultiplicator, cadenceMultiplicator);
                 return;
             }
+
             _isOverload.Value = isOverload;
             SurchargeMultiplierDamage = dmgMultiplicator;
             SurchargeMultiplierRate = cadenceMultiplicator;
@@ -226,27 +232,64 @@ namespace GunDecorator
         public void TryReload()
         {
             if (_reloadModule.IsReloading) return;
-            
+
             _reloadModule?.Reload();
         }
 
         public void TriggerHitMark(bool isCritique = false)
         {
-            if (!isCritique)
+            /*if (!isCritique)
             {
                 _hitMarkerModule?.HitMark();
             }
             else
             {
                 _hitMarkerModule?.HitMarkCritique();
-            }
+            }*/
         }
-
-        public void TryCharging()
+        
+        [ServerRpc(RequireOwnership = true)]
+        public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical)
         {
-            _chargedModule?.TryCharging();
+            Debug.Log($"[ServerRpc] RequestApplyDamage called - target: {target}, damage: {damage}");
+            ApplyDamage(target, damage, isCritical);
         }
 
+        public void ApplyDamage(NetworkObject target, int damage, bool isCritical)
+        {
+            if (target == null) return;
+            if (!target.TryGetComponent<IDamagable>(out var d)) return;
+
+            bool crit = d.TakeDamage(OwnerId, damage, isCritical);
+            
+            
+            if (target.TryGetComponent<EnemyCore>(out var enemyCore))
+            {
+                enemyCore.AddCharge(IsPositivePlayerCharge, damage);
+            }
+
+            ApplyDamageObservers(target, damage, isCritical);
+        }
+
+        [ObserversRpc]
+        private void ApplyDamageObservers(NetworkObject target, int damage, bool isCritical)
+        {
+            InvokeEvent(new ModifyEnergyEvent
+            {
+                p_player = Owner,
+                p_value = damage
+            });
+            
+            InvokeEvent(new OnPlayerDoDamage
+            {
+                p_ownerId = OwnerId,
+                p_value = damage,
+                p_critical = isCritical
+            });
+
+            AddPercentageCharge();
+        }
+        
         public void TryShootCharged()
         {
             _chargedModule?.TryShootCharging();
@@ -260,18 +303,18 @@ namespace GunDecorator
         public void SetFireRate(float multiplier)
         {
             _fireRateMultiplier = multiplier;
-            
-            _infiniteAmmo = multiplier == -1 ? false : true;
         }
+
+        public void SetInfiniteAmmo(bool infiniteAmmo) => _infiniteAmmo = infiniteAmmo;
 
         public void PlaySound(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
 
             if (clip == null) return;
-            
+
             SoundManager.PlaySound(clip, _source, 0.5f);
-            
+
             PlaySoundServerRpc(sound);
         }
 
@@ -284,7 +327,7 @@ namespace GunDecorator
         [ObserversRpc(ExcludeOwner = true)]
         void PlaySoundObserverRpc(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
             SoundManager.PlaySound(clip, _source, 0.5f);
         }
 
@@ -299,10 +342,18 @@ namespace GunDecorator
         public void SetChargedPlayer(bool b) => _isPositivePlayerCharge.Value = b;
 
         public void ResetNoise() => _shootModule?.CancelShooting();
-        
+
         public void SetReticule(ReticulesManager manager)
         {
             manager.ActivateReticules(_reticuleID);
         }
+
+        public void AddPercentageCharge()
+        {
+            Cons.Print("Add percentage");
+            _chargedModule.AddPercentage();
+        }
+
+    public void SetPercentageCharge(int percent) => _chargedModule.SetPercentage(percent);
     }
 }

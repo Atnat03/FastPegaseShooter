@@ -59,17 +59,8 @@ public class EnemyBullet
         if(Physics.SphereCast(startPos,  _bulletSize,dir, out RaycastHit hit, length))
         {
             PlayerVisuelBridge PVB = hit.collider.GetComponent<PlayerVisuelBridge>();
-            if(PVB == null)
-            {
-                playerHealthObject = null;
-                return false;
-            }
-            playerHealthObject = PVB.PlayerHealth;
-            
-            if(hit.collider.CompareTag("Player"))
-            {
-                return true;
-            }
+            playerHealthObject = PVB?.PlayerHealth ?? null;
+            return true;
         }
         playerHealthObject = null;
         return false;

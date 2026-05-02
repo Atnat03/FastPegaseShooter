@@ -89,7 +89,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                 {
                     if (hit.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
                     {
-                        bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,  (int)p_damage, p_isCritical);
+                        bool crit = damagable.TakeDamage(_gunController.OwnerId,  (int)p_damage, p_isCritical);
                         _gunController.TriggerHitMark(crit || p_isCritical);
                         InvokeEvent(new ModifyEnergyEvent
                         {
@@ -97,9 +97,17 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
                             p_value = p_damage
                         });
                         
+                        InvokeEvent(new OnPlayerDoDamage
+                        {
+                            p_ownerId = _gunController.OwnerId,
+                            p_value = p_damage,
+                            p_critical = p_isCritical
+                        });
+                        
+                        _gunController.AddPercentageCharge();
+                        
                         if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
                         {
-                            Cons.Print("Charge", ColorConsole.Red);
                             enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                         }
                     }
@@ -121,17 +129,26 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
         {
             if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
+                crit = damagable.TakeDamage(_gunController.OwnerId,(int)p_damage, p_isCritical);
                 InvokeEvent(new ModifyEnergyEvent
                 {
                     p_player = _gunController.Owner,
                     p_value = p_damage
                 });
                 
+                InvokeEvent(new OnPlayerDoDamage
+                {
+                    p_ownerId = _gunController.OwnerId,
+                    p_value = p_damage,
+                    p_critical = p_isCritical
+                });
+                
                 if (c.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
                     enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
                 }
+                
+                _gunController.AddPercentageCharge();
             
                 isHit = true;
             }

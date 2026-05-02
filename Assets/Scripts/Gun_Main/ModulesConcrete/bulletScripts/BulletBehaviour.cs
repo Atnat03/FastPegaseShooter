@@ -85,7 +85,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
                 transform.forward,
                 out RaycastHit hit,
                 distance,
-                ~LayerMask.NameToLayer("Owner"),
+                ~LayerMask.GetMask("Owner"),
                 QueryTriggerInteraction.Ignore))
             return;
 
@@ -114,40 +114,16 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private void HandleDirectHit(RaycastHit hit)
     {
+        Debug.Log($"[Bullet] HasHit - target: {_targetNetworkObject}, isServer: {_gunController.IsServerInitialized}");
+    
         if (_gunController.IsServerInitialized)
-        {
-            ApplyDamage();
-        }
+            _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical);
+        else
+            _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical);
 
         CreateHitMark(hit);
     }
-
-    private void ApplyDamage()
-    {
-        if (_targetNetworkObject == null) return;
-
-        if (_targetNetworkObject.TryGetComponent<IDamagable>(out var d))
-        {
-            bool crit = d.TakeDamage(
-                _gunController.NetworkObject.ObjectId,
-                (int)p_damage,
-                p_isCritical);
-
-            _gunController.TriggerHitMark(crit || p_isCritical);
-
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = _gunController.Owner,
-                p_value = p_damage
-            });
-
-            if (_targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
-            }
-        }
-    }
-
+    
     private void CreateHitMark(RaycastHit hit)
     {
         GameObject hitMark = Instantiate(
@@ -170,29 +146,14 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         
         foreach (Collider c in colliders)
         {
-            if (!c.TryGetComponent<IDamagable>(out IDamagable damagable))
-                continue;
+            if (!c.TryGetComponent<IDamagable>(out _)) continue;
+    
+            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
 
-            crit = damagable.TakeDamage(
-                _gunController.NetworkObject.ObjectId,
-                damage,
-                p_isCritical);
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = _gunController.Owner,
-                p_value = p_damage
-            });
-
-            hit = true;
-
-            if (_targetNetworkObject != null &&
-                _targetNetworkObject.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
-            }
+            if (_gunController.IsServerInitialized)
+                _gunController.ApplyDamage(netObj, (int)p_damage, p_isCritical);
+            else
+                _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical);
         }
-        
-        if(hit)
-            _gunController.TriggerHitMark(crit || p_isCritical);
     }
 }
