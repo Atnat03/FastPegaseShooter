@@ -18,7 +18,7 @@ public class PlayerEnergy : NetworkBusListener
 
 	[SerializeField] private float _maxEnergy = 100f;
 	[SerializeField] private float _valueOneBar = 20f;
-	[SerializeField] private float _convertionTaux;
+	[SerializeField] private float _convertionTaux = 10;
 	
 	[Header("Cost")]
 	public int p_costThrowGrenade = 1;
@@ -42,6 +42,7 @@ public class PlayerEnergy : NetworkBusListener
 		_currentEnergy.OnChange += OnEnergyChanged;
 
 		ListenToEvent<ModifyEnergyEvent>(ModifyEnergy);
+		ListenToEvent<ConsumeEnergyEvent>(ConsumeEnergy);
 		ListenToEvent<SetEnergyEvent>(SetEnergy);
 
 		_totalBars = Mathf.CeilToInt(_maxEnergy / _valueOneBar);
@@ -54,7 +55,7 @@ public class PlayerEnergy : NetworkBusListener
 
 		UpdateUI(_currentEnergy.Value);
 	}
-
+	
 	private void OnEnergyChanged(float prev, float next, bool asServer)
 	{
 		UpdateUI(next);
@@ -73,10 +74,23 @@ public class PlayerEnergy : NetworkBusListener
 		if (!IsServerInitialized) return;
 		if (data.p_player != Owner) return;
 		
+		_currentEnergy.Value += data.p_value * _convertionTaux;
+
+		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
+		
+		Cons.Print(_currentEnergy.Value.ToString(), ColorConsole.Red);
+	}
+	
+	private void ConsumeEnergy(ConsumeEnergyEvent data)
+	{
+		if (!IsServerInitialized) return;
+		if (data.p_player != Owner) return;
+		
 		_currentEnergy.Value += data.p_value;
 
 		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
 	}
+
 
 	private void UpdateUI(float energy)
 	{
@@ -110,6 +124,12 @@ public struct AddHealthFromBarEvent
 }
 
 public struct ModifyEnergyEvent
+{
+	public NetworkConnection p_player;
+	public float p_value;
+}
+
+public struct ConsumeEnergyEvent
 {
 	public NetworkConnection p_player;
 	public float p_value;

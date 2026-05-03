@@ -34,7 +34,7 @@ public class DebugCanva : MonoBehaviour
     void Update()
     {
         controllerCurrentState.text = mainFPSController.stateMachine.currentState?.iD.ToString();
-        controllerGrounded.text = mainFPSController.grounded ? "Grounded" : "Not grounded";
+        //controllerGrounded.text = mainFPSController.grounded ? "Grounded" : "Not grounded";
         if (mainFPSController.leftSideAgainstWall && mainFPSController.rightSideAgainstWall)
         {
             controllerSidesDetection.text = "Both side against wall";

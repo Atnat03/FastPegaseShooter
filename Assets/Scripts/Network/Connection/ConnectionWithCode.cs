@@ -47,7 +47,7 @@ public class ConnectionWithCode : MonoBehaviour
         _networkManager.ClientManager.StartConnection();
 
         string code = GetConnectionCode();
-        Debug.Log("📒 Code de la partie : " + code);
+//        Debug.Log("📒 Code de la partie : " + code);
 
         _codeTextUI.text = code;
 
@@ -87,7 +87,6 @@ public class ConnectionWithCode : MonoBehaviour
             addressToUse = GetIPFromCode();
         }
         
-        Debug.Log("Connexion à : " + addressToUse);
         InstanceFinder.TransportManager.Transport.SetClientAddress(addressToUse);
         _networkManager.ClientManager.StartConnection();
     }

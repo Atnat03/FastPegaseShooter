@@ -97,7 +97,7 @@ public class GrenadeThrower : NetworkBusListener
     [ServerRpc]
     private void ConsumeEnergyServerRpc(float amount)
     {
-        InvokeEvent(new ModifyEnergyEvent
+        InvokeEvent(new ConsumeEnergyEvent()
         {
             p_player = Owner,
             p_value = -amount

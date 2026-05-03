@@ -23,6 +23,10 @@ namespace GunDecorator.ChargedModules
         
         public override void TryShootCharging()
         {
+            base.TryShootCharging();
+            
+            if (!_fullCharge) return;
+            
                 _ammoModule.SetBulletData(new BulletData
                 {
                     IsExplosive = _isExplosifAmmo,
@@ -40,7 +44,7 @@ namespace GunDecorator.ChargedModules
 
         private void ApplyShoot()
         {
-            _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero);
+            _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero, false);
 
             _gunController.PlaySound("Charged");
         }

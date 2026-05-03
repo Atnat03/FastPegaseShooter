@@ -38,7 +38,8 @@ public class VisualChargedModule : GunModule
 	}
 	private void PercentageChanged(int percent)
 	{
-		_percentageChargeText.text = percent + "%";
+		if(_percentageChargeText != null)
+			_percentageChargeText.text = percent + "%";
 	}
 	
 	private void FullCharged(bool isFull)

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6325006552558930708}
   - component: {fileID: 1894198244629999496}
   - component: {fileID: 1039354952693192919}
+  - component: {fileID: 4366616008979837098}
   m_Layer: 0
   m_Name: "\U0001F308CoopManager"
   m_TagString: Untagged
@@ -71,6 +72,7 @@ MonoBehaviour:
     timeToCombo: 3
     colorJauge: {r: 1, g: 0.58867174, b: 0, a: 1}
   _infoCombo: {fileID: 5540293941858202540}
+  _instantSwapWithoutBroConsentement: 0
 --- !u!114 &4660385558512272094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +179,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02dcf3c689f2a3c48997bb78c5f56927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorManager
+--- !u!114 &4366616008979837098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195821754654841656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 675578607ae91a744a74b5efa2b6aac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthManager
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 6325006552558930708}
+  _networkObjectCache: {fileID: 0}
 --- !u!1 &1648326429967676846
 GameObject:
   m_ObjectHideFlags: 0

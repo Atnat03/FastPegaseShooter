@@ -25,7 +25,6 @@ public class BorneGunSelection : NetworkBusListener
 	private BoxCollider _collider;
 	private readonly SyncVar<int> _numberPlayer = new SyncVar<int>(0);
 	private readonly SyncVar<bool> _canOpenSelect = new SyncVar<bool>(false);
-	private readonly SyncVar<bool> _alreadySelect = new SyncVar<bool>(false);
 	
 	#endregion
 
@@ -55,7 +54,6 @@ public class BorneGunSelection : NetworkBusListener
 		{
 			if(IsServerInitialized)
 			{
-				_alreadySelect.Value = true;
 				AllPlayerInZoneObserversRpc();
 			}
 			else
@@ -67,13 +65,18 @@ public class BorneGunSelection : NetworkBusListener
 
 	private void OnNumberPlayerChange(int prev, int next, bool asServer)
 	{
-		if (next == InstanceFinder.ServerManager.Clients.Count)
+		if (asServer)
 		{
-			if (asServer)
+			if (next == InstanceFinder.ServerManager.Clients.Count)
 			{
+
 				_canOpenSelect.Value = true;
-				CanInteractToOpenObserversRpc();
 			}
+			else
+			{
+				_canOpenSelect.Value = false;
+			}
+			CanInteractToOpenObserversRpc(_canOpenSelect.Value);
 		}
 	}
 
@@ -91,15 +94,14 @@ public class BorneGunSelection : NetworkBusListener
 	}
 
 	[ObserversRpc]
-	void CanInteractToOpenObserversRpc()
+	void CanInteractToOpenObserversRpc(bool isOpen)
 	{
-		InvokeEvent(new OnAllPlayerCanSelectGun());
+		InvokeEvent(new OnAllPlayerCanSelectGun{p_open = isOpen});
 	}
 	
 	public void OnTriggerEnter(Collider other)
 	{
 		if (!IsServerInitialized) return;
-		if (_alreadySelect.Value) return;
 		
 		if (other.TryGetComponent(out PlayerVisuelBridge player))
 		{
@@ -111,7 +113,6 @@ public class BorneGunSelection : NetworkBusListener
 	public void OnTriggerExit(Collider other)
 	{
 		if (!IsServerInitialized) return;
-		if (_alreadySelect.Value) return;
 		
 		if (other.TryGetComponent(out PlayerVisuelBridge player))
 		{
@@ -139,4 +140,6 @@ public struct OnAllPlayerAtBorne
 { }
 
 public struct OnAllPlayerCanSelectGun
-{ }
+{
+	public bool p_open;
+}
