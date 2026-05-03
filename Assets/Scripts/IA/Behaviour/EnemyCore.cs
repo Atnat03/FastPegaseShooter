@@ -50,6 +50,8 @@ public class EnemyCore : NetworkBusListener
     
     public override void OnStartServer()
     {
+        base.OnStartServer();
+        
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
 
