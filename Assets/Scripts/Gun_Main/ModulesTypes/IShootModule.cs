@@ -40,7 +40,7 @@ namespace GunDecorator
 
     public interface IAmmoModule
     {
-        public void SpawnBullet(Vector3 direction, Vector3 offset);
+        public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged);
         public void SetDamage(float multiplierDmg);
         public void SetBulletData(BulletData data);
         public void ResetBulletData();
@@ -57,7 +57,8 @@ namespace GunDecorator
     {
         public void Explosed(float raduis, int damage);
         public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
-            float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target, bool isPositive);
+            float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target, 
+            bool isPositive, bool hadCharged = true);
     }
 
     public interface ISecondModule

@@ -204,7 +204,7 @@ public class PlayerHealth : NetworkBusListener
 	[ServerRpc(RequireOwnership = false)]
 	void ThrowHealServerRpc(Vector3 landingPos, float lifeToAdd, NetworkConnection throwerConnection)
 	{
-		InvokeEvent(new ModifyEnergyEvent
+		InvokeEvent(new ConsumeEnergyEvent()
 		{
 			p_player = throwerConnection,
 			p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),

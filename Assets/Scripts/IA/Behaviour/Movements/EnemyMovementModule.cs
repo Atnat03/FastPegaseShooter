@@ -34,6 +34,11 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         _targetPosition = playerPosition;
         
         //Updating Pathfinding
+        PathUpdateRequest();
+    }
+
+    protected void PathUpdateRequest()
+    {
         if (!_isPathUpdateRequested)
         {
             if(!_enemyCore.p_pathRequester) return;
@@ -41,10 +46,10 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
             _isPathUpdateRequested = _enemyCore.p_pathRequester.TryRegisterPathRequest(
                 new PathRequest(
                     _path.Count > 0 ?Vector3.SqrMagnitude(_path[0].position - _targetPosition) : float.MaxValue,
-                    RecalculatePath));
+                    RecalculatePathConcrete));
         }
     }
-
+    
     public void ClearPathReservation()
     {
         if (_pathReservationId < 0) return;
@@ -52,7 +57,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         _pathReservationId = -1;
     }
 
-    protected virtual void RecalculatePath()
+    protected virtual void RecalculatePathConcrete()
     {
         ClearPathReservation();
         
