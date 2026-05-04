@@ -55,7 +55,6 @@ public class PlayerEnergyView : MonoBehaviour
 			if(i == 0)
 			{
 				newImage.sprite = _energyBarSprites[0];
-				Debug.Log("First");
 			}
 			else if(i == totalBars-1)
 			{

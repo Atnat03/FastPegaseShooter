@@ -22,7 +22,6 @@ public class PlayerHealthManager : NetworkBusListener
 	{
 		if (!_registeredPlayers.Contains(playerHealth))
 		{
-			Cons.Print("Register", ColorConsole.Orange);
 			_registeredPlayers.Add(playerHealth);
 			OnRegistryUpdated?.Invoke();
 		}
