@@ -9,7 +9,7 @@ public class LobShootingAttackModule : EnemyAttackModule
     [Header("Shooting")]
     [SerializeField] private float _shootingAngle = 30;
 
-    static readonly float _g = Physics.gravity.y;
+    static readonly float _g = -Physics.gravity.y;
     
     
 
@@ -69,7 +69,7 @@ public class LobShootingAttackModule : EnemyAttackModule
         float denominator = hDist * tanTheta - vDist;
         
         //no solution, target unreachable
-        if (denominator >= 0) return null;
+        if (denominator <= 0) return null;
         
         float shootingSpeed =
             Mathf.Sqrt((_g * hDist * hDist) / (2 * cosTheta * cosTheta * (denominator)));
