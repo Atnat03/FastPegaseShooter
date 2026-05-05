@@ -95,22 +95,22 @@ namespace GunDecorator.AmmoModules
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
             
-            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, damagableObject, hadCharged);
+            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, _finalSpawnPoint, damagableObject, hadCharged);
         }
         
         [ServerRpc]
         private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, NetworkObject target = null, bool hadCharged = true)
+            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
         {
             bool isCritical = _gunController.IsOverload;
-            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, target, hadCharged);
+            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, hadCharged);
         }
 
         [ObserversRpc]
         private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, NetworkObject target = null, bool hadCharged = true)
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
         {
-            BulletBehaviour newBullet = _ammoPool.Spawn(_finalSpawnPoint + offset, Quaternion.LookRotation(direction));
+            BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     

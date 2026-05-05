@@ -35,13 +35,30 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private bool _hasHit = false;
     private bool _hasMark = false;
+    
+    private Vector3 _lastPosition;
+    private bool _firstFrame = true;
+
+    private void Awake()
+    {
+        _lastPosition = transform.position;
+    }
 
     private void FixedUpdate()
     {
         if (_hasHit) return;
 
+        if (_firstFrame)
+        {
+            _lastPosition = transform.position;
+            _firstFrame = false;
+            return;
+        }
+
         DetectCollision();
         Move();
+    
+        _lastPosition = transform.position;
     }
 
     public void SetUpVariables(
@@ -80,27 +97,22 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void DetectCollision()
     {
-        float distance = p_speed * Time.fixedDeltaTime;
+        Vector3 direction = transform.position - _lastPosition;
+        float distance = direction.magnitude;
 
-        if (!Physics.Raycast(
-                transform.position,
-                transform.forward,
-                out RaycastHit hit,
-                distance,
-                ~LayerMask.GetMask("Owner"),
-                QueryTriggerInteraction.Ignore))
+        if (distance <= 0f) return;
+
+        if (!Physics.SphereCast(_lastPosition, 0.15f, direction.normalized, out RaycastHit hit,
+                distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
             return;
 
+        if (_hasHit) return;
         _hasHit = true;
 
         if (p_isExplosive)
-        {
             HandleExplosion();
-        }
         else
-        {
             HandleDirectHit(hit);
-        }
 
         OnCollision.Invoke(this); // il y avait un destroy ici
     }
@@ -116,8 +128,10 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        if (_gunController.IsServerInitialized) _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
-        else _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
+        if (_gunController.IsServerInitialized) 
+            _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
+        else 
+            _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
 
         CreateHitMark(hit);
     }
