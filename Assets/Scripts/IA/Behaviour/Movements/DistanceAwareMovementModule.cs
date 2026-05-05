@@ -1,3 +1,4 @@
+using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Movement/DistanceAwareMovementModule")]
@@ -7,11 +8,16 @@ public class DistanceAwareMovementModule : EnemyMovementModule
     private Vector3 _lastPos;
     private float _t;
 
-    protected override void RecalculatePath()
+    [Header("-----Testing-----")]
+    [SerializeField] private int _maxTraverseNodeBeforePathUpdate = 3;
+    private int _walkedNodeSinceRecalculated;
+
+    protected override void RecalculatePathConcrete()
     {
-        base.RecalculatePath();
+        base.RecalculatePathConcrete();
         _lastPos = transform.position;
         _t = 0;
+        _walkedNodeSinceRecalculated = 0;
     }
 
 
@@ -27,8 +33,14 @@ public class DistanceAwareMovementModule : EnemyMovementModule
             {
                 _t = 0;
                 _path.RemoveAt(_path.Count - 1);
+                _walkedNodeSinceRecalculated++;
                 if (_path.Count > 0) _lastPos = transform.position;
             }
+        }
+
+        if (_walkedNodeSinceRecalculated >= _maxTraverseNodeBeforePathUpdate)
+        {
+            PathUpdateRequest();
         }
     }
 }

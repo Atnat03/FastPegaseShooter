@@ -3,11 +3,18 @@ using UnityEngine;
 using FishNet;
 using FishNet.Object;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class EnemyBulletManager : NetworkBusListener
 {
-    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private GameObject _normalBulletPrefab;
+    [SerializeField] private GameObject _splashBulletPrefab;
+    [SerializeField] private GameObject _puddleBulletPrefab;
+    
+    public LayerMask _normalBulletLayerMask = int.MaxValue & ~(1 << 16); //enemy layer
+    public LayerMask _splashBulletLayerMask = int.MaxValue & ~(1 << 6) & ~(1 << 7) & ~(1 << 16); //players layer and enemy layer
+    public LayerMask _puddleBulletLayerMask = (1 << 6) | (1 << 7); //players layer 
     private Action _unsubscribeAction;
 
     private List<EnemyBullet> _spawnedBullets = new List<EnemyBullet>();
@@ -35,29 +42,12 @@ public class EnemyBulletManager : NetworkBusListener
         float serverTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
         for(int i = _spawnedBullets.Count - 1; i >= 0; i--)
         {
-            if(_spawnedBullets[i].MoveForward(serverTime, out PlayerHealth playerHealth))
+            _spawnedBullets[i].UpdateBullet(serverTime);
+            if(_spawnedBullets[i].ShouldBeDestroyed(serverTime))
             {
-                //here, apply target hitting logic
-                if(playerHealth != null)
-                {
-                    InvokeEvent(new PlayerTakeDamageEvent
-                    {
-                        p_playerN = playerHealth.NetworkObject,
-                        p_value = _spawnedBullets[i].p_bulletStrenght
-                    });
-                    _spawnedBullets[i].p_attackModule.p_onHitPlayer?.Invoke(
-                        playerHealth.NetworkObject.ObjectId,
-                        _spawnedBullets[i].p_bulletStrenght);
-                }
-                
                 KillVisualBulletObserverRPC(_spawnedBullets[i].p_bulletId);
                 
                 //replace RemoveAt by "swap remove" for performances
-                _spawnedBullets.RemoveAt(i);
-            }
-            else if (_spawnedBullets[i].ShouldBeDestroyed(serverTime))
-            {
-                KillVisualBulletObserverRPC(_spawnedBullets[i].p_bulletId);
                 _spawnedBullets.RemoveAt(i);
             }
         }
@@ -68,22 +58,37 @@ public class EnemyBulletManager : NetworkBusListener
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta;
 
-        BulletsSpawningInfos BSI = new BulletsSpawningInfos(ESE.p_startPos, ESE.p_bulletSpeed, ESE.p_bulletDamage, ESE.p_bulletSize, ESE.p_bulletMaxAliveTime);
+        BulletsSpawningInfos BSI = new BulletsSpawningInfos(ESE.p_startPos, ESE.p_bulletSpeed, ESE.p_bulletDamage, ESE.p_bulletSize, ESE.p_bulletMaxAliveTime, ESE.p_useGravity, ESE.p_bulletType);
 
         for (int i = 0; i < ESE.p_bulletAmount; i++)
         {
-            Vector3 direction = RandomDirectionInCone(ESE.p_generalDirection, ESE.p_shootingSpreadAngle);
-            EnemyBullet bullet = new EnemyBullet(ESE.p_startPos, direction, ESE.p_bulletSpeed, ESE.p_bulletSize,
-                networkTime, ESE.p_bulletMaxAliveTime,_lastBulletId,
-                ESE.p_bulletDamage, ESE.p_enemyAttackModule);
+            Vector3 direction = RandomDirectionInCone(ESE.p_generalDirection, ESE.p_shootingSpreadAngle) * ESE.p_generalDirection.magnitude;
+
+            EnemyBullet bullet;
+            switch (ESE.p_bulletType)
+            {
+                case BulletTypes.Normal:
+                    bullet = new NormalEnemyBullet(ESE, direction, networkTime, _lastBulletId, _normalBulletLayerMask);
+                    break;
+                case BulletTypes.Splash:
+                    bullet = new SplashEnemyBullet(ESE, direction, networkTime, _lastBulletId, _splashBulletLayerMask);
+                    break;
+                case BulletTypes.GooPuddle:
+                    bullet = new PuddleEnemyBullet(ESE, direction, networkTime, _lastBulletId, _puddleBulletLayerMask);
+                    break;
+                
+                default:
+                    bullet = new NormalEnemyBullet( ESE, direction, networkTime, _lastBulletId, _normalBulletLayerMask);
+                    break;
+            }
+            
+            
             
             _spawnedBullets.Add(bullet);
             BSI.p_bulletsInfos.Add(new BulletBasicInfos(direction, _lastBulletId));
             
             _lastBulletId++;
         }
-        
-
         
         SpawnVisualBulletObserverRPC(BSI, networkTime);
     }
@@ -111,11 +116,26 @@ public class EnemyBulletManager : NetworkBusListener
         //may use object pulling to reduce lag when instantiating GO
         foreach (BulletBasicInfos bulletInfo in BSI.p_bulletsInfos)
         {
-            GameObject newBullet = Instantiate(_bulletPrefab, BSI.p_startPos, Quaternion.identity);
+            GameObject newBullet = Instantiate(GetObjectFromType(BSI.p_bulletType), BSI.p_startPos, Quaternion.identity);
             
             EnemyBulletVisuals EBV = newBullet.GetComponent<EnemyBulletVisuals>();
-            EBV.SetupVariables(BSI.p_startPos, bulletInfo.p_direction, BSI.p_bulletsSpeed, BSI.p_bulletsSize, spawnTime, bulletInfo.p_bulletId, BSI.p_bulletsDamage);
+            EBV.SetupVariables(BSI.p_startPos, spawnTime, BSI.p_useGravity, bulletInfo.p_direction, BSI.p_bulletsSpeed, BSI.p_bulletsSize, bulletInfo.p_bulletId, BSI.p_bulletType);
+        }
+    }
+
+    GameObject GetObjectFromType(BulletTypes type)
+    {
+        switch (type)
+        {
+            case BulletTypes.Normal:
+                return _normalBulletPrefab;
+            case BulletTypes.Splash:
+                return _splashBulletPrefab;
+            case BulletTypes.GooPuddle:
+                return _puddleBulletPrefab;
             
+            default:
+                return _normalBulletPrefab;
         }
     }
 
@@ -126,14 +146,20 @@ public class EnemyBulletManager : NetworkBusListener
     }
 }
 
-public struct BulletDestructionEvent
+public enum BulletTypes
 {
-    public int p_bulletId;
-}
+    Normal,
+    Splash,
+    GooPuddle
+};
 
 public struct BulletsSpawningInfos
 {
     public List<BulletBasicInfos> p_bulletsInfos;
+    
+    public bool p_useGravity;
+    public BulletTypes p_bulletType;
+    
     
     public Vector3 p_startPos;
     public float p_bulletsSpeed;
@@ -141,9 +167,12 @@ public struct BulletsSpawningInfos
     public float p_bulletsSize;
     public float p_bulletsMaxAliveTime;
     
-    public BulletsSpawningInfos(Vector3 startPos, float speed, int damage, float size, float lifeTime)
+    public BulletsSpawningInfos(Vector3 startPos, float speed, int damage, float size, float lifeTime, bool useGravity, BulletTypes bulletType)
     {
         p_bulletsInfos = new List<BulletBasicInfos>();
+        
+        p_useGravity = useGravity;
+        p_bulletType = bulletType;
         
         p_startPos = startPos;
         p_bulletsSpeed = speed;
