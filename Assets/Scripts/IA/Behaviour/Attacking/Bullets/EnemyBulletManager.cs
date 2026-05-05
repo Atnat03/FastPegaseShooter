@@ -3,6 +3,7 @@ using UnityEngine;
 using FishNet;
 using FishNet.Object;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class EnemyBulletManager : NetworkBusListener
@@ -11,8 +12,9 @@ public class EnemyBulletManager : NetworkBusListener
     [SerializeField] private GameObject _splashBulletPrefab;
     [SerializeField] private GameObject _puddleBulletPrefab;
     
-    public LayerMask p_defaultBullerLayerMask;
-    public LayerMask p_puddleBullerLayerMask;
+    public LayerMask _normalBulletLayerMask = int.MaxValue;
+    public LayerMask _splashBulletLayerMask = int.MaxValue & ~(1 << 6) & ~(1 << 7); //players layer
+    public LayerMask _puddleBulletLayerMask = (1 << 6) | (1 << 7); //players layer 
     private Action _unsubscribeAction;
 
     private List<EnemyBullet> _spawnedBullets = new List<EnemyBullet>();
@@ -66,17 +68,17 @@ public class EnemyBulletManager : NetworkBusListener
             switch (ESE.p_bulletType)
             {
                 case BulletTypes.Normal:
-                    bullet = new NormalEnemyBullet(this, ESE, direction, networkTime, _lastBulletId);
+                    bullet = new NormalEnemyBullet(ESE, direction, networkTime, _lastBulletId, _normalBulletLayerMask);
                     break;
                 case BulletTypes.Splash:
-                    bullet = new SplashEnemyBullet(this, ESE, direction, networkTime, _lastBulletId);
+                    bullet = new SplashEnemyBullet(ESE, direction, networkTime, _lastBulletId, _splashBulletLayerMask);
                     break;
                 case BulletTypes.GooPuddle:
-                    bullet = new PuddleEnemyBullet(this, ESE, direction, networkTime, _lastBulletId);
+                    bullet = new PuddleEnemyBullet(ESE, direction, networkTime, _lastBulletId, _puddleBulletLayerMask);
                     break;
                 
                 default:
-                    bullet = new NormalEnemyBullet(this, ESE, direction, networkTime, _lastBulletId);
+                    bullet = new NormalEnemyBullet( ESE, direction, networkTime, _lastBulletId, _normalBulletLayerMask);
                     break;
             }
             

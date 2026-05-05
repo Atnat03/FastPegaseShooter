@@ -1058,10 +1058,13 @@ MonoBehaviour:
   _normalBulletPrefab: {fileID: 4591400360090582569, guid: 563cd6461b623044c8d7fd34d0aecdac, type: 3}
   _splashBulletPrefab: {fileID: 4591400360090582569, guid: 2533d02588202e9458704dd2cf3877aa, type: 3}
   _puddleBulletPrefab: {fileID: 4591400360090582569, guid: a075766ba03e48f48ac3fc4d55e0e4ae, type: 3}
-  p_defaultBullerLayerMask:
+  p_defaultBulletLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
-  p_puddleBullerLayerMask:
+    m_Bits: 2147483647
+  p_splashBulletLayerMask:
+    serializedVersion: 2
+    m_Bits: 2147483455
+  p_puddleBulletLayerMask:
     serializedVersion: 2
     m_Bits: 192
 --- !u!4 &355935913
@@ -3528,6 +3531,7 @@ MonoBehaviour:
   p_shootingOffset: {x: 0, y: 0, z: 0}
   p_splashSize: 3
   p_splashDuration: 30
+  p_splashDamageDelay: 1
 --- !u!1 &2014960547
 GameObject:
   m_ObjectHideFlags: 0

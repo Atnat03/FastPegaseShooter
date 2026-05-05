@@ -5,7 +5,6 @@ using UnityEngine;
 
 public abstract class EnemyBullet
 {
-    protected EnemyBulletManager _enemyBulletManager;
     //Positions
     protected Vector3 _startPos;
     protected Vector3 _lastPosition;
@@ -20,6 +19,7 @@ public abstract class EnemyBullet
     //general
     public int p_bulletId;
     private bool _collided = false;
+    protected LayerMask _layerMask;
     
     //Damage
     protected float _bulletSize;
@@ -27,9 +27,10 @@ public abstract class EnemyBullet
     public EnemyAttackModule p_attackModule;
     
     
-    public EnemyBullet(EnemyBulletManager EBM, EnemyShootingEvent ESE, Vector3 direction, float spawnTime, int bulletId)
+    public EnemyBullet(EnemyShootingEvent ESE,
+        Vector3 direction, float spawnTime, int bulletId,
+        LayerMask layerMask)
     {
-        _enemyBulletManager = EBM;
         
         _startPos = ESE.p_startPos;
         _lastPosition = ESE.p_startPos;
@@ -41,13 +42,14 @@ public abstract class EnemyBullet
         _maxLifeTime = ESE.p_bulletMaxAliveTime;
         
         p_bulletId = bulletId;
+        _layerMask = layerMask;
         
         p_bulletDamage = ESE.p_bulletDamage;
         _bulletSize = ESE.p_bulletSize;
         p_attackModule = ESE.p_enemyAttackModule;
     }
 
-    public void UpdateBullet(float serverTime)
+    public virtual void UpdateBullet(float serverTime)
     {
         _currentPosition = GetNewPosition(serverTime);
 
@@ -72,7 +74,7 @@ public abstract class EnemyBullet
         Vector3 dir = delta / length;
 
         if(Physics.SphereCast(startPos,  _bulletSize,dir,
-               out hit, length, _enemyBulletManager.p_defaultBullerLayerMask, QueryTriggerInteraction.Ignore))
+               out hit, length, _layerMask, QueryTriggerInteraction.Ignore))
         {
             return true;
         }

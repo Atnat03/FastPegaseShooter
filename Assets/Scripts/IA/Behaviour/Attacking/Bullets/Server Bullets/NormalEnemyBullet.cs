@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class NormalEnemyBullet : EnemyBullet
 {
-    public NormalEnemyBullet(EnemyBulletManager EBM, EnemyShootingEvent ESE, Vector3 direction, float spawnTime, int bulletId)
-        : base(EBM, ESE, direction, spawnTime, bulletId)
+    public NormalEnemyBullet(EnemyShootingEvent ESE, Vector3 direction, float spawnTime, int bulletId, LayerMask layerMask)
+        : base(ESE, direction, spawnTime, bulletId, layerMask)
     {}
 
     protected override Vector3 GetNewPosition(float serverTime)

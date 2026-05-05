@@ -12,6 +12,7 @@ public class LobShootingAttackModule : EnemyAttackModule
     public Vector3 p_shootingOffset = Vector3.up * 0.5f;
     public float p_splashSize = 3;
     public float p_splashDuration = 30;
+    public float p_splashDamageDelay = 1;
 
     static readonly float _g = -Physics.gravity.y;
     
