@@ -13,6 +13,8 @@ public abstract class EnemyAttackModule : EnemyBehaviourModule
     [HideInInspector][SerializeField] protected EnemyTargetModule _targetModule;
     [HideInInspector][SerializeField] protected int _damage = 10;
     [HideInInspector][SerializeField] protected float _attackDelay = 2f;
+    [HideInInspector][SerializeField] protected BulletTypes _bulletType;
+    [HideInInspector][SerializeField] protected bool _projectileUseGravity = false;
     [HideInInspector][SerializeField] protected float _maxPlayerDistance = 10f;
     protected float _waitedTimeSinceAttack;
 
