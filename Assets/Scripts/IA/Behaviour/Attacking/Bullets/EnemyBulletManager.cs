@@ -12,8 +12,8 @@ public class EnemyBulletManager : NetworkBusListener
     [SerializeField] private GameObject _splashBulletPrefab;
     [SerializeField] private GameObject _puddleBulletPrefab;
     
-    public LayerMask _normalBulletLayerMask = int.MaxValue;
-    public LayerMask _splashBulletLayerMask = int.MaxValue & ~(1 << 6) & ~(1 << 7); //players layer
+    public LayerMask _normalBulletLayerMask = int.MaxValue & ~(1 << 16); //enemy layer
+    public LayerMask _splashBulletLayerMask = int.MaxValue & ~(1 << 6) & ~(1 << 7) & ~(1 << 16); //players layer and enemy layer
     public LayerMask _puddleBulletLayerMask = (1 << 6) | (1 << 7); //players layer 
     private Action _unsubscribeAction;
 
