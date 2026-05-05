@@ -1,9 +1,10 @@
+using System;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBusListener, IAmmoExplosif
+public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
@@ -12,6 +13,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
     [HideInInspector] public bool p_hadCharged;
+    public Action<BulletBehaviour> OnCollision;
 
     [SerializeField] private GameObject _positiveExplosionVFX;
     [SerializeField] private GameObject _negativeExplosionVFX;
@@ -69,8 +71,6 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         
         _trailenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
-
-        Destroy(gameObject, 3f);
     }
 
     private void Move()
@@ -102,7 +102,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
             HandleDirectHit(hit);
         }
 
-        Destroy(gameObject);
+        OnCollision.Invoke(this); // il y avait un destroy ici
     }
 
     private void HandleExplosion()
@@ -116,23 +116,13 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        if (_gunController.IsServerInitialized)
-            _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
-        else
-            _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
+        if (_gunController.IsServerInitialized) _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
+        else _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
 
         CreateHitMark(hit);
     }
     
-    private void CreateHitMark(RaycastHit hit)
-    {
-        GameObject hitMark = Instantiate(
-            p_markPrefab,
-            _targetPoint + hit.normal * 0.01f,
-            Quaternion.LookRotation(hit.normal));
-
-        Destroy(hitMark, 1f);
-    }
+    private void CreateHitMark(RaycastHit hit) => Destroy(Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal)), 1f);
 
     public void Explosed(float radius, int damage)
     {
@@ -155,5 +145,15 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
             else
                 _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
         }
+    }
+
+    public void Spawn()
+    {
+        
+    }
+
+    public void ReturnToPool()
+    {
+        
     }
 }

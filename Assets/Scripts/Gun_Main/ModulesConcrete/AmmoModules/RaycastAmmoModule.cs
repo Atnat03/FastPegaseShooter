@@ -1,3 +1,4 @@
+using System.Collections;
 using FishNet.Object;
 using MyPrint;
 using UnityEngine;
@@ -27,6 +28,8 @@ namespace GunDecorator.AmmoModules
         
         private Vector3 _finalSpawnPoint;
         
+        private Pooler<BulletBehaviour> _ammoPool;
+        
         public override void SetVariable(GunSetting setting)
         {
             if (setting is RaycastAmmoSetting s)
@@ -40,6 +43,7 @@ namespace GunDecorator.AmmoModules
         void Start()
         {
             _dmgToApply = _damages;
+            _ammoPool = new Pooler<BulletBehaviour>(BulletPrefab.GetComponent<BulletBehaviour>(), 0);
         }
 
         public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true)
@@ -106,16 +110,38 @@ namespace GunDecorator.AmmoModules
         private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, NetworkObject target = null, bool hadCharged = true)
         {
-            GameObject newBullet = Instantiate(BulletPrefab, _finalSpawnPoint + offset, Quaternion.LookRotation(direction));
-            Destroy(newBullet, travel + .5f);
+            BulletBehaviour newBullet = _ammoPool.Spawn(_finalSpawnPoint + offset, Quaternion.LookRotation(direction));
+            newBullet.OnCollision += DespawnBullet;
+            DespawnBullet(newBullet, 5f);//équivalent du destroy
     
-            IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
+            IAmmo bullet = newBullet.GetComponent<IAmmo>();
 
             SurfaceType surface = ImpactSurface.GetSurfaceType(touchObject);
             GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
                     isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, hadCharged);
+        }
+        
+        void DespawnBullet(BulletBehaviour bullet, float delay)
+        {
+            StartCoroutine(DespawnBulletCoroutine( bullet, delay));
+        }
+
+        void DespawnBullet(BulletBehaviour bullet)
+        {
+            bullet.OnCollision -= DespawnBullet;
+            _ammoPool.ReturnToPool(bullet);
+        }
+
+        IEnumerator DespawnBulletCoroutine(BulletBehaviour bullet, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            if (bullet != null && bullet.gameObject != null && bullet.gameObject.activeSelf)
+            {
+                bullet.OnCollision -= DespawnBullet;
+                _ammoPool.ReturnToPool(bullet);
+            }
         }
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;

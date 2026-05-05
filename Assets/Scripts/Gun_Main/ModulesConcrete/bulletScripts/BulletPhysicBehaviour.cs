@@ -1,10 +1,12 @@
+using System;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
+public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
@@ -12,6 +14,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
     [HideInInspector] public bool p_hadCharged;
+    public Action<BulletPhysicBehaviour> OnCollision;
     private GunController _gunController;
     
     [SerializeField] private GameObject _positiveExplosionVFX;
@@ -49,11 +52,6 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
     }
 
-    void Start()
-    {
-        _lastPosition = transform.position;
-    }
-
     void FixedUpdate()
     {
         DetectCollision();
@@ -79,7 +77,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
         else
             HandleDirectHit(hit);
 
-        Destroy(gameObject);
+        OnCollision.Invoke(this); // il y avait un destroy ici
     }
 
     private void HandleExplosion()
@@ -116,5 +114,15 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
             else
                 _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
         }
+    }
+
+    public void Spawn()
+    {
+        _lastPosition = transform.position;
+    }
+
+    public void ReturnToPool()
+    {
+        
     }
 }
