@@ -1,3 +1,4 @@
+using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
 public static class Extensions

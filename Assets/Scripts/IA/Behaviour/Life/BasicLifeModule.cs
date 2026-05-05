@@ -40,17 +40,3 @@ public class BasicLifeModule : EnemyLifeModule
     }
 }
 
-public struct EnemyDyingEvent
-{
-    public Guid p_gridReaderId;
-    public int p_enemySpawnCost;
-    public EnemyCore p_enemyCore;
-
-    public EnemyDyingEvent(Guid id, int cost, EnemyCore core)
-    {
-        p_gridReaderId = id;
-        p_enemySpawnCost = cost;
-        p_enemyCore = core;
-    }
-}
-

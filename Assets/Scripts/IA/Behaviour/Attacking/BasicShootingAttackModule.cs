@@ -32,9 +32,11 @@ public class BasicShootingAttackModule : EnemyAttackModule
                 dir, 
                 _bulletSpeed, 
                 _damage, 
-                _bulletSize, 
+                _bulletSize,
+                _bulletType,
                 _maxBulletLifeTime, 
-                this));
+                this,
+                _projectileUseGravity));
         }
     }
 
@@ -76,34 +78,4 @@ public class BasicShootingAttackModule : EnemyAttackModule
         Gizmos.DrawWireSphere(origin+dir*length, _bulletSize);
         Gizmos.DrawLine(origin, origin + dir * length);
     }*/
-}
-
-public struct EnemyShootingEvent
-{
-    public Vector3 p_startPos;
-    public Vector3 p_generalDirection;
-    public int p_bulletAmount;
-    public float p_shootingSpreadAngle;
-    
-    public EnemyAttackModule p_enemyAttackModule;
-    
-    public float p_bulletSpeed;
-    public int p_bulletDamage;
-    public float p_bulletSize;
-    public float p_bulletMaxAliveTime;
-
-    public EnemyShootingEvent(Vector3 startPos, Vector3 dir, float bSpeed, int bDamage, float bSize, float bLifeTime, EnemyAttackModule attackModule, int bAmount = 1, float spreadAngle = 0)
-    {
-        p_startPos = startPos;
-        p_generalDirection = dir;
-        
-        p_bulletAmount = bAmount;
-        p_shootingSpreadAngle = spreadAngle;
-        
-        p_bulletSpeed = bSpeed;
-        p_bulletDamage = bDamage;
-        p_bulletSize = bSize;
-        p_bulletMaxAliveTime = bLifeTime;
-        p_enemyAttackModule = attackModule;
-    }
 }

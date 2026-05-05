@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class LobShootingAttackModule : EnemyAttackModule
 {
+    [Header("Bullets")]
     [SerializeField] private float _bulletSize = 0.2f;
     [SerializeField] private float _bulletSpeed = 1;
     [SerializeField] private float _maxBulletLifeTime = 10f;
 
     [Header("Shooting")]
-    [SerializeField] private float _shootingAngle = 30;
+    [SerializeField, Range(5,85)] private float _shootingAngle = 30;
+    public Vector3 p_shootingOffset = Vector3.up * 0.5f;
+    public float p_splashSize = 3;
+    public float p_splashDuration = 30;
 
     static readonly float _g = -Physics.gravity.y;
     
@@ -18,23 +22,25 @@ public class LobShootingAttackModule : EnemyAttackModule
         base.OnNetworkTick();
         if (_waitedTimeSinceAttack >= _attackDelay)
         {
-            Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
-            float length = delta.magnitude;
-            Vector3 dir = delta / length;
+            Vector3? shootingInitialVelocity = GetShootingVelocity(_targetModule.GetTargetPosition());
+            if(!shootingInitialVelocity.HasValue) return;
 
-            Vector3 shootingPos = transform.position + Vector3.up * 0.5f;
+            Vector3 shootingPos = transform.position + p_shootingOffset;
             
-            if(!CanAttack(shootingPos, dir)) return;
+            if(!CanAttack(shootingPos, shootingInitialVelocity.Value)) return;
             _waitedTimeSinceAttack = 0;
             
             InvokeEvent(new EnemyShootingEvent(
-                shootingPos, 
-                dir, 
-                _bulletSpeed, 
-                _damage, 
-                _bulletSize, 
-                _maxBulletLifeTime, 
-                this));
+                shootingPos,
+                shootingInitialVelocity.Value,
+                _bulletSpeed,
+                _damage,
+                _bulletSize,
+                _bulletType,
+                _maxBulletLifeTime,
+                this,
+                _projectileUseGravity
+                ));
         }
     }
 
@@ -45,23 +51,13 @@ public class LobShootingAttackModule : EnemyAttackModule
             return false;
         }
 
-        Debug.DrawLine(shootingPos,shootingPos + projectileDir * _maxPlayerDistance, Color.red, _attackDelay);
-        
-        if (Physics.Raycast(shootingPos, projectileDir, out RaycastHit hit, _maxPlayerDistance, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
-        {
-            if (hit.collider.CompareTag("Player"))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return true;
     }
 
     float? GetLaunchingSpeed(Vector3 targetPosition)
     {
-        float hDist = (transform.position - targetPosition).RemoveY().magnitude;
-        float vDist = targetPosition.y - transform.position.y;
+        float hDist = ((transform.position + p_shootingOffset) - targetPosition).RemoveY().magnitude;
+        float vDist = targetPosition.y - (transform.position.y + p_shootingOffset.y);
 
         float cosTheta = Mathf.Cos(_shootingAngle * Mathf.Deg2Rad);
         float tanTheta = Mathf.Tan(_shootingAngle * Mathf.Deg2Rad);
@@ -72,7 +68,7 @@ public class LobShootingAttackModule : EnemyAttackModule
         if (denominator <= 0) return null;
         
         float shootingSpeed =
-            Mathf.Sqrt((_g * hDist * hDist) / (2 * cosTheta * cosTheta * (denominator)));
+            Mathf.Sqrt((_g * hDist * hDist) / (2 * cosTheta * cosTheta * denominator));
 
         return shootingSpeed;
     }
@@ -87,9 +83,18 @@ public class LobShootingAttackModule : EnemyAttackModule
         float launchSpeed = launchResult.Value;
         
         Vector3 launchVelocity =
-            (targetPos - transform.position).RemoveY().normalized * (launchSpeed * Mathf.Cos(radAngle));
+            (targetPos - (transform.position+p_shootingOffset)).RemoveY().normalized * (launchSpeed * Mathf.Cos(radAngle));
         launchVelocity.y = launchSpeed * Mathf.Sin(radAngle);
 
         return launchVelocity;
     }
+
+    protected override void Reset()
+    {
+        base.Reset();
+        _projectileUseGravity = true;
+        _bulletType = BulletTypes.Splash;
+    }
+
+    public Vector3 GetTargetPosition() => _targetModule.GetTargetPosition();
 }
