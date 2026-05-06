@@ -46,8 +46,10 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
                     _bulletSpeed, 
                     _damage, 
                     _bulletSize, 
+                    _bulletType,
                     _maxBulletLifeTime, 
                     this, 
+                    _projectileUseGravity,
                     _bulletAmount, 
                     _shootingSpreadAngle));
         }
