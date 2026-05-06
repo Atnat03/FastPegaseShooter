@@ -16,7 +16,7 @@ public class BasicMeleeAttackModule : EnemyAttackModule
             if (InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(_targetModule.p_targetId, out NetworkObject player))
             {
                 //Empty event for now
-                InvokeEvent(new EnemyMeleeAttack());
+                InvokeEvent(new EnemyMeleeAttackEvent());
                 InvokeEvent(new PlayerTakeDamageEvent
                 {
                     p_playerN = player,
@@ -45,9 +45,4 @@ public class BasicMeleeAttackModule : EnemyAttackModule
         Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
         Gizmos.DrawSphere(_targetingModule.GetTargetPosition(), 0.1f);
     }*/
-}
-
-public struct EnemyMeleeAttack
-{
-    
 }

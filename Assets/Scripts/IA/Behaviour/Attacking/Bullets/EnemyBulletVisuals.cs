@@ -5,26 +5,31 @@ using UnityEngine;
 public class EnemyBulletVisuals : MonoBusListener
 {
     private Vector3 _startPos;
+    private float _spawnTime;
+    private bool _useGravity;
+    
     private Vector3 _direction;
     private float _speed;
-    private float _spawnTime;
-    private float _damage = 10;
 
     private int _bulletId;
+    private BulletTypes _bulletTypes;
 
 
-    public void SetupVariables(Vector3 startPos, Vector3 direction, float speed, float bulletSize, float spawnTime, int bulletId, float damage)
+    public void SetupVariables(Vector3 startPos, float spawnTime, bool useGravity, Vector3 direction, float speed, float bulletSize, int bulletId, BulletTypes bulletType)
     {
         _startPos = startPos;
+        _spawnTime = spawnTime;
+        _useGravity = useGravity;
+        
         _direction = direction;
         _speed = speed;
-        _spawnTime = spawnTime;
-        _damage = damage;
 
         _bulletId = bulletId;
+        _bulletTypes = bulletType;
         
         transform.position = _startPos;
-        transform.localScale = Vector3.one * bulletSize;
+        
+        transform.localScale = bulletType == BulletTypes.GooPuddle ? new Vector3(bulletSize, transform.localScale.y, bulletSize) : Vector3.one * bulletSize;
         
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
         ListenToEvent<BulletDestructionEvent>(BDE =>
@@ -53,20 +58,15 @@ public class EnemyBulletVisuals : MonoBusListener
     private void OnNetworkTick()
     {
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta - _spawnTime;
-        transform.position = _startPos + _direction * _speed * networkTime;
-    }
-
-    //collision with player shouldn't be done in visual updater
-    /*public void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.TryGetComponent(out PlayerHealth player))
+        networkTime *= _speed;
+        
+        if(!_useGravity)
+            transform.position = _startPos + _direction * networkTime;
+        else
         {
-            EventBusInitialiser.instance.Bus.InvokeEvent(new PlayerTakeDamageEvent
-            {
-                playerN = player.NetworkObject,
-                value = _damage
-            });
+            transform.position = _startPos +
+                                 _direction * networkTime +
+                                 0.5f * Physics.gravity * networkTime * networkTime;
         }
-        KillBullet();
-    }*/
+    }
 }
