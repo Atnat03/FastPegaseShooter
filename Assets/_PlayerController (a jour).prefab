@@ -434,7 +434,6 @@ GameObject:
   - component: {fileID: 4936551050646408444}
   - component: {fileID: 6547442255424585383}
   - component: {fileID: 8428071434140413335}
-  - component: {fileID: 2220289887676329509}
   - component: {fileID: 2051022591737503024}
   m_Layer: 11
   m_Name: Mitraillette lourde
@@ -502,7 +501,7 @@ MonoBehaviour:
   moduleName: TemplateShootModule
   moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
   _secondModule:
-  - {fileID: 2220289887676329509}
+  - {fileID: 0}
   _ammoType: {fileID: 8428071434140413335}
   _fireRate: 0.1
   _numberBulletSpread: 1
@@ -811,59 +810,6 @@ MonoBehaviour:
   _damages: 5
   _BulletSpeed: 50
   _impactVFXData: {fileID: 11400000, guid: fa51d249e5d6f104e9e152faba21b25a, type: 2}
---- !u!114 &2220289887676329509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178092193857295503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfebb13a32584806874c4535aa257a50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.NoiseModule
-  _componentIndexCache: 45
-  _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 7927807153383519047}
-  moduleName: NoiseModule
-  moduleColor: {r: 0, g: 0.3921569, b: 0, a: 1}
-  _curveNoiseOverTime:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.7271282
-      value: 0.4084152
-      inSlope: 1.4843032
-      outSlope: 1.4843032
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _timeToAccessMaxNoise: 2
-  _maxOffsetX: 1
-  _maxOffsetY: 1
 --- !u!114 &2051022591737503024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12187,7 +12133,7 @@ MonoBehaviour:
   - {fileID: 4936551050646408444}
   - {fileID: 6547442255424585383}
   - {fileID: 8428071434140413335}
-  - {fileID: 2220289887676329509}
+  - {fileID: 0}
   - {fileID: 2051022591737503024}
   - {fileID: 4667889534577792590}
   - {fileID: 4108116853922842008}
@@ -22644,10 +22590,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6691543281294599276}
   - {fileID: 9072926797070794938}
   - {fileID: 4098783735463633369}
   - {fileID: 8314495479608476311}
+  - {fileID: 6691543281294599276}
   m_Father: {fileID: 2571651778359029525}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7093058337101482936
@@ -36125,6 +36071,10 @@ PrefabInstance:
       propertyPath: _addedNetworkObject
       value: 
       objectReference: {fileID: 7927807153383519047}
+    - target: {fileID: 7655756404476308796, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
+      propertyPath: _networkObjectCache
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
