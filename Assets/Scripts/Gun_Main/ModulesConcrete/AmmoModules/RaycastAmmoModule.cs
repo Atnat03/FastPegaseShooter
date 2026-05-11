@@ -91,7 +91,7 @@ namespace GunDecorator.AmmoModules
             {
                 targetPoint = cameraRay.GetPoint(_maxDistance);
             }
-
+            
             bulletDirection = spreadDirection.normalized;
             travelTime = Vector3.Distance(_finalSpawnPoint, targetPoint) / _BulletSpeed;
 
@@ -113,7 +113,8 @@ namespace GunDecorator.AmmoModules
         private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
         {
-            BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
+            /*BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));*/
+            BulletBehaviour newBullet = Instantiate(BulletPrefab, finalPos + offset, Quaternion.LookRotation(direction)).GetComponent<BulletBehaviour>();
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     
@@ -130,32 +131,30 @@ namespace GunDecorator.AmmoModules
         {
             bulletsLifetime.Add(bullet,StartCoroutine(DespawnBulletCoroutine( bullet, delay)));
         }
-
-        void DespawnBullet(BulletBehaviour bullet)
-        {
-            bullet.OnCollision -= DespawnBullet;
-            if (bulletsLifetime.ContainsKey(bullet)) 
-            {
-                StopCoroutine(bulletsLifetime[bullet]);
-                bulletsLifetime.Remove(bullet);
-            }
-            _ammoPool.ReturnToPool(bullet);
-        }
-
+        
         IEnumerator DespawnBulletCoroutine(BulletBehaviour bullet, float delay)
         {
             yield return new WaitForSeconds(delay);
             if (bullet != null && bullet.gameObject != null && bullet.gameObject.activeSelf)
             {
-                bullet.OnCollision -= DespawnBullet;
-                if (bulletsLifetime.ContainsKey(bullet)) 
-                {
-                    StopCoroutine(bulletsLifetime[bullet]);
-                    bulletsLifetime.Remove(bullet);
-                }
-                _ammoPool.ReturnToPool(bullet);
+                //DespawnBullet(bullet);
+                Destroy(bullet.gameObject);
             }
         }
+
+        void DespawnBullet(BulletBehaviour bullet)
+        {
+            /*if (bulletsLifetime.ContainsKey(bullet)) 
+            {
+                StopCoroutine(bulletsLifetime[bullet]);
+                bulletsLifetime.Remove(bullet);
+            }
+            bullet.OnCollision -= DespawnBullet;
+            _ammoPool.ReturnToPool(bullet);*/
+            
+            Destroy(bullet.gameObject);
+        }
+
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;
         
