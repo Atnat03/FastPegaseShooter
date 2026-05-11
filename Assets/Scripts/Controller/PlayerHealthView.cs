@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomConsole.Runtime.Logger;
 using MyPrint;
@@ -10,10 +11,6 @@ using UnityEngine.UI;
 
 public class PlayerHealthView : MonoBehaviour
 {
-	#region Properties
-
-	#endregion
-
 
 	#region Variables
 
@@ -176,13 +173,9 @@ public class PlayerHealthView : MonoBehaviour
 	{
 		if (_healingTrajectoryLine.enabled)
 		{
-			Vector3 startPos = _playerHealth.p_healThrowPoint.position;
-			Vector3 endPos = _playerHealth.p_healThrowLandingPos;
-			Vector3 dir = (endPos-startPos).normalized;
-			_healingTrajectoryLine.SetPosition(0, startPos);
-			_healingTrajectoryLine.SetPosition(1, startPos+dir*0.3f);
-			_healingTrajectoryLine.SetPosition(2, endPos-dir*0.3f);
-			_healingTrajectoryLine.SetPosition(3, endPos);
+			Vector3[] line = _playerHealth.HealThrowLine();
+			_healingTrajectoryLine.positionCount = line.Length;
+			_healingTrajectoryLine.SetPositions(line);
 		}
 		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _healTargetFillAmount, Time.deltaTime * _healthVisualFillingSpeed);
 	}
@@ -236,6 +229,7 @@ public class PlayerHealthView : MonoBehaviour
 		//_droneThrower.OnThrowingActivation -= OnThrowingVisualActivation;
 		_droneThrower.OnThrowing -= OnThrowing;
 	}
+
 
 	#endregion
 }

@@ -2264,81 +2264,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &792138691472843478
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7936943699042696849}
-  - component: {fileID: 7808212762066097452}
-  - component: {fileID: 7996410386911518169}
-  m_Layer: 5
-  m_Name: Surcharge
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &7936943699042696849
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 792138691472843478}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7218313039823865412}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &7808212762066097452
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 792138691472843478}
-  m_CullTransparentMesh: 1
---- !u!114 &7996410386911518169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 792138691472843478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 664547ee386048c488d261e83207aaa6, type: 3}
-  m_Type: 3
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &831308480005052006
 GameObject:
   m_ObjectHideFlags: 0
@@ -12254,9 +12179,12 @@ MonoBehaviour:
   _playerInputAction: {fileID: 997312506154426130}
   _playerAnimation: {fileID: 3465261579877272972}
   _gunSwitching: {fileID: 3154577241410043838}
+  healThrowObject: {fileID: 5060125199323097285, guid: 75ec9a798c987484cbe2ca5595ce95c5, type: 3}
   _playerEnergy: {fileID: 29235095159055250}
   p_healThrowPoint: {fileID: 2316828313444862460}
   p_healThrowDirection: {fileID: 6291573982660001099}
+  throwForce: 10
+  maxThrowDistance: 100
   _healthToGive: 30
   p_healThrowRadius: 6
   _healThrowCost: 20
@@ -12342,7 +12270,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _maxEnergy: 100
   _valueOneBar: 20
-  _convertionTaux: 0.2
+  _convertionTaux: 1
   p_costThrowGrenade: 1
   p_costThrowDrone: 2
   p_costThrowHeal: 2
@@ -16763,7 +16691,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7936943699042696849}
   - {fileID: 84360363029319753}
   - {fileID: 3809646166890354401}
   - {fileID: 8144038627874155572}
@@ -29412,13 +29339,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8149685527222359090}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5dd76e2d6f00b747af1b05379bb19a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunSwapView
   _gunSurcharge: {fileID: 8957410558547212102}
-  _infoOverload: {fileID: 7996410386911518169}
+  _infoOverload: {fileID: 0}
 --- !u!1 &8191126269992128899
 GameObject:
   m_ObjectHideFlags: 0

@@ -54,7 +54,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
         p_life.Value = _life;
         p_life.OnChange += OnLifeChanged;
         
-        ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
+        //ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
         ListenToEvent((EndOverloadEvent EOE) => p_damageMultiplier = 1);
     }
 

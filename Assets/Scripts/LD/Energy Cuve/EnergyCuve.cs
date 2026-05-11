@@ -23,7 +23,7 @@ public class EnergyCuve : NetworkBusListener, IDamagable
         _lifeAmount.Value = _life;
         _lifeAmount.OnChange += OnLifeChanged;
         
-        ListenToEvent((SwapingGunEvent SGE) => damageMultiplier = SGE.dataSurcharge.damageMultiplier);
+        //ListenToEvent((SwapingGunEvent SGE) => damageMultiplier = SGE.dataSurcharge.damageMultiplier);
         ListenToEvent((EndOverloadEvent EOE) => damageMultiplier = 1);
     }
 
