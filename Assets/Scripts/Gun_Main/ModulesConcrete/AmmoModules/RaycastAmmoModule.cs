@@ -113,7 +113,8 @@ namespace GunDecorator.AmmoModules
         private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
         {
-            BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
+            /*BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));*/
+            BulletBehaviour newBullet = Instantiate(BulletPrefab, finalPos + offset, Quaternion.LookRotation(direction)).GetComponent<BulletBehaviour>();
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     
@@ -136,19 +137,22 @@ namespace GunDecorator.AmmoModules
             yield return new WaitForSeconds(delay);
             if (bullet != null && bullet.gameObject != null && bullet.gameObject.activeSelf)
             {
-                DespawnBullet(bullet);
+                //DespawnBullet(bullet);
+                Destroy(bullet.gameObject);
             }
         }
 
         void DespawnBullet(BulletBehaviour bullet)
         {
-            if (bulletsLifetime.ContainsKey(bullet)) 
+            /*if (bulletsLifetime.ContainsKey(bullet)) 
             {
                 StopCoroutine(bulletsLifetime[bullet]);
                 bulletsLifetime.Remove(bullet);
             }
             bullet.OnCollision -= DespawnBullet;
-            _ammoPool.ReturnToPool(bullet);
+            _ammoPool.ReturnToPool(bullet);*/
+            
+            Destroy(bullet.gameObject);
         }
 
         
