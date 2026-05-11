@@ -20,9 +20,9 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
             Vector3 shootDir = Vector3.zero;
             Vector3 shootingPos = transform.position + Vector3.up * 0.5f;
             if (TryGetShootingDirection(
-                    _targetModule.p_fpsController.transform.position,
+                    _targetModule.p_playerVisualBridge.transform.position,
                     shootingPos,
-                    _targetModule.p_fpsController.Rb.linearVelocity,
+                    _targetModule.p_playerVisualBridge.FPSController.Rb.linearVelocity,
                     _bulletSpeed, out Vector3 shootingDirection))
             {
                 //CustomLogger.HighlightLog("Using predictive shoot");
