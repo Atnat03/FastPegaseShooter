@@ -42,7 +42,9 @@ public class PlayerHealth : NetworkBusListener
 	public Transform p_healThrowDirection;
 	public float throwForce = 10;
 	public float maxThrowDistance = 100;
-	[SerializeField] private float _healthToGive = 30;
+	public float healSizeEffectFactor = .05f;
+	[SerializeField] private float _healthToGiveFactor = 30;
+	[SerializeField] private float _minHealthToGive = 15;
 	public float p_healThrowRadius = 3;
 	[SerializeField] private float _healThrowCost = 20;
 	[SerializeField] private LayerMask _throwHitLayerMask;
@@ -65,7 +67,7 @@ public class PlayerHealth : NetworkBusListener
 	
 	public Action OnThrowingVisualActivation;
 	public Action OnThrowing;
-	public Action<Vector3> OnHealThrowLanding;
+	public Action<Vector3, float, float> OnHealThrowLanding;
 	public Action OnThrowKeyReleased;
 	
 	#endregion
@@ -181,11 +183,11 @@ public class PlayerHealth : NetworkBusListener
 			return;
 		}
 		
-		if(_canThrowHeal && p_healThrowLandingPos != p_healThrowPoint.position)
+		if(_canThrowHeal)
 		{
 			OnThrowing?.Invoke();
 			
-			ThrowHealServerRpc(p_healThrowLandingPos, _healthToGive, Owner);
+			ThrowHealServerRpc(p_healThrowLandingPos, _healthToGiveFactor, Owner);
 		}
 		
 		_isHealKeyDown = false;
@@ -249,7 +251,7 @@ public class PlayerHealth : NetworkBusListener
 
 	IEnumerator HealThrowCoroutine( float lifeToAdd)
 	{
-		Vector3[] positions = HealThrowLine();
+		Vector3[] positions = HealThrowLine(out float distance);
 		NetworkObject throwObject = Instantiate(healThrowObject,  positions[0], Quaternion.identity);
 		Spawn(throwObject);
 		for (int i = 0; i < positions.Length; i++)
@@ -259,14 +261,14 @@ public class PlayerHealth : NetworkBusListener
 		}
 		Despawn(throwObject);
 		Destroy(throwObject.gameObject);
-		OnHealActivate(positions[^1], lifeToAdd);
-		ShowHealThrowObserverRpc(positions[^1]);
+		OnHealActivate(positions[^1], lifeToAdd * positions.Length * Time.deltaTime + _minHealthToGive, p_healThrowRadius * distance * healSizeEffectFactor);
+		ShowHealThrowObserverRpc(positions[^1], distance, 1f);
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	void OnHealActivate(Vector3 landingPos, float lifeToAdd)
+	void OnHealActivate(Vector3 landingPos, float lifeToAdd,float scale)
 	{
-		Collider[] colliders = Physics.OverlapSphere(landingPos, p_healThrowRadius, _throwHealLayerMask);
+		Collider[] colliders = Physics.OverlapSphere(landingPos, scale, _throwHealLayerMask);
 		foreach (Collider collider in colliders)
 		{
 			if (collider != null && collider.TryGetComponent(out PlayerVisuelBridge visualBridge))
@@ -332,12 +334,12 @@ public class PlayerHealth : NetworkBusListener
 	{
 		InvokeEvent(new OnPlayerDeathEvent { p_playerN = playerN });
 	}
-	
+
 
 	[ObserversRpc]
-	private void ShowHealThrowObserverRpc(Vector3 landingPos)
+	private void ShowHealThrowObserverRpc(Vector3 landingPos, float scale, float duration)
 	{
-		OnHealThrowLanding?.Invoke(landingPos);
+		OnHealThrowLanding?.Invoke(landingPos, scale, duration);
 	}
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
@@ -381,14 +383,14 @@ public class PlayerHealth : NetworkBusListener
 	}
 	
 	private Vector3 startPos;
-	public Vector3[] HealThrowLine()
+	public Vector3[] HealThrowLine(out float distance)
 	{
 		startPos = transform.position + transform.forward + transform.right;
 		float simulatedTime = 0;
 		Vector3 previousPos = startPos;
 		Vector3 nextPos = GetNewPosition(Time.deltaTime);
 		List<Vector3>  posList = new();
-		float distance = 0;
+		distance = 0;
 		RaycastHit hit;
 		while (!Physics.Raycast(previousPos, nextPos - previousPos, out hit, (nextPos - previousPos).magnitude, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore) && distance < maxThrowDistance)
 		{
