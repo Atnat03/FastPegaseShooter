@@ -36,11 +36,15 @@ public class GunSwitching : NetworkBusListener
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
 	
+	[Header("Settings")]
+	[SerializeField] private float _cooldownChangeMagnetic = 5f;
+	
 	private bool _canSwitch = true;
+	private bool _canChangemagnetic = true;
 	private List<GameObject> _mainGunsList;
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
-
+	
 	//Actions
 	public Action OnStartSwitchGun;
 	public Action OnEndSwitchGun;
@@ -92,6 +96,7 @@ public class GunSwitching : NetworkBusListener
 	public void ChangeMagneticCharge(int pId)
 	{
 		if (!IsServerInitialized) return;
+		if (!_canChangemagnetic) return;
 		
 		_isPositiveChargedPlayer.Value = !_isPositiveChargedPlayer.Value;
 		
@@ -102,6 +107,8 @@ public class GunSwitching : NetworkBusListener
 			playerId = pId,
 			isPositiveCharged = _isPositiveChargedPlayer.Value
 		});
+
+		_canChangemagnetic = false;
 		
 		UpdateUIChargeObserversRpc();
 	}
@@ -110,6 +117,15 @@ public class GunSwitching : NetworkBusListener
 	private void UpdateUIChargeObserversRpc()
 	{
 		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
+
+		StartCoroutine(CooldownChargeMagnetic());
+	}
+
+	IEnumerator CooldownChargeMagnetic()
+	{
+		yield return new WaitForSeconds(_cooldownChangeMagnetic);
+
+		_canChangemagnetic = true;
 	}
 
 	private void ActivateCurrentGun(List<GameObject> list, int index)
