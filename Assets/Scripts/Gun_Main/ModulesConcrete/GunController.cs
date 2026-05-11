@@ -291,11 +291,8 @@ namespace GunDecorator
         }
 
         [ObserversRpc]
-        private void PlayMuzzleFlash()
-        {
-            _muzzleFlash.Play();
-        }
-
+        private void PlayMuzzleFlash() => _muzzleFlash.Play();
+        
         public void StopReload() => _reloadModule.StopReload();
 
         public void SetChargedPlayer(bool b) => _isPositivePlayerCharge.Value = b;
