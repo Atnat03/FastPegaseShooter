@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 4639033686446523756}
   - component: {fileID: -6673638721032206114}
   - component: {fileID: 4856717765235199756}
-  - component: {fileID: -3745771886591243004}
+  - component: {fileID: -1059870798127094945}
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: 6176439864006220930}
@@ -170,7 +170,7 @@ MonoBehaviour:
   _lifeModules:
   - {fileID: 4639033686446523756}
   _targetingModules:
-  - {fileID: -3745771886591243004}
+  - {fileID: -1059870798127094945}
   _movementModule: {fileID: 4856717765235199756}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
@@ -211,7 +211,7 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _targetModule: {fileID: -3745771886591243004}
+  _targetModule: {fileID: -1059870798127094945}
   _damage: 20
   _attackDelay: 2
   _bulletType: 1
@@ -222,7 +222,7 @@ MonoBehaviour:
   _maxBulletLifeTime: 10
   _shootingAngle: 30
   p_shootingOffset: {x: 0, y: 0.5, z: 0}
-  p_splashSize: 9
+  p_splashSize: 7.5
   p_splashDuration: 12
   p_splashDamageDelay: 0.8
 --- !u!114 &4856717765235199756
@@ -241,11 +241,11 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _doFreezeWithoutTarget: 1
-  _targetModule: {fileID: -3745771886591243004}
+  _targetModule: {fileID: -1059870798127094945}
   _speed: 4
   _traceWeight: 12
   _traceSpread: 3
---- !u!114 &-3745771886591243004
+--- !u!114 &-1059870798127094945
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -254,13 +254,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 5911405418369916473}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 099f65e195cc2e74fb0255db981497b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 551daad7dd080364381524025b5adc95, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FluidTargetingModule
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreTargetModule
   _componentIndexCache: 4
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
+  _aggroPointWhenInDetectZone: 100
+  _aggroPointPerDamageTaken: 2
+  _aggroPointPerSecond: 1
+  _aggroPointPerDamageDealt: 1
+  _aggroPointsThreshold: 0000000064000000c8000000
+  _detectionZoneRadius: 60
+  _aggroZoneRadius: 60
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -307,7 +314,7 @@ MonoBehaviour:
   - {fileID: 4639033686446523756}
   - {fileID: -6673638721032206114}
   - {fileID: 4856717765235199756}
-  - {fileID: -3745771886591243004}
+  - {fileID: -1059870798127094945}
   - {fileID: 6176439864006220930}
   - {fileID: 1602071577645785696}
   InitializedParentNetworkBehaviour: {fileID: 0}
@@ -320,7 +327,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584231141551162323
+  _initializedTimestamp: -8584231111660686348
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
