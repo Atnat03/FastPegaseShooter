@@ -106,12 +106,13 @@ namespace GunDecorator.AmmoModules
             float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
         {
             bool isCritical = _gunController.IsOverload;
+            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, hadCharged);
             SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, hadCharged);
         }
 
-        [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
+        private void DoSpawnBullet(Vector3 direction, float travel, bool isExplosive,
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos,
+            NetworkObject target = null, bool hadCharged = true)
         {
             BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
             newBullet.OnCollision += DespawnBullet;
@@ -123,7 +124,15 @@ namespace GunDecorator.AmmoModules
             GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
-                    isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, hadCharged);
+                isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, hadCharged);
+        }
+
+        [ObserversRpc]
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
+        {
+            if (!IsClientInitialized) return;
+            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObject, finalPos, target, hadCharged);
         }
         
         void DespawnBullet(BulletBehaviour bullet, float delay)
