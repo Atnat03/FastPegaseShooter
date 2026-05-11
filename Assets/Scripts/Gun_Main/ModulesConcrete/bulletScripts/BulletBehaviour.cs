@@ -115,7 +115,6 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
             HandleDirectHit(hit);
 
         OnCollision.Invoke(this);// il y avait un destroy ici
-        Destroy(gameObject);
     }
 
     private void HandleExplosion()
