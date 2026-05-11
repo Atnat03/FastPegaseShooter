@@ -128,12 +128,6 @@ public class ElementaryGrenade : NetworkBusListener
             {
                 damagable.TakeDamage(_thrower.Value.ClientId, _damage.Value);
                 
-                InvokeEvent(new ModifyEnergyEvent
-                {
-                    p_player = _thrower.Value,
-                    p_value = _damage.Value
-                });
-                
                 InvokeEvent(new OnPlayerDoDamage
                 {
                     p_ownerId = _thrower.Value.ClientId,

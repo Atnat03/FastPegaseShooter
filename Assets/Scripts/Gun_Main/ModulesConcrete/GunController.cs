@@ -28,7 +28,6 @@ public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value, bool _infiniteAmmo);
-    public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
     public Renderer ModelGun { get; }
     public void StopReload();
     public void SetPercentageCharge(int percent);
@@ -208,27 +207,7 @@ namespace GunDecorator
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
 
         public void SetAmmo(int value, bool infiniteAmmo) => _reloadModule.SetAmmo(value, _infiniteAmmo);
-
-        public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
-        {
-            if (!IsServerInitialized)
-            {
-                SetSurchargeStatServerRpc(isOverload, dmgMultiplicator, cadenceMultiplicator);
-                return;
-            }
-
-            _isOverload.Value = isOverload;
-            SurchargeMultiplierDamage = dmgMultiplicator;
-            SurchargeMultiplierRate = cadenceMultiplicator;
-            _shootModule?.AmmoModule.SetDamage(dmgMultiplicator);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void SetSurchargeStatServerRpc(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
-        {
-            SetSurchargeStat(isOverload, dmgMultiplicator, cadenceMultiplicator);
-        }
-
+        
         public void TryReload()
         {
             if (_reloadModule.IsReloading) return;
@@ -260,12 +239,6 @@ namespace GunDecorator
         [ObserversRpc]
         private void ApplyDamageObservers(int damage, bool isCritical, bool hadCharged)
         {
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = Owner,
-                p_value = damage
-            });
-            
             InvokeEvent(new OnPlayerDoDamage
             {
                 p_ownerId = OwnerId,

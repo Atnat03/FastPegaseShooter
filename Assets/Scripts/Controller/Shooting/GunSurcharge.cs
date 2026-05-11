@@ -19,7 +19,7 @@ namespace Controller
         public Action<bool, float> OnOverloadTimeUpdate;
         public Action<Color> OnInfoOverloadSetColor;
         
-        public void SetOverloadStats(bool state, float overloadTime, float dmg_Multi, float rate_Multi, int newAmmoAmount = -1)
+        public void SetOverloadStats(bool state, float overloadTime, int newAmmoAmount = -1)
         {
             _currentOverloadTimer = overloadTime;
             _elapsedTimeOverload = overloadTime;
@@ -30,7 +30,6 @@ namespace Controller
             
             if(newAmmoAmount != -1)
                 gun.SetAmmo(newAmmoAmount, false);
-            gun.SetSurchargeStat(state, dmg_Multi, rate_Multi);
             gun.SetPercentageCharge(_numberChargedShootWhenOverload * 100);
         }
 
@@ -38,12 +37,7 @@ namespace Controller
         {
             OverloadTimer();
         }
-
-        public void SetColorImage(Color color)
-        {
-            OnInfoOverloadSetColor?.Invoke(color);
-        }
-
+        
         private void OverloadTimer()
         {
             if (_isOverload)
@@ -56,7 +50,7 @@ namespace Controller
                 {
                     InvokeEvent(new EndOverloadEvent());
                     _isOverload = false;
-                    SetOverloadStats(false, 0, 1, 1);
+                    SetOverloadStats(false, 0);
                 }
             }
 

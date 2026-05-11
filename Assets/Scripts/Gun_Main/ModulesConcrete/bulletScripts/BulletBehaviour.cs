@@ -1,9 +1,10 @@
+using System;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBusListener, IAmmoExplosif
+public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
@@ -12,6 +13,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
     [HideInInspector] public bool p_hadCharged;
+    public Action<BulletBehaviour> OnCollision;
 
     [SerializeField] private GameObject _positiveExplosionVFX;
     [SerializeField] private GameObject _negativeExplosionVFX;
@@ -33,13 +35,30 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private bool _hasHit = false;
     private bool _hasMark = false;
+    
+    private Vector3 _lastPosition;
+    private bool _firstFrame = true;
+
+    private void Awake()
+    {
+        _lastPosition = transform.position;
+    }
 
     private void FixedUpdate()
     {
         if (_hasHit) return;
 
+        if (_firstFrame)
+        {
+            _lastPosition = transform.position;
+            _firstFrame = false;
+            return;
+        }
+
         DetectCollision();
         Move();
+    
+        _lastPosition = transform.position;
     }
 
     public void SetUpVariables(
@@ -69,8 +88,6 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         
         _trailenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
-
-        Destroy(gameObject, 3f);
     }
 
     private void Move()
@@ -80,29 +97,24 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private void DetectCollision()
     {
-        float distance = p_speed * Time.fixedDeltaTime;
+        Vector3 direction = transform.position - _lastPosition;
+        float distance = direction.magnitude;
 
-        if (!Physics.Raycast(
-                transform.position,
-                transform.forward,
-                out RaycastHit hit,
-                distance,
-                ~LayerMask.GetMask("Owner"),
-                QueryTriggerInteraction.Ignore))
+        if (distance <= 0f) return;
+
+        if (!Physics.SphereCast(_lastPosition, 0.15f, direction.normalized, out RaycastHit hit,
+                distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
             return;
 
+        if (_hasHit) return;
         _hasHit = true;
 
         if (p_isExplosive)
-        {
             HandleExplosion();
-        }
         else
-        {
             HandleDirectHit(hit);
-        }
 
-        Destroy(gameObject);
+        OnCollision.Invoke(this); // il y avait un destroy ici
     }
 
     private void HandleExplosion()
@@ -116,23 +128,15 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        if (_gunController.IsServerInitialized)
+        if (_gunController.IsServerInitialized) 
             _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
-        else
+        else 
             _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
 
         CreateHitMark(hit);
     }
     
-    private void CreateHitMark(RaycastHit hit)
-    {
-        GameObject hitMark = Instantiate(
-            p_markPrefab,
-            _targetPoint + hit.normal * 0.01f,
-            Quaternion.LookRotation(hit.normal));
-
-        Destroy(hitMark, 1f);
-    }
+    private void CreateHitMark(RaycastHit hit) => Destroy(Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal)), 1f);
 
     public void Explosed(float radius, int damage)
     {
@@ -155,5 +159,15 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
             else
                 _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
         }
+    }
+
+    public void Spawn()
+    {
+        
+    }
+
+    public void ReturnToPool()
+    {
+        
     }
 }
