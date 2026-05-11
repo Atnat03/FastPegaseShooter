@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GunSwitching : NetworkBehaviour
+public class GunSwitching : NetworkBusListener
 {
 	#region Properties
 	public bool IsMainGun => _isMainGun.Value;
@@ -35,12 +35,16 @@ public class GunSwitching : NetworkBehaviour
 	[SerializeField] private GrenadeThrower _throwerGrenade;
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
-
+	
+	[Header("Settings")]
+	[SerializeField] private float _cooldownChangeMagnetic = 5f;
+	
 	private bool _canSwitch = true;
+	private bool _canChangemagnetic = true;
 	private List<GameObject> _mainGunsList;
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
-
+	
 	//Actions
 	public Action OnStartSwitchGun;
 	public Action OnEndSwitchGun;
@@ -64,7 +68,7 @@ public class GunSwitching : NetworkBehaviour
 			_mainGunsList.Add(gun.gameObject);
 		}
 	}
-	
+
 	public void Initialize(int startIndex)
 	{
 		Cons.Print("Connected", ColorConsole.Green);
@@ -84,20 +88,27 @@ public class GunSwitching : NetworkBehaviour
 	}
 
 	[ServerRpc]
-	public void RequestChangeMagneticCharge()
+	public void RequestChangeMagneticCharge(int playerId)
 	{
-		ChangeMagneticCharge();
+		ChangeMagneticCharge(playerId);
 	}
 	
-	public void ChangeMagneticCharge()
+	public void ChangeMagneticCharge(int pId)
 	{
 		if (!IsServerInitialized) return;
+		if (!_canChangemagnetic) return;
 		
 		_isPositiveChargedPlayer.Value = !_isPositiveChargedPlayer.Value;
 		
 		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
-		
-		Cons.Print("New charge : " + IsPositive, IsPositive ? ColorConsole.Red : ColorConsole.Cyan);
+
+		InvokeEvent(new OnPlayerChangeMagneticCharge
+		{
+			playerId = pId,
+			isPositiveCharged = _isPositiveChargedPlayer.Value
+		});
+
+		_canChangemagnetic = false;
 		
 		UpdateUIChargeObserversRpc();
 	}
@@ -106,6 +117,15 @@ public class GunSwitching : NetworkBehaviour
 	private void UpdateUIChargeObserversRpc()
 	{
 		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
+
+		StartCoroutine(CooldownChargeMagnetic());
+	}
+
+	IEnumerator CooldownChargeMagnetic()
+	{
+		yield return new WaitForSeconds(_cooldownChangeMagnetic);
+
+		_canChangemagnetic = true;
 	}
 
 	private void ActivateCurrentGun(List<GameObject> list, int index)
@@ -213,4 +233,10 @@ public class GunSwitching : NetworkBehaviour
 	}
 
 	#endregion
+}
+
+public struct OnPlayerChangeMagneticCharge
+{
+	public int playerId;
+	public bool isPositiveCharged;
 }
