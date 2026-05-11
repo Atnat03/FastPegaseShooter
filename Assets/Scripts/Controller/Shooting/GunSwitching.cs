@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GunSwitching : NetworkBehaviour
+public class GunSwitching : NetworkBusListener
 {
 	#region Properties
 	public bool IsMainGun => _isMainGun.Value;
@@ -35,7 +35,7 @@ public class GunSwitching : NetworkBehaviour
 	[SerializeField] private GrenadeThrower _throwerGrenade;
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
-
+	
 	private bool _canSwitch = true;
 	private List<GameObject> _mainGunsList;
 	
@@ -64,7 +64,7 @@ public class GunSwitching : NetworkBehaviour
 			_mainGunsList.Add(gun.gameObject);
 		}
 	}
-	
+
 	public void Initialize(int startIndex)
 	{
 		Cons.Print("Connected", ColorConsole.Green);
@@ -84,20 +84,24 @@ public class GunSwitching : NetworkBehaviour
 	}
 
 	[ServerRpc]
-	public void RequestChangeMagneticCharge()
+	public void RequestChangeMagneticCharge(int playerId)
 	{
-		ChangeMagneticCharge();
+		ChangeMagneticCharge(playerId);
 	}
 	
-	public void ChangeMagneticCharge()
+	public void ChangeMagneticCharge(int pId)
 	{
 		if (!IsServerInitialized) return;
 		
 		_isPositiveChargedPlayer.Value = !_isPositiveChargedPlayer.Value;
 		
 		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
-		
-		Cons.Print("New charge : " + IsPositive, IsPositive ? ColorConsole.Red : ColorConsole.Cyan);
+
+		InvokeEvent(new OnPlayerChangeMagneticCharge
+		{
+			playerId = pId,
+			isPositiveCharged = _isPositiveChargedPlayer.Value
+		});
 		
 		UpdateUIChargeObserversRpc();
 	}
@@ -213,4 +217,10 @@ public class GunSwitching : NetworkBehaviour
 	}
 
 	#endregion
+}
+
+public struct OnPlayerChangeMagneticCharge
+{
+	public int playerId;
+	public bool isPositiveCharged;
 }

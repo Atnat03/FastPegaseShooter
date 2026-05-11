@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Controller;
 using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Connection;
@@ -58,7 +59,8 @@ public class EnemyCore : NetworkBusListener
         
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
-
+        
+        ListenToEvent<SwapingGunEvent>(TriggerExplosionOnSwap);
         
         //Initialising Score Target Module
         List<ScoreTargetModule> scoreModules = new List<ScoreTargetModule>();
@@ -183,8 +185,6 @@ public class EnemyCore : NetworkBusListener
             p_player1_IsPositive = positive;
             p_current_player1_Charge += value;
             
-            Cons.Print(p_current_player1_Charge + " // " +  positive);
-            
             OnPlayer1ChangeObserverRpc(p_current_player1_Charge, p_player1_IsPositive, p_current_player1_Charge/p_player1_ChargeMax);
         }
         else
@@ -198,8 +198,6 @@ public class EnemyCore : NetworkBusListener
             p_current_player2_Charge += value;
             OnPlayer2ChangeObserverRpc(p_current_player2_Charge, p_player2_IsPositive, p_current_player2_Charge/p_player2_ChargeMax); 
         }
-
-        CheckAllChargeAreFull();
     }
 
     [Server]
@@ -218,18 +216,12 @@ public class EnemyCore : NetworkBusListener
     }
     
     [Server]
-    private void CheckAllChargeAreFull()
+    private void TriggerExplosionOnSwap(SwapingGunEvent data)
     {
-        if (p_current_player2_Charge >= p_player2_ChargeMax && p_current_player1_Charge >= p_player1_ChargeMax)
-        {
-            //life module at position 0 is considered to be the main life module
-            // => There is feedback in the inspector
-            _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage);
+        _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage);
             
-            
-            ResetAllCharged();
-            ExplosionObserversRpc();
-        }
+        ResetAllCharged();
+        ExplosionObserversRpc();
     }
 
     [ObserversRpc]

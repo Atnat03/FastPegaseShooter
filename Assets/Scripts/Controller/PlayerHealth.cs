@@ -82,6 +82,12 @@ public class PlayerHealth : NetworkBusListener
 
 		ListenToEvent<PlayerTakeDamageEvent>(TakeDamage);
 		ListenToEvent<AddHealthToPlayer>(AddHealth);
+		
+		InvokeEvent(new OnPlayerSpawnEvent
+		{
+			playerId = Owner.ClientId,
+			isPositiveCharge = Owner.ClientId == 0
+		});
 	}
 
 	public override void OnStartClient()
@@ -91,7 +97,10 @@ public class PlayerHealth : NetworkBusListener
 		_respawnTimer.OnChange += OnRespawnTimerChange;
 
 		if (IsOwner)
+		{
 			_startPos = transform.position;
+			ListenToEvent<OnShortCircuitDamage>(ApplyShortCircuitDamage);
+		}
 
 		PlayerHealthManager.Instance?.Register(this);
 	}
@@ -193,6 +202,21 @@ public class PlayerHealth : NetworkBusListener
 		{
 			_currentHealth.Value = newHealth;
 		}
+	}
+	
+	private void ApplyShortCircuitDamage(OnShortCircuitDamage data)
+	{
+		RequestTakeDamageServerRpc(data.damage);
+	}
+
+	[ServerRpc]
+	private void RequestTakeDamageServerRpc(int damage)
+	{
+		TakeDamage(new PlayerTakeDamageEvent
+		{
+			p_playerN = NetworkObject,
+			p_value = damage,
+		});
 	}
 
 	[TargetRpc]

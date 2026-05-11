@@ -40,6 +40,7 @@ namespace Controller
             {
                 ListenToEvent<SwapingGunEvent>(SwapingGun);
                 ListenToEvent<EndTimerSwapEvent>(EndTimerSwap);
+                
                 _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
             }
             else
@@ -193,11 +194,11 @@ namespace Controller
         {
             if (IsServerInitialized)
             {
-                _gunSwitching.ChangeMagneticCharge();
+                _gunSwitching.ChangeMagneticCharge(Owner.ClientId);
             }
             else
             {
-                _gunSwitching.RequestChangeMagneticCharge();
+                _gunSwitching.RequestChangeMagneticCharge(Owner.ClientId);
             }
         }
     }
