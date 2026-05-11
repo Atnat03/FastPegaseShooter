@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd37eadeed8c574bba4e12cadbadf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 7
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _distanceMax: 100
@@ -534,7 +534,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584241236874613978
+  _initializedTimestamp: -8584236112231504074
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -811,7 +811,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584241236874613978
+  _initializedTimestamp: -8584236112231504074
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1088,7 +1088,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584241236874613978
+  _initializedTimestamp: -8584236112231504074
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1198,14 +1198,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1710859028773061241}
   - component: {fileID: 4385027282801438809}
-  - component: {fileID: 3484269404372181288}
+  - component: {fileID: 4750571229546580062}
   - component: {fileID: 4639033686446523756}
   - component: {fileID: 6912678073703625548}
-  - component: {fileID: 1719828175504443608}
+  - component: {fileID: 1354513869891513326}
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: -8997744782067408838}
-  - component: {fileID: 1354513869891513326}
   m_Layer: 16
   m_Name: Enemy 1
   m_TagString: Enemy
@@ -1250,7 +1249,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8280671740658429549}
   _maxEnemySwelling: 0
   _attackingModules:
-  - {fileID: 3484269404372181288}
+  - {fileID: 4750571229546580062}
   _lifeModules:
   - {fileID: 4639033686446523756}
   - {fileID: 8676698036849061702}
@@ -1266,7 +1265,7 @@ MonoBehaviour:
   p_currentNegativeCharge: 0
   p_positiveChargeMax: 5
   p_currentPositiveCharge: 0
---- !u!114 &3484269404372181288
+--- !u!114 &4750571229546580062
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1275,21 +1274,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 5911405418369916473}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1438ebc3a6f0dce4bbb71d4cbcd12b01, type: 3}
+  m_Script: {fileID: 11500000, guid: a0d26ea1f8930fd43bbf5ee8caa4f3c7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PredictiveShootingAttackModule
+  m_EditorClassIdentifier: Assembly-CSharp::LobShootingAttackModule
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _targetModule: {fileID: 6912678073703625548}
   _damage: 0
-  _attackDelay: 3
+  _attackDelay: 1
+  _bulletType: 1
+  _projectileUseGravity: 1
   _maxPlayerDistance: 10
   _bulletSize: 0.2
-  _bulletSpeed: 10
+  _bulletSpeed: 0.5
   _maxBulletLifeTime: 10
-  _bulletAmount: 1
-  _shootingSpreadAngle: 7
+  _shootingAngle: 30
+  p_shootingOffset: {x: 0, y: 0.5, z: 0}
+  p_splashSize: 3
+  p_splashDuration: 5
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1329,18 +1332,18 @@ MonoBehaviour:
   _aggroPointsThreshold: 0000000064000000c8000000
   _detectionZoneRadius: 30
   _aggroZoneRadius: 5
---- !u!114 &1719828175504443608
+--- !u!114 &1354513869891513326
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5911405418369916473}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23498b4b02aaf4e488d27c0b1c9abc28, type: 3}
+  m_Script: {fileID: 11500000, guid: 53783909ae03234408c4b1a8d6416c41, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteeringBehaviourMovementModule
+  m_EditorClassIdentifier: Assembly-CSharp::DistanceAwareMovementModule
   _componentIndexCache: 4
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
@@ -1349,44 +1352,8 @@ MonoBehaviour:
   _speed: 10
   _traceWeight: 9
   _traceSpread: 3
-  _nodeValidationDistance: 1
-  _seekSteeringCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0.3
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _seekSteeringStrenght: 60
-  _WallViewDistance: 1
-  _agentWidth: 0.4
-  _wallSteeringStrenght: 200
-  _ignoredLayers:
-    serializedVersion: 2
-    m_Bits: 2147549376
-  _enemyViewDistance: 60
-  _enemySteeringStrenght: 30
-  _enemyLayers:
-    serializedVersion: 2
-    m_Bits: 65536
-  _maxSkippingStep: 3
+  _idealDistance: 2
+  _maxTraverseNodeBeforePathUpdate: 3
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1430,12 +1397,11 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: 4385027282801438809}
-  - {fileID: 3484269404372181288}
+  - {fileID: 4750571229546580062}
   - {fileID: 4639033686446523756}
   - {fileID: 6912678073703625548}
-  - {fileID: 1719828175504443608}
-  - {fileID: -8997744782067408838}
   - {fileID: 1354513869891513326}
+  - {fileID: -8997744782067408838}
   - {fileID: 8656423359014822480}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects:
@@ -1451,7 +1417,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584241236874613978
+  _initializedTimestamp: -8584236112231504074
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -1522,27 +1488,6 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
---- !u!114 &1354513869891513326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5911405418369916473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53783909ae03234408c4b1a8d6416c41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DistanceAwareMovementModule
-  _componentIndexCache: 6
-  _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 8280671740658429549}
-  _doFreezeWithoutTarget: 1
-  _targetModule: {fileID: 6912678073703625548}
-  _speed: 3
-  _traceWeight: 9
-  _traceSpread: 3
-  _idealDistance: 2
 --- !u!1 &6364117521231957157
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,7 +1797,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584241236874613978
+  _initializedTimestamp: -8584236112231504074
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -2129,6 +2074,7 @@ GameObject:
   - component: {fileID: 5346405171015881183}
   - component: {fileID: 7388347016383583870}
   - component: {fileID: 8394527351532065358}
+  - component: {fileID: 22641558434399577}
   m_Layer: 16
   m_Name: Viewers
   m_TagString: Untagged
@@ -2219,6 +2165,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EliteWeakPointViewer
   _enemyLifeModule: {fileID: 1267449697482659097}
+--- !u!114 &22641558434399577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8649276501711791122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b15650e015d3cf041a2c6e576422eabb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyLobShootingDebugger
+  targetTransform: []
+  LSAModule: {fileID: 4750571229546580062}
+  _useComponentTarget: 1
 --- !u!1 &8987469566188833760
 GameObject:
   m_ObjectHideFlags: 0
