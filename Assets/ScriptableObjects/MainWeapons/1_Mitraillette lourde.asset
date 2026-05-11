@@ -26,7 +26,7 @@ MonoBehaviour:
       data:
         displayName: TemplateShootModule
         headerColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-        fireRate: 0.085
+        fireRate: 0.095
         numberBulletSpread: 0
         SpreadAngle: 0
         RadiusOffset: 0
@@ -80,8 +80,8 @@ MonoBehaviour:
       data:
         displayName: RaycastAmmoModule
         headerColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-        maxDistance: 2000
-        damages: 10
+        maxDistance: 40
+        damages: 9
         bulletSpeed: 70
     - rid: 8760679503559655528
       type: {class: ChargedSalveSetting, ns: , asm: Assembly-CSharp}
@@ -90,7 +90,8 @@ MonoBehaviour:
         headerColor: {r: 0, g: 1, b: 1, a: 1}
         IsExplosifAmmo: 1
         explosionRadius: 1
-        _damageChargedMultiplicator: 10
+        OneAmmoAddPercentage: {x: 2, y: 3}
+        _damageChargedMultiplicator: 1.25
         recoilChargedMultiplier: 0
         RecoilX: 0
         NumberBulletInCharged: 10
