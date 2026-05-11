@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
-using UnityEngine;
-using System.Collections.Generic;
+using FishNet.Object;
 
 public class Pooler<T> where T : MonoBehaviour, IPoolable
 {
