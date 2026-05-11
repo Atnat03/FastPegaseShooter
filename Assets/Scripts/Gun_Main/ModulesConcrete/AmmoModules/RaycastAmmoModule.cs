@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using FishNet.Object;
 using MyPrint;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace GunDecorator.AmmoModules
         private Vector3 _finalSpawnPoint;
         
         private Pooler<BulletBehaviour> _ammoPool;
+        
+        private Dictionary<BulletBehaviour, Coroutine> bulletsLifetime =  new Dictionary<BulletBehaviour, Coroutine>();
         
         public override void SetVariable(GunSetting setting)
         {
@@ -125,12 +128,17 @@ namespace GunDecorator.AmmoModules
         
         void DespawnBullet(BulletBehaviour bullet, float delay)
         {
-            StartCoroutine(DespawnBulletCoroutine( bullet, delay));
+            bulletsLifetime.Add(bullet,StartCoroutine(DespawnBulletCoroutine( bullet, delay)));
         }
 
         void DespawnBullet(BulletBehaviour bullet)
         {
             bullet.OnCollision -= DespawnBullet;
+            if (bulletsLifetime.ContainsKey(bullet)) 
+            {
+                StopCoroutine(bulletsLifetime[bullet]);
+                bulletsLifetime.Remove(bullet);
+            }
             _ammoPool.ReturnToPool(bullet);
         }
 
@@ -140,6 +148,11 @@ namespace GunDecorator.AmmoModules
             if (bullet != null && bullet.gameObject != null && bullet.gameObject.activeSelf)
             {
                 bullet.OnCollision -= DespawnBullet;
+                if (bulletsLifetime.ContainsKey(bullet)) 
+                {
+                    StopCoroutine(bulletsLifetime[bullet]);
+                    bulletsLifetime.Remove(bullet);
+                }
                 _ammoPool.ReturnToPool(bullet);
             }
         }
