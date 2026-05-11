@@ -66,6 +66,7 @@ public class PlayerHealth : NetworkBusListener
 	public Action OnThrowingVisualActivation;
 	public Action OnThrowing;
 	public Action<Vector3> OnHealThrowLanding;
+	public Action OnThrowKeyReleased;
 	
 	#endregion
 
@@ -157,6 +158,8 @@ public class PlayerHealth : NetworkBusListener
 	void HealKeyCanceled(InputAction.CallbackContext ctx)
 	{
 		if(!(IsOwner || _isHealKeyDown))return;
+		
+		OnThrowKeyReleased?.Invoke();
 		
 		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
 		{

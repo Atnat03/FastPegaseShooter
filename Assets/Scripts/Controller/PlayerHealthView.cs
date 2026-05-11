@@ -184,7 +184,7 @@ public class PlayerHealthView : MonoBehaviour
 	{
 		_healingTrajectoryLine.enabled = true;
 	}
-	private void OnThrowing()
+	private void StopPreview()
 	{
 		_healingTrajectoryLine.enabled = false;
 	}
@@ -205,12 +205,12 @@ public class PlayerHealthView : MonoBehaviour
 		
 		//Healing
 		_playerHealth.OnThrowingVisualActivation += OnThrowingVisualActivation;
-		_playerHealth.OnThrowing += OnThrowing;
+		_playerHealth.OnThrowKeyReleased += StopPreview;
 		_playerHealth.OnHealThrowLanding += OnHealThrowLanding;
 		
 		//Drone Throw
 		//_droneThrower.OnThrowingActivation += OnThrowingVisualActivation;
-		_droneThrower.OnThrowing += OnThrowing;
+		_droneThrower.OnThrowing += StopPreview;
 	}
 
 	void OnDisable()
@@ -222,12 +222,12 @@ public class PlayerHealthView : MonoBehaviour
 		
 		//Healing
 		_playerHealth.OnThrowingVisualActivation -= OnThrowingVisualActivation;
-		_playerHealth.OnThrowing -= OnThrowing;
+		_playerHealth.OnThrowing -= StopPreview;
 		_playerHealth.OnHealThrowLanding -= OnHealThrowLanding;
 		
 		//Drone Throw
 		//_droneThrower.OnThrowingActivation -= OnThrowingVisualActivation;
-		_droneThrower.OnThrowing -= OnThrowing;
+		_droneThrower.OnThrowing -= StopPreview;
 	}
 
 
