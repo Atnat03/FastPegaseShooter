@@ -94,6 +94,11 @@ public class GunSwitching : NetworkBehaviour
 		if (!IsServerInitialized) return;
 		
 		_isPositiveChargedPlayer.Value = !_isPositiveChargedPlayer.Value;
+		
+		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
+		
+		Cons.Print("New charge : " + IsPositive, IsPositive ? ColorConsole.Red : ColorConsole.Cyan);
+		
 		UpdateUIChargeObserversRpc();
 	}
 

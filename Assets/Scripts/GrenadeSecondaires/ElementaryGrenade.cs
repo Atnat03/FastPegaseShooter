@@ -137,7 +137,7 @@ public class ElementaryGrenade : NetworkBusListener
                         
                 if (c.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
-                    enemyCore.AddCharge(_isPositive.Value, _damage.Value);
+                    enemyCore.AddCharge(_isPositive.Value, _damage.Value, _thrower.Value.ClientId);
                 }
             }
         }

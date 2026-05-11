@@ -230,7 +230,7 @@ namespace GunDecorator
             
             if (target.TryGetComponent<EnemyCore>(out var enemyCore))
             {
-                enemyCore.AddCharge(IsPositivePlayerCharge, damage);
+                enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
             }
 
             ApplyDamageObservers(damage, isCritical, hadCharged);

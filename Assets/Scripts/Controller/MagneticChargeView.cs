@@ -16,15 +16,8 @@ public class MagneticChargeView : MonoBehaviour
 	[SerializeField] private GunSwitching _gunSwitching;
 	
 	[Header("Particles")]
-	[SerializeField] private ParticleSystem _positiveParticles;
-	[SerializeField] private ParticleSystem _negativeParticles;
-    /*
-	[Header("UI")]
-	[SerializeField] private Transform _imagePositive;
-	[SerializeField] private Image _imageSelectPositive;
-	[SerializeField] private Transform _imageNegative;
-	[SerializeField] private Image _imageSelectNegative;
-	[SerializeField] private Material _materialLine;*/
+	[SerializeField] private Image _positiveParticles;
+	[SerializeField] private Image _negativeParticles;
 
 	#endregion
 
@@ -40,8 +33,6 @@ public class MagneticChargeView : MonoBehaviour
 	{
 		_positiveParticles.gameObject.SetActive(positive);
 		_negativeParticles.gameObject.SetActive(!positive);
-		
-		Cons.PrintBool(positive, "MagneticCharge :");
 	}
 
 	#endregion

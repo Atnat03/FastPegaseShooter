@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6923047990356312704}
   - component: {fileID: 9119219548165452495}
   - component: {fileID: 7285036745726084220}
-  - component: {fileID: 2255138449878047049}
   - component: {fileID: 3137582765332358800}
   - component: {fileID: 4452635434205039295}
   - component: {fileID: 1398411418380392494}
@@ -56,11 +55,14 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8426487597539566496}
   _networkObjectCache: {fileID: 0}
+  _settings: {fileID: 0}
   _model: {fileID: 6180985778935192831}
   _source: {fileID: 4452635434205039295}
   _soundData: {fileID: 11400000, guid: 65bd5cf42144b4241ad32c45f4c56e43, type: 2}
+  _animator: {fileID: 0}
   _muzzleFlash: {fileID: 3843699616305672829}
-  _cameraShakeSettings: {x: 0.05, y: 0.1}
+  _isFullAuto: 0
+  _reticuleID: 0
   p_authorizedToShoot: 1
 --- !u!114 &7285036745726084220
 MonoBehaviour:
@@ -82,32 +84,6 @@ MonoBehaviour:
   _autoReload: 1
   _magazineSize: 15
   reloadDuration: 5
-  _ammoText: {fileID: 0}
-  _imageReload: {fileID: 0}
---- !u!114 &2255138449878047049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2270566580818466485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45db67dd1c8040edbc6fd3ca22e0271d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.FragShootModule
-  _componentIndexCache: 2
-  _addedNetworkObject: {fileID: 8426487597539566496}
-  _networkObjectCache: {fileID: 0}
-  moduleName: FragShootModule
-  moduleColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-  _secondModule:
-  - {fileID: 3020097247224437906}
-  _ammoType: {fileID: -5647408496531789243}
-  _isFullAuto: 1
-  _fireRate: 1
-  _numberBulletSpread: 4
-  _spreadAngle: 4
 --- !u!114 &3137582765332358800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,6 +102,30 @@ MonoBehaviour:
   moduleName: RecoilModule
   moduleColor: {r: 0.9607844, g: 0.8705883, b: 0.7019608, a: 1}
   _recoilTransform: {fileID: 0}
+  _recoilCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _recoilX: 10
   _recoilY: 4
   _recoilZ: 6
@@ -253,6 +253,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &3020097247224437906
 MonoBehaviour:
   m_ObjectHideFlags: 0
