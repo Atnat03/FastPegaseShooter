@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using MyPrint;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,34 +41,8 @@ public class MagneticChargeView : MonoBehaviour
 		_positiveParticles.gameObject.SetActive(positive);
 		_negativeParticles.gameObject.SetActive(!positive);
 		
-		//StartCoroutine(AnimationChargeSwap(positive));
+		Cons.PrintBool(positive, "MagneticCharge :");
 	}
-
-	/*IEnumerator AnimationChargeSwap(bool positive)
-	{
-		float duration = 0.5f;
-		float elapsedTime = 0f;
-
-		_imageSelectPositive.gameObject.SetActive(positive);
-		_imageSelectNegative.gameObject.SetActive(!positive);
-		
-		Vector3 negativeTargetScale = positive ? Vector3.one : Vector3.one * 1.2f;
-		Vector3 positiveTargetScale = positive ? Vector3.one * 1.2f : Vector3.one;
-		
-		while (elapsedTime < duration)
-		{
-			elapsedTime += Time.deltaTime;
-			
-			_imagePositive.localScale = Vector3.Lerp(_imagePositive.localScale, positiveTargetScale, elapsedTime / duration);
-			_imageNegative.localScale = Vector3.Lerp(_imagePositive.localScale, negativeTargetScale, elapsedTime / duration);
-			
-			yield return null;
-		}
-
-		_materialLine.SetFloat("_Speed", positive ? 1 : -1);
-		_materialLine.SetColor("_Color", positive ? Color.red : Color.dodgerBlue);
-		
-	}*/
 
 	#endregion
 }

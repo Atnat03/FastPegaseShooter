@@ -83,7 +83,13 @@ public class GunSwitching : NetworkBehaviour
 		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
 	}
 
-	private void ChangeMagneticCharge()
+	[ServerRpc]
+	public void RequestChangeMagneticCharge()
+	{
+		ChangeMagneticCharge();
+	}
+	
+	public void ChangeMagneticCharge()
 	{
 		if (!IsServerInitialized) return;
 		
@@ -126,7 +132,7 @@ public class GunSwitching : NetworkBehaviour
 		Cons.Print("change gun", ColorConsole.Orange);
 		
 		ChangeCurrentGun_Main(newIndex);
-		ChangeMagneticCharge();
+		//ChangeMagneticCharge();
 
 		if (_currentMainIGun != null)
 		{

@@ -190,6 +190,7 @@ public class EnemyCore : NetworkBusListener
         p_currentNegativeCharge = 0;
         ResetChargesObserverRpc();
     }
+    
     [ObserversRpc]
     private void ResetChargesObserverRpc()
     {

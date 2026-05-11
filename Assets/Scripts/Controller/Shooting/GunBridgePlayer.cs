@@ -188,6 +188,18 @@ namespace Controller
                 SetLayerRecursively(child.gameObject, newLayer);
             }
         }
+
+        public void TryChangeMagneticCharge()
+        {
+            if (IsServerInitialized)
+            {
+                _gunSwitching.ChangeMagneticCharge();
+            }
+            else
+            {
+                _gunSwitching.RequestChangeMagneticCharge();
+            }
+        }
     }
 
     //Demande de swap
