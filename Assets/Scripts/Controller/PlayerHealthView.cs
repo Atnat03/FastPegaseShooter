@@ -59,6 +59,8 @@ public class PlayerHealthView : MonoBehaviour
 		_audioSource = GetComponent<AudioSource>();
 		_healingTrajectoryLine.enabled = false;
 		_healingTrajectoryLine.positionCount = 4;
+		_healingThrowPosObj = Instantiate(_healingThrowPosObj, Vector3.zero, Quaternion.identity);
+		_healingThrowPosObj.SetActive(false);
 	}
 	
 	private void UpdateHealth(float targetFill)
@@ -173,9 +175,10 @@ public class PlayerHealthView : MonoBehaviour
 	{
 		if (_healingTrajectoryLine.enabled)
 		{
-			Vector3[] line = _playerHealth.HealThrowLine();
+			Vector3[] line = _playerHealth.HealThrowLine(out float distance);
 			_healingTrajectoryLine.positionCount = line.Length;
 			_healingTrajectoryLine.SetPositions(line);
+			ShowHealSphereEffect(line[^1], distance);
 		}
 		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _healTargetFillAmount, Time.deltaTime * _healthVisualFillingSpeed);
 	}
@@ -188,12 +191,14 @@ public class PlayerHealthView : MonoBehaviour
 	{
 		_healingTrajectoryLine.enabled = false;
 	}
-	private async void OnHealThrowLanding(Vector3 pos)
+	private async void ShowHealSphereEffect(Vector3 pos, float scale, float time = 0f)
 	{
-		GameObject orb = Instantiate(_healingThrowPosObj, pos, Quaternion.identity);
-		orb.transform.localScale = Vector3.one * _playerHealth.p_healThrowRadius;
-		await Task.Delay(1000);
-		Destroy(orb);
+		_healingThrowPosObj.SetActive(true);
+		_healingThrowPosObj.transform.position = pos;
+		_healingThrowPosObj.transform.localScale = Vector3.one * (_playerHealth.p_healThrowRadius * scale * _playerHealth.healSizeEffectFactor);
+		if(time == 0f) await Task.Delay((int)(Time.deltaTime * 1000));
+		else await Task.Delay((int)(time * 1000));
+		if(_healingTrajectoryLine.enabled == false) _healingThrowPosObj.SetActive(false);
 	}
 
 	void OnEnable()
@@ -206,7 +211,7 @@ public class PlayerHealthView : MonoBehaviour
 		//Healing
 		_playerHealth.OnThrowingVisualActivation += OnThrowingVisualActivation;
 		_playerHealth.OnThrowKeyReleased += StopPreview;
-		_playerHealth.OnHealThrowLanding += OnHealThrowLanding;
+		_playerHealth.OnHealThrowLanding += ShowHealSphereEffect;
 		
 		//Drone Throw
 		//_droneThrower.OnThrowingActivation += OnThrowingVisualActivation;
@@ -223,7 +228,7 @@ public class PlayerHealthView : MonoBehaviour
 		//Healing
 		_playerHealth.OnThrowingVisualActivation -= OnThrowingVisualActivation;
 		_playerHealth.OnThrowing -= StopPreview;
-		_playerHealth.OnHealThrowLanding -= OnHealThrowLanding;
+		_playerHealth.OnHealThrowLanding -= ShowHealSphereEffect;
 		
 		//Drone Throw
 		//_droneThrower.OnThrowingActivation -= OnThrowingVisualActivation;
