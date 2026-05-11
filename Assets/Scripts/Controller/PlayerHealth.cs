@@ -104,6 +104,12 @@ public class PlayerHealth : NetworkBusListener
 		}
 
 		PlayerHealthManager.Instance?.Register(this);
+		
+		InvokeEvent(new OnPlayerChangeZone
+		{
+			playerId = Owner.ClientId,
+			newZone = 0
+		});
 	}
 
 	public override void OnStopClient()
