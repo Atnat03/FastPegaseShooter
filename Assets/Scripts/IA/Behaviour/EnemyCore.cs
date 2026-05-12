@@ -143,19 +143,20 @@ public class EnemyCore : NetworkBusListener
 
     private void OnNetworkTick()
     {
+        float tickDelta = (float)InstanceFinder.TimeManager.TickDelta;
         foreach (EnemyAttackModule module in _attackingModules)
         {
             if (module != null)
-                module.OnNetworkTick();
+                module.OnNetworkTick(tickDelta);
         }
 
         foreach (EnemyTargetModule module in _targetingModules)
         {
             if (module != null)
-                module.OnNetworkTick();
+                module.OnNetworkTick(tickDelta);
         }
 
-        _movementModule?.OnNetworkTick();
+        _movementModule?.OnNetworkTick(tickDelta);
     }
 
     public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
