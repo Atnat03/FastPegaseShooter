@@ -46,7 +46,7 @@ namespace GunDecorator.AmmoModules
         void Start()
         {
             _dmgToApply = _damages;
-            _ammoPool = new Pooler<BulletBehaviour>(BulletPrefab.GetComponent<BulletBehaviour>(), 0);
+            _ammoPool = new Pooler<BulletBehaviour>(BulletPrefab.GetComponent<BulletBehaviour>(), 100);
         }
 
         public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true)
@@ -115,6 +115,7 @@ namespace GunDecorator.AmmoModules
             NetworkObject target = null, bool hadCharged = true)
         {
             BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
+            Debug.Log($"ammo pool size: {_ammoPool.Size}");
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     

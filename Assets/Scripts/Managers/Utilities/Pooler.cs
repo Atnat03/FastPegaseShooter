@@ -6,6 +6,8 @@ public class Pooler<T> where T : MonoBehaviour, IPoolable
 {
     private Queue<T> pool = new Queue<T>();
     private T prefab;
+    
+    public int Size => pool.Count;
 
     public Pooler(T prefab, int initialSize)
     {
