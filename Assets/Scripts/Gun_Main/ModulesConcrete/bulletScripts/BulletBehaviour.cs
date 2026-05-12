@@ -113,7 +113,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         else
             HandleDirectHit(hit);
 
-        Destroy(gameObject);
+        OnCollision.Invoke(this);
     }
 
     private void HandleExplosion()
@@ -127,7 +127,6 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        Cons.Print("HandleDirectHit");
         
         if (_gunController.IsServerInitialized) 
             _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
@@ -145,9 +144,6 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
             Instantiate(_vfx, transform.position, Quaternion.identity);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
-
-        bool crit = false;
-        bool hit = false;
         
         foreach (Collider c in colliders)
         {
