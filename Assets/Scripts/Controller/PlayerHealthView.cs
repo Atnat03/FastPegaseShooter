@@ -180,7 +180,7 @@ public class PlayerHealthView : MonoBehaviour
 			Vector3[] line = _playerHealth.HealThrowLine(out float distance);
 			_healingTrajectoryLine.positionCount = line.Length;
 			_healingTrajectoryLine.SetPositions(line);
-			ShowHealSphereEffect(line[^1], distance);
+			ShowHealSphereEffect(line[^1], distance * _playerHealth.healSizeEffectFactor + _playerHealth.minSize);
 		}
 		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _healTargetFillAmount, Time.deltaTime * _healthVisualFillingSpeed);
 	}
@@ -199,7 +199,7 @@ public class PlayerHealthView : MonoBehaviour
 	{
 		_healingThrowPosObj.SetActive(true);
 		_healingThrowPosObj.transform.position = pos;
-		_healingThrowPosObj.transform.localScale = Vector3.one * (_playerHealth.p_healThrowRadius * scale * _playerHealth.healSizeEffectFactor);
+		_healingThrowPosObj.transform.localScale = Vector3.one * (scale * _playerHealth.healSizeEffectFactor);
 		if(time == 0f) await Task.Delay((int)(Time.deltaTime * 1000));
 		else await Task.Delay((int)(time * 1000));
 		if(_healingTrajectoryLine.enabled == false) _healingThrowPosObj.SetActive(false);
