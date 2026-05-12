@@ -263,7 +263,7 @@ public class PlayerHealth : NetworkBusListener
 		Vector3[] positions = HealThrowLine(out float distance);
 		NetworkObject throwObject = Instantiate(healThrowObject,  positions[0], Quaternion.identity);
 		Spawn(throwObject);
-		for (int i = 0; i < positions.Length; i++)
+		for (int i = 0; i < positions.Length; i+=2)
 		{
 			throwObject.transform.position = positions[i];
 			yield return new WaitForEndOfFrame();
