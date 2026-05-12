@@ -46,6 +46,7 @@ public class PlayerHealthView : MonoBehaviour
 	
 	float _elapsedTimeShowWarning = 0;
 	bool _isShowedWarning = false;
+	bool healLineComplete = false;
 
 	private float _healTargetFillAmount = 1;
 	
@@ -175,7 +176,7 @@ public class PlayerHealthView : MonoBehaviour
 
 	private void Update()
 	{
-		if (_healingTrajectoryLine.enabled)
+		if (_healingTrajectoryLine.enabled && healLineComplete)
 		{
 			Vector3[] line = _playerHealth.HealThrowLine(out float distance);
 			_healingTrajectoryLine.positionCount = line.Length;
@@ -194,8 +195,22 @@ public class PlayerHealthView : MonoBehaviour
 
 	IEnumerator LinePreviewDelay()
 	{
+		healLineComplete = false;
 		yield return new WaitForSeconds(_playerHealth.showLineDelay);
+		int progression = 0;
 		_healingTrajectoryLine.enabled = true;
+		while (progression < _playerHealth.HealThrowLine(out float distance).Length)
+		{
+			Vector3[] line = _playerHealth.HealThrowLine(out distance);
+			_healingTrajectoryLine.positionCount = progression;
+			for (int i = 0; i < progression; i++)
+			{
+				_healingTrajectoryLine.SetPosition(i, line[i]);
+			}
+			progression++;
+			yield return null;
+		}
+		healLineComplete = true;
 	}
 	private void StopPreview()
 	{
