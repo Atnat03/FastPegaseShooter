@@ -131,7 +131,7 @@ namespace GunDecorator.AmmoModules
         private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
         {
-            if (!IsClientInitialized) return;
+            if (IsServerInitialized) return;
             DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObject, finalPos, target, hadCharged);
         }
         
