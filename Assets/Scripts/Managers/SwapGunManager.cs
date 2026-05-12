@@ -83,7 +83,7 @@ namespace Managers
         private void OnPlayerSpawn(OnPlayerSpawnEvent data)
         {
             RegisterPlayer(data.playerId);
-
+            
             if (!_playerZones.ContainsKey(data.playerId))
                 _playerZones[data.playerId] = 0;
 

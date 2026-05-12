@@ -48,17 +48,11 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     {
         if (_hasHit) return;
 
-        if (_firstFrame)
-        {
-            _lastPosition = transform.position;
-            _firstFrame = false;
-            return;
-        }
+        Vector3 startPosition = transform.position;
 
-        DetectCollision();
         Move();
-    
-        _lastPosition = transform.position;
+
+        DetectCollision(startPosition, transform.position);
     }
 
     public void SetUpVariables(
@@ -95,16 +89,21 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         transform.Translate(transform.forward * (p_speed * Time.deltaTime), Space.World);
     }
 
-    private void DetectCollision()
+    private void DetectCollision(Vector3 start, Vector3 end)
     {
-        Vector3 direction = transform.position - _lastPosition;
+        Vector3 direction = end - start;
         float distance = direction.magnitude;
 
-        if (distance <= 0f) return;
-
-        if (!Physics.SphereCast(_lastPosition, 0.15f, direction.normalized, out RaycastHit hit,
-                distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
+        if (distance <= 0f)
             return;
+
+        int ownerLayer = LayerMask.NameToLayer("Owner");
+        int mask = ~(1 << ownerLayer);
+
+        if (!Physics.SphereCast(start, 0.15f, direction.normalized, out RaycastHit hit, distance, mask, QueryTriggerInteraction.Ignore))
+            return;
+
+        Cons.Print("Physics.SphereCast");
 
         if (_hasHit) return;
         _hasHit = true;
@@ -114,7 +113,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         else
             HandleDirectHit(hit);
 
-        OnCollision.Invoke(this);// il y avait un destroy ici
+        Destroy(gameObject);
     }
 
     private void HandleExplosion()
@@ -128,6 +127,8 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleDirectHit(RaycastHit hit)
     {
+        Cons.Print("HandleDirectHit");
+        
         if (_gunController.IsServerInitialized) 
             _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
         else 
