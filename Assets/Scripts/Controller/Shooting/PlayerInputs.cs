@@ -142,6 +142,14 @@ namespace Controller
 
             InvokeEvent(new OnPlayerInteract());
         }
+        
+        private void ChangeMagneticCharge(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+
+            _bridgePlayer.TryChangeMagneticCharge();
+        }
 
         void OnEnable()
         {
@@ -161,6 +169,9 @@ namespace Controller
             
             //Interact
             _playerInputAction.actions["Grapple"].performed += Interact;
+            
+            //Charges Magnetic
+            _playerInputAction.actions["ChangeMagneticCharge"].performed += ChangeMagneticCharge;
         }
 
         void OnDisable()
@@ -181,6 +192,9 @@ namespace Controller
             
             //Interact
             _playerInputAction.actions["Grapple"].performed -= Interact;
+            
+            //Charges Magnetic
+            _playerInputAction.actions["ChangeMagneticCharge"].performed -= ChangeMagneticCharge;
         }
 
         #endregion

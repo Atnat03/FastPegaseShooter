@@ -40,6 +40,7 @@ namespace Controller
             {
                 ListenToEvent<SwapingGunEvent>(SwapingGun);
                 ListenToEvent<EndTimerSwapEvent>(EndTimerSwap);
+                
                 _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
             }
             else
@@ -122,7 +123,6 @@ namespace Controller
         IEnumerator WaitBeforeSwapCoroutine(SwapingGunEvent data)
         {
             CurrentMainSurchargeGun.StopReload();
-            _gunSurcharge.SetColorImage(data.color);
 
             int ammoToApply = data.currentAmmo;
 
@@ -156,11 +156,7 @@ namespace Controller
 
             matAfter.SetFloat("_Dissolving", 0);
 
-            _gunSurcharge.SetOverloadStats(true,
-                data.dataSurcharge.overloadDuration,
-                data.dataSurcharge.damageMultiplier,
-                data.dataSurcharge.cadenceMultiplier,
-                ammoToApply);
+            _gunSurcharge.SetOverloadStats(true, ammoToApply);
 
             _swapCoroutine = null;
         }
@@ -193,6 +189,18 @@ namespace Controller
                 SetLayerRecursively(child.gameObject, newLayer);
             }
         }
+
+        public void TryChangeMagneticCharge()
+        {
+            if (IsServerInitialized)
+            {
+                _gunSwitching.ChangeMagneticCharge(Owner.ClientId);
+            }
+            else
+            {
+                _gunSwitching.RequestChangeMagneticCharge(Owner.ClientId);
+            }
+        }
     }
 
     //Demande de swap
@@ -201,17 +209,14 @@ namespace Controller
         public NetworkObject player;
         public int gunIndex;
         public int currentAmmo;
-        public Color colorSwap;
     }
     
     //Swap accepté et envoyé au joueux
     public struct SwapingGunEvent
     {
-        public SurchargeData dataSurcharge;
         public int gunIndex;
         public float timeToSwap;
         public int currentAmmo;
-        public Color color;
     }
 
     //Event de fin de demande de swap

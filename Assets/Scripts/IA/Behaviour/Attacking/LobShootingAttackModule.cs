@@ -18,9 +18,9 @@ public class LobShootingAttackModule : EnemyAttackModule
     
     
 
-    public override void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
-        base.OnNetworkTick();
+        base.OnNetworkTick(tickDelta);
         if (_waitedTimeSinceAttack >= _attackDelay)
         {
             Vector3? shootingInitialVelocity = GetShootingVelocity(_targetModule.GetTargetPosition());
