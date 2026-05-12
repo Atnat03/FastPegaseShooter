@@ -31,7 +31,6 @@ namespace Managers
         [Header("Without Bro concentement")]
         [SerializeField] private bool _instantSwapWithoutBroConsentement;
         [SerializeField] private float _timeWindowToCancel = 3f;
-        private readonly SyncVar<float> _timeToCancel = new SyncVar<float>();
         private Dictionary<int, GunSwitching> _playersGunSwitching = new Dictionary<int, GunSwitching>();
         
         [Header("Polarized")]
@@ -69,7 +68,6 @@ namespace Managers
             ListenToEvent<CallSwapGunEvent>(CheckCanSwapServerRpc);
             ListenToEvent<OnPlayerChangeZone>(OnPlayerChangeZone);
             
-            ListenToEvent<OnPlayerChangeZone>(OnPlayerChangeZone);
             ListenToEvent<OnPlayerChangeMagneticCharge>(OnPlayerChangeMagneticCharge);
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
 
@@ -91,7 +89,7 @@ namespace Managers
             RegisterPlayer(data.playerId);
 
             if (!_playerZones.ContainsKey(data.playerId))
-                _playerZones[data.playerId] = 0;
+                _playerZones[data.playerId] = -1;
 
             if (!_playerCharges.ContainsKey(data.playerId))
                 _playerCharges[data.playerId] = data.isPositiveCharge;
@@ -129,9 +127,19 @@ namespace Managers
         {
             if (_playerIds.Count < 2) return;
 
+            
             int p1 = _playerIds[0];
             int p2 = _playerIds[1];
+            
+            if (_playerZones[p1] == -1 && _playerZones[p2] == -1)
+            {
+                _isInConflict.Value = false;
+                return;
+            }
+            
+            Cons.Print("p1 zone : " + _playerZones[p1] + " // p2 zone : " +  _playerZones[p2]);
 
+            
             bool zonesKnown = _playerZones.ContainsKey(p1) && _playerZones.ContainsKey(p2);
             bool chargesKnown = _playerCharges.ContainsKey(p1) && _playerCharges.ContainsKey(p2);
 
