@@ -46,7 +46,7 @@ namespace GunDecorator.AmmoModules
         void Start()
         {
             _dmgToApply = _damages;
-            _ammoPool = new Pooler<BulletBehaviour>(BulletPrefab.GetComponent<BulletBehaviour>(), 0);
+            _ammoPool = new Pooler<BulletBehaviour>(BulletPrefab.GetComponent<BulletBehaviour>(), 100);
         }
 
         public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true)
@@ -106,17 +106,17 @@ namespace GunDecorator.AmmoModules
             float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
         {
             bool isCritical = _gunController.IsOverload;
+            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, hadCharged);
             SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, hadCharged);
         }
 
-        [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
+        private void DoSpawnBullet(Vector3 direction, float travel, bool isExplosive,
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos,
+            NetworkObject target = null, bool hadCharged = true)
         {
-            /*BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));*/
-            BulletBehaviour newBullet = Instantiate(BulletPrefab, finalPos + offset, Quaternion.LookRotation(direction)).GetComponent<BulletBehaviour>();
-            
-            //newBullet.OnCollision += DespawnBullet;
+            BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
+            Debug.Log($"ammo pool size: {_ammoPool.Size}");
+            newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     
             IAmmo bullet = newBullet.GetComponent<IAmmo>();
@@ -125,7 +125,15 @@ namespace GunDecorator.AmmoModules
             GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
-                    isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, hadCharged);
+                isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, hadCharged);
+        }
+
+        [ObserversRpc]
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
+        {
+            if (IsServerInitialized) return;
+            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObject, finalPos, target, hadCharged);
         }
         
         void DespawnBullet(BulletBehaviour bullet, float delay)
@@ -138,22 +146,19 @@ namespace GunDecorator.AmmoModules
             yield return new WaitForSeconds(delay);
             if (bullet != null && bullet.gameObject != null && bullet.gameObject.activeSelf)
             {
-                //DespawnBullet(bullet);
-                Destroy(bullet.gameObject);
+                DespawnBullet(bullet);
             }
         }
 
         void DespawnBullet(BulletBehaviour bullet)
         {
-            /*if (bulletsLifetime.ContainsKey(bullet)) 
+            if (bulletsLifetime.ContainsKey(bullet)) 
             {
                 StopCoroutine(bulletsLifetime[bullet]);
                 bulletsLifetime.Remove(bullet);
             }
             bullet.OnCollision -= DespawnBullet;
-            _ammoPool.ReturnToPool(bullet);*/
-            
-            Destroy(bullet.gameObject);
+            _ammoPool.ReturnToPool(bullet);
         }
 
         
