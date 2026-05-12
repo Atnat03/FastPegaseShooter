@@ -37,6 +37,8 @@ public class PlayerHealthView : MonoBehaviour
 	[Header("Healing")]
 	[SerializeField] private LineRenderer _healingTrajectoryLine;
 	[SerializeField] private GameObject _healingThrowPosObj;
+	[SerializeField] private GunSwitching gunSwitching;
+	private int currentGunID;
 	
 	[Header("Sound")]
 	[SerializeField] private SoundsDataSO _soundsData;
@@ -186,10 +188,12 @@ public class PlayerHealthView : MonoBehaviour
 	private void OnThrowingVisualActivation()
 	{
 		_healingTrajectoryLine.enabled = true;
+		if (gunSwitching) HideGun();
 	}
 	private void StopPreview()
 	{
 		_healingTrajectoryLine.enabled = false;
+		if (gunSwitching) ShowGun();
 	}
 	private async void ShowHealSphereEffect(Vector3 pos, float scale, float time = 0f)
 	{
@@ -199,6 +203,17 @@ public class PlayerHealthView : MonoBehaviour
 		if(time == 0f) await Task.Delay((int)(Time.deltaTime * 1000));
 		else await Task.Delay((int)(time * 1000));
 		if(_healingTrajectoryLine.enabled == false) _healingThrowPosObj.SetActive(false);
+	}
+
+	void HideGun()
+	{
+		currentGunID = gunSwitching.CurrentMainGunIndex;
+		gunSwitching.DesactivateAllMainGun();
+	}
+
+	void ShowGun()
+	{
+		gunSwitching.ActivateCurrentGun(gunSwitching._mainGunsList, currentGunID);
 	}
 
 	void OnEnable()

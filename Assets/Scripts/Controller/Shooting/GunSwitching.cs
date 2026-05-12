@@ -41,7 +41,7 @@ public class GunSwitching : NetworkBusListener
 	
 	private bool _canSwitch = true;
 	private bool _canChangemagnetic = true;
-	private List<GameObject> _mainGunsList;
+	[HideInInspector]public List<GameObject> _mainGunsList;
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
 	
@@ -128,7 +128,7 @@ public class GunSwitching : NetworkBusListener
 		_canChangemagnetic = true;
 	}
 
-	private void ActivateCurrentGun(List<GameObject> list, int index)
+	public void ActivateCurrentGun(List<GameObject> list, int index)
 	{
 		for (int i = 0; i < list.Count; i++)
 		{
