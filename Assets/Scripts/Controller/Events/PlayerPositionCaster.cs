@@ -22,7 +22,7 @@ public class PlayerPositionCaster : NetworkBusListener
     
     private float _castingBeatTimer;
     private Dictionary<int, Vector3> _fakeTargetPositions = new Dictionary<int, Vector3>();
-    private int askedIndexsAmount;
+    private int askedIndexsAmount = -1;
 
     public override void OnStartClient()
     {
@@ -33,6 +33,7 @@ public class PlayerPositionCaster : NetworkBusListener
         
         _playerPosition = _playerTransform.position;
         PlayerPositionCastingServerRPC(_playerPosition, false);
+        UpdateFakePositions();
     }
 
     private void FixedUpdate()
@@ -45,6 +46,7 @@ public class PlayerPositionCaster : NetworkBusListener
             _playerPosition = _playerTransform.position;
             PlayerPositionCastingServerRPC(_playerPosition, _castingBeatTimer >= _castingBeatDelay);
             _castingBeatTimer = 0;
+            UpdateFakePositions();
         }
     }
 
@@ -58,6 +60,23 @@ public class PlayerPositionCaster : NetworkBusListener
     void PlayerPositionCastingObserverRPC(Vector3 position, int playerId, bool isHeartBeat)
     {
         InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId, isHeartBeat));
+    }
+
+    void UpdateFakePositions()
+    {
+        RaycastHit hit;
+        for (int i = 0; i < _fakeTargetAmount; i++)
+        {
+            Vector3 dir = GetDirection(i);
+            if (Physics.Raycast(transform.position, dir, out hit, _fakeTargetMaxDistance, _fakeTargetMask))
+            {
+                _fakeTargetPositions[i] = transform.position + dir * hit.distance;
+            }
+            else
+            {
+                _fakeTargetPositions[i] = transform.position + dir * _fakeTargetMaxDistance;
+            }
+        }
     }
 
     public int GetTargetIndex()
@@ -108,8 +127,8 @@ public class PlayerPositionCaster : NetworkBusListener
             Gizmos.color = Color.orange;
             foreach (var fakeTarget in _fakeTargetPositions)
             {
-                Gizmos.DrawRay(transform.position, fakeTarget.Value);
-                Gizmos.DrawSphere(transform.position+fakeTarget.Value, 0.1f);
+                Gizmos.DrawLine(transform.position, fakeTarget.Value);
+                Gizmos.DrawSphere(fakeTarget.Value, 0.1f);
             }
         }
         else

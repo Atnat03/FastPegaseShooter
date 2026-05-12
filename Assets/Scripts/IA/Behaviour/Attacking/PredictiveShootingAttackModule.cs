@@ -12,9 +12,9 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
     [SerializeField] private float _shootingSpreadAngle = 0;
     
 
-    public override void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
-        base.OnNetworkTick();
+        base.OnNetworkTick(tickDelta);
         if (_waitedTimeSinceAttack >= _attackDelay && _targetModule.HasTarget())
         {
             Vector3 shootDir = Vector3.zero;
