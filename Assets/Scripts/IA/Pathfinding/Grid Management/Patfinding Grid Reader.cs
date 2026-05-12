@@ -21,6 +21,10 @@ public class PathfindingGridReader : MonoBehaviour
     private Dictionary<int, PathReservation> _reservations = new Dictionary<int, PathReservation>();
     private int _freeReservationId;
 
+    /*[SerializeField] private int _playerPositionWeight = 50;
+    [SerializeField] private int _playerPositionSpread = 3;
+    private int playerRequestReservationId;*/
+
     private void Start()
     {
         _searchTree = new ThreeDimensionalTree();
@@ -28,6 +32,30 @@ public class PathfindingGridReader : MonoBehaviour
 
         _aStarAlgorithm = GetComponent<AStarAlgorithm>();
         p_id = GenerateNewGuid();
+        
+        /*ListenToEvent((PlayerPositionUpdateEvent PPUE) =>
+        {
+            PathfindingNode node = _searchTree.FindClosest(PPUE.p_playerPosition).node;
+            
+            if(_reservations.ContainsKey(playerRequestReservationId))
+            {
+                if (node.position !=
+                    pathfindingGridSO.nodes[_reservations[playerRequestReservationId].p_path[0]].position)
+                {
+                    ClearPathReservation(playerRequestReservationId);
+
+                    playerRequestReservationId = RegisterPath(
+                        new List<PathfindingNode> { node },
+                        _playerPositionWeight, _playerPositionSpread);
+                }
+            }
+            else
+            {
+                playerRequestReservationId = RegisterPath(
+                    new List<PathfindingNode> { node },
+                    _playerPositionWeight, _playerPositionSpread);
+            }
+        });*/
     }
 
     public void GetAndRegisterPath(Vector3 start, Vector3 end, int traceWeight, int traceSpread, out List<PathfindingNode> path, out int reservationId)
@@ -130,6 +158,7 @@ public class PathfindingGridReader : MonoBehaviour
                 _clearQueue.Enqueue((n, dist + 1));
             }
         }
+        _reservations.Remove(id);
         VariableChanged = true;
     }
 

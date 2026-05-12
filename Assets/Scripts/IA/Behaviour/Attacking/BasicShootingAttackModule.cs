@@ -13,9 +13,9 @@ public class BasicShootingAttackModule : EnemyAttackModule
     
     
 
-    public override void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
-        base.OnNetworkTick();
+        base.OnNetworkTick(tickDelta);
         if (_waitedTimeSinceAttack >= _attackDelay)
         {
             Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
