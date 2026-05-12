@@ -185,13 +185,21 @@ public class PlayerHealthView : MonoBehaviour
 		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _healTargetFillAmount, Time.deltaTime * _healthVisualFillingSpeed);
 	}
 
+	Coroutine showLineCoroutine;
 	private void OnThrowingVisualActivation()
 	{
-		_healingTrajectoryLine.enabled = true;
 		if (gunSwitching) HideGun();
+		showLineCoroutine = StartCoroutine(LinePreviewDelay());
+	}
+
+	IEnumerator LinePreviewDelay()
+	{
+		yield return new WaitForSeconds(_playerHealth.showLineDelay);
+		_healingTrajectoryLine.enabled = true;
 	}
 	private void StopPreview()
 	{
+		if (showLineCoroutine != null) StopCoroutine(showLineCoroutine);
 		_healingTrajectoryLine.enabled = false;
 		if (gunSwitching) ShowGun();
 	}

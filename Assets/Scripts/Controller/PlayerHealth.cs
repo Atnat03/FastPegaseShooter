@@ -46,6 +46,7 @@ public class PlayerHealth : NetworkBusListener
 	public float healSizeEffectFactor = .05f;
 	[SerializeField] private float _minHealthToGive = 15;
 	[SerializeField] private float healAmountEffectFactor = .1f;
+	public float showLineDelay = .5f;
 	[SerializeField] private float _healThrowCost = 20;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
