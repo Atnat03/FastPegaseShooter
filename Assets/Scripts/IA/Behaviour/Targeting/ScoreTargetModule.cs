@@ -36,13 +36,11 @@ public class ScoreTargetModule : EnemyTargetModule
         _currentThreshold = 0;
     }
 
-    public override void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
-        base.OnNetworkTick();
+        base.OnNetworkTick(tickDelta);
+        
         _timeSincePointAdded += (float)InstanceFinder.TimeManager.TickDelta;
-        //string text = "";
-        /*if(_currentThreshold < _aggroPointsThreshold.Count)
-            text = $"currentTarget: {p_targetId} => next threshold :{_aggroPointsThreshold[_currentThreshold]}";*/
         
         foreach (var newEntry in _playerToAdd)
         {
@@ -76,7 +74,9 @@ public class ScoreTargetModule : EnemyTargetModule
                 }
             }
             if (p_targetId == playerId && _playerAggroValue[playerId] == 0)
+            {
                 p_targetId = -1;
+            }
             
             //text += $"p{playerId}: {_playerAggroValue[playerId]}";
         }
@@ -123,7 +123,7 @@ public class ScoreTargetModule : EnemyTargetModule
 
     public override bool HasTarget()
     {
-        return p_targetId != -1;
+        return p_targetId >= 0;
     }
 
     public void OnHitPlayer(int playerId, int damages)
