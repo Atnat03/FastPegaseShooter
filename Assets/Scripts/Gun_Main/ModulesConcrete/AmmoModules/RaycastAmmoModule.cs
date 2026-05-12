@@ -115,7 +115,8 @@ namespace GunDecorator.AmmoModules
         {
             /*BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));*/
             BulletBehaviour newBullet = Instantiate(BulletPrefab, finalPos + offset, Quaternion.LookRotation(direction)).GetComponent<BulletBehaviour>();
-            newBullet.OnCollision += DespawnBullet;
+            
+            //newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     
             IAmmo bullet = newBullet.GetComponent<IAmmo>();
