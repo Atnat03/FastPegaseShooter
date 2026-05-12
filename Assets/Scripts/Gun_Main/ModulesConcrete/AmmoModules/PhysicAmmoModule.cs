@@ -100,16 +100,16 @@ namespace GunDecorator.AmmoModules
         [ServerRpc]
         private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
+            DoSpawnBullet(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
             SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
         }
-        
-        [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
+
+        private void DoSpawnBullet(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
             Vector3 baseDirection = _spawnPoint.forward;
             Vector3 spreadDirection = direction == Vector3.zero ? baseDirection : Quaternion.Euler(direction.y, direction.x, 0) * baseDirection;
     
-            BulletPhysicBehaviour newBullet = _ammoPool.Spawn(spawnPoint + offset, Quaternion.LookRotation(spreadDirection)); // ← utiliser spawnPoint // équivalent de instanciate
+            BulletPhysicBehaviour newBullet = _ammoPool.Spawn(spawnPoint + offset, Quaternion.LookRotation(spreadDirection));
             newBullet.OnCollision += DespawnBullet;
             if (newBullet.TryGetComponent(out Rigidbody rb))
             {
@@ -117,13 +117,20 @@ namespace GunDecorator.AmmoModules
                 rb.AddForce(spreadDirection.normalized * _bulletThrowForce, ForceMode.Impulse);
             }
     
-            Vector3 targetPos = spawnPoint + _spawnPoint.forward * 2000f; // ← utiliser spawnPoint
+            Vector3 targetPos = spawnPoint + _spawnPoint.forward * 2000f;
 
             IAmmo bullet = newBullet.GetComponent<IAmmo>();
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, 
                 isCritical, targetPos, null, _gunController.IsPositivePlayerCharge, hadCharged);
 
-            DespawnBullet(newBullet, 5f);//équivalent du destroy
+            DespawnBullet(newBullet, 5f);
+        }
+        
+        [ObserversRpc]
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
+        {
+            if (IsServerInitialized) return;
+            DoSpawnBullet(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
         }
 
         void DespawnBullet(BulletPhysicBehaviour bullet, float delay)
