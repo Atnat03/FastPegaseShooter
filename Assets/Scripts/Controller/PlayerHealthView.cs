@@ -212,6 +212,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnThrowingVisualActivation += OnThrowingVisualActivation;
 		_playerHealth.OnThrowKeyReleased += StopPreview;
 		_playerHealth.OnHealThrowLanding += ShowHealSphereEffect;
+		_playerHealth.OnHealCanceled += StopPreview;
 		
 		//Drone Throw
 		//_droneThrower.OnThrowingActivation += OnThrowingVisualActivation;

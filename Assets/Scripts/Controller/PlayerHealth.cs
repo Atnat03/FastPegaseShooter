@@ -69,6 +69,7 @@ public class PlayerHealth : NetworkBusListener
 	public Action OnThrowing;
 	public Action<Vector3, float, float> OnHealThrowLanding;
 	public Action OnThrowKeyReleased;
+	public Action OnHealCanceled;
 	
 	#endregion
 
@@ -119,12 +120,17 @@ public class PlayerHealth : NetworkBusListener
 	{
 		_playerInputAction.actions["Heal"].performed += HealKeyPerformed;
 		_playerInputAction.actions["Heal"].canceled += HealKeyCanceled;
+		_playerInputAction.actions["Shoot"].performed += CancelHealThrowing;
+		_playerInputAction.actions["Charge"].performed += CancelHealThrowing;
 	}
 
 	private void OnDisable()
 	{
 		_playerInputAction.actions["Heal"].performed -= HealKeyPerformed;
 		_playerInputAction.actions["Heal"].canceled -= HealKeyCanceled;
+		_playerInputAction.actions["Shoot"].performed -= CancelHealThrowing;
+		_playerInputAction.actions["Charge"].performed -= CancelHealThrowing;
+		
 	}
 
 	private void Update()
@@ -151,8 +157,15 @@ public class PlayerHealth : NetworkBusListener
 			}
 		}
 	}
-	
-	public void CancelHealThrowing() => _canThrowHeal = false;
+
+	public void CancelHealThrowing(InputAction.CallbackContext ctx)
+	{
+		if(!IsOwner) return;
+		
+		_canThrowHeal = false;
+		OnHealCanceled?.Invoke();
+	} 
+		
 
 	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
