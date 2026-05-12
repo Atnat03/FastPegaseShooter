@@ -56,10 +56,14 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 6325006552558930708}
   _timeToAcceptSwap: 2
   _swapingTime: 1
-  _cooldownSwap: 0
+  _cooldownSwap: 5
   _swapEnergyGain: 20
-  _instantSwapWithoutBroConsentement: 0
   _cooldownText: {fileID: 7185192468340287103}
+  _instantSwapWithoutBroConsentement: 0
+  _timeWindowToCancel: 2
+  _conflictTimerMax: 10
+  _shortCircuitDamageInterval: 2
+  _shortCircuitDamage: 10
 --- !u!114 &4660385558512272094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,7 +108,7 @@ MonoBehaviour:
   - {fileID: 4660385558512272094}
   - {fileID: 1894198244629999496}
   - {fileID: 4366616008979837098}
-  - {fileID: 0}
+  - {fileID: 3709122296254753378}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -115,7 +119,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584234496900446587
+  _initializedTimestamp: -8584230311326436341
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0

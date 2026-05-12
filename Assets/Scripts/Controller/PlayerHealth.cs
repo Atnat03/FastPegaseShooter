@@ -89,7 +89,8 @@ public class PlayerHealth : NetworkBusListener
 		InvokeEvent(new OnPlayerSpawnEvent
 		{
 			playerId = Owner.ClientId,
-			isPositiveCharge = Owner.ClientId == 0
+			isPositiveCharge = Owner.ClientId == 0,
+			gunSwitching = _gunSwitching
 		});
 	}
 
