@@ -78,10 +78,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCoreViewer
   _enemyCore: {fileID: 1227236921369466688}
-  _positiveUI: {fileID: 2172671982911471561}
-  _positiveCurValue: {fileID: 9199799529436561043}
-  _negativeUI: {fileID: 2223401561715668379}
-  _negativeCurValue: {fileID: 6256766211940018644}
+  _p1_UI: {fileID: 2172671982911471561}
+  _p1_CurValue: {fileID: 9199799529436561043}
+  _p2_UI: {fileID: 2223401561715668379}
+  _p2_CurValue: {fileID: 6256766211940018644}
+  _colorsJaugesCharges:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.67209816, b: 1, a: 1}
   _explosionParticle: {fileID: 1509239389167855855, guid: b2408256d1f9a414c91f7f086978e655, type: 3}
 --- !u!114 &2105214549607011887
 MonoBehaviour:
@@ -96,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicLifeViewer
   _enemyLifeModule: {fileID: 4639033686446523756}
-  _hitMarkerParent: {fileID: 0}
+  _hitMarkerParent: {fileID: 6348852553721747051}
   _textDmg: {fileID: 769879031349949937, guid: db53057fdd2066748b797f06e5df7027, type: 3}
   _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
   _lifeTMP: {fileID: 1167859077468925769}
@@ -176,10 +179,12 @@ MonoBehaviour:
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
   _explosionChargedDamage: 0
-  p_negativeChargeMax: 5
-  p_currentNegativeCharge: 0
-  p_positiveChargeMax: 5
-  p_currentPositiveCharge: 0
+  p_player1_IsPositive: 0
+  p_player1_ChargeMax: 5
+  p_current_player1_Charge: 0
+  p_player2_IsPositive: 0
+  p_player2_ChargeMax: 5
+  p_current_player2_Charge: 0
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,13 +501,61 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7406204131462875368}
     m_Modifications:
+    - target: {fileID: 73655864569653323, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 73655864569653323, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 73655864569653323, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1053794820482192422, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1869921243275385173, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 1869921243275385173, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.g
+      value: 0.4339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 1869921243275385173, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.r
+      value: 0.4339623
+      objectReference: {fileID: 0}
     - target: {fileID: 1998820330115211322, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
       propertyPath: m_Name
       value: CanvasEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 2917649538054012684, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2917649538054012684, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2917649538054012684, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4217860049491380721, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 4217860049491380721, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.g
+      value: 0.4339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 4217860049491380721, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Color.r
+      value: 0.4339623
       objectReference: {fileID: 0}
     - target: {fileID: 4907568637477498329, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
       propertyPath: m_Pivot.x
@@ -592,6 +645,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6949888217496625987, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Name
+      value: P2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6949888217496625987, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6957794086421195025, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_Name
+      value: P1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6957794086421195025, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7199695653630279578, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
@@ -679,6 +748,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!224 &6348852553721747051 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2788373244380037299, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
+  m_PrefabInstance: {fileID: 9127087201099929304}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7283677342022235874 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1998820330115211322, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
