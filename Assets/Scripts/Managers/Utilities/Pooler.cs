@@ -6,16 +6,25 @@ public class Pooler<T> where T : MonoBehaviour, IPoolable
 {
     private Queue<T> pool = new Queue<T>();
     private T prefab;
+    private GameObject poolParent;
     
     public int Size => pool.Count;
 
     public Pooler(T prefab, int initialSize)
     {
         this.prefab = prefab;
-
+        poolParent = new GameObject($"{typeof(T).Name} Pool")
+        {
+            transform =
+            {
+                position = Vector3.zero,
+                rotation = Quaternion.identity,
+                localScale = Vector3.one
+            }
+        };
         for (int i = 0; i < initialSize; i++)
         {
-            T obj = GameObject.Instantiate(prefab);
+            T obj = GameObject.Instantiate(prefab, poolParent.transform);
             obj.gameObject.SetActive(false);
             pool.Enqueue(obj);
         }
@@ -37,7 +46,7 @@ public class Pooler<T> where T : MonoBehaviour, IPoolable
 
         if (obj == null)
         {
-            obj = GameObject.Instantiate(prefab);
+            obj = GameObject.Instantiate(prefab, poolParent.transform);
         }
 
         obj.transform.position = position;

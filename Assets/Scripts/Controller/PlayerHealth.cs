@@ -256,7 +256,7 @@ public class PlayerHealth : NetworkBusListener
 		}
 		Despawn(throwObject);
 		Destroy(throwObject.gameObject);
-		OnHealActivate(positions[^1], lifeToAdd * positions.Length * Time.deltaTime + _minHealthToGive, p_healThrowRadius * distance * healSizeEffectFactor);
+		OnHealActivate(positions[^1], lifeToAdd * positions.Length * Time.fixedDeltaTime + _minHealthToGive, p_healThrowRadius * distance * healSizeEffectFactor);
 		ShowHealThrowObserverRpc(positions[^1], distance, 1f);
 	}
 
@@ -383,7 +383,7 @@ public class PlayerHealth : NetworkBusListener
 		startPos = transform.position + transform.forward + transform.right;
 		float simulatedTime = 0;
 		Vector3 previousPos = startPos;
-		Vector3 nextPos = GetNewPosition(Time.deltaTime);
+		Vector3 nextPos = GetNewPosition(Time.fixedDeltaTime);
 		List<Vector3>  posList = new();
 		distance = 0;
 		RaycastHit hit;
