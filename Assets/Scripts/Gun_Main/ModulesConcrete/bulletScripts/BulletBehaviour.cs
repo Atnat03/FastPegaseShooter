@@ -97,13 +97,8 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         if (distance <= 0f)
             return;
 
-        int ownerLayer = LayerMask.NameToLayer("Owner");
-        int mask = ~(1 << ownerLayer);
-
-        if (!Physics.SphereCast(start, 0.15f, direction.normalized, out RaycastHit hit, distance, mask, QueryTriggerInteraction.Ignore))
+        if (!Physics.SphereCast(start, 0.15f, direction.normalized, out RaycastHit hit, distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
             return;
-
-        Cons.Print("Physics.SphereCast");
 
         if (_hasHit) return;
         _hasHit = true;
@@ -158,13 +153,19 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         }
     }
 
+    private void Reset()
+    {
+        _hasHit = false;
+        
+    }
+
     public void Spawn()
     {
-        
+        _lastPosition = transform.position;
     }
 
     public void ReturnToPool()
     {
-        
+        Reset();
     }
 }
