@@ -57,7 +57,6 @@ public class PlayerHealth : NetworkBusListener
 	private Vector3 _startPos;
 
 	private bool _isHealKeyDown;
-	[HideInInspector] public Vector3 p_healThrowLandingPos;
 	private bool _canThrowHeal = true;
 	
 	//Action
@@ -142,19 +141,6 @@ public class PlayerHealth : NetworkBusListener
 			{
 				if (_respawnTimer.Value > 0) _respawnTimer.Value -= Time.deltaTime;
 				else Respawn();
-			}
-		}
-    
-		if (IsOwner)
-		{
-			if (_isHealKeyDown && _playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
-			{
-				if(Physics.Raycast(p_healThrowPoint.position, p_healThrowDirection.forward, out RaycastHit hit, 999f, _throwHitLayerMask, QueryTriggerInteraction.Ignore))
-					p_healThrowLandingPos = hit.point;
-				else
-					p_healThrowLandingPos = p_healThrowPoint.position;
-				
-				//Debug.DrawLine(p_healThrowPoint.position, p_healThrowLandingPos, Color.red, 2);
 			}
 		}
 	}
@@ -429,7 +415,7 @@ public class PlayerHealth : NetworkBusListener
 			p_healThrowDirection.right
 		);
 		
-		Vector3 throwAngle = new Vector3(p_healThrowDirection.forward.x, -pitch * 0.1f,  p_healThrowDirection.forward.z);
+		Vector3 throwAngle = new Vector3(p_healThrowDirection.forward.x, -pitch * 0.1f + .5f,  p_healThrowDirection.forward.z);
 		
 		return startPos + throwAngle  * throwForce * overTime + 0.5f * Physics.gravity * overTime * overTime;
 	}
