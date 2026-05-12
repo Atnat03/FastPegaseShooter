@@ -4,7 +4,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public class MusicManager : NetworkBehaviour
+public class MusicManager : NetworkBusListener
 {
 
     [SerializeField] private List<AudioClip> _musicList = new();
@@ -18,6 +18,9 @@ public class MusicManager : NetworkBehaviour
     private AudioSource _activeSource;
     private AudioSource _inactiveSource;
     private bool _isTransitioning = false;
+    
+    //temporary sound settings
+    private float volume; // clamp entre 0 et 1
 
     private void Awake()
     {
@@ -33,6 +36,13 @@ public class MusicManager : NetworkBehaviour
 
         if (_currentMusicIndex.Value >= 0)
             SyncToCurrentMusic();
+        
+        ListenToEvent<OnPausePanelInit>(SendMusicManagerSignal);
+    }
+
+    void SendMusicManagerSignal(OnPausePanelInit data)
+    {
+        InvokeEvent(new OnMusicManagerLinkage(){musicManager = this});
     }
 
     public override void OnStopClient()
@@ -100,7 +110,7 @@ public class MusicManager : NetworkBehaviour
 
         _activeSource.clip = clip;
         _activeSource.time = startOffset;
-        _activeSource.volume = 1f;
+        _activeSource.volume = volume;
         _activeSource.Play();
     }
 
@@ -125,7 +135,7 @@ public class MusicManager : NetworkBehaviour
             float t = elapsed / _fadeDuration;
 
             _activeSource.volume = Mathf.Lerp(startVolume, 0f, t);
-            _inactiveSource.volume = Mathf.Lerp(0f, 1f, t);
+            _inactiveSource.volume = Mathf.Lerp(0f, volume, t);
 
             yield return null;
         }
@@ -137,4 +147,6 @@ public class MusicManager : NetworkBehaviour
 
         _isTransitioning = false;
     }
+    
+    public void SetVolume(float newVolume) => volume = newVolume;
 }
