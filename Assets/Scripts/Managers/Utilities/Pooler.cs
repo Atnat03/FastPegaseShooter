@@ -6,6 +6,8 @@ public class Pooler<T> where T : MonoBehaviour, IPoolable
 {
     private Queue<T> pool = new Queue<T>();
     private T prefab;
+    
+    public int Size => pool.Count;
 
     public Pooler(T prefab, int initialSize)
     {
@@ -21,13 +23,19 @@ public class Pooler<T> where T : MonoBehaviour, IPoolable
 
     public T Spawn(Vector3 position, Quaternion rotation)
     {
-        T obj;
+        T obj = null;
 
-        if (pool.Count > 0)
+        while (pool.Count > 0)
         {
-            obj = pool.Dequeue();
+            var candidate = pool.Dequeue();
+            if (candidate != null && candidate.gameObject != null)
+            {
+                obj = candidate;
+                break;
+            }
         }
-        else
+
+        if (obj == null)
         {
             obj = GameObject.Instantiate(prefab);
         }
