@@ -44,7 +44,7 @@ public class EnemyCore : NetworkBusListener
     public readonly SyncVar<int> _hasShied = new SyncVar<int>(0);
     public ChargeType p_shiedType = ChargeType.None;
     
-    public enum ChargeType{None, Negative, Positive}
+    public enum ChargeType{Negative, Positive, None}
     
     #endregion
     
@@ -185,6 +185,14 @@ public class EnemyCore : NetworkBusListener
     [Server]
     public void AddCharge(bool positive, float value, int isServer)
     {
+        if (p_current_player1_Charge > 0 && p_current_player2_Charge > 0)
+        {
+            if (p_player1_IsPositive == p_player2_IsPositive)
+            {
+                _hasShied.Value = (int)ChargeType.None;
+            }
+        }
+        
         if (isServer == 0)
         {
             if (positive != p_player1_IsPositive)
@@ -207,14 +215,6 @@ public class EnemyCore : NetworkBusListener
             p_player2_IsPositive = positive;
             p_current_player2_Charge += value;
             OnPlayer2ChangeObserverRpc(p_current_player2_Charge, p_player2_IsPositive, p_current_player2_Charge/p_player2_ChargeMax); 
-        }
-
-        if (p_current_player1_Charge > 0 && p_current_player2_Charge > 0)
-        {
-            if (p_player1_IsPositive == p_player2_IsPositive)
-            {
-                _hasShied.Value = 0;
-            }
         }
     }
     
