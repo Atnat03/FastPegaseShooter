@@ -123,6 +123,6 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 
     public void ReturnToPool()
     {
-        
+        _hasHit = false;
     }
 }

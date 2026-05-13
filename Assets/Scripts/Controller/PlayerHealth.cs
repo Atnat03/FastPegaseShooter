@@ -42,10 +42,11 @@ public class PlayerHealth : NetworkBusListener
 	public Transform p_healThrowDirection;
 	public float throwForce = 10;
 	public float maxThrowDistance = 100;
+	public float minSize = 3;
 	public float healSizeEffectFactor = .05f;
-	[SerializeField] private float _healthToGiveFactor = 30;
 	[SerializeField] private float _minHealthToGive = 15;
-	public float p_healThrowRadius = 3;
+	[SerializeField] private float healAmountEffectFactor = .1f;
+	public float showLineDelay = .5f;
 	[SerializeField] private float _healThrowCost = 20;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
@@ -69,6 +70,7 @@ public class PlayerHealth : NetworkBusListener
 	public Action OnThrowing;
 	public Action<Vector3, float, float> OnHealThrowLanding;
 	public Action OnThrowKeyReleased;
+	public Action OnHealCanceled;
 	
 	#endregion
 
@@ -89,7 +91,8 @@ public class PlayerHealth : NetworkBusListener
 		InvokeEvent(new OnPlayerSpawnEvent
 		{
 			playerId = Owner.ClientId,
-			isPositiveCharge = Owner.ClientId == 0
+			isPositiveCharge = Owner.ClientId == 0,
+			gunSwitching = _gunSwitching
 		});
 	}
 
@@ -118,12 +121,17 @@ public class PlayerHealth : NetworkBusListener
 	{
 		_playerInputAction.actions["Heal"].performed += HealKeyPerformed;
 		_playerInputAction.actions["Heal"].canceled += HealKeyCanceled;
+		_playerInputAction.actions["Shoot"].performed += CancelHealThrowing;
+		_playerInputAction.actions["Charge"].performed += CancelHealThrowing;
 	}
 
 	private void OnDisable()
 	{
 		_playerInputAction.actions["Heal"].performed -= HealKeyPerformed;
 		_playerInputAction.actions["Heal"].canceled -= HealKeyCanceled;
+		_playerInputAction.actions["Shoot"].performed -= CancelHealThrowing;
+		_playerInputAction.actions["Charge"].performed -= CancelHealThrowing;
+		
 	}
 
 	private void Update()
@@ -150,8 +158,15 @@ public class PlayerHealth : NetworkBusListener
 			}
 		}
 	}
-	
-	public void CancelHealThrowing() => _canThrowHeal = false;
+
+	public void CancelHealThrowing(InputAction.CallbackContext ctx)
+	{
+		if(!IsOwner) return;
+		
+		_canThrowHeal = false;
+		OnHealCanceled?.Invoke();
+	} 
+		
 
 	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
@@ -181,7 +196,7 @@ public class PlayerHealth : NetworkBusListener
 		{
 			OnThrowing?.Invoke();
 			
-			ThrowHealServerRpc(p_healThrowLandingPos, _healthToGiveFactor, Owner);
+			ThrowHealServerRpc( Owner);
 		}
 		
 		_isHealKeyDown = false;
@@ -232,7 +247,7 @@ public class PlayerHealth : NetworkBusListener
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	void ThrowHealServerRpc(Vector3 landingPos, float lifeToAdd, NetworkConnection throwerConnection)
+	void ThrowHealServerRpc(NetworkConnection throwerConnection)
 	{
 		InvokeEvent(new ConsumeEnergyEvent()
 		{
@@ -240,22 +255,22 @@ public class PlayerHealth : NetworkBusListener
 			p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),
 		});
 
-		StartCoroutine(HealThrowCoroutine(lifeToAdd));
+		StartCoroutine(HealThrowCoroutine());
 	}
 
-	IEnumerator HealThrowCoroutine( float lifeToAdd)
+	IEnumerator HealThrowCoroutine()
 	{
 		Vector3[] positions = HealThrowLine(out float distance);
 		NetworkObject throwObject = Instantiate(healThrowObject,  positions[0], Quaternion.identity);
 		Spawn(throwObject);
-		for (int i = 0; i < positions.Length; i++)
+		for (int i = 0; i < positions.Length; i+=2)
 		{
 			throwObject.transform.position = positions[i];
 			yield return new WaitForEndOfFrame();
 		}
 		Despawn(throwObject);
 		Destroy(throwObject.gameObject);
-		OnHealActivate(positions[^1], lifeToAdd * positions.Length * Time.deltaTime + _minHealthToGive, p_healThrowRadius * distance * healSizeEffectFactor);
+		OnHealActivate(positions[^1],  distance * healAmountEffectFactor + _minHealthToGive, distance * healSizeEffectFactor + minSize);
 		ShowHealThrowObserverRpc(positions[^1], distance, 1f);
 	}
 
@@ -382,7 +397,7 @@ public class PlayerHealth : NetworkBusListener
 		startPos = transform.position + transform.forward + transform.right;
 		float simulatedTime = 0;
 		Vector3 previousPos = startPos;
-		Vector3 nextPos = GetNewPosition(Time.deltaTime);
+		Vector3 nextPos = GetNewPosition(Time.fixedDeltaTime);
 		List<Vector3>  posList = new();
 		distance = 0;
 		RaycastHit hit;

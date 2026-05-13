@@ -715,6 +715,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &3961050023182892889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,10 +752,10 @@ MonoBehaviour:
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 6547442255424585383}
-  _chargedUI: {fileID: 947224183139465357}
-  _valueCharging: {fileID: 2544424930392040772}
-  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
-  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
+  _percentageChargeText: {fileID: 0}
+  _textMat: {fileID: 0}
+  _normalTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _fullChargedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &6547442255424585383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,12 +776,12 @@ MonoBehaviour:
   _ammoType: {fileID: 8428071434140413335}
   _isExplosifAmmo: 1
   _explosionRadius: 1
+  _currentPercentCharge: 0
+  _oneAmmoAddPercentage: {x: 5, y: 5}
+  _fullCharge: 0
   _damageChargedMultiplicator: 10
-  _timeToCharge: 1
-  _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
-  _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
   _intervaleCharge: 0.05
@@ -11359,10 +11360,12 @@ MonoBehaviour:
   _playerAnimation: {fileID: 3465261579877272972}
   landSnap: 0
   dashVerticality: 1
+  groundNeededToDashAgain: 0
   clampedMaxAirSpeed: 0
   jumpSlideOnEndOfSlide: 0
   singleClicGrapple: 1
   omnidirectionalWallRide: 0
+  forwardWalllrideBeginning: 1
   wallRideUnlocked: 1
   slideUnlocked: 1
   dashUnlocked: 1
@@ -11404,6 +11407,7 @@ MonoBehaviour:
   wallRidingDuration: 1.5
   wallRideCooldownChangeSide: 0.2
   wallRideCooldownSameSide: 0.6
+  wallRideForwardTolerenceAngle: 90
   wallRidingSpeed: 11
   minSpeedToWallRide: 1
   wallJumpVerticalForce: 44
@@ -11460,7 +11464,6 @@ MonoBehaviour:
   slopeInfluenceOnVelocity: 0.075
   _castWidth: 1
   _grappleRedirectionSpeed: 60
-  grounded: 0
   leftSideAgainstWall: 0
   rightSideAgainstWall: 0
   fellOffWallrinding: 0
@@ -11720,12 +11723,17 @@ MonoBehaviour:
   _critikStep: 0.5
   _playerInputAction: {fileID: 997312506154426130}
   _playerAnimation: {fileID: 3465261579877272972}
-  _gunSwitching: {fileID: 0}
+  _gunSwitching: {fileID: 3154577241410043838}
+  healThrowObject: {fileID: 0}
   _playerEnergy: {fileID: 29235095159055250}
   p_healThrowPoint: {fileID: 2316828313444862460}
   p_healThrowDirection: {fileID: 6291573982660001099}
-  _healthToGive: 30
-  p_healThrowRadius: 3
+  throwForce: 10
+  maxThrowDistance: 100
+  minSize: 3
+  healSizeEffectFactor: 2
+  _minHealthToGive: 15
+  healAmountEffectFactor: 0.3
   _healThrowCost: 20
   _throwHitLayerMask:
     serializedVersion: 2
@@ -17529,6 +17537,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &8041650522221974858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17547,10 +17556,10 @@ MonoBehaviour:
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 4651678768051478449}
-  _chargedUI: {fileID: 947224183139465357}
-  _valueCharging: {fileID: 2544424930392040772}
-  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
-  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
+  _percentageChargeText: {fileID: 0}
+  _textMat: {fileID: 0}
+  _normalTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _fullChargedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4651678768051478449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17571,38 +17580,14 @@ MonoBehaviour:
   _ammoType: {fileID: 7048642797284340988}
   _isExplosifAmmo: 0
   _explosionRadius: 1
+  _currentPercentCharge: 0
+  _oneAmmoAddPercentage: {x: 5, y: 5}
+  _fullCharge: 0
   _damageChargedMultiplicator: 10
-  _timeToCharge: 1
-  _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
-  _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
-  _noiseEvolutionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   _startMaxNoiseAngle: 10
 --- !u!114 &7048642797284340988
 MonoBehaviour:
@@ -18518,6 +18503,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &6154372736321769268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18578,10 +18564,10 @@ MonoBehaviour:
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 233075791890108170}
-  _chargedUI: {fileID: 947224183139465357}
-  _valueCharging: {fileID: 2544424930392040772}
-  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
-  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
+  _percentageChargeText: {fileID: 0}
+  _textMat: {fileID: 0}
+  _normalTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _fullChargedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &233075791890108170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18602,38 +18588,15 @@ MonoBehaviour:
   _ammoType: {fileID: 219218631671859702}
   _isExplosifAmmo: 0
   _explosionRadius: 1
+  _currentPercentCharge: 0
+  _oneAmmoAddPercentage: {x: 5, y: 5}
+  _fullCharge: 0
   _damageChargedMultiplicator: 10
-  _timeToCharge: 1
-  _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
-  _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
-  _noiseEvolutionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _noiseAngle: 5
   _maximumNoiseAngle: 10
 --- !u!1 &5481550005715636783
 GameObject:
@@ -19614,6 +19577,7 @@ MonoBehaviour:
   - {fileID: 2417848013731251067}
   - {fileID: 5210516196185257609}
   _playerInput: {fileID: 997312506154426130}
+  _fpsController: {fileID: 0}
 --- !u!1 &6107377416928649300
 GameObject:
   m_ObjectHideFlags: 0
@@ -21343,6 +21307,7 @@ MonoBehaviour:
   - {fileID: 5823188005617963189}
   _healingTrajectoryLine: {fileID: 1292535258909843473}
   _healingThrowPosObj: {fileID: 36607885238878194, guid: 7382029bf5c03294488da66ede17c86b, type: 3}
+  gunSwitching: {fileID: 0}
   _soundsData: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}
 --- !u!82 &4823317710188223472
 AudioSource:
@@ -21497,8 +21462,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _gunSwitching: {fileID: 3154577241410043838}
-  _positiveParticles: {fileID: 6301050086997013332}
-  _negativeParticles: {fileID: 6708433035341785604}
+  _positiveUI: {fileID: 0}
+  _negativeUI: {fileID: 0}
+  _polarizationText: {fileID: 0}
+  _isPolarizedMessage: 
+  _isAlignedMessage: 
+  _conflictPanel: {fileID: 0}
+  _conflictText: {fileID: 0}
+  _conflictTimerBar: {fileID: 0}
 --- !u!114 &79945915510860574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28043,6 +28014,8 @@ MonoBehaviour:
   _throwerGrenade: {fileID: 4147575701769871822}
   _throwerDrone: {fileID: 931936587992237131}
   _reticuleManager: {fileID: 8014742524321164357}
+  _cooldownChangeMagnetic: 5
+  _mainGunsList: []
 --- !u!114 &300968199624122896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28074,6 +28047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Controller.GunSurcharge
   _gunBridge: {fileID: 300968199624122896}
+  _numberChargedShootWhenOverload: 2
   _isOverload: 0
   _elapsedTimeOverload: 0
 --- !u!114 &2365660128279577883
@@ -30311,6 +30285,7 @@ MonoBehaviour:
   _elementaryGrenadePrefab: {fileID: 7033959642892252244, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   _spawnPoint: {fileID: 446286405210506582}
   _currentGun: {fileID: 3154577241410043838}
+  _camera: {fileID: 0}
   _cooldown: 1
   _damage: 100
   _throwForce: 30
@@ -31271,6 +31246,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &6473785062868642151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31307,10 +31283,10 @@ MonoBehaviour:
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 3491274505332219922}
-  _chargedUI: {fileID: 947224183139465357}
-  _valueCharging: {fileID: 2544424930392040772}
-  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
-  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
+  _percentageChargeText: {fileID: 0}
+  _textMat: {fileID: 0}
+  _normalTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _fullChargedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &3491274505332219922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31331,12 +31307,12 @@ MonoBehaviour:
   _ammoType: {fileID: 2634165181546453424}
   _isExplosifAmmo: 0
   _explosionRadius: 1
+  _currentPercentCharge: 0
+  _oneAmmoAddPercentage: {x: 5, y: 5}
+  _fullCharge: 0
   _damageChargedMultiplicator: 10
-  _timeToCharge: 1
-  _deadZoneStartCharging: 0.5
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
-  _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
   _intervaleCharge: 0.05
@@ -33920,7 +33896,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 9068305515156755161, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 278331891298378960}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4799643639750831679, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
@@ -33937,7 +33913,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &3775537872039362388 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5318771884911752325, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
+  m_CorrespondingSourceObject: {fileID: 844255977359690238, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
   m_PrefabInstance: {fileID: 9058275321699060689}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &4552777606222636526 stripped

@@ -18,10 +18,17 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     private int _pathReservationId = -1;
     
     private bool _isPathUpdateRequested = false;
-    private Vector3 _targetPosition;
-    
-    public virtual void OnNetworkTick()
+
+    public override void InitialiseBehaviourModule(EnemyCore enemyCore)
     {
+        base.InitialiseBehaviourModule(enemyCore);
+        _targetModule.p_onTargetPositionForceUpdate += PathUpdateRequest;
+    }
+
+    public override void OnNetworkTick(float tickDelta)
+    {
+        base.OnNetworkTick(tickDelta);
+        
         if(!_targetModule.HasTarget() && _doFreezeWithoutTarget) return;
         
         MoveAlongPath();
@@ -30,8 +37,6 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     public virtual void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
     {
         if (!_targetModule.IsMyTarget(playerObjectId)) return;
-        
-        _targetPosition = playerPosition;
         
         //Updating Pathfinding
         PathUpdateRequest();
@@ -45,7 +50,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
             
             _isPathUpdateRequested = _enemyCore.p_pathRequester.TryRegisterPathRequest(
                 new PathRequest(
-                    _path.Count > 0 ?Vector3.SqrMagnitude(_path[0].position - _targetPosition) : float.MaxValue,
+                    _path.Count > 0 ?Vector3.SqrMagnitude(_path[0].position - _targetModule.GetTargetPosition()) : float.MaxValue,
                     RecalculatePathConcrete));
         }
     }
@@ -62,7 +67,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         ClearPathReservation();
         
         _enemyCore.p_gridReader.GetAndRegisterPath(
-            transform.position, _targetPosition, _traceWeight, _traceSpread,
+            transform.position, _targetModule.GetTargetPosition(), _traceWeight, _traceSpread,
             out _path, out _pathReservationId);
         _isPathUpdateRequested = false;
     }

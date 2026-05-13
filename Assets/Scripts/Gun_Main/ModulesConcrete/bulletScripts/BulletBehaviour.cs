@@ -97,13 +97,8 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         if (distance <= 0f)
             return;
 
-        int ownerLayer = LayerMask.NameToLayer("Owner");
-        int mask = ~(1 << ownerLayer);
-
-        if (!Physics.SphereCast(start, 0.15f, direction.normalized, out RaycastHit hit, distance, mask, QueryTriggerInteraction.Ignore))
+        if (!Physics.SphereCast(start, 0.15f, direction.normalized, out RaycastHit hit, distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
             return;
-
-        Cons.Print("Physics.SphereCast");
 
         if (_hasHit) return;
         _hasHit = true;
@@ -113,7 +108,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         else
             HandleDirectHit(hit);
 
-        Destroy(gameObject);
+        OnCollision.Invoke(this);
     }
 
     private void HandleExplosion()
@@ -127,7 +122,6 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        Cons.Print("HandleDirectHit");
         
         if (_gunController.IsServerInitialized) 
             _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
@@ -145,9 +139,6 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
             Instantiate(_vfx, transform.position, Quaternion.identity);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
-
-        bool crit = false;
-        bool hit = false;
         
         foreach (Collider c in colliders)
         {
@@ -162,13 +153,19 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         }
     }
 
+    private void Reset()
+    {
+        _hasHit = false;
+        
+    }
+
     public void Spawn()
     {
-        
+        _lastPosition = transform.position;
     }
 
     public void ReturnToPool()
     {
-        
+        Reset();
     }
 }

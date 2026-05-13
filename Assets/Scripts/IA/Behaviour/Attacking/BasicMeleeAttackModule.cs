@@ -6,9 +6,9 @@ using UnityEngine;
 [AddComponentMenu("EnemyBehaviour/Attack/BasicMeleeAttackModule")]
 public class BasicMeleeAttackModule : EnemyAttackModule
 {
-    public override void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
-        base.OnNetworkTick();
+        base.OnNetworkTick(tickDelta);
         if (_waitedTimeSinceAttack >= _attackDelay && CanAttack(Vector3.zero, Vector3.zero))//can attack do not use projectile direction
         {
             _waitedTimeSinceAttack = 0;

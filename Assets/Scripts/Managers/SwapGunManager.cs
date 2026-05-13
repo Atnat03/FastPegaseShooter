@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using Controller;
 using FishNet;
 using FishNet.Connection;
@@ -25,8 +26,12 @@ namespace Managers
         private readonly SyncVar<bool> _canSwap = new SyncVar<bool>(true);
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
 
-        [SerializeField] private bool _instantSwapWithoutBroConsentement;
         [SerializeField] private TextMeshProUGUI _cooldownText;
+        
+        [Header("Without Bro concentement")]
+        [SerializeField] private bool _instantSwapWithoutBroConsentement;
+        [SerializeField] private float _timeWindowToCancel = 3f;
+        private Dictionary<int, GunSwitching> _playersGunSwitching = new Dictionary<int, GunSwitching>();
         
         [Header("Polarized")]
         private readonly SyncVar<bool> _isPolarized = new SyncVar<bool>(false);
@@ -63,7 +68,6 @@ namespace Managers
             ListenToEvent<CallSwapGunEvent>(CheckCanSwapServerRpc);
             ListenToEvent<OnPlayerChangeZone>(OnPlayerChangeZone);
             
-            ListenToEvent<OnPlayerChangeZone>(OnPlayerChangeZone);
             ListenToEvent<OnPlayerChangeMagneticCharge>(OnPlayerChangeMagneticCharge);
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
 
@@ -83,12 +87,17 @@ namespace Managers
         private void OnPlayerSpawn(OnPlayerSpawnEvent data)
         {
             RegisterPlayer(data.playerId);
-            
+
             if (!_playerZones.ContainsKey(data.playerId))
-                _playerZones[data.playerId] = 0;
+                _playerZones[data.playerId] = -1;
 
             if (!_playerCharges.ContainsKey(data.playerId))
                 _playerCharges[data.playerId] = data.isPositiveCharge;
+
+            if (!_playersGunSwitching.ContainsKey(data.playerId))
+            {
+                _playersGunSwitching[data.playerId] = data.gunSwitching;
+            }
 
             if (_playerIds.Count >= 2)
                 EvaluateConflict();
@@ -118,9 +127,19 @@ namespace Managers
         {
             if (_playerIds.Count < 2) return;
 
+            
             int p1 = _playerIds[0];
             int p2 = _playerIds[1];
+            
+            if (_playerZones[p1] == -1 && _playerZones[p2] == -1)
+            {
+                _isInConflict.Value = false;
+                return;
+            }
+            
+            Cons.Print("p1 zone : " + _playerZones[p1] + " // p2 zone : " +  _playerZones[p2]);
 
+            
             bool zonesKnown = _playerZones.ContainsKey(p1) && _playerZones.ContainsKey(p2);
             bool chargesKnown = _playerCharges.ContainsKey(p1) && _playerCharges.ContainsKey(p2);
 
@@ -149,7 +168,12 @@ namespace Managers
                     _elapsedTime.Value -= Time.deltaTime;
                     if (_elapsedTime.Value <= 0)
                     {
-                        ResetTimer();
+                        if(!_instantSwapWithoutBroConsentement)
+                            ResetTimer();
+                        else
+                        {
+                            SwapWithoutConsentement();
+                        }
                     }
                 }
                 
@@ -248,28 +272,73 @@ namespace Managers
             if (_player == data.player) return;
             if (!_canSwap.Value) return;
             
-            if (_elapsedTime.Value > 0)
+            if(!_instantSwapWithoutBroConsentement)
             {
-                _elapsedTimeForCombo.Value = _cooldownSwap;
-                
-                _canSwap.Value = false;
+                if (_elapsedTime.Value > 0)
+                {
+                    _elapsedTimeForCombo.Value = _cooldownSwap;
 
-                NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
-                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo);
+                    _canSwap.Value = false;
 
-                AddEnergyTargetRpc(_player.Owner);
-                AddEnergyTargetRpc(data.player.Owner);
-                
-                ResetTimer();
+                    NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
+                    NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo);
+
+                    AddEnergyTargetRpc(_player.Owner);
+                    AddEnergyTargetRpc(data.player.Owner);
+
+                    ResetTimer();
+                }
+                else
+                {
+                    _firstGunAmmo = data.currentAmmo;
+                    _elapsedTime.Value = _timeToAcceptSwap;
+                    _player = data.player;
+                    _firstGunIndex = data.gunIndex;
+                    _firstPlayerOwnerId.Value = data.player.OwnerId;
+                }
             }
             else
             {
-                _firstGunAmmo = data.currentAmmo;
-                _elapsedTime.Value = _timeToAcceptSwap;
-                _player = data.player;
-                _firstGunIndex = data.gunIndex;
-                _firstPlayerOwnerId.Value = data.player.OwnerId;
+                if (_elapsedTime.Value > 0)
+                {
+                    ResetTimer();
+                    _elapsedTimeForCombo.Value = _cooldownSwap;
+                    _canSwap.Value = false;
+                }
+                else
+                {
+                    _elapsedTime.Value = _timeWindowToCancel;
+                }
             }
+        }
+
+        private void SwapWithoutConsentement()
+        {
+            _canSwap.Value = false;
+            _elapsedTimeForCombo.Value = _cooldownSwap;
+                    
+            int p1Id = _playerIds[0];
+            int p2Id = _playerIds[1];
+
+            GunSwitching p1 = _playersGunSwitching[p1Id];
+            GunSwitching p2 = _playersGunSwitching[p2Id];
+                    
+            NetworkConnection p1Conn = p1.Owner;
+            NetworkConnection p2Conn = p2.Owner;
+
+            int p1GunIndex = p1.CurrentMainGunIndex;
+            int p2GunIndex = p2.CurrentMainGunIndex;
+
+            int p1Ammo = p1.ISurchargeMain.GetCurrentAmmo();
+            int p2Ammo = p2.ISurchargeMain.GetCurrentAmmo();
+                    
+            NotifySwapTargetRpc(p2Conn, p2GunIndex, p2Ammo);
+            NotifySwapTargetRpc(p1Conn, p1GunIndex, p1Ammo);
+
+            AddEnergyTargetRpc(p2Conn);
+            AddEnergyTargetRpc(p1Conn);
+
+            ResetTimer();
         }
 
         [TargetRpc]
@@ -400,4 +469,5 @@ public struct OnPlayerSpawnEvent
 {
     public int playerId;
     public bool isPositiveCharge;
+    public GunSwitching gunSwitching;
 }
