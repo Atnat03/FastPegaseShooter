@@ -22,25 +22,25 @@ public class EnemyCore : NetworkBusListener
     [SerializeField] private List<EnemyTargetModule> _targetingModules = new List<EnemyTargetModule>();
     [SerializeField] private EnemyMovementModule _movementModule;
     
-    //Filled In Automatially
-    //private List<ScoreTargetModule> _scoreModules = new List<ScoreTargetModule>();
-
     public Guid p_gridReaderId;
     public PathfindingRequestManager p_pathRequester;
     public PathfindingGridReader p_gridReader;
     [HideInInspector] public int p_enemySpawnCost;
 
     #region Charges Variables
-    
+
+    public ChargeType p_affinityType = ChargeType.None;
     [SerializeField] private int _explosionChargedDamage = 50;
 
     public bool p_player1_IsPositive;
     public float p_player1_ChargeMax = 5;
-    public float p_current_player1_Charge;
+    public float p_current_player1_Charge;  
     
     public bool p_player2_IsPositive;
     public float p_player2_ChargeMax = 5;
     public float p_current_player2_Charge;
+    
+    public enum ChargeType{Negative, Positive, None}
     
     #endregion
 
@@ -166,7 +166,6 @@ public class EnemyCore : NetworkBusListener
         
     private void DeathEvent(int playerObjectId)
     {
-        CustomLogger.ImportantLog("Clear path reservation on death");
         ClearPathReservation();
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
     }
@@ -219,7 +218,7 @@ public class EnemyCore : NetworkBusListener
     [Server]
     private void TriggerExplosionOnSwap(SwapingGunEvent data)
     {
-        _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage);
+        _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage, ChargeType.None);
             
         ResetAllCharged();
         ExplosionObserversRpc();
@@ -244,6 +243,5 @@ public class EnemyCore : NetworkBusListener
         p_current_player1_Charge = value;
         p_OnPlayer2ChargeChange?.Invoke(positive, ratio);
     }
-    
     #endregion
 }

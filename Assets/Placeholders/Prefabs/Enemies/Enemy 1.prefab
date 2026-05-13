@@ -1254,6 +1254,8 @@ MonoBehaviour:
   - {fileID: 4639033686446523756}
   - {fileID: 8676698036849061702}
   - {fileID: 8676698036849061702}
+  - {fileID: 4338066039894778116}
+  - {fileID: 6070405561741422876}
   _targetingModules:
   - {fileID: 6912678073703625548}
   - {fileID: -4927633382726970012}
@@ -1261,11 +1263,14 @@ MonoBehaviour:
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
+  p_affinityType: 0
   _explosionChargedDamage: 50
-  p_negativeChargeMax: 5
-  p_currentNegativeCharge: 0
-  p_positiveChargeMax: 5
-  p_currentPositiveCharge: 0
+  p_player1_IsPositive: 0
+  p_player1_ChargeMax: 5
+  p_current_player1_Charge: 0
+  p_player2_IsPositive: 0
+  p_player2_ChargeMax: 5
+  p_current_player2_Charge: 0
 --- !u!114 &4750571229546580062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2138,10 +2143,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCoreViewer
   _enemyCore: {fileID: 4385027282801438809}
-  _positiveUI: {fileID: 131927882925500068}
-  _positiveCurValue: {fileID: 2385485759981620889}
-  _negativeUI: {fileID: 3694444866840515633}
-  _negativeCurValue: {fileID: 4093235033395490000}
+  _p1_UI: {fileID: 0}
+  _p1_CurValue: {fileID: 0}
+  _p2_UI: {fileID: 0}
+  _p2_CurValue: {fileID: 0}
+  _colorsJaugesCharges: []
   _explosionParticle: {fileID: 1509239389167855855, guid: b2408256d1f9a414c91f7f086978e655, type: 3}
 --- !u!114 &5346405171015881183
 MonoBehaviour:
@@ -2161,8 +2167,96 @@ MonoBehaviour:
   _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
   _lifeTMP: {fileID: 8838920003505348040}
   _lifeBarImage: {fileID: 7477918164592477288}
-  _fullLifeColor: {r: 0.113805294, g: 1, b: 0, a: 1}
-  _emptyLifeColor: {r: 1, g: 0, b: 0, a: 1}
+  _NoneAffinityLifeGradient:
+    serializedVersion: 2
+    key0: {r: 0.008009965, g: 0.11320752, b: 0.01677642, a: 1}
+    key1: {r: 0, g: 0.4716981, b: 0.040009897, a: 1}
+    key2: {r: 0.502141, g: 0.9150943, b: 0.44459772, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  _PositiveAffinityLifeGradient:
+    serializedVersion: 2
+    key0: {r: 0.13207549, g: 0, b: 0, a: 1}
+    key1: {r: 0.6226415, g: 0.11454255, b: 0.11454255, a: 1}
+    key2: {r: 0.745283, g: 0.34100214, b: 0.34100214, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  _NegativeAffinityLifeGradient:
+    serializedVersion: 2
+    key0: {r: 0.009181456, g: 0, b: 0.16037738, a: 1}
+    key1: {r: 0.1678355, g: 0.13737096, b: 0.5943396, a: 1}
+    key2: {r: 0.42816043, g: 0.42145783, b: 0.7264151, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
   _fillSpeedBarFront: 10
   _lifeBarSecondImage: {fileID: 1666881197510656852}
   _fillSpeedBarBack: 5

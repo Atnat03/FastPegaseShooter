@@ -141,7 +141,7 @@ namespace Managers
 
             if (!zonesKnown || !chargesKnown) return;
 
-            bool isAligned = _playerCharges[p1] != _playerCharges[p2];
+            bool isAligned = _playerCharges[p1] == _playerCharges[p2];
             bool isSameZone = _playerZones[p1] == _playerZones[p2];
 
             _canSwap.Value = !isAligned;
@@ -219,9 +219,10 @@ namespace Managers
                     if (_conflictTimer.Value <= 0)
                     {
                         _conflictTimer.Value = 0;
-                        _isShortCircuit.Value = false;
                     }
                 }
+                
+                _isShortCircuit.Value = false;
             }
         }
 
@@ -410,15 +411,22 @@ namespace Managers
             _cooldownText.text = ((int)next).ToString();
         }
         
-        // Callbacks clients pour l'UI
         private void OnConflictChanged(bool prev, bool next, bool asServer)
         {
-            InvokeEvent(new OnConflictUIUpdate { isConflict = next, isShortCircuit = _isShortCircuit.Value });
+            InvokeEvent(new OnConflictUIUpdate
+            {
+                isConflict = next, 
+                isShortCircuit = _isShortCircuit.Value
+            });
         }
 
         private void OnShortCircuitChanged(bool prev, bool next, bool asServer)
         {
-            InvokeEvent(new OnConflictUIUpdate { isConflict = _isInConflict.Value, isShortCircuit = next });
+            InvokeEvent(new OnConflictUIUpdate
+            {
+                isConflict = _isInConflict.Value,
+                isShortCircuit = next
+            });
         }
 
         private void OnConflictTimerChanged(float prev, float next, bool asServer)

@@ -23,7 +23,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     [SerializeField]private Material _positiveMaterial;
     [SerializeField] private Material _negativeMaterial;
     
-    [SerializeField]private TrailRenderer _trailenderer;
+    [SerializeField]private TrailRenderer _trailRenderer;
     [SerializeField]private Gradient _positiveLineColor;
     [SerializeField]private Gradient _negativeLineColor;
     
@@ -34,15 +34,6 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     private NetworkObject _targetNetworkObject;
 
     private bool _hasHit = false;
-    private bool _hasMark = false;
-    
-    private Vector3 _lastPosition;
-    private bool _firstFrame = true;
-
-    private void Awake()
-    {
-        _lastPosition = transform.position;
-    }
 
     private void FixedUpdate()
     {
@@ -80,7 +71,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
         
-        _trailenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
+        _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
     }
 
@@ -108,7 +99,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         else
             HandleDirectHit(hit);
 
-        OnCollision.Invoke(this);
+        OnCollision?.Invoke(this);
     }
 
     private void HandleExplosion()
@@ -156,13 +147,16 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     private void Reset()
     {
         _hasHit = false;
-        
+        OnCollision = null;
+        //if (_trailRenderer != null) _trailRenderer.Clear();
+        _targetPoint = Vector3.zero;
+        _targetNetworkObject = null;
+        _gunController = null;
+        _vfx = null;
+
     }
 
-    public void Spawn()
-    {
-        _lastPosition = transform.position;
-    }
+    public void Spawn() { }
 
     public void ReturnToPool()
     {

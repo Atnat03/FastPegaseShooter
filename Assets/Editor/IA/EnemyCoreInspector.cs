@@ -102,6 +102,7 @@ public class EnemyCoreInspector : Editor
         GUILayout.Space(10);
         GUILayout.Label("Charges", _titleStyle);
         
+        EditorUtilities.Draw("p_affinityType", serializedObject);
         EditorUtilities.Draw("_explosionChargedDamage", serializedObject);
         EditorUtilities.Draw("p_player1_ChargeMax", serializedObject);
         EditorUtilities.Draw("p_player2_ChargeMax", serializedObject);
