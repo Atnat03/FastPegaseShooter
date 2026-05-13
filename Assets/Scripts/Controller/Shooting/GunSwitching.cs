@@ -84,7 +84,7 @@ public class GunSwitching : NetworkBusListener
 		
 		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
 		
-		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
+		OnSwapGun?.Invoke(true);
 	}
 
 	[ServerRpc]
