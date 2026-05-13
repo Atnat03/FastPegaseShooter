@@ -131,8 +131,8 @@ namespace Controller
 
             int ammoToApply = data.currentAmmo;
 
-            Material matBefore = CurrentMainSurchargeGun.ModelGun.material;
-            matBefore.SetFloat("_Dissolving", 0);
+            //Material matBefore = CurrentMainSurchargeGun.ModelGun.GetComponent<>();
+            //matBefore.SetFloat("_Dissolving", 0);
 
             float duration = data.timeToSwap / 2;
             float elapsedTime = 0;
@@ -140,26 +140,26 @@ namespace Controller
             while (elapsedTime < duration)
             {
                 elapsedTime += Time.deltaTime;
-                matBefore.SetFloat("_Dissolving", Mathf.Clamp01(elapsedTime / duration));
+                //matBefore.SetFloat("_Dissolving", Mathf.Clamp01(elapsedTime / duration));
                 yield return null;
             }
 
             _gunSwitching.ChangeCurrentGun_Main_ServerRpc(data.gunIndex);
             _grenadeThrower.ChangeMagneticChargeServerRpc();
 
-            Material matAfter = CurrentMainSurchargeGun.ModelGun.material;
-            matAfter.SetFloat("_Dissolving", 1);
+            //Material matAfter = CurrentMainSurchargeGun.ModelGun.material;
+            //matAfter.SetFloat("_Dissolving", 1);
 
             elapsedTime = duration;
 
             while (elapsedTime > 0)
             {
                 elapsedTime -= Time.deltaTime;
-                matAfter.SetFloat("_Dissolving", Mathf.Clamp01(elapsedTime / duration));
+                //matAfter.SetFloat("_Dissolving", Mathf.Clamp01(elapsedTime / duration));
                 yield return null;
             }
 
-            matAfter.SetFloat("_Dissolving", 0);
+            // matAfter.SetFloat("_Dissolving", 0);
 
             _gunSurcharge.SetOverloadStats(true, ammoToApply);
 
