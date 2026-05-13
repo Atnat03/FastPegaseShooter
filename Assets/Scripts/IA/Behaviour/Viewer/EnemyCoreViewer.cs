@@ -15,13 +15,41 @@ public class EnemyCoreViewer : MonoBehaviour
     
     [SerializeField] private ParticleSystem _explosionParticle;
 
+    [Header("Shied")]
+    [SerializeField] private MeshRenderer _shied;
+    [SerializeField] private Material[] _materialShied;
+    
     void Awake()
     {
         _enemyCore.p_OnChargeExplosion += OnChargeExplosion;
         _enemyCore.p_OnPlayer1ChargeChange += OnPositiveChargeChange;
         _enemyCore.p_OnPlayer2ChargeChange += OnNegativeChargeChange;
+        
+        //Shied
+        _enemyCore.OnSetShied += SetShield;
     }
-    
+
+    private void SetShield(EnemyCore.ChargeType hasShield)
+    {
+        if(_shied == null)
+            return;
+        
+        switch (hasShield)
+        {
+            case EnemyCore.ChargeType.Negative :
+                _shied.gameObject.SetActive(true);
+                _shied.material = _materialShied[1];
+                break;
+            case EnemyCore.ChargeType.Positive :
+                _shied.gameObject.SetActive(true);
+                _shied.material = _materialShied[0];
+                break;
+            default:
+                _shied.gameObject.SetActive(false);
+                break;
+        }
+    }
+
     private void OnChargeExplosion()
     {
         Destroy(Instantiate(_explosionParticle, transform.position + Vector3.up, Quaternion.identity), 2f);

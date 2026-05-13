@@ -33,6 +33,9 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
         
         if (IsServerInitialized)
         {
+            if (_enemyCore._hasShied.Value != 0)
+                return false;
+            
             p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
             OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
 

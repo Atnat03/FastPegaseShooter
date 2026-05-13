@@ -40,15 +40,21 @@ public class EnemyCore : NetworkBusListener
     public float p_player2_ChargeMax = 5;
     public float p_current_player2_Charge;
     
-    public enum ChargeType{Negative, Positive, None}
+    //Shied
+    public readonly SyncVar<int> _hasShied = new SyncVar<int>(0);
+    public ChargeType p_shiedType = ChargeType.None;
+    
+    public enum ChargeType{None, Negative, Positive}
     
     #endregion
-
+    
     #region Actions
 
     public Action p_OnChargeExplosion;
     public Action<bool, float> p_OnPlayer1ChargeChange;
     public Action<bool, float> p_OnPlayer2ChargeChange;
+
+    public Action<ChargeType> OnSetShied;
 
     #endregion
 
@@ -89,6 +95,10 @@ public class EnemyCore : NetworkBusListener
                     module.p_onHitPlayer += scoreModule.OnDamageTaken;
             }
         }
+
+        _hasShied.OnChange += OnShiedChange;
+        
+        _hasShied.Value = (int)p_shiedType;
 
         _lifeModules[0].OnDeath += DeathEvent;
     }
@@ -198,6 +208,19 @@ public class EnemyCore : NetworkBusListener
             p_current_player2_Charge += value;
             OnPlayer2ChangeObserverRpc(p_current_player2_Charge, p_player2_IsPositive, p_current_player2_Charge/p_player2_ChargeMax); 
         }
+
+        if (p_current_player1_Charge > 0 && p_current_player2_Charge > 0)
+        {
+            if (p_player1_IsPositive == p_player2_IsPositive)
+            {
+                _hasShied.Value = 0;
+            }
+        }
+    }
+    
+    private void OnShiedChange(int prev, int next, bool asServer)
+    {
+        OnSetShied?.Invoke((ChargeType)next);
     }
 
     [Server]
