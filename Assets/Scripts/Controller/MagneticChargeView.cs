@@ -57,7 +57,7 @@ public class MagneticChargeView : MonoBusListener
 	
 	private void UpdateConflictText(OnConflictUIUpdate data)
 	{
-		_conflictPanel.SetActive(data.isConflict || data.isShortCircuit);
+		_conflictPanel.SetActive(data.isConflict && data.isShortCircuit);
 
 		if (data.isShortCircuit)
 			_conflictText.text = "COURT CIRCUIT";
