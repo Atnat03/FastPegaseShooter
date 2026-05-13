@@ -100,7 +100,14 @@ namespace Managers
             }
 
             if (_playerIds.Count >= 2)
+            {
                 EvaluateConflict();
+                
+                int p1 = _playerIds[0];
+                int p2 = _playerIds[1];
+                bool isAligned = _playerCharges[p1] == _playerCharges[p2];
+                NotifyPolarizationObserversRpc(isAligned, false, false);
+            }
         }
         
         private void OnPlayerChangeZone(OnPlayerChangeZone data)

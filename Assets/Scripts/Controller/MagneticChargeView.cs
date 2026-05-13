@@ -60,7 +60,7 @@ public class MagneticChargeView : MonoBusListener
 
 	private void UpdatePolarisation(OnPolarizationStateChanged data)
 	{
-		_polarizationText.text = data.isAligned ? _isAlignedMessage : _isPolarizedMessage;
+		_polarizationText.text = data.isAligned ? _isPolarizedMessage : _isAlignedMessage;
 	}
 
 	private void UpdateUI(bool positive)
