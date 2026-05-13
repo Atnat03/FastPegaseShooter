@@ -81,7 +81,7 @@ public class GunSwitching : NetworkBusListener
 		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
 
-		_isPositiveChargedPlayer.Value = startIndex == 0;
+		_isPositiveChargedPlayer.Value = true;
 		
 		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
 		
