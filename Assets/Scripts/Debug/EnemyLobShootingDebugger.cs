@@ -16,7 +16,7 @@ public class EnemyLobShootingDebugger : MonoBehaviour
     {
         if (!LSAModule) return;
         Gizmos.color =  Color.yellow;
-        if (_useComponentTarget)
+        if (Application.isPlaying && _useComponentTarget)
         {
             Vector3 targetPosition = LSAModule.GetTargetPosition();
             Vector3? shootVelocity = LSAModule.GetShootingVelocity(targetPosition);

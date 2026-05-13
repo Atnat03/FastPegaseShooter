@@ -23,8 +23,7 @@ public class SwapGunManagerView : NetworkBehaviour
 	[SerializeField] private TextMeshProUGUI _textSwapUI;
 	[SerializeField] private string _youAskSwapMessage;
 	[SerializeField] private string _broAskyouSwapMessage;
-
-	
+		
 	#endregion
 
 

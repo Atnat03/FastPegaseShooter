@@ -35,7 +35,7 @@ namespace GunDecorator.ChargedModules
         
         //Action
         public Action<int> OnPercentageChargeChange;
-        public Action<bool> OnFullCharged;
+        public Action<bool, bool> OnFullCharged;
         
         #endregion
         
@@ -48,7 +48,7 @@ namespace GunDecorator.ChargedModules
             _shootModule = GetComponent<ShootModule>();
             
             OnPercentageChargeChange?.Invoke(_currentPercentCharge);
-            OnFullCharged?.Invoke(false);
+            OnFullCharged?.Invoke(false, false);
         }
         
         
@@ -65,7 +65,7 @@ namespace GunDecorator.ChargedModules
         protected void ResetCharging()
         {
             _gunController.RecoilModule?.SetIsRecoil(false);
-            OnFullCharged?.Invoke(false);
+            OnFullCharged?.Invoke(false, false);
             
             _gunController?.OnStopCharging?.Invoke();
         }
@@ -79,16 +79,16 @@ namespace GunDecorator.ChargedModules
             if (_currentPercentCharge >= 100)
             {
                 _currentPercentCharge = 100;
-                OnFullCharged?.Invoke(true);
+                OnFullCharged?.Invoke(true, false);
             }
             else
             {
-                OnFullCharged?.Invoke(false);
+                OnFullCharged?.Invoke(false, false);
             }
             
             OnPercentageChargeChange?.Invoke(_currentPercentCharge);
         }
-
+        
         private void Update()
         {
             _fullCharge = _currentPercentCharge >= 100;
@@ -97,7 +97,9 @@ namespace GunDecorator.ChargedModules
         public void SetPercentage(int percent)
         {
             _currentPercentCharge = percent;
-            OnFullCharged?.Invoke(true);
+            
+            OnPercentageChargeChange?.Invoke(_currentPercentCharge);
+            OnFullCharged?.Invoke(true, true);
         }
     }
 }

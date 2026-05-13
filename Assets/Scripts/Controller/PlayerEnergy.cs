@@ -48,7 +48,7 @@ public class PlayerEnergy : NetworkBusListener
 		_totalBars = Mathf.CeilToInt(_maxEnergy / _valueOneBar);
 
 		if (IsServerInitialized)
-			_currentEnergy.Value = _maxEnergy / 2f;
+			_currentEnergy.Value = _maxEnergy;
 
 		//Créer UI
 		OnCreateBarUI?.Invoke(_totalBars);
