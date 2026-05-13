@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomConsole.Runtime.Logger;
 using MyPrint;
@@ -10,10 +11,6 @@ using UnityEngine.UI;
 
 public class PlayerHealthView : MonoBehaviour
 {
-	#region Properties
-
-	#endregion
-
 
 	#region Variables
 
@@ -40,6 +37,8 @@ public class PlayerHealthView : MonoBehaviour
 	[Header("Healing")]
 	[SerializeField] private LineRenderer _healingTrajectoryLine;
 	[SerializeField] private GameObject _healingThrowPosObj;
+	[SerializeField] private GunSwitching gunSwitching;
+	private int currentGunID;
 	
 	[Header("Sound")]
 	[SerializeField] private SoundsDataSO _soundsData;
@@ -47,6 +46,7 @@ public class PlayerHealthView : MonoBehaviour
 	
 	float _elapsedTimeShowWarning = 0;
 	bool _isShowedWarning = false;
+	bool healLineComplete = false;
 
 	private float _healTargetFillAmount = 1;
 	
@@ -62,6 +62,8 @@ public class PlayerHealthView : MonoBehaviour
 		_audioSource = GetComponent<AudioSource>();
 		_healingTrajectoryLine.enabled = false;
 		_healingTrajectoryLine.positionCount = 4;
+		_healingThrowPosObj = Instantiate(_healingThrowPosObj, Vector3.zero, Quaternion.identity);
+		_healingThrowPosObj.SetActive(false);
 	}
 	
 	private void UpdateHealth(float targetFill)
@@ -174,33 +176,67 @@ public class PlayerHealthView : MonoBehaviour
 
 	private void Update()
 	{
-		if (_healingTrajectoryLine.enabled)
+		if (_healingTrajectoryLine.enabled && healLineComplete)
 		{
-			Vector3 startPos = _playerHealth.p_healThrowPoint.position;
-			Vector3 endPos = _playerHealth.p_healThrowLandingPos;
-			Vector3 dir = (endPos-startPos).normalized;
-			_healingTrajectoryLine.SetPosition(0, startPos);
-			_healingTrajectoryLine.SetPosition(1, startPos+dir*0.3f);
-			_healingTrajectoryLine.SetPosition(2, endPos-dir*0.3f);
-			_healingTrajectoryLine.SetPosition(3, endPos);
+			Vector3[] line = _playerHealth.HealThrowLine(out float distance);
+			_healingTrajectoryLine.positionCount = line.Length;
+			_healingTrajectoryLine.SetPositions(line);
+			ShowHealSphereEffect(line[^1], distance * _playerHealth.healSizeEffectFactor + _playerHealth.minSize);
 		}
 		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _healTargetFillAmount, Time.deltaTime * _healthVisualFillingSpeed);
 	}
 
+	Coroutine showLineCoroutine;
 	private void OnThrowingVisualActivation()
 	{
+		if (gunSwitching) HideGun();
+		showLineCoroutine = StartCoroutine(LinePreviewDelay());
+	}
+
+	IEnumerator LinePreviewDelay()
+	{
+		healLineComplete = false;
+		yield return new WaitForSeconds(_playerHealth.showLineDelay);
+		int progression = 0;
 		_healingTrajectoryLine.enabled = true;
+		while (progression < _playerHealth.HealThrowLine(out float distance).Length)
+		{
+			Vector3[] line = _playerHealth.HealThrowLine(out distance);
+			_healingTrajectoryLine.positionCount = progression;
+			for (int i = 0; i < progression; i++)
+			{
+				_healingTrajectoryLine.SetPosition(i, line[i]);
+			}
+			progression++;
+			yield return null;
+		}
+		healLineComplete = true;
 	}
-	private void OnThrowing()
+	private void StopPreview()
 	{
+		if (showLineCoroutine != null) StopCoroutine(showLineCoroutine);
 		_healingTrajectoryLine.enabled = false;
+		if (gunSwitching) ShowGun();
 	}
-	private async void OnHealThrowLanding(Vector3 pos)
+	private async void ShowHealSphereEffect(Vector3 pos, float scale, float time = 0f)
 	{
-		GameObject orb = Instantiate(_healingThrowPosObj, pos, Quaternion.identity);
-		orb.transform.localScale = Vector3.one * _playerHealth.p_healThrowRadius;
-		await Task.Delay(1000);
-		Destroy(orb);
+		_healingThrowPosObj.SetActive(true);
+		_healingThrowPosObj.transform.position = pos;
+		_healingThrowPosObj.transform.localScale = Vector3.one * (scale * _playerHealth.healSizeEffectFactor);
+		if(time == 0f) await Task.Delay((int)(Time.deltaTime * 1000));
+		else await Task.Delay((int)(time * 1000));
+		if(_healingTrajectoryLine.enabled == false) _healingThrowPosObj.SetActive(false);
+	}
+
+	void HideGun()
+	{
+		currentGunID = gunSwitching.CurrentMainGunIndex;
+		gunSwitching.DesactivateAllMainGun();
+	}
+
+	void ShowGun()
+	{
+		gunSwitching.ActivateCurrentGun(gunSwitching._mainGunsList, currentGunID);
 	}
 
 	void OnEnable()
@@ -212,12 +248,13 @@ public class PlayerHealthView : MonoBehaviour
 		
 		//Healing
 		_playerHealth.OnThrowingVisualActivation += OnThrowingVisualActivation;
-		_playerHealth.OnThrowing += OnThrowing;
-		_playerHealth.OnHealThrowLanding += OnHealThrowLanding;
+		_playerHealth.OnThrowKeyReleased += StopPreview;
+		_playerHealth.OnHealThrowLanding += ShowHealSphereEffect;
+		_playerHealth.OnHealCanceled += StopPreview;
 		
 		//Drone Throw
 		//_droneThrower.OnThrowingActivation += OnThrowingVisualActivation;
-		_droneThrower.OnThrowing += OnThrowing;
+		_droneThrower.OnThrowing += StopPreview;
 	}
 
 	void OnDisable()
@@ -229,13 +266,14 @@ public class PlayerHealthView : MonoBehaviour
 		
 		//Healing
 		_playerHealth.OnThrowingVisualActivation -= OnThrowingVisualActivation;
-		_playerHealth.OnThrowing -= OnThrowing;
-		_playerHealth.OnHealThrowLanding -= OnHealThrowLanding;
+		_playerHealth.OnThrowing -= StopPreview;
+		_playerHealth.OnHealThrowLanding -= ShowHealSphereEffect;
 		
 		//Drone Throw
 		//_droneThrower.OnThrowingActivation -= OnThrowingVisualActivation;
-		_droneThrower.OnThrowing -= OnThrowing;
+		_droneThrower.OnThrowing -= StopPreview;
 	}
+
 
 	#endregion
 }

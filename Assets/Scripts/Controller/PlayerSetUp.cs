@@ -14,6 +14,7 @@ public class PlayerSetup : NetworkBehaviour
         int gunId = data != null ? data.LocalPlayerGunId : 0;
 
         SendGunDataServerRpc(gunId);
+        
     }
 
     [ServerRpc]

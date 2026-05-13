@@ -20,8 +20,10 @@ public abstract class EnemyAttackModule : EnemyBehaviourModule
 
     protected abstract bool CanAttack(Vector3 shootingPos, Vector3 projectileDir);
 
-    public virtual void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
+        base.OnNetworkTick(tickDelta);
+        
         _waitedTimeSinceAttack += (float)InstanceFinder.TimeManager.TickDelta;
     }
 

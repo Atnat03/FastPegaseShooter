@@ -103,8 +103,8 @@ public class EnemyCoreInspector : Editor
         GUILayout.Label("Charges", _titleStyle);
         
         EditorUtilities.Draw("_explosionChargedDamage", serializedObject);
-        EditorUtilities.Draw("p_negativeChargeMax", serializedObject);
-        EditorUtilities.Draw("p_positiveChargeMax", serializedObject);
+        EditorUtilities.Draw("p_player1_ChargeMax", serializedObject);
+        EditorUtilities.Draw("p_player2_ChargeMax", serializedObject);
         
         serializedObject.ApplyModifiedProperties();
     }

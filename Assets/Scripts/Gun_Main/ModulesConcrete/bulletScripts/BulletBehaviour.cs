@@ -1,9 +1,10 @@
+using System;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBusListener, IAmmoExplosif
+public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
@@ -12,6 +13,7 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
     [HideInInspector] public bool p_hadCharged;
+    public Action<BulletBehaviour> OnCollision;
 
     [SerializeField] private GameObject _positiveExplosionVFX;
     [SerializeField] private GameObject _negativeExplosionVFX;
@@ -33,13 +35,24 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private bool _hasHit = false;
     private bool _hasMark = false;
+    
+    private Vector3 _lastPosition;
+    private bool _firstFrame = true;
+
+    private void Awake()
+    {
+        _lastPosition = transform.position;
+    }
 
     private void FixedUpdate()
     {
         if (_hasHit) return;
 
-        DetectCollision();
+        Vector3 startPosition = transform.position;
+
         Move();
+
+        DetectCollision(startPosition, transform.position);
     }
 
     public void SetUpVariables(
@@ -69,8 +82,6 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         
         _trailenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
-
-        Destroy(gameObject, 3f);
     }
 
     private void Move()
@@ -78,31 +89,26 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
         transform.Translate(transform.forward * (p_speed * Time.deltaTime), Space.World);
     }
 
-    private void DetectCollision()
+    private void DetectCollision(Vector3 start, Vector3 end)
     {
-        float distance = p_speed * Time.fixedDeltaTime;
+        Vector3 direction = end - start;
+        float distance = direction.magnitude;
 
-        if (!Physics.Raycast(
-                transform.position,
-                transform.forward,
-                out RaycastHit hit,
-                distance,
-                ~LayerMask.GetMask("Owner"),
-                QueryTriggerInteraction.Ignore))
+        if (distance <= 0f)
             return;
 
+        if (!Physics.SphereCast(start, 0.15f, direction.normalized, out RaycastHit hit, distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
+            return;
+
+        if (_hasHit) return;
         _hasHit = true;
 
         if (p_isExplosive)
-        {
             HandleExplosion();
-        }
         else
-        {
             HandleDirectHit(hit);
-        }
 
-        Destroy(gameObject);
+        OnCollision.Invoke(this);
     }
 
     private void HandleExplosion()
@@ -116,23 +122,16 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        if (_gunController.IsServerInitialized)
+        
+        if (_gunController.IsServerInitialized) 
             _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
-        else
+        else 
             _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
 
         CreateHitMark(hit);
     }
     
-    private void CreateHitMark(RaycastHit hit)
-    {
-        GameObject hitMark = Instantiate(
-            p_markPrefab,
-            _targetPoint + hit.normal * 0.01f,
-            Quaternion.LookRotation(hit.normal));
-
-        Destroy(hitMark, 1f);
-    }
+    private void CreateHitMark(RaycastHit hit) => Destroy(Instantiate(p_markPrefab, _targetPoint + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal)), 1f);
 
     public void Explosed(float radius, int damage)
     {
@@ -140,9 +139,6 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
             Instantiate(_vfx, transform.position, Quaternion.identity);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
-
-        bool crit = false;
-        bool hit = false;
         
         foreach (Collider c in colliders)
         {
@@ -155,5 +151,21 @@ public class BulletBehaviour : MonoBusListener, IAmmoExplosif
             else
                 _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
         }
+    }
+
+    private void Reset()
+    {
+        _hasHit = false;
+        
+    }
+
+    public void Spawn()
+    {
+        _lastPosition = transform.position;
+    }
+
+    public void ReturnToPool()
+    {
+        Reset();
     }
 }

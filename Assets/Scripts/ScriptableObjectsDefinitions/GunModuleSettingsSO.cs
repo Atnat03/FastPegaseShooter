@@ -103,6 +103,7 @@ public class GunSetting
     {
         public bool IsExplosifAmmo = false;
         public float explosionRadius;
+        public Vector2 OneAmmoAddPercentage = new Vector2(1, 1);
 
         [Header("Charging")] 
         public float _damageChargedMultiplicator = 10;
@@ -118,8 +119,9 @@ public class GunSetting
     public class ChargedIncreaseNoiseSetting : GunSetting
     {
         public bool IsExplosifAmmo = false;
-        public float explosionRadius;
-
+        public float explosionRadius;        
+        public Vector2 OneAmmoAddPercentage = new Vector2(1, 1);
+        
         [Header("Charging")]
         public float _damageChargedMultiplicator = 10;
         public float recoilChargedMultiplier = 1.25f;
@@ -136,6 +138,7 @@ public class GunSetting
     {
         public bool IsExplosifAmmo = false;
         public float explosionRadius;
+        public Vector2 OneAmmoAddPercentage = new Vector2(1, 1);
 
         [Header("Charging")] 
         public float _damageChargedMultiplicator = 2;

@@ -20,6 +20,7 @@ namespace GunDecorator.ChargedModules
                 _recoilX = s.RecoilX;
                 _numberBulletInCharge = s.NumberBulletInCharged;
                 _intervaleCharge = s.intervaleCharge;
+                _oneAmmoAddPercentage = s.OneAmmoAddPercentage;
             }
         }
         

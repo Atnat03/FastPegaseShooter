@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class PausePanel : MonoBehaviour
+public abstract class PausePanel : MonoBusListener
 {
     public virtual void Init() { }
     

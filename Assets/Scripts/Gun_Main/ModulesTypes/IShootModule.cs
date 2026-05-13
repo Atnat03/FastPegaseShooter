@@ -53,7 +53,7 @@ namespace GunDecorator
         public float ExplosionRadius { get; set; }
     }
     
-    public interface IAmmoExplosif
+    public interface IAmmo
     {
         public void Explosed(float raduis, int damage);
         public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 

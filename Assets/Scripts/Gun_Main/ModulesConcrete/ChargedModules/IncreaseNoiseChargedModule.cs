@@ -22,6 +22,7 @@ namespace GunDecorator.ChargedModules
                 _numberBulletInCharge = s.NumberBulletInCharged;
                 _noiseAngle = s.noiseAngle;
                 _maximumNoiseAngle = s.maxNoiseAngle;
+                _oneAmmoAddPercentage = s.OneAmmoAddPercentage;
             }
         }
         
