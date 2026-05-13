@@ -23,7 +23,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     [SerializeField]private Material _positiveMaterial;
     [SerializeField] private Material _negativeMaterial;
     
-    [SerializeField]private TrailRenderer _trailenderer;
+    [SerializeField]private TrailRenderer _trailRenderer;
     [SerializeField]private Gradient _positiveLineColor;
     [SerializeField]private Gradient _negativeLineColor;
     
@@ -34,15 +34,6 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     private NetworkObject _targetNetworkObject;
 
     private bool _hasHit = false;
-    private bool _hasMark = false;
-    
-    private Vector3 _lastPosition;
-    private bool _firstFrame = true;
-
-    private void Awake()
-    {
-        _lastPosition = transform.position;
-    }
 
     private void FixedUpdate()
     {
@@ -80,7 +71,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
         
-        _trailenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
+        _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
     }
 
@@ -108,12 +99,12 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         else
             HandleDirectHit(hit);
 
-        OnCollision.Invoke(this);
+        OnCollision?.Invoke(this);
     }
 
     private void HandleExplosion()
     {
-        if(_vfx != null)
+        if (_vfx != null)
             Destroy(Instantiate(_vfx, transform.position, Quaternion.identity), 3f);
 
         if (_gunController.IsServerInitialized)
@@ -122,11 +113,8 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        
-        if (_gunController.IsServerInitialized) 
+        if (_gunController.IsServerInitialized)
             _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
-        else 
-            _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
 
         CreateHitMark(hit);
     }
@@ -135,34 +123,32 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     public void Explosed(float radius, int damage)
     {
-        if(_vfx != null)
-            Instantiate(_vfx, transform.position, Quaternion.identity);
+        if(_vfx != null) Instantiate(_vfx, transform.position, Quaternion.identity);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
         
-        foreach (Collider c in colliders)
+        foreach (Collider c in Physics.OverlapSphere(transform.position, radius))
         {
             if (!c.TryGetComponent<IDamagable>(out _)) continue;
-    
             if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
 
-            if (_gunController.IsServerInitialized)
-                _gunController.ApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
-            else
-                _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
+            _gunController.ApplyDamage(netObj, damage, p_isCritical, p_hadCharged);
         }
     }
 
     private void Reset()
     {
         _hasHit = false;
-        
+        OnCollision = null;
+        //if (_trailRenderer != null) _trailRenderer.Clear();
+        _targetPoint = Vector3.zero;
+        _targetNetworkObject = null;
+        _gunController = null;
+        _vfx = null;
+
     }
 
-    public void Spawn()
-    {
-        _lastPosition = transform.position;
-    }
+    public void Spawn() { }
 
     public void ReturnToPool()
     {

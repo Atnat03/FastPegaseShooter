@@ -150,8 +150,7 @@ public class PlayerHealthView : MonoBehaviour
 	
 	private void TakeDamageEffect()
 	{
-		AudioClip clip = SoundManager.GetAudioClip(_soundsData, "Hurt");
-		SoundManager.PlaySound(clip, _audioSource);
+		SoundManager.PlaySound(_soundsData, "Hurt", _audioSource);
 		
 		StartCoroutine(ApplyVolumeDamagedEffect());
 	}
@@ -230,13 +229,12 @@ public class PlayerHealthView : MonoBehaviour
 
 	void HideGun()
 	{
-		currentGunID = gunSwitching.CurrentMainGunIndex;
 		gunSwitching.DesactivateAllMainGun();
 	}
 
 	void ShowGun()
 	{
-		gunSwitching.ActivateCurrentGun(gunSwitching._mainGunsList, currentGunID);
+		gunSwitching.ActivateCurrentGun(gunSwitching._mainGunsList, gunSwitching.CurrentMainGunIndex);
 	}
 
 	void OnEnable()
@@ -253,7 +251,6 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnHealCanceled += StopPreview;
 		
 		//Drone Throw
-		//_droneThrower.OnThrowingActivation += OnThrowingVisualActivation;
 		_droneThrower.OnThrowing += StopPreview;
 	}
 
@@ -263,14 +260,14 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnStartWarning -= StartWarning;
 		_playerHealth.OnKOPlayer -= KoPlayerUI;
 		_playerHealth.OnTakeDamage -= TakeDamageEffect;
-		
+    
 		//Healing
 		_playerHealth.OnThrowingVisualActivation -= OnThrowingVisualActivation;
-		_playerHealth.OnThrowing -= StopPreview;
+		_playerHealth.OnThrowKeyReleased -= StopPreview;
 		_playerHealth.OnHealThrowLanding -= ShowHealSphereEffect;
-		
+		_playerHealth.OnHealCanceled -= StopPreview;
+
 		//Drone Throw
-		//_droneThrower.OnThrowingActivation -= OnThrowingVisualActivation;
 		_droneThrower.OnThrowing -= StopPreview;
 	}
 

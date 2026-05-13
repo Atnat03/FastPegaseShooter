@@ -19,6 +19,7 @@ public class MagneticChargeView : MonoBusListener
 	[Header("UI")]
 	[SerializeField] private Image _positiveUI;
 	[SerializeField] private Image _negativeUI;
+	[SerializeField] private Image _cooldown;
 	
 	[Header("Polarization")]
 	[SerializeField] private TextMeshProUGUI _polarizationText;
@@ -38,15 +39,28 @@ public class MagneticChargeView : MonoBusListener
 	private void OnEnable()
 	{
 		_gunSwitching.OnSwapGun += UpdateUI;
+		_gunSwitching.OnMagneticCooldown += CooldownMagneticCharge;
 		
 		ListenToEvent<OnPolarizationStateChanged>(UpdatePolarisation);
 		ListenToEvent<OnConflictUIUpdate>(UpdateConflictText);
 		ListenToEvent<OnConflictTimerUIUpdate>(UpdateTimerBar);
 	}
+	
+	private void OnDisable()
+	{
+		_gunSwitching.OnSwapGun -= UpdateUI;
+		_gunSwitching.OnMagneticCooldown -= CooldownMagneticCharge;
+	}
+
+	private void CooldownMagneticCharge(float ratio)
+	{
+		_cooldown.gameObject.SetActive(ratio > 0);
+		_cooldown.fillAmount = 1 - ratio;
+	}
 
 	private void UpdatePolarisation(OnPolarizationStateChanged data)
 	{
-		_polarizationText.text = data.isAligned ? _isAlignedMessage : _isPolarizedMessage;
+		_polarizationText.text = data.isAligned ? _isPolarizedMessage : _isAlignedMessage;
 	}
 
 	private void UpdateUI(bool positive)

@@ -28,7 +28,7 @@ public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value, bool _infiniteAmmo);
-    public Renderer ModelGun { get; }
+    public Transform ModelGun { get; }
     public void StopReload();
     public void SetPercentageCharge(int percent);
 }
@@ -44,7 +44,7 @@ namespace GunDecorator
         public bool IsInfiniteAmmo => _infiniteAmmo;
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
-        public Renderer ModelGun => _model;
+        public Transform ModelGun => _model;
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -58,7 +58,7 @@ namespace GunDecorator
         private GunModuleSettingsSO _settings;
 
         [SerializeField, Tooltip("Model 3d de l'arme")]
-        private Renderer _model;
+        private Transform _model;
 
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
@@ -226,7 +226,7 @@ namespace GunDecorator
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
 
-            bool crit = d.TakeDamage(OwnerId, damage, isCritical);
+            bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
             
             if (target.TryGetComponent<EnemyCore>(out var enemyCore))
@@ -275,7 +275,7 @@ namespace GunDecorator
 
             if (clip == null) return;
 
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
 
             PlaySoundServerRpc(sound);
         }
@@ -289,8 +289,7 @@ namespace GunDecorator
         [ObserversRpc(ExcludeOwner = true)]
         void PlaySoundObserverRpc(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
         }
 
         [ObserversRpc]
