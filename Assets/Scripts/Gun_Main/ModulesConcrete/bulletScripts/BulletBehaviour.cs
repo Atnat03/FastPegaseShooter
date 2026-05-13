@@ -104,7 +104,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleExplosion()
     {
-        if(_vfx != null)
+        if (_vfx != null)
             Destroy(Instantiate(_vfx, transform.position, Quaternion.identity), 3f);
 
         if (_gunController.IsServerInitialized)
@@ -113,11 +113,8 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleDirectHit(RaycastHit hit)
     {
-        
-        if (_gunController.IsServerInitialized) 
+        if (_gunController.IsServerInitialized)
             _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
-        else 
-            _gunController.RequestApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
 
         CreateHitMark(hit);
     }
@@ -130,16 +127,12 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
         
-        foreach (Collider c in colliders)
+        foreach (Collider c in Physics.OverlapSphere(transform.position, radius))
         {
             if (!c.TryGetComponent<IDamagable>(out _)) continue;
-    
             if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
 
-            if (_gunController.IsServerInitialized)
-                _gunController.ApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
-            else
-                _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
+            _gunController.ApplyDamage(netObj, damage, p_isCritical, p_hadCharged);
         }
     }
 
