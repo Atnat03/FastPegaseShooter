@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class BasicLifeViewer : MonoBehaviour
 {
+    private EnemyCore _enemyCore;
     [SerializeField] private EnemyLifeModule _enemyLifeModule;
     
     [Header("HitMark")] //visuals
@@ -18,8 +19,9 @@ public class BasicLifeViewer : MonoBehaviour
     [Header("Life")]
     [SerializeField] private TextMeshProUGUI _lifeTMP;
     [SerializeField] private Image _lifeBarImage;
-    [SerializeField] private Color _fullLifeColor;
-    [SerializeField] private Color _emptyLifeColor;
+    [SerializeField] private Gradient _NoneAffinityLifeGradient;
+    [SerializeField] private Gradient _PositiveAffinityLifeGradient;
+    [SerializeField] private Gradient _NegativeAffinityLifeGradient;
     [SerializeField] private float _fillSpeedBarFront = 10f;
     
     [SerializeField] private Image _lifeBarSecondImage;
@@ -33,19 +35,16 @@ public class BasicLifeViewer : MonoBehaviour
     
     void Awake()
     {
+        _enemyCore = _enemyLifeModule.gameObject.GetComponent<EnemyCore>();
+        
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
-        _lifeBarImage.color = _fullLifeColor;
+        _lifeBarImage.color = GetLifeColor(1f, _enemyCore.p_affinityType);
+
         
         _lifeTMP.enabled = false;
         _lifeBarImage.enabled = false;
         _lifeBarSecondImage.enabled = false;
     }
-
-    /*void SetUI(int baseLife)
-    {
-        _lifeTMP.text = $"{baseLife}/{baseLife}";
-        _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, 1);
-    }*/
     
     private void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
@@ -56,7 +55,7 @@ public class BasicLifeViewer : MonoBehaviour
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
         _lifeTMP.text = $"{lifeAmount}/{fullLife}";
-        _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, percentage);
+        _lifeBarImage.color = GetLifeColor(percentage, _enemyCore.p_affinityType);
 
         //Percentage fills
         _frontFill = percentage;
@@ -80,6 +79,13 @@ public class BasicLifeViewer : MonoBehaviour
             if (_hitMarker != null)
                 _hitMarker.SetText(_cumulatifDmg.ToString());
         }
+    }
+
+    Color GetLifeColor(float percent, EnemyCore.ChargeType affinityType)
+    {
+        if (affinityType == EnemyCore.ChargeType.None) return _NoneAffinityLifeGradient.Evaluate(percent);
+        else if(affinityType == EnemyCore.ChargeType.Positive) return _PositiveAffinityLifeGradient.Evaluate(percent);
+        else return _NegativeAffinityLifeGradient.Evaluate(percent);
     }
 
     private void Update()
