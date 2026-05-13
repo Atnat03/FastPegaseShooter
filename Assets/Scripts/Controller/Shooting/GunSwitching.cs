@@ -133,7 +133,6 @@ public class GunSwitching : NetworkBusListener
 		for (int i = 0; i < list.Count; i++)
 		{
 			bool shouldBeActive = (i == index);
-			Debug.Log($"[GunSwitching] Gun[{i}] '{list[i].name}' → {shouldBeActive}");
 			list[i].gameObject.SetActive(shouldBeActive);
 		}
 
@@ -152,8 +151,6 @@ public class GunSwitching : NetworkBusListener
 	public void ChangeCurrentGun_Main_ServerRpc(int newIndex)
 	{
 		if (!IsMainGun) return;
-		
-		Cons.Print("change gun", ColorConsole.Orange);
 		
 		ChangeCurrentGun_Main(newIndex);
 		//ChangeMagneticCharge();
@@ -186,8 +183,6 @@ public class GunSwitching : NetworkBusListener
 		
 	private void OnCurrentGunMainChange(int prev, int next, bool asServer)
 	{
-		Debug.Log($"[GunSwitching] OnCurrentGunMainChange prev={prev} next={next} asServer={asServer} IsOwner={IsOwner}");
-		
 		if (_mainGunsList == null || _mainGunsList.Count == 0) return;
 		if (next >= _mainGunsList.Count) return;
 
@@ -202,7 +197,6 @@ public class GunSwitching : NetworkBusListener
 			CurrentMainGun.GetComponent<GunController>().StopReload();
 		}
     
-		Debug.Log($"[GunSwitching] Activating gun index {next}, list count={_mainGunsList.Count}");
 		ActivateCurrentGun(_mainGunsList, next);
 	}
 	
