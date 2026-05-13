@@ -94,6 +94,8 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         if (_hasHit) return;
         _hasHit = true;
 
+        Debug.Log($"[BulletHit] touché: {hit.collider.gameObject.name} | layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)} | distance: {hit.distance}");
+
         if (p_isExplosive)
             HandleExplosion();
         else
@@ -146,18 +148,26 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     private void Reset()
     {
         _hasHit = false;
-        OnCollision = null;
         //if (_trailRenderer != null) _trailRenderer.Clear();
         _targetPoint = Vector3.zero;
         _targetNetworkObject = null;
         _gunController = null;
         _vfx = null;
+    }
+    
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        Debug.Log($"DESTROYED: {gameObject.name} | instanceID: {gameObject.GetInstanceID()} | wasActive: {gameObject.activeSelf}\n{System.Environment.StackTrace}");
 
     }
 
-    public void Spawn() { }
+    public void Spawn()
+    {
+        Reset();
+    }
 
-    public void ReturnToPool()
+    public void OnReturnToPool()
     {
         Reset();
     }

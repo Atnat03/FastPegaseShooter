@@ -121,7 +121,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
         _lastPosition = transform.position;
     }
 
-    public void ReturnToPool()
+    public void OnReturnToPool()
     {
         _hasHit = false;
     }

@@ -30,7 +30,7 @@ namespace GunDecorator.AmmoModules
         
         private Vector3 _finalSpawnPoint;
         
-        private Pooler<BulletBehaviour> _ammoPool;
+        private static Pooler<BulletBehaviour> _ammoPool;
         
         private Dictionary<BulletBehaviour, Coroutine> bulletsLifetime =  new Dictionary<BulletBehaviour, Coroutine>();
         
@@ -47,7 +47,7 @@ namespace GunDecorator.AmmoModules
         void Start()
         {
             _dmgToApply = _damages;
-            _ammoPool = new Pooler<BulletBehaviour>(BulletPrefab.GetComponent<BulletBehaviour>(), 100);
+            _ammoPool ??= new Pooler<BulletBehaviour>(BulletPrefab.GetComponent<BulletBehaviour>(), 0);
         }
 
         public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true)
@@ -115,9 +115,15 @@ namespace GunDecorator.AmmoModules
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos,
             NetworkObject target = null, bool hadCharged = true)
         {
-            //BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
-            //Debug.Log($"ammo pool size: {_ammoPool.Size}");
-            BulletBehaviour newBullet = Instantiate(BulletPrefab, finalPos + offset, Quaternion.LookRotation(direction)).GetComponent<BulletBehaviour>();
+            BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
+            Debug.Log($"ammo pool size: {_ammoPool.Size}");
+            
+            if (bulletsLifetime.ContainsKey(newBullet))
+            {
+                StopCoroutine(bulletsLifetime[newBullet]);
+                bulletsLifetime.Remove(newBullet);
+            }
+            
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     
@@ -154,16 +160,15 @@ namespace GunDecorator.AmmoModules
 
         void DespawnBullet(BulletBehaviour bullet)
         {
+            if (!bullet.gameObject.activeSelf) return;
             if (bulletsLifetime.ContainsKey(bullet)) 
             {
                 StopCoroutine(bulletsLifetime[bullet]);
                 bulletsLifetime.Remove(bullet);
             }
-            Destroy(bullet.gameObject);
-            /*
+            
             bullet.OnCollision -= DespawnBullet;
             _ammoPool.ReturnToPool(bullet);
-            */
         }
 
         
