@@ -96,10 +96,8 @@ public class EnemyCore : NetworkBusListener
             }
         }
 
-        _hasShied.OnChange += OnShiedChange;
-        
         _hasShied.Value = (int)p_shiedType;
-
+        
         _lifeModules[0].OnDeath += DeathEvent;
     }
 
@@ -107,7 +105,12 @@ public class EnemyCore : NetworkBusListener
     {
         InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }
-    
+
+    public override void OnStartClient()
+    {
+        _hasShied.OnChange += OnShiedChange;
+    }
+
     public void InitialiseEnemy()
     {
         foreach (EnemyAttackModule module in _attackingModules)
