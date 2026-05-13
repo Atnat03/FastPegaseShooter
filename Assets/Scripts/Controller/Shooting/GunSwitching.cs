@@ -49,6 +49,7 @@ public class GunSwitching : NetworkBusListener
 	public Action OnStartSwitchGun;
 	public Action OnEndSwitchGun;
 	public Action<bool> OnSwapGun;
+	public Action<float> OnMagneticCooldown;
 
 	private IGun _currentMainIGun;
 	private ISurcharge _currentISurcharge;
@@ -80,11 +81,11 @@ public class GunSwitching : NetworkBusListener
 		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
 
-		_isPositiveChargedPlayer.Value = startIndex == 0;
+		_isPositiveChargedPlayer.Value = true;
 		
 		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
 		
-		OnSwapGun?.Invoke(true);
+		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);	
 	}
 
 	[ServerRpc]
@@ -110,22 +111,32 @@ public class GunSwitching : NetworkBusListener
 
 		_canChangemagnetic = false;
 		
-		UpdateUIChargeObserversRpc();
+		UpdateUIChargeObserversRpc(_isPositiveChargedPlayer.Value);
 	}
 
 	[ObserversRpc]
-	private void UpdateUIChargeObserversRpc()
+	private void UpdateUIChargeObserversRpc(bool isPositive)
 	{
-		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
+		OnSwapGun?.Invoke(isPositive);
 
 		StartCoroutine(CooldownChargeMagnetic());
 	}
 
 	IEnumerator CooldownChargeMagnetic()
 	{
-		yield return new WaitForSeconds(_cooldownChangeMagnetic);
+		float t = 0;
 
-		_canChangemagnetic = true;
+		while (t < _cooldownChangeMagnetic)
+		{
+			t += Time.deltaTime;
+			
+			OnMagneticCooldown?.Invoke(t / _cooldownChangeMagnetic);
+			
+			yield return null;
+		}
+
+		if (IsServerInitialized)
+			_canChangemagnetic = true;
 	}
 
 	public void ActivateCurrentGun(List<GameObject> list, int index)

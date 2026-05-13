@@ -106,6 +106,7 @@ public class EnemyCoreInspector : Editor
         EditorUtilities.Draw("_explosionChargedDamage", serializedObject);
         EditorUtilities.Draw("p_player1_ChargeMax", serializedObject);
         EditorUtilities.Draw("p_player2_ChargeMax", serializedObject);
+        EditorUtilities.Draw("p_shiedType", serializedObject);
         
         serializedObject.ApplyModifiedProperties();
     }

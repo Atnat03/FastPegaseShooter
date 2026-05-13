@@ -40,8 +40,6 @@ public class VisualChargedModule : GunModule
 	}
 	private void PercentageChanged(int percent)
 	{
-		Cons.Print("% : " + percent, ColorConsole.Red);
-		
 		if(_percentageChargeText != null)
 			_percentageChargeText.text = percent + "%";
 	}
