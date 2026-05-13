@@ -14,9 +14,11 @@ public class BasicLifeModule : EnemyLifeModule
 {
 
     [Server]
-    public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
+    public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false)
     {
-        base.TakeDamage(attackerObjectId, rawDamageAmount, isCritical);
+        if(!CanReceiveDamage(charge)) return false;
+        
+        base.TakeDamage(attackerObjectId, rawDamageAmount, charge,  isCritical);
         
         if (IsServerInitialized)
         {

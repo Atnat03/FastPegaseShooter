@@ -226,7 +226,7 @@ namespace GunDecorator
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
 
-            bool crit = d.TakeDamage(OwnerId, damage, isCritical);
+            bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
             
             if (target.TryGetComponent<EnemyCore>(out var enemyCore))

@@ -1,5 +1,6 @@
 using GunDecorator;
 using GunDecorator.ChargedModules;
+using MyPrint;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,7 @@ public class VisualChargedModule : GunModule
 	[SerializeField] private MeshRenderer _textMat;
 	[SerializeField] private Color _normalTextColor;
 	[SerializeField] private Color _fullChargedTextColor;
+	[SerializeField] private Color _OverloadTextColor;
 	
 	#endregion
 
@@ -42,9 +44,12 @@ public class VisualChargedModule : GunModule
 			_percentageChargeText.text = percent + "%";
 	}
 	
-	private void FullCharged(bool isFull)
+	private void FullCharged(bool isFull, bool isOverload)
 	{
-		_textMat.material.SetColor("_FresnelColor" , isFull ? _fullChargedTextColor : _normalTextColor);
+		if(!isOverload)
+			_textMat.material.SetColor("_FresnelColor" , isFull ? _fullChargedTextColor : _normalTextColor);
+		else
+			_textMat.material.SetColor("_FresnelColor" , _OverloadTextColor);
 
 		if (isFull)
 		{
