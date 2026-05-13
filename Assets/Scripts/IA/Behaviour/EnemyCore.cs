@@ -36,7 +36,7 @@ public class EnemyCore : NetworkBusListener
 
     public bool p_player1_IsPositive;
     public float p_player1_ChargeMax = 5;
-    public float p_current_player1_Charge;
+    public float p_current_player1_Charge;  
     
     public bool p_player2_IsPositive;
     public float p_player2_ChargeMax = 5;

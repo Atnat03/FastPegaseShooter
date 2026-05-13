@@ -132,10 +132,8 @@ public class GunSwitching : NetworkBusListener
 	{
 		for (int i = 0; i < list.Count; i++)
 		{
-			if(i == index)
-				list[i].gameObject.SetActive(true);
-			else
-				list[i].gameObject.SetActive(false);
+			bool shouldBeActive = (i == index);
+			list[i].gameObject.SetActive(shouldBeActive);
 		}
 
 		IGunMain?.SetReticule(_reticuleManager);
@@ -154,8 +152,6 @@ public class GunSwitching : NetworkBusListener
 	{
 		if (!IsMainGun) return;
 		
-		Cons.Print("change gun", ColorConsole.Orange);
-		
 		ChangeCurrentGun_Main(newIndex);
 		//ChangeMagneticCharge();
 
@@ -168,32 +164,40 @@ public class GunSwitching : NetworkBusListener
 	[Server]
 	public void ChangeCurrentGun_Main(int newIndex)
 	{
+		if (_currentMainGun.Value == newIndex)
+		{
+			ActivateCurrentGunObserversRpc(newIndex);
+			return;
+		}
+
 		_currentMainGun.Value = newIndex;
-		IGunMain.SetChargedPlayer(_isPositiveChargedPlayer.Value);
+	}
+	
+	[ObserversRpc]
+	private void ActivateCurrentGunObserversRpc(int index)
+	{
+		_currentMainIGun = _mainGunsList[index].GetComponent<IGun>();
+		_currentISurcharge = _mainGunsList[index].GetComponent<ISurcharge>();
+		ActivateCurrentGun(_mainGunsList, index);
 	}
 		
 	private void OnCurrentGunMainChange(int prev, int next, bool asServer)
 	{
 		if (_mainGunsList == null || _mainGunsList.Count == 0) return;
-       
-		if (next < _mainGunsList.Count)
+		if (next >= _mainGunsList.Count) return;
+
+		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
+    
+		_currentISurcharge.StopReload();
+    
+		if (IsOwner)
 		{
-			_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
-			_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
-			
-			_currentISurcharge.StopReload();
-			
-			if (IsOwner)
-			{
-				CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
-				CurrentMainGun.GetComponent<GunController>().StopReload();
-			}
-          
-			if (!asServer)
-			{
-				ActivateCurrentGun(_mainGunsList, next);
-			}
+			CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
+			CurrentMainGun.GetComponent<GunController>().StopReload();
 		}
+    
+		ActivateCurrentGun(_mainGunsList, next);
 	}
 	
 	private void DesactivateGunWhenThrow()
@@ -211,14 +215,12 @@ public class GunSwitching : NetworkBusListener
 
 		GunController g = CurrentMainGun.GetComponent<GunController>();
 		
-		Cons.PrintBool(g != null, "Gun controller not null");
-		
 		if (g.IsFullAuto)
 		{
 			g.ApplyShoot();
 		}
 	}
-
+	
 	private void OnEnable()
 	{
 		_throwerGrenade.OnStartThrow += DesactivateGunWhenThrow;
@@ -231,7 +233,7 @@ public class GunSwitching : NetworkBusListener
 		_throwerGrenade.OnStartThrow -= DesactivateGunWhenThrow;
 		_throwerDrone.OnThrowing -= DesactivateGunWhenThrow;
 	}
-
+	
 	#endregion
 }
 

@@ -219,9 +219,10 @@ namespace Managers
                     if (_conflictTimer.Value <= 0)
                     {
                         _conflictTimer.Value = 0;
-                        _isShortCircuit.Value = false;
                     }
                 }
+                
+                _isShortCircuit.Value = false;
             }
         }
 
