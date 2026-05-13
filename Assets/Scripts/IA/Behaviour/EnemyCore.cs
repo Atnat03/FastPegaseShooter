@@ -44,7 +44,7 @@ public class EnemyCore : NetworkBusListener
     public readonly SyncVar<int> _hasShied = new SyncVar<int>(0);
     public ChargeType p_shiedType = ChargeType.None;
     
-    public enum ChargeType{Negative, Positive, None}
+    public enum ChargeType{None, Negative, Positive}
     
     #endregion
     
