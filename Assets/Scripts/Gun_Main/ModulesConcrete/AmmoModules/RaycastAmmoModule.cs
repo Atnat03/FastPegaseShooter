@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
 using MyPrint;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -114,8 +115,9 @@ namespace GunDecorator.AmmoModules
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos,
             NetworkObject target = null, bool hadCharged = true)
         {
-            BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
-            Debug.Log($"ammo pool size: {_ammoPool.Size}");
+            //BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
+            //Debug.Log($"ammo pool size: {_ammoPool.Size}");
+            BulletBehaviour newBullet = Instantiate(BulletPrefab, finalPos + offset, Quaternion.LookRotation(direction)).GetComponent<BulletBehaviour>();
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     
@@ -157,8 +159,11 @@ namespace GunDecorator.AmmoModules
                 StopCoroutine(bulletsLifetime[bullet]);
                 bulletsLifetime.Remove(bullet);
             }
+            Destroy(bullet.gameObject);
+            /*
             bullet.OnCollision -= DespawnBullet;
             _ammoPool.ReturnToPool(bullet);
+            */
         }
 
         

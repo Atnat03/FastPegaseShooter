@@ -126,8 +126,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     public void Explosed(float radius, int damage)
     {
-        if(_vfx != null)
-            Instantiate(_vfx, transform.position, Quaternion.identity);
+        if(_vfx != null) Instantiate(_vfx, transform.position, Quaternion.identity);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
         
