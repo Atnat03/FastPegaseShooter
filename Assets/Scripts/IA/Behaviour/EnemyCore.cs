@@ -185,36 +185,37 @@ public class EnemyCore : NetworkBusListener
     [Server]
     public void AddCharge(bool positive, float value, int isServer)
     {
-        if (p_current_player1_Charge > 0 && p_current_player2_Charge > 0)
-        {
-            if (p_player1_IsPositive == p_player2_IsPositive)
-            {
-                _hasShied.Value = (int)ChargeType.None;
-            }
-        }
-        
         if (isServer == 0)
         {
             if (positive != p_player1_IsPositive)
-            {
                 p_current_player1_Charge = 0;
-            }
-            
+
             p_player1_IsPositive = positive;
             p_current_player1_Charge += value;
-            
-            OnPlayer1ChangeObserverRpc(p_current_player1_Charge, p_player1_IsPositive, p_current_player1_Charge/p_player1_ChargeMax);
+
+            OnPlayer1ChangeObserverRpc(p_current_player1_Charge, p_player1_IsPositive, p_current_player1_Charge / p_player1_ChargeMax);
         }
         else
         {
             if (positive != p_player2_IsPositive)
-            {
                 p_current_player2_Charge = 0;
-            }
-            
+
             p_player2_IsPositive = positive;
             p_current_player2_Charge += value;
-            OnPlayer2ChangeObserverRpc(p_current_player2_Charge, p_player2_IsPositive, p_current_player2_Charge/p_player2_ChargeMax); 
+
+            OnPlayer2ChangeObserverRpc(p_current_player2_Charge, p_player2_IsPositive, p_current_player2_Charge / p_player2_ChargeMax);
+        }
+
+        if (p_shiedType != ChargeType.None && p_current_player1_Charge > 0 && p_current_player2_Charge > 0 && p_player1_IsPositive == p_player2_IsPositive)
+        {
+            ChargeType combinedType = p_player1_IsPositive ? ChargeType.Positive : ChargeType.Negative;
+
+            if (combinedType == p_shiedType)
+            {
+                _hasShied.Value = (int)ChargeType.None;
+                p_shiedType = ChargeType.None;
+                ResetAllCharged();
+            }
         }
     }
     
