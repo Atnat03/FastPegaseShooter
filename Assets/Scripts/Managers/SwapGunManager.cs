@@ -126,7 +126,6 @@ namespace Managers
         private void EvaluateConflict()
         {
             if (_playerIds.Count < 2) return;
-
             
             int p1 = _playerIds[0];
             int p2 = _playerIds[1];
@@ -137,15 +136,12 @@ namespace Managers
                 return;
             }
             
-            Cons.Print("p1 zone : " + _playerZones[p1] + " // p2 zone : " +  _playerZones[p2]);
-
-            
             bool zonesKnown = _playerZones.ContainsKey(p1) && _playerZones.ContainsKey(p2);
             bool chargesKnown = _playerCharges.ContainsKey(p1) && _playerCharges.ContainsKey(p2);
 
             if (!zonesKnown || !chargesKnown) return;
 
-            bool isAligned = _playerCharges[p1] == _playerCharges[p2];
+            bool isAligned = _playerCharges[p1] != _playerCharges[p2];
             bool isSameZone = _playerZones[p1] == _playerZones[p2];
 
             _canSwap.Value = !isAligned;
