@@ -1,64 +1,89 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using FishNet.Object;
 using UnityEngine;
 
 public class AscenseurManager : NetworkBusListener
 {
-	#region Properties
+    [Header("Prefabs")]
+    [SerializeField] private Ascenseur _ascenseurPrefab;
 
-	#endregion
+    [Header("Settings")]
+    [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private Transform _endPoint;
+    [SerializeField] private float _durationTraveling;
+    [SerializeField] private int _poolSize;
 
+    [Header("Events")] 
+    [SerializeField] private float _timeBeforeActivatedAscenseurScroll = 1;
 
-	#region Variables
+    private List<Ascenseur> _pool = new();
 
-	[Header("Prefabs")]
-	[SerializeField] private Ascenseur _ascenseurPrefabDefault;
-	[SerializeField] private Ascenseur _ascenseurPrefabStart;
-	[SerializeField] private Ascenseur _ascenseurPrefabEnd;
-	
-	[Header("Settings")]
-	[SerializeField] private Transform _spawnAscenseurPoint;
-	[SerializeField] private Transform _endRunAscenseurPoint;
-	[SerializeField] private float _durationTraveling;
+    public override void OnStartClient()
+    {
+        ListenToEvent<OnAscenseurStart>(CreatePool);
+    }
 
-	#endregion
-	
-	#region Fonctions
-	
-	public override void OnStartNetwork()
-	{
-		SpawnNewAscenseur();
-	}
+    public override void OnStartNetwork()
+    {
+        _ = FillPoolAsync();
+    }
 
-	[ContextMenu("Spawn Ascenseur")]
-	public void SpawnNewAscenseur()
-	{
-		if(IsServerInitialized)
-			SpawnNewAscenseurObserverRpc();
-		else
-		{
-			RequestSpawnAscenseurServerRpc();
-		}
-	}
+    private async Awaitable FillPoolAsync()
+    {
+        AsyncInstantiateOperation<Ascenseur> firstOp = InstantiateAsync(_ascenseurPrefab, 1, transform, _spawnPoint.position, _spawnPoint.rotation);
+        await firstOp;
 
-	[ServerRpc]
-	private void RequestSpawnAscenseurServerRpc()
-	{
-		SpawnNewAscenseurObserverRpc();
-	}
+        Ascenseur first = firstOp.Result[0].GetComponent<Ascenseur>();
+        first.OnThresholdReached += HandleThreshold;
+        first.gameObject.SetActive(true);
+        _pool.Add(first);
 
-	[ObserversRpc]
-	private void SpawnNewAscenseurObserverRpc()
-	{
-		//si plus de monstres => on change le prefab pour celui de fin
-		
-		Ascenseur newAscenseur = Instantiate(_ascenseurPrefabDefault, _spawnAscenseurPoint.position, _spawnAscenseurPoint.rotation, transform);
-		
-		newAscenseur.StartDescente(
-			_spawnAscenseurPoint.position,
-			_endRunAscenseurPoint.position, 
-			_durationTraveling, this);
-	}
-	
-	#endregion
+        for (int i = 0; i < _poolSize - 1; i++)
+        {
+            AsyncInstantiateOperation<Ascenseur> op = InstantiateAsync(_ascenseurPrefab, 1, transform, _spawnPoint.position, _spawnPoint.rotation);
+            await op;
+
+            Ascenseur a = op.Result[0].GetComponent<Ascenseur>();
+            a.OnThresholdReached += HandleThreshold;
+            a.gameObject.SetActive(false);
+            _pool.Add(a);
+        }
+    }
+
+    private void CreatePool(OnAscenseurStart data)
+    {
+        LaunchNext();
+    }
+
+    private void HandleThreshold()
+    {
+        ActivateNextAscenseurObserverRpc();
+    }
+
+    private void LaunchNext()
+    {
+        if (IsServerInitialized)
+            ActivateNextAscenseurObserverRpc();
+        else
+            RequestActivateAscenseurServerRpc();
+    }
+
+    [ObserversRpc]
+    private void ActivateNextAscenseurObserverRpc()
+    {
+        Ascenseur current = _pool[0];
+        _pool.RemoveAt(0);
+        _pool.Add(current);
+
+        current.transform.position = _spawnPoint.position;
+        current.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling);
+    }
+
+    [ServerRpc]
+    private void RequestActivateAscenseurServerRpc() => ActivateNextAscenseurObserverRpc();
 }
+
+public struct OnAscenseurStart
+{ }

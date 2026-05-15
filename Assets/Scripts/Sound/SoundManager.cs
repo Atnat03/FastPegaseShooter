@@ -20,13 +20,6 @@ public class SoundManager : NetworkBehaviour
 		return clip[Random.Range(0, clip.Count)];
 	}
 	
-	public static void PlaySound(AudioClip clip, AudioSource source, float volume = 0.5f, float pitch = 1f)
-	{
-		source.pitch = pitch;
-		source.volume = volume;
-		AudioSource.PlayClipAtPoint(clip, source.transform.position, source.volume);
-	}
-	
 	public static void PlaySound(SoundsDataSO data, string soundName, AudioSource source)
 	{
 		List<AudioClip> clip = new List<AudioClip>();
@@ -64,6 +57,24 @@ public class SoundManager : NetworkBehaviour
 	{
 		source.pitch = 1f;
 		source.volume = volume;
-		AudioSource.PlayClipAtPoint(clip, source.transform.position, source.volume);
+		PlayClipAtPoint(clip, source.transform.position, source, source.transform);
+	}
+	
+	public static void PlayClipAtPoint(AudioClip clip, Vector3 position, AudioSource source, Transform parent = null)
+	{
+		GameObject gameObject = new GameObject(clip.name + " spatial play");
+		gameObject.transform.position = position;
+		
+		gameObject.transform.SetParent(parent);
+    
+		AudioSource audioSource = (AudioSource) gameObject.AddComponent(typeof (AudioSource));
+		audioSource.clip = clip;
+		audioSource.spatialBlend = 1f;
+		audioSource.volume = source.volume;
+		
+		audioSource.outputAudioMixerGroup = source.outputAudioMixerGroup;
+		
+		audioSource.Play();
+		Object.Destroy((Object) gameObject, clip.length * ((double) Time.timeScale < 0.009999999776482582 ? 0.01f : Time.timeScale));
 	}
 }
