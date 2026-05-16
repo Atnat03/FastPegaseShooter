@@ -14,12 +14,19 @@ public class SettingsPausePanelBehaviour : PausePanel
     [SerializeField] float _mouseSensitivityMaxValue;
     [SerializeField] TMP_Dropdown _resolutionDropdown;
     [SerializeField] Toggle _fullscreenToggle;
+    
+    //sound temporary
+    MusicManager _musicManager;
+    [SerializeField] Slider _musicVolumeSlider;
+    [SerializeField] TMP_Text _musicVolumeText;
 
     Resolution[] _resolutions;
     private List<Resolution> _selectedResolutions = new();
 
     public override void Init()
     {
+        ListenToEvent<OnMusicManagerLinkage>(OnMusicManagerSignal);
+        
         _resolutions = Screen.resolutions;
         List<string> resolutionListString = new List<string>();
         string newResolutionString;
@@ -56,9 +63,20 @@ public class SettingsPausePanelBehaviour : PausePanel
         _mouseSensitivityText.text = savedSens.ToString("F0");
         _fpsController.mouseSensitivity = Mathf.Lerp(0, _mouseSensitivityMaxValue, _mouseSensitivitySlider.value / _mouseSensitivitySlider.maxValue);
         
+        // volume sonore
+        ChangeMusicVolume(PlayerPrefs.GetFloat("MusicVolume", 100));
+        _musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 100) * 100;
+        _musicVolumeText.text = _musicVolumeSlider.value.ToString("F0")  + "%";
+        
         ChangeResolution();
 
+        InvokeEvent<OnPausePanelInit>(new OnPausePanelInit());
         gameObject.SetActive(false);
+    }
+
+    void OnMusicManagerSignal(OnMusicManagerLinkage data)
+    {
+        _musicManager = data.musicManager;
     }
 
     public override void OnPause(bool isPause)
@@ -86,6 +104,17 @@ public class SettingsPausePanelBehaviour : PausePanel
         PlayerPrefs.Save();
     }
 
+    
+    public void ChangeMusicVolume() => ChangeMusicVolume(_musicVolumeSlider.value);
+    void ChangeMusicVolume(float newVolume)
+    {
+        if(!_musicManager)return;
+        _musicVolumeText.text = newVolume.ToString("F0");
+        newVolume /= 100;
+        PlayerPrefs.SetFloat("MusicVolume", newVolume);
+        _musicManager.SetVolume(newVolume);
+    } 
+
     public void QuitPanel() => gameObject.SetActive(false);
 
     [ContextMenu("ResetAllPlayerPrefs")]
@@ -93,4 +122,14 @@ public class SettingsPausePanelBehaviour : PausePanel
     {
         PlayerPrefs.DeleteAll();
     }
+}
+
+public struct OnPausePanelInit
+{
+    
+}
+
+public struct OnMusicManagerLinkage
+{
+    public MusicManager musicManager;
 }

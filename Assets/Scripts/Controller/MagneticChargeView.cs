@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
+using MyPrint;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MagneticChargeView : MonoBehaviour
+public class MagneticChargeView : MonoBusListener
 {
 	#region Properties
 
@@ -14,16 +16,20 @@ public class MagneticChargeView : MonoBehaviour
 
 	[SerializeField] private GunSwitching _gunSwitching;
 	
-	[Header("Particles")]
-	[SerializeField] private ParticleSystem _positiveParticles;
-	[SerializeField] private ParticleSystem _negativeParticles;
-    /*
 	[Header("UI")]
-	[SerializeField] private Transform _imagePositive;
-	[SerializeField] private Image _imageSelectPositive;
-	[SerializeField] private Transform _imageNegative;
-	[SerializeField] private Image _imageSelectNegative;
-	[SerializeField] private Material _materialLine;*/
+	[SerializeField] private Image _positiveUI;
+	[SerializeField] private Image _negativeUI;
+	[SerializeField] private Image _cooldown;
+	
+	[Header("Polarization")]
+	[SerializeField] private TextMeshProUGUI _polarizationText;
+	[SerializeField] private string _isPolarizedMessage;
+	[SerializeField] private string _isAlignedMessage;
+	
+	[Header("Conflict")]
+	[SerializeField] private GameObject _conflictPanel;
+	[SerializeField] private TextMeshProUGUI _conflictText;
+	[SerializeField] private Image _conflictTimerBar;
 
 	#endregion
 
@@ -33,41 +39,51 @@ public class MagneticChargeView : MonoBehaviour
 	private void OnEnable()
 	{
 		_gunSwitching.OnSwapGun += UpdateUI;
+		_gunSwitching.OnMagneticCooldown += CooldownMagneticCharge;
+		
+		ListenToEvent<OnPolarizationStateChanged>(UpdatePolarisation);
+		ListenToEvent<OnConflictUIUpdate>(UpdateConflictText);
+		ListenToEvent<OnConflictTimerUIUpdate>(UpdateTimerBar);
+	}
+	
+	private void OnDisable()
+	{
+		_gunSwitching.OnSwapGun -= UpdateUI;
+		_gunSwitching.OnMagneticCooldown -= CooldownMagneticCharge;
+	}
+
+	private void CooldownMagneticCharge(float ratio)
+	{
+		_cooldown.gameObject.SetActive(ratio > 0);
+		_cooldown.fillAmount = 1 - ratio;
+	}
+
+	private void UpdatePolarisation(OnPolarizationStateChanged data)
+	{
+		_polarizationText.text = data.isAligned ? _isPolarizedMessage : _isAlignedMessage;
 	}
 
 	private void UpdateUI(bool positive)
 	{
-		_positiveParticles.gameObject.SetActive(positive);
-		_negativeParticles.gameObject.SetActive(!positive);
-		
-		//StartCoroutine(AnimationChargeSwap(positive));
+		_positiveUI.gameObject.SetActive(positive);
+		_negativeUI.gameObject.SetActive(!positive);
+	}
+	
+	private void UpdateConflictText(OnConflictUIUpdate data)
+	{
+		_conflictPanel.SetActive(data.isConflict || data.isShortCircuit);
+
+		if (data.isShortCircuit)
+			_conflictText.text = "COURT CIRCUIT";
+		else if (data.isConflict)
+			_conflictText.text = "CONFLIT ÉLECTRIQUE - Temps avant court-circuit";
 	}
 
-	/*IEnumerator AnimationChargeSwap(bool positive)
+	private void UpdateTimerBar(OnConflictTimerUIUpdate data)
 	{
-		float duration = 0.5f;
-		float elapsedTime = 0f;
+		_conflictTimerBar.fillAmount = data.ratio;
+	}
 
-		_imageSelectPositive.gameObject.SetActive(positive);
-		_imageSelectNegative.gameObject.SetActive(!positive);
-		
-		Vector3 negativeTargetScale = positive ? Vector3.one : Vector3.one * 1.2f;
-		Vector3 positiveTargetScale = positive ? Vector3.one * 1.2f : Vector3.one;
-		
-		while (elapsedTime < duration)
-		{
-			elapsedTime += Time.deltaTime;
-			
-			_imagePositive.localScale = Vector3.Lerp(_imagePositive.localScale, positiveTargetScale, elapsedTime / duration);
-			_imageNegative.localScale = Vector3.Lerp(_imagePositive.localScale, negativeTargetScale, elapsedTime / duration);
-			
-			yield return null;
-		}
-
-		_materialLine.SetFloat("_Speed", positive ? 1 : -1);
-		_materialLine.SetColor("_Color", positive ? Color.red : Color.dodgerBlue);
-		
-	}*/
 
 	#endregion
 }

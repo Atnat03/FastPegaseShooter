@@ -48,12 +48,17 @@ public class PlayerEnergy : NetworkBusListener
 		_totalBars = Mathf.CeilToInt(_maxEnergy / _valueOneBar);
 
 		if (IsServerInitialized)
-			_currentEnergy.Value = _maxEnergy / 2f;
+			_currentEnergy.Value = _maxEnergy;
 
 		//Créer UI
 		OnCreateBarUI?.Invoke(_totalBars);
 
 		UpdateUI(_currentEnergy.Value);
+	}
+	
+	public override void OnStartClient()
+	{
+		_currentEnergy.OnChange += OnEnergyChanged;
 	}
 	
 	private void OnEnergyChanged(float prev, float next, bool asServer)
@@ -72,13 +77,10 @@ public class PlayerEnergy : NetworkBusListener
 	private void ModifyEnergy(ModifyEnergyEvent data)
 	{
 		if (!IsServerInitialized) return;
-		if (data.p_player != Owner) return;
-		
-		_currentEnergy.Value += data.p_value * _convertionTaux;
+		if (data.p_player != OwnerId) return;
 
+		_currentEnergy.Value += data.p_value * _convertionTaux;
 		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
-		
-		Cons.Print(_currentEnergy.Value.ToString(), ColorConsole.Red);
 	}
 	
 	private void ConsumeEnergy(ConsumeEnergyEvent data)
@@ -125,7 +127,7 @@ public struct AddHealthFromBarEvent
 
 public struct ModifyEnergyEvent
 {
-	public NetworkConnection p_player;
+	public int p_player;
 	public float p_value;
 }
 

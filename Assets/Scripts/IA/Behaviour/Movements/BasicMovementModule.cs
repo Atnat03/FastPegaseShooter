@@ -7,9 +7,9 @@ public class BasicMovementModule : EnemyMovementModule
     private Vector3 _lastPos;
     private float _t;
 
-    protected override void RecalculatePath()
+    protected override void RecalculatePathConcrete()
     {
-        base.RecalculatePath();
+        base.RecalculatePathConcrete();
         _lastPos = transform.position;
         _t = 0;
     }

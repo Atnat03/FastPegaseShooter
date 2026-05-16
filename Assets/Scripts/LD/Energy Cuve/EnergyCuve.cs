@@ -23,7 +23,7 @@ public class EnergyCuve : NetworkBusListener, IDamagable
         _lifeAmount.Value = _life;
         _lifeAmount.OnChange += OnLifeChanged;
         
-        ListenToEvent((SwapingGunEvent SGE) => damageMultiplier = SGE.dataSurcharge.damageMultiplier);
+        //ListenToEvent((SwapingGunEvent SGE) => damageMultiplier = SGE.dataSurcharge.damageMultiplier);
         ListenToEvent((EndOverloadEvent EOE) => damageMultiplier = 1);
     }
 
@@ -38,7 +38,7 @@ public class EnergyCuve : NetworkBusListener, IDamagable
         }
     }
 
-    public bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
+    public bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false)
     {
         //Debug.Log($"raw {rawDamageAmount}, mult {damageMultiplier}, life {_lifeAmount.Value}");
         if (IsServerInitialized)

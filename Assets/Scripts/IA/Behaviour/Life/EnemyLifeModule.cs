@@ -27,10 +27,15 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     
     [HideInInspector] private float p_damageMultiplier = 1;
 
-    public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, bool isCritical = false)
+    public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false)
     {
+        if(!CanReceiveDamage(charge)) return false;
+        
         if (IsServerInitialized)
         {
+            if (_enemyCore._hasShied.Value != 0)
+                return false;
+            
             p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
             OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
 
@@ -42,6 +47,13 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
         return isCritical;
     }
 
+    protected bool CanReceiveDamage(EnemyCore.ChargeType charge)
+    {
+        if(_enemyCore.p_affinityType == EnemyCore.ChargeType.None) return true;
+        
+        return _enemyCore.p_affinityType != charge;
+    }
+    
     public virtual void Death(int takenDamages)
     {
         if(!IsServerInitialized) return;
@@ -54,7 +66,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
         p_life.Value = _life;
         p_life.OnChange += OnLifeChanged;
         
-        ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
+        //ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
         ListenToEvent((EndOverloadEvent EOE) => p_damageMultiplier = 1);
     }
 

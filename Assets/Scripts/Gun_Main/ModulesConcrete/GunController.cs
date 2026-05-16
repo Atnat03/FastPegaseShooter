@@ -28,8 +28,7 @@ public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value, bool _infiniteAmmo);
-    public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
-    public Renderer ModelGun { get; }
+    public Transform ModelGun { get; }
     public void StopReload();
     public void SetPercentageCharge(int percent);
 }
@@ -45,7 +44,7 @@ namespace GunDecorator
         public bool IsInfiniteAmmo => _infiniteAmmo;
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
-        public Renderer ModelGun => _model;
+        public Transform ModelGun => _model;
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -59,7 +58,7 @@ namespace GunDecorator
         private GunModuleSettingsSO _settings;
 
         [SerializeField, Tooltip("Model 3d de l'arme")]
-        private Renderer _model;
+        private Transform _model;
 
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
@@ -208,27 +207,7 @@ namespace GunDecorator
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
 
         public void SetAmmo(int value, bool infiniteAmmo) => _reloadModule.SetAmmo(value, _infiniteAmmo);
-
-        public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
-        {
-            if (!IsServerInitialized)
-            {
-                SetSurchargeStatServerRpc(isOverload, dmgMultiplicator, cadenceMultiplicator);
-                return;
-            }
-
-            _isOverload.Value = isOverload;
-            SurchargeMultiplierDamage = dmgMultiplicator;
-            SurchargeMultiplierRate = cadenceMultiplicator;
-            _shootModule?.AmmoModule.SetDamage(dmgMultiplicator);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void SetSurchargeStatServerRpc(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
-        {
-            SetSurchargeStat(isOverload, dmgMultiplicator, cadenceMultiplicator);
-        }
-
+        
         public void TryReload()
         {
             if (_reloadModule.IsReloading) return;
@@ -247,11 +226,14 @@ namespace GunDecorator
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
 
-            bool crit = d.TakeDamage(OwnerId, damage, isCritical);
+            bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
+            Cons.Print("Damage : " + crit);
             
             if (target.TryGetComponent<EnemyCore>(out var enemyCore))
             {
-                enemyCore.AddCharge(IsPositivePlayerCharge, damage);
+                enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
+                
+                Cons.Print("Add charge : " + IsPositivePlayerCharge);;
             }
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
@@ -260,12 +242,6 @@ namespace GunDecorator
         [ObserversRpc]
         private void ApplyDamageObservers(int damage, bool isCritical, bool hadCharged)
         {
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = Owner,
-                p_value = damage
-            });
-            
             InvokeEvent(new OnPlayerDoDamage
             {
                 p_ownerId = OwnerId,
@@ -299,7 +275,7 @@ namespace GunDecorator
 
             if (clip == null) return;
 
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
 
             PlaySoundServerRpc(sound);
         }
@@ -313,16 +289,12 @@ namespace GunDecorator
         [ObserversRpc(ExcludeOwner = true)]
         void PlaySoundObserverRpc(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
         }
 
         [ObserversRpc]
-        private void PlayMuzzleFlash()
-        {
-            _muzzleFlash.Play();
-        }
-
+        private void PlayMuzzleFlash() => _muzzleFlash.Play();
+        
         public void StopReload() => _reloadModule.StopReload();
 
         public void SetChargedPlayer(bool b) => _isPositivePlayerCharge.Value = b;

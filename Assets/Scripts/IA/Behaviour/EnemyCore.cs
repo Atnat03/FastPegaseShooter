@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Controller;
 using CustomConsole.Runtime.Logger;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
@@ -20,39 +22,51 @@ public class EnemyCore : NetworkBusListener
     [SerializeField] private List<EnemyTargetModule> _targetingModules = new List<EnemyTargetModule>();
     [SerializeField] private EnemyMovementModule _movementModule;
     
-    //Filled In Automatially
-    //private List<ScoreTargetModule> _scoreModules = new List<ScoreTargetModule>();
-
     public Guid p_gridReaderId;
     public PathfindingRequestManager p_pathRequester;
     public PathfindingGridReader p_gridReader;
     [HideInInspector] public int p_enemySpawnCost;
 
     #region Charges Variables
-    
-    [SerializeField] private int _explosionChargedDamage = 50;
-    
-    public float p_negativeChargeMax = 5;
-    public float p_currentNegativeCharge;
-    
-    public float p_positiveChargeMax = 5;
-    public float p_currentPositiveCharge;
-    #endregion
 
+    public ChargeType p_affinityType = ChargeType.None;
+    [SerializeField] private int _explosionChargedDamage = 50;
+
+    public bool p_player1_IsPositive;
+    public float p_player1_ChargeMax = 5;
+    public float p_current_player1_Charge;  
+    
+    public bool p_player2_IsPositive;
+    public float p_player2_ChargeMax = 5;
+    public float p_current_player2_Charge;
+    
+    //Shied
+    public readonly SyncVar<int> _hasShied = new SyncVar<int>(0);
+    public ChargeType p_shiedType = ChargeType.None;
+    
+    public enum ChargeType{Negative, Positive, None}
+    
+    #endregion
+    
     #region Actions
 
     public Action p_OnChargeExplosion;
-    public Action p_OnPositiveChargeChange;
-    public Action p_OnNegativeChargeChange;
+    public Action<bool, float> p_OnPlayer1ChargeChange;
+    public Action<bool, float> p_OnPlayer2ChargeChange;
+
+    public Action<ChargeType> OnSetShied;
 
     #endregion
 
     
     public override void OnStartServer()
     {
+        base.OnStartServer();
+        
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
-
+        
+        ListenToEvent<SwapingGunEvent>(TriggerExplosionOnSwap);
         
         //Initialising Score Target Module
         List<ScoreTargetModule> scoreModules = new List<ScoreTargetModule>();
@@ -82,6 +96,8 @@ public class EnemyCore : NetworkBusListener
             }
         }
 
+        _hasShied.Value = (int)p_shiedType;
+        
         _lifeModules[0].OnDeath += DeathEvent;
     }
 
@@ -89,7 +105,12 @@ public class EnemyCore : NetworkBusListener
     {
         InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }
-    
+
+    public override void OnStartClient()
+    {
+        _hasShied.OnChange += OnShiedChange;
+    }
+
     public void InitialiseEnemy()
     {
         foreach (EnemyAttackModule module in _attackingModules)
@@ -135,19 +156,20 @@ public class EnemyCore : NetworkBusListener
 
     private void OnNetworkTick()
     {
+        float tickDelta = (float)InstanceFinder.TimeManager.TickDelta;
         foreach (EnemyAttackModule module in _attackingModules)
         {
             if (module != null)
-                module.OnNetworkTick();
+                module.OnNetworkTick(tickDelta);
         }
 
         foreach (EnemyTargetModule module in _targetingModules)
         {
             if (module != null)
-                module.OnNetworkTick();
+                module.OnNetworkTick(tickDelta);
         }
 
-        _movementModule?.OnNetworkTick();
+        _movementModule?.OnNetworkTick(tickDelta);
     }
 
     public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
@@ -157,7 +179,6 @@ public class EnemyCore : NetworkBusListener
         
     private void DeathEvent(int playerObjectId)
     {
-        CustomLogger.ImportantLog("Clear path reservation on death");
         ClearPathReservation();
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
     }
@@ -165,49 +186,69 @@ public class EnemyCore : NetworkBusListener
     #region Charges
 
     [Server]
-    public void AddCharge(bool positive, float value)
+    public void AddCharge(bool positive, float value, int isServer)
     {
-        if (positive)
+        if (isServer == 0)
         {
-            p_currentPositiveCharge += value;
-            OnPositiveChangeObserverRpc(p_currentPositiveCharge);
+            if (positive != p_player1_IsPositive)
+                p_current_player1_Charge = 0;
+
+            p_player1_IsPositive = positive;
+            p_current_player1_Charge += value;
+
+            OnPlayer1ChangeObserverRpc(p_current_player1_Charge, p_player1_IsPositive, p_current_player1_Charge / p_player1_ChargeMax);
         }
         else
         {
-            p_currentNegativeCharge += value;
-            OnNegativeChangeObserverRpc(p_currentNegativeCharge); 
+            if (positive != p_player2_IsPositive)
+                p_current_player2_Charge = 0;
+
+            p_player2_IsPositive = positive;
+            p_current_player2_Charge += value;
+
+            OnPlayer2ChangeObserverRpc(p_current_player2_Charge, p_player2_IsPositive, p_current_player2_Charge / p_player2_ChargeMax);
         }
 
-        CheckAllChargeAreFull();
+        if (p_shiedType != ChargeType.None && p_current_player1_Charge > 0 && p_current_player2_Charge > 0 && p_player1_IsPositive == p_player2_IsPositive)
+        {
+            ChargeType combinedType = p_player1_IsPositive ? ChargeType.Positive : ChargeType.Negative;
+
+            if (combinedType == p_shiedType)
+            {
+                _hasShied.Value = (int)ChargeType.None;
+                p_shiedType = ChargeType.None;
+                ResetAllCharged();
+            }
+        }
+    }
+    
+    private void OnShiedChange(int prev, int next, bool asServer)
+    {
+        OnSetShied?.Invoke((ChargeType)next);
     }
 
     [Server]
     private void ResetAllCharged()
     {
-        p_currentPositiveCharge = 0;
-        p_currentNegativeCharge = 0;
+        p_current_player2_Charge = 0;
+        p_current_player1_Charge = 0;
         ResetChargesObserverRpc();
     }
+    
     [ObserversRpc]
     private void ResetChargesObserverRpc()
     {
-        p_currentPositiveCharge = 0;
-        p_currentNegativeCharge = 0;
+        p_current_player2_Charge = 0;
+        p_current_player1_Charge = 0;
     }
     
     [Server]
-    private void CheckAllChargeAreFull()
+    private void TriggerExplosionOnSwap(SwapingGunEvent data)
     {
-        if (p_currentPositiveCharge >= p_positiveChargeMax && p_currentNegativeCharge >= p_negativeChargeMax)
-        {
-            //life module at position 0 is considered to be the main life module
-            // => There is feedback in the inspector
-            _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage);
+        _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage, ChargeType.None);
             
-            
-            ResetAllCharged();
-            ExplosionObserversRpc();
-        }
+        ResetAllCharged();
+        ExplosionObserversRpc();
     }
 
     [ObserversRpc]
@@ -217,18 +258,17 @@ public class EnemyCore : NetworkBusListener
     }
     
     [ObserversRpc]
-    private void OnPositiveChangeObserverRpc(float value)
+    private void OnPlayer2ChangeObserverRpc(float value, bool positive, float ratio)
     {
-        p_currentPositiveCharge = value;
-        p_OnPositiveChargeChange?.Invoke();
+        p_current_player2_Charge = value;
+        p_OnPlayer1ChargeChange?.Invoke(positive, ratio);
     }
     
     [ObserversRpc]
-    private void OnNegativeChangeObserverRpc(float value)
+    private void OnPlayer1ChangeObserverRpc(float value, bool positive, float ratio)
     {
-        p_currentNegativeCharge = value;
-        p_OnNegativeChargeChange?.Invoke();
+        p_current_player1_Charge = value;
+        p_OnPlayer2ChargeChange?.Invoke(positive, ratio);
     }
-    
     #endregion
 }
