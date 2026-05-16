@@ -929,6 +929,9 @@ public class FPSController : NetworkBusListener
             cameraSpringTarget.rotation =
                 cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, -headtiltIntensity);
             previousWallRideSide = wallRideSide.leftSide;
+
+            _playerAnimation.SetWallIKServerRpc(isLeftSide: true, wallContactPoint: leftSideHit.point,
+                wallNormal: leftSideHit.normal);
         }
         else
         {
@@ -938,6 +941,8 @@ public class FPSController : NetworkBusListener
             cameraSpringTarget.rotation =
                 cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, headtiltIntensity);
             previousWallRideSide = wallRideSide.rightSide;
+            
+            _playerAnimation.SetWallIKServerRpc(isLeftSide: false, wallContactPoint: rightSideHit.point, wallNormal: rightSideHit.normal);
         }
 
         if (Vector3.Dot(horizontalVelocity, wallRidingDirection) < 0 || (forwardWalllrideBeginning && Vector3.Angle(wallRidingDirection, YawForward) > wallRideForwardTolerenceAngle))
@@ -1013,6 +1018,9 @@ public class FPSController : NetworkBusListener
     void ExitWallRidingState()
     {
         cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+        
+        _playerAnimation.ResetWallIKServerRpc();
+        
         StopCoroutine(wallRidingCoroutine);
     }
 
