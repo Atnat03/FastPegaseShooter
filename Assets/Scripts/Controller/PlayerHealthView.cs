@@ -150,8 +150,7 @@ public class PlayerHealthView : MonoBehaviour
 	
 	private void TakeDamageEffect()
 	{
-		AudioClip clip = SoundManager.GetAudioClip(_soundsData, "Hurt");
-		SoundManager.PlaySound(clip, _audioSource);
+		SoundManager.PlaySound(_soundsData, "Hurt", _audioSource);
 		
 		StartCoroutine(ApplyVolumeDamagedEffect());
 	}
