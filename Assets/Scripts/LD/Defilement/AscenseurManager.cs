@@ -7,19 +7,18 @@ using UnityEngine;
 public class AscenseurManager : NetworkBusListener
 {
     [Header("Prefabs")]
-    [SerializeField] private Ascenseur _ascenseurPrefab;
+    [SerializeField] private GameObject[] _partsList;
 
     [Header("Settings")]
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private Transform _endPoint;
     [SerializeField] private float _durationTraveling;
-    [SerializeField] private int _poolSize;
 
     [Header("Events")] 
     [SerializeField] private float _timeBeforeActivatedAscenseurScroll = 1;
-
+    
     private List<Ascenseur> _pool = new();
-
+    
     public override void OnStartClient()
     {
         ListenToEvent<OnAscenseurStart>(CreatePool);
@@ -27,25 +26,19 @@ public class AscenseurManager : NetworkBusListener
 
     public override void OnStartNetwork()
     {
-        _ = FillPoolAsync();
+        FillPool();
     }
 
-    private async Awaitable FillPoolAsync()
+    private void FillPool()
     {
-        AsyncInstantiateOperation<Ascenseur> firstOp = InstantiateAsync(_ascenseurPrefab, 1, transform, _spawnPoint.position, _spawnPoint.rotation);
-        await firstOp;
-
-        Ascenseur first = firstOp.Result[0].GetComponent<Ascenseur>();
+        Ascenseur first = _partsList[0].GetComponent<Ascenseur>();
         first.OnThresholdReached += HandleThreshold;
         first.gameObject.SetActive(true);
         _pool.Add(first);
 
-        for (int i = 0; i < _poolSize - 1; i++)
+        for (int i = 0; i < _pool.Count - 1; i++)
         {
-            AsyncInstantiateOperation<Ascenseur> op = InstantiateAsync(_ascenseurPrefab, 1, transform, _spawnPoint.position, _spawnPoint.rotation);
-            await op;
-
-            Ascenseur a = op.Result[0].GetComponent<Ascenseur>();
+            Ascenseur a = _partsList[i].GetComponent<Ascenseur>();
             a.OnThresholdReached += HandleThreshold;
             a.gameObject.SetActive(false);
             _pool.Add(a);
