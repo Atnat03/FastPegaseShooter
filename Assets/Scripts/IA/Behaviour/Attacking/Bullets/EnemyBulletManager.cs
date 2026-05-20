@@ -70,7 +70,7 @@ public class EnemyBulletManager : NetworkBusListener
                 case BulletTypes.Normal:
                     bullet = new NormalEnemyBullet(ESE, direction, networkTime, _lastBulletId, _normalBulletLayerMask);
                     break;
-                case BulletTypes.Splash:
+                case BulletTypes.Viscous:
                     bullet = new SplashEnemyBullet(ESE, direction, networkTime, _lastBulletId, _splashBulletLayerMask);
                     break;
                 case BulletTypes.GooPuddle:
@@ -129,7 +129,7 @@ public class EnemyBulletManager : NetworkBusListener
         {
             case BulletTypes.Normal:
                 return _normalBulletPrefab;
-            case BulletTypes.Splash:
+            case BulletTypes.Viscous:
                 return _splashBulletPrefab;
             case BulletTypes.GooPuddle:
                 return _puddleBulletPrefab;
@@ -149,7 +149,7 @@ public class EnemyBulletManager : NetworkBusListener
 public enum BulletTypes
 {
     Normal,
-    Splash,
+    Viscous,
     GooPuddle
 };
 
