@@ -2,7 +2,7 @@ using System;
 using FishNet;
 using UnityEngine;
 
-public class EnemyBulletVisuals : MonoBusListener
+public class EnemyBulletVisuals : MonoBusListener, IPoolable
 {
     private Vector3 _startPos;
     private float _spawnTime;
@@ -14,9 +14,13 @@ public class EnemyBulletVisuals : MonoBusListener
     private int _bulletId;
     private BulletTypes _bulletTypes;
 
+    private EnemyBulletManager _enemyBulletManager;
 
-    public void SetupVariables(Vector3 startPos, float spawnTime, bool useGravity, Vector3 direction, float speed, float bulletSize, int bulletId, BulletTypes bulletType)
+
+    public void SetupVariables(Vector3 startPos, float spawnTime, bool useGravity, Vector3 direction, float speed, float bulletSize, int bulletId, BulletTypes bulletType, EnemyBulletManager EBM)
     {
+        _enemyBulletManager = EBM;
+            
         _startPos = startPos;
         _spawnTime = spawnTime;
         _useGravity = useGravity;
@@ -36,23 +40,9 @@ public class EnemyBulletVisuals : MonoBusListener
         {
             if (this != null && BDE.p_bulletId == _bulletId)
             {
-                KillBullet();
+                _enemyBulletManager.ReturnBulletToPool(this, _bulletTypes);
             }
         });
-    }
-
-    public void KillBullet()
-    {
-        if(gameObject != null)
-            Destroy(gameObject);
-    }
-    
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        
-        if(InstanceFinder.TimeManager != null)
-            InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }
 
     private void OnNetworkTick()
@@ -68,5 +58,15 @@ public class EnemyBulletVisuals : MonoBusListener
                                  _direction * networkTime +
                                  0.5f * Physics.gravity * networkTime * networkTime;
         }
+    }
+
+    public void Spawn() { }
+
+    public void ReturnToPool()
+    {
+        UnsubscribeAll();
+        
+        if(InstanceFinder.TimeManager != null)
+            InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }
 }
