@@ -9,47 +9,32 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
-public class SpawnZone : NetworkBusListener
+public class SubArena : NetworkBusListener
 {
     [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
-    [SerializeField] private int _budgetMin;
-    [SerializeField] private int _budgetMax;
+    
     [SerializeField] private int _currentBudget;
 
     private bool _zoneActivated;
     [SerializeField] private float spawnDelayFirstWave;
     [SerializeField] private List<MobSpawnSO> spawnMobsFirstWave = new List<MobSpawnSO>();
-    
-    
-    [SerializeField] private float spawnDelay;
-    [SerializeField] private List<MobSpawnSO> spawnMobs = new List<MobSpawnSO>();
+
+    [SerializeField] private List<MobSpawnProba> spawnMobs = new List<MobSpawnProba>();
 
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     
     private PathfindingGridReader _gridReader;
     private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
 
-    public Action<SpawnZone> p_onSpawnZoneComplete;
+
+    #region Initialisation
 
     public override void OnStartServer()
     {
         _gridReader = GetComponent<PathfindingGridReader>();
         
-        ListenToEvent<EnemyDyingEvent>(EDE =>
-        {
-            if (EDE.p_gridReaderId == _gridReader.p_id)
-            {
-                _currentBudget -= EDE.p_enemySpawnCost;
-                _spawnedEnemies.Remove(EDE.p_enemyCore);
-                
-                if (IsSpawnZoneComplete())
-                {
-                    p_onSpawnZoneComplete?.Invoke(this);
-                }
-            }
-            
-        });
 
+        CustomLogger.ImportantLog("Not sure if this listening is usefull => to test");
         ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
         {
             if (PPUE.p_isHeartBeat) return; //Heart beat isn't usefull for pathfinding
@@ -62,9 +47,12 @@ public class SpawnZone : NetworkBusListener
         });
     }
 
+    #endregion
+
+    #region SubArena Starting
+
     [ServerRpc(RequireOwnership = false)]
-    [CallableFunction("Trigger Zone")]
-    public void TriggerZone()
+    public void TriggerSubArenaSpawning()
     {
         if(_zoneActivated) return;
         
@@ -76,9 +64,13 @@ public class SpawnZone : NetworkBusListener
     async void StartSpawning()
     {
         await SpawnFirstWave();
-        await SpawnSecondWave();
+        await InfiniteSpawn();
     }
-    
+
+    #endregion
+
+    #region Utilities
+
     [Server]
     public void SpawnEnemy(GameObject enemyPrefab, int enemyCost)
     {
@@ -95,10 +87,11 @@ public class SpawnZone : NetworkBusListener
     }
     Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];
 
+    #endregion
+
     [Server]
     async Task SpawnFirstWave()
     {
-        CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
         while (spawnMobsFirstWave.Count > 0)
         {
             MobSpawnSO mobSpawnSo = spawnMobsFirstWave[0];
@@ -107,55 +100,19 @@ public class SpawnZone : NetworkBusListener
             _currentBudget += mobSpawnSo.p_cost;
             
             await Task.Delay((int)(spawnDelayFirstWave * 1000));
-            CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
         }
     }
 
     [Server]
-    async Task SpawnSecondWave()
+    async Task InfiniteSpawn()
     {
-        int remainingTime = (int)(spawnDelay * 1000);
         
-        while (spawnMobs.Count > 0 && _zoneActivated)
-        {
-            await Task.Delay(50);
-            remainingTime -= 50;
-            remainingTime = Math.Max(0, remainingTime);
-            
-            //Hover budget => do nothing
-            if (_currentBudget > _budgetMax)
-            {
-                continue;
-            }
-
-            //In budget => waiting for countDown to reach 0 and budget to be enough before spawning
-            if (_currentBudget > _budgetMin && remainingTime <= 0 && _currentBudget + spawnMobs[0].p_cost < _budgetMax)
-            {
-                MobSpawnSO mobSpawnSo = spawnMobs[0];
-                spawnMobs.RemoveAt(0);
-                SpawnEnemy(mobSpawnSo.p_prefab, mobSpawnSo.p_cost);
-                _currentBudget += mobSpawnSo.p_cost;
-                
-                remainingTime = (int)(spawnDelay * 1000);
-                continue;
-            }
-
-            //Under budget => spawning immediately
-            if (_currentBudget < _budgetMin)
-            {
-                MobSpawnSO mobSpawnSo = spawnMobs[0];
-                spawnMobs.RemoveAt(0);
-                SpawnEnemy(mobSpawnSo.p_prefab, mobSpawnSo.p_cost);
-                _currentBudget += mobSpawnSo.p_cost;
-                
-                remainingTime = (int)(spawnDelay * 1000);
-            }
-        }
     }
+}
 
-    bool IsSpawnZoneComplete()
-    {
-        return _spawnedEnemies.Count == 0 && spawnMobsFirstWave.Count == 0 && spawnMobs.Count == 0;
-    }
-    
+[System.Serializable]
+public struct MobSpawnProba
+{
+    public MobSpawnSO p_mobSpawnSo;
+    public int p_spawnProba;
 }
