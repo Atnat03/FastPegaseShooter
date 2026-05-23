@@ -94,7 +94,7 @@ public class LobShootingAttackModule : EnemyAttackModule
     {
         base.Reset();
         _projectileUseGravity = true;
-        _bulletType = BulletTypes.Splash;
+        _bulletType = BulletTypes.Viscous;
     }
 
     public Vector3 GetTargetPosition() => _targetModule.GetTargetPosition();
