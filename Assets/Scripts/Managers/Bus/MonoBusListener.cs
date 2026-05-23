@@ -20,7 +20,7 @@ public class MonoBusListener : MonoBehaviour
         UnsubscribeAll();
     }
 
-    private void UnsubscribeAll()
+    protected void UnsubscribeAll()
     {
         foreach (Action unsubscribeAction in _unsubscribeActions)
             unsubscribeAction?.Invoke();
