@@ -13,10 +13,10 @@ public class GunSwitching : NetworkBusListener
 {
 	#region Properties
 	public bool IsMainGun => _isMainGun.Value;
-	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun.Value];
+	public GunController CurrentMainGun => _mainGunsList[_currentMainGun.Value];
 	public IGun IGunMain => _currentMainIGun;
 	public ISurcharge ISurchargeMain => _currentISurcharge;
-	
+	public ShootEnergy ShootEnergy => _shootEnergy;
 	public int CurrentMainGunIndex => _currentMainGun.Value;
 
 	public bool IsSwitching => !_canSwitch;
@@ -32,6 +32,7 @@ public class GunSwitching : NetworkBusListener
 	
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
+	[SerializeField] private ShootEnergy _shootEnergy;
 	[SerializeField] private GrenadeThrower _throwerGrenade;
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
@@ -39,18 +40,17 @@ public class GunSwitching : NetworkBusListener
 	[Header("Settings")]
 	[SerializeField] private float _cooldownChangeMagnetic = 5f;
 	
+	private bool _forceEnergyMode;
 	private bool _canSwitch = true;
 	private bool _canChangemagnetic = true;
-	[HideInInspector]public List<GameObject> _mainGunsList;
+	[HideInInspector]public List<GunController> _mainGunsList;
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
 	
 	//Actions
-	public Action OnStartSwitchGun;
-	public Action OnEndSwitchGun;
 	public Action<bool> OnSwapGun;
 	public Action<float> OnMagneticCooldown;
-
+	
 	private IGun _currentMainIGun;
 	private ISurcharge _currentISurcharge;
 	
@@ -62,30 +62,37 @@ public class GunSwitching : NetworkBusListener
 	{
 		_currentMainGun.OnChange += OnCurrentGunMainChange;
 		
-		_mainGunsList = new List<GameObject>();
+		_mainGunsList = new List<GunController>();
 		
 		foreach (Transform gun in _mainGunParent.transform)
 		{
-			_mainGunsList.Add(gun.gameObject);
+			_mainGunsList.Add(gun.GetComponent<GunController>());
 		}
 	}
 
 	public void Initialize(int startIndex)
 	{
 		Cons.Print("Connected", ColorConsole.Green);
-		
+
 		_currentMainGun.Value = startIndex;
 		
 		ActivateCurrentGun(_mainGunsList, startIndex);
-		
+
 		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
-
-		_isPositiveChargedPlayer.Value = true;
 		
+		_isMainGun.Value = true;
+
+		if (IsServerInitialized)
+		{
+			_isPositiveChargedPlayer.Value = (Owner.ClientId == 0);
+		}
+
 		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
 		
-		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);	
+		_shootEnergy.gameObject.SetActive(false);
+
+		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
 	}
 
 	[ServerRpc]
@@ -139,12 +146,15 @@ public class GunSwitching : NetworkBusListener
 			_canChangemagnetic = true;
 	}
 
-	public void ActivateCurrentGun(List<GameObject> list, int index)
+	public void ActivateCurrentGun(List<GunController> list, int index)
 	{
+		if (_forceEnergyMode)
+			return;
+		
 		for (int i = 0; i < list.Count; i++)
 		{
 			bool shouldBeActive = (i == index);
-			list[i].gameObject.SetActive(shouldBeActive);
+			list[i].ModelGun.gameObject.SetActive(shouldBeActive);
 		}
 
 		IGunMain?.SetReticule(_reticuleManager);
@@ -152,9 +162,9 @@ public class GunSwitching : NetworkBusListener
 
 	public void DesactivateAllMainGun()
 	{
-		foreach (GameObject t in _mainGunsList)
+		foreach (GunController gun in _mainGunsList)
 		{
-			t.gameObject.SetActive(false);
+			gun.ModelGun.gameObject.SetActive(false);
 		}
 	}
 	
@@ -208,7 +218,36 @@ public class GunSwitching : NetworkBusListener
 			CurrentMainGun.GetComponent<GunController>().StopReload();
 		}
     
-		ActivateCurrentGun(_mainGunsList, next);
+		if (IsMainGun)
+			ActivateCurrentGun(_mainGunsList, next);
+	}
+	
+	[ServerRpc]
+	public void ChangeGunServerRpc(bool isMain)
+	{
+		SetGunModeObserversRpc(isMain);
+	}
+	
+	[ObserversRpc]
+	private void SetGunModeObserversRpc(bool isMain)
+	{
+		_isMainGun.Value = isMain;
+		
+		_shootEnergy.gameObject.SetActive(!isMain);
+
+		_forceEnergyMode = !isMain;
+
+		if (!isMain)
+		{
+			DesactivateAllMainGun();
+			_shootEnergy.gameObject.SetActive(true);
+		}
+		else
+		{
+			_forceEnergyMode = false;
+			ActivateCurrentGun(_mainGunsList, _currentMainGun.Value);
+			_shootEnergy.gameObject.SetActive(false);
+		}
 	}
 	
 	private void DesactivateGunWhenThrow()
@@ -221,6 +260,9 @@ public class GunSwitching : NetworkBusListener
 		DesactivateAllMainGun();
 		
 		yield return new WaitForSeconds(1f);
+		
+		if (!IsMainGun)
+			yield break;
 
 		ActivateCurrentGun(_mainGunsList, _currentMainGun.Value);
 

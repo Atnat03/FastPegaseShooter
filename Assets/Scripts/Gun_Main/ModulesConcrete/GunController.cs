@@ -144,6 +144,9 @@ namespace GunDecorator
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
+            
+            if (!_model.gameObject.activeInHierarchy)
+                return;
 
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
@@ -192,16 +195,13 @@ namespace GunDecorator
                 p_authorizedToShoot = true;
             }
         }
-
-
+        
         public void TryCancelShooting()
         {
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
 
             _recoilModule?.SetIsRecoil(false);
-
-            p_authorizedToShoot = true;
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
