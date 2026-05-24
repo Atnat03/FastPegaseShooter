@@ -1513,11 +1513,6 @@ MonoBehaviour:
   spawnDelayFirstWave: 0.5
   spawnMobsFirstWave:
   - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
-  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
-  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
-  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
-  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
-  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
   spawnDelay: 0
   spawnMobs: []
   _spawnPoints:
@@ -1802,11 +1797,15 @@ MonoBehaviour:
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
+  p_affinityType: 2
   _explosionChargedDamage: 50
-  p_negativeChargeMax: 5
-  p_currentNegativeCharge: 0
-  p_positiveChargeMax: 5
-  p_currentPositiveCharge: 0
+  p_player1_IsPositive: 0
+  p_player1_ChargeMax: 5
+  p_current_player1_Charge: 0
+  p_player2_IsPositive: 0
+  p_player2_ChargeMax: 5
+  p_current_player2_Charge: 0
+  p_shiedType: 2
 --- !u!1 &886799655
 GameObject:
   m_ObjectHideFlags: 0
@@ -3189,11 +3188,27 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 152500101}
     - target: {fileID: 3709122296254753378, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
+      propertyPath: _normalBulletPrefab
+      value: 
+      objectReference: {fileID: -5877786095843465243, guid: 563cd6461b623044c8d7fd34d0aecdac, type: 3}
+    - target: {fileID: 3709122296254753378, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
+      propertyPath: _puddleBulletPrefab
+      value: 
+      objectReference: {fileID: -5877786095843465243, guid: a075766ba03e48f48ac3fc4d55e0e4ae, type: 3}
+    - target: {fileID: 3709122296254753378, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
+      propertyPath: _viscousBulletPrefab
+      value: 
+      objectReference: {fileID: -5877786095843465243, guid: 2533d02588202e9458704dd2cf3877aa, type: 3}
+    - target: {fileID: 3709122296254753378, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _normalBulletLayerMask.m_Bits
       value: 458743
       objectReference: {fileID: 0}
     - target: {fileID: 3709122296254753378, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
       propertyPath: _splashBulletLayerMask.m_Bits
+      value: 458551
+      objectReference: {fileID: 0}
+    - target: {fileID: 3709122296254753378, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
+      propertyPath: _viscousBulletLayerMask.m_Bits
       value: 458551
       objectReference: {fileID: 0}
     - target: {fileID: 3724542229050372869, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
