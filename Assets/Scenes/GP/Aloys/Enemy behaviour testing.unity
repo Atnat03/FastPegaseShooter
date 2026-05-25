@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &20570169
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 20570170}
+  m_Layer: 0
+  m_Name: SpawnPoint (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &20570170
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20570169}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.99, y: 2.5, z: 1.78}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216813623}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &35834337
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,6 +593,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _activateOnce: 1
 --- !u!65 &207287456
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1421,7 +1453,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &864013883
 Transform:
   m_ObjectHideFlags: 0
@@ -1451,7 +1483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
   <IsNested>k__BackingField: 0
-  WasActiveDuringEdit: 1
+  WasActiveDuringEdit: 0
   WasActiveDuringEdit_Set1: 1
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
@@ -1571,6 +1603,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _activateOnce: 1
 --- !u!65 &864013889
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1797,7 +1830,6 @@ MonoBehaviour:
   _movementModule: {fileID: 1197237516}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
-  p_enemySpawnCost: 0
   p_affinityType: 2
   _explosionChargedDamage: 50
   p_player1_IsPositive: 0
@@ -2265,6 +2297,8 @@ GameObject:
   - component: {fileID: 1216813626}
   - component: {fileID: 1216813625}
   - component: {fileID: 1216813624}
+  - component: {fileID: 1216813630}
+  - component: {fileID: 1216813629}
   m_Layer: 0
   m_Name: Enemis Spawner 3
   m_TagString: Untagged
@@ -2286,6 +2320,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1458842875}
+  - {fileID: 2083802959}
+  - {fileID: 1896252399}
+  - {fileID: 20570170}
   m_Father: {fileID: 651685586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1216813624
@@ -2378,12 +2415,25 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1216813624}
   _networkObjectCache: {fileID: 0}
-  _pathfindingRequestManager: {fileID: 0}
+  _pathfindingRequestManager: {fileID: 651685585}
+  _zoneActivated: 0
+  _spawnPoints:
+  - {fileID: 1458842875}
+  - {fileID: 2083802959}
+  - {fileID: 1896252399}
+  - {fileID: 20570170}
+  spawnDelayFirstWave: 5
+  spawnMobsFirstWave:
+  - {fileID: 11400000, guid: 2669ccc8b25a74a4c9c1061d4e1fb61d, type: 2}
+  - {fileID: 11400000, guid: 1ddabd5585812514da8b700e45659218, type: 2}
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
   _currentBudget: 0
-  spawnDelayFirstWave: 0
-  spawnMobsFirstWave: []
-  spawnMobs: []
-  _spawnPoints: []
+  _budgetPerSecond: 5
+  _spawnMobs:
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
+  - {fileID: 11400000, guid: 2669ccc8b25a74a4c9c1061d4e1fb61d, type: 2}
+  _currentSpawnPointIndex: 0
+  _maxEnabledTime: 200
 --- !u!114 &1216813627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2396,8 +2446,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cef386ddb5932e40bf94a56237adfb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
-  pathfindingGridSO: {fileID: 0}
-  VariableChanged: 1
+  pathfindingGridSO: {fileID: 11400000, guid: b933e9225e40920408f2840e973b2db2, type: 2}
+  VariableChanged: 0
 --- !u!114 &1216813628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2410,6 +2460,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f10cb0004e05de4478a6450cf2529724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AStarAlgorithm
+--- !u!114 &1216813629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216813622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c4c3930ecf31e843b6fff2c97f0bb92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PathfindingReaderVisualizer
+  drawNodes: 1
+  drawNodesConnections: 1
+  walkingCostGradient:
+    serializedVersion: 2
+    key0: {r: 0.10670447, g: 1, b: 0, a: 1}
+    key1: {r: 0, g: 1, b: 0.8759382, a: 1}
+    key2: {r: 0.5053053, g: 0, b: 1, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 32768
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: 0
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  upperWalkingCostValue: 10
+  nodeDrawSize: 0.1
+  needToRebuildMatrix: 0
+--- !u!114 &1216813630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216813622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b372314c9d1f77459a78ed7ea1c0821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerZone
+  _events:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1216813626}
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _activateOnce: 1
 --- !u!1 &1243614839
 GameObject:
   m_ObjectHideFlags: 0
@@ -2805,7 +2930,7 @@ GameObject:
   m_Layer: 0
   m_Name: SpawnPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2818,7 +2943,7 @@ Transform:
   m_GameObject: {fileID: 1458842874}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalPosition: {x: 3.05, y: 2.5, z: 1.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2997,6 +3122,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 877711046}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1896252398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1896252399}
+  m_Layer: 0
+  m_Name: SpawnPoint (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1896252399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896252398}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.99, y: 2.5, z: -15.18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216813623}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2008564966
 GameObject:
@@ -3186,6 +3342,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3724542229050372869, guid: 9a99f18d8d2497e48a4f111d9c81eeac, type: 3}
   m_PrefabInstance: {fileID: 7853791551555895662}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2083802958
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2083802959}
+  m_Layer: 0
+  m_Name: SpawnPoint (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2083802959
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083802958}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.05, y: 2.5, z: -15.18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216813623}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2112398798
 GameObject:
   m_ObjectHideFlags: 0

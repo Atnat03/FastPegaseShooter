@@ -35,7 +35,7 @@ public class SpawnZone : NetworkBusListener
     {
         _gridReader = GetComponent<PathfindingGridReader>();
         
-        ListenToEvent<EnemyDyingEvent>(EDE =>
+        /*ListenToEvent<EnemyDyingEvent>(EDE =>
         {
             if (EDE.p_gridReaderId == _gridReader.p_id)
             {
@@ -48,7 +48,7 @@ public class SpawnZone : NetworkBusListener
                 }
             }
             
-        });
+        });*/
 
         ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
         {
@@ -75,8 +75,11 @@ public class SpawnZone : NetworkBusListener
     [Server]
     async void StartSpawning()
     {
+        CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
         await SpawnFirstWave();
+        CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
         await SpawnSecondWave();
+        CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
     }
     
     [Server]
@@ -87,7 +90,7 @@ public class SpawnZone : NetworkBusListener
         
         
         EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
-        enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader, enemyCost);
+        enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
         _spawnedEnemies.Add(enemyCore);
         
@@ -98,7 +101,6 @@ public class SpawnZone : NetworkBusListener
     [Server]
     async Task SpawnFirstWave()
     {
-        CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
         while (spawnMobsFirstWave.Count > 0)
         {
             MobSpawnSO mobSpawnSo = spawnMobsFirstWave[0];
@@ -107,7 +109,6 @@ public class SpawnZone : NetworkBusListener
             _currentBudget += mobSpawnSo.p_cost;
             
             await Task.Delay((int)(spawnDelayFirstWave * 1000));
-            CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
         }
     }
 

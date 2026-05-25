@@ -49,7 +49,12 @@ public struct EnemyMeleeAttackEvent
     
 }
 
-public struct EnemyDyingEvent
+public struct OnDapEvent
+{
+    
+}
+
+/*public struct EnemyDyingEvent
 {
     public Guid p_gridReaderId;
     public int p_enemySpawnCost;
@@ -61,5 +66,5 @@ public struct EnemyDyingEvent
         p_enemySpawnCost = cost;
         p_enemyCore = core;
     }
-}
+}*/
 

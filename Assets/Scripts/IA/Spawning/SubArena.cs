@@ -1,30 +1,40 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CustomConsole.Runtime.Console;
 using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
+using GameKit.Dependencies.Utilities;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
 public class SubArena : NetworkBusListener
 {
+    [Header("----- General -----")]
     [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
+    [SerializeField] private bool _zoneActivated;
+    [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     
-    [SerializeField] private int _currentBudget;
-
-    private bool _zoneActivated;
+    [Header("----- First Wave -----")]
     [SerializeField] private float spawnDelayFirstWave;
     [SerializeField] private List<MobSpawnSO> spawnMobsFirstWave = new List<MobSpawnSO>();
 
-    [SerializeField] private List<MobSpawnProba> spawnMobs = new List<MobSpawnProba>();
-
-    [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
+    [Header("----- Infinite Spawn -----")]
+    [SerializeField] private int _currentBudget;
+    [SerializeField] private int _budgetPerSecond;
+    [SerializeField] private List<MobSpawnSO> _spawnMobs = new List<MobSpawnSO>();
     
     private PathfindingGridReader _gridReader;
     private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
+
+    private List<(float cumulativeWeight, MobSpawnSO mob)> orderedSpawnPriority = new();
+    [SerializeField] private int _currentSpawnPointIndex = 0;
+    
+    [Header("----- Debug -----")]
+    [SerializeField] private int _maxEnabledTime;
 
 
     #region Initialisation
@@ -33,8 +43,14 @@ public class SubArena : NetworkBusListener
     {
         _gridReader = GetComponent<PathfindingGridReader>();
         
+        ListenToEvent<OnDapEvent>(ODE =>
+        {
+            //CustomLogger.Log("OnDapEvent zone stop");
+            _zoneActivated = false;
+        });
+        
 
-        CustomLogger.ImportantLog("Not sure if this listening is usefull => to test");
+        //CustomLogger.ImportantLog("Not sure if this listening is usefull => to test");
         ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
         {
             if (PPUE.p_isHeartBeat) return; //Heart beat isn't usefull for pathfinding
@@ -45,6 +61,27 @@ public class SubArena : NetworkBusListener
                 else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition);
             }
         });
+
+        //to trigger a spawn point shuffle
+        _currentSpawnPointIndex = _spawnPoints.Count;
+        
+        InitialiseSpawnProbability();
+    }
+
+    void InitialiseSpawnProbability()
+    {
+        _spawnMobs = _spawnMobs.OrderByDescending(s => s.p_spawnProba).ToList();
+        float totalWeight = 0;
+        
+        foreach (MobSpawnSO spawnMob in _spawnMobs)
+            totalWeight += spawnMob.p_spawnProba;
+
+        float currentWeight = 0;
+        foreach (MobSpawnSO spawnMob in _spawnMobs)
+        {
+            currentWeight += spawnMob.p_spawnProba / totalWeight;
+            orderedSpawnPriority.Add((currentWeight, spawnMob));
+        }
     }
 
     #endregion
@@ -72,47 +109,103 @@ public class SubArena : NetworkBusListener
     #region Utilities
 
     [Server]
-    public void SpawnEnemy(GameObject enemyPrefab, int enemyCost)
+    MobSpawnSO GetNextEnemyToSpawn()
     {
-        Vector3 position = GetValidSpawnPoint().position;
+        float random01 = Random.Range(0f, 1f);
+        foreach (var mobSpawn in orderedSpawnPriority)
+        {
+            if(random01 <= mobSpawn.cumulativeWeight)
+            {
+                //CustomLogger.HighlightLog($"Chosen Enemy : {mobSpawn.mob.name}, random01 : {random01}");
+                return mobSpawn.mob;
+            }
+        }
+        
+        //fallback for float imprecision
+        return orderedSpawnPriority[^1].mob;
+    }
+
+    [Server]
+    public void SpawnEnemy(GameObject enemyPrefab)
+    {
+        Vector3 position = GetNextSpawnPoint().position;
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         
         
         EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
-        enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader, enemyCost);
+        enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
         _spawnedEnemies.Add(enemyCore);
         
         InstanceFinder.ServerManager.Spawn(enemy);
     }
-    Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];
+    Transform GetNextSpawnPoint()
+    { 
+        if (_currentSpawnPointIndex >=  _spawnPoints.Count)
+        {
+            _spawnPoints.Shuffle();
+            _currentSpawnPointIndex = 0;
+        }
+
+        return _spawnPoints[_currentSpawnPointIndex++];
+    }
 
     #endregion
 
     [Server]
     async Task SpawnFirstWave()
     {
-        while (spawnMobsFirstWave.Count > 0)
+        try
         {
-            MobSpawnSO mobSpawnSo = spawnMobsFirstWave[0];
-            spawnMobsFirstWave.RemoveAt(0);
-            SpawnEnemy(mobSpawnSo.p_prefab, mobSpawnSo.p_cost);
-            _currentBudget += mobSpawnSo.p_cost;
+            while (spawnMobsFirstWave.Count > 0 && _zoneActivated && Application.isPlaying)
+            {
+                MobSpawnSO mobSpawnSo = spawnMobsFirstWave[0];
+                spawnMobsFirstWave.RemoveAt(0);
+                SpawnEnemy(mobSpawnSo.p_prefab);
             
-            await Task.Delay((int)(spawnDelayFirstWave * 1000));
+                await Task.Delay((int)(spawnDelayFirstWave * 1000));
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+            return;
         }
     }
 
     [Server]
     async Task InfiniteSpawn()
     {
-        
-    }
-}
+        try
+        {
+            int enabledTime = 0;
+            while (_zoneActivated && enabledTime < _maxEnabledTime && Application.isPlaying)
+            {
+                MobSpawnSO nextMobToSpawn = GetNextEnemyToSpawn();
 
-[System.Serializable]
-public struct MobSpawnProba
-{
-    public MobSpawnSO p_mobSpawnSo;
-    public int p_spawnProba;
+                //generating budget
+                while (_currentBudget < nextMobToSpawn.p_cost &&
+                       enabledTime < _maxEnabledTime && _zoneActivated
+                       && Application.isPlaying)
+                {
+                    _currentBudget += _budgetPerSecond;
+                    //CustomLogger.ImportantLog($"Budget Increased : {_currentBudget}");
+                    enabledTime++;
+                    await Task.Delay(1000);
+                }
+
+                if(_zoneActivated)
+                {
+                    //CustomLogger.Log($"Spawn enemy : {nextMobToSpawn.name}");
+                    _currentBudget -= nextMobToSpawn.p_cost;
+                    SpawnEnemy(nextMobToSpawn.p_prefab);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+            return;
+        }
+    }
 }
