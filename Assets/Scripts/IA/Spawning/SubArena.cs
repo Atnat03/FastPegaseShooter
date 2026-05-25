@@ -24,18 +24,19 @@ public class SubArena : NetworkBusListener
 
     [Header("----- Infinite Spawn -----")]
     [SerializeField] private int _currentBudget;
-    [SerializeField] private int _budgetPerSecond;
-    [SerializeField] private List<MobSpawnSO> _spawnMobs = new List<MobSpawnSO>();
+    [SerializeField] private List<MobSpawnSO> _spawnMobs = new();
+    [SerializeField] private List<SpawningState> _spawningStates = new();
     
-    private PathfindingGridReader _gridReader;
-    private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
 
     private List<(float cumulativeWeight, MobSpawnSO mob)> orderedSpawnPriority = new();
-    [SerializeField] private int _currentSpawnPointIndex = 0;
+    private int _currentSpawnPointIndex = 0;
     
     [Header("----- Debug -----")]
     [SerializeField] private int _maxEnabledTime;
 
+    [SerializeField]private int _currentStateIndex;
+    private PathfindingGridReader _gridReader;
+    private List<EnemyCore> _spawnedEnemies = new List<EnemyCore>();
 
     #region Initialisation
 
@@ -179,6 +180,8 @@ public class SubArena : NetworkBusListener
         try
         {
             int enabledTime = 0;
+            int currentStateTime = 0;
+            
             while (_zoneActivated && enabledTime < _maxEnabledTime && Application.isPlaying)
             {
                 MobSpawnSO nextMobToSpawn = GetNextEnemyToSpawn();
@@ -188,9 +191,16 @@ public class SubArena : NetworkBusListener
                        enabledTime < _maxEnabledTime && _zoneActivated
                        && Application.isPlaying)
                 {
-                    _currentBudget += _budgetPerSecond;
-                    //CustomLogger.ImportantLog($"Budget Increased : {_currentBudget}");
+                    if (currentStateTime >= _spawningStates[_currentStateIndex].p_stateDuration)
+                    {
+                        currentStateTime = 0;
+                        _currentStateIndex = (_currentStateIndex + 1) % _spawningStates.Count;
+                    }
+                    
+                    _currentBudget += _spawningStates[_currentStateIndex].p_state.p_budgetPerSecond;
+                    //CustomLogger.ImportantLog($"Budget : {_currentBudget}, state :  {_spawningStates[_currentStateIndex].p_state.p_name}");
                     enabledTime++;
+                    currentStateTime++;
                     await Task.Delay(1000);
                 }
 
@@ -208,4 +218,11 @@ public class SubArena : NetworkBusListener
             return;
         }
     }
+}
+
+[System.Serializable]
+public struct SpawningState
+{
+    [Tooltip("Duration is expressed in seconds")] public int p_stateDuration;
+    public SubArenaStateSO p_state;
 }

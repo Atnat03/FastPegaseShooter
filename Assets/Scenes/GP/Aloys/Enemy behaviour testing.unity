@@ -2423,17 +2423,20 @@ MonoBehaviour:
   - {fileID: 1896252399}
   - {fileID: 20570170}
   spawnDelayFirstWave: 5
-  spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 2669ccc8b25a74a4c9c1061d4e1fb61d, type: 2}
-  - {fileID: 11400000, guid: 1ddabd5585812514da8b700e45659218, type: 2}
-  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
+  spawnMobsFirstWave: []
   _currentBudget: 0
-  _budgetPerSecond: 5
   _spawnMobs:
   - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
   - {fileID: 11400000, guid: 2669ccc8b25a74a4c9c1061d4e1fb61d, type: 2}
-  _currentSpawnPointIndex: 0
+  _spawningStates:
+  - p_stateDuration: 5
+    p_state: {fileID: 11400000, guid: b76ef31b4c0f92c4ba6a4f1de725c3d9, type: 2}
+  - p_stateDuration: 10
+    p_state: {fileID: 11400000, guid: 7d65cf201bff6a744ae0e08b0e161a1c, type: 2}
+  - p_stateDuration: 7
+    p_state: {fileID: 11400000, guid: 8f43d0a4971893a45a05d5c9ef15dc69, type: 2}
   _maxEnabledTime: 200
+  _currentStateIndex: 0
 --- !u!114 &1216813627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2883,7 +2886,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1445867641}
-  - component: {fileID: 1445867640}
   m_Layer: 0
   m_Name: "\U0001F68CBus"
   m_TagString: Untagged
@@ -2891,18 +2893,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1445867640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445867639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3e8d09efbf96514fa195bb7bc3e8e4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EventBusInitialiser
 --- !u!4 &1445867641
 Transform:
   m_ObjectHideFlags: 0
