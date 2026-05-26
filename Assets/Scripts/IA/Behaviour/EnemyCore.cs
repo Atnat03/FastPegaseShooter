@@ -25,7 +25,6 @@ public class EnemyCore : NetworkBusListener
     public Guid p_gridReaderId;
     public PathfindingRequestManager p_pathRequester;
     public PathfindingGridReader p_gridReader;
-    [HideInInspector] public int p_enemySpawnCost;
 
     #region Charges Variables
 
@@ -145,10 +144,9 @@ public class EnemyCore : NetworkBusListener
     }
 
     public void SetInfos(Guid _readerId, PathfindingRequestManager pathfindingRequestManager,
-        PathfindingGridReader pathfindingGridReader, int cost)
+        PathfindingGridReader pathfindingGridReader)
     {
         p_gridReaderId = _readerId;
-        p_enemySpawnCost = cost;
         p_pathRequester = pathfindingRequestManager;
         p_gridReader = pathfindingGridReader;
     }
