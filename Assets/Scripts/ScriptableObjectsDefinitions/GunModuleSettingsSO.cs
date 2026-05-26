@@ -11,7 +11,7 @@ public class GunModuleSettingsSO : ScriptableObject
     public List<GunSetting> modulesList = new();
 }
 
-[Serializable]
+[System.Serializable]
 public class GunSetting
 {
     [HideInInspector] public string displayName;
@@ -21,6 +21,7 @@ public class GunSetting
 #region Child Settings Class
 
     //TemplateShoot
+    [System.Serializable]
     public class TemplateShootSetting : GunSetting
     {
         public float fireRate;
@@ -30,6 +31,7 @@ public class GunSetting
     }
 
     //RaycastAmmo
+    [System.Serializable]
     public class RaycastAmmoSetting : GunSetting
     {
         public float maxDistance = 2000;
@@ -38,6 +40,7 @@ public class GunSetting
     }
 
     //PhysicAmmo
+    [System.Serializable]
     public class PhysicAmmoSetting : GunSetting
     {
         public float damages;
@@ -48,6 +51,7 @@ public class GunSetting
 
 
     //Reload
+    [System.Serializable]
     public class ReloadSetting : GunSetting
     {
         public bool isAutoReload;
@@ -56,6 +60,7 @@ public class GunSetting
     }
 
     //Recoil
+    [System.Serializable]
     public class RecoilSetting : GunSetting
     {
         [Header("Settings")]
@@ -75,12 +80,14 @@ public class GunSetting
     //SECOND
 
     //Explosif
+    [System.Serializable]
     public class S_ExplosifSetting : GunSetting
     {
         public float explosionRadius;
     }
 
     //Noise
+    [System.Serializable]
     public class S_NoiseSetting : GunSetting
     {
         public float MaxOffsetX = 2;
@@ -90,6 +97,7 @@ public class GunSetting
     }
 
     //Salve
+    [System.Serializable]
     public class S_SalveSetting : GunSetting
     {
         public int numberShootPerSalve;
@@ -99,6 +107,7 @@ public class GunSetting
 
 
     //Charged Salve
+    [System.Serializable]
     public class ChargedSalveSetting : GunSetting
     {
         public bool IsExplosifAmmo = false;
@@ -116,6 +125,7 @@ public class GunSetting
     }
 
     //Charged Increase Noise
+    [System.Serializable]
     public class ChargedIncreaseNoiseSetting : GunSetting
     {
         public bool IsExplosifAmmo = false;
@@ -134,6 +144,7 @@ public class GunSetting
     }
 
     //Charged Decrease Noise
+    [System.Serializable]
     public class ChargedDecreaseNoiseSetting : GunSetting
     {
         public bool IsExplosifAmmo = false;

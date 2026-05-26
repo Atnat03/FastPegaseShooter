@@ -5,6 +5,7 @@ using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
+using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
@@ -78,6 +79,8 @@ namespace GunDecorator
 
         [SerializeField] private int _reticuleID = 0;
 
+        [SerializeField] private SwapGunManager swapGunManager;
+        
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
         private bool _infiniteAmmo = false;
@@ -133,6 +136,11 @@ namespace GunDecorator
                     }
                 }
             }
+        }
+
+        private void Start() // pour du debug, a tej en build finale
+        {
+            swapGunManager = FindAnyObjectByType<SwapGunManager>();
         }
 
         public void TryFire()
@@ -237,6 +245,33 @@ namespace GunDecorator
             }
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
+
+
+            // debug clement
+            float player1PVs = -1;
+            float player2PVs = -1;
+            if (PlayerHealthManager.Instance != null)
+            {
+                player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+                    ? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+                    : 0;
+                player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+                    ? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+                    : 0;
+            }
+            InvokeEvent(new OnDataLog
+            {
+                entityName = transform.GetRootTransform().gameObject.name,
+                EntityID = ObjectId,
+                weapon = gameObject.name,
+                targetName = target.name,
+                damages = damage,
+                player1PVs = player1PVs,
+                player2PVs = player2PVs,
+                ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+            });
+            
+            // fin du debug 
         }
 
         [ObserversRpc]
@@ -248,7 +283,7 @@ namespace GunDecorator
                 p_value = damage,
                 p_critical = isCritical
             });
-
+            
             AddPercentageCharge(hadCharged);
         }
         

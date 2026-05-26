@@ -6,6 +6,7 @@ using CustomConsole.Runtime.Logger;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -50,6 +51,8 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private float _healThrowCost = 20;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
+
+	[Header("debug")] [SerializeField] private SwapGunManager swapGunManager;
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -94,6 +97,13 @@ public class PlayerHealth : NetworkBusListener
 			isPositiveCharge = Owner.ClientId == 0,
 			gunSwitching = _gunSwitching
 		});
+		
+		ListenToEvent<OnCorrosionEvent>(ApplyCorrosionDamage);
+		
+		 
+		
+		swapGunManager = FindAnyObjectByType<SwapGunManager>();// pour du debug, a tej en build finale
+		
 	}
 
 	public override void OnStartClient()
@@ -206,6 +216,34 @@ public class PlayerHealth : NetworkBusListener
 	[Server]
 	void TakeDamage(PlayerTakeDamageEvent data)
 	{
+		
+		//debug clement
+		
+		float player1PVs = -1;
+		float player2PVs = -1;
+		if (PlayerHealthManager.Instance != null)
+		{
+			player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+				? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+				: 0;
+			player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+				? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+				: 0;
+		}
+		InvokeEvent(new OnDataLog
+		{
+			entityName = data.p_attacker.name,
+			EntityID = data.p_attacker.ObjectId,
+			weapon = "ennemy_Shoot",
+			targetName = transform.GetRootTransform().gameObject.name,
+			damages = data.p_value,
+			player1PVs = player1PVs,
+			player2PVs = player2PVs,
+			ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+		});
+		
+		//fin du debug
+		
 		if (data.p_playerN.ObjectId != NetworkObject.ObjectId) return;
 		
 		if (IsDead) return;
@@ -227,6 +265,10 @@ public class PlayerHealth : NetworkBusListener
 	private void ApplyShortCircuitDamage(OnShortCircuitDamage data)
 	{
 		RequestTakeDamageServerRpc(data.damage);
+	}
+	private void ApplyCorrosionDamage(OnCorrosionEvent data)
+	{
+		RequestTakeDamageServerRpc(data.p_corrosionDamage);
 	}
 
 	[ServerRpc]
@@ -295,6 +337,33 @@ public class PlayerHealth : NetworkBusListener
 	[Server]
 	async void AddHealth(AddHealthToPlayer data)
 	{
+		//debug clement
+		
+		float player1PVs = -1;
+		float player2PVs = -1;
+		if (PlayerHealthManager.Instance != null)
+		{
+			player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+				? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+				: 0;
+			player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+				? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+				: 0;
+		}
+		InvokeEvent(new OnDataLog
+		{
+			entityName = name,
+			EntityID = ObjectId,
+			weapon = "heal",
+			targetName = gameObject.name,
+			damages = (data.p_value * -1f),
+			player1PVs = player1PVs,
+			player2PVs = player2PVs,
+			ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+		});
+		
+		//fin du debug
+		
 		if (_isDead.Value || data.p_playerId != OwnerId) return;
 		if(data.p_delay != 0) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
 
@@ -431,7 +500,7 @@ public class PlayerHealth : NetworkBusListener
 		
 		Vector3 throwAngle = new Vector3(p_healThrowDirection.forward.x, -pitch * 0.1f,  p_healThrowDirection.forward.z);
 		
-		return startPos + throwAngle  * throwForce * overTime + 0.5f * Physics.gravity * overTime * overTime;
+		return startPos + throwAngle * (throwForce * overTime) + Physics.gravity * (0.5f * overTime * overTime);
 	}
 }
 
@@ -446,6 +515,7 @@ public struct PlayerTakeDamageEvent
 {
 	public NetworkObject p_playerN;
 	public float p_value;
+	public NetworkObject p_attacker;
 }
 
 public struct OnPlayerDeathEvent

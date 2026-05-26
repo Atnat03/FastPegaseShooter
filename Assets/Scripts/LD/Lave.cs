@@ -54,7 +54,8 @@ public class Lave : NetworkBusListener
         InvokeEvent(new PlayerTakeDamageEvent
         {
             p_playerN = playerCollision,
-            p_value = _damage
+            p_value = _damage,
+            p_attacker = gameObject.GetComponent<NetworkObject>()
         });
     }
 }
