@@ -49,7 +49,7 @@ public class CSVDataExport : MonoBusListener
     {
         if(rows.Count < 2) return;
         ExportCSV();
-        PlayerPrefs.SetInt("GameID", gameID++);
+        PlayerPrefs.SetInt("GameID", ++gameID);
     }
 
     void ExportCSV()
