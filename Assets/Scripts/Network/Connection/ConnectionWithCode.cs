@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using MyPrint;
 
 public class ConnectionWithCode : MonoBehaviour
 {
@@ -43,8 +44,11 @@ public class ConnectionWithCode : MonoBehaviour
 
         InstanceFinder.TransportManager.Transport.SetClientAddress("127.0.0.1");
 
+        Cons.Print("Server manager");
         _networkManager.ServerManager.StartConnection();
-        _networkManager.ClientManager.StartConnection();
+
+        Cons.Print("Client manager");
+            _networkManager.ClientManager.StartConnection();
 
         string code = GetConnectionCode();
 //        Debug.Log("📒 Code de la partie : " + code);

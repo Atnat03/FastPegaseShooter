@@ -4,58 +4,48 @@ using UnityEngine;
 
 public class Ascenseur : MonoBehaviour
 {
-	AscenseurManager _manager;
-	private Collider _collider;
-	
-	#region Fonctions
+    public event Action OnThresholdReached;
 
-	private void Awake()
-	{
-		_collider = GetComponent<Collider>();
-	}
+    [Range(0f, 1f)]
+    [SerializeField] private float _spawnThreshold = 0.5f;
 
-	public void StartDescente(
-		Vector3 startPosition, 
-		Vector3 endPosition, 
-		float duration,
-		AscenseurManager manager)
-	{
-		_manager = manager;
-		
-		StartCoroutine(DescenteAscenseur(startPosition, endPosition, duration));
-	}
+    private Coroutine _currentCoroutine;
+    private bool _thresholdTriggered;
 
-	private IEnumerator DescenteAscenseur(Vector3 startPosition, Vector3 endPosition, float duration)
-	{
-		float elapsedTime = 0;
-		
-		transform.position = startPosition;
+    public void StartDescente(Vector3 startPosition, Vector3 endPosition, float duration)
+    {
+        gameObject.SetActive(true);
+        
+        if (_currentCoroutine != null)
+            StopCoroutine(_currentCoroutine);
 
-		while (elapsedTime < duration)
-		{
-			elapsedTime += Time.deltaTime;
-			
-			transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
-			
-			yield return null;
-		}
-		
-		transform.position = endPosition;
-		
-		Destroy(gameObject);
-	}
+        _thresholdTriggered = false;
+        _currentCoroutine = StartCoroutine(DescenteAscenseur(startPosition, endPosition, duration));
+    }
 
-	private void OnTriggerEnter(Collider other)
-	{
-		if (_manager != null)
-		{
-			if (other.TryGetComponent(out PlayerVisuelBridge player))
-			{
-				_manager.SpawnNewAscenseur();
-				_collider.enabled = false;
-			}
-		}
-	}
+    private IEnumerator DescenteAscenseur(Vector3 startPosition, Vector3 endPosition, float duration)
+    {
+        float elapsed = 0f;
+        transform.position = startPosition;
 
-	#endregion
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+
+            transform.position = Vector3.Lerp(startPosition, endPosition, t);
+
+            if (!_thresholdTriggered && t >= _spawnThreshold)
+            {
+                _thresholdTriggered = true;
+                OnThresholdReached?.Invoke();
+            }
+
+            yield return null;
+        }
+
+        transform.position = endPosition;
+        
+        gameObject.SetActive(false);
+    }
 }
