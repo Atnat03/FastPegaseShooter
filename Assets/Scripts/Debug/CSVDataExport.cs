@@ -47,6 +47,7 @@ public class CSVDataExport : MonoBusListener
     
     private void OnApplicationQuit()
     {
+        if(rows.Count < 2) return;
         ExportCSV();
         PlayerPrefs.SetInt("GameID", gameID++);
     }
@@ -80,7 +81,6 @@ public class CSVDataExport : MonoBusListener
     [ContextMenu("resetGameCount")]
     public void ResetGameCount()
     {
-        gameID = 0;
         PlayerPrefs.SetInt("GameID", 0);
     }
 }
