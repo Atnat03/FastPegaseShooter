@@ -14,6 +14,7 @@ public class ShootEnergyView : MonoBehaviour
 	#region Variables
 
 	[SerializeField] private ShootEnergy _shootEnergy;
+	[SerializeField] private GunSwitching _gunSwitching;
 	
 	[Header("Model")]
 	[SerializeField] private MeshRenderer _modelRenderer;
@@ -30,6 +31,7 @@ public class ShootEnergyView : MonoBehaviour
 	
 	[Header("Laser")]
 	[SerializeField] private LineRenderer _laser;
+	[SerializeField] private Gradient[] _laserColors;
 	[SerializeField] private Transform _laserSpawnPoint;
 	private Vector3 _targetLaserPos;
 
@@ -45,7 +47,7 @@ public class ShootEnergyView : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_shootEnergy.OnSetUpColor += SetUpColor;
+		_gunSwitching.OnSwapGun += SetUpColor;
 		_shootEnergy.CantThrowEnergy += CantThrowEnergy;
 		_shootEnergy.OnDetectBro += DetectBro;
 		_shootEnergy.OnLaserActivate += ActivatedLaser;
@@ -57,7 +59,7 @@ public class ShootEnergyView : MonoBehaviour
 
 		if (isActive)
 		{
-			_targetLaserPos = endPos;
+			_targetLaserPos = endPos + Vector3.up;
 		}
 	}
 
@@ -79,7 +81,10 @@ public class ShootEnergyView : MonoBehaviour
 
 	private void SetUpColor(bool isPositive)
 	{
+		Cons.PrintBool(isPositive);
+		
 		_modelRenderer.material = isPositive ? _modelMaterial[0] : _modelMaterial[1];
+		_laser.colorGradient = isPositive ? _laserColors[0] : _laserColors[1];
 	}
 	
 	private void DetectBro(bool hasDetect, Vector3 pos)
@@ -88,11 +93,7 @@ public class ShootEnergyView : MonoBehaviour
 			
 		Canvas canvas = _uiTarget.GetComponentInParent<Canvas>();
 
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(
-			canvas.transform as RectTransform,
-			pos,
-			canvas.worldCamera,
-			out Vector2 localPos);
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, pos, canvas.worldCamera, out Vector2 localPos);
 
 		_uiTarget.GetComponent<RectTransform>().localPosition = localPos;
 	}

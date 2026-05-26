@@ -130,6 +130,23 @@ namespace Controller
             _bridgePlayer.TryChangeMain(false);
         }
         
+        private void ChangeGunScroll(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+
+            float scroll = obj.ReadValue<float>();
+            
+            if (scroll > 0)
+            {
+                _bridgePlayer.TryChangeMain(false);
+            }
+            else if (scroll < 0)
+            {
+                _bridgePlayer.TryChangeMain(true);
+            }
+        }
+        
         void OnEnable()
         {
             _shootAction = _playerInputAction.actions["Shoot"];
@@ -142,6 +159,8 @@ namespace Controller
             
             _playerInputAction.actions["ChangeToMainGun"].performed += ChangeToMainGun;
             _playerInputAction.actions["ChangeToEnergyGun"].performed += ChangeToEnergyGun;
+            
+            _playerInputAction.actions["ChangeGunScroll"].performed += ChangeGunScroll;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth += StopShooting;
@@ -160,6 +179,8 @@ namespace Controller
             
             _playerInputAction.actions["ChangeToMainGun"].performed -= ChangeToMainGun;
             _playerInputAction.actions["ChangeToEnergyGun"].performed -= ChangeToEnergyGun;
+            
+            _playerInputAction.actions["ChangeGunScroll"].performed -= ChangeGunScroll;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth -= StopShooting;

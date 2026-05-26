@@ -15,7 +15,6 @@ public class ShootEnergy : NetworkBusListener
 	#region Variables
 
 	[Header("References")] 
-	[SerializeField] private GunSwitching _gunSwitching;
 	[SerializeField] private PlayerEnergy _playerEnergy;
 
 	[Header("Settings")] 
@@ -30,12 +29,14 @@ public class ShootEnergy : NetworkBusListener
 	[SerializeField] private Camera _camera;
 	private Transform _target = null;
 	private NetworkObject _targetNetObj;
+	
 	private readonly SyncVar<bool> _isAiming = new  SyncVar<bool>(false);
+	private readonly SyncVar<bool> _laserActive = new SyncVar<bool>(false);
+	private readonly SyncVar<Vector3> _laserTargetPos = new SyncVar<Vector3>();
 
 	private float _nextFireTime = 0f;
 
 	//Actions
-	public Action<bool> OnSetUpColor;
 	public Action<int> CantThrowEnergy;
 	public Action<bool, Vector3> OnDetectBro;
 	public Action<bool, Vector3> OnLaserActivate;
@@ -58,12 +59,7 @@ public class ShootEnergy : NetworkBusListener
 	{
 		OnDetectBro?.Invoke(false, Vector3.zero);
 	}
-
-	void Start()
-	{
-		OnSetUpColor?.Invoke(_gunSwitching.IsMainGun);
-	}
-
+	
 	public void TryShoot()
 	{
 		if (Time.time < _nextFireTime) return;
@@ -136,11 +132,7 @@ public class ShootEnergy : NetworkBusListener
 		{
 			Vector3 screenPos = _camera.WorldToScreenPoint(_target.position + Vector3.up);
 			
-			if (_isAiming.Value)
-			{
-				OnLaserActivate?.Invoke(true, _target.position);
-			}
-			else
+			if (!_isAiming.Value)
 			{
 				OnDetectBro?.Invoke(true, screenPos);
 			}
@@ -148,6 +140,7 @@ public class ShootEnergy : NetworkBusListener
 		else
 		{
 			OnDetectBro?.Invoke(false, Vector3.zero);
+			SetAimingState(false);
 		}
 	}
 
@@ -167,15 +160,23 @@ public class ShootEnergy : NetworkBusListener
 	
 	private void OnAimingChange(bool prev, bool next, bool asServer)
 	{
-		if (!asServer) return;
-
-		if (_targetNetObj != null)
+		if (asServer)
 		{
-			SendEnergyStateObserverRpc(_targetNetObj.OwnerId, next);
+			if (_targetNetObj != null)
+				SendEnergyStateObserverRpc(_targetNetObj.OwnerId, next);
+			return;
 		}
 
-		if (!next)
+		if (!IsOwner) return;
+
+		if (next && _target != null)
+		{
+			OnLaserActivate?.Invoke(true, _target.position);
+		}
+		else
+		{
 			OnLaserActivate?.Invoke(false, Vector3.zero);
+		}
 	}
 
 	[ObserversRpc]
