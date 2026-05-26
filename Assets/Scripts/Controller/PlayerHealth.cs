@@ -216,6 +216,33 @@ public class PlayerHealth : NetworkBusListener
 	[Server]
 	void TakeDamage(PlayerTakeDamageEvent data)
 	{
+		
+		//debug clement
+		
+		float player1PVs = -1;
+		float player2PVs = -1;
+		if (PlayerHealthManager.Instance != null)
+		{
+			player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+				? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+				: 0;
+			player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+				? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+				: 0;
+		}
+		InvokeEvent(new OnDataLog
+		{
+			entityName = data.p_attacker.name,
+			weapon = "ennemy_Shoot",
+			targetName = transform.GetRootTransform().gameObject.name,
+			damages = data.p_value,
+			player1PVs = player1PVs,
+			player2PVs = player2PVs,
+			ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+		});
+		
+		//fin du debug
+		
 		if (data.p_playerN.ObjectId != NetworkObject.ObjectId) return;
 		
 		if (IsDead) return;
@@ -486,6 +513,7 @@ public struct PlayerTakeDamageEvent
 {
 	public NetworkObject p_playerN;
 	public float p_value;
+	public NetworkObject p_attacker;
 }
 
 public struct OnPlayerDeathEvent
