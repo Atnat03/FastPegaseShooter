@@ -12,13 +12,12 @@ public class DroneThrower : NetworkBusListener
 	#region Properties
 
 	#endregion
-
-
+	
 	#region Variables
 	
 	[SerializeField] private ArmBridgeAnimation _bridgeAnimation;
-	[SerializeField] private PlayerEnergy _playerEnergy;
 	[SerializeField] private GunSwitching _gunSwitching;
+	[SerializeField] private PlayerCapacity _playerCapacity;
 	
 	[Header("Throw")]
 	[SerializeField] private Drone _dronePrefab;
@@ -64,17 +63,17 @@ public class DroneThrower : NetworkBusListener
 		if (!_hasDrone) return;
 		if (_isCanceled) return;
 		if (_target == null) return;
-		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowDrone)) return;
+		if (!_playerCapacity.CanDrone) return;
+		
+		InvokeEvent(new OnUseCapacity
+		{
+			p_capacityData = Capacity.Drone
+		});
 		
 		_isCharging = false;
 		
 		NetworkObject targetNetObj = _target.GetComponent<NetworkObject>()
 		                             ?? _target.GetComponentInParent<NetworkObject>();
-		
-		if (_playerEnergy != null)
-		{
-			ConsumeEnergyServerRpc(_playerEnergy.p_costThrowDrone * _playerEnergy.EnergyOneBar);
-		}
 		
 		if (_bridgeAnimation != null)
 		{

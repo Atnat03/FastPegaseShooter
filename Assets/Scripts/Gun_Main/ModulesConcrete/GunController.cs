@@ -30,7 +30,6 @@ public interface ISurcharge
     public void SetAmmo(int value, bool _infiniteAmmo);
     public Transform ModelGun { get; }
     public void StopReload();
-    public void SetPercentageCharge(int percent);
 }
 
 namespace GunDecorator

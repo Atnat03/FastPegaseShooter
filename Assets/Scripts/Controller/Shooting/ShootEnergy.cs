@@ -77,7 +77,7 @@ public class ShootEnergy : NetworkBusListener
 			SetAimingState(false);
 			return;
 		}
-
+		
 		SetAimingState(true);
 		
 		_nextFireTime = Time.time + _fireRate;

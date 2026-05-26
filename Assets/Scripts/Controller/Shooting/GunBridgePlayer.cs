@@ -21,6 +21,7 @@ namespace Controller
         [SerializeField] private GunSwitching _gunSwitching;
         [SerializeField] private GunSurcharge _gunSurcharge;
         [SerializeField] private GrenadeThrower _grenadeThrower;
+        [SerializeField] private PlayerCapacity _playerCapacity;
         
         private bool _isInitialized = false;
         
@@ -72,6 +73,12 @@ namespace Controller
         {
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
+            if (!_playerCapacity.CanChargedShoot) return;
+            
+            InvokeEvent(new OnUseCapacity
+            {
+                p_capacityData = Capacity.ChargedShoot
+            });
             
             CurrentGun.TryShootCharged();
         }
