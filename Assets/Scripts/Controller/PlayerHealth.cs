@@ -52,7 +52,7 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
 
-	[Header("debug")] [SerializeField] private SwapGunManager SwapGunManager;
+	[Header("debug")] [SerializeField] private SwapGunManager swapGunManager;
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -99,6 +99,11 @@ public class PlayerHealth : NetworkBusListener
 		});
 		
 		ListenToEvent<OnCorrosionEvent>(ApplyCorrosionDamage);
+		
+		 
+		
+		swapGunManager = FindAnyObjectByType<SwapGunManager>();// pour du debug, a tej en build finale
+		
 	}
 
 	public override void OnStartClient()
@@ -304,20 +309,31 @@ public class PlayerHealth : NetworkBusListener
 	[Server]
 	async void AddHealth(AddHealthToPlayer data)
 	{
+		//debug clement
+		
+		float player1PVs = -1;
+		float player2PVs = -1;
+		if (PlayerHealthManager.Instance != null)
+		{
+			player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+				? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+				: 0;
+			player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+				? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+				: 0;
+		}
 		InvokeEvent(new OnDataLog
 		{
 			entityName = gameObject.name,
 			weapon = "heal",
 			targetName = gameObject.name,
 			damages = (data.p_value * -1f),
-			player1PVs = PlayerHealthManager.Instance.RegisteredPlayers[0]
-				? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
-				: 0,
-			player2PVs = PlayerHealthManager.Instance.RegisteredPlayers[1]
-				? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
-				: 0,
-			ArenaID = SwapGunManager ? SwapGunManager.p_playerZones[OwnerId] : -1
+			player1PVs = player1PVs,
+			player2PVs = player2PVs,
+			ArenaID = swapGunManager ? swapGunManager.p_playerZones[OwnerId] : -1
 		});
+		
+		//fin du debug
 		
 		if (_isDead.Value || data.p_playerId != OwnerId) return;
 		if(data.p_delay != 0) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
