@@ -32,11 +32,6 @@ namespace Controller
         
         private Coroutine _swapCoroutine;
 
-        private void Update()
-        {
-            Cons.Print("Main gun : " + GetCurrentMainIndex);
-        }
-
         public override void OnStartClient()
         {
             base.OnStartClient();
