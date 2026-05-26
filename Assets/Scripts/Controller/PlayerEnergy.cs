@@ -146,7 +146,6 @@ public class PlayerEnergy : NetworkBusListener
 
 		UpdateUI(_currentEnergy.Value);
 	}
-
 	#endregion
 }
 

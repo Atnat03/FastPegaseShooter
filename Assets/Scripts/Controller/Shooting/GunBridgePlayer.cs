@@ -24,11 +24,6 @@ namespace Controller
         
         private bool _isInitialized = false;
         
-        private void Update()
-        {
-            Cons.Print("Main gun : " + GetCurrentMainIndex);
-        }
-
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -61,6 +56,12 @@ namespace Controller
 
         public void TryCancelShooting()
         {
+            if (!_gunSwitching.IsMainGun)
+            {
+                _gunSwitching.ShootEnergy.TryCancelShoot();
+                return;
+            }
+            
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
             

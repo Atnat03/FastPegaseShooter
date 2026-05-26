@@ -314,6 +314,8 @@ namespace GunDecorator
             }
         }
 
+        public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
+
     public void SetPercentageCharge(int percent) => _chargedModule.SetPercentage(percent);
     }
 }

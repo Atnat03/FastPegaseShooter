@@ -1,4 +1,7 @@
 using System;
+using FishNet.Connection;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MyPrint;
 using UnityEngine;
 
@@ -22,20 +25,34 @@ public class ShootEnergy : NetworkBusListener
 	[Header("Detection Bro")]
 	[SerializeField] private float _range = 50f;
 	[SerializeField] private float _aimAngle = 0.95f; 
+	[SerializeField] private float _aimAngleShoot = 0.9f; 
 	[SerializeField] private LayerMask _targetLayer;
 	[SerializeField] private Camera _camera;
 	private Transform _target = null;
+	private NetworkObject _targetNetObj;
+	private readonly SyncVar<bool> _isAiming = new  SyncVar<bool>(false);
 
 	private float _nextFireTime = 0f;
 
 	//Actions
 	public Action<bool> OnSetUpColor;
-	public Action CantThrowEnergy;
+	public Action<int> CantThrowEnergy;
 	public Action<bool, Vector3> OnDetectBro;
+	public Action<bool, Vector3> OnLaserActivate;
 
 	#endregion
 	
 	#region Fonctions
+
+	public override void OnStartNetwork()
+	{
+		_isAiming.OnChange += OnAimingChange;
+	}
+
+	public override void OnStopNetwork()
+	{
+		_isAiming.OnChange -= OnAimingChange;
+	}
 
 	private void OnDisable()
 	{
@@ -50,23 +67,36 @@ public class ShootEnergy : NetworkBusListener
 	public void TryShoot()
 	{
 		if (Time.time < _nextFireTime) return;
-		if (_target == null) return;
 		
 		if (_playerEnergy.CurrentEnergy <= 0)
 		{
-			CantThrowEnergy?.Invoke();
+			CantThrowEnergy?.Invoke(0);
+			SetAimingState(false);
+			return;
+		}
+		
+		if (_target == null)
+		{
+			CantThrowEnergy?.Invoke(1);
+			SetAimingState(false);
 			return;
 		}
 
+		SetAimingState(true);
+		
 		_nextFireTime = Time.time + _fireRate;
-
-		Cons.Print("Try ConsumeEnergyEvent ", ColorConsole.Blue);
-
+		
 		InvokeEvent(new ConsumeEnergyEvent
 		{
 			p_player = Owner,
 			p_value = -_value
 		});
+	}
+	
+	
+	public void TryCancelShoot()
+	{
+		SetAimingState(false);
 	}
 	
 	Transform GetTarget()
@@ -78,7 +108,7 @@ public class ShootEnergy : NetworkBusListener
 		);
 
 		Transform bestTarget = null;
-		float bestScore = _aimAngle;
+		float bestScore = _isAiming.Value ? _aimAngleShoot : _aimAngle;
 
 		foreach (Collider col in targets)
 		{
@@ -105,14 +135,64 @@ public class ShootEnergy : NetworkBusListener
 		if (_target)
 		{
 			Vector3 screenPos = _camera.WorldToScreenPoint(_target.position + Vector3.up);
-			OnDetectBro?.Invoke(true, screenPos);
+			
+			if (_isAiming.Value)
+			{
+				OnLaserActivate?.Invoke(true, _target.position);
+			}
+			else
+			{
+				OnDetectBro?.Invoke(true, screenPos);
+			}
 		}
 		else
 		{
 			OnDetectBro?.Invoke(false, Vector3.zero);
 		}
+	}
 
+	void SetAimingState(bool state)
+	{
+		NetworkObject targetNetObj = _target?.root.GetComponent<NetworkObject>();
+		
+		SetAimingServerRpc(state, targetNetObj);
+	}
+
+	[ServerRpc]
+	private void SetAimingServerRpc(bool state, NetworkObject targetNetObj)
+	{
+		_targetNetObj = targetNetObj;
+		_isAiming.Value = state;
+	}
+	
+	private void OnAimingChange(bool prev, bool next, bool asServer)
+	{
+		if (!asServer) return;
+
+		if (_targetNetObj != null)
+		{
+			SendEnergyStateObserverRpc(_targetNetObj.OwnerId, next);
+		}
+
+		if (!next)
+			OnLaserActivate?.Invoke(false, Vector3.zero);
+	}
+
+	[ObserversRpc]
+	private void SendEnergyStateObserverRpc(int targetOwnerId, bool state)
+	{
+		InvokeEvent(new OnPlayerGetEnergized
+		{
+			p_ownerId = targetOwnerId,
+			p_state = state
+		});
 	}
 	
 	#endregion
+}
+
+public struct OnPlayerGetEnergized
+{
+	public int p_ownerId;
+	public bool p_state;
 }
