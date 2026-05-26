@@ -24,9 +24,11 @@ public class Pooler<T> where T : MonoBehaviour, IPoolable
         };
         for (int i = 0; i < initialSize; i++)
         {
-           /* T obj = GameObject.Instantiate(prefab, poolParent.transform);
+            /*
+            T obj = GameObject.Instantiate(prefab, poolParent.transform);
             obj.gameObject.SetActive(false);
-            pool.Enqueue(obj);*/
+            pool.Enqueue(obj);
+            */
         }
     }
 

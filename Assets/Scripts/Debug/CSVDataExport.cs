@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-public class CSVDataExport : MonoBehaviour
+public class CSVDataExport : MonoBusListener
 {
     public bool autoOpenFile = true;
     private int gameID;
@@ -16,21 +16,33 @@ public class CSVDataExport : MonoBehaviour
         
         rows.Add(new string[]
         {
-            "Generation",
-            "AvgFitness",
-            "AvgFitnessNoFall",
-            "MaxFitness",
-            "FallenCount",
-            "TrainingDuration",
-            "MutationRate",
-            "MutationPower",
+            "Time",
+            "Entity",
+            "weapon",
+            "target",
+            "damages",
+            "player1PVs",
+            "player2PVs",
+            "subArenaID",
         });
+        
+        ListenToEvent<OnDataLog>(AddLog);
     }
 
 
     void AddLog(OnDataLog data)
     {
-        
+        rows.Add(new []
+        {
+            Time.time.ToString("F2"),
+            data.entityName,
+            data.weapon,
+            data.targetName,
+            data.damages.ToString("F2"),
+            data.player1PVs.ToString("F2"),
+            data.player2PVs.ToString("F2"),
+            data.ArenaID.ToString(),
+        });
     }
     
     private void OnApplicationQuit()
@@ -44,7 +56,7 @@ public class CSVDataExport : MonoBehaviour
         string fileName = "game_" + gameID;
 
         string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-        string folderPath = Path.Combine(documentsPath);
+        string folderPath = Path.Combine(documentsPath, "GamesData");
 
         if (!Directory.Exists(folderPath))
         {
@@ -62,11 +74,17 @@ public class CSVDataExport : MonoBehaviour
 
         File.WriteAllText(path, sb.ToString());
 
-        Debug.Log("CSV sauvegardé ici : " + path);
-
         if(autoOpenFile)Application.OpenURL("file://" + folderPath); 
     }
+    
+    [ContextMenu("resetGameCount")]
+    public void ResetGameCount()
+    {
+        gameID = 0;
+        PlayerPrefs.SetInt("GameID", 0);
+    }
 }
+
 
 struct OnDataLog
 {
