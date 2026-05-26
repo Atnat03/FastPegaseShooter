@@ -309,6 +309,8 @@ public class PlayerHealth : NetworkBusListener
 	[Server]
 	async void AddHealth(AddHealthToPlayer data)
 	{
+		//debug clement
+		
 		float player1PVs = -1;
 		float player2PVs = -1;
 		if (PlayerHealthManager.Instance != null)
@@ -330,6 +332,8 @@ public class PlayerHealth : NetworkBusListener
 			player2PVs = player2PVs,
 			ArenaID = swapGunManager ? swapGunManager.p_playerZones[OwnerId] : -1
 		});
+		
+		//fin du debug
 		
 		if (_isDead.Value || data.p_playerId != OwnerId) return;
 		if(data.p_delay != 0) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));

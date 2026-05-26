@@ -247,6 +247,7 @@ namespace GunDecorator
             ApplyDamageObservers(damage, isCritical, hadCharged);
 
 
+            // debug clement
             float player1PVs = -1;
             float player2PVs = -1;
             if (PlayerHealthManager.Instance != null)
@@ -268,6 +269,8 @@ namespace GunDecorator
                 player2PVs = player2PVs,
                 ArenaID = swapGunManager ? swapGunManager.p_playerZones[OwnerId] : -1
             });
+            
+            // fin du debug 
         }
 
         [ObserversRpc]
