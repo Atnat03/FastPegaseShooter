@@ -17,7 +17,8 @@ public class CSVDataExport : MonoBusListener
         rows.Add(new string[]
         {
             "Time",
-            "Entity",
+            "EntityType",
+            "EntityID",
             "weapon",
             "target",
             "damages",
@@ -36,6 +37,7 @@ public class CSVDataExport : MonoBusListener
         {
             Time.time.ToString("F2"),
             data.entityName,
+            data.EntityID.ToString(),
             data.weapon,
             data.targetName,
             data.damages.ToString("F2"),
@@ -89,6 +91,7 @@ public class CSVDataExport : MonoBusListener
 struct OnDataLog
 {
     public string entityName;
+    public int EntityID;
     public string weapon;
     public string targetName;
     public float damages;

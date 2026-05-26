@@ -233,6 +233,7 @@ public class PlayerHealth : NetworkBusListener
 		InvokeEvent(new OnDataLog
 		{
 			entityName = data.p_attacker.name,
+			EntityID = data.p_attacker.ObjectId,
 			weapon = "ennemy_Shoot",
 			targetName = transform.GetRootTransform().gameObject.name,
 			damages = data.p_value,
@@ -351,7 +352,8 @@ public class PlayerHealth : NetworkBusListener
 		}
 		InvokeEvent(new OnDataLog
 		{
-			entityName = gameObject.name,
+			entityName = name,
+			EntityID = ObjectId,
 			weapon = "heal",
 			targetName = gameObject.name,
 			damages = (data.p_value * -1f),

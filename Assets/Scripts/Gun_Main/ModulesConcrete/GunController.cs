@@ -262,6 +262,7 @@ namespace GunDecorator
             InvokeEvent(new OnDataLog
             {
                 entityName = transform.GetRootTransform().gameObject.name,
+                EntityID = ObjectId,
                 weapon = gameObject.name,
                 targetName = target.name,
                 damages = damage,
