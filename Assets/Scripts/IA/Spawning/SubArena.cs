@@ -8,6 +8,7 @@ using FishNet;
 using FishNet.Object;
 using GameKit.Dependencies.Utilities;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
@@ -27,6 +28,10 @@ public class SubArena : NetworkBusListener
     [SerializeField] private List<MobSpawnSO> _spawnMobs = new();
     [SerializeField] private List<SpawningState> _spawningStates = new();
     
+    [Header("----- Corrosion -----")]
+    [SerializeField] private int _maxSpawnEnemy = 10;
+    [SerializeField] private int _corrosionDamage = 5;
+    [SerializeField] private int _corrosionDelay = 3;
 
     private List<(float cumulativeWeight, MobSpawnSO mob)> orderedSpawnPriority = new();
     private int _currentSpawnPointIndex = 0;
@@ -48,6 +53,11 @@ public class SubArena : NetworkBusListener
         {
             //CustomLogger.Log("OnDapEvent zone stop");
             _zoneActivated = false;
+        });
+        
+        ListenToEvent<OnEnemyDieEvent>(OEDE =>
+        {
+            _spawnedEnemies.Remove(OEDE.p_enemy);
         });
         
 
@@ -184,6 +194,24 @@ public class SubArena : NetworkBusListener
             
             while (_zoneActivated && enabledTime < _maxEnabledTime && Application.isPlaying)
             {
+                //Corrosion
+                if (_spawnedEnemies.Count >= _maxSpawnEnemy)
+                {
+                    int t = 0;
+                    while (_spawnedEnemies.Count >= _maxSpawnEnemy &&
+                           enabledTime < _maxEnabledTime && _zoneActivated
+                           && Application.isPlaying)
+                    {
+                        await Task.Delay(500);
+                        t += 500;
+                        if (t >= _corrosionDelay * 1000)
+                        {
+                            EventBus.InvokeEvent(new OnCorrosionEvent(_corrosionDamage));
+                            t -= _corrosionDelay * 1000;
+                        }
+                    }
+                }
+                
                 MobSpawnSO nextMobToSpawn = GetNextEnemyToSpawn();
 
                 //generating budget
@@ -204,6 +232,7 @@ public class SubArena : NetworkBusListener
                     await Task.Delay(1000);
                 }
 
+                //Enemy Spawning
                 if(_zoneActivated)
                 {
                     //CustomLogger.Log($"Spawn enemy : {nextMobToSpawn.name}");

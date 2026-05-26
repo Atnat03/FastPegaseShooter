@@ -54,17 +54,18 @@ public struct OnDapEvent
     
 }
 
-/*public struct EnemyDyingEvent
+public struct OnEnemyDieEvent
 {
-    public Guid p_gridReaderId;
-    public int p_enemySpawnCost;
-    public EnemyCore p_enemyCore;
+    public EnemyCore p_enemy;
+}
 
-    public EnemyDyingEvent(Guid id, int cost, EnemyCore core)
+public struct OnCorrosionEvent
+{
+    public int p_corrosionDamage;
+
+    public OnCorrosionEvent(int damages)
     {
-        p_gridReaderId = id;
-        p_enemySpawnCost = cost;
-        p_enemyCore = core;
+        p_corrosionDamage = damages;
     }
-}*/
+}
 

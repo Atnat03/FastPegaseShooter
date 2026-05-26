@@ -94,6 +94,8 @@ public class PlayerHealth : NetworkBusListener
 			isPositiveCharge = Owner.ClientId == 0,
 			gunSwitching = _gunSwitching
 		});
+		
+		ListenToEvent<OnCorrosionEvent>(ApplyCorrosionDamage);
 	}
 
 	public override void OnStartClient()
@@ -227,6 +229,10 @@ public class PlayerHealth : NetworkBusListener
 	private void ApplyShortCircuitDamage(OnShortCircuitDamage data)
 	{
 		RequestTakeDamageServerRpc(data.damage);
+	}
+	private void ApplyCorrosionDamage(OnCorrosionEvent data)
+	{
+		RequestTakeDamageServerRpc(data.p_corrosionDamage);
 	}
 
 	[ServerRpc]
