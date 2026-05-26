@@ -74,7 +74,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
             damages = rawDamageAmount,
             player1PVs = player1PVs,
             player2PVs = player2PVs,
-            ArenaID = swapGunManager ? swapGunManager.p_playerZones[OwnerId] : -1
+            ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
         });
         
         //fin du debug

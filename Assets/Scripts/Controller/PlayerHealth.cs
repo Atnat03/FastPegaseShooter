@@ -330,7 +330,7 @@ public class PlayerHealth : NetworkBusListener
 			damages = (data.p_value * -1f),
 			player1PVs = player1PVs,
 			player2PVs = player2PVs,
-			ArenaID = swapGunManager ? swapGunManager.p_playerZones[OwnerId] : -1
+			ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
 		});
 		
 		//fin du debug
