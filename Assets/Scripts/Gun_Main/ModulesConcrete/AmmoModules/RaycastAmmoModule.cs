@@ -163,7 +163,6 @@ namespace GunDecorator.AmmoModules
             bullet.OnCollision -= DespawnBullet;
             _ammoPool.ReturnToPool(bullet);
         }
-
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;
         
