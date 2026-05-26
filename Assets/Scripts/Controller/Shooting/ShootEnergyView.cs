@@ -81,8 +81,6 @@ public class ShootEnergyView : MonoBehaviour
 
 	private void SetUpColor(bool isPositive)
 	{
-		Cons.PrintBool(isPositive);
-		
 		_modelRenderer.material = isPositive ? _modelMaterial[0] : _modelMaterial[1];
 		_laser.colorGradient = isPositive ? _laserColors[0] : _laserColors[1];
 	}

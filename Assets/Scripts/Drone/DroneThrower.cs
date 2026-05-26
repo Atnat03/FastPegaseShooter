@@ -36,8 +36,6 @@ public class DroneThrower : NetworkBusListener
 	private bool _isCanceled = false;
 
 	private readonly SyncVar<bool> _canThrow = new(false);
-
-	public bool _hasDrone = false;
 	
 	private Drone _currentDroneInTerrain = null;
 	
@@ -53,14 +51,12 @@ public class DroneThrower : NetworkBusListener
 	{
 		if (IsServerInitialized)
 		{
-			_hasDrone = true;
 			OnGetDrone?.Invoke();
 		}
 	}
 
 	public void TryThrowDrone()
 	{
-		if (!_hasDrone) return;
 		if (_isCanceled) return;
 		if (_target == null) return;
 		if (!_playerCapacity.CanDrone) return;
@@ -86,20 +82,9 @@ public class DroneThrower : NetworkBusListener
 			ThrowDroneServerRpc(targetNetObj);
 		}
 
-		_hasDrone = false;
 		OnThrowing?.Invoke();
 	}
 	
-	[ServerRpc]
-	private void ConsumeEnergyServerRpc(float amount)
-	{
-		InvokeEvent(new ConsumeEnergyEvent()
-		{
-			p_player = Owner,
-			p_value = -amount
-		});
-	}
-
 	[ServerRpc]
 	public void ThrowDroneServerRpc(NetworkObject targetNetObj)
 	{
@@ -111,13 +96,12 @@ public class DroneThrower : NetworkBusListener
 		_currentDroneInTerrain = Instantiate(_dronePrefab, _spawnPoint.position, Quaternion.identity);
 		InstanceFinder.ServerManager.Spawn(_currentDroneInTerrain.gameObject);
 		
-		_currentDroneInTerrain.SetTarget(targetNetObj.transform);
+		_currentDroneInTerrain.SetTarget(targetNetObj.transform, _gunSwitching.IsPositive);
 	}
 
 	[TargetRpc]
 	public void GiveDroneBackTargetRpc(NetworkConnection target)
 	{
-		_hasDrone = true;
 		OnGetDrone?.Invoke();
 	}
 	
@@ -151,12 +135,6 @@ public class DroneThrower : NetworkBusListener
 	private void Update()
 	{
 		if (!IsOwner) return;
-
-		if (!_hasDrone)
-		{
-			_uiTarget.SetActive(false);
-			return;
-		}
 		
 		_target = GetTarget();
 
