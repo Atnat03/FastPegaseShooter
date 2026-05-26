@@ -56,7 +56,7 @@ public class CSVDataExport : MonoBusListener
         string fileName = "game_" + gameID;
 
         string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-        string folderPath = Path.Combine(documentsPath);
+        string folderPath = Path.Combine(documentsPath, "GamesData");
 
         if (!Directory.Exists(folderPath))
         {
@@ -76,7 +76,15 @@ public class CSVDataExport : MonoBusListener
 
         if(autoOpenFile)Application.OpenURL("file://" + folderPath); 
     }
+    
+    [ContextMenu("resetGameCount")]
+    public void ResetGameCount()
+    {
+        gameID = 0;
+        PlayerPrefs.SetInt("GameID", 0);
+    }
 }
+
 
 struct OnDataLog
 {

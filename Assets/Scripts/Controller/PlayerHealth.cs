@@ -6,6 +6,7 @@ using CustomConsole.Runtime.Logger;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -50,6 +51,8 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private float _healThrowCost = 20;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
+
+	[Header("debug")] [SerializeField] private SwapGunManager SwapGunManager;
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -301,6 +304,21 @@ public class PlayerHealth : NetworkBusListener
 	[Server]
 	async void AddHealth(AddHealthToPlayer data)
 	{
+		InvokeEvent(new OnDataLog
+		{
+			entityName = gameObject.name,
+			weapon = "heal",
+			targetName = gameObject.name,
+			damages = (data.p_value * -1f),
+			player1PVs = PlayerHealthManager.Instance.RegisteredPlayers[0]
+				? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+				: 0,
+			player2PVs = PlayerHealthManager.Instance.RegisteredPlayers[1]
+				? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+				: 0,
+			ArenaID = SwapGunManager ? SwapGunManager.p_playerZones[OwnerId] : -1
+		});
+		
 		if (_isDead.Value || data.p_playerId != OwnerId) return;
 		if(data.p_delay != 0) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
 
@@ -437,7 +455,7 @@ public class PlayerHealth : NetworkBusListener
 		
 		Vector3 throwAngle = new Vector3(p_healThrowDirection.forward.x, -pitch * 0.1f,  p_healThrowDirection.forward.z);
 		
-		return startPos + throwAngle  * throwForce * overTime + 0.5f * Physics.gravity * overTime * overTime;
+		return startPos + throwAngle * (throwForce * overTime) + Physics.gravity * (0.5f * overTime * overTime);
 	}
 }
 
