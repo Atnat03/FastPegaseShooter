@@ -18,9 +18,6 @@ public class SplashEnemyBullet : EnemyBullet
     {
         LobShootingAttackModule LSAModule = p_attackModule as LobShootingAttackModule;
         
-        Debug.Log($"splash bullet collided with {hit.collider.name}, pos: {_currentPosition}");
-        Debug.DrawLine(_lastPosition, _currentPosition, Color.red, 5);
-        
         EventBus.InvokeEvent(
             new EnemyShootingEvent(
             hit.point,
