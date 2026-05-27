@@ -236,12 +236,12 @@ namespace GunDecorator
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
             
-            if (target.TryGetComponent<EnemyCore>(out var enemyCore))
+            /*if (target.TryGetComponent<EnemyCore>(out var enemyCore))
             {
                 enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
                 
                 Cons.Print("Add charge : " + IsPositivePlayerCharge);;
-            }
+            }*/
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
 

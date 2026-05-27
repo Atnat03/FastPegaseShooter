@@ -53,6 +53,13 @@ public struct EnemyMeleeAttackEvent
 public struct OnEnemyDieEvent
 {
     public EnemyCore p_enemy;
+    public float p_energyToDropInOrb;
+
+    public OnEnemyDieEvent(EnemyCore core, float energyToDropInOrb)
+    {
+        p_enemy = core;
+        p_energyToDropInOrb = energyToDropInOrb;
+    }
 }
 
 #region Sub Arena
