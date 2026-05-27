@@ -8,17 +8,18 @@ using Random = UnityEngine.Random;
 
 public class EnemyBulletManager : NetworkBusListener
 {
-    [SerializeField] private GameObject _normalBulletPrefab;
-    [SerializeField] private GameObject _splashBulletPrefab;
-    [SerializeField] private GameObject _puddleBulletPrefab;
+    [SerializeField] private EnemyBulletVisuals _normalBulletPrefab;
+    [SerializeField] private EnemyBulletVisuals _viscousBulletPrefab;
+    [SerializeField] private EnemyBulletVisuals _puddleBulletPrefab;
     
     public LayerMask _normalBulletLayerMask = int.MaxValue & ~(1 << 16); //enemy layer
-    public LayerMask _splashBulletLayerMask = int.MaxValue & ~(1 << 6) & ~(1 << 7) & ~(1 << 16); //players layer and enemy layer
+    public LayerMask _viscousBulletLayerMask = int.MaxValue & ~(1 << 6) & ~(1 << 7) & ~(1 << 16); //players layer and enemy layer
     public LayerMask _puddleBulletLayerMask = (1 << 6) | (1 << 7); //players layer 
     private Action _unsubscribeAction;
 
     private List<EnemyBullet> _spawnedBullets = new List<EnemyBullet>();
     private int _lastBulletId;
+    private Dictionary<BulletTypes, Pooler<EnemyBulletVisuals>> bulletPools = new();
     
     public override void OnStartServer()
     {
@@ -26,6 +27,10 @@ public class EnemyBulletManager : NetworkBusListener
 
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
         ListenToEvent<EnemyShootingEvent>(AddBullets);
+        
+        bulletPools.Add(BulletTypes.Normal, new Pooler<EnemyBulletVisuals>(_normalBulletPrefab, 5));
+        bulletPools.Add(BulletTypes.Viscous, new Pooler<EnemyBulletVisuals>(_viscousBulletPrefab, 5));
+        bulletPools.Add(BulletTypes.GooPuddle, new Pooler<EnemyBulletVisuals>(_puddleBulletPrefab, 5));
     }
 
     public override void OnStopServer()
@@ -70,8 +75,8 @@ public class EnemyBulletManager : NetworkBusListener
                 case BulletTypes.Normal:
                     bullet = new NormalEnemyBullet(ESE, direction, networkTime, _lastBulletId, _normalBulletLayerMask);
                     break;
-                case BulletTypes.Splash:
-                    bullet = new SplashEnemyBullet(ESE, direction, networkTime, _lastBulletId, _splashBulletLayerMask);
+                case BulletTypes.Viscous:
+                    bullet = new SplashEnemyBullet(ESE, direction, networkTime, _lastBulletId, _viscousBulletLayerMask);
                     break;
                 case BulletTypes.GooPuddle:
                     bullet = new PuddleEnemyBullet(ESE, direction, networkTime, _lastBulletId, _puddleBulletLayerMask);
@@ -116,28 +121,32 @@ public class EnemyBulletManager : NetworkBusListener
         //may use object pulling to reduce lag when instantiating GO
         foreach (BulletBasicInfos bulletInfo in BSI.p_bulletsInfos)
         {
-            GameObject newBullet = Instantiate(GetObjectFromType(BSI.p_bulletType), BSI.p_startPos, Quaternion.identity);
+            EnemyBulletVisuals newBullet = bulletPools[BSI.p_bulletType].Spawn(BSI.p_startPos, Quaternion.identity);//Instantiate(GetObjectFromType(BSI.p_bulletType), BSI.p_startPos, Quaternion.identity);
             
-            EnemyBulletVisuals EBV = newBullet.GetComponent<EnemyBulletVisuals>();
-            EBV.SetupVariables(BSI.p_startPos, spawnTime, BSI.p_useGravity, bulletInfo.p_direction, BSI.p_bulletsSpeed, BSI.p_bulletsSize, bulletInfo.p_bulletId, BSI.p_bulletType);
+            newBullet.SetupVariables(BSI.p_startPos, spawnTime, BSI.p_useGravity, bulletInfo.p_direction, BSI.p_bulletsSpeed, BSI.p_bulletsSize, bulletInfo.p_bulletId, BSI.p_bulletType, this);
         }
     }
 
-    GameObject GetObjectFromType(BulletTypes type)
+    public void ReturnBulletToPool(EnemyBulletVisuals EBV, BulletTypes bulletType)
+    {
+        bulletPools[bulletType].ReturnToPool(EBV);
+    }
+
+    /*GameObject GetObjectFromType(BulletTypes type)
     {
         switch (type)
         {
             case BulletTypes.Normal:
                 return _normalBulletPrefab;
-            case BulletTypes.Splash:
-                return _splashBulletPrefab;
+            case BulletTypes.Viscous:
+                return _viscousBulletPrefab;
             case BulletTypes.GooPuddle:
                 return _puddleBulletPrefab;
             
             default:
                 return _normalBulletPrefab;
         }
-    }
+    }*/
 
     [ObserversRpc]
     void KillVisualBulletObserverRPC(int bulletId)
@@ -149,7 +158,7 @@ public class EnemyBulletManager : NetworkBusListener
 public enum BulletTypes
 {
     Normal,
-    Splash,
+    Viscous,
     GooPuddle
 };
 

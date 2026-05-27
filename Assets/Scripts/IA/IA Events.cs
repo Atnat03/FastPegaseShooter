@@ -49,17 +49,42 @@ public struct EnemyMeleeAttackEvent
     
 }
 
-public struct EnemyDyingEvent
-{
-    public Guid p_gridReaderId;
-    public int p_enemySpawnCost;
-    public EnemyCore p_enemyCore;
 
-    public EnemyDyingEvent(Guid id, int cost, EnemyCore core)
-    {
-        p_gridReaderId = id;
-        p_enemySpawnCost = cost;
-        p_enemyCore = core;
-    }
+public struct OnEnemyDieEvent
+{
+    public EnemyCore p_enemy;
 }
+
+#region Sub Arena
+    public struct OnDapEvent
+    {
+        
+    }
+
+    public struct OnSubArenaUpdateEvent
+    {
+        public Guid p_arenaID;
+        public float p_overCrowdingPercent;
+        public SubArenaStateSO p_state;
+        public string p_arenaName;
+
+        public OnSubArenaUpdateEvent(Guid arenaID, float overCrowdingPercent, string arenaName, SubArenaStateSO state)
+        {
+            p_arenaID = arenaID;
+            p_state = state;
+            p_overCrowdingPercent = overCrowdingPercent;
+            p_arenaName = arenaName;
+        }
+    }
+    public struct OnCorrosionEvent
+    {
+        public int p_corrosionDamage;
+
+        public OnCorrosionEvent(int damages)
+        {
+            p_corrosionDamage = damages;
+        }
+    }
+#endregion
+
 

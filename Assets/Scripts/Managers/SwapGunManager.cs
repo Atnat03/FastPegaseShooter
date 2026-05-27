@@ -35,7 +35,7 @@ namespace Managers
         
         [Header("Polarized")]
         private readonly SyncVar<bool> _isPolarized = new SyncVar<bool>(false);
-        private Dictionary<int, int> _playerZones = new Dictionary<int, int>();
+        public Dictionary<int, int> p_playerZones = new Dictionary<int, int>();
         private Dictionary<int, bool> _playerCharges = new Dictionary<int, bool>();
 
         [Header("Conflict")]
@@ -88,8 +88,8 @@ namespace Managers
         {
             RegisterPlayer(data.playerId);
 
-            if (!_playerZones.ContainsKey(data.playerId))
-                _playerZones[data.playerId] = -1;
+            if (!p_playerZones.ContainsKey(data.playerId))
+                p_playerZones[data.playerId] = -1;
 
             if (!_playerCharges.ContainsKey(data.playerId))
                 _playerCharges[data.playerId] = data.isPositiveCharge;
@@ -100,12 +100,19 @@ namespace Managers
             }
 
             if (_playerIds.Count >= 2)
+            {
                 EvaluateConflict();
+                
+                int p1 = _playerIds[0];
+                int p2 = _playerIds[1];
+                bool isAligned = _playerCharges[p1] == _playerCharges[p2];
+                NotifyPolarizationObserversRpc(isAligned, false, false);
+            }
         }
         
         private void OnPlayerChangeZone(OnPlayerChangeZone data)
         {
-            _playerZones[data.playerId] = data.newZone;
+            p_playerZones[data.playerId] = data.newZone;
             RegisterPlayer(data.playerId);
             EvaluateConflict();
         }
@@ -126,27 +133,23 @@ namespace Managers
         private void EvaluateConflict()
         {
             if (_playerIds.Count < 2) return;
-
             
             int p1 = _playerIds[0];
             int p2 = _playerIds[1];
             
-            if (_playerZones[p1] == -1 && _playerZones[p2] == -1)
+            if (p_playerZones[p1] == -1 && p_playerZones[p2] == -1)
             {
                 _isInConflict.Value = false;
                 return;
             }
             
-            Cons.Print("p1 zone : " + _playerZones[p1] + " // p2 zone : " +  _playerZones[p2]);
-
-            
-            bool zonesKnown = _playerZones.ContainsKey(p1) && _playerZones.ContainsKey(p2);
+            bool zonesKnown = p_playerZones.ContainsKey(p1) && p_playerZones.ContainsKey(p2);
             bool chargesKnown = _playerCharges.ContainsKey(p1) && _playerCharges.ContainsKey(p2);
 
             if (!zonesKnown || !chargesKnown) return;
 
             bool isAligned = _playerCharges[p1] == _playerCharges[p2];
-            bool isSameZone = _playerZones[p1] == _playerZones[p2];
+            bool isSameZone = p_playerZones[p1] == p_playerZones[p2];
 
             _canSwap.Value = !isAligned;
 
@@ -223,9 +226,10 @@ namespace Managers
                     if (_conflictTimer.Value <= 0)
                     {
                         _conflictTimer.Value = 0;
-                        _isShortCircuit.Value = false;
                     }
                 }
+                
+                _isShortCircuit.Value = false;
             }
         }
 
@@ -385,7 +389,7 @@ namespace Managers
         
         private bool CheckPolarized()
         {
-            if (_playerZones[0] == _playerZones[1])
+            if (p_playerZones[0] == p_playerZones[1])
             {
                 return true;
             }
@@ -414,15 +418,22 @@ namespace Managers
             _cooldownText.text = ((int)next).ToString();
         }
         
-        // Callbacks clients pour l'UI
         private void OnConflictChanged(bool prev, bool next, bool asServer)
         {
-            InvokeEvent(new OnConflictUIUpdate { isConflict = next, isShortCircuit = _isShortCircuit.Value });
+            InvokeEvent(new OnConflictUIUpdate
+            {
+                isConflict = next, 
+                isShortCircuit = _isShortCircuit.Value
+            });
         }
 
         private void OnShortCircuitChanged(bool prev, bool next, bool asServer)
         {
-            InvokeEvent(new OnConflictUIUpdate { isConflict = _isInConflict.Value, isShortCircuit = next });
+            InvokeEvent(new OnConflictUIUpdate
+            {
+                isConflict = _isInConflict.Value,
+                isShortCircuit = next
+            });
         }
 
         private void OnConflictTimerChanged(float prev, float next, bool asServer)

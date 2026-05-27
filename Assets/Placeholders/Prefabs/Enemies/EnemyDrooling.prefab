@@ -86,6 +86,8 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0.67209816, b: 1, a: 1}
   _explosionParticle: {fileID: 1509239389167855855, guid: b2408256d1f9a414c91f7f086978e655, type: 3}
+  _shied: {fileID: 0}
+  _materialShied: []
 --- !u!114 &2105214549607011887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,8 +106,96 @@ MonoBehaviour:
   _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
   _lifeTMP: {fileID: 1167859077468925769}
   _lifeBarImage: {fileID: 2657176826086352456}
-  _fullLifeColor: {r: 0.6666667, g: 0.20000002, b: 0.16470589, a: 1}
-  _emptyLifeColor: {r: 0.2264151, g: 0.020315934, b: 0, a: 1}
+  _NoneAffinityLifeGradient:
+    serializedVersion: 2
+    key0: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+    key1: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  _PositiveAffinityLifeGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.5330188, b: 0.5330188, a: 1}
+    key1: {r: 1, g: 0.53333336, b: 0.53333336, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  _NegativeAffinityLifeGradient:
+    serializedVersion: 2
+    key0: {r: 0.49803922, g: 0.7137255, b: 1, a: 1}
+    key1: {r: 0.495283, g: 0.7136667, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
   _fillSpeedBarFront: 10
   _lifeBarSecondImage: {fileID: 4950254358149817393}
   _fillSpeedBarBack: 5
@@ -178,6 +268,7 @@ MonoBehaviour:
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_enemySpawnCost: 0
+  p_affinityType: 0
   _explosionChargedDamage: 0
   p_player1_IsPositive: 0
   p_player1_ChargeMax: 5
@@ -185,6 +276,7 @@ MonoBehaviour:
   p_player2_IsPositive: 0
   p_player2_ChargeMax: 5
   p_current_player2_Charge: 0
+  p_shiedType: 0
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,8 +309,8 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _targetModule: {fileID: -1059870798127094945}
-  _damage: 20
-  _attackDelay: 2
+  _damage: 15
+  _attackDelay: 2.5
   _bulletType: 1
   _projectileUseGravity: 1
   _maxPlayerDistance: 10
@@ -228,8 +320,8 @@ MonoBehaviour:
   _shootingAngle: 30
   p_shootingOffset: {x: 0, y: 0.5, z: 0}
   p_splashSize: 7.5
-  p_splashDuration: 12
-  p_splashDamageDelay: 0.8
+  p_splashDuration: 8
+  p_splashDamageDelay: 1.1
 --- !u!114 &4856717765235199756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,8 +363,8 @@ MonoBehaviour:
   _aggroPointPerSecond: 1
   _aggroPointPerDamageDealt: 1
   _aggroPointsThreshold: 0000000064000000c8000000
-  _detectionZoneRadius: 60
-  _aggroZoneRadius: 60
+  _detectionZoneRadius: 120
+  _aggroZoneRadius: 120
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -332,7 +424,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584231111660686348
+  _initializedTimestamp: -8584224093668715896
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -348,7 +440,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 24
+  <PrefabId>k__BackingField: 27
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 10969955874153687185
   SceneId: 0

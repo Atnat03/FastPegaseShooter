@@ -5,6 +5,7 @@ using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
+using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
@@ -28,7 +29,7 @@ public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value, bool _infiniteAmmo);
-    public Renderer ModelGun { get; }
+    public Transform ModelGun { get; }
     public void StopReload();
     public void SetPercentageCharge(int percent);
 }
@@ -44,7 +45,7 @@ namespace GunDecorator
         public bool IsInfiniteAmmo => _infiniteAmmo;
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
-        public Renderer ModelGun => _model;
+        public Transform ModelGun => _model;
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -58,7 +59,7 @@ namespace GunDecorator
         private GunModuleSettingsSO _settings;
 
         [SerializeField, Tooltip("Model 3d de l'arme")]
-        private Renderer _model;
+        private Transform _model;
 
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
@@ -78,6 +79,8 @@ namespace GunDecorator
 
         [SerializeField] private int _reticuleID = 0;
 
+        [SerializeField] private SwapGunManager swapGunManager;
+        
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
         private bool _infiniteAmmo = false;
@@ -133,6 +136,11 @@ namespace GunDecorator
                     }
                 }
             }
+        }
+
+        private void Start() // pour du debug, a tej en build finale
+        {
+            swapGunManager = FindAnyObjectByType<SwapGunManager>();
         }
 
         public void TryFire()
@@ -226,7 +234,7 @@ namespace GunDecorator
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
 
-            bool crit = d.TakeDamage(OwnerId, damage, isCritical);
+            bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
             
             if (target.TryGetComponent<EnemyCore>(out var enemyCore))
@@ -237,6 +245,33 @@ namespace GunDecorator
             }
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
+
+
+            // debug clement
+            float player1PVs = -1;
+            float player2PVs = -1;
+            if (PlayerHealthManager.Instance != null)
+            {
+                player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+                    ? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+                    : 0;
+                player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+                    ? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+                    : 0;
+            }
+            InvokeEvent(new OnDataLog
+            {
+                entityName = transform.GetRootTransform().gameObject.name,
+                EntityID = ObjectId,
+                weapon = gameObject.name,
+                targetName = target.name,
+                damages = damage,
+                player1PVs = player1PVs,
+                player2PVs = player2PVs,
+                ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+            });
+            
+            // fin du debug 
         }
 
         [ObserversRpc]
@@ -248,7 +283,7 @@ namespace GunDecorator
                 p_value = damage,
                 p_critical = isCritical
             });
-
+            
             AddPercentageCharge(hadCharged);
         }
         
@@ -275,7 +310,7 @@ namespace GunDecorator
 
             if (clip == null) return;
 
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
 
             PlaySoundServerRpc(sound);
         }
@@ -289,8 +324,7 @@ namespace GunDecorator
         [ObserversRpc(ExcludeOwner = true)]
         void PlaySoundObserverRpc(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
         }
 
         [ObserversRpc]

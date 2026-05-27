@@ -9,7 +9,7 @@ public class PuddleEnemyBullet : EnemyBullet
     private float _damageDelay;
     private float _timeToShoot;
     
-    List<NetworkObject> _playerHits = new List<NetworkObject>();
+    HashSet<NetworkObject> _playerHits = new HashSet<NetworkObject>();
 
     public PuddleEnemyBullet(EnemyShootingEvent ESE, Vector3 direction, float spawnTime,
         int bulletId, LayerMask layerMask)
@@ -82,7 +82,8 @@ public class PuddleEnemyBullet : EnemyBullet
                 EventBus.InvokeEvent(new PlayerTakeDamageEvent
                 {
                     p_playerN = playerNetworkObject,
-                    p_value = p_bulletDamage
+                    p_value = p_bulletDamage,
+                    p_attacker = p_attackModule.gameObject.GetComponent<NetworkObject>()
                 });
             
                 p_attackModule.p_onHitPlayer?.Invoke(playerNetworkObject.ObjectId, p_bulletDamage);
