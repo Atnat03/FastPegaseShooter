@@ -127,7 +127,7 @@ namespace GunDecorator.AmmoModules
             GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
-                isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, hadCharged);
+                isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, 0, hadCharged);
         }
 
         [ObserversRpc]
@@ -163,7 +163,6 @@ namespace GunDecorator.AmmoModules
             bullet.OnCollision -= DespawnBullet;
             _ammoPool.ReturnToPool(bullet);
         }
-
         
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;
         

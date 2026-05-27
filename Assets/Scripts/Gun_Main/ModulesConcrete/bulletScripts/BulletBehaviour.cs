@@ -56,7 +56,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         bool isCritical,
         Vector3 targetPoint,
         NetworkObject target,
-        bool isPositive, bool hadCharged = true)
+        bool isPositive, float duration = 0, bool hadCharged = true)
     {
         p_damage = damage;
         p_speed = speed;

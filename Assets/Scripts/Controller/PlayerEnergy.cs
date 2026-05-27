@@ -4,6 +4,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerEnergy : NetworkBusListener
 {
@@ -19,6 +20,7 @@ public class PlayerEnergy : NetworkBusListener
 	[SerializeField] private float _maxEnergy = 100f;
 	[SerializeField] private float _valueOneBar = 20f;
 	[SerializeField] private float _convertionTaux = 10;
+	[SerializeField] private GunSwitching _gunSwitching;
 	
 	[Header("Cost")]
 	public int p_costThrowGrenade = 1;
@@ -32,6 +34,7 @@ public class PlayerEnergy : NetworkBusListener
 	//Events UI
 	public Action<int> OnCreateBarUI;
 	public Action<int, float> OnUpdateUI;
+	public Action<bool> OnUpdateCharge;
 
 	#endregion
 
@@ -55,7 +58,7 @@ public class PlayerEnergy : NetworkBusListener
 
 		UpdateUI(_currentEnergy.Value);
 	}
-	
+
 	public override void OnStartClient()
 	{
 		_currentEnergy.OnChange += OnEnergyChanged;
@@ -65,7 +68,7 @@ public class PlayerEnergy : NetworkBusListener
 	{
 		UpdateUI(next);
 	}
-
+	
 	private void SetEnergy(SetEnergyEvent data)
 	{
 		if (data.p_player != Owner) return;
@@ -73,13 +76,22 @@ public class PlayerEnergy : NetworkBusListener
 		_currentEnergy.Value = Mathf.Clamp(data.p_ratio * _maxEnergy, 0, _maxEnergy);
 		UpdateUI(_currentEnergy.Value);
 	}
-
+	
 	private void ModifyEnergy(ModifyEnergyEvent data)
 	{
-		if (!IsServerInitialized) return;
-		if (data.p_player != OwnerId) return;
+		if (data.p_player != OwnerId)
+			return;
 
-		_currentEnergy.Value += data.p_value * _convertionTaux;
+		if (IsOwner)
+		{
+			AddEnergyServerRpc(data.p_value);
+		}
+	}
+
+	[ServerRpc]
+	private void AddEnergyServerRpc(float value)
+	{
+		_currentEnergy.Value += value * _convertionTaux;
 		_currentEnergy.Value = Mathf.Clamp(_currentEnergy.Value, 0, _maxEnergy);
 	}
 	
@@ -87,6 +99,8 @@ public class PlayerEnergy : NetworkBusListener
 	{
 		if (!IsServerInitialized) return;
 		if (data.p_player != Owner) return;
+		
+		Cons.Print("ConsumeEnergy", ColorConsole.Blue);
 		
 		_currentEnergy.Value += data.p_value;
 
@@ -108,7 +122,6 @@ public class PlayerEnergy : NetworkBusListener
 			activeFill = 1f;
 		}
 		
-
 		OnUpdateUI?.Invoke(activeBarIndex, activeFill);
 	}
 
@@ -116,7 +129,23 @@ public class PlayerEnergy : NetworkBusListener
 	{
 		return (CurrentEnergy - nbBar * _valueOneBar) >= 0;
 	}
+	
+	private void OnEnable()
+	{
+		_gunSwitching.OnSwapGun += UpdateCharge;
+	}
 
+	private void OnDisable()
+	{
+		_gunSwitching.OnSwapGun -= UpdateCharge;
+	}
+
+	private void UpdateCharge(bool isPositive)
+	{
+		OnUpdateCharge?.Invoke(isPositive);
+
+		UpdateUI(_currentEnergy.Value);
+	}
 	#endregion
 }
 

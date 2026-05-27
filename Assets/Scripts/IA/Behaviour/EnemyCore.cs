@@ -28,12 +28,16 @@ public class EnemyCore : NetworkBusListener
 
     #region Charges Variables
 
+    [SerializeField] private float _energyDropValue = 5;
+    [SerializeField] private bool _isWorldDroppingItem = false;
+    [SerializeField] private EnergyOrb _energyOrbPrefab;
+    
     public ChargeType p_affinityType = ChargeType.None;
     [SerializeField] private int _explosionChargedDamage = 50;
 
     public bool p_player1_IsPositive;
     public float p_player1_ChargeMax = 5;
-    public float p_current_player1_Charge;  
+    public float p_current_player1_Charge;
     
     public bool p_player2_IsPositive;
     public float p_player2_ChargeMax = 5;
@@ -177,8 +181,43 @@ public class EnemyCore : NetworkBusListener
         
     private void DeathEvent(int playerObjectId)
     {
-        ClearPathReservation();
-        InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
+        if(_movementModule != null)   
+            ClearPathReservation();
+
+        if (_isWorldDroppingItem)
+        {
+            NetworkConnection killer = null;
+
+            foreach (NetworkObject obj in InstanceFinder.ServerManager.Objects.Spawned.Values)
+            {
+                if (obj.OwnerId == playerObjectId)
+                {
+                    killer = obj.Owner;
+                    break;
+                }
+            }
+
+            if (killer != null)
+            {
+                SpawnOrbTargetRpc(killer, transform.position, _energyDropValue, playerObjectId);
+            }    
+        }
+        else
+        {
+            InvokeEvent(new ModifyEnergyEvent
+            {
+                p_player = playerObjectId,
+                p_value = _energyDropValue
+            });
+        }
+    }
+
+    [TargetRpc]
+    private void SpawnOrbTargetRpc(NetworkConnection conn, Vector3 pos, float energy, int playerId)
+    {
+        EnergyOrb orb = Instantiate(_energyOrbPrefab, pos, Quaternion.identity);
+
+        orb.SetUpOrb(energy, playerId);
     }
 
     #region Charges
