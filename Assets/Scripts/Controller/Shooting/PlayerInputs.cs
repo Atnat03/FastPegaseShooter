@@ -18,10 +18,10 @@ namespace Controller
         [SerializeField] private DroneThrower _droneThrower;
         
         private bool _canShoot = true;
-
-
         private bool shootingInputPressed;
 
+        private InputAction _shootAction;
+        
         #endregion
 
         #region Fonctions
@@ -36,17 +36,17 @@ namespace Controller
 
         void Update()
         {
-            if (_playerInputAction.actions["Shoot"].WasReleasedThisFrame()) CancelShooting();
-        }
+            if (_shootAction.WasReleasedThisFrame()) CancelShooting();
 
-        private void Shooting(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            if (!_canShoot) return;
-            
-            if (_bridgePlayer != null)
-                _bridgePlayer.TryShootWithCurrentGun();
+            if (_shootAction.IsPressed())
+            {
+                if (!IsOwner) return;
+                if (_playerHealth.IsDead) return;
+                if (!_canShoot) return;
+
+                if (_bridgePlayer != null)
+                    _bridgePlayer.TryShootWithCurrentGun();
+            }
         }
 
         private void CancelShooting()
@@ -82,35 +82,6 @@ namespace Controller
                 _bridgePlayer.TryReload();
             }
         }
-
-        private void RequestSwapingGun(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            if(!_canShoot) return;
-
-            _bridgePlayer.RequestSwapingGunServerRpc(
-                this,
-                _bridgePlayer.GetCurrentMainIndex,
-                _bridgePlayer.GetCurrentAmmo);
-        }
-
-        private void TryThrowGrenade(InputAction.CallbackContext obj)
-        {
-            if (!IsOwner) return;
-            if (_playerHealth.IsDead) return;
-            if(!_canShoot) return;
-    
-            _grenadeThrower.TryThrowGrenade();
-        }
-        
-        private void OnGrenadeThrown(ElementaryGrenade g)
-        {
-            if (_playerInputAction.actions["Shoot"].IsPressed())
-            {
-                _bridgePlayer.TryShootWithCurrentGun();
-            }
-        }
         
         private void TryThrowDrone(InputAction.CallbackContext obj)
         {
@@ -143,58 +114,79 @@ namespace Controller
             InvokeEvent(new OnPlayerInteract());
         }
         
-        private void ChangeMagneticCharge(InputAction.CallbackContext obj)
+        private void ChangeToMainGun(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _bridgePlayer.TryChangeMain(true);
+        }
+        
+        private void ChangeToEnergyGun(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _bridgePlayer.TryChangeMain(false);
+        }
+        
+        private void ChangeGunScroll(InputAction.CallbackContext obj)
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
 
-            _bridgePlayer.TryChangeMagneticCharge();
+            float scroll = obj.ReadValue<float>();
+            
+            if (scroll > 0)
+            {
+                _bridgePlayer.TryChangeMain(false);
+            }
+            else if (scroll < 0)
+            {
+                _bridgePlayer.TryChangeMain(true);
+            }
         }
-
+        
         void OnEnable()
         {
-            _playerInputAction.actions["Shoot"].performed += Shooting;
+            _shootAction = _playerInputAction.actions["Shoot"];
+            
             _playerInputAction.actions["Charge"].performed += ShootCharged;
             
-            _playerInputAction.actions["SwapGun"].performed += RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed += Reloading;
             
-            _playerInputAction.actions["ThrowGrenade"].performed += TryThrowGrenade;
-            _grenadeThrower.OnThrow += OnGrenadeThrown;
-            
             _playerInputAction.actions["ThrowDrone"].performed += TryThrowDrone;
+            
+            _playerInputAction.actions["ChangeToMainGun"].performed += ChangeToMainGun;
+            _playerInputAction.actions["ChangeToEnergyGun"].performed += ChangeToEnergyGun;
+            
+            _playerInputAction.actions["ChangeGunScroll"].performed += ChangeGunScroll;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth += StopShooting;
             
             //Interact
             _playerInputAction.actions["Grapple"].performed += Interact;
-            
-            //Charges Magnetic
-            _playerInputAction.actions["ChangeMagneticCharge"].performed += ChangeMagneticCharge;
         }
 
         void OnDisable()
         {
-            _playerInputAction.actions["Shoot"].performed -= Shooting;
             _playerInputAction.actions["Charge"].performed -= ShootCharged;
             
-            _playerInputAction.actions["SwapGun"].performed -= RequestSwapingGun;
             _playerInputAction.actions["Reload"].performed -= Reloading;
             
-            _playerInputAction.actions["ThrowGrenade"].performed -= TryThrowGrenade;
-            _grenadeThrower.OnThrow -= OnGrenadeThrown;
-            
             _playerInputAction.actions["ThrowDrone"].performed -= TryThrowDrone;
+            
+            _playerInputAction.actions["ChangeToMainGun"].performed -= ChangeToMainGun;
+            _playerInputAction.actions["ChangeToEnergyGun"].performed -= ChangeToEnergyGun;
+            
+            _playerInputAction.actions["ChangeGunScroll"].performed -= ChangeGunScroll;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth -= StopShooting;
             
             //Interact
             _playerInputAction.actions["Grapple"].performed -= Interact;
-            
-            //Charges Magnetic
-            _playerInputAction.actions["ChangeMagneticCharge"].performed -= ChangeMagneticCharge;
         }
 
         #endregion

@@ -54,11 +54,6 @@ namespace GunDecorator.ChargedModules
         
         public virtual void TryShootCharging()
         {
-            if (!_fullCharge) return;
-            if (_reloadModule.IsReloading) return;
-
-            _currentPercentCharge -= 100;
-            
             OnPercentageChargeChange?.Invoke(_currentPercentCharge);
         }
 
