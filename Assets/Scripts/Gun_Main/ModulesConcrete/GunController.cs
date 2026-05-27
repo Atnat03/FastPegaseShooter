@@ -5,6 +5,7 @@ using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
+using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
@@ -30,7 +31,6 @@ public interface ISurcharge
     public void SetAmmo(int value, bool _infiniteAmmo);
     public Transform ModelGun { get; }
     public void StopReload();
-    public void SetPercentageCharge(int percent);
 }
 
 namespace GunDecorator
@@ -71,13 +71,15 @@ namespace GunDecorator
         public Animator _animator;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
-        public VisualEffect _muzzleFlash; // test
+        public ParticleSystem _muzzleFlash;
 
         [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]
         private bool _isFullAuto;
 
         [SerializeField] private int _reticuleID = 0;
 
+        [SerializeField] private SwapGunManager swapGunManager;
+        
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
         private bool _infiniteAmmo = false;
@@ -135,6 +137,11 @@ namespace GunDecorator
             }
         }
 
+        private void Start() // pour du debug, a tej en build finale
+        {
+            swapGunManager = FindAnyObjectByType<SwapGunManager>();
+        }
+
         public void TryFire()
         {
             ShootingInputPressed = true;
@@ -144,6 +151,9 @@ namespace GunDecorator
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
+            
+            if (!_model.gameObject.activeInHierarchy)
+                return;
 
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
@@ -192,16 +202,13 @@ namespace GunDecorator
                 p_authorizedToShoot = true;
             }
         }
-
-
+        
         public void TryCancelShooting()
         {
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
 
             _recoilModule?.SetIsRecoil(false);
-
-            p_authorizedToShoot = true;
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
@@ -237,6 +244,33 @@ namespace GunDecorator
             }
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
+
+
+            // debug clement
+            float player1PVs = -1;
+            float player2PVs = -1;
+            if (PlayerHealthManager.Instance != null)
+            {
+                player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+                    ? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+                    : 0;
+                player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+                    ? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+                    : 0;
+            }
+            InvokeEvent(new OnDataLog
+            {
+                entityName = transform.GetRootTransform().gameObject.name,
+                EntityID = ObjectId,
+                weapon = gameObject.name,
+                targetName = target.name,
+                damages = damage,
+                player1PVs = player1PVs,
+                player2PVs = player2PVs,
+                ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+            });
+            
+            // fin du debug 
         }
 
         [ObserversRpc]
@@ -248,7 +282,7 @@ namespace GunDecorator
                 p_value = damage,
                 p_critical = isCritical
             });
-
+            
             AddPercentageCharge(hadCharged);
         }
         
@@ -313,6 +347,8 @@ namespace GunDecorator
                 _chargedModule.AddPercentage();
             }
         }
+
+        public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
 
     public void SetPercentageCharge(int percent) => _chargedModule.SetPercentage(percent);
     }

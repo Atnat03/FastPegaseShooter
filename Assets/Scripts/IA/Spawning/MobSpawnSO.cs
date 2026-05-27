@@ -4,5 +4,6 @@ using UnityEngine;
 public class MobSpawnSO : ScriptableObject
 {
     public GameObject p_prefab;
+    public float p_spawnProba;
     public int p_cost;
 }

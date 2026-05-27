@@ -1,7 +1,9 @@
 using System;
 using Controller;
+using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using Managers;
 using MyPrint;
 using UnityEngine;
 
@@ -13,6 +15,8 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     //SerializeField to get properties in custom inspector
     [HideInInspector][SerializeField] private int _life = 10;
     public readonly SyncVar<int> p_life = new SyncVar<int>();
+    
+    [Header("debug")] [SerializeField] private SwapGunManager swapGunManager;
     
     /// <summary>
     /// bool => Is Critical Damages <br/>
@@ -26,6 +30,11 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     
     
     [HideInInspector] private float p_damageMultiplier = 1;
+
+    private void Start()// pour du debug, a tej en build finale
+    {
+        swapGunManager = FindAnyObjectByType<SwapGunManager>();
+    }
 
     public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false)
     {
