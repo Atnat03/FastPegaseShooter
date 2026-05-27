@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,13 +15,25 @@ public class DapManagerView : MonoBusListener
     [SerializeField] private Color _energyBarColorFull;
     [SerializeField] private Color _energyBarColorNotFull;
     private float _targetFill;
-	
+    
     private List<Image> _energyBarsImageList = new List<Image>();
+	
+    [Header("Messages")]
+    [SerializeField] private TextMeshProUGUI _textMessage;
+    [SerializeField] private string[] _messages;
     
     private void OnEnable()
     {
         _dapManager.OnPercentageChange += UpdateUI;
         _dapManager.OnCreateBarUI += CreateUI;
+        _dapManager.OnMessageUpdate += UpdateMessages;
+    }
+
+    private void UpdateMessages(int idMessage)
+    {
+        _textMessage.gameObject.SetActive(idMessage > -1);
+        
+        _textMessage.text = _messages[idMessage];
     }
 
     #region BARS

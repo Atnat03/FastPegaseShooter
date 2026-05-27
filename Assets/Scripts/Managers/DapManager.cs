@@ -30,6 +30,7 @@ public class DapManager : NetworkBusListener
 	//Actions
 	public Action<int, float> OnPercentageChange;
 	public Action<int> OnCreateBarUI;
+	public Action<int> OnMessageUpdate;
 	
 	#endregion
 
@@ -63,6 +64,11 @@ public class DapManager : NetworkBusListener
 	
 	private void OnDapChange(float prev, float next, bool asServer)
 	{
+		if (_dapPercentage.Value >= _maxEnergy)
+		{
+			OnMessageUpdate?.Invoke(0);
+		}
+		
 		UpdateUI(next);
 	}
 	

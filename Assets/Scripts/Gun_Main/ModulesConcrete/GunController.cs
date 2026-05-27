@@ -327,7 +327,16 @@ namespace GunDecorator
         }
 
         [ObserversRpc]
-        private void PlayMuzzleFlash() => p_particleData.GetVFX("Shoot").Play();
+        private void PlayMuzzleFlash()
+        {
+            if (p_particleData == null) return;
+            
+            VFXData data = p_particleData.CreateVFX("Shoot");
+            
+            ParticleSystem particle = Instantiate(data.p_particle, transform);
+            particle.transform.localPosition = data.p_spawnPos;
+            Destroy(particle.gameObject, data.p_timeBeforeDestroy);
+        }
         
         public void StopReload() => _reloadModule.StopReload();
 
