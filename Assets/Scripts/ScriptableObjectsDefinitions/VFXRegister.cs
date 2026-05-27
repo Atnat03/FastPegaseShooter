@@ -7,13 +7,13 @@ public class VFXRegistry : ScriptableObject
 {
     public List<VFXData> _vfxList = new List<VFXData>();
 
-    public ParticleSystem GetVFX(string name)
+    public VFXData CreateVFX(string name)
     {
         foreach (VFXData data in _vfxList)
         {
             if (data.p_vfxName == name)
             {
-                return data.p_particle;
+                return data;
             }
         }
 
@@ -26,4 +26,6 @@ public class VFXData
 {
     public string p_vfxName;
     public ParticleSystem p_particle;
+    public Vector3 p_spawnPos;
+    public float p_timeBeforeDestroy = 1;
 }
