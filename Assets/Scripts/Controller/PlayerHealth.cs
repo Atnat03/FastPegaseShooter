@@ -37,9 +37,9 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private GunSwitching _gunSwitching;
 	[SerializeField] private NetworkObject healThrowObject;
 
-	[Header("Healing")]
+	[Header("Healing throw version")]
+	[SerializeField] private bool throwableHeal = false;
 	[SerializeField] private PlayerEnergy _playerEnergy;
-	public Transform p_healThrowPoint;
 	public Transform p_healThrowDirection;
 	public float throwForce = 10;
 	public float maxThrowDistance = 100;
@@ -51,8 +51,11 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private float _healThrowCost = 20;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
+	
+	[Header("Healing Self version")]
+	[SerializeField] private float _healAmount = 50;
 
-	[Header("debug")] [SerializeField] private SwapGunManager swapGunManager;
+	private SwapGunManager swapGunManager; //debug
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -174,13 +177,32 @@ public class PlayerHealth : NetworkBusListener
 			return;
 		}
 
-		OnThrowingVisualActivation?.Invoke();
-		_isHealKeyDown = true;
+		if (throwableHeal)
+		{
+			OnThrowingVisualActivation?.Invoke();
+			_isHealKeyDown = true;
+		}
+		else
+		{
+			AddHealth(new AddHealthToPlayer
+			{
+				p_delay = 0,
+				p_playerId = OwnerId,
+				p_value = _healAmount
+			});
+			
+			InvokeEvent(new ConsumeEnergyEvent()
+			{
+				p_player = Owner,
+				p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),
+			});
+		}
+		
 	}
 	void HealKeyCanceled(InputAction.CallbackContext ctx)
 	{
 		if(!(IsOwner || _isHealKeyDown))return;
-		
+		if(!throwableHeal)return;
 		OnThrowKeyReleased?.Invoke();
 		
 		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
@@ -192,7 +214,7 @@ public class PlayerHealth : NetworkBusListener
 		{
 			OnThrowing?.Invoke();
 			
-			ThrowHealServerRpc( Owner);
+			ThrowHealServerRpc(Owner);
 		}
 		
 		_isHealKeyDown = false;
@@ -351,7 +373,7 @@ public class PlayerHealth : NetworkBusListener
 		//fin du debug
 		
 		if (_isDead.Value || data.p_playerId != OwnerId) return;
-		if(data.p_delay != 0) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
+		if(data.p_delay != 0 && throwableHeal) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
 
 		float newHealth = (_currentHealth.Value + data.p_value) > _healthBase ? _healthBase : _currentHealth.Value + data.p_value;
 		_currentHealth.Value = newHealth;
