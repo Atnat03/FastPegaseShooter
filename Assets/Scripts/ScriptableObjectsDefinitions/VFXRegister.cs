@@ -1,13 +1,29 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "VFXRegistry", menuName = "GunDecorator/VFXRegistry")]
+[CreateAssetMenu(fileName = "VFXRegistry", menuName = "VFXRegistry")]
 public class VFXRegistry : ScriptableObject
 {
-    [SerializeField] private GameObject[] _vfxList;
-    
-    public GameObject Get(int index)
+    public List<VFXData> _vfxList = new List<VFXData>();
+
+    public ParticleSystem GetVFX(string name)
     {
-        if (index < 0 || index >= _vfxList.Length) return null;
-        return _vfxList[index];
+        foreach (VFXData data in _vfxList)
+        {
+            if (data.p_vfxName == name)
+            {
+                return data.p_particle;
+            }
+        }
+
+        return null;
     }
+}
+
+[Serializable]
+public class VFXData
+{
+    public string p_vfxName;
+    public ParticleSystem p_particle;
 }

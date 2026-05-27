@@ -13,6 +13,7 @@ public class DapManagerView : MonoBusListener
     [SerializeField] private Transform _barParent;   
     [SerializeField] private Color _energyBarColorFull;
     [SerializeField] private Color _energyBarColorNotFull;
+    private float _targetFill;
 	
     private List<Image> _energyBarsImageList = new List<Image>();
     
@@ -21,7 +22,7 @@ public class DapManagerView : MonoBusListener
         _dapManager.OnPercentageChange += UpdateUI;
         _dapManager.OnCreateBarUI += CreateUI;
     }
-    
+
     #region BARS
     
     private void UpdateUI(int activeBarIndex, float activeFill)

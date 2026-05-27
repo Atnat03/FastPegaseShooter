@@ -87,7 +87,7 @@ public class PlayerEnergizedState : NetworkBusListener
 				
 				if(ratio > 0 && IsServerInitialized)
 				{
-					InvokeEvent(new OnAddDapPercentage{});
+					InvokeEvent(new OnAddDapPercentage{p_ratio = Time.deltaTime});
 				}
 			}
 			yield return null;

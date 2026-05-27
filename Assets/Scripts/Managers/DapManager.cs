@@ -3,7 +3,9 @@ using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 public struct OnAddDapPercentage
-{ }
+{
+	public float p_ratio;
+}
 
 public class DapManager : NetworkBusListener
 {
@@ -42,10 +44,8 @@ public class DapManager : NetworkBusListener
 		
 		_totalBars = Mathf.CeilToInt(_maxEnergy / _valueOneBar);
 		
-		if (IsServerInitialized)
-			_dapPercentage.Value = _maxEnergy;
-		
 		OnCreateBarUI?.Invoke(_totalBars);
+		_dapPercentage.Value = 0;
 	}
 
 	public override void OnStartClient()
@@ -57,7 +57,7 @@ public class DapManager : NetworkBusListener
 	{
 		if (IsServerInitialized)
 		{
-			_dapPercentage.Value += _percentageGainPerSecond;
+			_dapPercentage.Value += _percentageGainPerSecond * data.p_ratio;
 		}
 	}
 	
