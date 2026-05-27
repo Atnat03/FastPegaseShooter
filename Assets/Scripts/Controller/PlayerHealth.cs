@@ -97,7 +97,8 @@ public class PlayerHealth : NetworkBusListener
 		{
 			playerId = Owner.ClientId,
 			isPositiveCharge = Owner.ClientId == 0,
-			gunSwitching = _gunSwitching
+			gunSwitching = _gunSwitching,
+			Transform = transform
 		});
 		
 		ListenToEvent<OnCorrosionEvent>(ApplyCorrosionDamage);

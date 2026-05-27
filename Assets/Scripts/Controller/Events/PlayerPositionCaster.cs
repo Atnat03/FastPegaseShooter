@@ -53,7 +53,7 @@ public class PlayerPositionCaster : NetworkBusListener
     [ServerRpc(RequireOwnership = false)]
     void PlayerPositionCastingServerRPC(Vector3 position, bool isHeartBeat, NetworkConnection conn = null)
     {
-        PlayerPositionCastingObserverRPC(position, conn.ClientId,isHeartBeat);
+        PlayerPositionCastingObserverRPC(position, conn.ClientId, isHeartBeat);
     }
     
     [ObserversRpc]
