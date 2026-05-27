@@ -71,7 +71,7 @@ namespace GunDecorator
         public Animator _animator;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
-        public VisualEffect _muzzleFlash; // test
+        public VFXRegistry p_particleData;
 
         [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]
         private bool _isFullAuto;
@@ -327,7 +327,16 @@ namespace GunDecorator
         }
 
         [ObserversRpc]
-        private void PlayMuzzleFlash() => _muzzleFlash.Play();
+        private void PlayMuzzleFlash()
+        {
+            if (p_particleData == null) return;
+            
+            VFXData data = p_particleData.CreateVFX("Shoot");
+            
+            ParticleSystem particle = Instantiate(data.p_particle, transform);
+            particle.transform.localPosition = data.p_spawnPos;
+            Destroy(particle.gameObject, data.p_timeBeforeDestroy);
+        }
         
         public void StopReload() => _reloadModule.StopReload();
 

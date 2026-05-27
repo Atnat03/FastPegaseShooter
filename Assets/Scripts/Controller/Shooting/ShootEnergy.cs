@@ -10,8 +10,7 @@ public class ShootEnergy : NetworkBusListener
 	#region Properties
 
 	#endregion
-
-
+	
 	#region Variables
 
 	[Header("References")] 
@@ -82,6 +81,12 @@ public class ShootEnergy : NetworkBusListener
 		
 		_nextFireTime = Time.time + _fireRate;
 		
+		ConsumeEnergyServerRpc();
+	}
+	
+	[ServerRpc]
+	private void ConsumeEnergyServerRpc()
+	{
 		InvokeEvent(new ConsumeEnergyEvent
 		{
 			p_player = Owner,

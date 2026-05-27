@@ -21,6 +21,8 @@ namespace Controller
         private bool shootingInputPressed;
 
         private InputAction _shootAction;
+
+        private bool _hasDap = true;
         
         #endregion
 
@@ -88,6 +90,7 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(!_canShoot) return;
+            if (_hasDap) return;
             
             _droneThrower.TryThrowDrone();
         }
@@ -147,6 +150,25 @@ namespace Controller
             }
         }
         
+        private void Dapping(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+            
+            _hasDap = true;
+            
+            AskForDapServerRpc();
+        }
+
+        [ServerRpc]
+        void AskForDapServerRpc()
+        {
+            InvokeEvent(new OnAskForDapp
+            {
+                p_connection = Owner.ClientId
+            });
+        }
+        
         void OnEnable()
         {
             _shootAction = _playerInputAction.actions["Shoot"];
@@ -161,6 +183,8 @@ namespace Controller
             _playerInputAction.actions["ChangeToEnergyGun"].performed += ChangeToEnergyGun;
             
             _playerInputAction.actions["ChangeGunScroll"].performed += ChangeGunScroll;
+            
+            _playerInputAction.actions["Interact"].performed += Dapping;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth += StopShooting;
@@ -181,6 +205,8 @@ namespace Controller
             _playerInputAction.actions["ChangeToEnergyGun"].performed -= ChangeToEnergyGun;
             
             _playerInputAction.actions["ChangeGunScroll"].performed -= ChangeGunScroll;
+            
+            _playerInputAction.actions["Interact"].performed -= Dapping;
             
             //Stop Shoot
             _playerHealth.OnUpdateHealth -= StopShooting;

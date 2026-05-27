@@ -84,6 +84,11 @@ public class PlayerEnergizedState : NetworkBusListener
 					p_capacityData = capa,
 					p_percentageValue = _percentagePerSecond * Time.deltaTime * ratio
 				});
+				
+				if(ratio > 0 && IsServerInitialized)
+				{
+					InvokeEvent(new OnAddDapPercentage{p_ratio = Time.deltaTime});
+				}
 			}
 			yield return null;
 		}
