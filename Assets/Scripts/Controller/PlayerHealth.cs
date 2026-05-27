@@ -185,20 +185,25 @@ public class PlayerHealth : NetworkBusListener
 		}
 		else
 		{
-			AddHealth(new AddHealthToPlayer
-			{
-				p_delay = 0,
-				p_playerId = OwnerId,
-				p_value = _healAmount
-			});
-			
-			InvokeEvent(new ConsumeEnergyEvent()
-			{
-				p_player = Owner,
-				p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),
-			});
+			NotThrowableHealPressedServerRpc();
 		}
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	void NotThrowableHealPressedServerRpc()
+	{
+		AddHealth(new AddHealthToPlayer
+		{
+			p_delay = 0,
+			p_playerId = OwnerId,
+			p_value = _healAmount
+		});
 		
+		InvokeEvent(new ConsumeEnergyEvent()
+		{
+			p_player = Owner,
+			p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),
+		});
 	}
 	void HealKeyCanceled(InputAction.CallbackContext ctx)
 	{

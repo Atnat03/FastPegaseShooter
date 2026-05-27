@@ -154,7 +154,6 @@ public class XpOrbManager : NetworkBusListener
                 continue;
             }
 
-            //Collection only computed on server
             if (IsServerInitialized && CanOrbBeCollected(orbIndex))
             {
                 InvokeEvent(new ModifyEnergyEvent
