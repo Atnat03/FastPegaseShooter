@@ -27,7 +27,7 @@ public class PVBagLifeModule : EnemyLifeModule
             
             if(p_life.Value <= 0)
             {
-                int damage = Mathf.RoundToInt(GetDamageAmount(rawDamageAmount) * _damageMultWhenDestroyed);
+                int damage = Mathf.RoundToInt(damages * _damageMultWhenDestroyed);
                 _enemyLifeModule.TakeDamage(attackerObjectId, damage, charge,  isCritical);
             }
         }

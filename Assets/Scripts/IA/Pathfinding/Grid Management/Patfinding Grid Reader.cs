@@ -31,6 +31,9 @@ public class PathfindingGridReader : MonoBehaviour
         _searchTree.Populate(pathfindingGridSO.nodes);
 
         _aStarAlgorithm = GetComponent<AStarAlgorithm>();
+        
+        _aStarAlgorithm.Init();
+        
         p_id = GenerateNewGuid();
         
         /*ListenToEvent((PlayerPositionUpdateEvent PPUE) =>

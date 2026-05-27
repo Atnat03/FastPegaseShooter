@@ -20,7 +20,8 @@ public class BasicMeleeAttackModule : EnemyAttackModule
                 InvokeEvent(new PlayerTakeDamageEvent
                 {
                     p_playerN = player,
-                    p_value = _damage
+                    p_value = _damage,
+                    p_attacker = transform.GetComponent<NetworkObject>(),
                 });
                 p_onHitPlayer?.Invoke(player.ObjectId, _damage);
             }
