@@ -1,11 +1,12 @@
+using MyPrint;
 using UnityEngine;
 
 namespace GunDecorator.ChargedModules
 {
-    public class DecreaseNoiseChargedModule : ChargedParentModule
+    public class MultipleShootChargedModule : ChargedParentModule
     {
         [Header("Salve")] 
-        [SerializeField] private float _startMaxNoiseAngle = 10;
+        [SerializeField] private Vector3[] _posOffset;
         
         public override void SetVariable(GunSetting setting)
         {
@@ -17,17 +18,18 @@ namespace GunDecorator.ChargedModules
                 _recoilChargedMultiplier =  s.recoilChargedMultiplier;
                 _recoilX = s.RecoilX;
                 _numberBulletInCharge = s.NumberBulletInCharged;
-                _startMaxNoiseAngle = s.startMaxNoiseAngle;
-                _oneAmmoAddPercentage = s.OneAmmoAddPercentage;
+                _posOffset = s._posOffset;
             }
         }
         
         public override void TryShootCharging()
         {
             base.TryShootCharging();
-            
-            if (!_fullCharge) return;
-            
+
+                Cons.Print("Apply shoot : " + _posOffset.Length);
+            for (int i = 0; i < _posOffset.Length; i++)
+            {
+                
                 _ammoModule.SetBulletData(new BulletData
                 {
                     IsExplosive = _isExplosifAmmo,
@@ -35,19 +37,20 @@ namespace GunDecorator.ChargedModules
                     ExplosionRadius = _explosionRadius
                 });
 
+                ApplyShoot(i);
+                
                 _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);
-                
-                ApplyShoot();
+            }
             
-            ResetCharging();
+            _gunController.PlaySound("Charged");
         }
 
-        private void ApplyShoot()
+        private void ApplyShoot(int index)
         {
-            _ammoModule.SpawnBullet(Vector3.zero, Vector3.zero, false);
-
-            _gunController.PlaySound("Charged");
+            Cons.Print("Apply shoot : " + _posOffset[index]);
+            
+            _ammoModule.SpawnBullet(Vector3.zero, _posOffset[index], false);
         }
     }
 }

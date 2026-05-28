@@ -60,7 +60,7 @@ public class SubArena : NetworkBusListener
         {
             if(_spawnedEnemies.Contains(OEDE.p_enemy))
             {
-                NotifySubArenaUpdateObserverRpc();
+                NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
                 _spawnedEnemies.Remove(OEDE.p_enemy);
             }
         });
@@ -105,20 +105,20 @@ public class SubArena : NetworkBusListener
     #region Visual Notification
 
     [ObserversRpc]
-    void NotifySubArenaStartObserverRpc()
+    void NotifySubArenaStartObserverRpc(Guid arenaId)
     {
         EventBus.InvokeEvent(
             new OnSubArenaStartEvent(
-                _gridReader.p_id,
+                arenaId,
                 _arenaGaugePrefab)
             );
     }
     [ObserversRpc]
-    void NotifySubArenaUpdateObserverRpc()
+    void NotifySubArenaUpdateObserverRpc(Guid arenaId)
     {
         EventBus.InvokeEvent(
             new OnSubArenaUpdateEvent(
-                _gridReader.p_id, 
+                arenaId, 
                 _spawnedEnemies.Count/(float)_maxSpawnEnemy,
                 _spawningStates[_currentStateIndex].p_state)
             );
@@ -140,7 +140,9 @@ public class SubArena : NetworkBusListener
     [Server]
     async void StartSpawning()
     {
-        NotifySubArenaStartObserverRpc();
+        if(!IsServerStarted) return;
+        
+        NotifySubArenaStartObserverRpc(_gridReader.p_id);
         
         await SpawnFirstWave();
         await InfiniteSpawn();
@@ -255,7 +257,7 @@ public class SubArena : NetworkBusListener
                     {
                         currentStateTime = 0;
                         _currentStateIndex = (_currentStateIndex + 1) % _spawningStates.Count;
-                        NotifySubArenaUpdateObserverRpc();
+                        NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
                     }
                     
                     _currentBudget += _spawningStates[_currentStateIndex].p_state.p_budgetPerSecond;
@@ -271,7 +273,7 @@ public class SubArena : NetworkBusListener
                     //CustomLogger.Log($"Spawn enemy : {nextMobToSpawn.name}");
                     _currentBudget -= nextMobToSpawn.p_cost;
                     SpawnEnemy(nextMobToSpawn.p_prefab);
-                    NotifySubArenaUpdateObserverRpc();
+                    NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
                 }
             }
         }
