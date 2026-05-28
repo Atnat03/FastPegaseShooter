@@ -58,7 +58,7 @@ namespace GunDecorator
         public void Explosed(float raduis, int damage);
         public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
             float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target, 
-            bool isPositive, bool hadCharged = true);
+            bool isPositive, float durationBeforeExplosion, bool hadCharged = true);
     }
 
     public interface ISecondModule
