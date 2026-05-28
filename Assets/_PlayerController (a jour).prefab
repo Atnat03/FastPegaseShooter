@@ -543,9 +543,10 @@ MonoBehaviour:
   _source: {fileID: 2319611060576274565}
   _soundData: {fileID: 11400000, guid: 65bd5cf42144b4241ad32c45f4c56e43, type: 2}
   _animator: {fileID: 4998647555748396230}
-  _muzzleFlash: {fileID: 6504872138130008429}
+  p_particleData: {fileID: 11400000, guid: 140620da22199c84abc1327f11439eca, type: 2}
   _isFullAuto: 1
   _reticuleID: 0
+  swapGunManager: {fileID: 0}
   p_authorizedToShoot: 1
 --- !u!114 &3797048584812851494
 MonoBehaviour:
@@ -1211,8 +1212,8 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _bridgeAnimation: {fileID: 1696661386864895725}
-  _playerEnergy: {fileID: 29235095159055250}
   _gunSwitching: {fileID: 3154577241410043838}
+  _playerCapacity: {fileID: 0}
   _dronePrefab: {fileID: 377463757777460365, guid: f1c05ad0ae4860046b6a4cb55f69529a, type: 3}
   _spawnPoint: {fileID: 8380329674851811601}
   _range: 5000
@@ -1222,7 +1223,6 @@ MonoBehaviour:
     m_Bits: 128
   _camera: {fileID: 3061844143884342809}
   _uiTarget: {fileID: 3595022601666599641}
-  _hasDrone: 0
 --- !u!1 &418334527989560021
 GameObject:
   m_ObjectHideFlags: 0
@@ -5256,7 +5256,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1758004073705069848}
-  m_Mesh: {fileID: -4497804199551319036, guid: fc891aa664a3ed94784b49c35f97b1ad, type: 3}
+  m_Mesh: {fileID: 2151248950992796498, guid: e415af1486ba8af4bbf714fcd20a9983, type: 3}
 --- !u!23 &4763980611330696504
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5329,7 +5329,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768220097572476205}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5339,7 +5339,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -100, y: 50}
+  m_AnchoredPosition: {x: -1009.99994, y: 540.00006}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1800979908142473302
@@ -12952,7 +12952,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2549426100202260014}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -12963,7 +12963,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -722.39996, y: -170.95}
+  m_AnchoredPosition: {x: 187.60011, y: 319.05002}
   m_SizeDelta: {x: 212.207, y: 96.509}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3180509483899063657
@@ -13613,8 +13613,8 @@ MonoBehaviour:
   _playerAnimation: {fileID: 3465261579877272972}
   _gunSwitching: {fileID: 3154577241410043838}
   healThrowObject: {fileID: 5060125199323097285, guid: 75ec9a798c987484cbe2ca5595ce95c5, type: 3}
+  throwableHeal: 0
   _playerEnergy: {fileID: 29235095159055250}
-  p_healThrowPoint: {fileID: 2316828313444862460}
   p_healThrowDirection: {fileID: 6291573982660001099}
   throwForce: 20
   maxThrowDistance: 100
@@ -13630,8 +13630,7 @@ MonoBehaviour:
   _throwHealLayerMask:
     serializedVersion: 2
     m_Bits: 192
-  SwapGunManager: {fileID: 0}
-  p_healThrowLandingPos: {x: 0, y: 0, z: 0}
+  _healAmount: 50
 --- !u!114 &8101511114389266693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13772,6 +13771,10 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 0}
   _gunSwitching: {fileID: 3154577241410043838}
   _damageFactor: 1.5
+  _percentagePerSecond: 10
+  _reloadCapacityValue: []
+  _percentageFreeze: 0
+  _percentagePerSecondDecrease: 0.5
 --- !u!1 &2663657820374755588
 GameObject:
   m_ObjectHideFlags: 0
@@ -14130,12 +14133,13 @@ RectTransform:
   - {fileID: 8090465910554267042}
   - {fileID: 7970848699346026978}
   - {fileID: 10748939879584899}
+  - {fileID: 308075494181272738}
   m_Father: {fileID: 7218313039823865412}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 540}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2766717587664504891
 MonoBehaviour:
@@ -19707,6 +19711,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4777854699099038466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 308075494181272738}
+  m_Layer: 5
+  m_Name: ArenaGauge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &308075494181272738
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4777854699099038466}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8144038627874155572}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4803969621413074910
 GameObject:
   m_ObjectHideFlags: 0
@@ -20200,9 +20239,10 @@ MonoBehaviour:
   _source: {fileID: 8132065868563438229}
   _soundData: {fileID: 11400000, guid: 376eb2d5da950c64c8f7abf6d416e1e0, type: 2}
   _animator: {fileID: 4931721667873999180}
-  _muzzleFlash: {fileID: 8900465745978998690}
+  p_particleData: {fileID: 0}
   _isFullAuto: 0
   _reticuleID: 1
+  swapGunManager: {fileID: 0}
   p_authorizedToShoot: 1
 --- !u!114 &6500108499577103005
 MonoBehaviour:
@@ -21115,9 +21155,10 @@ MonoBehaviour:
   _source: {fileID: 9206707941445351018}
   _soundData: {fileID: 11400000, guid: baba7f4aad2773f45b57a042e622a26d, type: 2}
   _animator: {fileID: 2581208419339123142}
-  _muzzleFlash: {fileID: 5899782461312709397}
+  p_particleData: {fileID: 0}
   _isFullAuto: 0
   _reticuleID: 1
+  swapGunManager: {fileID: 0}
   p_authorizedToShoot: 1
 --- !u!114 &4108116853922842008
 MonoBehaviour:
@@ -21394,6 +21435,7 @@ MonoBehaviour:
   _damages: 40
   _bulletThrowForce: 100
   _BulletSpeed: 50
+  _timeToExplose: 3
 --- !u!114 &5058586758962968031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22918,7 +22960,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -751.9, y: -309.8}
+  m_AnchoredPosition: {x: 158.10005, y: 180.20001}
   m_SizeDelta: {x: 408.1935, y: 116.0562}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6128018379006013303
@@ -23670,7 +23712,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -677.4, y: -219.2}
+  m_AnchoredPosition: {x: -677.39996, y: -219.19998}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6532959277089578514
@@ -23745,7 +23787,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -860, y: 515}
+  m_AnchoredPosition: {x: -860, y: 128}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7510938084471118052
@@ -24876,6 +24918,7 @@ GameObject:
   - component: {fileID: 79945915510860574}
   - component: {fileID: 8824872197090131092}
   - component: {fileID: 3960452511176637144}
+  - component: {fileID: 3631565360873447739}
   m_Layer: 7
   m_Name: PlayerControllerViews
   m_TagString: Untagged
@@ -25148,6 +25191,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEnergizedStateView
   _playerEnergizedState: {fileID: 2632099118924709043}
   _uiEnergized: {fileID: 4325465316112231463}
+--- !u!114 &3631565360873447739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6972727970303002869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc4ba81c2d5d244084cf9c580365b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubArenaGaugeView
+  SubArenaGaugeParent: {fileID: 308075494181272738}
 --- !u!1 &6976985933120169149
 GameObject:
   m_ObjectHideFlags: 0
@@ -30542,7 +30598,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -721, y: -421}
+  m_AnchoredPosition: {x: 189, y: 69}
   m_SizeDelta: {x: 408.1935, y: 116.0562}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7267254617557571447
@@ -30569,7 +30625,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7267254617557571447}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -30581,7 +30637,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 714.8, y: -175.54}
+  m_AnchoredPosition: {x: -195.20007, y: 314.46002}
   m_SizeDelta: {x: 353.722, y: 99.622}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1533047710073531061
@@ -31085,7 +31141,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 677, y: -384}
+  m_AnchoredPosition: {x: -233, y: 106}
   m_SizeDelta: {x: 463.85303, y: 253.675}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7488050329797814986
@@ -32496,6 +32552,7 @@ MonoBehaviour:
   _gunSwitching: {fileID: 3154577241410043838}
   _gunSurcharge: {fileID: 8957410558547212102}
   _grenadeThrower: {fileID: 4147575701769871822}
+  _playerCapacity: {fileID: 0}
 --- !u!114 &8957410558547212102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35746,9 +35803,10 @@ MonoBehaviour:
   _source: {fileID: 4697111258072731268}
   _soundData: {fileID: 11400000, guid: 65bd5cf42144b4241ad32c45f4c56e43, type: 2}
   _animator: {fileID: 4242411118646796630}
-  _muzzleFlash: {fileID: 5641821571385223286}
+  p_particleData: {fileID: 0}
   _isFullAuto: 1
   _reticuleID: 0
+  swapGunManager: {fileID: 0}
   p_authorizedToShoot: 1
 --- !u!114 &9103689300624622221
 MonoBehaviour:

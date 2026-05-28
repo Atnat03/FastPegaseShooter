@@ -130,6 +130,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 4531288954403815074}
   _life: 20
+  swapGunManager: {fileID: 0}
   _enemyLifeModule: {fileID: 4639033686446523756}
   _damageMultWhenDestroyed: 1
 --- !u!114 &4531288954403815074
@@ -162,7 +163,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584218848451500882
+  _initializedTimestamp: -8584216429531601385
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -350,6 +351,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 621410928043515991}
   _life: 20
+  swapGunManager: {fileID: 0}
   _enemyLifeModule: {fileID: 4639033686446523756}
   _damageMultWhenDestroyed: 1
 --- !u!114 &621410928043515991
@@ -382,7 +384,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584218848451500882
+  _initializedTimestamp: -8584216429531601385
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -466,7 +468,6 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _maxEnemySwelling: 0
   _attackingModules:
   - {fileID: 4750571229546580062}
   _lifeModules:
@@ -479,15 +480,10 @@ MonoBehaviour:
   _movementModule: {fileID: 1354513869891513326}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
-  p_affinityType: 0
-  _explosionChargedDamage: 50
-  p_player1_IsPositive: 0
-  p_player1_ChargeMax: 5
-  p_current_player1_Charge: 0
-  p_player2_IsPositive: 0
-  p_player2_ChargeMax: 5
-  p_current_player2_Charge: 0
-  p_shiedType: 2
+  _pinataType: 2
+  _baseEnergyDropValue: 5
+  _pinataEnergyDropValue: 10
+  _dropXpOrb: 0
 --- !u!114 &4750571229546580062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,6 +529,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _life: 100
+  swapGunManager: {fileID: 0}
 --- !u!114 &6912678073703625548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -598,11 +595,10 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 8280671740658429549}
   _doFreezeWithoutTarget: 1
   _targetModule: {fileID: -4927633382726970012}
-  _speed: 10
+  _speed: 5
   _traceWeight: 9
   _traceSpread: 3
   _idealDistance: 3
-  _maxTraverseNodeBeforePathUpdate: 3
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -665,7 +661,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584218848451500882
+  _initializedTimestamp: -8584216429531601385
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -681,7 +677,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 41
+  <PrefabId>k__BackingField: 44
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 17098794325251615989
   SceneId: 0
@@ -875,16 +871,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCoreViewer
   _enemyCore: {fileID: 4385027282801438809}
-  _p1_UI: {fileID: 273447798776681422}
-  _p1_CurValue: {fileID: 7080179882202550932}
-  _p2_UI: {fileID: 231514312740411804}
-  _p2_CurValue: {fileID: 5420615700648166867}
-  _colorsJaugesCharges:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 0.8051772, b: 1, a: 1}
-  _explosionParticle: {fileID: 1509239389167855855, guid: b2408256d1f9a414c91f7f086978e655, type: 3}
-  _shied: {fileID: 0}
-  _materialShied: []
 --- !u!114 &5346405171015881183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -908,66 +894,6 @@ MonoBehaviour:
     key0: {r: 0.008009965, g: 0.11320752, b: 0.01677642, a: 1}
     key1: {r: 0, g: 0.4716981, b: 0.040009897, a: 1}
     key2: {r: 0.502141, g: 0.9150943, b: 0.44459772, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 16384
-    ctime2: 65535
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  _PositiveAffinityLifeGradient:
-    serializedVersion: 2
-    key0: {r: 0.13207549, g: 0, b: 0, a: 1}
-    key1: {r: 0.6226415, g: 0.11454255, b: 0.11454255, a: 1}
-    key2: {r: 0.745283, g: 0.34100214, b: 0.34100214, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 16384
-    ctime2: 65535
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  _NegativeAffinityLifeGradient:
-    serializedVersion: 2
-    key0: {r: 0.009181456, g: 0, b: 0.16037738, a: 1}
-    key1: {r: 0.1678355, g: 0.13737096, b: 0.5943396, a: 1}
-    key2: {r: 0.42816043, g: 0.42145783, b: 0.7264151, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
@@ -1234,16 +1160,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6338584851720017724}
   m_SourcePrefab: {fileID: 100100000, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
---- !u!1 &231514312740411804 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6949888217496625987, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
-  m_PrefabInstance: {fileID: 7152973540407425759}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &273447798776681422 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6957794086421195025, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
-  m_PrefabInstance: {fileID: 7152973540407425759}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &997700555186094926 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7970523440951294353, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
@@ -1271,31 +1187,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!114 &5420615700648166867 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2917649538054012684, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
-  m_PrefabInstance: {fileID: 7152973540407425759}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!114 &6439950545859545142 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4187005629766447849, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
-  m_PrefabInstance: {fileID: 7152973540407425759}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!114 &7080179882202550932 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 73655864569653323, guid: dd5c453036fcda44585751e50f2d49cc, type: 3}
   m_PrefabInstance: {fileID: 7152973540407425759}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

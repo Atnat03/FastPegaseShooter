@@ -17,12 +17,15 @@ public class CSVDataExport : MonoBusListener
         rows.Add(new string[]
         {
             "Time",
-            "Entity",
+            "EntityType",
+            "EntityID",
             "weapon",
             "target",
             "damages",
             "player1PVs",
             "player2PVs",
+            "player1Energy",
+            "player2Energy",
             "subArenaID",
         });
         
@@ -36,11 +39,14 @@ public class CSVDataExport : MonoBusListener
         {
             Time.time.ToString("F2"),
             data.entityName,
+            data.EntityID.ToString(),
             data.weapon,
             data.targetName,
             data.damages.ToString("F2"),
             data.player1PVs.ToString("F2"),
             data.player2PVs.ToString("F2"),
+            data.player1Energy.ToString("F2"),
+            data.player2Energy.ToString("F2"),
             data.ArenaID.ToString(),
         });
     }
@@ -89,10 +95,13 @@ public class CSVDataExport : MonoBusListener
 struct OnDataLog
 {
     public string entityName;
+    public int EntityID;
     public string weapon;
     public string targetName;
     public float damages;
     public float player1PVs;
     public float player2PVs;
+    public float player1Energy;
+    public float player2Energy;
     public int ArenaID;
 }
