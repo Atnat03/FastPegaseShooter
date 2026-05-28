@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
@@ -36,7 +37,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 
     public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
         float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target, 
-        bool isPositive, bool hadCharged = true)
+        bool isPositive, float durationBeforeExplosion, float ratio = 1, bool isDistanceReduce = false,bool hadCharged = true)
     {
         p_damage = damage;
         p_speed = speed;
@@ -50,8 +51,13 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
         _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
-    }
 
+        if (isExplosive)
+        {
+            StartCoroutine(DelayBeforeExplosion(durationBeforeExplosion));
+        }
+    }
+    
     void FixedUpdate()
     {
         DetectCollision();
@@ -95,6 +101,13 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
             _gunController.ApplyDamage(hit.transform.GetComponent<NetworkObject>(), (int)p_damage, p_isCritical,p_hadCharged);
         else
             _gunController.RequestApplyDamage(hit.transform.GetComponent<NetworkObject>(), (int)p_damage, p_isCritical, p_hadCharged);
+    }
+
+    IEnumerator DelayBeforeExplosion(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        Explosed(p_explosionRadius, (int)p_damage);
     }
 
     public void Explosed(float radius, int damage)

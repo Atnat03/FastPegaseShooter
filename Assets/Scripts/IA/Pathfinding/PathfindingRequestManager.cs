@@ -11,7 +11,6 @@ public class PathfindingRequestManager : MonoBehaviour
     
     private Queue<PathRequest> _requests = new Queue<PathRequest>();
     
-    [FormerlySerializedAs("a")]
     [Header("----- Options -----")]
     [SerializeField] private bool _useDistanceCullingOptimization = true;
     

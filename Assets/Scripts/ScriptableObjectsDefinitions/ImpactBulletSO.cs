@@ -8,7 +8,7 @@ public enum SurfaceType
     None, Metal, Enemy
 }
 
-[CreateAssetMenu(menuName = "ImpactBulletSO")]
+[CreateAssetMenu(menuName = "Scriptable Objects/ImpactBulletSO")]
 public class ImpactBulletSO : ScriptableObject
 {
     public List<VFXSurface> vfxList = new List<VFXSurface>();
