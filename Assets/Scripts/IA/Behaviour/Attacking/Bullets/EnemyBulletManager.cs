@@ -27,7 +27,10 @@ public class EnemyBulletManager : NetworkBusListener
 
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
         ListenToEvent<EnemyShootingEvent>(AddBullets);
-        
+    }
+
+    public override void OnStartClient()
+    {
         bulletPools.Add(BulletTypes.Normal, new Pooler<EnemyBulletVisuals>(_normalBulletPrefab, 5));
         bulletPools.Add(BulletTypes.Viscous, new Pooler<EnemyBulletVisuals>(_viscousBulletPrefab, 5));
         bulletPools.Add(BulletTypes.GooPuddle, new Pooler<EnemyBulletVisuals>(_puddleBulletPrefab, 5));
