@@ -38,6 +38,8 @@ MonoBehaviour:
         maxDistance: 35
         damages: 18
         bulletSpeed: 35
+        isDistanceReduced: 0
+        factorReduceDamageByDistance: 1
     - rid: 8760679503559655524
       type: {class: ReloadSetting, ns: , asm: Assembly-CSharp}
       data:
@@ -95,4 +97,10 @@ MonoBehaviour:
         recoilChargedMultiplier: 1.25
         RecoilX: 2
         NumberBulletInCharged: 10
-        startMaxNoiseAngle: 4
+        _posOffset:
+        - {x: 0.15, y: 0, z: 0}
+        - {x: 0.15, y: 0.15, z: 0}
+        - {x: -0.15, y: 0.15, z: 0}
+        - {x: -0.15, y: 0, z: 0}
+        - {x: 0.15, y: -0.15, z: 0}
+        - {x: 0.15, y: -0.15, z: 0}

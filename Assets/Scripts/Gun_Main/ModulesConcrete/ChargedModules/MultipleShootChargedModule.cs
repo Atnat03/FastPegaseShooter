@@ -1,3 +1,4 @@
+using MyPrint;
 using UnityEngine;
 
 namespace GunDecorator.ChargedModules
@@ -18,7 +19,6 @@ namespace GunDecorator.ChargedModules
                 _recoilX = s.RecoilX;
                 _numberBulletInCharge = s.NumberBulletInCharged;
                 _posOffset = s._posOffset;
-                _oneAmmoAddPercentage = s.OneAmmoAddPercentage;
             }
         }
         
@@ -26,8 +26,10 @@ namespace GunDecorator.ChargedModules
         {
             base.TryShootCharging();
 
+                Cons.Print("Apply shoot : " + _posOffset.Length);
             for (int i = 0; i < _posOffset.Length; i++)
             {
+                
                 _ammoModule.SetBulletData(new BulletData
                 {
                     IsExplosive = _isExplosifAmmo,
@@ -35,20 +37,20 @@ namespace GunDecorator.ChargedModules
                     ExplosionRadius = _explosionRadius
                 });
 
+                ApplyShoot(i);
+                
                 _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);
-                
-                ApplyShoot(i);
             }
             
-            ResetCharging();
+            _gunController.PlaySound("Charged");
         }
 
         private void ApplyShoot(int index)
         {
+            Cons.Print("Apply shoot : " + _posOffset[index]);
+            
             _ammoModule.SpawnBullet(Vector3.zero, _posOffset[index], false);
-
-            _gunController.PlaySound("Charged");
         }
     }
 }
