@@ -17,7 +17,6 @@ namespace GunDecorator.ChargedModules
         [SerializeField] MonoBehaviour _ammoType;
         protected IAmmoModule _ammoModule;
         protected ShootModule _shootModule;
-        IReloadModule _reloadModule;
 
         [SerializeField] protected bool _isExplosifAmmo = false;
         [SerializeField] protected float _explosionRadius = 1f;
@@ -32,6 +31,8 @@ namespace GunDecorator.ChargedModules
         [SerializeField] protected float _recoilX = 2f;
         [SerializeField] protected int _numberBulletInCharge = 10;
         [SerializeField] protected float _coolDownCharge = 0.5f;
+
+        public bool _isChargedShooting = false;
         
         //Action
         public Action<int> OnPercentageChargeChange;
@@ -44,7 +45,6 @@ namespace GunDecorator.ChargedModules
             if(_ammoType != null)
                 _ammoModule = (IAmmoModule)_ammoType;
 
-            _reloadModule = GetComponent<ReloadModule>();
             _shootModule = GetComponent<ShootModule>();
             
             OnPercentageChargeChange?.Invoke(_currentPercentCharge);
@@ -54,6 +54,9 @@ namespace GunDecorator.ChargedModules
         
         public virtual void TryShootCharging()
         {
+            if (_isChargedShooting)
+                return;
+            
             OnPercentageChargeChange?.Invoke(_currentPercentCharge);
         }
 

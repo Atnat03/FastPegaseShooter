@@ -300,7 +300,7 @@ namespace GunDecorator
         }
         
         public void TryShootCharged()
-        {
+        { 
             _chargedModule?.TryShootCharging();
         }
 

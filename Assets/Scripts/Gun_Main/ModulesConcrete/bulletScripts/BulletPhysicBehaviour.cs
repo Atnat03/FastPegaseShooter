@@ -37,7 +37,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 
     public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
         float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target, 
-        bool isPositive, float durationBeforeExplosion, bool hadCharged = true)
+        bool isPositive, float durationBeforeExplosion, float ratio = 1, bool isDistanceReduce = false,bool hadCharged = true)
     {
         p_damage = damage;
         p_speed = speed;
