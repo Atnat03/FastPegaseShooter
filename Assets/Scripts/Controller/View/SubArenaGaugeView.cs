@@ -6,30 +6,35 @@ using UnityEngine.UI;
 
 public class SubArenaGaugeView : MonoBusListener
 {
-    [SerializeField] private SubArenaGauge SubArenaGaugePrefab;
     [SerializeField] private Transform SubArenaGaugeParent;
 
     private Dictionary<Guid, SubArenaGauge> _idToInfos = new();
 
     private void Awake()
     {
+        ListenToEvent<OnSubArenaStartEvent>(OSASE =>
+        {
+            _idToInfos.Add(OSASE.p_arenaID, Instantiate(OSASE.p_arenaGaugePrefab, SubArenaGaugeParent));
+            
+            SubArenaGauge info = _idToInfos[OSASE.p_arenaID];
+            
+            info.p_gauge.fillAmount = 0;
+        });
+        
         ListenToEvent<OnSubArenaUpdateEvent>(OSAUE =>
         {
-            if (!_idToInfos.ContainsKey(OSAUE.p_arenaID))
-            {
-                _idToInfos.Add(OSAUE.p_arenaID, Instantiate(SubArenaGaugePrefab, SubArenaGaugeParent));
-            }
+            if (!_idToInfos.TryGetValue(OSAUE.p_arenaID, out var info)) return;
 
-            _idToInfos[OSAUE.p_arenaID].p_gauge.fillAmount = OSAUE.p_overCrowdingPercent;
-            _idToInfos[OSAUE.p_arenaID].p_gauge.color = OSAUE.p_state.p_color;
+            info.p_gauge.fillAmount = OSAUE.p_overCrowdingPercent;
+            info.p_gauge.color = OSAUE.p_state.p_color;
             
-            _idToInfos[OSAUE.p_arenaID].p_icon.sprite = OSAUE.p_state.p_icon;
+            info.p_icon.sprite = OSAUE.p_state.p_icon;
             
-            _idToInfos[OSAUE.p_arenaID].p_nameTMP.text = $"{OSAUE.p_arenaName} - {OSAUE.p_state.p_name}";
-            _idToInfos[OSAUE.p_arenaID].p_nameTMP.color = OSAUE.p_state.p_color;
+            /*info.p_nameTMP.text = $"{OSAUE.p_arenaName} - {OSAUE.p_state.p_name}";
+            info.p_nameTMP.color = OSAUE.p_state.p_color;*/
             
             
-            _idToInfos[OSAUE.p_arenaID].p_overCrowded.SetActive(OSAUE.p_overCrowdingPercent >= 1);
+            info.p_overCrowded.SetActive(OSAUE.p_overCrowdingPercent >= 1);
         });
         
         ListenToEvent<OnDapEvent>(ODE =>

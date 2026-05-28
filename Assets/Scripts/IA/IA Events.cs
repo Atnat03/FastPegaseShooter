@@ -68,19 +68,29 @@ public struct OnEnemyDieEvent
         
     }
 
+    public struct OnSubArenaStartEvent
+    {
+        public Guid p_arenaID;
+        public SubArenaGauge p_arenaGaugePrefab;
+
+        public OnSubArenaStartEvent(Guid arenaID, SubArenaGauge prefab)
+        {
+            p_arenaID = arenaID;
+            p_arenaGaugePrefab = prefab;
+        }
+    }
     public struct OnSubArenaUpdateEvent
     {
         public Guid p_arenaID;
         public float p_overCrowdingPercent;
         public SubArenaStateSO p_state;
-        public string p_arenaName;
+        // public string p_arenaName;
 
-        public OnSubArenaUpdateEvent(Guid arenaID, float overCrowdingPercent, string arenaName, SubArenaStateSO state)
+        public OnSubArenaUpdateEvent(Guid arenaID, float overCrowdingPercent, SubArenaStateSO state)
         {
             p_arenaID = arenaID;
             p_state = state;
             p_overCrowdingPercent = overCrowdingPercent;
-            p_arenaName = arenaName;
         }
     }
     public struct OnCorrosionEvent
