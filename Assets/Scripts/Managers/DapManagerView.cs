@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using MyPrint;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,15 +15,41 @@ public class DapManagerView : MonoBusListener
     [SerializeField] private Transform _barParent;   
     [SerializeField] private Color _energyBarColorFull;
     [SerializeField] private Color _energyBarColorNotFull;
-	
+    private float _targetFill;
+    
     private List<Image> _energyBarsImageList = new List<Image>();
+	
+    [Header("Messages")]
+    [SerializeField] private TextMeshProUGUI _textMessage;
+    [SerializeField] private string[] _messages;
+    
+    [Header("Dapping")]
+    [SerializeField] private GameObject _dappingExplosion;
     
     private void OnEnable()
     {
         _dapManager.OnPercentageChange += UpdateUI;
         _dapManager.OnCreateBarUI += CreateUI;
+        _dapManager.OnMessageUpdate += UpdateMessages;
+        
+        _dapManager.OnDapping += Dapping;
     }
-    
+
+    private void Dapping(Vector3 pos)
+    {
+        Cons.Print("Dapping effect !! ");
+        
+        Destroy(Instantiate(_dappingExplosion, pos, Quaternion.identity), 5f);
+    }
+
+    private void UpdateMessages(int idMessage)
+    {
+        _textMessage.gameObject.SetActive(idMessage > -1);
+        
+        if(_textMessage.gameObject.activeSelf)
+            _textMessage.text = _messages[idMessage];
+    }
+
     #region BARS
     
     private void UpdateUI(int activeBarIndex, float activeFill)

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6140387316111891358}
   - component: {fileID: 4487584025630424715}
   - component: {fileID: 5691584062127298278}
-  - component: {fileID: 2220833416842319374}
+  - component: {fileID: 273197325415757339}
   - component: {fileID: 5651608469680430264}
   - component: {fileID: 4450978280648341753}
   - component: {fileID: 4868097695480487962}
@@ -70,7 +70,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
   pathfindingGridSO: {fileID: 11400000, guid: bd3c01cfc4936a848b69b27ce44336c5, type: 2}
   VariableChanged: 1
---- !u!114 &2220833416842319374
+--- !u!114 &273197325415757339
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -79,41 +79,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2289853876636789175}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717f604ce1be2ce4986941635a51955e, type: 3}
+  m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnZone
+  m_EditorClassIdentifier: Assembly-CSharp::SubArena
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 5651608469680430264}
   _networkObjectCache: {fileID: 5651608469680430264}
   _pathfindingRequestManager: {fileID: 0}
-  _budgetMin: 9
-  _budgetMax: 15
-  _currentBudget: 0
-  spawnDelayFirstWave: 1.4
-  spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  spawnDelay: 2
-  spawnMobs:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  _subArenaName: Arena 1 - Zone 1
+  _zoneActivated: 0
   _spawnPoints:
   - {fileID: 4052275527940667378}
   - {fileID: 4879927201896284813}
@@ -121,6 +95,29 @@ MonoBehaviour:
   - {fileID: 8291505201428064764}
   - {fileID: 5647438671037012018}
   - {fileID: 5842782908955696475}
+  spawnDelayFirstWave: 1.4
+  spawnMobsFirstWave:
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  _currentBudget: 0
+  _spawnMobs:
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  _spawningStates:
+  - p_stateDuration: 20
+    p_state: {fileID: 11400000, guid: 4a613f8c475c147479fd86507e001004, type: 2}
+  - p_stateDuration: 15
+    p_state: {fileID: 11400000, guid: 759ce88eb16b3314187a45078069775d, type: 2}
+  - p_stateDuration: 25
+    p_state: {fileID: 11400000, guid: 65391380cbb42ca4abb0c89edc37ed75, type: 2}
+  _maxSpawnEnemy: 8
+  _corrosionDamage: 15
+  _corrosionDelay: 1
+  _maxEnabledTime: 999
+  _currentStateIndex: 0
 --- !u!114 &5651608469680430264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,7 +137,8 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
-  - {fileID: 2220833416842319374}
+  - {fileID: 273197325415757339}
+  - {fileID: 0}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects:
   - {fileID: 6279194531240466456}
@@ -152,7 +150,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584224240368820090
+  _initializedTimestamp: -8584217110564239637
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -168,7 +166,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 38
+  <PrefabId>k__BackingField: 42
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 15742868034793577017
   SceneId: 0
@@ -192,7 +190,7 @@ MonoBehaviour:
   _events:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2220833416842319374}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SpawnZone, Assembly-CSharp
         m_MethodName: TriggerZone
         m_Mode: 1
@@ -204,6 +202,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _activateOnce: 1
 --- !u!65 &4868097695480487962
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -433,7 +432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1300058702531480593, guid: b52c05a3931b1b94bb6e9505d7939b59, type: 3}
       propertyPath: _initializedTimestamp
-      value: -8584224240368820090
+      value: -8584217110564239637
       objectReference: {fileID: 0}
     - target: {fileID: 1300058702531480593, guid: b52c05a3931b1b94bb6e9505d7939b59, type: 3}
       propertyPath: <IsNested>k__BackingField
@@ -450,7 +449,7 @@ PrefabInstance:
     - target: {fileID: 1300058702531480593, guid: b52c05a3931b1b94bb6e9505d7939b59, type: 3}
       propertyPath: InitializedParentNetworkBehaviour
       value: 
-      objectReference: {fileID: 2220833416842319374}
+      objectReference: {fileID: 273197325415757339}
     - target: {fileID: 1300058702531480593, guid: b52c05a3931b1b94bb6e9505d7939b59, type: 3}
       propertyPath: SerializedTransformProperties.Scale.x
       value: 50

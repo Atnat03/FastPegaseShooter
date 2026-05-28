@@ -10,7 +10,7 @@ public interface IDamagable
     /// <param name="rawDamageAmount">The base amount of damage inflicted by the weapon</param>
     /// <param name="isCritical">Tell the enemy is supposed to take a critical damage from overload</param>
     /// <returns>whereas the damages were critical or not, may be different from parameter due to internal logic</returns>
-    public bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false);
+    public bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false);
     public void Death(int takenDamages);
 }
 

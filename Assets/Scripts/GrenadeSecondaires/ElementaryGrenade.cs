@@ -135,10 +135,10 @@ public class ElementaryGrenade : NetworkBusListener
                     p_critical = false
                 });
                         
-                if (c.TryGetComponent<EnemyCore>(out var enemyCore))
+                /*if (c.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
                     enemyCore.AddCharge(_isPositive.Value, _damage.Value, _thrower.Value.ClientId);
-                }
+                }*/
             }
         }
     }

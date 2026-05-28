@@ -543,9 +543,10 @@ MonoBehaviour:
   _source: {fileID: 2319611060576274565}
   _soundData: {fileID: 11400000, guid: 65bd5cf42144b4241ad32c45f4c56e43, type: 2}
   _animator: {fileID: 4998647555748396230}
-  _muzzleFlash: {fileID: 6504872138130008429}
+  p_particleData: {fileID: 11400000, guid: 140620da22199c84abc1327f11439eca, type: 2}
   _isFullAuto: 1
   _reticuleID: 0
+  swapGunManager: {fileID: 0}
   p_authorizedToShoot: 1
 --- !u!114 &3797048584812851494
 MonoBehaviour:
@@ -841,16 +842,14 @@ MonoBehaviour:
   _ammoType: {fileID: 8428071434140413335}
   _isExplosifAmmo: 1
   _explosionRadius: 1
-  _currentPercentCharge: 0
-  _oneAmmoAddPercentage: {x: 2, y: 2}
-  _fullCharge: 0
   _damageChargedMultiplicator: 8
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
+  _isChargedShooting: 0
   _intervaleCharge: 0.05
-  _noiseCharged: 5
+  _noiseCharged: {x: 0, y: 0}
 --- !u!114 &8428071434140413335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -875,6 +874,8 @@ MonoBehaviour:
   _damages: 5
   _BulletSpeed: 50
   _impactVFXData: {fileID: 11400000, guid: fa51d249e5d6f104e9e152faba21b25a, type: 2}
+  _isDistanceReduced: 0
+  _factorReduceDamageByDistance: 1
 --- !u!114 &2051022591737503024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1359,7 +1360,6 @@ MonoBehaviour:
     m_Bits: 128
   _camera: {fileID: 3061844143884342809}
   _uiTarget: {fileID: 3595022601666599641}
-  _hasDrone: 0
 --- !u!1 &418334527989560021
 GameObject:
   m_ObjectHideFlags: 0
@@ -13890,8 +13890,8 @@ MonoBehaviour:
   _playerAnimation: {fileID: 3465261579877272972}
   _gunSwitching: {fileID: 3154577241410043838}
   healThrowObject: {fileID: 5060125199323097285, guid: 75ec9a798c987484cbe2ca5595ce95c5, type: 3}
+  throwableHeal: 0
   _playerEnergy: {fileID: 29235095159055250}
-  p_healThrowPoint: {fileID: 2316828313444862460}
   p_healThrowDirection: {fileID: 6291573982660001099}
   throwForce: 20
   maxThrowDistance: 100
@@ -13907,8 +13907,7 @@ MonoBehaviour:
   _throwHealLayerMask:
     serializedVersion: 2
     m_Bits: 192
-  SwapGunManager: {fileID: 0}
-  p_healThrowLandingPos: {x: 0, y: 0, z: 0}
+  _healAmount: 50
 --- !u!114 &8101511114389266693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20655,9 +20654,10 @@ MonoBehaviour:
   _source: {fileID: 8132065868563438229}
   _soundData: {fileID: 11400000, guid: 376eb2d5da950c64c8f7abf6d416e1e0, type: 2}
   _animator: {fileID: 4931721667873999180}
-  _muzzleFlash: {fileID: 8900465745978998690}
+  p_particleData: {fileID: 11400000, guid: 140620da22199c84abc1327f11439eca, type: 2}
   _isFullAuto: 0
   _reticuleID: 1
+  swapGunManager: {fileID: 0}
   p_authorizedToShoot: 1
 --- !u!114 &6500108499577103005
 MonoBehaviour:
@@ -20910,15 +20910,19 @@ MonoBehaviour:
   _ammoType: {fileID: 7048642797284340988}
   _isExplosifAmmo: 0
   _explosionRadius: 1
-  _currentPercentCharge: 0
-  _oneAmmoAddPercentage: {x: 5, y: 5}
-  _fullCharge: 0
   _damageChargedMultiplicator: 12
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
   _numberBulletInCharge: 12
   _coolDownCharge: 0.5
-  _startMaxNoiseAngle: 10
+  _isChargedShooting: 0
+  _posOffset:
+  - {x: 0.15, y: 0, z: 0}
+  - {x: 0.15, y: 0.15, z: 0}
+  - {x: -0.15, y: 0.15, z: 0}
+  - {x: -0.15, y: 0, z: 0}
+  - {x: 0.15, y: -0.15, z: 0}
+  - {x: 0.15, y: -0.15, z: 0}
 --- !u!114 &7048642797284340988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20943,6 +20947,8 @@ MonoBehaviour:
   _damages: 22
   _BulletSpeed: 50
   _impactVFXData: {fileID: 11400000, guid: fa51d249e5d6f104e9e152faba21b25a, type: 2}
+  _isDistanceReduced: 0
+  _factorReduceDamageByDistance: 1
 --- !u!114 &4693748091335889128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21570,9 +21576,10 @@ MonoBehaviour:
   _source: {fileID: 9206707941445351018}
   _soundData: {fileID: 11400000, guid: baba7f4aad2773f45b57a042e622a26d, type: 2}
   _animator: {fileID: 2581208419339123142}
-  _muzzleFlash: {fileID: 5899782461312709397}
+  p_particleData: {fileID: 0}
   _isFullAuto: 0
   _reticuleID: 1
+  swapGunManager: {fileID: 0}
   p_authorizedToShoot: 1
 --- !u!114 &4108116853922842008
 MonoBehaviour:
@@ -21849,6 +21856,7 @@ MonoBehaviour:
   _damages: 40
   _bulletThrowForce: 100
   _BulletSpeed: 50
+  _timeToExplose: 3
 --- !u!114 &5058586758962968031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21892,14 +21900,12 @@ MonoBehaviour:
   _ammoType: {fileID: 219218631671859702}
   _isExplosifAmmo: 0
   _explosionRadius: 1
-  _currentPercentCharge: 0
-  _oneAmmoAddPercentage: {x: 50, y: 50}
-  _fullCharge: 0
   _damageChargedMultiplicator: 10
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
+  _isChargedShooting: 0
   _noiseAngle: 5
   _maximumNoiseAngle: 10
 --- !u!114 &5072551121728865889
@@ -36225,9 +36231,10 @@ MonoBehaviour:
   _source: {fileID: 4697111258072731268}
   _soundData: {fileID: 11400000, guid: 65bd5cf42144b4241ad32c45f4c56e43, type: 2}
   _animator: {fileID: 4242411118646796630}
-  _muzzleFlash: {fileID: 5641821571385223286}
+  p_particleData: {fileID: 0}
   _isFullAuto: 1
   _reticuleID: 0
+  swapGunManager: {fileID: 0}
   p_authorizedToShoot: 1
 --- !u!114 &9103689300624622221
 MonoBehaviour:
@@ -36523,16 +36530,14 @@ MonoBehaviour:
   _ammoType: {fileID: 2634165181546453424}
   _isExplosifAmmo: 1
   _explosionRadius: 1
-  _currentPercentCharge: 0
-  _oneAmmoAddPercentage: {x: 2, y: 2}
-  _fullCharge: 0
   _damageChargedMultiplicator: 8
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
+  _isChargedShooting: 0
   _intervaleCharge: 0.05
-  _noiseCharged: 5
+  _noiseCharged: {x: 0, y: 0}
 --- !u!114 &2634165181546453424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36557,6 +36562,8 @@ MonoBehaviour:
   _damages: 5
   _BulletSpeed: 50
   _impactVFXData: {fileID: 11400000, guid: fa51d249e5d6f104e9e152faba21b25a, type: 2}
+  _isDistanceReduced: 0
+  _factorReduceDamageByDistance: 1
 --- !u!114 &2225603457426565555
 MonoBehaviour:
   m_ObjectHideFlags: 0
