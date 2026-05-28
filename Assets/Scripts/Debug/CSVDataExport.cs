@@ -24,6 +24,8 @@ public class CSVDataExport : MonoBusListener
             "damages",
             "player1PVs",
             "player2PVs",
+            "player1Energy",
+            "player2Energy",
             "subArenaID",
         });
         
@@ -43,6 +45,8 @@ public class CSVDataExport : MonoBusListener
             data.damages.ToString("F2"),
             data.player1PVs.ToString("F2"),
             data.player2PVs.ToString("F2"),
+            data.player1Energy.ToString("F2"),
+            data.player2Energy.ToString("F2"),
             data.ArenaID.ToString(),
         });
     }
@@ -97,5 +101,7 @@ struct OnDataLog
     public float damages;
     public float player1PVs;
     public float player2PVs;
+    public float player1Energy;
+    public float player2Energy;
     public int ArenaID;
 }
