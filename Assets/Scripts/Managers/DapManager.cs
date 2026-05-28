@@ -82,6 +82,9 @@ public class DapManager : NetworkBusListener
 		if (!IsServerInitialized)
 			return;
 		
+		if(!_canDapping.Value)
+			return;
+		
 		_playersReadyToDap.Add(data.p_connection);
 
 		AskForDapObserverRpc();
