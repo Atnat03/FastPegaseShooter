@@ -481,4 +481,5 @@ public struct OnPlayerSpawnEvent
     public int playerId;
     public bool isPositiveCharge;
     public GunSwitching gunSwitching;
+    public Transform Transform;
 }

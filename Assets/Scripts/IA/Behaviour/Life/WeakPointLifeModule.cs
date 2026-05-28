@@ -13,10 +13,8 @@ public class WeakPointLifeModule : EnemyLifeModule
     [SerializeField] private float _damageMult = 2;
     
     [Server]
-    public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false)
+    public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false)
     {
-        if(!CanReceiveDamage(charge)) return false;
-        
         base.TakeDamage(attackerObjectId, rawDamageAmount, charge, isCritical);
         if (IsServerInitialized)
         {
