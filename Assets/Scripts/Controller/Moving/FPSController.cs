@@ -1309,7 +1309,12 @@ public class FPSController : NetworkBusListener
         }
         else
         {
-            if (verticalInput == 0f && horizontalInput == 0f) dashingDirection = _camera.transform.forward;
+            if (verticalInput == 0f && horizontalInput == 0f)
+            {
+                dashingDirection = cameraParentTransform.forward;
+                dashingDirection.y = 0f;
+                dashingDirection.Normalize();
+            }
             else dashingDirection = (YawForward * verticalInput + YawRight * horizontalInput).normalized;
         }
 

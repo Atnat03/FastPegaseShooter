@@ -11,6 +11,8 @@ public class EnemyCoreInspector : Editor
     private SerializedProperty _targetModules;
     private SerializedProperty _movementModule;
     
+    private SerializedProperty _isWorldDroppingItem;    
+    
     private SerializedProperty scriptProperty;
 
     private GUIStyle _centeredTitleStyle;
@@ -29,6 +31,7 @@ public class EnemyCoreInspector : Editor
         _lifeModules = serializedObject.FindProperty("_lifeModules");
         _targetModules = serializedObject.FindProperty("_targetingModules");
         _movementModule = serializedObject.FindProperty("_movementModule");
+        _isWorldDroppingItem = serializedObject.FindProperty("_isWorldDroppingItem");
 
         _centeredTitleStyle = new GUIStyle
         {
@@ -101,6 +104,14 @@ public class EnemyCoreInspector : Editor
         
         GUILayout.Space(10);
         GUILayout.Label("Charges", _titleStyle);
+        
+        EditorUtilities.Draw("_energyDropValue", serializedObject);
+        EditorUtilities.Draw("_isWorldDroppingItem", serializedObject);
+
+        if (_isWorldDroppingItem.boolValue)
+        {
+            EditorUtilities.Draw("_energyOrbPrefab", serializedObject);
+        }
         
         EditorUtilities.Draw("p_affinityType", serializedObject);
         EditorUtilities.Draw("_explosionChargedDamage", serializedObject);

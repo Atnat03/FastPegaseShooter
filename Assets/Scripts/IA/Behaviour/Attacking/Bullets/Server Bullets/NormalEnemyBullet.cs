@@ -1,3 +1,4 @@
+using FishNet.Object;
 using UnityEngine;
 
 public class NormalEnemyBullet : EnemyBullet
@@ -21,7 +22,8 @@ public class NormalEnemyBullet : EnemyBullet
             EventBus.InvokeEvent(new PlayerTakeDamageEvent
             {
                 p_playerN = PVB.NetworkObject,
-                p_value = p_bulletDamage
+                p_value = p_bulletDamage,
+                p_attacker = p_attackModule.gameObject.GetComponent<NetworkObject>()
             });
             
             p_attackModule.p_onHitPlayer?.Invoke(PVB.NetworkObject.ObjectId, p_bulletDamage);
