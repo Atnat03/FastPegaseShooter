@@ -147,8 +147,10 @@ public class EnemyCore : NetworkBusListener
         Debug.Log(signedEnergyAmount);
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_dropXpOrb ? 0 : signedEnergyAmount));
         
-        if(_movementModule != null)   
+        if(_movementModule != null)
             ClearPathReservation();
+        
+        InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
         
         if (!_dropXpOrb)
         {

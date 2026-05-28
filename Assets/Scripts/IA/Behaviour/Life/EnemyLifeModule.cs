@@ -40,7 +40,6 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     {
         if (IsServerInitialized)
         {
-            
             p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
             OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
 

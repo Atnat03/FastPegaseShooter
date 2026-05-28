@@ -75,14 +75,13 @@ namespace GunDecorator
         {
             if (_killMarkerPrefab == null) return;
             if (data.p_owerId != _gunController.OwnerId) return;
-            if (_currentKillMarker == null);
             
             GameObject s = Instantiate(_killMarkerPrefab, _hitMarkerParent);
             _currentKillMarker = s;
             
             SoundManager.PlaySound(_gunController._soundData, "Kill", _gunController._source);
             
-            Destroy(_currentKillMarker.gameObject, 0.5f);
+            Destroy(_currentKillMarker.gameObject, 2f);
         }
     }
 }

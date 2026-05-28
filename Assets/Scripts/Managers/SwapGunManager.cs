@@ -25,8 +25,6 @@ namespace Managers
 
         private readonly SyncVar<bool> _canSwap = new SyncVar<bool>(true);
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
-
-        [SerializeField] private TextMeshProUGUI _cooldownText;
         
         [Header("Without Bro concentement")]
         [SerializeField] private bool _instantSwapWithoutBroConsentement;
@@ -78,7 +76,6 @@ namespace Managers
             base.OnStartClient();
             
             _elapsedTime.OnChange += OnElapsedTimeChanged;
-            _elapsedTimeForCombo.OnChange += OnElapsedComboTimeChanged;
             _isInConflict.OnChange += OnConflictChanged;
             _isShortCircuit.OnChange += OnShortCircuitChanged;
             _conflictTimer.OnChange += OnConflictTimerChanged;
@@ -409,13 +406,6 @@ namespace Managers
 
             if (next > prev)
                 _displayedTime = next;
-        }
-        
-        private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
-        {
-            _cooldownText.gameObject.SetActive(next > 0);
-            
-            _cooldownText.text = ((int)next).ToString();
         }
         
         private void OnConflictChanged(bool prev, bool next, bool asServer)
