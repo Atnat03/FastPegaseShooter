@@ -20,8 +20,6 @@ public class BasicLifeViewer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _lifeTMP;
     [SerializeField] private Image _lifeBarImage;
     [SerializeField] private Gradient _NoneAffinityLifeGradient;
-    [SerializeField] private Gradient _PositiveAffinityLifeGradient;
-    [SerializeField] private Gradient _NegativeAffinityLifeGradient;
     [SerializeField] private float _fillSpeedBarFront = 10f;
     
     [SerializeField] private Image _lifeBarSecondImage;
@@ -38,7 +36,7 @@ public class BasicLifeViewer : MonoBehaviour
         _enemyCore = _enemyLifeModule.gameObject.GetComponent<EnemyCore>();
         
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
-        _lifeBarImage.color = GetLifeColor(1f, _enemyCore.p_affinityType);
+        _lifeBarImage.color = _NoneAffinityLifeGradient.Evaluate(1f);
 
         
         _lifeTMP.enabled = false;
@@ -55,7 +53,7 @@ public class BasicLifeViewer : MonoBehaviour
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
         _lifeTMP.text = $"{lifeAmount}/{fullLife}";
-        _lifeBarImage.color = GetLifeColor(percentage, _enemyCore.p_affinityType);
+        _lifeBarImage.color = _NoneAffinityLifeGradient.Evaluate(percentage);
 
         //Percentage fills
         _frontFill = percentage;
@@ -79,13 +77,6 @@ public class BasicLifeViewer : MonoBehaviour
             if (_hitMarker != null)
                 _hitMarker.SetText(_cumulatifDmg.ToString());
         }
-    }
-
-    Color GetLifeColor(float percent, EnemyCore.ChargeType affinityType)
-    {
-        if (affinityType == EnemyCore.ChargeType.None) return _NoneAffinityLifeGradient.Evaluate(percent);
-        else if(affinityType == EnemyCore.ChargeType.Positive) return _PositiveAffinityLifeGradient.Evaluate(percent);
-        else return _NegativeAffinityLifeGradient.Evaluate(percent);
     }
 
     private void Update()
