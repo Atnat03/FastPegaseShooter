@@ -79,7 +79,7 @@ namespace GunDecorator
         [SerializeField] private int _reticuleID = 0;
 
         [SerializeField] private SwapGunManager swapGunManager;
-        
+
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
         private bool _infiniteAmmo = false;
@@ -151,7 +151,7 @@ namespace GunDecorator
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
-            
+
             if (!_model.gameObject.activeInHierarchy)
                 return;
 
@@ -202,7 +202,7 @@ namespace GunDecorator
                 p_authorizedToShoot = true;
             }
         }
-        
+
         public void TryCancelShooting()
         {
             ShootingInputPressed = false;
@@ -214,14 +214,14 @@ namespace GunDecorator
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
 
         public void SetAmmo(int value, bool infiniteAmmo) => _reloadModule.SetAmmo(value, _infiniteAmmo);
-        
+
         public void TryReload()
         {
             if (_reloadModule.IsReloading) return;
 
             _reloadModule?.Reload();
         }
-        
+
         [ServerRpc(RequireOwnership = true)]
         public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
         {
@@ -235,11 +235,11 @@ namespace GunDecorator
 
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
-            
+
             /*if (target.TryGetComponent<EnemyCore>(out var enemyCore))
             {
                 enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
-                
+
                 Cons.Print("Add charge : " + IsPositivePlayerCharge);;
             }*/
 
@@ -263,12 +263,13 @@ namespace GunDecorator
                     ? PlayerHealthManager.Instance.RegisteredPlayers[0].gameObject.GetComponent<PlayerEnergy>()
                         .CurrentEnergy
                     : 0;
-			
+
                 player2Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
                     ? PlayerHealthManager.Instance.RegisteredPlayers[1].gameObject.GetComponent<PlayerEnergy>()
                         .CurrentEnergy
                     : 0;
             }
+
             InvokeEvent(new OnDataLog
             {
                 entityName = transform.GetRootTransform().gameObject.name,
@@ -282,7 +283,7 @@ namespace GunDecorator
                 player2Energy = player2Energy,
                 ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
             });
-            
+
             // fin du debug 
         }
 
@@ -295,10 +296,8 @@ namespace GunDecorator
                 p_value = damage,
                 p_critical = isCritical
             });
-            
-            AddPercentageCharge(hadCharged);
         }
-        
+
         public void TryShootCharged()
         {
             _chargedModule?.TryShootCharging();
@@ -343,14 +342,14 @@ namespace GunDecorator
         private void PlayMuzzleFlash()
         {
             if (p_particleData == null) return;
-            
+
             VFXData data = p_particleData.CreateVFX("Shoot");
-            
+
             ParticleSystem particle = Instantiate(data.p_particle, transform);
             particle.transform.localPosition = data.p_spawnPos;
             Destroy(particle.gameObject, data.p_timeBeforeDestroy);
         }
-        
+
         public void StopReload() => _reloadModule.StopReload();
 
         public void SetChargedPlayer(bool b) => _isPositivePlayerCharge.Value = b;
@@ -361,17 +360,7 @@ namespace GunDecorator
         {
             manager.ActivateReticules(_reticuleID);
         }
-
-        public void AddPercentageCharge(bool hadPercentage = true)
-        {
-            if(hadPercentage)
-            {
-                _chargedModule.AddPercentage();
-            }
-        }
-
+        
         public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
-
-    public void SetPercentageCharge(int percent) => _chargedModule.SetPercentage(percent);
     }
 }
