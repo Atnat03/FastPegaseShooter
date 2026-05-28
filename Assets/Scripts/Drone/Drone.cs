@@ -21,6 +21,8 @@ public class Drone : NetworkBusListener
 	#region Properties
 
 	public NetworkConnection IdThrower => _idThrower.Value;
+
+	public bool IsPositive => _isPositive.Value;
 	
 	#endregion
 
@@ -49,9 +51,12 @@ public class Drone : NetworkBusListener
 	[Header("Life")]
 	[SerializeField] private float _durationLife = 10f;
 	private DroneEffectParent _effect;
+
+	private readonly SyncVar<bool> _isPositive = new(true);
 	
 	//Actions
 	public Action OnIdThrowerChange;
+	public Action<bool> OnSetUpColor;
 	
 	#endregion
 
@@ -65,8 +70,16 @@ public class Drone : NetworkBusListener
 	public override void OnStartNetwork()
 	{
 		_idThrower.OnChange += OnThrowChange;
+
+		_isPositive.OnChange += OnPositiveChange;
 	}
-	
+
+	private void OnPositiveChange(bool prev, bool next, bool asServer)
+	{
+		if (asServer) return;
+		OnSetUpColor?.Invoke(next);
+	}
+
 	private void OnThrowChange(NetworkConnection prev, NetworkConnection next, bool asServer)
 	{
 		OnIdThrowerChange?.Invoke();
@@ -134,10 +147,11 @@ public class Drone : NetworkBusListener
 		Die();
 	}
 
-	public void SetTarget(Transform target)
+	public void SetTarget(Transform target, bool isPositive)
 	{
 		_target = target;
 		_activatorConnection = _target.root.GetComponent<NetworkObject>().Owner;
+		_isPositive.Value = isPositive;
 	}
 	
 	private void FollowTarget(float speed)
@@ -150,5 +164,4 @@ public class Drone : NetworkBusListener
 	}
 	
 	#endregion
-
 }

@@ -5,9 +5,9 @@ namespace GunDecorator.ChargedModules
 {
     public class SalveChargedModule : ChargedParentModule
     {
-        [Header("Salve")] 
+        [Header("Salve")]
         [SerializeField] private float _intervaleCharge = 0.05f;
-        [SerializeField, Range(0, 30)] private float _noiseCharged = 5;
+        [SerializeField] private Vector2 _noiseCharged = new Vector2(0, 0);
         
         public override void SetVariable(GunSetting setting)
         {
@@ -20,15 +20,15 @@ namespace GunDecorator.ChargedModules
                 _recoilX = s.RecoilX;
                 _numberBulletInCharge = s.NumberBulletInCharged;
                 _intervaleCharge = s.intervaleCharge;
-                _oneAmmoAddPercentage = s.OneAmmoAddPercentage;
+                _noiseCharged = s.noiseCharged;
             }
         }
         
         public override void TryShootCharging()
         {
             base.TryShootCharging();
-            
-            if (!_fullCharge) return;
+
+            _isChargedShooting = true;
             
             _ammoModule.SetBulletData(new BulletData
             {
@@ -51,8 +51,8 @@ namespace GunDecorator.ChargedModules
             for (int i = 0; i < numberBullet; i++)
             {
                 Vector3 spread = new Vector3(
-                    Random.Range(-_noiseCharged, _noiseCharged),
-                    Random.Range(-_noiseCharged, _noiseCharged),
+                    Random.Range(-_noiseCharged.x, _noiseCharged.x),
+                    Random.Range(-_noiseCharged.y, _noiseCharged.y),
                     0);
                 
                 _ammoModule.SpawnBullet(spread, Vector3.zero, false);
@@ -66,6 +66,8 @@ namespace GunDecorator.ChargedModules
             _gunController?.OnStopCharging?.Invoke();
             _ammoModule.ResetBulletData();
             _ammoModule.SetDamage(1);
+
+            _isChargedShooting = false;
         }
     }
 }

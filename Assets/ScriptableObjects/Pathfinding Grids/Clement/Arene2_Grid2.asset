@@ -1,0 +1,3730 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e50dfabe331a2b44a56549deb3e550a, type: 3}
+  m_Name: Arene2_Grid2
+  m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridSO
+  nodes:
+  - index: 0
+    gridPosition: {x: 1, y: 0}
+    position: {x: -23.75, y: -6.152966, z: -39.04999}
+    travelCost: 3
+    neighborsIndex: 01000000020000000300000004000000
+  - index: 1
+    gridPosition: {x: 0, y: 1}
+    position: {x: -22.250002, y: -6.152966, z: -40.54999}
+    travelCost: 3
+    neighborsIndex: 05000000000000000200000006000000
+  - index: 2
+    gridPosition: {x: 1, y: 1}
+    position: {x: -22.25, y: -6.152966, z: -39.049995}
+    travelCost: 2
+    neighborsIndex: 0100000005000000000000000600000003000000040000000700000008000000
+  - index: 3
+    gridPosition: {x: 2, y: 0}
+    position: {x: -23.750002, y: -6.148422, z: -37.55}
+    travelCost: 3
+    neighborsIndex: 000000000200000004000000090000000a000000
+  - index: 4
+    gridPosition: {x: 2, y: 1}
+    position: {x: -22.250002, y: -6.148422, z: -37.550003}
+    travelCost: 2
+    neighborsIndex: 000000000200000006000000030000000700000008000000090000000a000000
+  - index: 5
+    gridPosition: {x: 0, y: 2}
+    position: {x: -20.750002, y: -6.148422, z: -40.55}
+    travelCost: 3
+    neighborsIndex: 010000000b00000002000000060000000c000000
+  - index: 6
+    gridPosition: {x: 1, y: 2}
+    position: {x: -20.75, y: -6.148422, z: -39.05}
+    travelCost: 2
+    neighborsIndex: 01000000050000000b000000020000000c0000000400000007000000080000000d0000000e000000
+  - index: 7
+    gridPosition: {x: 2, y: 2}
+    position: {x: -20.750002, y: -6.148422, z: -37.55}
+    travelCost: 3
+    neighborsIndex: 02000000060000000c000000040000000d0000000e0000000a000000
+  - index: 8
+    gridPosition: {x: 2, y: 2}
+    position: {x: -20.750002, y: -6.148422, z: -37.550003}
+    travelCost: 3
+    neighborsIndex: 02000000060000000c000000040000000d0000000e0000000a000000
+  - index: 9
+    gridPosition: {x: 3, y: 0}
+    position: {x: -23.75, y: -6.148421, z: -36.05}
+    travelCost: 3
+    neighborsIndex: 03000000040000000a0000000f00000010000000
+  - index: 10
+    gridPosition: {x: 3, y: 1}
+    position: {x: -22.25, y: -6.148422, z: -36.05}
+    travelCost: 2
+    neighborsIndex: 03000000040000000700000008000000090000000f000000100000001100000012000000
+  - index: 11
+    gridPosition: {x: 0, y: 3}
+    position: {x: -19.250002, y: -6.148422, z: -40.550003}
+    travelCost: 3
+    neighborsIndex: 0500000013000000060000000c000000
+  - index: 12
+    gridPosition: {x: 1, y: 3}
+    position: {x: -19.25, y: -6.148422, z: -39.05}
+    travelCost: 2
+    neighborsIndex: 050000000b000000130000000600000007000000080000000d0000000e0000001400000015000000
+  - index: 13
+    gridPosition: {x: 2, y: 3}
+    position: {x: -19.250002, y: -6.148422, z: -37.550003}
+    travelCost: 3
+    neighborsIndex: 060000000c00000007000000080000001400000015000000
+  - index: 14
+    gridPosition: {x: 2, y: 3}
+    position: {x: -19.250002, y: -6.148422, z: -37.550007}
+    travelCost: 3
+    neighborsIndex: 060000000c00000007000000080000001400000015000000
+  - index: 15
+    gridPosition: {x: 4, y: 0}
+    position: {x: -23.750004, y: -6.148422, z: -34.550003}
+    travelCost: 3
+    neighborsIndex: 090000000a000000100000001600000017000000
+  - index: 16
+    gridPosition: {x: 4, y: 1}
+    position: {x: -22.250004, y: -6.1484222, z: -34.549995}
+    travelCost: 2
+    neighborsIndex: 090000000a0000000f000000110000001200000016000000170000001800000019000000
+  - index: 17
+    gridPosition: {x: 4, y: 2}
+    position: {x: -20.750004, y: -6.148422, z: -34.55}
+    travelCost: 3
+    neighborsIndex: 0a00000010000000170000001800000019000000
+  - index: 18
+    gridPosition: {x: 4, y: 2}
+    position: {x: -20.75, y: -6.148422, z: -34.550003}
+    travelCost: 3
+    neighborsIndex: 0a00000010000000170000001800000019000000
+  - index: 19
+    gridPosition: {x: 0, y: 4}
+    position: {x: -17.750002, y: -6.148422, z: -40.55}
+    travelCost: 3
+    neighborsIndex: 0b0000000c0000001a000000
+  - index: 20
+    gridPosition: {x: 2, y: 4}
+    position: {x: -17.75, y: -6.148422, z: -37.55}
+    travelCost: 3
+    neighborsIndex: 0c0000001a0000000d0000000e0000001b000000
+  - index: 21
+    gridPosition: {x: 2, y: 4}
+    position: {x: -17.750002, y: -6.148422, z: -37.55}
+    travelCost: 3
+    neighborsIndex: 0c0000001a0000000d0000000e0000001b000000
+  - index: 22
+    gridPosition: {x: 5, y: 0}
+    position: {x: -23.750004, y: -6.148422, z: -33.05}
+    travelCost: 3
+    neighborsIndex: 0f00000010000000170000001c0000001d000000
+  - index: 23
+    gridPosition: {x: 5, y: 1}
+    position: {x: -22.250004, y: -6.148422, z: -33.050003}
+    travelCost: 2
+    neighborsIndex: 0f0000001000000011000000120000001600000018000000190000001c0000001d0000001e000000
+  - index: 24
+    gridPosition: {x: 5, y: 2}
+    position: {x: -20.750004, y: -6.148422, z: -33.05}
+    travelCost: 3
+    neighborsIndex: 100000001100000012000000170000001d0000001e000000
+  - index: 25
+    gridPosition: {x: 5, y: 2}
+    position: {x: -20.75, y: -6.148422, z: -33.05}
+    travelCost: 3
+    neighborsIndex: 100000001100000012000000170000001d0000001e000000
+  - index: 26
+    gridPosition: {x: 1, y: 5}
+    position: {x: -16.25, y: -6.148422, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 130000001f00000014000000150000001b000000
+  - index: 27
+    gridPosition: {x: 2, y: 5}
+    position: {x: -16.250002, y: -6.148422, z: -37.549995}
+    travelCost: 3
+    neighborsIndex: 1a0000001f0000001400000015000000
+  - index: 28
+    gridPosition: {x: 6, y: 0}
+    position: {x: -23.750002, y: -6.148422, z: -31.550003}
+    travelCost: 3
+    neighborsIndex: 16000000170000001d0000002000000021000000
+  - index: 29
+    gridPosition: {x: 6, y: 1}
+    position: {x: -22.250002, y: -6.148422, z: -31.55}
+    travelCost: 2
+    neighborsIndex: 160000001700000018000000190000001c0000001e000000200000002100000022000000
+  - index: 30
+    gridPosition: {x: 6, y: 2}
+    position: {x: -20.750004, y: -6.148422, z: -31.550003}
+    travelCost: 3
+    neighborsIndex: 1700000018000000190000001d0000002100000022000000
+  - index: 31
+    gridPosition: {x: 1, y: 6}
+    position: {x: -14.75, y: -6.148422, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 230000001a000000240000001b000000
+  - index: 32
+    gridPosition: {x: 7, y: 0}
+    position: {x: -23.750004, y: -6.148422, z: -30.05}
+    travelCost: 3
+    neighborsIndex: 1c0000001d000000210000002500000026000000
+  - index: 33
+    gridPosition: {x: 7, y: 1}
+    position: {x: -22.250004, y: -6.148422, z: -30.050003}
+    travelCost: 2
+    neighborsIndex: 1c0000001d0000001e0000002000000022000000250000002600000027000000
+  - index: 34
+    gridPosition: {x: 7, y: 2}
+    position: {x: -20.750004, y: -6.148421, z: -30.05}
+    travelCost: 3
+    neighborsIndex: 1d0000001e000000210000002600000027000000
+  - index: 35
+    gridPosition: {x: 0, y: 7}
+    position: {x: -13.250002, y: -6.148422, z: -40.550003}
+    travelCost: 3
+    neighborsIndex: 280000001f00000024000000
+  - index: 36
+    gridPosition: {x: 1, y: 7}
+    position: {x: -13.250001, y: -6.148421, z: -39.050003}
+    travelCost: 3
+    neighborsIndex: 23000000280000001f000000
+  - index: 37
+    gridPosition: {x: 8, y: 0}
+    position: {x: -23.750002, y: -6.148422, z: -28.550001}
+    travelCost: 3
+    neighborsIndex: 200000002100000026000000290000002a000000
+  - index: 38
+    gridPosition: {x: 8, y: 1}
+    position: {x: -22.25, y: -6.148422, z: -28.550001}
+    travelCost: 2
+    neighborsIndex: 2000000021000000220000002500000027000000290000002a0000002b000000
+  - index: 39
+    gridPosition: {x: 8, y: 2}
+    position: {x: -20.75, y: -6.148422, z: -28.550001}
+    travelCost: 3
+    neighborsIndex: 2100000022000000260000002a0000002b0000002c000000
+  - index: 40
+    gridPosition: {x: 0, y: 8}
+    position: {x: -11.750001, y: -6.148421, z: -40.55}
+    travelCost: 3
+    neighborsIndex: 230000002d000000240000002e000000
+  - index: 41
+    gridPosition: {x: 9, y: 0}
+    position: {x: -23.75, y: -6.148422, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 25000000260000002a0000002f00000030000000
+  - index: 42
+    gridPosition: {x: 9, y: 1}
+    position: {x: -22.25, y: -6.148422, z: -27.05}
+    travelCost: 2
+    neighborsIndex: 250000002600000027000000290000002b0000002f0000003000000031000000
+  - index: 43
+    gridPosition: {x: 9, y: 2}
+    position: {x: -20.75, y: -6.148422, z: -27.049997}
+    travelCost: 3
+    neighborsIndex: 26000000270000002a0000002c000000300000003100000032000000
+  - index: 44
+    gridPosition: {x: 9, y: 3}
+    position: {x: -19.25, y: -6.148422, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 270000002b000000310000003200000033000000
+  - index: 45
+    gridPosition: {x: 0, y: 9}
+    position: {x: -10.250001, y: -6.1484222, z: -40.550003}
+    travelCost: 3
+    neighborsIndex: 280000002e000000
+  - index: 46
+    gridPosition: {x: 1, y: 9}
+    position: {x: -10.25, y: -6.148422, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 280000002d00000034000000
+  - index: 47
+    gridPosition: {x: 10, y: 0}
+    position: {x: -23.75, y: -7.1321664, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 290000002a000000300000003500000036000000
+  - index: 48
+    gridPosition: {x: 10, y: 1}
+    position: {x: -22.25, y: -7.1321664, z: -25.55}
+    travelCost: 2
+    neighborsIndex: 290000002a0000002b0000002f00000031000000350000003600000037000000
+  - index: 49
+    gridPosition: {x: 10, y: 2}
+    position: {x: -20.75, y: -7.1321664, z: -25.55}
+    travelCost: 2
+    neighborsIndex: 2a0000002b0000002c0000003000000032000000360000003700000038000000
+  - index: 50
+    gridPosition: {x: 10, y: 3}
+    position: {x: -19.25, y: -7.1321664, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 2b0000002c0000003100000033000000370000003800000039000000
+  - index: 51
+    gridPosition: {x: 10, y: 4}
+    position: {x: -17.75, y: -7.1321664, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 2c0000003a000000320000003b00000038000000390000003c000000
+  - index: 52
+    gridPosition: {x: 2, y: 9}
+    position: {x: -10.250002, y: -6.148422, z: -37.550003}
+    travelCost: 3
+    neighborsIndex: 2e0000003d000000
+  - index: 53
+    gridPosition: {x: 11, y: 0}
+    position: {x: -23.75, y: -7.1321664, z: -24.05}
+    travelCost: 3
+    neighborsIndex: 2f00000030000000360000003e0000003f000000
+  - index: 54
+    gridPosition: {x: 11, y: 1}
+    position: {x: -22.25, y: -7.1321664, z: -24.05}
+    travelCost: 2
+    neighborsIndex: 2f000000300000003100000035000000370000003e0000003f00000040000000
+  - index: 55
+    gridPosition: {x: 11, y: 2}
+    position: {x: -20.75, y: -7.1321664, z: -24.05}
+    travelCost: 2
+    neighborsIndex: 30000000310000003200000036000000380000003f0000004000000041000000
+  - index: 56
+    gridPosition: {x: 11, y: 3}
+    position: {x: -19.25, y: -7.1321664, z: -24.05}
+    travelCost: 2
+    neighborsIndex: 3100000032000000330000003700000039000000400000004100000042000000
+  - index: 57
+    gridPosition: {x: 11, y: 4}
+    position: {x: -17.75, y: -7.1321664, z: -24.05}
+    travelCost: 2
+    neighborsIndex: 32000000330000003b000000380000003c000000410000004200000043000000
+  - index: 58
+    gridPosition: {x: 9, y: 5}
+    position: {x: -16.250002, y: -6.148422, z: -27.050001}
+    travelCost: 3
+    neighborsIndex: 44000000330000003b00000045000000
+  - index: 59
+    gridPosition: {x: 10, y: 5}
+    position: {x: -16.249996, y: -7.1321664, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 3a000000440000003300000045000000390000003c00000046000000
+  - index: 60
+    gridPosition: {x: 11, y: 5}
+    position: {x: -16.25, y: -7.1321664, z: -24.05}
+    travelCost: 2
+    neighborsIndex: 330000003b000000450000003900000046000000420000004300000047000000
+  - index: 61
+    gridPosition: {x: 3, y: 9}
+    position: {x: -10.250001, y: -6.148422, z: -36.050003}
+    travelCost: 3
+    neighborsIndex: 3400000048000000
+  - index: 62
+    gridPosition: {x: 12, y: 0}
+    position: {x: -23.749996, y: -7.1321664, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 35000000360000003f000000490000004a000000
+  - index: 63
+    gridPosition: {x: 12, y: 1}
+    position: {x: -22.249996, y: -7.1321664, z: -22.55}
+    travelCost: 2
+    neighborsIndex: 3500000036000000370000003e00000040000000490000004a0000004b000000
+  - index: 64
+    gridPosition: {x: 12, y: 2}
+    position: {x: -20.75, y: -7.1321664, z: -22.55}
+    travelCost: 1
+    neighborsIndex: 3600000037000000380000003f000000410000004a0000004b0000004c000000
+  - index: 65
+    gridPosition: {x: 12, y: 3}
+    position: {x: -19.25, y: -7.1321664, z: -22.55}
+    travelCost: 1
+    neighborsIndex: 37000000380000003900000040000000420000004b0000004c0000004d000000
+  - index: 66
+    gridPosition: {x: 12, y: 4}
+    position: {x: -17.75, y: -7.1321664, z: -22.55}
+    travelCost: 1
+    neighborsIndex: 38000000390000003c00000041000000430000004c0000004d0000004e000000
+  - index: 67
+    gridPosition: {x: 12, y: 5}
+    position: {x: -16.25, y: -7.1321664, z: -22.55}
+    travelCost: 1
+    neighborsIndex: 390000003c0000004600000042000000470000004d0000004e0000004f000000
+  - index: 68
+    gridPosition: {x: 9, y: 6}
+    position: {x: -14.750002, y: -6.148422, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 3a000000500000003b0000004500000051000000
+  - index: 69
+    gridPosition: {x: 10, y: 6}
+    position: {x: -14.749996, y: -7.1321664, z: -25.55}
+    travelCost: 2
+    neighborsIndex: 3a00000044000000500000003b000000510000003c0000004600000052000000
+  - index: 70
+    gridPosition: {x: 11, y: 6}
+    position: {x: -14.75, y: -7.1321664, z: -24.05}
+    travelCost: 2
+    neighborsIndex: 3b00000045000000510000003c00000052000000430000004700000053000000
+  - index: 71
+    gridPosition: {x: 12, y: 6}
+    position: {x: -14.75, y: -7.1321664, z: -22.55}
+    travelCost: 2
+    neighborsIndex: 3c000000460000005200000043000000530000004e0000004f00000054000000
+  - index: 72
+    gridPosition: {x: 4, y: 9}
+    position: {x: -10.25, y: -6.148422, z: -34.550007}
+    travelCost: 3
+    neighborsIndex: 3d000000
+  - index: 73
+    gridPosition: {x: 13, y: 0}
+    position: {x: -23.75, y: -7.1321664, z: -21.05}
+    travelCost: 3
+    neighborsIndex: 3e0000003f0000004a000000550000005600000057000000
+  - index: 74
+    gridPosition: {x: 13, y: 1}
+    position: {x: -22.249996, y: -7.1321664, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 3e0000003f00000040000000490000004b0000005500000056000000570000005800000059000000
+  - index: 75
+    gridPosition: {x: 13, y: 2}
+    position: {x: -20.75, y: -7.1321664, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 3f00000040000000410000004a0000004c000000560000005700000058000000590000005a000000
+  - index: 76
+    gridPosition: {x: 13, y: 3}
+    position: {x: -19.25, y: -7.1321664, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 4000000041000000420000004b0000004d00000058000000590000005a0000005b000000
+  - index: 77
+    gridPosition: {x: 13, y: 4}
+    position: {x: -17.75, y: -7.1321664, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 4100000042000000430000004c0000004e0000005a0000005b0000005c000000
+  - index: 78
+    gridPosition: {x: 13, y: 5}
+    position: {x: -16.25, y: -7.1321664, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 4200000043000000470000004d0000004f0000005b0000005c0000005d000000
+  - index: 79
+    gridPosition: {x: 13, y: 6}
+    position: {x: -14.75, y: -7.1321664, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 4300000047000000530000004e000000540000005c0000005d0000005e000000
+  - index: 80
+    gridPosition: {x: 9, y: 7}
+    position: {x: -13.250004, y: -6.148422, z: -27.050001}
+    travelCost: 3
+    neighborsIndex: 440000005f0000004500000051000000
+  - index: 81
+    gridPosition: {x: 10, y: 7}
+    position: {x: -13.25, y: -7.1321664, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 44000000500000005f00000045000000460000005200000060000000
+  - index: 82
+    gridPosition: {x: 11, y: 7}
+    position: {x: -13.249996, y: -7.1321664, z: -24.05}
+    travelCost: 3
+    neighborsIndex: 45000000510000004600000060000000470000005300000061000000
+  - index: 83
+    gridPosition: {x: 12, y: 7}
+    position: {x: -13.25, y: -7.1321664, z: -22.55}
+    travelCost: 2
+    neighborsIndex: 46000000520000006000000047000000610000004f0000005400000062000000
+  - index: 84
+    gridPosition: {x: 13, y: 7}
+    position: {x: -13.25, y: -7.1321664, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 4700000053000000610000004f000000620000005d0000005e00000063000000
+  - index: 85
+    gridPosition: {x: 14, y: 0}
+    position: {x: -23.749996, y: -7.1321664, z: -19.55}
+    travelCost: 2
+    neighborsIndex: 490000004a000000560000005700000064000000650000006600000067000000
+  - index: 86
+    gridPosition: {x: 14, y: 1}
+    position: {x: -22.25, y: -7.1321664, z: -19.55}
+    travelCost: 2
+    neighborsIndex: 490000004a0000004b000000550000005800000059000000640000006500000066000000670000006800000069000000
+  - index: 87
+    gridPosition: {x: 14, y: 1}
+    position: {x: -22.250015, y: -7.1321664, z: -19.550009}
+    travelCost: 2
+    neighborsIndex: 490000004a0000004b000000550000005800000059000000640000006500000066000000670000006800000069000000
+  - index: 88
+    gridPosition: {x: 14, y: 2}
+    position: {x: -20.75, y: -7.1321664, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 4a0000004b0000004c00000056000000570000005a000000660000006700000068000000690000006a0000006b000000
+  - index: 89
+    gridPosition: {x: 14, y: 2}
+    position: {x: -20.750011, y: -7.1321664, z: -19.550009}
+    travelCost: 1
+    neighborsIndex: 4a0000004b0000004c00000056000000570000005a000000660000006700000068000000690000006a0000006b000000
+  - index: 90
+    gridPosition: {x: 14, y: 3}
+    position: {x: -19.25, y: -7.1321664, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 4b0000004c0000004d00000058000000590000005b00000068000000690000006a0000006b0000006c000000
+  - index: 91
+    gridPosition: {x: 14, y: 4}
+    position: {x: -17.75, y: -7.1321664, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 4c0000004d0000004e0000005a0000005c0000006a0000006b0000006c0000006d000000
+  - index: 92
+    gridPosition: {x: 14, y: 5}
+    position: {x: -16.25, y: -7.1321664, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 4d0000004e0000004f0000005b0000005d0000006c0000006d0000006e000000
+  - index: 93
+    gridPosition: {x: 14, y: 6}
+    position: {x: -14.75, y: -7.1321664, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 4e0000004f000000540000005c0000005e0000006d0000006e0000006f000000
+  - index: 94
+    gridPosition: {x: 14, y: 7}
+    position: {x: -13.25, y: -7.1321664, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 4f00000054000000620000005d000000630000006e0000006f00000070000000
+  - index: 95
+    gridPosition: {x: 9, y: 8}
+    position: {x: -11.749996, y: -7.1321664, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 71000000500000005100000072000000
+  - index: 96
+    gridPosition: {x: 11, y: 8}
+    position: {x: -11.749996, y: -7.1321664, z: -24.05}
+    travelCost: 3
+    neighborsIndex: 51000000720000005200000073000000530000006100000074000000
+  - index: 97
+    gridPosition: {x: 12, y: 8}
+    position: {x: -11.75, y: -7.1321664, z: -22.55}
+    travelCost: 2
+    neighborsIndex: 5200000060000000730000005300000074000000540000006200000075000000
+  - index: 98
+    gridPosition: {x: 13, y: 8}
+    position: {x: -11.75, y: -7.1321664, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 53000000610000007400000054000000750000005e0000006300000076000000
+  - index: 99
+    gridPosition: {x: 14, y: 8}
+    position: {x: -11.75, y: -7.1321664, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 5400000062000000750000005e000000760000006f0000007000000077000000
+  - index: 100
+    gridPosition: {x: 15, y: 0}
+    position: {x: -23.75, y: -7.1321664, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 550000005600000057000000660000006700000078000000790000007a0000007b000000
+  - index: 101
+    gridPosition: {x: 15, y: 0}
+    position: {x: -23.750011, y: -7.1321664, z: -18.050003}
+    travelCost: 2
+    neighborsIndex: 550000005600000057000000660000006700000078000000790000007a0000007b000000
+  - index: 102
+    gridPosition: {x: 15, y: 1}
+    position: {x: -22.25, y: -7.1321664, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 55000000560000005700000058000000590000006400000065000000680000006900000078000000790000007a0000007b0000007c0000007d000000
+  - index: 103
+    gridPosition: {x: 15, y: 1}
+    position: {x: -22.250011, y: -7.1321664, z: -18.050005}
+    travelCost: 2
+    neighborsIndex: 55000000560000005700000058000000590000006400000065000000680000006900000078000000790000007a0000007b0000007c0000007d000000
+  - index: 104
+    gridPosition: {x: 15, y: 2}
+    position: {x: -20.75, y: -7.1321664, z: -18.05}
+    travelCost: 1
+    neighborsIndex: 560000005700000058000000590000005a00000066000000670000006a0000006b0000007a0000007b0000007c0000007d0000007e0000007f000000
+  - index: 105
+    gridPosition: {x: 15, y: 2}
+    position: {x: -20.750011, y: -7.1321664, z: -18.050005}
+    travelCost: 1
+    neighborsIndex: 560000005700000058000000590000005a00000066000000670000006a0000006b0000007a0000007b0000007c0000007d0000007e0000007f000000
+  - index: 106
+    gridPosition: {x: 15, y: 3}
+    position: {x: -19.25, y: -7.1321664, z: -18.05}
+    travelCost: 1
+    neighborsIndex: 58000000590000005a0000005b00000068000000690000006c0000007c0000007d0000007e0000007f0000008000000081000000
+  - index: 107
+    gridPosition: {x: 15, y: 3}
+    position: {x: -19.250011, y: -7.1321664, z: -18.050005}
+    travelCost: 1
+    neighborsIndex: 58000000590000005a0000005b00000068000000690000006c0000007c0000007d0000007e0000007f0000008000000081000000
+  - index: 108
+    gridPosition: {x: 15, y: 4}
+    position: {x: -17.75, y: -7.1321664, z: -18.05}
+    travelCost: 1
+    neighborsIndex: 5a0000005b0000005c0000006a0000006b0000006d0000007e0000007f00000080000000810000008200000083000000
+  - index: 109
+    gridPosition: {x: 15, y: 5}
+    position: {x: -16.25, y: -7.1321664, z: -18.05}
+    travelCost: 1
+    neighborsIndex: 5b0000005c0000005d0000006c0000006e0000008000000081000000820000008300000084000000
+  - index: 110
+    gridPosition: {x: 15, y: 6}
+    position: {x: -14.75, y: -7.1321664, z: -18.05}
+    travelCost: 1
+    neighborsIndex: 5c0000005d0000005e0000006d0000006f00000082000000830000008400000085000000
+  - index: 111
+    gridPosition: {x: 15, y: 7}
+    position: {x: -13.25, y: -7.1321664, z: -18.05}
+    travelCost: 1
+    neighborsIndex: 5d0000005e000000630000006e00000070000000840000008500000086000000
+  - index: 112
+    gridPosition: {x: 15, y: 8}
+    position: {x: -11.75, y: -7.1321664, z: -18.05}
+    travelCost: 1
+    neighborsIndex: 5e00000063000000760000006f00000077000000850000008600000087000000
+  - index: 113
+    gridPosition: {x: 8, y: 9}
+    position: {x: -10.25, y: -7.1321664, z: -28.55}
+    travelCost: 3
+    neighborsIndex: 880000005f00000089000000
+  - index: 114
+    gridPosition: {x: 10, y: 9}
+    position: {x: -10.25, y: -7.1321664, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 5f000000890000008a00000060000000730000008b000000
+  - index: 115
+    gridPosition: {x: 11, y: 9}
+    position: {x: -10.249998, y: -7.1321664, z: -24.05}
+    travelCost: 3
+    neighborsIndex: 720000008a000000600000008b00000061000000740000008c000000
+  - index: 116
+    gridPosition: {x: 12, y: 9}
+    position: {x: -10.25, y: -7.1321664, z: -22.55}
+    travelCost: 2
+    neighborsIndex: 60000000730000008b000000610000008c00000062000000750000008d000000
+  - index: 117
+    gridPosition: {x: 13, y: 9}
+    position: {x: -10.25, y: -7.1321664, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 61000000740000008c000000620000008d00000063000000760000008e000000
+  - index: 118
+    gridPosition: {x: 14, y: 9}
+    position: {x: -10.25, y: -7.1321664, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 62000000750000008d000000630000008e00000070000000770000008f000000
+  - index: 119
+    gridPosition: {x: 15, y: 9}
+    position: {x: -10.25, y: -7.1321664, z: -18.05}
+    travelCost: 1
+    neighborsIndex: 63000000760000008e000000700000008f000000860000008700000090000000
+  - index: 120
+    gridPosition: {x: 16, y: 0}
+    position: {x: -23.75, y: -7.1321664, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 640000006500000066000000670000007a0000007b00000091000000
+  - index: 121
+    gridPosition: {x: 16, y: 0}
+    position: {x: -23.750011, y: -7.1321664, z: -16.550003}
+    travelCost: 3
+    neighborsIndex: 640000006500000066000000670000007a0000007b00000091000000
+  - index: 122
+    gridPosition: {x: 16, y: 1}
+    position: {x: -22.25, y: -7.1321664, z: -16.55}
+    travelCost: 2
+    neighborsIndex: 64000000650000006600000067000000680000006900000078000000790000007c0000007d0000009100000092000000
+  - index: 123
+    gridPosition: {x: 16, y: 1}
+    position: {x: -22.250011, y: -7.1321664, z: -16.550003}
+    travelCost: 2
+    neighborsIndex: 64000000650000006600000067000000680000006900000078000000790000007c0000007d0000009100000092000000
+  - index: 124
+    gridPosition: {x: 16, y: 2}
+    position: {x: -20.75, y: -7.1321664, z: -16.55}
+    travelCost: 2
+    neighborsIndex: 660000006700000068000000690000006a0000006b0000007a0000007b0000007e0000007f000000910000009200000093000000
+  - index: 125
+    gridPosition: {x: 16, y: 2}
+    position: {x: -20.750008, y: -7.1321664, z: -16.550003}
+    travelCost: 2
+    neighborsIndex: 660000006700000068000000690000006a0000006b0000007a0000007b0000007e0000007f000000910000009200000093000000
+  - index: 126
+    gridPosition: {x: 16, y: 3}
+    position: {x: -19.25, y: -7.1321664, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 68000000690000006a0000006b0000006c0000007c0000007d0000008000000081000000920000009300000094000000
+  - index: 127
+    gridPosition: {x: 16, y: 3}
+    position: {x: -19.25001, y: -7.1321664, z: -16.550005}
+    travelCost: 1
+    neighborsIndex: 68000000690000006a0000006b0000006c0000007c0000007d0000008000000081000000920000009300000094000000
+  - index: 128
+    gridPosition: {x: 16, y: 4}
+    position: {x: -17.75, y: -7.1321664, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 6a0000006b0000006c0000006d0000007e0000007f0000008200000083000000930000009400000095000000
+  - index: 129
+    gridPosition: {x: 16, y: 4}
+    position: {x: -17.750008, y: -7.1321664, z: -16.550007}
+    travelCost: 1
+    neighborsIndex: 6a0000006b0000006c0000006d0000007e0000007f0000008200000083000000930000009400000095000000
+  - index: 130
+    gridPosition: {x: 16, y: 5}
+    position: {x: -16.25, y: -7.1321664, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 6c0000006d0000006e000000800000008100000084000000940000009500000096000000
+  - index: 131
+    gridPosition: {x: 16, y: 5}
+    position: {x: -16.25001, y: -7.1321664, z: -16.550007}
+    travelCost: 1
+    neighborsIndex: 6c0000006d0000006e000000800000008100000084000000940000009500000096000000
+  - index: 132
+    gridPosition: {x: 16, y: 6}
+    position: {x: -14.75, y: -7.1321664, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 6d0000006e0000006f000000820000008300000085000000950000009600000097000000
+  - index: 133
+    gridPosition: {x: 16, y: 7}
+    position: {x: -13.25, y: -7.1321664, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 6e0000006f000000700000008400000086000000960000009700000098000000
+  - index: 134
+    gridPosition: {x: 16, y: 8}
+    position: {x: -11.75, y: -7.1321664, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 6f00000070000000770000008500000087000000970000009800000099000000
+  - index: 135
+    gridPosition: {x: 16, y: 9}
+    position: {x: -10.25, y: -7.1321664, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 70000000770000008f000000860000009000000098000000990000009a000000
+  - index: 136
+    gridPosition: {x: 7, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -30.049997}
+    travelCost: 3
+    neighborsIndex: 71000000
+  - index: 137
+    gridPosition: {x: 9, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -27.050001}
+    travelCost: 3
+    neighborsIndex: 710000009b000000720000008a0000009c000000
+  - index: 138
+    gridPosition: {x: 10, y: 10}
+    position: {x: -8.750004, y: -7.1835527, z: -25.550001}
+    travelCost: 3
+    neighborsIndex: 890000009b000000720000009c000000730000008b0000009d000000
+  - index: 139
+    gridPosition: {x: 11, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -24.05}
+    travelCost: 2
+    neighborsIndex: 720000008a0000009c000000730000009d000000740000008c0000009e000000
+  - index: 140
+    gridPosition: {x: 12, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -22.55}
+    travelCost: 2
+    neighborsIndex: 730000008b0000009d000000740000009e000000750000008d0000009f000000
+  - index: 141
+    gridPosition: {x: 13, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 740000008c0000009e000000750000009f000000760000008e000000a0000000
+  - index: 142
+    gridPosition: {x: 14, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -19.550001}
+    travelCost: 1
+    neighborsIndex: 750000008d0000009f00000076000000a0000000770000008f000000a1000000
+  - index: 143
+    gridPosition: {x: 15, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -18.050001}
+    travelCost: 1
+    neighborsIndex: 760000008e000000a000000077000000a10000008700000090000000a2000000
+  - index: 144
+    gridPosition: {x: 16, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 770000008f000000a100000087000000a2000000990000009a000000a3000000
+  - index: 145
+    gridPosition: {x: 17, y: 1}
+    position: {x: -22.250015, y: -7.1321664, z: -15.050003}
+    travelCost: 3
+    neighborsIndex: 78000000790000007a0000007b0000007c0000007d00000092000000
+  - index: 146
+    gridPosition: {x: 17, y: 2}
+    position: {x: -20.750011, y: -7.1321664, z: -15.050003}
+    travelCost: 2
+    neighborsIndex: 7a0000007b0000007c0000007d0000007e0000007f0000009100000093000000a4000000
+  - index: 147
+    gridPosition: {x: 17, y: 3}
+    position: {x: -19.250015, y: -7.1321664, z: -15.050007}
+    travelCost: 2
+    neighborsIndex: 7c0000007d0000007e0000007f00000080000000810000009200000094000000a4000000a5000000
+  - index: 148
+    gridPosition: {x: 17, y: 4}
+    position: {x: -17.750011, y: -7.1321664, z: -15.050005}
+    travelCost: 2
+    neighborsIndex: 7e0000007f000000800000008100000082000000830000009300000095000000a4000000a5000000a6000000
+  - index: 149
+    gridPosition: {x: 17, y: 5}
+    position: {x: -16.25001, y: -7.1321664, z: -15.050005}
+    travelCost: 2
+    neighborsIndex: 80000000810000008200000083000000840000009400000096000000a5000000a6000000a7000000
+  - index: 150
+    gridPosition: {x: 17, y: 6}
+    position: {x: -14.75001, y: -7.1321664, z: -15.050007}
+    travelCost: 1
+    neighborsIndex: 820000008300000084000000850000009500000097000000a6000000a7000000a8000000
+  - index: 151
+    gridPosition: {x: 17, y: 7}
+    position: {x: -13.25, y: -7.1835527, z: -15.049999}
+    travelCost: 1
+    neighborsIndex: 8400000085000000860000009600000098000000a7000000a8000000a9000000
+  - index: 152
+    gridPosition: {x: 17, y: 8}
+    position: {x: -11.75, y: -7.1835527, z: -15.049999}
+    travelCost: 1
+    neighborsIndex: 8500000086000000870000009700000099000000a8000000a9000000aa000000
+  - index: 153
+    gridPosition: {x: 17, y: 9}
+    position: {x: -10.25, y: -7.1835527, z: -15.049999}
+    travelCost: 1
+    neighborsIndex: 860000008700000090000000980000009a000000a9000000aa000000ab000000
+  - index: 154
+    gridPosition: {x: 17, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -15.049999}
+    travelCost: 1
+    neighborsIndex: 8700000090000000a200000099000000a3000000aa000000ab000000ac000000
+  - index: 155
+    gridPosition: {x: 9, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -27.050001}
+    travelCost: 3
+    neighborsIndex: 89000000ad0000008a0000009c000000ae000000
+  - index: 156
+    gridPosition: {x: 10, y: 11}
+    position: {x: -7.250004, y: -7.1835527, z: -25.550001}
+    travelCost: 2
+    neighborsIndex: 890000009b000000ad0000008a000000ae0000008b0000009d000000af000000
+  - index: 157
+    gridPosition: {x: 11, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -24.05}
+    travelCost: 2
+    neighborsIndex: 8a0000009c000000ae0000008b000000af0000008c0000009e000000b0000000
+  - index: 158
+    gridPosition: {x: 12, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -22.55}
+    travelCost: 1
+    neighborsIndex: 8b0000009d000000af0000008c000000b00000008d0000009f000000b1000000
+  - index: 159
+    gridPosition: {x: 13, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 8c0000009e000000b00000008d000000b10000008e000000a0000000b2000000
+  - index: 160
+    gridPosition: {x: 14, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -19.550001}
+    travelCost: 1
+    neighborsIndex: 8d0000009f000000b10000008e000000b20000008f000000a1000000b3000000
+  - index: 161
+    gridPosition: {x: 15, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -18.050001}
+    travelCost: 1
+    neighborsIndex: 8e000000a0000000b20000008f000000b300000090000000a2000000b4000000
+  - index: 162
+    gridPosition: {x: 16, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -16.55}
+    travelCost: 1
+    neighborsIndex: 8f000000a1000000b300000090000000b40000009a000000a3000000b5000000
+  - index: 163
+    gridPosition: {x: 17, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -15.049999}
+    travelCost: 1
+    neighborsIndex: 90000000a2000000b40000009a000000b5000000ab000000ac000000b6000000
+  - index: 164
+    gridPosition: {x: 18, y: 3}
+    position: {x: -19.250008, y: -7.1321664, z: -13.550003}
+    travelCost: 3
+    neighborsIndex: 920000009300000094000000a5000000b7000000
+  - index: 165
+    gridPosition: {x: 18, y: 4}
+    position: {x: -17.750013, y: -7.1321664, z: -13.550009}
+    travelCost: 3
+    neighborsIndex: 930000009400000095000000a4000000a6000000b7000000b8000000
+  - index: 166
+    gridPosition: {x: 18, y: 5}
+    position: {x: -16.250008, y: -7.1321664, z: -13.550005}
+    travelCost: 2
+    neighborsIndex: 940000009500000096000000a5000000a7000000b7000000b8000000b9000000
+  - index: 167
+    gridPosition: {x: 18, y: 6}
+    position: {x: -14.75001, y: -7.1321664, z: -13.550003}
+    travelCost: 2
+    neighborsIndex: 950000009600000097000000a6000000a8000000b8000000b9000000ba000000
+  - index: 168
+    gridPosition: {x: 18, y: 7}
+    position: {x: -13.25, y: -7.1835527, z: -13.549999}
+    travelCost: 2
+    neighborsIndex: 960000009700000098000000a7000000a9000000b9000000ba000000bb000000
+  - index: 169
+    gridPosition: {x: 18, y: 8}
+    position: {x: -11.75, y: -7.1835527, z: -13.549999}
+    travelCost: 1
+    neighborsIndex: 970000009800000099000000a8000000aa000000ba000000bb000000bc000000
+  - index: 170
+    gridPosition: {x: 18, y: 9}
+    position: {x: -10.25, y: -7.1835527, z: -13.549999}
+    travelCost: 1
+    neighborsIndex: 98000000990000009a000000a9000000ab000000bb000000bc000000bd000000
+  - index: 171
+    gridPosition: {x: 18, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -13.549999}
+    travelCost: 1
+    neighborsIndex: 990000009a000000a3000000aa000000ac000000bc000000bd000000be000000
+  - index: 172
+    gridPosition: {x: 18, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -13.549999}
+    travelCost: 1
+    neighborsIndex: 9a000000a3000000b5000000ab000000b6000000bd000000be000000bf000000
+  - index: 173
+    gridPosition: {x: 9, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -27.05}
+    travelCost: 3
+    neighborsIndex: c00000009b000000c10000009c000000ae000000c2000000
+  - index: 174
+    gridPosition: {x: 10, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -25.55}
+    travelCost: 2
+    neighborsIndex: 9b000000ad000000c10000009c000000c20000009d000000af000000c3000000
+  - index: 175
+    gridPosition: {x: 11, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -24.05}
+    travelCost: 1
+    neighborsIndex: 9c000000ae000000c20000009d000000c30000009e000000b0000000c4000000
+  - index: 176
+    gridPosition: {x: 12, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -22.55}
+    travelCost: 1
+    neighborsIndex: 9d000000af000000c30000009e000000c40000009f000000b1000000c5000000
+  - index: 177
+    gridPosition: {x: 13, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -21.05}
+    travelCost: 1
+    neighborsIndex: 9e000000b0000000c40000009f000000c5000000a0000000b2000000c6000000
+  - index: 178
+    gridPosition: {x: 14, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -19.550001}
+    travelCost: 1
+    neighborsIndex: 9f000000b1000000c5000000a0000000c6000000a1000000b3000000c7000000
+  - index: 179
+    gridPosition: {x: 15, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -18.050001}
+    travelCost: 1
+    neighborsIndex: a0000000b2000000c6000000a1000000c7000000a2000000b4000000c8000000
+  - index: 180
+    gridPosition: {x: 16, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -16.55}
+    travelCost: 1
+    neighborsIndex: a1000000b3000000c7000000a2000000c8000000a3000000b5000000c9000000
+  - index: 181
+    gridPosition: {x: 17, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -15.049999}
+    travelCost: 1
+    neighborsIndex: a2000000b4000000c8000000a3000000c9000000ac000000b6000000ca000000
+  - index: 182
+    gridPosition: {x: 18, y: 12}
+    position: {x: -5.750004, y: -7.1445723, z: -13.550003}
+    travelCost: 1
+    neighborsIndex: a3000000b5000000c9000000ac000000ca000000be000000bf000000cb000000
+  - index: 183
+    gridPosition: {x: 19, y: 4}
+    position: {x: -17.75001, y: -7.1321664, z: -12.050003}
+    travelCost: 3
+    neighborsIndex: a4000000a5000000a6000000b8000000
+  - index: 184
+    gridPosition: {x: 19, y: 5}
+    position: {x: -16.25001, y: -7.1321664, z: -12.050005}
+    travelCost: 3
+    neighborsIndex: a5000000a6000000a7000000b7000000b9000000cc000000
+  - index: 185
+    gridPosition: {x: 19, y: 6}
+    position: {x: -14.75, y: -7.1835527, z: -12.049999}
+    travelCost: 3
+    neighborsIndex: a6000000a7000000a8000000b8000000ba000000cc000000cd000000
+  - index: 186
+    gridPosition: {x: 19, y: 7}
+    position: {x: -13.25, y: -7.1835527, z: -12.049999}
+    travelCost: 2
+    neighborsIndex: a7000000a8000000a9000000b9000000bb000000cc000000cd000000ce000000
+  - index: 187
+    gridPosition: {x: 19, y: 8}
+    position: {x: -11.75, y: -7.1835527, z: -12.049999}
+    travelCost: 1
+    neighborsIndex: a8000000a9000000aa000000ba000000bc000000cd000000ce000000cf000000
+  - index: 188
+    gridPosition: {x: 19, y: 9}
+    position: {x: -10.25, y: -7.1835527, z: -12.049999}
+    travelCost: 1
+    neighborsIndex: a9000000aa000000ab000000bb000000bd000000ce000000cf000000d0000000
+  - index: 189
+    gridPosition: {x: 19, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -12.049999}
+    travelCost: 1
+    neighborsIndex: aa000000ab000000ac000000bc000000be000000cf000000d0000000d1000000
+  - index: 190
+    gridPosition: {x: 19, y: 11}
+    position: {x: -7.2500076, y: -7.154771, z: -12.050005}
+    travelCost: 1
+    neighborsIndex: ab000000ac000000b6000000bd000000bf000000d0000000d1000000d2000000
+  - index: 191
+    gridPosition: {x: 19, y: 12}
+    position: {x: -5.7500076, y: -7.1564, z: -12.050005}
+    travelCost: 1
+    neighborsIndex: ac000000b6000000ca000000be000000cb000000d1000000d2000000d3000000
+  - index: 192
+    gridPosition: {x: 8, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -28.549997}
+    travelCost: 3
+    neighborsIndex: d4000000d5000000d6000000d7000000ad000000c1000000d8000000
+  - index: 193
+    gridPosition: {x: 9, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -27.05}
+    travelCost: 3
+    neighborsIndex: c0000000d7000000ad000000d8000000ae000000c2000000d9000000
+  - index: 194
+    gridPosition: {x: 10, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -25.55}
+    travelCost: 2
+    neighborsIndex: ad000000c1000000d8000000ae000000d9000000af000000c3000000da000000
+  - index: 195
+    gridPosition: {x: 11, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -24.05}
+    travelCost: 1
+    neighborsIndex: ae000000c2000000d9000000af000000da000000b0000000c4000000db000000
+  - index: 196
+    gridPosition: {x: 12, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -22.55}
+    travelCost: 1
+    neighborsIndex: af000000c3000000da000000b0000000db000000b1000000c5000000dc000000
+  - index: 197
+    gridPosition: {x: 13, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -21.05}
+    travelCost: 1
+    neighborsIndex: b0000000c4000000db000000b1000000dc000000b2000000c6000000dd000000
+  - index: 198
+    gridPosition: {x: 14, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -19.550001}
+    travelCost: 1
+    neighborsIndex: b1000000c5000000dc000000b2000000dd000000b3000000c7000000de000000
+  - index: 199
+    gridPosition: {x: 15, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -18.050001}
+    travelCost: 1
+    neighborsIndex: b2000000c6000000dd000000b3000000de000000b4000000c8000000df000000
+  - index: 200
+    gridPosition: {x: 16, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -16.55}
+    travelCost: 1
+    neighborsIndex: b3000000c7000000de000000b4000000df000000b5000000c9000000e0000000
+  - index: 201
+    gridPosition: {x: 17, y: 13}
+    position: {x: -4.2500076, y: -7.1343737, z: -15.049999}
+    travelCost: 1
+    neighborsIndex: b4000000c8000000df000000b5000000e0000000b6000000ca000000e1000000
+  - index: 202
+    gridPosition: {x: 18, y: 13}
+    position: {x: -4.2500114, y: -7.146201, z: -13.550005}
+    travelCost: 1
+    neighborsIndex: b5000000c9000000e0000000b6000000e1000000bf000000cb000000e2000000
+  - index: 203
+    gridPosition: {x: 19, y: 13}
+    position: {x: -4.2500114, y: -7.15803, z: -12.050005}
+    travelCost: 2
+    neighborsIndex: b6000000ca000000e1000000bf000000e2000000d2000000d3000000e3000000
+  - index: 204
+    gridPosition: {x: 20, y: 6}
+    position: {x: -14.75, y: -7.1835527, z: -10.549999}
+    travelCost: 3
+    neighborsIndex: b8000000b9000000ba000000cd000000e4000000e5000000
+  - index: 205
+    gridPosition: {x: 20, y: 7}
+    position: {x: -13.25, y: -7.1835527, z: -10.549999}
+    travelCost: 2
+    neighborsIndex: b9000000ba000000bb000000cc000000ce000000e4000000e5000000e6000000
+  - index: 206
+    gridPosition: {x: 20, y: 8}
+    position: {x: -11.75, y: -7.1835527, z: -10.549999}
+    travelCost: 2
+    neighborsIndex: ba000000bb000000bc000000cd000000cf000000e5000000e6000000e7000000
+  - index: 207
+    gridPosition: {x: 20, y: 9}
+    position: {x: -10.25, y: -7.1835527, z: -10.549999}
+    travelCost: 2
+    neighborsIndex: bb000000bc000000bd000000ce000000d0000000e6000000e7000000e8000000
+  - index: 208
+    gridPosition: {x: 20, y: 10}
+    position: {x: -8.750004, y: -7.1835527, z: -10.549999}
+    travelCost: 2
+    neighborsIndex: bc000000bd000000be000000cf000000d1000000e7000000e8000000e9000000
+  - index: 209
+    gridPosition: {x: 20, y: 11}
+    position: {x: -7.250004, y: -7.166599, z: -10.549999}
+    travelCost: 2
+    neighborsIndex: bd000000be000000bf000000d0000000d2000000e8000000e9000000ea000000
+  - index: 210
+    gridPosition: {x: 20, y: 12}
+    position: {x: -5.750004, y: -7.168228, z: -10.550001}
+    travelCost: 2
+    neighborsIndex: be000000bf000000cb000000d1000000d3000000e9000000ea000000eb000000
+  - index: 211
+    gridPosition: {x: 20, y: 13}
+    position: {x: -4.250004, y: -7.169859, z: -10.550003}
+    travelCost: 2
+    neighborsIndex: bf000000cb000000e2000000d2000000e3000000ea000000eb000000ec000000
+  - index: 212
+    gridPosition: {x: 7, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -30.049997}
+    travelCost: 3
+    neighborsIndex: ed000000ee000000d5000000c0000000
+  - index: 213
+    gridPosition: {x: 7, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -30.049997}
+    travelCost: 3
+    neighborsIndex: ed000000ee000000ef000000d4000000d6000000c0000000d7000000
+  - index: 214
+    gridPosition: {x: 7, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -30.05}
+    travelCost: 2
+    neighborsIndex: ee000000ef000000f0000000d5000000f1000000c0000000d7000000f2000000
+  - index: 215
+    gridPosition: {x: 8, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -28.55}
+    travelCost: 2
+    neighborsIndex: d5000000d6000000f1000000c0000000f2000000c1000000d8000000f3000000
+  - index: 216
+    gridPosition: {x: 9, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -27.05}
+    travelCost: 2
+    neighborsIndex: c0000000d7000000f2000000c1000000f3000000c2000000d9000000f4000000
+  - index: 217
+    gridPosition: {x: 10, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -25.550001}
+    travelCost: 2
+    neighborsIndex: c1000000d8000000f3000000c2000000f4000000c3000000da000000f5000000
+  - index: 218
+    gridPosition: {x: 11, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -24.05}
+    travelCost: 2
+    neighborsIndex: c2000000d9000000f4000000c3000000f5000000c4000000db000000f6000000
+  - index: 219
+    gridPosition: {x: 12, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -22.55}
+    travelCost: 2
+    neighborsIndex: c3000000da000000f5000000c4000000f6000000c5000000dc000000f7000000
+  - index: 220
+    gridPosition: {x: 13, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -21.05}
+    travelCost: 2
+    neighborsIndex: c4000000db000000f6000000c5000000f7000000c6000000dd000000f8000000
+  - index: 221
+    gridPosition: {x: 14, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -19.55}
+    travelCost: 2
+    neighborsIndex: c5000000dc000000f7000000c6000000f8000000c7000000de000000f9000000
+  - index: 222
+    gridPosition: {x: 15, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -18.05}
+    travelCost: 2
+    neighborsIndex: c6000000dd000000f8000000c7000000f9000000c8000000df000000fa000000
+  - index: 223
+    gridPosition: {x: 16, y: 14}
+    position: {x: -2.7500076, y: -7.1241746, z: -16.55}
+    travelCost: 2
+    neighborsIndex: c7000000de000000f9000000c8000000fa000000c9000000e0000000fb000000
+  - index: 224
+    gridPosition: {x: 17, y: 14}
+    position: {x: -2.7500076, y: -7.1360025, z: -15.050005}
+    travelCost: 1
+    neighborsIndex: c8000000df000000fa000000c9000000fb000000ca000000e1000000fc000000
+  - index: 225
+    gridPosition: {x: 18, y: 14}
+    position: {x: -2.7500038, y: -7.1478314, z: -13.549999}
+    travelCost: 1
+    neighborsIndex: c9000000e0000000fb000000ca000000fc000000cb000000e2000000fd000000
+  - index: 226
+    gridPosition: {x: 19, y: 14}
+    position: {x: -2.7500076, y: -7.1596594, z: -12.050003}
+    travelCost: 2
+    neighborsIndex: ca000000e1000000fc000000cb000000fd000000d3000000e3000000fe000000
+  - index: 227
+    gridPosition: {x: 20, y: 14}
+    position: {x: -2.7500076, y: -7.171488, z: -10.550001}
+    travelCost: 3
+    neighborsIndex: cb000000e2000000fd000000d3000000fe000000eb000000ec000000
+  - index: 228
+    gridPosition: {x: 21, y: 6}
+    position: {x: -14.75, y: -7.1835527, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: cc000000cd000000e5000000
+  - index: 229
+    gridPosition: {x: 21, y: 7}
+    position: {x: -13.25, y: -7.1835527, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: cc000000cd000000ce000000e4000000e6000000
+  - index: 230
+    gridPosition: {x: 21, y: 8}
+    position: {x: -11.75, y: -7.1835527, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: cd000000ce000000cf000000e5000000e7000000
+  - index: 231
+    gridPosition: {x: 21, y: 9}
+    position: {x: -10.25, y: -7.1835527, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: ce000000cf000000d0000000e6000000e8000000
+  - index: 232
+    gridPosition: {x: 21, y: 10}
+    position: {x: -8.75, y: -7.1835527, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: cf000000d0000000d1000000e7000000e9000000
+  - index: 233
+    gridPosition: {x: 21, y: 11}
+    position: {x: -7.25, y: -7.1835527, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: d0000000d1000000d2000000e8000000ea000000
+  - index: 234
+    gridPosition: {x: 21, y: 12}
+    position: {x: -5.7500076, y: -7.1800566, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: d1000000d2000000d3000000e9000000eb000000
+  - index: 235
+    gridPosition: {x: 21, y: 13}
+    position: {x: -4.2500076, y: -7.181687, z: -9.050003}
+    travelCost: 3
+    neighborsIndex: d2000000d3000000e3000000ea000000ec000000
+  - index: 236
+    gridPosition: {x: 21, y: 14}
+    position: {x: -2.7500076, y: -7.183316, z: -9.050003}
+    travelCost: 3
+    neighborsIndex: d3000000e3000000fe000000eb000000
+  - index: 237
+    gridPosition: {x: 6, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -31.549997}
+    travelCost: 3
+    neighborsIndex: ff00000000010000ee000000d4000000d5000000
+  - index: 238
+    gridPosition: {x: 6, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -31.549997}
+    travelCost: 2
+    neighborsIndex: ff0000000001000001010000ed000000ef000000d4000000d5000000d6000000
+  - index: 239
+    gridPosition: {x: 6, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -31.549997}
+    travelCost: 2
+    neighborsIndex: 000100000101000002010000ee000000f0000000d5000000d6000000f1000000
+  - index: 240
+    gridPosition: {x: 6, y: 15}
+    position: {x: -1.25, y: -7.1835527, z: -31.549997}
+    travelCost: 1
+    neighborsIndex: 010100000201000003010000ef00000004010000d6000000f100000005010000
+  - index: 241
+    gridPosition: {x: 7, y: 15}
+    position: {x: -1.2499981, y: -7.1835527, z: -30.049997}
+    travelCost: 1
+    neighborsIndex: ef000000f000000004010000d600000005010000d7000000f200000006010000
+  - index: 242
+    gridPosition: {x: 8, y: 15}
+    position: {x: -1.25, y: -7.1835527, z: -28.55}
+    travelCost: 2
+    neighborsIndex: d6000000f100000005010000d700000006010000d8000000f300000007010000
+  - index: 243
+    gridPosition: {x: 9, y: 15}
+    position: {x: -1.25, y: -7.1835527, z: -27.05}
+    travelCost: 3
+    neighborsIndex: d7000000f200000006010000d800000007010000d9000000f4000000
+  - index: 244
+    gridPosition: {x: 10, y: 15}
+    position: {x: -1.2499981, y: -7.1835527, z: -25.55}
+    travelCost: 3
+    neighborsIndex: d8000000f300000007010000d9000000da000000f5000000
+  - index: 245
+    gridPosition: {x: 11, y: 15}
+    position: {x: -1.2499981, y: -7.1835527, z: -24.05}
+    travelCost: 3
+    neighborsIndex: d9000000f4000000da000000db000000f6000000
+  - index: 246
+    gridPosition: {x: 12, y: 15}
+    position: {x: -1.25, y: -7.1835527, z: -22.55}
+    travelCost: 3
+    neighborsIndex: da000000f5000000db000000dc000000f7000000
+  - index: 247
+    gridPosition: {x: 13, y: 15}
+    position: {x: -1.25, y: -7.1835527, z: -21.05}
+    travelCost: 3
+    neighborsIndex: db000000f6000000dc000000dd000000f8000000
+  - index: 248
+    gridPosition: {x: 14, y: 15}
+    position: {x: -1.25, y: -7.1835527, z: -19.55}
+    travelCost: 3
+    neighborsIndex: dc000000f7000000dd000000de000000f900000008010000
+  - index: 249
+    gridPosition: {x: 15, y: 15}
+    position: {x: -1.2500076, y: -7.1139755, z: -18.05001}
+    travelCost: 3
+    neighborsIndex: dd000000f8000000de00000008010000df000000fa00000009010000
+  - index: 250
+    gridPosition: {x: 16, y: 15}
+    position: {x: -1.2500095, y: -7.125804, z: -16.550007}
+    travelCost: 2
+    neighborsIndex: de000000f900000008010000df00000009010000e0000000fb0000000a010000
+  - index: 251
+    gridPosition: {x: 17, y: 15}
+    position: {x: -1.2500057, y: -7.1376324, z: -15.050001}
+    travelCost: 1
+    neighborsIndex: df000000fa00000009010000e00000000a010000e1000000fc0000000b010000
+  - index: 252
+    gridPosition: {x: 18, y: 15}
+    position: {x: -1.2500076, y: -7.1494613, z: -13.550005}
+    travelCost: 1
+    neighborsIndex: e0000000fb0000000a010000e10000000b010000e2000000fd0000000c010000
+  - index: 253
+    gridPosition: {x: 19, y: 15}
+    position: {x: -1.2500076, y: -7.161289, z: -12.050005}
+    travelCost: 2
+    neighborsIndex: e1000000fc0000000b010000e20000000c010000e3000000fe0000000d010000
+  - index: 254
+    gridPosition: {x: 20, y: 15}
+    position: {x: -1.2500095, y: -7.1731176, z: -10.550003}
+    travelCost: 3
+    neighborsIndex: e2000000fd0000000c010000e30000000d010000ec0000000e010000
+  - index: 255
+    gridPosition: {x: 5, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -33.049995}
+    travelCost: 3
+    neighborsIndex: 0f0100001001000000010000ed000000ee000000
+  - index: 256
+    gridPosition: {x: 5, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -33.049995}
+    travelCost: 2
+    neighborsIndex: 0f0100001001000011010000ff00000001010000ed000000ee000000ef000000
+  - index: 257
+    gridPosition: {x: 5, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -33.049995}
+    travelCost: 2
+    neighborsIndex: 1001000011010000120100000001000002010000ee000000ef000000f0000000
+  - index: 258
+    gridPosition: {x: 5, y: 15}
+    position: {x: -1.25, y: -7.1835527, z: -33.049995}
+    travelCost: 2
+    neighborsIndex: 1101000012010000130100000101000003010000ef000000f000000004010000
+  - index: 259
+    gridPosition: {x: 5, y: 16}
+    position: {x: 0.25, y: -7.1835527, z: -33.05}
+    travelCost: 2
+    neighborsIndex: 1201000013010000140100000201000015010000f00000000401000016010000
+  - index: 260
+    gridPosition: {x: 6, y: 16}
+    position: {x: 0.25, y: -7.1835527, z: -31.55}
+    travelCost: 1
+    neighborsIndex: 020100000301000015010000f000000016010000f10000000501000017010000
+  - index: 261
+    gridPosition: {x: 7, y: 16}
+    position: {x: 0.25, y: -7.1835527, z: -30.05}
+    travelCost: 2
+    neighborsIndex: f00000000401000016010000f100000017010000f20000000601000018010000
+  - index: 262
+    gridPosition: {x: 8, y: 16}
+    position: {x: 0.25, y: -7.1835527, z: -28.55}
+    travelCost: 2
+    neighborsIndex: f10000000501000017010000f200000018010000f30000000701000019010000
+  - index: 263
+    gridPosition: {x: 9, y: 16}
+    position: {x: 0.25, y: -7.1835527, z: -27.05}
+    travelCost: 3
+    neighborsIndex: f20000000601000018010000f300000019010000f4000000
+  - index: 264
+    gridPosition: {x: 15, y: 16}
+    position: {x: 0.24999428, y: -7.1156054, z: -18.050003}
+    travelCost: 3
+    neighborsIndex: f8000000f90000001a010000fa000000090100001b010000
+  - index: 265
+    gridPosition: {x: 16, y: 16}
+    position: {x: 0.24999046, y: -7.127434, z: -16.550003}
+    travelCost: 2
+    neighborsIndex: f9000000080100001a010000fa0000001b010000fb0000000a0100001c010000
+  - index: 266
+    gridPosition: {x: 17, y: 16}
+    position: {x: 0.24999046, y: -7.139262, z: -15.050003}
+    travelCost: 2
+    neighborsIndex: fa000000090100001b010000fb0000001c010000fc0000000b0100001d010000
+  - index: 267
+    gridPosition: {x: 18, y: 16}
+    position: {x: 0.24999237, y: -7.1510906, z: -13.550001}
+    travelCost: 1
+    neighborsIndex: fb0000000a0100001c010000fc0000001d010000fd0000000c0100001e010000
+  - index: 268
+    gridPosition: {x: 19, y: 16}
+    position: {x: 0.24999046, y: -7.162919, z: -12.050003}
+    travelCost: 2
+    neighborsIndex: fc0000000b0100001d010000fd0000001e010000fe0000000d0100001f010000
+  - index: 269
+    gridPosition: {x: 20, y: 16}
+    position: {x: 0.24999237, y: -7.1747475, z: -10.550003}
+    travelCost: 3
+    neighborsIndex: fd0000000c0100001e010000fe0000001f0100000e01000020010000
+  - index: 270
+    gridPosition: {x: 21, y: 16}
+    position: {x: 0.25, y: -7.1835527, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: fe0000000d0100001f0100002001000021010000
+  - index: 271
+    gridPosition: {x: 4, y: 12}
+    position: {x: -5.75, y: -7.1835527, z: -34.549995}
+    travelCost: 3
+    neighborsIndex: 10010000ff00000000010000
+  - index: 272
+    gridPosition: {x: 4, y: 13}
+    position: {x: -4.25, y: -7.1835527, z: -34.549995}
+    travelCost: 3
+    neighborsIndex: 0f01000011010000ff0000000001000001010000
+  - index: 273
+    gridPosition: {x: 4, y: 14}
+    position: {x: -2.75, y: -7.1835527, z: -34.549995}
+    travelCost: 3
+    neighborsIndex: 1001000012010000000100000101000002010000
+  - index: 274
+    gridPosition: {x: 4, y: 15}
+    position: {x: -1.25, y: -7.1835527, z: -34.549995}
+    travelCost: 3
+    neighborsIndex: 1101000013010000010100000201000003010000
+  - index: 275
+    gridPosition: {x: 4, y: 16}
+    position: {x: 0.25, y: -7.1835527, z: -34.549995}
+    travelCost: 3
+    neighborsIndex: 1201000014010000020100000301000015010000
+  - index: 276
+    gridPosition: {x: 4, y: 17}
+    position: {x: 1.75, y: -7.1835527, z: -34.549995}
+    travelCost: 3
+    neighborsIndex: 1301000022010000030100001501000023010000
+  - index: 277
+    gridPosition: {x: 5, y: 17}
+    position: {x: 1.75, y: -7.1835527, z: -33.049995}
+    travelCost: 2
+    neighborsIndex: 1301000014010000220100000301000023010000040100001601000024010000
+  - index: 278
+    gridPosition: {x: 6, y: 17}
+    position: {x: 1.75, y: -7.1835527, z: -31.549997}
+    travelCost: 1
+    neighborsIndex: 0301000015010000230100000401000024010000050100001701000025010000
+  - index: 279
+    gridPosition: {x: 7, y: 17}
+    position: {x: 1.75, y: -7.1835527, z: -30.05}
+    travelCost: 2
+    neighborsIndex: 0401000016010000240100000501000025010000060100001801000026010000
+  - index: 280
+    gridPosition: {x: 8, y: 17}
+    position: {x: 1.75, y: -7.1835527, z: -28.55}
+    travelCost: 3
+    neighborsIndex: 05010000170100002501000006010000260100000701000019010000
+  - index: 281
+    gridPosition: {x: 9, y: 17}
+    position: {x: 1.75, y: -7.1835527, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 06010000180100002601000007010000
+  - index: 282
+    gridPosition: {x: 15, y: 17}
+    position: {x: 1.7499905, y: -7.1171265, z: -18.050007}
+    travelCost: 3
+    neighborsIndex: 08010000090100001b01000027010000
+  - index: 283
+    gridPosition: {x: 16, y: 17}
+    position: {x: 1.7499905, y: -7.1290636, z: -16.550003}
+    travelCost: 3
+    neighborsIndex: 080100001a01000009010000270100000a0100001c01000028010000
+  - index: 284
+    gridPosition: {x: 17, y: 17}
+    position: {x: 1.7499905, y: -7.140892, z: -15.050005}
+    travelCost: 2
+    neighborsIndex: 090100001b010000270100000a010000280100000b0100001d01000029010000
+  - index: 285
+    gridPosition: {x: 18, y: 17}
+    position: {x: 1.7499905, y: -7.1527205, z: -13.550005}
+    travelCost: 1
+    neighborsIndex: 0a0100001c010000280100000b010000290100000c0100001e0100002a010000
+  - index: 286
+    gridPosition: {x: 19, y: 17}
+    position: {x: 1.7499962, y: -7.164549, z: -12.050001}
+    travelCost: 2
+    neighborsIndex: 0b0100001d010000290100000c0100002a0100000d0100001f0100002b010000
+  - index: 287
+    gridPosition: {x: 20, y: 17}
+    position: {x: 1.7499943, y: -7.1763773, z: -10.550003}
+    travelCost: 2
+    neighborsIndex: 0c0100001e0100002a0100000d0100002b0100000e010000200100002c010000
+  - index: 288
+    gridPosition: {x: 21, y: 17}
+    position: {x: 1.75, y: -7.1835527, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: 0d0100001f0100002b0100000e0100002c010000210100002d010000
+  - index: 289
+    gridPosition: {x: 22, y: 17}
+    position: {x: 1.7499943, y: -7.200034, z: -7.550001}
+    travelCost: 3
+    neighborsIndex: 0e010000200100002c0100002d0100002e010000
+  - index: 290
+    gridPosition: {x: 4, y: 18}
+    position: {x: 3.25, y: -7.1835527, z: -34.549995}
+    travelCost: 2
+    neighborsIndex: 2f0100003001000014010000310100003201000015010000230100003301000034010000
+  - index: 291
+    gridPosition: {x: 5, y: 18}
+    position: {x: 3.25, y: -7.1835527, z: -33.049995}
+    travelCost: 2
+    neighborsIndex: 14010000220100003101000032010000150100003301000034010000160100002401000035010000
+  - index: 292
+    gridPosition: {x: 6, y: 18}
+    position: {x: 3.25, y: -7.1835527, z: -31.549997}
+    travelCost: 1
+    neighborsIndex: 150100002301000033010000340100001601000035010000170100002501000036010000
+  - index: 293
+    gridPosition: {x: 7, y: 18}
+    position: {x: 3.25, y: -7.1835527, z: -30.05}
+    travelCost: 2
+    neighborsIndex: 1601000024010000350100001701000036010000180100002601000037010000
+  - index: 294
+    gridPosition: {x: 8, y: 18}
+    position: {x: 3.25, y: -7.1835527, z: -28.549997}
+    travelCost: 3
+    neighborsIndex: 170100002501000036010000180100003701000019010000
+  - index: 295
+    gridPosition: {x: 16, y: 18}
+    position: {x: 3.2499962, y: -7.130445, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 1a0100001b010000380100001c0100002801000039010000
+  - index: 296
+    gridPosition: {x: 17, y: 18}
+    position: {x: 3.2499943, y: -7.1423864, z: -15.050005}
+    travelCost: 2
+    neighborsIndex: 1b01000027010000380100001c010000390100001d010000290100003a010000
+  - index: 297
+    gridPosition: {x: 18, y: 18}
+    position: {x: 3.2499924, y: -7.154328, z: -13.550007}
+    travelCost: 1
+    neighborsIndex: 1c01000028010000390100001d0100003a0100001e0100002a0100003b010000
+  - index: 298
+    gridPosition: {x: 19, y: 18}
+    position: {x: 3.2499924, y: -7.1661787, z: -12.050005}
+    travelCost: 1
+    neighborsIndex: 1d010000290100003a0100001e0100003b0100001f0100002b0100003c010000
+  - index: 299
+    gridPosition: {x: 20, y: 18}
+    position: {x: 3.2499943, y: -7.178007, z: -10.550001}
+    travelCost: 2
+    neighborsIndex: 1e0100002a0100003b0100001f0100003c010000200100002c0100003d010000
+  - index: 300
+    gridPosition: {x: 21, y: 18}
+    position: {x: 3.25, y: -7.1835527, z: -9.049999}
+    travelCost: 2
+    neighborsIndex: 1f0100002b0100003c010000200100003d010000210100002d0100003e010000
+  - index: 301
+    gridPosition: {x: 22, y: 18}
+    position: {x: 3.2499962, y: -7.2016635, z: -7.550001}
+    travelCost: 3
+    neighborsIndex: 200100002c0100003d010000210100003e0100002e0100003f010000
+  - index: 302
+    gridPosition: {x: 23, y: 18}
+    position: {x: 3.2499924, y: -7.213492, z: -6.050001}
+    travelCost: 3
+    neighborsIndex: 210100002d0100003e0100003f010000
+  - index: 303
+    gridPosition: {x: 3, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -36.05}
+    travelCost: 2
+    neighborsIndex: 4001000041010000420100004301000022010000310100003201000044010000
+  - index: 304
+    gridPosition: {x: 3, y: 19}
+    position: {x: 4.749998, y: -7.1417522, z: -36.05}
+    travelCost: 2
+    neighborsIndex: 4001000041010000420100004301000022010000310100003201000044010000
+  - index: 305
+    gridPosition: {x: 4, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -34.550003}
+    travelCost: 1
+    neighborsIndex: 2f0100003001000043010000220100004401000023010000330100003401000045010000
+  - index: 306
+    gridPosition: {x: 4, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -34.55}
+    travelCost: 1
+    neighborsIndex: 2f0100003001000043010000220100004401000023010000330100003401000045010000
+  - index: 307
+    gridPosition: {x: 5, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -33.049995}
+    travelCost: 1
+    neighborsIndex: 220100003101000032010000440100002301000045010000240100003501000046010000
+  - index: 308
+    gridPosition: {x: 5, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -33.05}
+    travelCost: 1
+    neighborsIndex: 220100003101000032010000440100002301000045010000240100003501000046010000
+  - index: 309
+    gridPosition: {x: 6, y: 19}
+    position: {x: 4.750004, y: -7.1417522, z: -31.550001}
+    travelCost: 1
+    neighborsIndex: 230100003301000034010000450100002401000046010000250100003601000047010000
+  - index: 310
+    gridPosition: {x: 7, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -30.05}
+    travelCost: 2
+    neighborsIndex: 2401000035010000460100002501000047010000260100003701000048010000
+  - index: 311
+    gridPosition: {x: 8, y: 19}
+    position: {x: 4.750004, y: -7.1417522, z: -28.55}
+    travelCost: 3
+    neighborsIndex: 250100003601000047010000260100004801000049010000
+  - index: 312
+    gridPosition: {x: 16, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 4a010000270100004b01000028010000390100004c010000
+  - index: 313
+    gridPosition: {x: 17, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -15.049999}
+    travelCost: 2
+    neighborsIndex: 27010000380100004b010000280100004c010000290100003a0100004d010000
+  - index: 314
+    gridPosition: {x: 18, y: 19}
+    position: {x: 4.750004, y: -7.1417522, z: -13.549999}
+    travelCost: 1
+    neighborsIndex: 28010000390100004c010000290100004d0100002a0100003b0100004e010000
+  - index: 315
+    gridPosition: {x: 19, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -12.049999}
+    travelCost: 1
+    neighborsIndex: 290100003a0100004d0100002a0100004e0100002b0100003c0100004f010000
+  - index: 316
+    gridPosition: {x: 20, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -10.549999}
+    travelCost: 1
+    neighborsIndex: 2a0100003b0100004e0100002b0100004f0100002c0100003d01000050010000
+  - index: 317
+    gridPosition: {x: 21, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -9.049999}
+    travelCost: 2
+    neighborsIndex: 2b0100003c0100004f0100002c010000500100002d0100003e01000051010000
+  - index: 318
+    gridPosition: {x: 22, y: 19}
+    position: {x: 4.7499905, y: -7.203293, z: -7.550005}
+    travelCost: 2
+    neighborsIndex: 2c0100003d010000500100002d010000510100002e0100003f01000052010000
+  - index: 319
+    gridPosition: {x: 23, y: 19}
+    position: {x: 4.7499943, y: -7.215122, z: -6.050003}
+    travelCost: 3
+    neighborsIndex: 2d0100003e010000510100002e0100005201000053010000
+  - index: 320
+    gridPosition: {x: 2, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -37.550003}
+    travelCost: 3
+    neighborsIndex: 5401000055010000420100002f0100003001000043010000
+  - index: 321
+    gridPosition: {x: 2, y: 19}
+    position: {x: 4.75, y: -7.1417522, z: -37.55}
+    travelCost: 3
+    neighborsIndex: 5401000055010000420100002f0100003001000043010000
+  - index: 322
+    gridPosition: {x: 2, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -37.550003}
+    travelCost: 2
+    neighborsIndex: 5401000055010000560100004001000041010000570100002f010000300100004301000058010000
+  - index: 323
+    gridPosition: {x: 3, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -36.05}
+    travelCost: 2
+    neighborsIndex: 400100004101000042010000570100002f010000300100005801000031010000320100004401000059010000
+  - index: 324
+    gridPosition: {x: 4, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -34.550003}
+    travelCost: 1
+    neighborsIndex: 2f0100003001000043010000580100003101000032010000590100003301000034010000450100005a010000
+  - index: 325
+    gridPosition: {x: 5, y: 20}
+    position: {x: 6.249996, y: -7.1417522, z: -33.05}
+    travelCost: 1
+    neighborsIndex: 3101000032010000440100005901000033010000340100005a01000035010000460100005b010000
+  - index: 326
+    gridPosition: {x: 6, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -31.55}
+    travelCost: 1
+    neighborsIndex: 3301000034010000450100005a010000350100005b01000036010000470100005c010000
+  - index: 327
+    gridPosition: {x: 7, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -30.05}
+    travelCost: 2
+    neighborsIndex: 35010000460100005b010000360100005c01000037010000480100005d010000
+  - index: 328
+    gridPosition: {x: 8, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -28.55}
+    travelCost: 3
+    neighborsIndex: 36010000470100005c010000370100005d010000490100005e010000
+  - index: 329
+    gridPosition: {x: 9, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 37010000480100005d0100005e0100005f010000
+  - index: 330
+    gridPosition: {x: 15, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -18.050001}
+    travelCost: 3
+    neighborsIndex: 60010000380100004b01000061010000
+  - index: 331
+    gridPosition: {x: 16, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 4a010000600100003801000061010000390100004c01000062010000
+  - index: 332
+    gridPosition: {x: 17, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -15.049999}
+    travelCost: 2
+    neighborsIndex: 380100004b0100006101000039010000620100003a0100004d01000063010000
+  - index: 333
+    gridPosition: {x: 18, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -13.549999}
+    travelCost: 2
+    neighborsIndex: 390100004c010000620100003a010000630100003b0100004e01000064010000
+  - index: 334
+    gridPosition: {x: 19, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -12.049999}
+    travelCost: 2
+    neighborsIndex: 3a0100004d010000630100003b010000640100003c0100004f01000065010000
+  - index: 335
+    gridPosition: {x: 20, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -10.549999}
+    travelCost: 2
+    neighborsIndex: 3b0100004e010000640100003c010000650100003d0100005001000066010000
+  - index: 336
+    gridPosition: {x: 21, y: 20}
+    position: {x: 6.25, y: -7.1417522, z: -9.049999}
+    travelCost: 2
+    neighborsIndex: 3c0100004f010000650100003d010000660100003e0100005101000067010000
+  - index: 337
+    gridPosition: {x: 22, y: 20}
+    position: {x: 6.2499943, y: -7.204848, z: -7.550001}
+    travelCost: 2
+    neighborsIndex: 3d01000050010000660100003e010000670100003f0100005201000068010000
+  - index: 338
+    gridPosition: {x: 23, y: 20}
+    position: {x: 6.249996, y: -7.216752, z: -6.050003}
+    travelCost: 3
+    neighborsIndex: 3e01000051010000670100003f010000680100005301000069010000
+  - index: 339
+    gridPosition: {x: 24, y: 20}
+    position: {x: 6.2499924, y: -7.2285795, z: -4.550005}
+    travelCost: 3
+    neighborsIndex: 3f0100005201000068010000690100006a0100006b010000
+  - index: 340
+    gridPosition: {x: 1, y: 19}
+    position: {x: 4.749996, y: -6.215844, z: -39.049995}
+    travelCost: 3
+    neighborsIndex: 55010000400100004101000042010000
+  - index: 341
+    gridPosition: {x: 1, y: 20}
+    position: {x: 6.249996, y: -7.1417522, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 540100005601000040010000410100004201000057010000
+  - index: 342
+    gridPosition: {x: 1, y: 21}
+    position: {x: 7.749998, y: -7.1417522, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 550100006c01000042010000570100006d010000
+  - index: 343
+    gridPosition: {x: 2, y: 21}
+    position: {x: 7.749998, y: -7.1417522, z: -37.55}
+    travelCost: 2
+    neighborsIndex: 55010000560100006c010000420100006d01000043010000580100006e010000
+  - index: 344
+    gridPosition: {x: 3, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -36.05}
+    travelCost: 1
+    neighborsIndex: 42010000570100006d010000430100006e01000044010000590100006f010000
+  - index: 345
+    gridPosition: {x: 4, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -34.55}
+    travelCost: 1
+    neighborsIndex: 43010000580100006e010000440100006f010000450100005a01000070010000
+  - index: 346
+    gridPosition: {x: 5, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -33.05}
+    travelCost: 1
+    neighborsIndex: 44010000590100006f0100004501000070010000460100005b01000071010000
+  - index: 347
+    gridPosition: {x: 6, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -31.55}
+    travelCost: 1
+    neighborsIndex: 450100005a010000700100004601000071010000470100005c01000072010000
+  - index: 348
+    gridPosition: {x: 7, y: 21}
+    position: {x: 7.749998, y: -7.1417522, z: -30.05}
+    travelCost: 2
+    neighborsIndex: 460100005b010000710100004701000072010000480100005d01000073010000
+  - index: 349
+    gridPosition: {x: 8, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -28.55}
+    travelCost: 2
+    neighborsIndex: 470100005c010000720100004801000073010000490100005e01000074010000
+  - index: 350
+    gridPosition: {x: 9, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -27.050001}
+    travelCost: 3
+    neighborsIndex: 480100005d0100007301000049010000740100005f01000075010000
+  - index: 351
+    gridPosition: {x: 10, y: 21}
+    position: {x: 7.749998, y: -7.1417522, z: -25.550001}
+    travelCost: 3
+    neighborsIndex: 490100005e010000740100007501000076010000
+  - index: 352
+    gridPosition: {x: 15, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -18.05}
+    travelCost: 3
+    neighborsIndex: 770100004a010000780100004b0100006101000079010000
+  - index: 353
+    gridPosition: {x: 16, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -16.55}
+    travelCost: 2
+    neighborsIndex: 4a01000060010000780100004b010000790100004c010000620100007a010000
+  - index: 354
+    gridPosition: {x: 17, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -15.049999}
+    travelCost: 2
+    neighborsIndex: 4b01000061010000790100004c0100007a0100004d010000630100007b010000
+  - index: 355
+    gridPosition: {x: 18, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: 4c010000620100007a0100004d0100007b0100004e01000064010000
+  - index: 356
+    gridPosition: {x: 19, y: 21}
+    position: {x: 7.75, y: -7.1417522, z: -12.049999}
+    travelCost: 3
+    neighborsIndex: 4d010000630100007b0100004e0100004f010000650100007c010000
+  - index: 357
+    gridPosition: {x: 20, y: 21}
+    position: {x: 7.749998, y: -7.1417522, z: -10.549999}
+    travelCost: 3
+    neighborsIndex: 4e010000640100004f0100007c01000050010000660100007d010000
+  - index: 358
+    gridPosition: {x: 21, y: 21}
+    position: {x: 7.749998, y: -7.1417522, z: -9.049999}
+    travelCost: 2
+    neighborsIndex: 4f010000650100007c010000500100007d01000051010000670100007e010000
+  - index: 359
+    gridPosition: {x: 22, y: 21}
+    position: {x: 7.749998, y: -7.2062244, z: -7.549999}
+    travelCost: 2
+    neighborsIndex: 50010000660100007d010000510100007e01000052010000680100007f010000
+  - index: 360
+    gridPosition: {x: 23, y: 21}
+    position: {x: 7.7499943, y: -7.218166, z: -6.050003}
+    travelCost: 2
+    neighborsIndex: 51010000670100007e010000520100007f010000530100006901000080010000
+  - index: 361
+    gridPosition: {x: 24, y: 21}
+    position: {x: 7.749996, y: -7.2301073, z: -4.549999}
+    travelCost: 2
+    neighborsIndex: 52010000680100007f01000053010000800100006a0100006b01000081010000
+  - index: 362
+    gridPosition: {x: 25, y: 20}
+    position: {x: 6.2499924, y: -7.2404084, z: -3.050003}
+    travelCost: 3
+    neighborsIndex: 53010000690100006b01000082010000
+  - index: 363
+    gridPosition: {x: 25, y: 21}
+    position: {x: 7.749996, y: -7.2420382, z: -3.050003}
+    travelCost: 3
+    neighborsIndex: 5301000069010000800100006a0100008101000083010000
+  - index: 364
+    gridPosition: {x: 1, y: 22}
+    position: {x: 9.250002, y: -7.1417522, z: -39.049995}
+    travelCost: 3
+    neighborsIndex: 5601000084010000570100006d01000085010000
+  - index: 365
+    gridPosition: {x: 2, y: 22}
+    position: {x: 9.250002, y: -7.1417522, z: -37.55}
+    travelCost: 2
+    neighborsIndex: 560100006c010000840100005701000085010000580100006e01000086010000
+  - index: 366
+    gridPosition: {x: 3, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -36.05}
+    travelCost: 1
+    neighborsIndex: 570100006d010000850100005801000086010000590100006f01000087010000
+  - index: 367
+    gridPosition: {x: 4, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -34.55}
+    travelCost: 1
+    neighborsIndex: 580100006e0100008601000059010000870100005a0100007001000088010000
+  - index: 368
+    gridPosition: {x: 5, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -33.05}
+    travelCost: 1
+    neighborsIndex: 590100006f010000870100005a010000880100005b0100007101000089010000
+  - index: 369
+    gridPosition: {x: 6, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -31.549997}
+    travelCost: 1
+    neighborsIndex: 5a01000070010000880100005b010000890100005c010000720100008a010000
+  - index: 370
+    gridPosition: {x: 7, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -30.049997}
+    travelCost: 1
+    neighborsIndex: 5b01000071010000890100005c0100008a0100005d010000730100008b010000
+  - index: 371
+    gridPosition: {x: 8, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -28.55}
+    travelCost: 2
+    neighborsIndex: 5c010000720100008a0100005d0100008b0100005e010000740100008c010000
+  - index: 372
+    gridPosition: {x: 9, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -27.050001}
+    travelCost: 2
+    neighborsIndex: 5d010000730100008b0100005e0100008c0100005f010000750100008d010000
+  - index: 373
+    gridPosition: {x: 10, y: 22}
+    position: {x: 9.250002, y: -7.1417522, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 5e010000740100008c0100005f0100008d01000076010000
+  - index: 374
+    gridPosition: {x: 11, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -24.049997}
+    travelCost: 3
+    neighborsIndex: 5f010000750100008d0100008e0100008f010000
+  - index: 375
+    gridPosition: {x: 14, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -19.55}
+    travelCost: 3
+    neighborsIndex: 900100009101000092010000600100007801000093010000
+  - index: 376
+    gridPosition: {x: 15, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -18.05}
+    travelCost: 3
+    neighborsIndex: 77010000920100006001000093010000610100007901000094010000
+  - index: 377
+    gridPosition: {x: 16, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 6001000078010000930100006101000094010000620100007a010000
+  - index: 378
+    gridPosition: {x: 17, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -15.049999}
+    travelCost: 3
+    neighborsIndex: 61010000790100009401000062010000630100007b01000095010000
+  - index: 379
+    gridPosition: {x: 18, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: 620100007a010000630100009501000064010000
+  - index: 380
+    gridPosition: {x: 20, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -10.549999}
+    travelCost: 3
+    neighborsIndex: 6401000065010000660100007d010000
+  - index: 381
+    gridPosition: {x: 21, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: 650100007c01000066010000670100007e01000096010000
+  - index: 382
+    gridPosition: {x: 22, y: 22}
+    position: {x: 9.249992, y: -7.2076006, z: -7.550003}
+    travelCost: 3
+    neighborsIndex: 660100007d0100006701000096010000680100007f01000097010000
+  - index: 383
+    gridPosition: {x: 23, y: 22}
+    position: {x: 9.249994, y: -7.2195425, z: -6.050001}
+    travelCost: 2
+    neighborsIndex: 670100007e010000960100006801000097010000690100008001000098010000
+  - index: 384
+    gridPosition: {x: 24, y: 22}
+    position: {x: 9.249994, y: -7.2314844, z: -4.550005}
+    travelCost: 2
+    neighborsIndex: 680100007f0100009701000069010000980100006b0100008101000099010000
+  - index: 385
+    gridPosition: {x: 25, y: 22}
+    position: {x: 9.249992, y: -7.243426, z: -3.050005}
+    travelCost: 3
+    neighborsIndex: 6901000080010000980100006b01000099010000830100009a010000
+  - index: 386
+    gridPosition: {x: 26, y: 19}
+    position: {x: 4.7499924, y: -7.2506065, z: -1.550005}
+    travelCost: 3
+    neighborsIndex: 6a010000
+  - index: 387
+    gridPosition: {x: 26, y: 22}
+    position: {x: 9.249992, y: -7.2553673, z: -1.550003}
+    travelCost: 3
+    neighborsIndex: 6b01000081010000990100009a0100009b010000
+  - index: 388
+    gridPosition: {x: 1, y: 23}
+    position: {x: 10.750002, y: -7.1417522, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 6c0100009c0100006d010000850100009d0100009e010000
+  - index: 389
+    gridPosition: {x: 2, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -37.550003}
+    travelCost: 2
+    neighborsIndex: 6c010000840100009c0100006d0100009d0100009e0100006e010000860100009f010000a0010000
+  - index: 390
+    gridPosition: {x: 3, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -36.049995}
+    travelCost: 2
+    neighborsIndex: 6d010000850100009d0100009e0100006e0100009f010000a00100006f01000087010000a1010000a2010000
+  - index: 391
+    gridPosition: {x: 4, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -34.550003}
+    travelCost: 1
+    neighborsIndex: 6e010000860100009f010000a00100006f010000a1010000a20100007001000088010000a3010000a4010000
+  - index: 392
+    gridPosition: {x: 5, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -33.05}
+    travelCost: 1
+    neighborsIndex: 6f01000087010000a1010000a201000070010000a3010000a40100007101000089010000a5010000
+  - index: 393
+    gridPosition: {x: 6, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -31.550001}
+    travelCost: 1
+    neighborsIndex: 7001000088010000a3010000a401000071010000a5010000720100008a010000a6010000
+  - index: 394
+    gridPosition: {x: 7, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -30.05}
+    travelCost: 1
+    neighborsIndex: 7101000089010000a501000072010000a6010000730100008b010000a7010000
+  - index: 395
+    gridPosition: {x: 8, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -28.55}
+    travelCost: 1
+    neighborsIndex: 720100008a010000a601000073010000a7010000740100008c010000a8010000
+  - index: 396
+    gridPosition: {x: 9, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -27.050001}
+    travelCost: 2
+    neighborsIndex: 730100008b010000a701000074010000a8010000750100008d010000a9010000
+  - index: 397
+    gridPosition: {x: 10, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -25.550001}
+    travelCost: 3
+    neighborsIndex: 740100008c010000a801000075010000a901000076010000aa010000
+  - index: 398
+    gridPosition: {x: 12, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 760100008f0100009001000091010000
+  - index: 399
+    gridPosition: {x: 12, y: 23}
+    position: {x: 10.749998, y: -7.1417522, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 76010000aa0100008e010000ab0100009001000091010000ac010000
+  - index: 400
+    gridPosition: {x: 13, y: 22}
+    position: {x: 9.25, y: -7.1417522, z: -21.05}
+    travelCost: 3
+    neighborsIndex: 8e0100008f010000910100007701000092010000
+  - index: 401
+    gridPosition: {x: 13, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 8e0100008f010000ab01000090010000ac0100007701000092010000ad010000
+  - index: 402
+    gridPosition: {x: 14, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -19.55}
+    travelCost: 2
+    neighborsIndex: 9001000091010000ac01000077010000ad0100007801000093010000ae010000
+  - index: 403
+    gridPosition: {x: 15, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 7701000092010000ad01000078010000ae0100007901000094010000af010000
+  - index: 404
+    gridPosition: {x: 16, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 7801000093010000ae01000079010000af0100007a010000b0010000
+  - index: 405
+    gridPosition: {x: 18, y: 23}
+    position: {x: 10.75, y: -7.1417522, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: 7a010000b00100007b010000b1010000b2010000
+  - index: 406
+    gridPosition: {x: 22, y: 23}
+    position: {x: 10.749992, y: -7.2089777, z: -7.550003}
+    travelCost: 3
+    neighborsIndex: 7d0100007e0100007f01000097010000
+  - index: 407
+    gridPosition: {x: 23, y: 23}
+    position: {x: 10.749994, y: -7.220919, z: -6.050005}
+    travelCost: 3
+    neighborsIndex: 7e010000960100007f0100008001000098010000b3010000
+  - index: 408
+    gridPosition: {x: 24, y: 23}
+    position: {x: 10.749994, y: -7.232861, z: -4.550001}
+    travelCost: 3
+    neighborsIndex: 7f0100009701000080010000b30100008101000099010000b4010000
+  - index: 409
+    gridPosition: {x: 25, y: 23}
+    position: {x: 10.749992, y: -7.2448025, z: -3.050003}
+    travelCost: 2
+    neighborsIndex: 8001000098010000b301000081010000b4010000830100009a010000b5010000
+  - index: 410
+    gridPosition: {x: 26, y: 23}
+    position: {x: 10.749994, y: -7.256744, z: -1.550003}
+    travelCost: 3
+    neighborsIndex: 8101000099010000b401000083010000b50100009b010000b6010000
+  - index: 411
+    gridPosition: {x: 27, y: 23}
+    position: {x: 10.749994, y: -7.268686, z: -0.05000496}
+    travelCost: 3
+    neighborsIndex: 830100009a010000b5010000b6010000b7010000
+  - index: 412
+    gridPosition: {x: 1, y: 24}
+    position: {x: 12.249996, y: -6.215845, z: -39.050003}
+    travelCost: 3
+    neighborsIndex: 84010000850100009d0100009e010000
+  - index: 413
+    gridPosition: {x: 2, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -37.550003}
+    travelCost: 3
+    neighborsIndex: 840100009c01000085010000860100009f010000a0010000
+  - index: 414
+    gridPosition: {x: 2, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -37.55}
+    travelCost: 3
+    neighborsIndex: 840100009c01000085010000860100009f010000a0010000
+  - index: 415
+    gridPosition: {x: 3, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -36.050003}
+    travelCost: 2
+    neighborsIndex: 850100009d0100009e0100008601000087010000a1010000a2010000b8010000
+  - index: 416
+    gridPosition: {x: 3, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -36.05}
+    travelCost: 2
+    neighborsIndex: 850100009d0100009e0100008601000087010000a1010000a2010000b8010000
+  - index: 417
+    gridPosition: {x: 4, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -34.550003}
+    travelCost: 1
+    neighborsIndex: 860100009f010000a001000087010000b801000088010000a3010000a4010000b9010000
+  - index: 418
+    gridPosition: {x: 4, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -34.55}
+    travelCost: 1
+    neighborsIndex: 860100009f010000a001000087010000b801000088010000a3010000a4010000b9010000
+  - index: 419
+    gridPosition: {x: 5, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -33.050003}
+    travelCost: 1
+    neighborsIndex: 87010000a1010000a2010000b801000088010000b901000089010000a5010000ba010000
+  - index: 420
+    gridPosition: {x: 5, y: 24}
+    position: {x: 12.250002, y: -7.1417522, z: -33.05}
+    travelCost: 1
+    neighborsIndex: 87010000a1010000a2010000b801000088010000b901000089010000a5010000ba010000
+  - index: 421
+    gridPosition: {x: 6, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -31.55}
+    travelCost: 1
+    neighborsIndex: 88010000a3010000a4010000b901000089010000ba0100008a010000a6010000bb010000
+  - index: 422
+    gridPosition: {x: 7, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -30.049997}
+    travelCost: 1
+    neighborsIndex: 89010000a5010000ba0100008a010000bb0100008b010000a7010000bc010000
+  - index: 423
+    gridPosition: {x: 8, y: 24}
+    position: {x: 12.250002, y: -7.1417522, z: -28.55}
+    travelCost: 1
+    neighborsIndex: 8a010000a6010000bb0100008b010000bc0100008c010000a8010000bd010000
+  - index: 424
+    gridPosition: {x: 9, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -27.050001}
+    travelCost: 2
+    neighborsIndex: 8b010000a7010000bc0100008c010000bd0100008d010000a9010000be010000
+  - index: 425
+    gridPosition: {x: 10, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -25.550001}
+    travelCost: 3
+    neighborsIndex: 8c010000a8010000bd0100008d010000be010000aa010000bf010000
+  - index: 426
+    gridPosition: {x: 11, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -24.05}
+    travelCost: 3
+    neighborsIndex: 8d010000a9010000be010000bf0100008f010000ab010000c0010000
+  - index: 427
+    gridPosition: {x: 12, y: 24}
+    position: {x: 12.25, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: aa010000bf0100008f010000c001000091010000ac010000c1010000
+  - index: 428
+    gridPosition: {x: 13, y: 24}
+    position: {x: 12.249996, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 8f010000ab010000c001000091010000c101000092010000ad010000c2010000
+  - index: 429
+    gridPosition: {x: 14, y: 24}
+    position: {x: 12.25, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 91010000ac010000c101000092010000c201000093010000ae010000c3010000
+  - index: 430
+    gridPosition: {x: 15, y: 24}
+    position: {x: 12.25, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 92010000ad010000c201000093010000c301000094010000af010000c4010000
+  - index: 431
+    gridPosition: {x: 16, y: 24}
+    position: {x: 12.249996, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 93010000ae010000c301000094010000c4010000b0010000c5010000
+  - index: 432
+    gridPosition: {x: 17, y: 24}
+    position: {x: 12.25, y: -7.1417522, z: -15.049999}
+    travelCost: 3
+    neighborsIndex: 94010000af010000c4010000c501000095010000b1010000c6010000
+  - index: 433
+    gridPosition: {x: 18, y: 24}
+    position: {x: 12.25, y: -7.1321654, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: b0010000c501000095010000c6010000b2010000c7010000
+  - index: 434
+    gridPosition: {x: 19, y: 24}
+    position: {x: 12.249996, y: -7.1321654, z: -12.049999}
+    travelCost: 3
+    neighborsIndex: 95010000b1010000c6010000c7010000c8010000
+  - index: 435
+    gridPosition: {x: 24, y: 24}
+    position: {x: 12.249996, y: -7.1321654, z: -4.5499988}
+    travelCost: 3
+    neighborsIndex: 97010000c901000098010000ca01000099010000b4010000cb010000
+  - index: 436
+    gridPosition: {x: 25, y: 24}
+    position: {x: 12.249996, y: -7.1321654, z: -3.0499992}
+    travelCost: 2
+    neighborsIndex: 98010000b3010000ca01000099010000cb0100009a010000b5010000cc010000
+  - index: 437
+    gridPosition: {x: 26, y: 24}
+    position: {x: 12.249996, y: -7.2581205, z: -1.5500011}
+    travelCost: 2
+    neighborsIndex: 99010000b4010000cb0100009a010000cc0100009b010000b6010000cd010000
+  - index: 438
+    gridPosition: {x: 27, y: 24}
+    position: {x: 12.249996, y: -7.2700624, z: -0.050001144}
+    travelCost: 3
+    neighborsIndex: 9a010000b5010000cc0100009b010000cd010000b7010000ce010000
+  - index: 439
+    gridPosition: {x: 28, y: 24}
+    position: {x: 12.249996, y: -7.282004, z: 1.4499998}
+    travelCost: 3
+    neighborsIndex: 9b010000b6010000cd010000ce010000cf010000
+  - index: 440
+    gridPosition: {x: 4, y: 25}
+    position: {x: 13.75, y: -7.1137524, z: -34.55}
+    travelCost: 2
+    neighborsIndex: 9f010000a0010000a1010000a2010000d0010000a3010000a4010000b9010000d1010000
+  - index: 441
+    gridPosition: {x: 5, y: 25}
+    position: {x: 13.75, y: -7.1137524, z: -33.05}
+    travelCost: 2
+    neighborsIndex: a1010000a2010000b8010000d0010000a3010000a4010000d1010000a5010000ba010000d2010000
+  - index: 442
+    gridPosition: {x: 6, y: 25}
+    position: {x: 13.75, y: -7.1137524, z: -31.55}
+    travelCost: 1
+    neighborsIndex: a3010000a4010000b9010000d1010000a5010000d2010000a6010000bb010000d3010000
+  - index: 443
+    gridPosition: {x: 7, y: 25}
+    position: {x: 13.749998, y: -7.1137524, z: -30.050001}
+    travelCost: 1
+    neighborsIndex: a5010000ba010000d2010000a6010000d3010000a7010000bc010000d4010000
+  - index: 444
+    gridPosition: {x: 8, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -28.55}
+    travelCost: 1
+    neighborsIndex: a6010000bb010000d3010000a7010000d4010000a8010000bd010000d5010000
+  - index: 445
+    gridPosition: {x: 9, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -27.05}
+    travelCost: 2
+    neighborsIndex: a7010000bc010000d4010000a8010000d5010000a9010000be010000d6010000
+  - index: 446
+    gridPosition: {x: 10, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: a8010000bd010000d5010000a9010000d6010000aa010000bf010000
+  - index: 447
+    gridPosition: {x: 11, y: 25}
+    position: {x: 13.75, y: -7.1417522, z: -24.05}
+    travelCost: 3
+    neighborsIndex: a9010000be010000d6010000aa010000ab010000c0010000d7010000
+  - index: 448
+    gridPosition: {x: 12, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: aa010000bf010000ab010000d7010000ac010000c1010000d8010000
+  - index: 449
+    gridPosition: {x: 13, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: ab010000c0010000d7010000ac010000d8010000ad010000c2010000d9010000
+  - index: 450
+    gridPosition: {x: 14, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: ac010000c1010000d8010000ad010000d9010000ae010000c3010000da010000
+  - index: 451
+    gridPosition: {x: 15, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: ad010000c2010000d9010000ae010000da010000af010000c4010000db010000
+  - index: 452
+    gridPosition: {x: 16, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: ae010000c3010000da010000af010000db010000b0010000c5010000
+  - index: 453
+    gridPosition: {x: 17, y: 25}
+    position: {x: 13.75, y: -7.1417522, z: -15.049999}
+    travelCost: 3
+    neighborsIndex: af010000c4010000db010000b0010000b1010000c6010000dc010000
+  - index: 454
+    gridPosition: {x: 18, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: b0010000c5010000b1010000dc010000b2010000c7010000dd010000
+  - index: 455
+    gridPosition: {x: 19, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -12.049999}
+    travelCost: 3
+    neighborsIndex: b1010000c6010000dc010000b2010000dd010000c8010000de010000
+  - index: 456
+    gridPosition: {x: 20, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -10.549999}
+    travelCost: 3
+    neighborsIndex: b2010000c7010000dd010000de010000df010000
+  - index: 457
+    gridPosition: {x: 23, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -6.049999}
+    travelCost: 3
+    neighborsIndex: e0010000e1010000b3010000ca010000e2010000
+  - index: 458
+    gridPosition: {x: 24, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -4.5499988}
+    travelCost: 3
+    neighborsIndex: c9010000e1010000b3010000e2010000b4010000cb010000e3010000
+  - index: 459
+    gridPosition: {x: 25, y: 25}
+    position: {x: 13.75, y: -7.1321654, z: -3.0499992}
+    travelCost: 2
+    neighborsIndex: b3010000ca010000e2010000b4010000e3010000b5010000cc010000e4010000
+  - index: 460
+    gridPosition: {x: 26, y: 25}
+    position: {x: 13.75, y: -7.1417522, z: -1.55}
+    travelCost: 2
+    neighborsIndex: b4010000cb010000e3010000b5010000e4010000b6010000cd010000e5010000
+  - index: 461
+    gridPosition: {x: 27, y: 25}
+    position: {x: 13.75, y: -7.1417522, z: -0.049999}
+    travelCost: 2
+    neighborsIndex: b5010000cc010000e4010000b6010000e5010000b7010000ce010000e6010000
+  - index: 462
+    gridPosition: {x: 28, y: 25}
+    position: {x: 13.75, y: -7.1417522, z: 1.4500003}
+    travelCost: 3
+    neighborsIndex: b6010000cd010000e5010000b7010000e6010000cf010000e7010000
+  - index: 463
+    gridPosition: {x: 29, y: 25}
+    position: {x: 13.75, y: -7.1417522, z: 2.9500008}
+    travelCost: 3
+    neighborsIndex: b7010000ce010000e6010000e7010000e8010000e9010000
+  - index: 464
+    gridPosition: {x: 4, y: 26}
+    position: {x: 15.25, y: -7.1137524, z: -34.549995}
+    travelCost: 3
+    neighborsIndex: b8010000ea010000b9010000d1010000eb010000
+  - index: 465
+    gridPosition: {x: 5, y: 26}
+    position: {x: 15.25, y: -7.1137524, z: -33.05}
+    travelCost: 2
+    neighborsIndex: b8010000d0010000ea010000b9010000eb010000ba010000d2010000ec010000
+  - index: 466
+    gridPosition: {x: 6, y: 26}
+    position: {x: 15.25, y: -7.1137524, z: -31.55}
+    travelCost: 1
+    neighborsIndex: b9010000d1010000eb010000ba010000ec010000bb010000d3010000ed010000
+  - index: 467
+    gridPosition: {x: 7, y: 26}
+    position: {x: 15.25, y: -7.1137524, z: -30.05}
+    travelCost: 1
+    neighborsIndex: ba010000d2010000ec010000bb010000ed010000bc010000d4010000ee010000
+  - index: 468
+    gridPosition: {x: 8, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -28.55}
+    travelCost: 1
+    neighborsIndex: bb010000d3010000ed010000bc010000ee010000bd010000d5010000ef010000
+  - index: 469
+    gridPosition: {x: 9, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -27.05}
+    travelCost: 2
+    neighborsIndex: bc010000d4010000ee010000bd010000ef010000be010000d6010000f0010000
+  - index: 470
+    gridPosition: {x: 10, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: bd010000d5010000ef010000be010000f0010000bf010000
+  - index: 471
+    gridPosition: {x: 12, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: bf010000c0010000f1010000c1010000d8010000f2010000
+  - index: 472
+    gridPosition: {x: 13, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: c0010000d7010000f1010000c1010000f2010000c2010000d9010000f3010000
+  - index: 473
+    gridPosition: {x: 14, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: c1010000d8010000f2010000c2010000f3010000c3010000da010000f4010000
+  - index: 474
+    gridPosition: {x: 15, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: c2010000d9010000f3010000c3010000f4010000c4010000db010000f5010000
+  - index: 475
+    gridPosition: {x: 16, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: c3010000da010000f4010000c4010000f5010000c5010000
+  - index: 476
+    gridPosition: {x: 18, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -13.550001}
+    travelCost: 3
+    neighborsIndex: c5010000c6010000f6010000c7010000dd010000f7010000
+  - index: 477
+    gridPosition: {x: 19, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -12.049999}
+    travelCost: 2
+    neighborsIndex: c6010000dc010000f6010000c7010000f7010000c8010000de010000f8010000
+  - index: 478
+    gridPosition: {x: 20, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -10.549999}
+    travelCost: 3
+    neighborsIndex: c7010000dd010000f7010000c8010000f8010000df010000f9010000
+  - index: 479
+    gridPosition: {x: 21, y: 26}
+    position: {x: 15.250004, y: -7.1321654, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: c8010000de010000f8010000f9010000e0010000fa010000
+  - index: 480
+    gridPosition: {x: 22, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -7.5499997}
+    travelCost: 3
+    neighborsIndex: df010000f9010000fa010000c9010000e1010000fb010000
+  - index: 481
+    gridPosition: {x: 23, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -6.049999}
+    travelCost: 3
+    neighborsIndex: e0010000fa010000c9010000fb010000ca010000e2010000fc010000
+  - index: 482
+    gridPosition: {x: 24, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -4.549999}
+    travelCost: 2
+    neighborsIndex: c9010000e1010000fb010000ca010000fc010000cb010000e3010000fd010000
+  - index: 483
+    gridPosition: {x: 25, y: 26}
+    position: {x: 15.25, y: -7.1321654, z: -3.0499997}
+    travelCost: 2
+    neighborsIndex: ca010000e2010000fc010000cb010000fd010000cc010000e4010000fe010000
+  - index: 484
+    gridPosition: {x: 26, y: 26}
+    position: {x: 15.25, y: -7.1417522, z: -1.55}
+    travelCost: 1
+    neighborsIndex: cb010000e3010000fd010000cc010000fe010000cd010000e5010000ff010000
+  - index: 485
+    gridPosition: {x: 27, y: 26}
+    position: {x: 15.25, y: -7.1417522, z: -0.04999852}
+    travelCost: 2
+    neighborsIndex: cc010000e4010000fe010000cd010000ff010000ce010000e601000000020000
+  - index: 486
+    gridPosition: {x: 28, y: 26}
+    position: {x: 15.25, y: -7.1417522, z: 1.4500005}
+    travelCost: 2
+    neighborsIndex: cd010000e5010000ff010000ce01000000020000cf010000e701000001020000
+  - index: 487
+    gridPosition: {x: 29, y: 26}
+    position: {x: 15.25, y: -7.1417522, z: 2.9500008}
+    travelCost: 2
+    neighborsIndex: ce010000e601000000020000cf01000001020000e8010000e901000002020000
+  - index: 488
+    gridPosition: {x: 30, y: 25}
+    position: {x: 13.75, y: -7.1417522, z: 4.450001}
+    travelCost: 3
+    neighborsIndex: cf010000e7010000e901000003020000
+  - index: 489
+    gridPosition: {x: 30, y: 26}
+    position: {x: 15.25, y: -7.1417522, z: 4.450001}
+    travelCost: 3
+    neighborsIndex: cf010000e701000001020000e8010000020200000302000004020000
+  - index: 490
+    gridPosition: {x: 4, y: 27}
+    position: {x: 16.75, y: -7.1137524, z: -34.549995}
+    travelCost: 3
+    neighborsIndex: d001000005020000d1010000eb01000006020000
+  - index: 491
+    gridPosition: {x: 5, y: 27}
+    position: {x: 16.75, y: -7.1137524, z: -33.05}
+    travelCost: 2
+    neighborsIndex: d0010000ea01000005020000d101000006020000d2010000ec01000007020000
+  - index: 492
+    gridPosition: {x: 6, y: 27}
+    position: {x: 16.75, y: -7.1137524, z: -31.55}
+    travelCost: 1
+    neighborsIndex: d1010000eb01000006020000d201000007020000d3010000ed01000008020000
+  - index: 493
+    gridPosition: {x: 7, y: 27}
+    position: {x: 16.75, y: -7.1137524, z: -30.05}
+    travelCost: 1
+    neighborsIndex: d2010000ec01000007020000d301000008020000d4010000ee01000009020000
+  - index: 494
+    gridPosition: {x: 8, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -28.55}
+    travelCost: 1
+    neighborsIndex: d3010000ed01000008020000d401000009020000d5010000ef0100000a020000
+  - index: 495
+    gridPosition: {x: 9, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -27.05}
+    travelCost: 2
+    neighborsIndex: d4010000ee01000009020000d50100000a020000d6010000f00100000b020000
+  - index: 496
+    gridPosition: {x: 10, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: d5010000ef0100000a020000d60100000b020000
+  - index: 497
+    gridPosition: {x: 12, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: d70100000c020000d8010000f20100000d020000
+  - index: 498
+    gridPosition: {x: 13, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: d7010000f10100000c020000d80100000d020000d9010000f30100000e020000
+  - index: 499
+    gridPosition: {x: 14, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: d8010000f20100000d020000d90100000e020000da010000f40100000f020000
+  - index: 500
+    gridPosition: {x: 15, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: d9010000f30100000e020000da0100000f020000db010000f501000010020000
+  - index: 501
+    gridPosition: {x: 16, y: 27}
+    position: {x: 16.749996, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: da010000f40100000f020000db01000010020000
+  - index: 502
+    gridPosition: {x: 18, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: dc01000011020000dd010000f701000012020000
+  - index: 503
+    gridPosition: {x: 19, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -12.049999}
+    travelCost: 2
+    neighborsIndex: dc010000f601000011020000dd01000012020000de010000f801000013020000
+  - index: 504
+    gridPosition: {x: 20, y: 27}
+    position: {x: 16.749996, y: -7.1321654, z: -10.549999}
+    travelCost: 2
+    neighborsIndex: dd010000f701000012020000de01000013020000df010000f901000014020000
+  - index: 505
+    gridPosition: {x: 21, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -9.049999}
+    travelCost: 2
+    neighborsIndex: de010000f801000013020000df01000014020000e0010000fa01000015020000
+  - index: 506
+    gridPosition: {x: 22, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -7.549999}
+    travelCost: 2
+    neighborsIndex: df010000f901000014020000e001000015020000e1010000fb01000016020000
+  - index: 507
+    gridPosition: {x: 23, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -6.049999}
+    travelCost: 2
+    neighborsIndex: e0010000fa01000015020000e101000016020000e2010000fc01000017020000
+  - index: 508
+    gridPosition: {x: 24, y: 27}
+    position: {x: 16.749996, y: -7.1321654, z: -4.549999}
+    travelCost: 2
+    neighborsIndex: e1010000fb01000016020000e201000017020000e3010000fd01000018020000
+  - index: 509
+    gridPosition: {x: 25, y: 27}
+    position: {x: 16.75, y: -7.1321654, z: -3.0499992}
+    travelCost: 1
+    neighborsIndex: e2010000fc01000017020000e301000018020000e4010000fe01000019020000
+  - index: 510
+    gridPosition: {x: 26, y: 27}
+    position: {x: 16.75, y: -7.1417522, z: -1.5499997}
+    travelCost: 1
+    neighborsIndex: e3010000fd01000018020000e401000019020000e5010000ff0100001a020000
+  - index: 511
+    gridPosition: {x: 27, y: 27}
+    position: {x: 16.75, y: -7.1417522, z: -0.04999852}
+    travelCost: 1
+    neighborsIndex: e4010000fe01000019020000e50100001a020000e6010000000200001b020000
+  - index: 512
+    gridPosition: {x: 28, y: 27}
+    position: {x: 16.75, y: -7.1417522, z: 1.4500005}
+    travelCost: 1
+    neighborsIndex: e5010000ff0100001a020000e60100001b020000e7010000010200001c020000
+  - index: 513
+    gridPosition: {x: 29, y: 27}
+    position: {x: 16.75, y: -7.1417522, z: 2.9500008}
+    travelCost: 2
+    neighborsIndex: e6010000000200001b020000e70100001c020000e9010000020200001d020000
+  - index: 514
+    gridPosition: {x: 30, y: 27}
+    position: {x: 16.75, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: e7010000010200001c020000e90100001d02000003020000040200001e020000
+  - index: 515
+    gridPosition: {x: 31, y: 26}
+    position: {x: 15.25, y: -7.1417522, z: 5.950001}
+    travelCost: 3
+    neighborsIndex: e8010000e90100000202000004020000
+  - index: 516
+    gridPosition: {x: 31, y: 27}
+    position: {x: 16.75, y: -7.1417522, z: 5.950001}
+    travelCost: 3
+    neighborsIndex: e9010000020200001d020000030200001e020000
+  - index: 517
+    gridPosition: {x: 4, y: 28}
+    position: {x: 18.25, y: -7.1137524, z: -34.55}
+    travelCost: 3
+    neighborsIndex: ea0100001f020000eb0100000602000020020000
+  - index: 518
+    gridPosition: {x: 5, y: 28}
+    position: {x: 18.25, y: -7.1137524, z: -33.05}
+    travelCost: 2
+    neighborsIndex: ea010000050200001f020000eb01000020020000ec0100000702000021020000
+  - index: 519
+    gridPosition: {x: 6, y: 28}
+    position: {x: 18.25, y: -7.1137524, z: -31.55}
+    travelCost: 1
+    neighborsIndex: eb0100000602000020020000ec01000021020000ed0100000802000022020000
+  - index: 520
+    gridPosition: {x: 7, y: 28}
+    position: {x: 18.25, y: -7.1137524, z: -30.05}
+    travelCost: 1
+    neighborsIndex: ec0100000702000021020000ed01000022020000ee0100000902000023020000
+  - index: 521
+    gridPosition: {x: 8, y: 28}
+    position: {x: 18.250004, y: -7.1321654, z: -28.55}
+    travelCost: 1
+    neighborsIndex: ed0100000802000022020000ee01000023020000ef0100000a02000024020000
+  - index: 522
+    gridPosition: {x: 9, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -27.05}
+    travelCost: 2
+    neighborsIndex: ee0100000902000023020000ef01000024020000f00100000b02000025020000
+  - index: 523
+    gridPosition: {x: 10, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: ef0100000a02000024020000f001000025020000
+  - index: 524
+    gridPosition: {x: 12, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: f101000026020000f20100000d02000027020000
+  - index: 525
+    gridPosition: {x: 13, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: f10100000c02000026020000f201000027020000f30100000e02000028020000
+  - index: 526
+    gridPosition: {x: 14, y: 28}
+    position: {x: 18.250004, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: f20100000d02000027020000f301000028020000f40100000f02000029020000
+  - index: 527
+    gridPosition: {x: 15, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: f30100000e02000028020000f401000029020000f5010000100200002a020000
+  - index: 528
+    gridPosition: {x: 16, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: f40100000f02000029020000f50100002a020000
+  - index: 529
+    gridPosition: {x: 18, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: f60100002b020000f7010000120200002c020000
+  - index: 530
+    gridPosition: {x: 19, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -12.049999}
+    travelCost: 2
+    neighborsIndex: f6010000110200002b020000f70100002c020000f8010000130200002d020000
+  - index: 531
+    gridPosition: {x: 20, y: 28}
+    position: {x: 18.249996, y: -7.1321654, z: -10.549999}
+    travelCost: 1
+    neighborsIndex: f7010000120200002c020000f80100002d020000f9010000140200002e020000
+  - index: 532
+    gridPosition: {x: 21, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -9.049999}
+    travelCost: 1
+    neighborsIndex: f8010000130200002d020000f90100002e020000fa010000150200002f020000
+  - index: 533
+    gridPosition: {x: 22, y: 28}
+    position: {x: 18.249996, y: -7.1321654, z: -7.549999}
+    travelCost: 1
+    neighborsIndex: f9010000140200002e020000fa0100002f020000fb0100001602000030020000
+  - index: 534
+    gridPosition: {x: 23, y: 28}
+    position: {x: 18.25, y: -7.1321654, z: -6.049999}
+    travelCost: 1
+    neighborsIndex: fa010000150200002f020000fb01000030020000fc0100001702000031020000
+  - index: 535
+    gridPosition: {x: 24, y: 28}
+    position: {x: 18.249996, y: -7.1321654, z: -4.5499988}
+    travelCost: 1
+    neighborsIndex: fb0100001602000030020000fc01000031020000fd0100001802000032020000
+  - index: 536
+    gridPosition: {x: 25, y: 28}
+    position: {x: 18.249996, y: -7.1321654, z: -3.0499992}
+    travelCost: 1
+    neighborsIndex: fc0100001702000031020000fd01000032020000fe0100001902000033020000
+  - index: 537
+    gridPosition: {x: 26, y: 28}
+    position: {x: 18.25, y: -7.1417522, z: -1.5499997}
+    travelCost: 1
+    neighborsIndex: fd0100001802000032020000fe01000033020000ff0100001a02000034020000
+  - index: 538
+    gridPosition: {x: 27, y: 28}
+    position: {x: 18.25, y: -7.1417522, z: -0.04999876}
+    travelCost: 1
+    neighborsIndex: fe0100001902000033020000ff01000034020000000200001b02000035020000
+  - index: 539
+    gridPosition: {x: 28, y: 28}
+    position: {x: 18.25, y: -7.1417522, z: 1.4500005}
+    travelCost: 1
+    neighborsIndex: ff0100001a020000340200000002000035020000010200001c02000036020000
+  - index: 540
+    gridPosition: {x: 29, y: 28}
+    position: {x: 18.25, y: -7.1417522, z: 2.9500008}
+    travelCost: 1
+    neighborsIndex: 000200001b020000350200000102000036020000020200001d02000037020000
+  - index: 541
+    gridPosition: {x: 30, y: 28}
+    position: {x: 18.25, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: 010200001c020000360200000202000037020000040200001e02000038020000
+  - index: 542
+    gridPosition: {x: 31, y: 28}
+    position: {x: 18.25, y: -7.1417522, z: 5.950001}
+    travelCost: 3
+    neighborsIndex: 020200001d020000370200000402000038020000
+  - index: 543
+    gridPosition: {x: 4, y: 29}
+    position: {x: 19.75, y: -7.1137524, z: -34.550003}
+    travelCost: 3
+    neighborsIndex: 050200003902000006020000200200003a020000
+  - index: 544
+    gridPosition: {x: 5, y: 29}
+    position: {x: 19.75, y: -7.1137524, z: -33.05}
+    travelCost: 2
+    neighborsIndex: 050200001f02000039020000060200003a02000007020000210200003b020000
+  - index: 545
+    gridPosition: {x: 6, y: 29}
+    position: {x: 19.75, y: -7.1137524, z: -31.55}
+    travelCost: 1
+    neighborsIndex: 06020000200200003a020000070200003b02000008020000220200003c020000
+  - index: 546
+    gridPosition: {x: 7, y: 29}
+    position: {x: 19.749998, y: -7.1137524, z: -30.05}
+    travelCost: 1
+    neighborsIndex: 07020000210200003b020000080200003c02000009020000230200003d020000
+  - index: 547
+    gridPosition: {x: 8, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -28.55}
+    travelCost: 1
+    neighborsIndex: 08020000220200003c020000090200003d0200000a020000240200003e020000
+  - index: 548
+    gridPosition: {x: 9, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -27.05}
+    travelCost: 2
+    neighborsIndex: 09020000230200003d0200000a0200003e0200000b020000250200003f020000
+  - index: 549
+    gridPosition: {x: 10, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 0a020000240200003e0200000b0200003f020000
+  - index: 550
+    gridPosition: {x: 12, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 0c020000400200000d0200002702000041020000
+  - index: 551
+    gridPosition: {x: 13, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 0c02000026020000400200000d020000410200000e0200002802000042020000
+  - index: 552
+    gridPosition: {x: 14, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 0d02000027020000410200000e020000420200000f0200002902000043020000
+  - index: 553
+    gridPosition: {x: 15, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 0e02000028020000420200000f02000043020000100200002a02000044020000
+  - index: 554
+    gridPosition: {x: 16, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 0f02000029020000430200001002000044020000
+  - index: 555
+    gridPosition: {x: 18, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: 1102000045020000120200002c02000046020000
+  - index: 556
+    gridPosition: {x: 19, y: 29}
+    position: {x: 19.750004, y: -7.1321654, z: -12.049999}
+    travelCost: 2
+    neighborsIndex: 110200002b020000450200001202000046020000130200002d02000047020000
+  - index: 557
+    gridPosition: {x: 20, y: 29}
+    position: {x: 19.750004, y: -7.1321654, z: -10.549999}
+    travelCost: 2
+    neighborsIndex: 120200002c020000460200001302000047020000140200002e02000048020000
+  - index: 558
+    gridPosition: {x: 21, y: 29}
+    position: {x: 19.750004, y: -7.1321654, z: -9.049999}
+    travelCost: 2
+    neighborsIndex: 130200002d020000470200001402000048020000150200002f02000049020000
+  - index: 559
+    gridPosition: {x: 22, y: 29}
+    position: {x: 19.750004, y: -7.1321654, z: -7.5499997}
+    travelCost: 2
+    neighborsIndex: 140200002e02000048020000150200004902000016020000300200004a020000
+  - index: 560
+    gridPosition: {x: 23, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -6.0499997}
+    travelCost: 1
+    neighborsIndex: 150200002f02000049020000160200004a02000017020000310200004b020000
+  - index: 561
+    gridPosition: {x: 24, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -4.549999}
+    travelCost: 1
+    neighborsIndex: 16020000300200004a020000170200004b02000018020000320200004c020000
+  - index: 562
+    gridPosition: {x: 25, y: 29}
+    position: {x: 19.75, y: -7.1321654, z: -3.0499992}
+    travelCost: 1
+    neighborsIndex: 17020000310200004b020000180200004c02000019020000330200004d020000
+  - index: 563
+    gridPosition: {x: 26, y: 29}
+    position: {x: 19.75, y: -7.1417522, z: -1.5499997}
+    travelCost: 1
+    neighborsIndex: 18020000320200004c020000190200004d0200001a020000340200004e020000
+  - index: 564
+    gridPosition: {x: 27, y: 29}
+    position: {x: 19.75, y: -7.1417522, z: -0.04999876}
+    travelCost: 1
+    neighborsIndex: 19020000330200004d0200001a0200004e0200001b020000350200004f020000
+  - index: 565
+    gridPosition: {x: 28, y: 29}
+    position: {x: 19.75, y: -7.1417522, z: 1.4500004}
+    travelCost: 1
+    neighborsIndex: 1a020000340200004e0200001b0200004f0200001c0200003602000050020000
+  - index: 566
+    gridPosition: {x: 29, y: 29}
+    position: {x: 19.75, y: -7.1417522, z: 2.9500005}
+    travelCost: 1
+    neighborsIndex: 1b020000350200004f0200001c020000500200001d0200003702000051020000
+  - index: 567
+    gridPosition: {x: 30, y: 29}
+    position: {x: 19.75, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: 1c02000036020000500200001d020000510200001e0200003802000052020000
+  - index: 568
+    gridPosition: {x: 31, y: 29}
+    position: {x: 19.75, y: -7.1417522, z: 5.950001}
+    travelCost: 3
+    neighborsIndex: 1d02000037020000510200001e02000052020000
+  - index: 569
+    gridPosition: {x: 4, y: 30}
+    position: {x: 21.25, y: -7.1137524, z: -34.55}
+    travelCost: 3
+    neighborsIndex: 1f02000053020000200200003a02000054020000
+  - index: 570
+    gridPosition: {x: 5, y: 30}
+    position: {x: 21.25, y: -7.1137524, z: -33.05}
+    travelCost: 2
+    neighborsIndex: 1f02000039020000530200002002000054020000210200003b02000055020000
+  - index: 571
+    gridPosition: {x: 6, y: 30}
+    position: {x: 21.25, y: -7.1137524, z: -31.55}
+    travelCost: 2
+    neighborsIndex: 200200003a020000540200002102000055020000220200003c02000056020000
+  - index: 572
+    gridPosition: {x: 7, y: 30}
+    position: {x: 21.25, y: -7.1137524, z: -30.05}
+    travelCost: 2
+    neighborsIndex: 210200003b020000550200002202000056020000230200003d02000057020000
+  - index: 573
+    gridPosition: {x: 8, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -28.55}
+    travelCost: 2
+    neighborsIndex: 220200003c020000560200002302000057020000240200003e02000058020000
+  - index: 574
+    gridPosition: {x: 9, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -27.05}
+    travelCost: 2
+    neighborsIndex: 230200003d020000570200002402000058020000250200003f02000059020000
+  - index: 575
+    gridPosition: {x: 10, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 240200003e020000580200002502000059020000
+  - index: 576
+    gridPosition: {x: 12, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 260200005a02000027020000410200005b020000
+  - index: 577
+    gridPosition: {x: 13, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 26020000400200005a020000270200005b02000028020000420200005c020000
+  - index: 578
+    gridPosition: {x: 14, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 27020000410200005b020000280200005c02000029020000430200005d020000
+  - index: 579
+    gridPosition: {x: 15, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 28020000420200005c020000290200005d0200002a020000440200005e020000
+  - index: 580
+    gridPosition: {x: 16, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 29020000430200005d0200002a0200005e020000
+  - index: 581
+    gridPosition: {x: 18, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -13.549998}
+    travelCost: 3
+    neighborsIndex: 2b0200005f0200002c0200004602000060020000
+  - index: 582
+    gridPosition: {x: 19, y: 30}
+    position: {x: 21.250004, y: -7.1321654, z: -12.049999}
+    travelCost: 3
+    neighborsIndex: 2b020000450200005f0200002c020000600200002d02000047020000
+  - index: 583
+    gridPosition: {x: 20, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -10.549998}
+    travelCost: 3
+    neighborsIndex: 2c02000046020000600200002d0200002e0200004802000061020000
+  - index: 584
+    gridPosition: {x: 21, y: 30}
+    position: {x: 21.250004, y: -7.1321654, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: 2d020000470200002e020000610200002f0200004902000062020000
+  - index: 585
+    gridPosition: {x: 22, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -7.549999}
+    travelCost: 2
+    neighborsIndex: 2e02000048020000610200002f02000062020000300200004a02000063020000
+  - index: 586
+    gridPosition: {x: 23, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -6.049999}
+    travelCost: 1
+    neighborsIndex: 2f02000049020000620200003002000063020000310200004b02000064020000
+  - index: 587
+    gridPosition: {x: 24, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -4.549999}
+    travelCost: 1
+    neighborsIndex: 300200004a020000630200003102000064020000320200004c02000065020000
+  - index: 588
+    gridPosition: {x: 25, y: 30}
+    position: {x: 21.25, y: -7.1321654, z: -3.0499992}
+    travelCost: 1
+    neighborsIndex: 310200004b020000640200003202000065020000330200004d02000066020000
+  - index: 589
+    gridPosition: {x: 26, y: 30}
+    position: {x: 21.25, y: -7.1417522, z: -1.5499992}
+    travelCost: 1
+    neighborsIndex: 320200004c020000650200003302000066020000340200004e02000067020000
+  - index: 590
+    gridPosition: {x: 27, y: 30}
+    position: {x: 21.25, y: -7.1417522, z: -0.04999852}
+    travelCost: 1
+    neighborsIndex: 330200004d020000660200003402000067020000350200004f02000068020000
+  - index: 591
+    gridPosition: {x: 28, y: 30}
+    position: {x: 21.25, y: -7.1417522, z: 1.4500006}
+    travelCost: 1
+    neighborsIndex: 340200004e020000670200003502000068020000360200005002000069020000
+  - index: 592
+    gridPosition: {x: 29, y: 30}
+    position: {x: 21.25, y: -7.1417522, z: 2.9500008}
+    travelCost: 1
+    neighborsIndex: 350200004f02000068020000360200006902000037020000510200006a020000
+  - index: 593
+    gridPosition: {x: 30, y: 30}
+    position: {x: 21.25, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: 360200005002000069020000370200006a02000038020000520200006b020000
+  - index: 594
+    gridPosition: {x: 31, y: 30}
+    position: {x: 21.25, y: -7.1417522, z: 5.950001}
+    travelCost: 3
+    neighborsIndex: 37020000510200006a020000380200006b020000
+  - index: 595
+    gridPosition: {x: 4, y: 31}
+    position: {x: 22.75, y: -7.1137524, z: -34.550003}
+    travelCost: 3
+    neighborsIndex: 6c020000390200006d0200003a02000054020000
+  - index: 596
+    gridPosition: {x: 5, y: 31}
+    position: {x: 22.75, y: -7.1137524, z: -33.05}
+    travelCost: 3
+    neighborsIndex: 39020000530200006d0200003a0200003b020000550200006e020000
+  - index: 597
+    gridPosition: {x: 6, y: 31}
+    position: {x: 22.75, y: -7.1137524, z: -31.55}
+    travelCost: 3
+    neighborsIndex: 3a020000540200003b0200006e0200003c020000560200006f020000
+  - index: 598
+    gridPosition: {x: 7, y: 31}
+    position: {x: 22.75, y: -7.1137524, z: -30.05}
+    travelCost: 2
+    neighborsIndex: 3b020000550200006e0200003c0200006f0200003d0200005702000070020000
+  - index: 599
+    gridPosition: {x: 8, y: 31}
+    position: {x: 22.749996, y: -7.1321654, z: -28.55}
+    travelCost: 3
+    neighborsIndex: 3c020000560200006f0200003d020000700200003e02000058020000
+  - index: 600
+    gridPosition: {x: 9, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 3d02000057020000700200003e0200003f0200005902000071020000
+  - index: 601
+    gridPosition: {x: 10, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 3e020000580200003f02000071020000
+  - index: 602
+    gridPosition: {x: 12, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 4002000072020000410200005b02000073020000
+  - index: 603
+    gridPosition: {x: 13, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 400200005a020000720200004102000073020000420200005c02000074020000
+  - index: 604
+    gridPosition: {x: 14, y: 31}
+    position: {x: 22.750004, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 410200005b020000730200004202000074020000430200005d02000075020000
+  - index: 605
+    gridPosition: {x: 15, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 420200005c020000740200004302000075020000440200005e02000076020000
+  - index: 606
+    gridPosition: {x: 16, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 430200005d020000750200004402000076020000
+  - index: 607
+    gridPosition: {x: 18, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -13.549999}
+    travelCost: 3
+    neighborsIndex: 450200004602000060020000
+  - index: 608
+    gridPosition: {x: 19, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -12.049999}
+    travelCost: 3
+    neighborsIndex: 450200005f0200004602000047020000
+  - index: 609
+    gridPosition: {x: 21, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: 470200004802000077020000490200006202000078020000
+  - index: 610
+    gridPosition: {x: 22, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -7.549999}
+    travelCost: 2
+    neighborsIndex: 48020000610200007702000049020000780200004a0200006302000079020000
+  - index: 611
+    gridPosition: {x: 23, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -6.049999}
+    travelCost: 2
+    neighborsIndex: 4902000062020000780200004a020000790200004b020000640200007a020000
+  - index: 612
+    gridPosition: {x: 24, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -4.549999}
+    travelCost: 1
+    neighborsIndex: 4a02000063020000790200004b0200007a0200004c020000650200007b020000
+  - index: 613
+    gridPosition: {x: 25, y: 31}
+    position: {x: 22.75, y: -7.1321654, z: -3.0499992}
+    travelCost: 1
+    neighborsIndex: 4b020000640200007a0200004c0200007b0200004d020000660200007c020000
+  - index: 614
+    gridPosition: {x: 26, y: 31}
+    position: {x: 22.75, y: -7.1417522, z: -1.5499992}
+    travelCost: 1
+    neighborsIndex: 4c020000650200007b0200004d0200007c0200004e020000670200007d020000
+  - index: 615
+    gridPosition: {x: 27, y: 31}
+    position: {x: 22.75, y: -7.1417522, z: -0.04999852}
+    travelCost: 1
+    neighborsIndex: 4d020000660200007c0200004e0200007d0200004f020000680200007e020000
+  - index: 616
+    gridPosition: {x: 28, y: 31}
+    position: {x: 22.75, y: -7.1417522, z: 1.4500005}
+    travelCost: 1
+    neighborsIndex: 4e020000670200007d0200004f0200007e02000050020000690200007f020000
+  - index: 617
+    gridPosition: {x: 29, y: 31}
+    position: {x: 22.75, y: -7.1417522, z: 2.9500005}
+    travelCost: 1
+    neighborsIndex: 4f020000680200007e020000500200007f020000510200006a02000080020000
+  - index: 618
+    gridPosition: {x: 30, y: 31}
+    position: {x: 22.75, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: 50020000690200007f0200005102000080020000520200006b02000081020000
+  - index: 619
+    gridPosition: {x: 31, y: 31}
+    position: {x: 22.75, y: -7.1417522, z: 5.950001}
+    travelCost: 3
+    neighborsIndex: 510200006a020000800200005202000081020000
+  - index: 620
+    gridPosition: {x: 3, y: 32}
+    position: {x: 24.25, y: -7.1137524, z: -36.05}
+    travelCost: 3
+    neighborsIndex: 820200008302000084020000530200006d02000085020000
+  - index: 621
+    gridPosition: {x: 4, y: 32}
+    position: {x: 24.25, y: -7.1137524, z: -34.55}
+    travelCost: 3
+    neighborsIndex: 6c02000084020000530200008502000054020000
+  - index: 622
+    gridPosition: {x: 6, y: 32}
+    position: {x: 24.25, y: -7.1137524, z: -31.55}
+    travelCost: 3
+    neighborsIndex: 5402000055020000560200006f02000086020000
+  - index: 623
+    gridPosition: {x: 7, y: 32}
+    position: {x: 24.25, y: -7.1137524, z: -30.05}
+    travelCost: 3
+    neighborsIndex: 550200006e0200005602000086020000570200007002000087020000
+  - index: 624
+    gridPosition: {x: 8, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -28.55}
+    travelCost: 3
+    neighborsIndex: 560200006f0200008602000057020000870200005802000088020000
+  - index: 625
+    gridPosition: {x: 10, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 58020000880200005902000089020000
+  - index: 626
+    gridPosition: {x: 12, y: 32}
+    position: {x: 24.249996, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 5a0200008a0200005b020000730200008b020000
+  - index: 627
+    gridPosition: {x: 13, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 5a020000720200008a0200005b0200008b0200005c020000740200008c020000
+  - index: 628
+    gridPosition: {x: 14, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 5b020000730200008b0200005c0200008c0200005d020000750200008d020000
+  - index: 629
+    gridPosition: {x: 15, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 5c020000740200008c0200005d0200008d0200005e020000760200008e020000
+  - index: 630
+    gridPosition: {x: 16, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 5d020000750200008d0200005e0200008e020000
+  - index: 631
+    gridPosition: {x: 21, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -9.049999}
+    travelCost: 3
+    neighborsIndex: 6102000062020000780200008f020000
+  - index: 632
+    gridPosition: {x: 22, y: 32}
+    position: {x: 24.250004, y: -7.1321654, z: -7.549999}
+    travelCost: 3
+    neighborsIndex: 6102000077020000620200008f020000630200007902000090020000
+  - index: 633
+    gridPosition: {x: 23, y: 32}
+    position: {x: 24.250004, y: -7.1321654, z: -6.049999}
+    travelCost: 2
+    neighborsIndex: 62020000780200008f0200006302000090020000640200007a02000091020000
+  - index: 634
+    gridPosition: {x: 24, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -4.549999}
+    travelCost: 1
+    neighborsIndex: 6302000079020000900200006402000091020000650200007b02000092020000
+  - index: 635
+    gridPosition: {x: 25, y: 32}
+    position: {x: 24.25, y: -7.1321654, z: -3.0499992}
+    travelCost: 1
+    neighborsIndex: 640200007a020000910200006502000092020000660200007c02000093020000
+  - index: 636
+    gridPosition: {x: 26, y: 32}
+    position: {x: 24.25, y: -7.1417522, z: -1.5499992}
+    travelCost: 1
+    neighborsIndex: 650200007b020000920200006602000093020000670200007d02000094020000
+  - index: 637
+    gridPosition: {x: 27, y: 32}
+    position: {x: 24.25, y: -7.1417522, z: -0.04999852}
+    travelCost: 1
+    neighborsIndex: 660200007c020000930200006702000094020000680200007e02000095020000
+  - index: 638
+    gridPosition: {x: 28, y: 32}
+    position: {x: 24.25, y: -7.1417522, z: 1.4500012}
+    travelCost: 1
+    neighborsIndex: 670200007d020000940200006802000095020000690200007f02000096020000
+  - index: 639
+    gridPosition: {x: 29, y: 32}
+    position: {x: 24.25, y: -7.1417522, z: 2.9500005}
+    travelCost: 1
+    neighborsIndex: 680200007e0200009502000069020000960200006a0200008002000097020000
+  - index: 640
+    gridPosition: {x: 30, y: 32}
+    position: {x: 24.25, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: 690200007f020000960200006a020000970200006b0200008102000098020000
+  - index: 641
+    gridPosition: {x: 31, y: 32}
+    position: {x: 24.25, y: -7.1417522, z: 5.950001}
+    travelCost: 3
+    neighborsIndex: 6a02000080020000970200006b02000098020000
+  - index: 642
+    gridPosition: {x: 2, y: 32}
+    position: {x: 24.25, y: -7.116304, z: -37.55}
+    travelCost: 3
+    neighborsIndex: 990200009a020000830200006c02000084020000
+  - index: 643
+    gridPosition: {x: 2, y: 33}
+    position: {x: 25.75, y: -7.116304, z: -37.55}
+    travelCost: 2
+    neighborsIndex: 990200009a0200009b020000820200009c0200006c020000840200009d020000
+  - index: 644
+    gridPosition: {x: 3, y: 33}
+    position: {x: 25.75, y: -7.1137524, z: -36.05}
+    travelCost: 2
+    neighborsIndex: 82020000830200009c0200006c0200009d0200006d020000850200009e020000
+  - index: 645
+    gridPosition: {x: 4, y: 33}
+    position: {x: 25.75, y: -7.1137524, z: -34.55}
+    travelCost: 3
+    neighborsIndex: 6c020000840200009d0200006d0200009e020000
+  - index: 646
+    gridPosition: {x: 7, y: 33}
+    position: {x: 25.749998, y: -7.1137524, z: -30.05}
+    travelCost: 3
+    neighborsIndex: 6e0200009f0200006f020000a00200007002000087020000a1020000
+  - index: 647
+    gridPosition: {x: 8, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -28.55}
+    travelCost: 3
+    neighborsIndex: 6f02000086020000a002000070020000a102000088020000a2020000
+  - index: 648
+    gridPosition: {x: 9, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 7002000087020000a1020000a20200007102000089020000a3020000
+  - index: 649
+    gridPosition: {x: 10, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 88020000a202000071020000a3020000
+  - index: 650
+    gridPosition: {x: 12, y: 33}
+    position: {x: 25.749996, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 72020000a4020000730200008b020000a5020000
+  - index: 651
+    gridPosition: {x: 13, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 720200008a020000a402000073020000a5020000740200008c020000a6020000
+  - index: 652
+    gridPosition: {x: 14, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 730200008b020000a502000074020000a6020000750200008d020000a7020000
+  - index: 653
+    gridPosition: {x: 15, y: 33}
+    position: {x: 25.750004, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 740200008c020000a602000075020000a7020000760200008e020000a8020000
+  - index: 654
+    gridPosition: {x: 16, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 750200008d020000a702000076020000a8020000
+  - index: 655
+    gridPosition: {x: 22, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -7.5499997}
+    travelCost: 3
+    neighborsIndex: 7702000078020000a90200007902000090020000aa020000
+  - index: 656
+    gridPosition: {x: 23, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -6.049999}
+    travelCost: 2
+    neighborsIndex: 780200008f020000a902000079020000aa0200007a02000091020000ab020000
+  - index: 657
+    gridPosition: {x: 24, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -4.549999}
+    travelCost: 2
+    neighborsIndex: 7902000090020000aa0200007a020000ab0200007b02000092020000ac020000
+  - index: 658
+    gridPosition: {x: 25, y: 33}
+    position: {x: 25.75, y: -7.1321654, z: -3.0499992}
+    travelCost: 2
+    neighborsIndex: 7a02000091020000ab0200007b020000ac0200007c02000093020000ad020000
+  - index: 659
+    gridPosition: {x: 26, y: 33}
+    position: {x: 25.75, y: -7.1417522, z: -1.5499992}
+    travelCost: 2
+    neighborsIndex: 7b02000092020000ac0200007c020000ad0200007d02000094020000ae020000
+  - index: 660
+    gridPosition: {x: 27, y: 33}
+    position: {x: 25.75, y: -7.1417522, z: -0.04999852}
+    travelCost: 2
+    neighborsIndex: 7c02000093020000ad0200007d020000ae0200007e02000095020000af020000
+  - index: 661
+    gridPosition: {x: 28, y: 33}
+    position: {x: 25.75, y: -7.1417522, z: 1.4500012}
+    travelCost: 2
+    neighborsIndex: 7d02000094020000ae0200007e020000af0200007f02000096020000b0020000b1020000
+  - index: 662
+    gridPosition: {x: 29, y: 33}
+    position: {x: 25.75, y: -7.1417522, z: 2.9500008}
+    travelCost: 2
+    neighborsIndex: 7e02000095020000af0200007f020000b0020000b10200008002000097020000b2020000b3020000
+  - index: 663
+    gridPosition: {x: 30, y: 33}
+    position: {x: 25.75, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: 7f02000096020000b0020000b102000080020000b2020000b30200008102000098020000b4020000
+  - index: 664
+    gridPosition: {x: 31, y: 33}
+    position: {x: 25.75, y: -7.1417522, z: 5.950001}
+    travelCost: 3
+    neighborsIndex: 8002000097020000b2020000b302000081020000b4020000
+  - index: 665
+    gridPosition: {x: 1, y: 32}
+    position: {x: 24.25, y: -7.1417522, z: -39.049995}
+    travelCost: 3
+    neighborsIndex: 9a0200008202000083020000
+  - index: 666
+    gridPosition: {x: 1, y: 33}
+    position: {x: 25.75, y: -7.116304, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 990200009b02000082020000830200009c020000
+  - index: 667
+    gridPosition: {x: 1, y: 34}
+    position: {x: 27.25, y: -7.116304, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 9a020000b5020000830200009c020000b6020000
+  - index: 668
+    gridPosition: {x: 2, y: 34}
+    position: {x: 27.25, y: -7.116304, z: -37.55}
+    travelCost: 2
+    neighborsIndex: 9a0200009b020000b502000083020000b6020000840200009d020000b7020000
+  - index: 669
+    gridPosition: {x: 3, y: 34}
+    position: {x: 27.25, y: -7.1137524, z: -36.050003}
+    travelCost: 3
+    neighborsIndex: 830200009c020000b602000084020000b7020000850200009e020000
+  - index: 670
+    gridPosition: {x: 4, y: 34}
+    position: {x: 27.25, y: -7.1137524, z: -34.550003}
+    travelCost: 3
+    neighborsIndex: 840200009d020000b702000085020000
+  - index: 671
+    gridPosition: {x: 6, y: 34}
+    position: {x: 27.25, y: -7.1137524, z: -31.55}
+    travelCost: 3
+    neighborsIndex: 86020000a0020000
+  - index: 672
+    gridPosition: {x: 7, y: 34}
+    position: {x: 27.25, y: -7.1137524, z: -30.05}
+    travelCost: 3
+    neighborsIndex: 9f0200008602000087020000a1020000
+  - index: 673
+    gridPosition: {x: 8, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -28.55}
+    travelCost: 3
+    neighborsIndex: 86020000a00200008702000088020000a2020000b8020000
+  - index: 674
+    gridPosition: {x: 9, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -27.05}
+    travelCost: 3
+    neighborsIndex: 87020000a102000088020000b802000089020000a3020000b9020000
+  - index: 675
+    gridPosition: {x: 10, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: 88020000a2020000b802000089020000b9020000
+  - index: 676
+    gridPosition: {x: 12, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: 8a020000ba0200008b020000a5020000bb020000
+  - index: 677
+    gridPosition: {x: 13, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: 8a020000a4020000ba0200008b020000bb0200008c020000a6020000bc020000
+  - index: 678
+    gridPosition: {x: 14, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: 8b020000a5020000bb0200008c020000bc0200008d020000a7020000bd020000
+  - index: 679
+    gridPosition: {x: 15, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: 8c020000a6020000bc0200008d020000bd0200008e020000a8020000be020000
+  - index: 680
+    gridPosition: {x: 16, y: 34}
+    position: {x: 27.250004, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: 8d020000a7020000bd0200008e020000be020000
+  - index: 681
+    gridPosition: {x: 22, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -7.5499997}
+    travelCost: 3
+    neighborsIndex: 8f02000090020000aa020000bf020000
+  - index: 682
+    gridPosition: {x: 23, y: 34}
+    position: {x: 27.25, y: -7.1321654, z: -6.049999}
+    travelCost: 3
+    neighborsIndex: 8f020000a902000090020000bf02000091020000ab020000
+  - index: 683
+    gridPosition: {x: 24, y: 34}
+    position: {x: 27.250004, y: -7.1321654, z: -4.549999}
+    travelCost: 3
+    neighborsIndex: 90020000aa020000bf0200009102000092020000ac020000
+  - index: 684
+    gridPosition: {x: 25, y: 34}
+    position: {x: 27.250004, y: -7.1321654, z: -3.0499992}
+    travelCost: 3
+    neighborsIndex: 91020000ab0200009202000093020000ad020000
+  - index: 685
+    gridPosition: {x: 26, y: 34}
+    position: {x: 27.25, y: -7.1417522, z: -1.5499988}
+    travelCost: 3
+    neighborsIndex: 92020000ac0200009302000094020000ae020000
+  - index: 686
+    gridPosition: {x: 27, y: 34}
+    position: {x: 27.25, y: -7.1417522, z: -0.049999}
+    travelCost: 3
+    neighborsIndex: 93020000ad0200009402000095020000af020000
+  - index: 687
+    gridPosition: {x: 28, y: 34}
+    position: {x: 27.25, y: -7.1417522, z: 1.4500008}
+    travelCost: 3
+    neighborsIndex: 94020000ae0200009502000096020000b0020000b1020000
+  - index: 688
+    gridPosition: {x: 29, y: 34}
+    position: {x: 27.249998, y: -7.1417522, z: 2.949995}
+    travelCost: 2
+    neighborsIndex: 95020000af0200009602000097020000b2020000b3020000c0020000c1020000
+  - index: 689
+    gridPosition: {x: 29, y: 34}
+    position: {x: 27.25, y: -7.1417522, z: 2.9500003}
+    travelCost: 2
+    neighborsIndex: 95020000af0200009602000097020000b2020000b3020000c0020000c1020000
+  - index: 690
+    gridPosition: {x: 30, y: 34}
+    position: {x: 27.249998, y: -7.1417522, z: 4.449996}
+    travelCost: 2
+    neighborsIndex: 96020000b0020000b102000097020000c0020000c102000098020000b4020000c2020000c3020000
+  - index: 691
+    gridPosition: {x: 30, y: 34}
+    position: {x: 27.25, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: 96020000b0020000b102000097020000c0020000c102000098020000b4020000c2020000c3020000
+  - index: 692
+    gridPosition: {x: 31, y: 34}
+    position: {x: 27.25, y: -7.1417522, z: 5.950001}
+    travelCost: 2
+    neighborsIndex: 97020000b2020000b3020000c0020000c102000098020000c2020000c3020000
+  - index: 693
+    gridPosition: {x: 1, y: 35}
+    position: {x: 28.75, y: -7.116304, z: -39.05}
+    travelCost: 3
+    neighborsIndex: 9b020000c40200009c020000b6020000c5020000
+  - index: 694
+    gridPosition: {x: 2, y: 35}
+    position: {x: 28.75, y: -7.116304, z: -37.55}
+    travelCost: 2
+    neighborsIndex: 9b020000b5020000c40200009c020000c50200009d020000b7020000c6020000
+  - index: 695
+    gridPosition: {x: 3, y: 35}
+    position: {x: 28.75, y: -7.1137524, z: -36.049995}
+    travelCost: 3
+    neighborsIndex: 9c020000b6020000c50200009d020000c60200009e020000c7020000
+  - index: 696
+    gridPosition: {x: 9, y: 35}
+    position: {x: 28.75, y: -7.1321654, z: -27.05}
+    travelCost: 3
+    neighborsIndex: a1020000c8020000a2020000c9020000a3020000b9020000ca020000
+  - index: 697
+    gridPosition: {x: 10, y: 35}
+    position: {x: 28.75, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: a2020000b8020000c9020000a3020000ca020000
+  - index: 698
+    gridPosition: {x: 12, y: 35}
+    position: {x: 28.75, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: a4020000cb020000a5020000bb020000cc020000
+  - index: 699
+    gridPosition: {x: 13, y: 35}
+    position: {x: 28.75, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: a4020000ba020000cb020000a5020000cc020000a6020000bc020000cd020000
+  - index: 700
+    gridPosition: {x: 14, y: 35}
+    position: {x: 28.75, y: -7.1321654, z: -19.55}
+    travelCost: 1
+    neighborsIndex: a5020000bb020000cc020000a6020000cd020000a7020000bd020000ce020000
+  - index: 701
+    gridPosition: {x: 15, y: 35}
+    position: {x: 28.75, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: a6020000bc020000cd020000a7020000ce020000a8020000be020000cf020000
+  - index: 702
+    gridPosition: {x: 16, y: 35}
+    position: {x: 28.75, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: a7020000bd020000ce020000a8020000cf020000
+  - index: 703
+    gridPosition: {x: 23, y: 35}
+    position: {x: 28.75, y: -7.1321654, z: -6.049999}
+    travelCost: 3
+    neighborsIndex: a9020000aa020000d0020000ab020000
+  - index: 704
+    gridPosition: {x: 30, y: 35}
+    position: {x: 28.749996, y: -7.1417522, z: 4.449996}
+    travelCost: 2
+    neighborsIndex: b0020000b1020000b2020000b3020000d1020000b4020000c2020000c3020000d2020000
+  - index: 705
+    gridPosition: {x: 30, y: 35}
+    position: {x: 28.75, y: -7.1417522, z: 4.450001}
+    travelCost: 2
+    neighborsIndex: b0020000b1020000b2020000b3020000d1020000b4020000c2020000c3020000d2020000
+  - index: 706
+    gridPosition: {x: 31, y: 35}
+    position: {x: 28.749998, y: -7.1417522, z: 5.949996}
+    travelCost: 3
+    neighborsIndex: b2020000b3020000c0020000c1020000d1020000b4020000d2020000
+  - index: 707
+    gridPosition: {x: 31, y: 35}
+    position: {x: 28.75, y: -7.1417522, z: 5.9500012}
+    travelCost: 3
+    neighborsIndex: b2020000b3020000c0020000c1020000d1020000b4020000d2020000
+  - index: 708
+    gridPosition: {x: 1, y: 36}
+    position: {x: 30.25, y: -7.1163034, z: -39.05}
+    travelCost: 3
+    neighborsIndex: b5020000d3020000b6020000c5020000d4020000
+  - index: 709
+    gridPosition: {x: 2, y: 36}
+    position: {x: 30.25, y: -7.116304, z: -37.55}
+    travelCost: 2
+    neighborsIndex: b5020000c4020000d3020000b6020000d4020000b7020000c6020000d5020000
+  - index: 710
+    gridPosition: {x: 3, y: 36}
+    position: {x: 30.25, y: -7.1137524, z: -36.05}
+    travelCost: 3
+    neighborsIndex: b6020000c5020000d4020000b7020000d5020000c7020000
+  - index: 711
+    gridPosition: {x: 4, y: 36}
+    position: {x: 30.25, y: -7.1137524, z: -34.55}
+    travelCost: 3
+    neighborsIndex: b7020000c6020000d5020000d6020000d7020000
+  - index: 712
+    gridPosition: {x: 8, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -28.55}
+    travelCost: 3
+    neighborsIndex: d8020000d9020000da020000b8020000c9020000db020000
+  - index: 713
+    gridPosition: {x: 9, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -27.05}
+    travelCost: 3
+    neighborsIndex: c8020000da020000b8020000db020000b9020000ca020000dc020000
+  - index: 714
+    gridPosition: {x: 10, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: b8020000c9020000db020000b9020000dc020000
+  - index: 715
+    gridPosition: {x: 12, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: ba020000dd020000bb020000cc020000de020000
+  - index: 716
+    gridPosition: {x: 13, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -21.05}
+    travelCost: 2
+    neighborsIndex: ba020000cb020000dd020000bb020000de020000bc020000cd020000df020000
+  - index: 717
+    gridPosition: {x: 14, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -19.55}
+    travelCost: 2
+    neighborsIndex: bb020000cc020000de020000bc020000df020000bd020000ce020000e0020000
+  - index: 718
+    gridPosition: {x: 15, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -18.05}
+    travelCost: 2
+    neighborsIndex: bc020000cd020000df020000bd020000e0020000be020000cf020000e1020000
+  - index: 719
+    gridPosition: {x: 16, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: bd020000ce020000e0020000be020000e1020000
+  - index: 720
+    gridPosition: {x: 23, y: 36}
+    position: {x: 30.25, y: -7.1321654, z: -6.049999}
+    travelCost: 3
+    neighborsIndex: e2020000bf020000e3020000
+  - index: 721
+    gridPosition: {x: 30, y: 36}
+    position: {x: 30.249998, y: -7.1417522, z: 4.449996}
+    travelCost: 3
+    neighborsIndex: c0020000c1020000e4020000c2020000c3020000d2020000
+  - index: 722
+    gridPosition: {x: 31, y: 36}
+    position: {x: 30.25, y: -7.1417522, z: 5.949995}
+    travelCost: 3
+    neighborsIndex: c0020000c1020000d1020000e4020000c2020000c3020000
+  - index: 723
+    gridPosition: {x: 1, y: 37}
+    position: {x: 31.75, y: -7.116304, z: -39.05}
+    travelCost: 3
+    neighborsIndex: c4020000c5020000d4020000
+  - index: 724
+    gridPosition: {x: 2, y: 37}
+    position: {x: 31.75, y: -7.116304, z: -37.55}
+    travelCost: 3
+    neighborsIndex: c4020000d3020000c5020000c6020000d5020000
+  - index: 725
+    gridPosition: {x: 3, y: 37}
+    position: {x: 31.75, y: -7.1137524, z: -36.05}
+    travelCost: 3
+    neighborsIndex: c5020000d4020000c6020000c7020000
+  - index: 726
+    gridPosition: {x: 5, y: 36}
+    position: {x: 30.25, y: -7.1137524, z: -33.05}
+    travelCost: 3
+    neighborsIndex: c7020000d7020000e5020000e6020000
+  - index: 727
+    gridPosition: {x: 5, y: 37}
+    position: {x: 31.75, y: -7.1137524, z: -33.05}
+    travelCost: 3
+    neighborsIndex: c7020000d6020000e5020000e6020000
+  - index: 728
+    gridPosition: {x: 7, y: 36}
+    position: {x: 30.25, y: -7.1137524, z: -30.05}
+    travelCost: 3
+    neighborsIndex: e5020000e6020000d9020000c8020000da020000
+  - index: 729
+    gridPosition: {x: 7, y: 37}
+    position: {x: 31.75, y: -7.1137524, z: -30.05}
+    travelCost: 3
+    neighborsIndex: e5020000e6020000d8020000c8020000da020000
+  - index: 730
+    gridPosition: {x: 8, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -28.55}
+    travelCost: 3
+    neighborsIndex: d8020000d9020000c8020000c9020000db020000
+  - index: 731
+    gridPosition: {x: 9, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -27.05}
+    travelCost: 3
+    neighborsIndex: c8020000da020000c9020000ca020000dc020000
+  - index: 732
+    gridPosition: {x: 10, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -25.55}
+    travelCost: 3
+    neighborsIndex: c9020000db020000ca020000
+  - index: 733
+    gridPosition: {x: 12, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -22.55}
+    travelCost: 3
+    neighborsIndex: cb020000cc020000de020000
+  - index: 734
+    gridPosition: {x: 13, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -21.05}
+    travelCost: 3
+    neighborsIndex: cb020000dd020000cc020000cd020000df020000
+  - index: 735
+    gridPosition: {x: 14, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -19.55}
+    travelCost: 3
+    neighborsIndex: cc020000de020000cd020000ce020000e0020000
+  - index: 736
+    gridPosition: {x: 15, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -18.05}
+    travelCost: 3
+    neighborsIndex: cd020000df020000ce020000cf020000e1020000
+  - index: 737
+    gridPosition: {x: 16, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -16.55}
+    travelCost: 3
+    neighborsIndex: ce020000e0020000cf020000
+  - index: 738
+    gridPosition: {x: 22, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -7.5499997}
+    travelCost: 3
+    neighborsIndex: d0020000e3020000
+  - index: 739
+    gridPosition: {x: 23, y: 37}
+    position: {x: 31.75, y: -7.1321654, z: -6.049999}
+    travelCost: 3
+    neighborsIndex: e2020000d0020000
+  - index: 740
+    gridPosition: {x: 30, y: 37}
+    position: {x: 31.749998, y: -7.1417522, z: 4.449995}
+    travelCost: 3
+    neighborsIndex: d1020000d2020000
+  - index: 741
+    gridPosition: {x: 6, y: 36}
+    position: {x: 30.25, y: -7.1137524, z: -31.55}
+    travelCost: 3
+    neighborsIndex: d6020000d7020000e6020000d8020000d9020000
+  - index: 742
+    gridPosition: {x: 6, y: 37}
+    position: {x: 31.75, y: -7.1137524, z: -31.55}
+    travelCost: 3
+    neighborsIndex: d6020000d7020000e5020000d8020000d9020000
