@@ -71,7 +71,7 @@ namespace GunDecorator
         public Animator _animator;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
-        public VisualEffect _muzzleFlash; // test
+        public VFXRegistry p_particleData;
 
         [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]
         private bool _isFullAuto;
@@ -236,12 +236,12 @@ namespace GunDecorator
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
             
-            if (target.TryGetComponent<EnemyCore>(out var enemyCore))
+            /*if (target.TryGetComponent<EnemyCore>(out var enemyCore))
             {
                 enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
                 
                 Cons.Print("Add charge : " + IsPositivePlayerCharge);;
-            }
+            }*/
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
 
@@ -249,6 +249,8 @@ namespace GunDecorator
             // debug clement
             float player1PVs = -1;
             float player2PVs = -1;
+            float player1Energy = -1;
+            float player2Energy = -1;
             if (PlayerHealthManager.Instance != null)
             {
                 player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
@@ -256,6 +258,15 @@ namespace GunDecorator
                     : 0;
                 player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
                     ? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+                    : 0;
+                player1Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+                    ? PlayerHealthManager.Instance.RegisteredPlayers[0].gameObject.GetComponent<PlayerEnergy>()
+                        .CurrentEnergy
+                    : 0;
+			
+                player2Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+                    ? PlayerHealthManager.Instance.RegisteredPlayers[1].gameObject.GetComponent<PlayerEnergy>()
+                        .CurrentEnergy
                     : 0;
             }
             InvokeEvent(new OnDataLog
@@ -267,7 +278,9 @@ namespace GunDecorator
                 damages = damage,
                 player1PVs = player1PVs,
                 player2PVs = player2PVs,
-                ArenaID = swapGunManager != null ? swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1 : -99
+                player1Energy = player1Energy,
+                player2Energy = player2Energy,
+                ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
             });
             
             // fin du debug 
@@ -327,7 +340,16 @@ namespace GunDecorator
         }
 
         [ObserversRpc]
-        private void PlayMuzzleFlash() => _muzzleFlash.Play();
+        private void PlayMuzzleFlash()
+        {
+            if (p_particleData == null) return;
+            
+            VFXData data = p_particleData.CreateVFX("Shoot");
+            
+            ParticleSystem particle = Instantiate(data.p_particle, transform);
+            particle.transform.localPosition = data.p_spawnPos;
+            Destroy(particle.gameObject, data.p_timeBeforeDestroy);
+        }
         
         public void StopReload() => _reloadModule.StopReload();
 

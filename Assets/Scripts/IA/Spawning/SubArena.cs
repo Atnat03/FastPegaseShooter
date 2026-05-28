@@ -16,9 +16,9 @@ public class SubArena : NetworkBusListener
 {
     [Header("----- General -----")]
     [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
-    [SerializeField] private string _subArenaName;
     [SerializeField] private bool _zoneActivated;
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
+    [SerializeField] private SubArenaGauge _arenaGaugePrefab;
     
     [Header("----- First Wave -----")]
     [SerializeField] private float spawnDelayFirstWave;
@@ -104,7 +104,15 @@ public class SubArena : NetworkBusListener
 
     #region Visual Notification
 
-    
+    [ObserversRpc]
+    void NotifySubArenaStartObserverRpc()
+    {
+        EventBus.InvokeEvent(
+            new OnSubArenaStartEvent(
+                _gridReader.p_id,
+                _arenaGaugePrefab)
+            );
+    }
     [ObserversRpc]
     void NotifySubArenaUpdateObserverRpc()
     {
@@ -112,7 +120,6 @@ public class SubArena : NetworkBusListener
             new OnSubArenaUpdateEvent(
                 _gridReader.p_id, 
                 _spawnedEnemies.Count/(float)_maxSpawnEnemy,
-                _subArenaName,
                 _spawningStates[_currentStateIndex].p_state)
             );
     }
@@ -133,7 +140,7 @@ public class SubArena : NetworkBusListener
     [Server]
     async void StartSpawning()
     {
-        NotifySubArenaUpdateObserverRpc();
+        NotifySubArenaStartObserverRpc();
         
         await SpawnFirstWave();
         await InfiniteSpawn();

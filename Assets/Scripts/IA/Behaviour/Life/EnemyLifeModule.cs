@@ -24,7 +24,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     /// </summary>
     public Action<bool, int, int, int> OnLifeUpdate;
     public Action OnDeathViewer;
-    public Action<int> OnDeath;
+    public Action<int, ChargeType> OnDeath;
     
     public Action<int, int> p_onHitPlayer;
     
@@ -36,31 +36,20 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
         swapGunManager = FindAnyObjectByType<SwapGunManager>();
     }
 
-    public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false)
+    public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false)
     {
-        if(!CanReceiveDamage(charge)) return false;
-        
         if (IsServerInitialized)
         {
-            if (_enemyCore._hasShied.Value != 0)
-                return false;
             
             p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
             OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
 
             if (p_life.Value - GetDamageAmount(rawDamageAmount) <= 0)
             {
-                OnDeath?.Invoke(attackerObjectId);
+                OnDeath?.Invoke(attackerObjectId, charge);
             }
         }
         return isCritical;
-    }
-
-    protected bool CanReceiveDamage(EnemyCore.ChargeType charge)
-    {
-        if(_enemyCore.p_affinityType == EnemyCore.ChargeType.None) return true;
-        
-        return _enemyCore.p_affinityType != charge;
     }
     
     public virtual void Death(int takenDamages)
