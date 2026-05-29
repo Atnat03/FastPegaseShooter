@@ -82,6 +82,9 @@ public class DapManager : NetworkBusListener
 		if (!IsServerInitialized)
 			return;
 		
+		if(!_canDapping.Value)
+			return;
+		
 		_playersReadyToDap.Add(data.p_connection);
 
 		AskForDapObserverRpc();
@@ -90,6 +93,8 @@ public class DapManager : NetworkBusListener
 		{
 			Vector3 pos = (_playerList[0].position + _playerList[1].position) / 2f;
 			DappingObserverRpc(pos);
+			
+			InvokeEvent(new OnDapEvent());
 
 			_dapPercentage.Value = 0;
 			_playersReadyToDap.Clear();

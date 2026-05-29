@@ -18,6 +18,7 @@ public class PVBagLifeModule : EnemyLifeModule
     public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false)
     {
         base.TakeDamage(attackerObjectId, rawDamageAmount, charge, isCritical);
+        
         if (IsServerInitialized)
         {
             int damages = GetDamageAmount(rawDamageAmount);
@@ -35,9 +36,9 @@ public class PVBagLifeModule : EnemyLifeModule
     }
 
     [Server]
-    public override void Death(int takenDamages)
+    public override void Death(int attackerObjectId, ChargeType charge)
     {
-        base.Death(takenDamages);
+        base.Death(attackerObjectId, charge);
         
         
         InstanceFinder.ServerManager.Despawn(gameObject);
