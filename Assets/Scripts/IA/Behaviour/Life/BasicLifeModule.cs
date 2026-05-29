@@ -31,8 +31,8 @@ public class BasicLifeModule : EnemyLifeModule
     public override void Death(int attackerObjectId, ChargeType charge)
     {
         base.Death(attackerObjectId, charge);
-        InstanceFinder.ServerManager.Despawn(gameObject);
-        //InvokeEvent(new EnemyDyingEvent(_enemyCore.p_gridReaderId, _enemyCore.p_enemySpawnCost, _enemyCore));
+        
+        _enemyCore.KillEnemy(attackerObjectId, charge);
     }
 }
 

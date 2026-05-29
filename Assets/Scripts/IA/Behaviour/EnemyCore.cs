@@ -23,6 +23,8 @@ public class EnemyCore : NetworkBusListener
     public PathfindingRequestManager p_pathRequester;
     public PathfindingGridReader p_gridReader;
 
+    public Action OnDapExplosion;
+
     #region Energy Variables
 
     [SerializeField] private ChargeType _pinataType = ChargeType.None;
@@ -66,9 +68,6 @@ public class EnemyCore : NetworkBusListener
                     module.p_onHitPlayer += scoreModule.OnDamageTaken;
             }
         }
-
-        
-        _lifeModules[0].OnDeath += DeathEvent;
     }
 
     public override void OnStopServer()
@@ -140,15 +139,34 @@ public class EnemyCore : NetworkBusListener
     {
         _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
     }
-        
-    private void DeathEvent(int playerObjectId, ChargeType charge)
+
+    public void ExplodeOnDapWave()
     {
+        ExplodeOnDapWaveObserverRpc();
+        KillEnemy(-1, ChargeType.None);
+    }
+
+    void ExplodeOnDapWaveObserverRpc()
+    {
+        OnDapExplosion?.Invoke();
+    }
+
+    public void KillEnemy(int playerObjectId, ChargeType charge)
+    {
+        if(_movementModule != null)
+            ClearPathReservation();
+
+        //if killed by dap wave
+        if (charge != ChargeType.None)
+        {
+            InstanceFinder.ServerManager.Despawn(gameObject);
+            return;
+        }
+        
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
         
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_dropXpOrb ? 0 : signedEnergyAmount));
         
-        if(_movementModule != null)
-            ClearPathReservation();
         
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
         
@@ -160,6 +178,8 @@ public class EnemyCore : NetworkBusListener
                 p_value = Mathf.Abs(signedEnergyAmount)
             });
         }
+        
+        InstanceFinder.ServerManager.Despawn(gameObject);
     }
 
     float GetSignedEnergyAmount(ChargeType charge)

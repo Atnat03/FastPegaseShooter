@@ -24,7 +24,6 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     /// </summary>
     public Action<bool, int, int, int> OnLifeUpdate;
     public Action OnDeathViewer;
-    public Action<int, ChargeType> OnDeath;
     
     public Action<int, int> p_onHitPlayer;
     
@@ -58,7 +57,6 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     public virtual void Death(int attackerObjectId, ChargeType charge)
     {
         if(!IsServerInitialized) return;
-        OnDeath?.Invoke(attackerObjectId, charge);
         OnDeathObserverRPC();
     }
 
