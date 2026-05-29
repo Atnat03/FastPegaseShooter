@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class EnemyCoreViewer : MonoBehaviour
 {
     [SerializeField] private EnemyCore _enemyCore;
-    
+    [SerializeField] private ParticleSystem _explosionVfx;    
 
     private void Awake()
     {
@@ -15,6 +15,7 @@ public class EnemyCoreViewer : MonoBehaviour
 
     private void OnDapExplosion()
     {
-        //create explosion particle here
+        ParticleSystem ps = Instantiate(_explosionVfx, transform.position, Quaternion.identity);
+        ps.Play();
     }
 }
