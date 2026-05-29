@@ -124,7 +124,7 @@ namespace GunDecorator.AmmoModules
 
             IAmmo bullet = newBullet.GetComponent<IAmmo>();
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, 
-                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge,_timeToExplose, hadCharged);
+                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge,_timeToExplose, 0, false, hadCharged);
 
             DespawnBullet(newBullet, 5f);
         }

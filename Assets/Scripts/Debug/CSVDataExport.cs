@@ -30,24 +30,41 @@ public class CSVDataExport : MonoBusListener
         });
         
         ListenToEvent<OnDataLog>(AddLog);
+        
+        AddLog(
+            new OnDataLog()
+            {
+                entityName = "init",
+                EntityID = -1,
+                weapon = "init",
+                targetName = "init",
+                damages = 0,
+                player1PVs = 100,
+                player2PVs = 100,
+                player1Energy = 100,
+                player2Energy = 100,
+                ArenaID = -1,
+            });
     }
 
 
     void AddLog(OnDataLog data)
     {
-        rows.Add(new []
+        string[] prev = rows.Count > 1 ? rows[^1] : new string[11];
+
+        rows.Add(new[]
         {
-            Time.time.ToString("F2"),
-            data.entityName,
-            data.EntityID.ToString(),
-            data.weapon,
-            data.targetName,
-            data.damages.ToString("F2"),
-            data.player1PVs.ToString("F2"),
-            data.player2PVs.ToString("F2"),
-            data.player1Energy.ToString("F2"),
-            data.player2Energy.ToString("F2"),
-            data.ArenaID.ToString(),
+            Time.time.ToString("F2"),                                         
+            data.entityName   ?? prev[1],                                    
+            data.EntityID     .HasValue ? data.EntityID.Value.ToString()     : prev[2],
+            data.weapon       ?? prev[3],                                 
+            data.targetName   ?? prev[4],                                   
+            data.damages      .HasValue ? data.damages.Value.ToString("F2")  : prev[5], 
+            data.player1PVs   .HasValue ? data.player1PVs.Value.ToString("F2") : prev[6],
+            data.player2PVs   .HasValue ? data.player2PVs.Value.ToString("F2") : prev[7],
+            data.player1Energy.HasValue ? data.player1Energy.Value.ToString("F2") : prev[8], 
+            data.player2Energy.HasValue ? data.player2Energy.Value.ToString("F2") : prev[9], 
+            data.ArenaID      .HasValue ? data.ArenaID.Value.ToString()      : prev[10],
         });
     }
     
@@ -94,14 +111,14 @@ public class CSVDataExport : MonoBusListener
 
 struct OnDataLog
 {
-    public string entityName;
-    public int EntityID;
+    public string entityName;   
+    public int?   EntityID;
     public string weapon;
     public string targetName;
-    public float damages;
-    public float player1PVs;
-    public float player2PVs;
-    public float player1Energy;
-    public float player2Energy;
-    public int ArenaID;
+    public float? damages;
+    public float? player1PVs;
+    public float? player2PVs;
+    public float? player1Energy;
+    public float? player2Energy;
+    public int?   ArenaID;
 }
