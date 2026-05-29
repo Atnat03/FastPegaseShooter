@@ -232,6 +232,12 @@ namespace GunDecorator
         {
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
+            
+            if (!target.IsSpawned)
+            {
+                Debug.LogWarning("ApplyDamage : target not spawned");
+                return;
+            }
 
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
@@ -244,32 +250,9 @@ namespace GunDecorator
             }*/
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
-
+            
 
             // debug clement
-            float player1PVs = -1;
-            float player2PVs = -1;
-            float player1Energy = -1;
-            float player2Energy = -1;
-            if (PlayerHealthManager.Instance != null)
-            {
-                player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
-                    ? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
-                    : 0;
-                player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
-                    ? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
-                    : 0;
-                player1Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
-                    ? PlayerHealthManager.Instance.RegisteredPlayers[0].gameObject.GetComponent<PlayerEnergy>()
-                        .CurrentEnergy
-                    : 0;
-
-                player2Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
-                    ? PlayerHealthManager.Instance.RegisteredPlayers[1].gameObject.GetComponent<PlayerEnergy>()
-                        .CurrentEnergy
-                    : 0;
-            }
-
             InvokeEvent(new OnDataLog
             {
                 entityName = transform.GetRootTransform().gameObject.name,
@@ -277,11 +260,7 @@ namespace GunDecorator
                 weapon = gameObject.name,
                 targetName = target.name,
                 damages = damage,
-                player1PVs = player1PVs,
-                player2PVs = player2PVs,
-                player1Energy = player1Energy,
-                player2Energy = player2Energy,
-                ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+                ArenaID = (swapGunManager != null && swapGunManager.p_playerZones.ContainsKey(OwnerId)) ? swapGunManager.p_playerZones[OwnerId] : -1
             });
 
             // fin du debug 

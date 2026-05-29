@@ -123,14 +123,27 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleDirectHit(RaycastHit hit)
     {
+        if (_gunController == null)
+        {
+            Debug.LogError("GunController is NULL");
+            return;
+        }
+
         if (_gunController.IsServerInitialized)
         {
             float damage = p_damage;
-            
-            if(p_isDistanceReduce)
-                damage *= (1 / (1 + p_ratioDistanceReduce * (Vector3.Distance(hit.point, _shootPos))));
-            
-            _gunController.ApplyDamage(_targetNetworkObject, (int)damage, p_isCritical, p_hadCharged);
+
+            if (p_isDistanceReduce)
+                damage *= (1 / (1 + p_ratioDistanceReduce * Vector3.Distance(hit.point, _shootPos)));
+
+            if (hit.collider.TryGetComponent<NetworkObject>(out var netObj))
+            {
+                _gunController.ApplyDamage(netObj, (int)damage, p_isCritical, p_hadCharged);
+            }
+            else
+            {
+                Debug.LogWarning("Touched object has no NetworkObject");
+            }
         }
 
         CreateHitMark(hit);
