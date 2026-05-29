@@ -85,9 +85,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Arene2_Spawner_1
       objectReference: {fileID: 0}
+    - target: {fileID: 4400878467749057927, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: _events.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7435662848663130165}
+    - target: {fileID: 4400878467749057927, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: _events.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TriggerSubArenaSpawning
+      objectReference: {fileID: 0}
+    - target: {fileID: 4400878467749057927, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: _events.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SubArena, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4794371258773578959, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: pathfindingGridSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 06f8af95133e4d549843b215b8c76188, type: 2}
     - target: {fileID: 4913893146479340958, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
       propertyPath: SceneId
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4913893146479340958, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: _initializedTimestamp
+      value: -8584218207859465817
+      objectReference: {fileID: 0}
+    - target: {fileID: 4913893146479340958, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: InitializedParentNetworkBehaviour
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
       propertyPath: SceneId
@@ -97,16 +121,93 @@ PrefabInstance:
       propertyPath: WasActiveDuringEdit
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: _initializedTimestamp
+      value: -8584218207859465817
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: <PrefabId>k__BackingField
+      value: 38
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: SerializedTransformProperties.Rotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: SerializedTransformProperties.Rotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: SerializedTransformProperties.Rotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837983242953784692, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: m_Center.z
+      value: 57.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1729803781805421488, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2276005674624102555, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 7435662848663130165}
   m_SourcePrefab: {fileID: 100100000, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
 --- !u!4 &3880859917443687053 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1437782805840429614, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
   m_PrefabInstance: {fileID: 2751578772259004579}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4159757373423931448 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2276005674624102555, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+  m_PrefabInstance: {fileID: 2751578772259004579}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7435662848663130165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4159757373423931448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubArena
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 4987059843056240130}
+  _networkObjectCache: {fileID: 0}
+  _pathfindingRequestManager: {fileID: 0}
+  _zoneActivated: 0
+  _spawnPoints: []
+  _arenaGaugePrefab: {fileID: 0}
+  spawnDelayFirstWave: 0
+  spawnMobsFirstWave: []
+  _currentBudget: 0
+  _spawnMobs: []
+  _spawningStates: []
+  _maxSpawnEnemy: 10
+  _corrosionDamage: 5
+  _corrosionDelay: 3
+  _maxEnabledTime: 0
+  _currentStateIndex: 0
+--- !u!114 &4987059843056240130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+  m_PrefabInstance: {fileID: 2751578772259004579}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4159757373423931448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
 --- !u!1001 &7898315105421368702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -115,6 +216,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7097750493315146274}
     m_Modifications:
+    - target: {fileID: 2120530428348468344, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: pathfindingGridSO
+      value: 
+      objectReference: {fileID: 11400000, guid: edeeb6bb647c0874890818aedd5c4f2a, type: 2}
     - target: {fileID: 2165125395364659213, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 14.6
@@ -130,6 +235,14 @@ PrefabInstance:
     - target: {fileID: 2189633458858471923, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
       propertyPath: m_Name
       value: Arene2_Spawner_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845018961135553267, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: m_Size.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845018961135553267, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: m_Center.z
+      value: 7.7
       objectReference: {fileID: 0}
     - target: {fileID: 4070920540654852810, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
       propertyPath: _spawnPoints.Array.size
@@ -167,9 +280,17 @@ PrefabInstance:
       propertyPath: WasActiveDuringEdit
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5626854157473161853, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5684848239944995954, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
       propertyPath: SceneId
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5684848239944995954, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: InitializedParentNetworkBehaviour
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5697366080667569796, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -247,17 +368,78 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8442919097825990346, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: _events.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4776918070559633880}
+    - target: {fileID: 8442919097825990346, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: _events.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TriggerSubArenaSpawning
+      objectReference: {fileID: 0}
+    - target: {fileID: 8442919097825990346, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: _events.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SubArena, Assembly-CSharp
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4070920540654852810, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     m_RemovedGameObjects:
     - {fileID: 8403741077371464184, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     - {fileID: 2426734625193879238, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     - {fileID: 4321086963674077243, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     - {fileID: 8084054215586837156, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2189633458858471923, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 4776918070559633880}
   m_SourcePrefab: {fileID: 100100000, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
 --- !u!4 &13661016653847116 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7902967571896485682, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
   m_PrefabInstance: {fileID: 7898315105421368702}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2561116310262005507 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5626854157473161853, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+  m_PrefabInstance: {fileID: 7898315105421368702}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8358495891160542349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+--- !u!1 &8358495891160542349 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2189633458858471923, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+  m_PrefabInstance: {fileID: 7898315105421368702}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4776918070559633880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8358495891160542349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubArena
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 2561116310262005507}
+  _networkObjectCache: {fileID: 0}
+  _pathfindingRequestManager: {fileID: 0}
+  _zoneActivated: 0
+  _spawnPoints: []
+  _arenaGaugePrefab: {fileID: 0}
+  spawnDelayFirstWave: 0
+  spawnMobsFirstWave: []
+  _currentBudget: 0
+  _spawnMobs: []
+  _spawningStates: []
+  _maxSpawnEnemy: 10
+  _corrosionDamage: 5
+  _corrosionDelay: 3
+  _maxEnabledTime: 0
+  _currentStateIndex: 0
