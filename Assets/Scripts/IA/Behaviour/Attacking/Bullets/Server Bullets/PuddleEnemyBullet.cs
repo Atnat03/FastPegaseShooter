@@ -9,7 +9,7 @@ public class PuddleEnemyBullet : EnemyBullet
     private float _damageDelay;
     private float _timeToShoot;
     
-    List<NetworkObject> _playerHits = new List<NetworkObject>();
+    HashSet<NetworkObject> _playerHits = new HashSet<NetworkObject>();
 
     public PuddleEnemyBullet(EnemyShootingEvent ESE, Vector3 direction, float spawnTime,
         int bulletId, LayerMask layerMask)
