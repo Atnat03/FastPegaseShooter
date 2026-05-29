@@ -11,7 +11,7 @@ public interface IDamagable
     /// <param name="isCritical">Tell the enemy is supposed to take a critical damage from overload</param>
     /// <returns>whereas the damages were critical or not, may be different from parameter due to internal logic</returns>
     public bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false);
-    public void Death(int takenDamages);
+    public void Death(int attackerObjectId, ChargeType charge);
 }
 
 public interface IHealable : IDamagable

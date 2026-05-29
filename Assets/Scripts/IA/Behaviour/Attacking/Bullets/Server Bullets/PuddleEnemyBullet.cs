@@ -86,7 +86,7 @@ public class PuddleEnemyBullet : EnemyBullet
                     p_attacker = p_attackModule.gameObject.GetComponent<NetworkObject>()
                 });
             
-                p_attackModule.p_onHitPlayer?.Invoke(playerNetworkObject.ObjectId, p_bulletDamage);
+                p_attackModule?.p_onHitPlayer?.Invoke(playerNetworkObject.ObjectId, p_bulletDamage);
             }
         }
     }

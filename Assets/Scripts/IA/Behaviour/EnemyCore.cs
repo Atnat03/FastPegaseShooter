@@ -144,7 +144,7 @@ public class EnemyCore : NetworkBusListener
     private void DeathEvent(int playerObjectId, ChargeType charge)
     {
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
-        Debug.Log(signedEnergyAmount);
+        
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_dropXpOrb ? 0 : signedEnergyAmount));
         
         if(_movementModule != null)   
