@@ -12,13 +12,11 @@ public class UIGunModule : GunModule
 	#region Properties
 
 	#endregion
-
-
+	
 	#region Variables
 	
 	[Header("Reload")]
 	[SerializeField, Tooltip("Text des balles actuelles + max balles")] private TextMeshProUGUI _ammoText;
-	[SerializeField, Tooltip("Cercle pour le temps de reload")] private Image _imageReload;
 	
 	[Header("Noise")]
 	[SerializeField] private List<ReticuleUI> _reticules;
@@ -32,9 +30,6 @@ public class UIGunModule : GunModule
 		_gunController.OnShootAmmo += OnAmmoChange;
 		_gunController.OnShootNoise += OnNoiseChange;
 
-		_gunController.OnEndReload += EndReload;
-		_gunController.OnStartReload += StartReload;
-
 		_gunController.OnCharging += OnNoiseChange;
 		_gunController.OnStopCharging += StopCharging;
 	}
@@ -43,38 +38,9 @@ public class UIGunModule : GunModule
 	{
 		_gunController.OnShootAmmo -= OnAmmoChange;
 		_gunController.OnShootNoise -= OnNoiseChange;
-
-		_gunController.OnEndReload -= EndReload;
-		_gunController.OnStartReload -= StartReload;
-
+		
 		_gunController.OnCharging -= OnNoiseChange;
 		_gunController.OnStopCharging -= StopCharging;
-	}
-
-	private void StartReload(float reloadDuration)
-	{
-		_imageReload.gameObject.SetActive(true);
-		_imageReload.fillAmount = 1;
-
-		StartCoroutine(ReloadUI(reloadDuration));
-	}
-
-	IEnumerator ReloadUI(float reloadDuration)
-	{
-		float duration = reloadDuration;
-		float elapsedTime = duration;
-
-		while (elapsedTime > 0)
-		{
-			elapsedTime -= Time.deltaTime;
-			_imageReload.fillAmount = elapsedTime / duration;
-			yield return null;
-		}
-	}
-	
-	private void EndReload()
-	{
-		_imageReload.gameObject.SetActive(false);
 	}
 
 	private void OnNoiseChange(float ratio)

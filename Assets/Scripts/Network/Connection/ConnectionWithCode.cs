@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using MyPrint;
 
 public class ConnectionWithCode : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class ConnectionWithCode : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _codeTextUI;
     [SerializeField] private GameObject _connectedUI;
     [SerializeField] private GameObject _gameCodeUI;
+    
+    [Header("Wrong code")]
+    [SerializeField] private GameObject _wrongCode;
+    [SerializeField] private Transform _wrongCodeParent;
 
     private void Awake()
     {
@@ -39,11 +44,14 @@ public class ConnectionWithCode : MonoBehaviour
 
         InstanceFinder.TransportManager.Transport.SetClientAddress("127.0.0.1");
 
+        Cons.Print("Server manager");
         _networkManager.ServerManager.StartConnection();
-        _networkManager.ClientManager.StartConnection();
+
+        Cons.Print("Client manager");
+            _networkManager.ClientManager.StartConnection();
 
         string code = GetConnectionCode();
-        Debug.Log("📒 Code de la partie : " + code);
+//        Debug.Log("📒 Code de la partie : " + code);
 
         _codeTextUI.text = code;
 
@@ -82,13 +90,9 @@ public class ConnectionWithCode : MonoBehaviour
         {
             addressToUse = GetIPFromCode();
         }
-
-        Debug.Log("Connexion à : " + addressToUse);
+        
         InstanceFinder.TransportManager.Transport.SetClientAddress(addressToUse);
         _networkManager.ClientManager.StartConnection();
-
-        _connectedUI.SetActive(false);
-        _gameCodeUI.SetActive(true);
     }
 
     #endregion
@@ -151,6 +155,30 @@ public class ConnectionWithCode : MonoBehaviour
         }
 
         return "127.0.0.1";
+    }
+    
+    private void OnEnable()
+    {
+        _networkManager.ClientManager.OnClientConnectionState += OnClientConnectionState;
+    }
+
+    private void OnDisable()
+    {
+        _networkManager.ClientManager.OnClientConnectionState -= OnClientConnectionState;
+    }
+    
+    private void OnClientConnectionState(ClientConnectionStateArgs args)
+    {
+        if (args.ConnectionState == LocalConnectionState.Stopped)
+        {
+            Destroy(Instantiate(_wrongCode, _wrongCodeParent), 2f);
+        }
+        
+        if (args.ConnectionState == LocalConnectionState.Started)
+        {
+            _connectedUI.SetActive(false);
+            _gameCodeUI.SetActive(true);
+        }
     }
 
     #endregion

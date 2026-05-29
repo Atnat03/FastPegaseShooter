@@ -50,10 +50,12 @@ public class FPSControlerCustomInspector : Editor
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("landSnap"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dashVerticality"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("groundNeededToDashAgain"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("clampedMaxAirSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpSlideOnEndOfSlide"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("singleClicGrapple"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("omnidirectionalWallRide"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("forwardWalllrideBeginning"));
         }, ref showParameters);
 
         DrawSection("Unlocked Capacities", new Color(1f, 0.85f, 0.6f), () =>
@@ -84,6 +86,8 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStepHeight"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceAscending"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("gravityBonusForceFalling"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("idleLargerFeetColliders"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("largerFeetStayingDelay"));
         }, ref showMovement);
 
         DrawSection("Headbob", new Color(1f, 0.6f, 1f), () =>
@@ -126,6 +130,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpHorizontalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltIntensity"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpCoyoteDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideForwardTolerenceAngle"));
         }, ref showWallRide);
 
         DrawSection("Crouch", new Color(0.8f, 1f, 0.8f), () =>

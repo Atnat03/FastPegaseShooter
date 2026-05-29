@@ -5,6 +5,7 @@ using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
+using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
@@ -15,10 +16,10 @@ public interface IGun
     public void TryFire();
     public void TryCancelShooting();
     public void TryReload();
-    public void TryCharging();
     public void TryShootCharged();
     public void Disable(bool state);
     public void SetFireRate(float multiplier);
+    public void SetInfiniteAmmo(bool infiniteAmmo);
     public void SetChargedPlayer(bool b);
     public void SetReticule(ReticulesManager manager);
 }
@@ -28,8 +29,7 @@ public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value, bool _infiniteAmmo);
-    public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
-    public Renderer ModelGun { get; }
+    public Transform ModelGun { get; }
     public void StopReload();
 }
 
@@ -44,7 +44,7 @@ namespace GunDecorator
         public bool IsInfiniteAmmo => _infiniteAmmo;
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
-        public Renderer ModelGun => _model;
+        public Transform ModelGun => _model;
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -56,43 +56,51 @@ namespace GunDecorator
 
         [SerializeField, Tooltip("ScriptableObject contenant les settings de l'arme équilibré")]
         private GunModuleSettingsSO _settings;
-        
-        [SerializeField, Tooltip("Model 3d de l'arme")] 
-        private Renderer _model;
-        [SerializeField, Tooltip("Audio Source de l'arme")] 
+
+        [SerializeField, Tooltip("Model 3d de l'arme")]
+        private Transform _model;
+
+        [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
-        [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")] 
+
+        [SerializeField,
+         Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
         public SoundsDataSO _soundData;
-        
-        [SerializeField, Tooltip("Animation du modele de l'arme")] 
+
+        [SerializeField, Tooltip("Animation du modele de l'arme")]
         public Animator _animator;
-        
-        [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")] public VisualEffect _muzzleFlash; // test
-        [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]private bool _isFullAuto;
+
+        [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
+        public VFXRegistry p_particleData;
+
+        [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]
+        private bool _isFullAuto;
 
         [SerializeField] private int _reticuleID = 0;
-        
+
+        [SerializeField] private SwapGunManager swapGunManager;
+
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
         private bool _infiniteAmmo = false;
         private readonly SyncVar<bool> _isPositivePlayerCharge = new SyncVar<bool>(false);
 
         [HideInInspector] public bool p_authorizedToShoot = true;
-        
+
         //Action
-        
+
         //Shoot
         public Action<int, int> OnShootAmmo;
         public Action<float> OnShootNoise;
-        
+
         //Reloading
         public Action<float> OnStartReload;
         public Action OnEndReload;
-        
+
         //Charging
         public Action<float> OnCharging;
         public Action OnStopCharging;
-        
+
         private void OnEnable()
         {
             _animator.ResetTrigger("Reload");
@@ -115,7 +123,7 @@ namespace GunDecorator
                 module.Initialize(this);
             }
 
-            if(_settings != null)
+            if (_settings != null)
             {
                 foreach (GunSetting s in _settings.modulesList)
                 {
@@ -129,11 +137,13 @@ namespace GunDecorator
             }
         }
 
+        private void Start() // pour du debug, a tej en build finale
+        {
+            swapGunManager = FindAnyObjectByType<SwapGunManager>();
+        }
+
         public void TryFire()
         {
-            if (_chargedModule != null)
-                if (_chargedModule.IsCharging) return;
-    
             ShootingInputPressed = true;
             ApplyShoot();
         }
@@ -141,26 +151,30 @@ namespace GunDecorator
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
-            
+
+            if (!_model.gameObject.activeInHierarchy)
+                return;
+
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 if (!_shootModule.CanShoot) return;
-                
+
                 _shootModule.SetFireRate(_fireRateMultiplier);
-                    
+
                 if (IsFullAuto)
                 {
                     StartCoroutine(ShootingCoroutine(_shootModule));
                     return;
                 }
+
                 _shootModule?.TryShoot();
-                    
+
                 _recoilModule?.Recoil(_model.transform, 0.1f, false);
                 _recoilModule?.SetIsRecoil(true);
-                    
+
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
                 PlayMuzzleFlash();
-                    
+
                 _animator?.SetTrigger("Shoot");
             }
         }
@@ -171,80 +185,96 @@ namespace GunDecorator
             while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
             {
                 _shootModule.SetFireRate(_fireRateMultiplier);
-                
+
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 PlayMuzzleFlash();
-                
+
                 _recoilModule?.Recoil(_model.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
-                
+
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
-                
+
                 _animator?.SetTrigger("Shoot");
-                
+
                 yield return new WaitForSeconds(s.FireRate);
-                
-                p_authorizedToShoot =  true;
+
+                p_authorizedToShoot = true;
             }
         }
-        
 
         public void TryCancelShooting()
         {
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
-            
+
             _recoilModule?.SetIsRecoil(false);
-            
-            p_authorizedToShoot = true;
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
 
         public void SetAmmo(int value, bool infiniteAmmo) => _reloadModule.SetAmmo(value, _infiniteAmmo);
 
-        public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
-        {
-            if (!IsServerInitialized)
-            {
-                SetSurchargeStatServerRpc(isOverload, dmgMultiplicator, cadenceMultiplicator);
-                return;
-            }
-            _isOverload.Value = isOverload;
-            SurchargeMultiplierDamage = dmgMultiplicator;
-            SurchargeMultiplierRate = cadenceMultiplicator;
-            _shootModule?.AmmoModule.SetDamage(dmgMultiplicator);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void SetSurchargeStatServerRpc(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
-        {
-            SetSurchargeStat(isOverload, dmgMultiplicator, cadenceMultiplicator);
-        }
-
         public void TryReload()
         {
             if (_reloadModule.IsReloading) return;
-            
+
             _reloadModule?.Reload();
         }
 
-        public void TriggerHitMark(bool isCritique = false)
+        [ServerRpc(RequireOwnership = true)]
+        public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
         {
-            if (!isCritique)
-            {
-                _hitMarkerModule?.HitMark();
-            }
-            else
-            {
-                _hitMarkerModule?.HitMarkCritique();
-            }
+            ApplyDamage(target, damage, isCritical, hadCharged);
         }
 
-        public void TryCharging()
+        public void ApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
         {
-            _chargedModule?.TryCharging();
+            if (target == null) return;
+            if (!target.TryGetComponent<IDamagable>(out var d)) return;
+            
+            if (!target.IsSpawned)
+            {
+                Debug.LogWarning("ApplyDamage : target not spawned");
+                return;
+            }
+
+            bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
+            Cons.Print("Damage : " + crit);
+
+            /*if (target.TryGetComponent<EnemyCore>(out var enemyCore))
+            {
+                enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
+
+                Cons.Print("Add charge : " + IsPositivePlayerCharge);;
+            }*/
+
+            ApplyDamageObservers(damage, isCritical, hadCharged);
+            
+
+            // debug clement
+            InvokeEvent(new OnDataLog
+            {
+                entityName = transform.GetRootTransform().gameObject.name,
+                EntityID = ObjectId,
+                weapon = gameObject.name,
+                targetName = target.name,
+                damages = damage,
+                ArenaID = (swapGunManager != null && swapGunManager.p_playerZones.ContainsKey(OwnerId)) ? swapGunManager.p_playerZones[OwnerId] : -1
+            });
+
+            // fin du debug 
+        }
+
+        [ObserversRpc]
+        private void ApplyDamageObservers(int damage, bool isCritical, bool hadCharged)
+        {
+            InvokeEvent(new OnPlayerDoDamage
+            {
+                p_ownerId = OwnerId,
+                p_value = damage,
+                p_critical = isCritical
+            });
         }
 
         public void TryShootCharged()
@@ -260,18 +290,18 @@ namespace GunDecorator
         public void SetFireRate(float multiplier)
         {
             _fireRateMultiplier = multiplier;
-            
-            _infiniteAmmo = multiplier == -1 ? false : true;
         }
+
+        public void SetInfiniteAmmo(bool infiniteAmmo) => _infiniteAmmo = infiniteAmmo;
 
         public void PlaySound(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
+            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
 
             if (clip == null) return;
-            
-            SoundManager.PlaySound(clip, _source, 0.5f);
-            
+
+            SoundManager.PlaySound(_soundData, sound, _source);
+
             PlaySoundServerRpc(sound);
         }
 
@@ -284,14 +314,19 @@ namespace GunDecorator
         [ObserversRpc(ExcludeOwner = true)]
         void PlaySoundObserverRpc(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData,sound);
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
         }
 
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {
-            _muzzleFlash.Play();
+            if (p_particleData == null) return;
+
+            VFXData data = p_particleData.CreateVFX("Shoot");
+
+            ParticleSystem particle = Instantiate(data.p_particle, transform);
+            particle.transform.localPosition = data.p_spawnPos;
+            Destroy(particle.gameObject, data.p_timeBeforeDestroy);
         }
 
         public void StopReload() => _reloadModule.StopReload();
@@ -299,10 +334,12 @@ namespace GunDecorator
         public void SetChargedPlayer(bool b) => _isPositivePlayerCharge.Value = b;
 
         public void ResetNoise() => _shootModule?.CancelShooting();
-        
+
         public void SetReticule(ReticulesManager manager)
         {
             manager.ActivateReticules(_reticuleID);
         }
+        
+        public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
     }
 }

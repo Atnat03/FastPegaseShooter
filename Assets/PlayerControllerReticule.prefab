@@ -715,6 +715,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &3961050023182892889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,10 +752,10 @@ MonoBehaviour:
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 6547442255424585383}
-  _chargedUI: {fileID: 947224183139465357}
-  _valueCharging: {fileID: 2544424930392040772}
-  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
-  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
+  _percentageChargeText: {fileID: 0}
+  _textMat: {fileID: 0}
+  _normalTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _fullChargedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &6547442255424585383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,11 +776,12 @@ MonoBehaviour:
   _ammoType: {fileID: 8428071434140413335}
   _isExplosifAmmo: 1
   _explosionRadius: 1
-  _timeToCharge: 1
-  _deadZoneStartCharging: 0.5
+  _currentPercentCharge: 0
+  _oneAmmoAddPercentage: {x: 5, y: 5}
+  _fullCharge: 0
+  _damageChargedMultiplicator: 10
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
-  _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
   _intervaleCharge: 0.05
@@ -11358,10 +11360,12 @@ MonoBehaviour:
   _playerAnimation: {fileID: 3465261579877272972}
   landSnap: 0
   dashVerticality: 1
+  groundNeededToDashAgain: 0
   clampedMaxAirSpeed: 0
   jumpSlideOnEndOfSlide: 0
   singleClicGrapple: 1
   omnidirectionalWallRide: 0
+  forwardWalllrideBeginning: 1
   wallRideUnlocked: 1
   slideUnlocked: 1
   dashUnlocked: 1
@@ -11380,6 +11384,8 @@ MonoBehaviour:
   maxStepHeight: 1
   gravityBonusForceAscending: 40
   gravityBonusForceFalling: 4.5
+  idleLargerFeetColliders: []
+  largerFeetStayingDelay: 0
   walkingHeadbobAmplitude: 0.075
   walkingHeadbobFrequency: 15
   wallRidingHeadbobAmplitude: 0.1
@@ -11401,6 +11407,7 @@ MonoBehaviour:
   wallRidingDuration: 1.5
   wallRideCooldownChangeSide: 0.2
   wallRideCooldownSameSide: 0.6
+  wallRideForwardTolerenceAngle: 90
   wallRidingSpeed: 11
   minSpeedToWallRide: 1
   wallJumpVerticalForce: 44
@@ -11457,7 +11464,6 @@ MonoBehaviour:
   slopeInfluenceOnVelocity: 0.075
   _castWidth: 1
   _grappleRedirectionSpeed: 60
-  grounded: 0
   leftSideAgainstWall: 0
   rightSideAgainstWall: 0
   fellOffWallrinding: 0
@@ -11591,7 +11597,6 @@ MonoBehaviour:
   - {fileID: 6547442255424585383}
   - {fileID: 8428071434140413335}
   - {fileID: 2220289887676329509}
-  - {fileID: 0}
   - {fileID: 4667889534577792590}
   - {fileID: 4108116853922842008}
   - {fileID: 7557458434173687512}
@@ -11601,7 +11606,6 @@ MonoBehaviour:
   - {fileID: 219218631671859702}
   - {fileID: 5058586758962968031}
   - {fileID: 233075791890108170}
-  - {fileID: 0}
   - {fileID: 7744048412683742324}
   - {fileID: 6500108499577103005}
   - {fileID: 3954904171555899916}
@@ -11610,18 +11614,20 @@ MonoBehaviour:
   - {fileID: 4651678768051478449}
   - {fileID: 7048642797284340988}
   - {fileID: 4693748091335889128}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4188393265129028377}
+  - {fileID: 9103689300624622221}
+  - {fileID: 5085082601805186007}
+  - {fileID: 9108969561537642468}
+  - {fileID: 3877093541988288906}
+  - {fileID: 6473785062868642151}
+  - {fileID: 6064643404217225757}
+  - {fileID: 3491274505332219922}
+  - {fileID: 2634165181546453424}
+  - {fileID: 2225603457426565555}
+  - {fileID: 4529339864843645274}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects:
-  - {fileID: 1414232106957678873}
+  - {fileID: 0}
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
   _isNetworked: 1
@@ -11630,7 +11636,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584245799580734155
+  _initializedTimestamp: -8584242235129343366
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -11717,11 +11723,17 @@ MonoBehaviour:
   _critikStep: 0.5
   _playerInputAction: {fileID: 997312506154426130}
   _playerAnimation: {fileID: 3465261579877272972}
+  _gunSwitching: {fileID: 3154577241410043838}
+  healThrowObject: {fileID: 0}
   _playerEnergy: {fileID: 29235095159055250}
   p_healThrowPoint: {fileID: 2316828313444862460}
   p_healThrowDirection: {fileID: 6291573982660001099}
-  _healthToGive: 30
-  p_healThrowRadius: 3
+  throwForce: 10
+  maxThrowDistance: 100
+  minSize: 3
+  healSizeEffectFactor: 2
+  _minHealthToGive: 15
+  healAmountEffectFactor: 0.3
   _healThrowCost: 20
   _throwHitLayerMask:
     serializedVersion: 2
@@ -17306,7 +17318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 45
+  _componentIndexCache: 43
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _settings: {fileID: 11400000, guid: 418245dc587db674abd3b0ff9f837937, type: 2}
@@ -17330,7 +17342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 46
+  _componentIndexCache: 44
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ReloadModule
@@ -17350,7 +17362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 47
+  _componentIndexCache: 45
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RecoilModule
@@ -17515,7 +17527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 48
+  _componentIndexCache: 46
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
@@ -17525,6 +17537,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &8041650522221974858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17537,16 +17550,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 49
+  _componentIndexCache: 47
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 4651678768051478449}
-  _chargedUI: {fileID: 947224183139465357}
-  _valueCharging: {fileID: 2544424930392040772}
-  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
-  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
+  _percentageChargeText: {fileID: 0}
+  _textMat: {fileID: 0}
+  _normalTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _fullChargedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4651678768051478449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17559,7 +17572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af359fc3e59411da93c658f8239b885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.DecreaseNoiseChargedModule
-  _componentIndexCache: 50
+  _componentIndexCache: 48
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: DecreaseNoiseChargedModule
@@ -17567,37 +17580,14 @@ MonoBehaviour:
   _ammoType: {fileID: 7048642797284340988}
   _isExplosifAmmo: 0
   _explosionRadius: 1
-  _timeToCharge: 1
-  _deadZoneStartCharging: 0.5
+  _currentPercentCharge: 0
+  _oneAmmoAddPercentage: {x: 5, y: 5}
+  _fullCharge: 0
+  _damageChargedMultiplicator: 10
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
-  _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
-  _noiseEvolutionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   _startMaxNoiseAngle: 10
 --- !u!114 &7048642797284340988
 MonoBehaviour:
@@ -17611,7 +17601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.RaycastAmmoModule
-  _componentIndexCache: 51
+  _componentIndexCache: 49
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RaycastAmmoModule
@@ -17635,7 +17625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 52
+  _componentIndexCache: 50
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
@@ -18269,7 +18259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 35
+  _componentIndexCache: 34
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _settings: {fileID: 11400000, guid: f634933029542f0429c9dcfd3957e999, type: 2}
@@ -18293,7 +18283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 36
+  _componentIndexCache: 35
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
@@ -18318,7 +18308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 37
+  _componentIndexCache: 36
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ReloadModule
@@ -18338,7 +18328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 38
+  _componentIndexCache: 37
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RecoilModule
@@ -18503,7 +18493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 39
+  _componentIndexCache: 38
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
@@ -18513,6 +18503,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &6154372736321769268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18525,7 +18516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 40
+  _componentIndexCache: 39
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ExplosifAmmoModule
@@ -18543,7 +18534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1c10d552aef42cf9e8fb79047b90af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.PhysicAmmoModule
-  _componentIndexCache: 41
+  _componentIndexCache: 40
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: PhysicAmmoModule
@@ -18567,16 +18558,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 42
+  _componentIndexCache: 41
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 233075791890108170}
-  _chargedUI: {fileID: 947224183139465357}
-  _valueCharging: {fileID: 2544424930392040772}
-  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
-  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
+  _percentageChargeText: {fileID: 0}
+  _textMat: {fileID: 0}
+  _normalTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _fullChargedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &233075791890108170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18589,7 +18580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7943d687f9f4473a952dd4bcf848eba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.IncreaseNoiseChargedModule
-  _componentIndexCache: 43
+  _componentIndexCache: 42
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: IncreaseNoiseChargedModule
@@ -18597,37 +18588,15 @@ MonoBehaviour:
   _ammoType: {fileID: 219218631671859702}
   _isExplosifAmmo: 0
   _explosionRadius: 1
-  _timeToCharge: 1
-  _deadZoneStartCharging: 0.5
+  _currentPercentCharge: 0
+  _oneAmmoAddPercentage: {x: 5, y: 5}
+  _fullCharge: 0
+  _damageChargedMultiplicator: 10
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
-  _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
-  _noiseEvolutionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _noiseAngle: 5
   _maximumNoiseAngle: 10
 --- !u!1 &5481550005715636783
 GameObject:
@@ -19608,6 +19577,7 @@ MonoBehaviour:
   - {fileID: 2417848013731251067}
   - {fileID: 5210516196185257609}
   _playerInput: {fileID: 997312506154426130}
+  _fpsController: {fileID: 0}
 --- !u!1 &6107377416928649300
 GameObject:
   m_ObjectHideFlags: 0
@@ -19964,6 +19934,38 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &6240176814268882576
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 5082973326308634768, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+  m_PrefabInstance: {fileID: 1158505439156596224}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 278331891298378960}
+  - component: {fileID: 4529339864843645274}
+  m_Layer: 0
+  m_Name: 'GrenadeElementaire (Missing Prefab with guid: 0a12a57e0b893b94b9f25a70d7a9c318)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &278331891298378960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 1427363929612995280, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
+  m_PrefabInstance: {fileID: 1158505439156596224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6240176814268882576}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.83, y: -4.76, z: 4.36}
+  m_LocalScale: {x: 50.000004, y: 50.000004, z: 50.000004}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 30507841948031240}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6268674906941156603
 GameObject:
   m_ObjectHideFlags: 0
@@ -21305,6 +21307,7 @@ MonoBehaviour:
   - {fileID: 5823188005617963189}
   _healingTrajectoryLine: {fileID: 1292535258909843473}
   _healingThrowPosObj: {fileID: 36607885238878194, guid: 7382029bf5c03294488da66ede17c86b, type: 3}
+  gunSwitching: {fileID: 0}
   _soundsData: {fileID: 11400000, guid: db801a67cf0008e4f91da1159db4aa19, type: 2}
 --- !u!82 &4823317710188223472
 AudioSource:
@@ -21459,8 +21462,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _gunSwitching: {fileID: 3154577241410043838}
-  _positiveParticles: {fileID: 6301050086997013332}
-  _negativeParticles: {fileID: 6708433035341785604}
+  _positiveUI: {fileID: 0}
+  _negativeUI: {fileID: 0}
+  _polarizationText: {fileID: 0}
+  _isPolarizedMessage: 
+  _isAlignedMessage: 
+  _conflictPanel: {fileID: 0}
+  _conflictText: {fileID: 0}
+  _conflictTimerBar: {fileID: 0}
 --- !u!114 &79945915510860574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28005,6 +28014,8 @@ MonoBehaviour:
   _throwerGrenade: {fileID: 4147575701769871822}
   _throwerDrone: {fileID: 931936587992237131}
   _reticuleManager: {fileID: 8014742524321164357}
+  _cooldownChangeMagnetic: 5
+  _mainGunsList: []
 --- !u!114 &300968199624122896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28036,6 +28047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Controller.GunSurcharge
   _gunBridge: {fileID: 300968199624122896}
+  _numberChargedShootWhenOverload: 2
   _isOverload: 0
   _elapsedTimeOverload: 0
 --- !u!114 &2365660128279577883
@@ -30273,6 +30285,7 @@ MonoBehaviour:
   _elementaryGrenadePrefab: {fileID: 7033959642892252244, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
   _spawnPoint: {fileID: 446286405210506582}
   _currentGun: {fileID: 3154577241410043838}
+  _camera: {fileID: 0}
   _cooldown: 1
   _damage: 100
   _throwForce: 30
@@ -30989,7 +31002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e863f7011cc4577b68dabe570c7f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.GunController
-  _componentIndexCache: 24
+  _componentIndexCache: 51
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _settings: {fileID: 11400000, guid: 1b4fdfb7c56b59046951c35e1a6c450a, type: 2}
@@ -31013,7 +31026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e89363ef2d6423daaa93e00d620d9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.TemplateShootModule
-  _componentIndexCache: 25
+  _componentIndexCache: 52
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: TemplateShootModule
@@ -31038,7 +31051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bdd4a18cf141a88a2e9c3b94a32feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ReloadModule
-  _componentIndexCache: 26
+  _componentIndexCache: 53
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ReloadModule
@@ -31058,7 +31071,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0092e71c5a4c9aa4bbd583668c79bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecoilModule
-  _componentIndexCache: 27
+  _componentIndexCache: 54
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RecoilModule
@@ -31223,7 +31236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7740cf74d14f9ab4ae3cf0c144a5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.HitMarkerModule
-  _componentIndexCache: 28
+  _componentIndexCache: 55
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: HitMarkerModule
@@ -31233,6 +31246,7 @@ MonoBehaviour:
   _hitMarkerColor: {r: 1, g: 0.08789868, b: 0, a: 1}
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
+  _killMarkerPrefab: {fileID: 0}
 --- !u!114 &6473785062868642151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31245,7 +31259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb545e70576f41dbadba93792d5db8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ExplosifAmmoModule
-  _componentIndexCache: 29
+  _componentIndexCache: 56
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: ExplosifAmmoModule
@@ -31263,16 +31277,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17aed588ed717a34db1dfa35ce827307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualChargedModule
-  _componentIndexCache: 30
+  _componentIndexCache: 57
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: VisualChargedModule
   moduleColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   _chargedModule: {fileID: 3491274505332219922}
-  _chargedUI: {fileID: 947224183139465357}
-  _valueCharging: {fileID: 2544424930392040772}
-  _chargingColor: {r: 1, g: 0.6470588, b: 0, a: 1}
-  _fullChargeColor: {r: 1, g: 0, b: 0, a: 1}
+  _percentageChargeText: {fileID: 0}
+  _textMat: {fileID: 0}
+  _normalTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _fullChargedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &3491274505332219922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31285,7 +31299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54694bd6bf22480cb93d2e412bbf17eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.ChargedModules.SalveChargedModule
-  _componentIndexCache: 31
+  _componentIndexCache: 58
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: SalveChargedModule
@@ -31293,11 +31307,12 @@ MonoBehaviour:
   _ammoType: {fileID: 2634165181546453424}
   _isExplosifAmmo: 0
   _explosionRadius: 1
-  _timeToCharge: 1
-  _deadZoneStartCharging: 0.5
+  _currentPercentCharge: 0
+  _oneAmmoAddPercentage: {x: 5, y: 5}
+  _fullCharge: 0
+  _damageChargedMultiplicator: 10
   _recoilChargedMultiplier: 1.25
   _recoilX: 2
-  _isFullMultiplicator: 0.9
   _numberBulletInCharge: 10
   _coolDownCharge: 0.5
   _intervaleCharge: 0.05
@@ -31314,7 +31329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63271f06d005447489cdc2b16ef27714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.RaycastAmmoModule
-  _componentIndexCache: 32
+  _componentIndexCache: 59
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: RaycastAmmoModule
@@ -31338,7 +31353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfebb13a32584806874c4535aa257a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.NoiseModule
-  _componentIndexCache: 33
+  _componentIndexCache: 60
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: NoiseModule
@@ -31566,32 +31581,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4529339864843645274}
   m_SourcePrefab: {fileID: 100100000, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
---- !u!4 &278331891298378960 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1427363929612995280, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
-  m_PrefabInstance: {fileID: 1158505439156596224}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1414232106957678873 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 266708624374712089, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
-  m_PrefabInstance: {fileID: 1158505439156596224}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6240176814268882576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
---- !u!23 &4249826739577011265 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 3092209774603326017, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
-  m_PrefabInstance: {fileID: 1158505439156596224}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6240176814268882576 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5082973326308634768, guid: 0a12a57e0b893b94b9f25a70d7a9c318, type: 3}
-  m_PrefabInstance: {fileID: 1158505439156596224}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4529339864843645274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31604,9 +31593,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a6a39c46bf52104ba8efe3100bce3f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.EmptyNetworkBehaviour
-  _componentIndexCache: 0
+  _componentIndexCache: 61
   _addedNetworkObject: {fileID: 7927807153383519047}
-  _networkObjectCache: {fileID: 1414232106957678873}
+  _networkObjectCache: {fileID: 7927807153383519047}
 --- !u!1001 &1366108170947395903
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33907,7 +33896,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 9068305515156755161, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 278331891298378960}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4799643639750831679, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
@@ -33924,7 +33913,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &3775537872039362388 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5318771884911752325, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
+  m_CorrespondingSourceObject: {fileID: 844255977359690238, guid: 3db83080c4908774c8ce1301dbfa63a7, type: 3}
   m_PrefabInstance: {fileID: 9058275321699060689}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &4552777606222636526 stripped
@@ -33972,4 +33961,4 @@ MonoBehaviour:
   _grenadeThrower: {fileID: 4147575701769871822}
   _droneThrower: {fileID: 931936587992237131}
   _animator: {fileID: 4616227668612083950}
-  _ballInHand: {fileID: 4249826739577011265}
+  _ballInHand: {fileID: 0}

@@ -18,51 +18,9 @@ MonoBehaviour:
   - rid: 8760679503559655525
   - rid: 8760679503559655526
   - rid: 8760679503559655528
-  - rid: 2771476817129242866
   references:
     version: 2
     RefIds:
-    - rid: 2771476817129242866
-      type: {class: S_NoiseSetting, ns: , asm: Assembly-CSharp}
-      data:
-        displayName: NoiseModule
-        headerColor: {r: 0, g: 0.3921569, b: 0, a: 1}
-        MaxOffsetX: 5
-        MaxOffsetY: 5
-        TimeToAccessMaxNoise: 2
-        CurveNoiseOverTime:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0.020832062
-            value: 0.99520874
-            inSlope: -0.0028416202
-            outSlope: -0.0028416202
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.5636619
-            outWeight: 0.1929544
-          - serializedVersion: 3
-            time: 0.6894469
-            value: 0.45887896
-            inSlope: -1.3138467
-            outSlope: -1.3138467
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.17808516
-            outWeight: 0.33822766
-          - serializedVersion: 3
-            time: 0.9916687
-            value: -0.009548187
-            inSlope: 0.77106595
-            outSlope: 0.77106595
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.4961026
-            outWeight: 0.38490272
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
     - rid: 8760679503559655523
       type: {class: TemplateShootSetting, ns: , asm: Assembly-CSharp}
       data:
@@ -130,12 +88,10 @@ MonoBehaviour:
       data:
         displayName: SalveChargedModule
         headerColor: {r: 0, g: 1, b: 1, a: 1}
-        IsExplosifAmmo: 0
+        IsExplosifAmmo: 1
         explosionRadius: 1
-        timeToCharge: 0.6
-        DeadZoneStartCharging: 0
+        _damageChargedMultiplicator: 10
         recoilChargedMultiplier: 0
         RecoilX: 0
-        IsFullMultiplicator: 0.9
         NumberBulletInCharged: 10
         intervaleCharge: 0.02

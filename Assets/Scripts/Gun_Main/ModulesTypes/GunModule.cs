@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace  GunDecorator
 {
-    public abstract class GunModule : NetworkBehaviour
+    public abstract class GunModule : NetworkBusListener
     {
         protected GunController _gunController;
 

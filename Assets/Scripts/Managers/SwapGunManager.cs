@@ -1,50 +1,60 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using Controller;
 using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using MyPrint;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Managers
 {
-    [Serializable]
-    public struct SurchargeData
-    {
-        public float damageMultiplier;
-        public float cadenceMultiplier;
-        public float overloadDuration;
-        public float timeToCombo;
-        public Color colorJauge;
-    }
-    
     public class SwapGunManager : NetworkBusListener
     {
         [SerializeField] private float _timeToAcceptSwap = 2f;
         public readonly SyncVar<float> _elapsedTime = new SyncVar<float>();
         [SerializeField] private float _swapingTime;
+        [SerializeField] private float _cooldownSwap;
+        [SerializeField] private float _swapEnergyGain = 20;
         
-        [SerializeField] 
-        private List<SurchargeData> _damageSurchargeData = new List<SurchargeData>();
-        private readonly SyncVar<int> _currentSurchargeLevel = new SyncVar<int>();
         private readonly SyncVar<int> _firstPlayerOwnerId = new SyncVar<int>(-1);
 
-        private bool _isCombo = false;
+        private readonly SyncVar<bool> _canSwap = new SyncVar<bool>(true);
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
-        [SerializeField] private Image _infoCombo;
+        
+        [Header("Without Bro concentement")]
+        [SerializeField] private bool _instantSwapWithoutBroConsentement;
+        [SerializeField] private float _timeWindowToCancel = 3f;
+        private Dictionary<int, GunSwitching> _playersGunSwitching = new Dictionary<int, GunSwitching>();
+        
+        [Header("Polarized")]
+        private readonly SyncVar<bool> _isPolarized = new SyncVar<bool>(false);
+        public Dictionary<int, int> p_playerZones = new Dictionary<int, int>();
+        private Dictionary<int, bool> _playerCharges = new Dictionary<int, bool>();
+
+        [Header("Conflict")]
+        [SerializeField] private float _conflictTimerMax = 10f;
+        [SerializeField] private float _shortCircuitDamageInterval = 2f;
+        [SerializeField] private int _shortCircuitDamage = 10;
+
+        private readonly SyncVar<float> _conflictTimer = new SyncVar<float>(0f);
+        private readonly SyncVar<bool> _isInConflict = new SyncVar<bool>(false);
+        private readonly SyncVar<bool> _isShortCircuit = new SyncVar<bool>(false);
+
+        private float _shortCircuitDamageElapsed = 0f;
+        private List<int> _playerIds = new List<int>();
         
         private NetworkObject _player = null;
         private int _firstGunIndex = -1;
         private int _firstGunAmmo = -1;
         private float _displayedTime = 0f;
-        private float _targetTime = 0f;
         
         public Action<float> OnUpdateAskBroSwap;
         public Action<bool> OnChangeAskText;
-        public Action<bool, Color> OnComboUpdate;
 
         public override void OnStartServer()
         {
@@ -54,7 +64,11 @@ namespace Managers
             _elapsedTime.Value = 0;
             
             ListenToEvent<CallSwapGunEvent>(CheckCanSwapServerRpc);
-            ListenToEvent<EndOverloadEvent>(data => _elapsedTimeForCombo.Value = _damageSurchargeData[_currentSurchargeLevel.Value].timeToCombo);
+            ListenToEvent<OnPlayerChangeZone>(OnPlayerChangeZone);
+            
+            ListenToEvent<OnPlayerChangeMagneticCharge>(OnPlayerChangeMagneticCharge);
+            ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
+
         }
 
         public override void OnStartClient()
@@ -62,9 +76,89 @@ namespace Managers
             base.OnStartClient();
             
             _elapsedTime.OnChange += OnElapsedTimeChanged;
-            _elapsedTimeForCombo.OnChange += OnElapsedComboTimeChanged;
+            _isInConflict.OnChange += OnConflictChanged;
+            _isShortCircuit.OnChange += OnShortCircuitChanged;
+            _conflictTimer.OnChange += OnConflictTimerChanged;
         }
         
+        private void OnPlayerSpawn(OnPlayerSpawnEvent data)
+        {
+            RegisterPlayer(data.playerId);
+
+            if (!p_playerZones.ContainsKey(data.playerId))
+                p_playerZones[data.playerId] = -1;
+
+            if (!_playerCharges.ContainsKey(data.playerId))
+                _playerCharges[data.playerId] = data.isPositiveCharge;
+
+            if (!_playersGunSwitching.ContainsKey(data.playerId))
+            {
+                _playersGunSwitching[data.playerId] = data.gunSwitching;
+            }
+
+            if (_playerIds.Count >= 2)
+            {
+                EvaluateConflict();
+                
+                int p1 = _playerIds[0];
+                int p2 = _playerIds[1];
+                bool isAligned = _playerCharges[p1] == _playerCharges[p2];
+                NotifyPolarizationObserversRpc(isAligned, false, false);
+            }
+        }
+        
+        private void OnPlayerChangeZone(OnPlayerChangeZone data)
+        {
+            p_playerZones[data.playerId] = data.newZone;
+            RegisterPlayer(data.playerId);
+            EvaluateConflict();
+        }
+
+        private void OnPlayerChangeMagneticCharge(OnPlayerChangeMagneticCharge data)
+        {
+            _playerCharges[data.playerId] = data.isPositiveCharged;
+            RegisterPlayer(data.playerId);
+            EvaluateConflict();
+        }
+
+        private void RegisterPlayer(int id)
+        {
+            if (!_playerIds.Contains(id))
+                _playerIds.Add(id);
+        }
+        
+        private void EvaluateConflict()
+        {
+            if (_playerIds.Count < 2) return;
+            
+            int p1 = _playerIds[0];
+            int p2 = _playerIds[1];
+            
+            if (p_playerZones[p1] == -1 && p_playerZones[p2] == -1)
+            {
+                _isInConflict.Value = false;
+                return;
+            }
+            
+            bool zonesKnown = p_playerZones.ContainsKey(p1) && p_playerZones.ContainsKey(p2);
+            bool chargesKnown = _playerCharges.ContainsKey(p1) && _playerCharges.ContainsKey(p2);
+
+            if (!zonesKnown || !chargesKnown) return;
+
+            bool isAligned = _playerCharges[p1] == _playerCharges[p2];
+            bool isSameZone = p_playerZones[p1] == p_playerZones[p2];
+
+            _canSwap.Value = !isAligned;
+
+            bool conflict = (isAligned && !isSameZone) || (!isAligned && isSameZone);
+
+            _isInConflict.Value = conflict;
+
+            _isPolarized.Value = !isAligned;
+
+            NotifyPolarizationObserversRpc(isAligned, isSameZone, conflict);
+        }
+
         private void Update()
         {
             if (IsServerInitialized)
@@ -73,77 +167,206 @@ namespace Managers
                 {
                     _elapsedTime.Value -= Time.deltaTime;
                     if (_elapsedTime.Value <= 0)
-                        ResetTimer();
+                    {
+                        if(!_instantSwapWithoutBroConsentement)
+                            ResetTimer();
+                        else
+                        {
+                            SwapWithoutConsentement();
+                        }
+                    }
                 }
                 
                 if (_elapsedTimeForCombo.Value > 0)
                 {
                     _elapsedTimeForCombo.Value -= Time.deltaTime;
-                    _isCombo = true;
                     if (_elapsedTimeForCombo.Value <= 0)
                     {
-                        _isCombo = false;
-                        _currentSurchargeLevel.Value = 0;
+                        _canSwap.Value = true;
                     }
                 }
+                
+                UpdateConflictTimer();
+                UpdateShortCircuitDamage();
             }
             
             if (_displayedTime > 0)
             {
                 _displayedTime -= Time.deltaTime;
-                if (_displayedTime < 0) _displayedTime = 0;
+                if (_displayedTime < 0) 
+                    _displayedTime = 0;
             }
         
             OnUpdateAskBroSwap?.Invoke(_displayedTime / _timeToAcceptSwap);
         }
+        
+        private void UpdateConflictTimer()
+        {
+            if (_isInConflict.Value)
+            {
+                if (_isShortCircuit.Value) return; 
+
+                _conflictTimer.Value += Time.deltaTime;
+                if (_conflictTimer.Value >= _conflictTimerMax)
+                {
+                    _conflictTimer.Value = _conflictTimerMax;
+                    _isShortCircuit.Value = true;
+                }
+            }
+            else
+            {
+                _shortCircuitDamageElapsed = 0f;
+
+                if (_conflictTimer.Value > 0)
+                {
+                    _conflictTimer.Value -= Time.deltaTime;
+                    if (_conflictTimer.Value <= 0)
+                    {
+                        _conflictTimer.Value = 0;
+                    }
+                }
+                
+                _isShortCircuit.Value = false;
+            }
+        }
+
+        private void UpdateShortCircuitDamage()
+        {
+            if (!_isShortCircuit.Value) return;
+
+            _shortCircuitDamageElapsed += Time.deltaTime;
+            if (_shortCircuitDamageElapsed >= _shortCircuitDamageInterval)
+            {
+                _shortCircuitDamageElapsed = 0f;
+
+                foreach (int playerId in _playerIds)
+                {
+                    ApplyShortCircuitDamageTargetRpc(
+                        ServerManager.Clients[playerId],
+                        _shortCircuitDamage
+                    );
+                }
+            }
+        }
+
+        [TargetRpc]
+        private void ApplyShortCircuitDamageTargetRpc(NetworkConnection conn, int damage)
+        {
+            InvokeEvent(new OnShortCircuitDamage { damage = damage });
+        }
+        
+        [ObserversRpc]
+        private void NotifyPolarizationObserversRpc(bool isAligned, bool isSameZone, bool isConflict)
+        {
+            InvokeEvent(new OnPolarizationStateChanged
+            {
+                isAligned = isAligned,
+                isSameZone = isSameZone,
+                isConflict = isConflict
+            });
+        }
+        
 
         [ServerRpc(RequireOwnership = false)]
         private void CheckCanSwapServerRpc(CallSwapGunEvent data)
         {
             if (_player == data.player) return;
+            if (!_canSwap.Value) return;
             
-            if (_elapsedTime.Value > 0)
+            if(!_instantSwapWithoutBroConsentement)
             {
-                if (_isCombo)
+                if (_elapsedTime.Value > 0)
                 {
-                    _currentSurchargeLevel.Value++;
+                    _elapsedTimeForCombo.Value = _cooldownSwap;
 
-                    if (_currentSurchargeLevel.Value >= _damageSurchargeData.Count)
-                    {
-                        _currentSurchargeLevel.Value = 0;
-                    }
+                    _canSwap.Value = false;
+
+                    NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo);
+                    NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo);
+
+                    AddEnergyTargetRpc(_player.Owner);
+                    AddEnergyTargetRpc(data.player.Owner);
+
+                    ResetTimer();
                 }
                 else
                 {
-                    _elapsedTimeForCombo.Value = 0;
+                    _firstGunAmmo = data.currentAmmo;
+                    _elapsedTime.Value = _timeToAcceptSwap;
+                    _player = data.player;
+                    _firstGunIndex = data.gunIndex;
+                    _firstPlayerOwnerId.Value = data.player.OwnerId;
                 }
-                    
-                _elapsedTimeForCombo.Value = 0;
-
-                NotifySwapTargetRpc(_player.Owner, data.gunIndex, data.currentAmmo, _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge);
-                NotifySwapTargetRpc(data.player.Owner, _firstGunIndex, _firstGunAmmo, _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge);
-                ResetTimer();
             }
             else
             {
-                _firstGunAmmo = data.currentAmmo;
-                _elapsedTime.Value = _timeToAcceptSwap;
-                _player = data.player;
-                _firstGunIndex = data.gunIndex;
-                _firstPlayerOwnerId.Value = data.player.OwnerId;
+                if (_elapsedTime.Value > 0)
+                {
+                    ResetTimer();
+                    _elapsedTimeForCombo.Value = _cooldownSwap;
+                    _canSwap.Value = false;
+                }
+                else
+                {
+                    _elapsedTime.Value = _timeWindowToCancel;
+                }
             }
         }
-        
-        [TargetRpc]
-        private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo, Color color)
+
+        private void SwapWithoutConsentement()
         {
+            _canSwap.Value = false;
+            _elapsedTimeForCombo.Value = _cooldownSwap;
+                    
+            int p1Id = _playerIds[0];
+            int p2Id = _playerIds[1];
+
+            GunSwitching p1 = _playersGunSwitching[p1Id];
+            GunSwitching p2 = _playersGunSwitching[p2Id];
+                    
+            NetworkConnection p1Conn = p1.Owner;
+            NetworkConnection p2Conn = p2.Owner;
+
+            int p1GunIndex = p1.CurrentMainGunIndex;
+            int p2GunIndex = p2.CurrentMainGunIndex;
+
+            int p1Ammo = p1.ISurchargeMain.GetCurrentAmmo();
+            int p2Ammo = p2.ISurchargeMain.GetCurrentAmmo();
+                    
+            NotifySwapTargetRpc(p2Conn, p2GunIndex, p2Ammo);
+            NotifySwapTargetRpc(p1Conn, p1GunIndex, p1Ammo);
+
+            AddEnergyTargetRpc(p2Conn);
+            AddEnergyTargetRpc(p1Conn);
+
+            ResetTimer();
+        }
+
+        [TargetRpc]
+        private void AddEnergyTargetRpc(NetworkConnection conn)
+        {
+            RequestAddEnergyServerRpc(conn.ClientId);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void RequestAddEnergyServerRpc(int playerId)
+        {
+            InvokeEvent(new ModifyEnergyEvent
+            {
+                p_player = playerId,
+                p_value = _swapEnergyGain
+            });
+        }
+
+        [TargetRpc]
+        private void NotifySwapTargetRpc(NetworkConnection conn, int newIndex, int currentAmmo)
+        {
+            
             InvokeEvent(new SwapingGunEvent
             {
-                dataSurcharge = _damageSurchargeData[_currentSurchargeLevel.Value],
                 gunIndex = newIndex,
                 timeToSwap = _swapingTime,
                 currentAmmo = currentAmmo,
-                color = color,
             });
         }
 
@@ -161,10 +384,20 @@ namespace Managers
             _firstPlayerOwnerId.Value = -1;
         }
         
+        private bool CheckPolarized()
+        {
+            if (p_playerZones[0] == p_playerZones[1])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void OnElapsedTimeChanged(float prev, float next, bool asServer)
         {
-            _targetTime = next;
-
             if (next > 0)
             {
                 bool isRequester = LocalConnection.ClientId == _firstPlayerOwnerId.Value;
@@ -175,13 +408,68 @@ namespace Managers
                 _displayedTime = next;
         }
         
-        private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
+        private void OnConflictChanged(bool prev, bool next, bool asServer)
         {
-            bool a = next > 0 && _currentSurchargeLevel.Value < _damageSurchargeData.Count - 1;
-            Color c = _damageSurchargeData[_currentSurchargeLevel.Value].colorJauge;
-            
-            _infoCombo.color = c;
-            _infoCombo.gameObject.SetActive(a);
+            InvokeEvent(new OnConflictUIUpdate
+            {
+                isConflict = next, 
+                isShortCircuit = _isShortCircuit.Value
+            });
+        }
+
+        private void OnShortCircuitChanged(bool prev, bool next, bool asServer)
+        {
+            InvokeEvent(new OnConflictUIUpdate
+            {
+                isConflict = _isInConflict.Value,
+                isShortCircuit = next
+            });
+        }
+
+        private void OnConflictTimerChanged(float prev, float next, bool asServer)
+        {
+            InvokeEvent(new OnConflictTimerUIUpdate
+            {
+                ratio = next / _conflictTimerMax,
+                isShortCircuit = _isShortCircuit.Value
+            });
         }
     }
+}
+
+public struct OnPlayerIsInSameZone
+{
+    public bool isSameZone;
+}
+
+public struct OnPolarizationStateChanged
+{
+    public bool isAligned;
+    public bool isSameZone;
+    public bool isConflict;
+}
+
+public struct OnConflictUIUpdate
+{
+    public bool isConflict;
+    public bool isShortCircuit;
+}
+
+public struct OnConflictTimerUIUpdate
+{
+    public float ratio;
+    public bool isShortCircuit;
+}
+
+public struct OnShortCircuitDamage
+{
+    public int damage;
+}
+
+public struct OnPlayerSpawnEvent
+{
+    public int playerId;
+    public bool isPositiveCharge;
+    public GunSwitching gunSwitching;
+    public Transform Transform;
 }

@@ -1,40 +1,43 @@
-using FishNet;
+using System;
+using System.Collections;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
+public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 {
     [HideInInspector] public float p_damage;
     [HideInInspector] public float p_speed;
     [HideInInspector] public bool p_isExplosive;
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
+    [HideInInspector] public bool p_hadCharged;
+    public Action<BulletPhysicBehaviour> OnCollision;
     private GunController _gunController;
     
     [SerializeField] private GameObject _positiveExplosionVFX;
     [SerializeField] private GameObject _negativeExplosionVFX;
     
     [Header("View")]    
-    [SerializeField]private MeshRenderer _meshRenderer;
-    [SerializeField]private Material _positiveMaterial;
+    [SerializeField] private MeshRenderer _meshRenderer;
+    [SerializeField] private Material _positiveMaterial;
     [SerializeField] private Material _negativeMaterial;
     
-    [SerializeField]private TrailRenderer _trailRenderer;
-    [SerializeField]private Gradient _positiveLineColor;
-    [SerializeField]private Gradient _negativeLineColor;
+    [SerializeField] private TrailRenderer _trailRenderer;
+    [SerializeField] private Gradient _positiveLineColor;
+    [SerializeField] private Gradient _negativeLineColor;
 
     private GameObject _vfx;
-    
+    private NetworkObject _targetNetworkObject;
     private bool _hasHit = false;
-    RaycastHit hit;
-    
     private Vector3 _lastPosition;
 
     public void SetUpVariables(float damage, float speed, GameObject markPrefab, bool isExplosive, 
-        float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target, bool isPositive)
+        float explosionRadius, GunController gun, bool isCritical, Vector3 targetPoint, NetworkObject target, 
+        bool isPositive, float durationBeforeExplosion, float ratio = 1, bool isDistanceReduce = false,bool hadCharged = true)
     {
         p_damage = damage;
         p_speed = speed;
@@ -42,18 +45,19 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
         p_explosionRadius = explosionRadius;
         _gunController = gun;
         p_isCritical = isCritical;
+        _targetNetworkObject = target;
+        p_hadCharged = hadCharged;
         
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
-        
         _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
-    }
 
-    void Start()
-    {
-        _lastPosition = transform.position;
+        if (isExplosive)
+        {
+            StartCoroutine(DelayBeforeExplosion(durationBeforeExplosion));
+        }
     }
-
+    
     void FixedUpdate()
     {
         DetectCollision();
@@ -67,77 +71,71 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmoExplosif
 
         if (distance <= 0f) return;
 
-        if (Physics.SphereCast(_lastPosition, 0.15f, direction.normalized, out hit,
+        if (!Physics.SphereCast(_lastPosition, 0.15f, direction.normalized, out RaycastHit hit,
                 distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
-        {
-            if (_hasHit) return;
-            _hasHit = true;
-            
-            if (_vfx != null && p_isExplosive)
-            {
-                Instantiate(_vfx, transform.position, Quaternion.identity);
-            }
+            return;
 
-            if (InstanceFinder.IsServerStarted)
-            {
-                if (p_isExplosive)
-                {
-                    Explosed(p_explosionRadius, (int)p_damage);
-                    return;
-                }
-                else
-                {
-                    if (hit.transform.TryGetComponent<IDamagable>(out IDamagable damagable))
-                    {
-                        bool crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,  (int)p_damage, p_isCritical);
-                        _gunController.TriggerHitMark(crit || p_isCritical);
-                        InvokeEvent(new ModifyEnergyEvent
-                        {
-                            p_player = _gunController.Owner,
-                            p_value = p_damage
-                        });
-                        
-                        if (hit.collider.TryGetComponent<EnemyCore>(out var enemyCore))
-                        {
-                            Cons.Print("Charge", ColorConsole.Red);
-                            enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
-                        }
-                    }
-                }
-            }
+        if (_hasHit) return;
+        _hasHit = true;
 
-            Destroy(gameObject);
-        }
+        if (p_isExplosive)
+            HandleExplosion();
+        else
+            HandleDirectHit(hit);
+
+        OnCollision.Invoke(this); // il y avait un destroy ici
+    }
+
+    private void HandleExplosion()
+    {
+        if (_vfx != null)
+            Destroy(Instantiate(_vfx, transform.position, Quaternion.identity), 3f);
+
+        if (_gunController.IsServerInitialized)
+            Explosed(p_explosionRadius, (int)p_damage);
+    }
+
+    private void HandleDirectHit(RaycastHit hit)
+    {
+        if (_gunController.IsServerInitialized)
+            _gunController.ApplyDamage(hit.transform.GetComponent<NetworkObject>(), (int)p_damage, p_isCritical,p_hadCharged);
+        else
+            _gunController.RequestApplyDamage(hit.transform.GetComponent<NetworkObject>(), (int)p_damage, p_isCritical, p_hadCharged);
+    }
+
+    IEnumerator DelayBeforeExplosion(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        Explosed(p_explosionRadius, (int)p_damage);
     }
 
     public void Explosed(float radius, int damage)
     {
+        if (_vfx != null)
+            Instantiate(_vfx, transform.position, Quaternion.identity);
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
-        bool isHit = false;
-        bool crit = false;
-    
         foreach (Collider c in colliders)
         {
-            if (c.TryGetComponent<IDamagable>(out IDamagable damagable))
-            {
-                crit = damagable.TakeDamage(_gunController.NetworkObject.ObjectId,(int)p_damage, p_isCritical);
-                InvokeEvent(new ModifyEnergyEvent
-                {
-                    p_player = _gunController.Owner,
-                    p_value = p_damage
-                });
-                
-                if (c.TryGetComponent<EnemyCore>(out var enemyCore))
-                {
-                    enemyCore.AddCharge(_gunController.IsPositivePlayerCharge, p_damage);
-                }
-            
-                isHit = true;
-            }
+            if (!c.TryGetComponent<IDamagable>(out _)) continue;
+            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
+
+            if (_gunController.IsServerInitialized)
+                _gunController.ApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
+            else
+                _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
         }
-    
-        if(isHit)
-            _gunController.TriggerHitMark(crit || p_isCritical);
+    }
+
+    public void Spawn()
+    {
+        _lastPosition = transform.position;
+    }
+
+    public void ReturnToPool()
+    {
+        _hasHit = false;
     }
 }

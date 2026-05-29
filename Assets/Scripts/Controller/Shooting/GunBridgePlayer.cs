@@ -21,33 +21,17 @@ namespace Controller
         [SerializeField] private GunSwitching _gunSwitching;
         [SerializeField] private GunSurcharge _gunSurcharge;
         [SerializeField] private GrenadeThrower _grenadeThrower;
-        
-        private readonly SyncVar<bool> _wantToSwitch = new SyncVar<bool>();
-        
-        private bool _localWantToSwitch = false;
-        
-        private Material _gunMaterial;
+        [SerializeField] private PlayerCapacity _playerCapacity;
         
         private bool _isInitialized = false;
-        
-        private Coroutine _swapCoroutine;
         
         public override void OnStartClient()
         {
             base.OnStartClient();
-
-            if (IsOwner)
             {
-                ListenToEvent<SwapingGunEvent>(SwapingGun);
-                ListenToEvent<EndTimerSwapEvent>(EndTimerSwap);
-                _wantToSwitch.OnChange += (prev, next, asServer) => _localWantToSwitch = next;
+                if(!IsOwner)
+                    SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
             }
-            else
-            {
-                SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
-            }
-
-            _gunSwitching.OnStartSwitchGun += StopReloadGun;
         }
 
         public void InitializeWithGunId(int gunId)
@@ -59,8 +43,11 @@ namespace Controller
 
         public void TryShootWithCurrentGun()
         {
-            if (_gunSwitching == null || _gunSwitching.IGunMain == null)
+            if (!_gunSwitching.IsMainGun)
+            {
+                _gunSwitching.ShootEnergy.TryShoot();
                 return;
+            }
 
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
@@ -70,25 +57,28 @@ namespace Controller
 
         public void TryCancelShooting()
         {
+            if (!_gunSwitching.IsMainGun)
+            {
+                _gunSwitching.ShootEnergy.TryCancelShoot();
+                return;
+            }
+            
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
             
             CurrentGun.TryCancelShooting();
         }
         
-        public void TryChargeWithCurrentGun()
-        {             
-            if (_gunSwitching.IsSwitching) return;
-            if (!_isInitialized) return;
-
-            TryCancelShooting();
-            CurrentGun.TryCharging();
-        }
-
         public void TryShootChargeShooting()
         {
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
+            if (!_playerCapacity.CanChargedShoot) return;
+            
+            InvokeEvent(new OnUseCapacity
+            {
+                p_capacityData = Capacity.ChargedShoot
+            });
             
             CurrentGun.TryShootCharged();
         }
@@ -100,99 +90,10 @@ namespace Controller
             
             CurrentGun.TryReload();
         }
-        
-        [ServerRpc]
-        public void RequestSwapingGunServerRpc(NetworkObject playerNet, int gunIndex,int currentAmmo)
+
+        public void TryChangeMain(bool isMain)
         {
-            if (!_gunSwitching.IsMainGun) return;
-            
-            _wantToSwitch.Value = true;
-            
-            CallSwapGunEvent data = new CallSwapGunEvent
-            {
-                player = playerNet,
-                gunIndex = gunIndex,
-                currentAmmo = currentAmmo,
-            };
-    
-            InvokeEvent(data);
-        }
-
-        private void SwapingGun(SwapingGunEvent data)
-        {
-            ResetWantToSwitchServerRpc();
-            
-            if (_swapCoroutine != null)
-                StopCoroutine(_swapCoroutine);
-            
-            _swapCoroutine = StartCoroutine(WaitBeforeSwapCoroutine(data));
-        }
-
-        IEnumerator WaitBeforeSwapCoroutine(SwapingGunEvent data)
-        {
-            CurrentMainSurchargeGun.StopReload();
-            _gunSurcharge.SetColorImage(data.color);
-
-            int ammoToApply = data.currentAmmo;
-
-            // ✅ Variable LOCALE — isolée de toute autre coroutine
-            Material matBefore = CurrentMainSurchargeGun.ModelGun.material;
-            matBefore.SetFloat("_Dissolving", 0);
-
-            float duration = data.timeToSwap / 2;
-            float elapsedTime = 0;
-
-            while (elapsedTime < duration)
-            {
-                elapsedTime += Time.deltaTime;
-                matBefore.SetFloat("_Dissolving", Mathf.Clamp01(elapsedTime / duration));
-                yield return null;
-            }
-
-            _gunSwitching.ChangeCurrentGun_Main_ServerRpc(data.gunIndex);
-            _grenadeThrower.ChangeMagneticChargeServerRpc();
-
-            // ✅ Nouvelle référence locale après le swap
-            Material matAfter = CurrentMainSurchargeGun.ModelGun.material;
-            matAfter.SetFloat("_Dissolving", 1);
-
-            elapsedTime = duration;
-
-            while (elapsedTime > 0)
-            {
-                elapsedTime -= Time.deltaTime;
-                matAfter.SetFloat("_Dissolving", Mathf.Clamp01(elapsedTime / duration));
-                yield return null;
-            }
-
-            matAfter.SetFloat("_Dissolving", 0);
-
-            _gunSurcharge.SetOverloadStats(true,
-                data.dataSurcharge.overloadDuration,
-                data.dataSurcharge.damageMultiplier,
-                data.dataSurcharge.cadenceMultiplier,
-                ammoToApply);
-
-            _swapCoroutine = null;
-        }
-
-
-        private void EndTimerSwap(EndTimerSwapEvent data)
-        {
-            if (data.player == NetworkObject) return;
-
-            ResetWantToSwitchServerRpc();
-        }
-        
-        [ServerRpc]
-        private void ResetWantToSwitchServerRpc()
-        {
-            _wantToSwitch.Value = false;
-        }
-        
-        private void StopReloadGun()
-        {
-            CurrentMainSurchargeGun.StopReload();
+            _gunSwitching.ChangeGunServerRpc(isMain);
         }
         
         void SetLayerRecursively(GameObject obj, int newLayer)
@@ -212,17 +113,14 @@ namespace Controller
         public NetworkObject player;
         public int gunIndex;
         public int currentAmmo;
-        public Color colorSwap;
     }
     
     //Swap accepté et envoyé au joueux
     public struct SwapingGunEvent
     {
-        public SurchargeData dataSurcharge;
         public int gunIndex;
         public float timeToSwap;
         public int currentAmmo;
-        public Color color;
     }
 
     //Event de fin de demande de swap

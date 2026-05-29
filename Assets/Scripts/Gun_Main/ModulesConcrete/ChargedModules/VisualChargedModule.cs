@@ -1,5 +1,7 @@
 using GunDecorator;
 using GunDecorator.ChargedModules;
+using MyPrint;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,10 +17,11 @@ public class VisualChargedModule : GunModule
 	[SerializeField] private ChargedParentModule _chargedModule;
 
 	[Header("UI")]
-	[SerializeField] private GameObject _chargedUI;
-	[SerializeField] private Image _valueCharging;
-	[SerializeField] private Color _chargingColor = Color.orange;
-	[SerializeField] private Color _fullChargeColor = Color.red;
+	[SerializeField] private TextMeshPro _percentageChargeText;
+	[SerializeField] private MeshRenderer _textMat;
+	[SerializeField] private Color _normalTextColor;
+	[SerializeField] private Color _fullChargedTextColor;
+	[SerializeField] private Color _OverloadTextColor;
 	
 	#endregion
 
@@ -27,41 +30,31 @@ public class VisualChargedModule : GunModule
 
 	void OnEnable()
 	{
-		_chargedModule.OnStartCharging += StartCharing;
-		_chargedModule.OnEndCharging += EndCharging;
-		_chargedModule.OnCharging += Charging;
+		_chargedModule.OnPercentageChargeChange += PercentageChanged;
 		_chargedModule.OnFullCharged += FullCharged;
-		
-		_chargedUI.SetActive(false);
 	}
 
 	void OnDisable()
 	{
-		_chargedModule.OnStartCharging -= StartCharing;
-		_chargedModule.OnEndCharging -= EndCharging;
-		_chargedModule.OnCharging -= Charging;
-		_chargedModule.OnFullCharged -= FullCharged;
+		_chargedModule.OnPercentageChargeChange -= PercentageChanged;
 	}
-
-	private void Charging(float amount)
+	private void PercentageChanged(int percent)
 	{
-		_valueCharging.fillAmount = amount;
+		if(_percentageChargeText != null)
+			_percentageChargeText.text = percent + "%";
 	}
 	
-	private void StartCharing()
+	private void FullCharged(bool isFull, bool isOverload)
 	{
-		_chargedUI.SetActive(true);
-		_valueCharging.color = _chargingColor;
-	}
-	
-	private void EndCharging()
-	{
-		_chargedUI.SetActive(false);
-	}
+		if(!isOverload)
+			_textMat.material.SetColor("_FresnelColor" , isFull ? _fullChargedTextColor : _normalTextColor);
+		else
+			_textMat.material.SetColor("_FresnelColor" , _OverloadTextColor);
 
-	private void FullCharged()
-	{
-		_valueCharging.color = _fullChargeColor;
+		if (isFull)
+		{
+			_gunController.PlaySound("IsCharged");
+		}
 	}
 
 	#endregion

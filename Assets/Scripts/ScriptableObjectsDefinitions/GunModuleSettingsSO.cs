@@ -11,7 +11,7 @@ public class GunModuleSettingsSO : ScriptableObject
     public List<GunSetting> modulesList = new();
 }
 
-[Serializable]
+[System.Serializable]
 public class GunSetting
 {
     [HideInInspector] public string displayName;
@@ -21,6 +21,7 @@ public class GunSetting
 #region Child Settings Class
 
     //TemplateShoot
+    [System.Serializable]
     public class TemplateShootSetting : GunSetting
     {
         public float fireRate;
@@ -30,14 +31,18 @@ public class GunSetting
     }
 
     //RaycastAmmo
+    [System.Serializable]
     public class RaycastAmmoSetting : GunSetting
     {
         public float maxDistance = 2000;
         public float damages;
         public float bulletSpeed = 100;
+        public bool isDistanceReduced = false;
+        public float factorReduceDamageByDistance = 1;
     }
 
     //PhysicAmmo
+    [System.Serializable]
     public class PhysicAmmoSetting : GunSetting
     {
         public float damages;
@@ -48,6 +53,7 @@ public class GunSetting
 
 
     //Reload
+    [System.Serializable]
     public class ReloadSetting : GunSetting
     {
         public bool isAutoReload;
@@ -56,6 +62,7 @@ public class GunSetting
     }
 
     //Recoil
+    [System.Serializable]
     public class RecoilSetting : GunSetting
     {
         [Header("Settings")]
@@ -75,12 +82,14 @@ public class GunSetting
     //SECOND
 
     //Explosif
+    [System.Serializable]
     public class S_ExplosifSetting : GunSetting
     {
         public float explosionRadius;
     }
 
     //Noise
+    [System.Serializable]
     public class S_NoiseSetting : GunSetting
     {
         public float MaxOffsetX = 2;
@@ -90,6 +99,7 @@ public class GunSetting
     }
 
     //Salve
+    [System.Serializable]
     public class S_SalveSetting : GunSetting
     {
         public int numberShootPerSalve;
@@ -99,59 +109,59 @@ public class GunSetting
 
 
     //Charged Salve
+    [System.Serializable]
     public class ChargedSalveSetting : GunSetting
     {
         public bool IsExplosifAmmo = false;
         public float explosionRadius;
+        public Vector2 OneAmmoAddPercentage = new Vector2(1, 1);
 
         [Header("Charging")] 
-        public float timeToCharge = 1;
-        public float DeadZoneStartCharging = 0.5f;
+        public float _damageChargedMultiplicator = 10;
         public float recoilChargedMultiplier = 1.25f;
         public float RecoilX = 2;
-        public float IsFullMultiplicator = 0.9f;
         public int NumberBulletInCharged = 10;
 
         [Header("Salve")]
         public float intervaleCharge = 0.05f;
+        public Vector2 noiseCharged = new Vector2(0, 0);
     }
 
     //Charged Increase Noise
+    [System.Serializable]
     public class ChargedIncreaseNoiseSetting : GunSetting
     {
         public bool IsExplosifAmmo = false;
-        public float explosionRadius;
-
-        [Header("Charging")] 
-        public float timeToCharge = 1;
-        public float DeadZoneStartCharging = 0.5f;
+        public float explosionRadius;        
+        public Vector2 OneAmmoAddPercentage = new Vector2(1, 1);
+        
+        [Header("Charging")]
+        public float _damageChargedMultiplicator = 10;
         public float recoilChargedMultiplier = 1.25f;
         public float RecoilX = 2;
-        public float IsFullMultiplicator = 0.9f;
         public int NumberBulletInCharged = 10;
 
         [Header("Noise")] 
-        public AnimationCurve NoiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
+        public float noiseAngle = 5;
         public float maxNoiseAngle = 10;
     }
 
     //Charged Decrease Noise
+    [System.Serializable]
     public class ChargedDecreaseNoiseSetting : GunSetting
     {
         public bool IsExplosifAmmo = false;
         public float explosionRadius;
+        public Vector2 OneAmmoAddPercentage = new Vector2(1, 1);
 
         [Header("Charging")] 
-        public float timeToCharge = 1;
-        public float DeadZoneStartCharging = 0.5f;
+        public float _damageChargedMultiplicator = 2;
         public float recoilChargedMultiplier = 1.25f;
         public float RecoilX = 2;
-        public float IsFullMultiplicator = 0.9f;
         public int NumberBulletInCharged = 10;
 
-        [Header("Noise")] 
-        public AnimationCurve NoiseEvolutionCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
-        public float startMaxNoiseAngle = 10;
+        [Header("Positions")] 
+        public Vector3[] _posOffset;
     }
 
 #endregion

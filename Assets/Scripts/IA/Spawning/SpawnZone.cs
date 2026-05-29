@@ -35,7 +35,7 @@ public class SpawnZone : NetworkBusListener
     {
         _gridReader = GetComponent<PathfindingGridReader>();
         
-        ListenToEvent<EnemyDyingEvent>(EDE =>
+        /*ListenToEvent<EnemyDyingEvent>(EDE =>
         {
             if (EDE.p_gridReaderId == _gridReader.p_id)
             {
@@ -48,10 +48,12 @@ public class SpawnZone : NetworkBusListener
                 }
             }
             
-        });
+        });*/
 
         ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
         {
+            if (PPUE.p_isHeartBeat) return; //Heart beat isn't usefull for pathfinding
+            
             for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
             {
                 if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
@@ -73,8 +75,11 @@ public class SpawnZone : NetworkBusListener
     [Server]
     async void StartSpawning()
     {
+        CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
         await SpawnFirstWave();
+        CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
         await SpawnSecondWave();
+        CustomLogger.CCErrorLog("\"SpawnZone.cs\" is deprecated, please use \"SubArena.cs\" instead.");
     }
     
     [Server]
@@ -85,7 +90,7 @@ public class SpawnZone : NetworkBusListener
         
         
         EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
-        enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader, enemyCost);
+        enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
         _spawnedEnemies.Add(enemyCore);
         

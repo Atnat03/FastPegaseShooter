@@ -2,19 +2,30 @@ using System;
 using System.Collections.Generic;
 using FishNet;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PathfindingRequestManager : MonoBehaviour
 {
     [SerializeField] private int _maxRequestsPerFrame = 2;
+    [SerializeField] private float _tolerableDistanceThreshold = 0.5f;
     
     private Queue<PathRequest> _requests = new Queue<PathRequest>();
+    
+    [Header("----- Options -----")]
+    [SerializeField] private bool _useDistanceCullingOptimization = true;
     
     /// <summary>
     /// Add a pathRequest, previous check needs to be done to prevent registering multiple time the same request
     /// </summary>
-    public void RegisterPathRequest(PathRequest pathRequest)
+    public bool TryRegisterPathRequest(PathRequest pathRequest)
     {
-        _requests.Enqueue(pathRequest);
+        if(!_useDistanceCullingOptimization || pathRequest._sqrDistanceEndNodeToTarget > _tolerableDistanceThreshold * _tolerableDistanceThreshold)
+        {
+            _requests.Enqueue(pathRequest);
+            return true;
+        }
+        
+        return false;
     }
 
     void Update()
@@ -27,12 +38,19 @@ public class PathfindingRequestManager : MonoBehaviour
     {
         for (int i = 0; i < _maxRequestsPerFrame && _requests.Count > 0; i++)
         {
-            _requests.Dequeue().p_AuthorizePathRequest?.Invoke();
+            _requests.Dequeue().p_authorizePathRequest?.Invoke();
         }
     }
 }
 
 public struct PathRequest
 {
-    public Action p_AuthorizePathRequest;
+    public float _sqrDistanceEndNodeToTarget;
+    public Action p_authorizePathRequest;
+
+    public PathRequest(float sqrDistanceEndNodeToTarget, Action authorizePathRequest)
+    {
+        _sqrDistanceEndNodeToTarget = sqrDistanceEndNodeToTarget;
+        p_authorizePathRequest = authorizePathRequest;
+    }
 }

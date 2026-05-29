@@ -6,9 +6,9 @@ using UnityEngine;
 [AddComponentMenu("EnemyBehaviour/Attack/BasicMeleeAttackModule")]
 public class BasicMeleeAttackModule : EnemyAttackModule
 {
-    public override void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
-        base.OnNetworkTick();
+        base.OnNetworkTick(tickDelta);
         if (_waitedTimeSinceAttack >= _attackDelay && CanAttack(Vector3.zero, Vector3.zero))//can attack do not use projectile direction
         {
             _waitedTimeSinceAttack = 0;
@@ -16,11 +16,12 @@ public class BasicMeleeAttackModule : EnemyAttackModule
             if (InstanceFinder.ClientManager.Objects.Spawned.TryGetValue(_targetModule.p_targetId, out NetworkObject player))
             {
                 //Empty event for now
-                InvokeEvent(new EnemyMeleeAttack());
+                InvokeEvent(new EnemyMeleeAttackEvent());
                 InvokeEvent(new PlayerTakeDamageEvent
                 {
                     p_playerN = player,
-                    p_value = _damage
+                    p_value = _damage,
+                    p_attacker = transform.GetComponent<NetworkObject>(),
                 });
                 p_onHitPlayer?.Invoke(player.ObjectId, _damage);
             }
@@ -45,9 +46,4 @@ public class BasicMeleeAttackModule : EnemyAttackModule
         Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
         Gizmos.DrawSphere(_targetingModule.GetTargetPosition(), 0.1f);
     }*/
-}
-
-public struct EnemyMeleeAttack
-{
-    
 }

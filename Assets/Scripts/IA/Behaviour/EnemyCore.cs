@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Controller;
+using CustomConsole.Runtime.Logger;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
@@ -11,47 +14,32 @@ using UnityEngine.UI;
 [AddComponentMenu("EnemyBehaviour/Core")]
 public class EnemyCore : NetworkBusListener
 {
-    [SerializeField] private float _maxEnemySwelling;
-    private float _swellingAmount;
-
     [SerializeField] private List<EnemyAttackModule> _attackingModules = new List<EnemyAttackModule>();
     [SerializeField] private List<EnemyLifeModule> _lifeModules = new List<EnemyLifeModule>();
     [SerializeField] private List<EnemyTargetModule> _targetingModules = new List<EnemyTargetModule>();
     [SerializeField] private EnemyMovementModule _movementModule;
     
-    //Filled In Automatially
-    //private List<ScoreTargetModule> _scoreModules = new List<ScoreTargetModule>();
-
     public Guid p_gridReaderId;
     public PathfindingRequestManager p_pathRequester;
     public PathfindingGridReader p_gridReader;
-    [HideInInspector] public int p_enemySpawnCost;
 
-    #region Charges Variables
-    
-    [SerializeField] private int _explosionChargedDamage = 50;
-    
-    public float p_negativeChargeMax = 5;
-    public float p_currentNegativeCharge;
-    
-    public float p_positiveChargeMax = 5;
-    public float p_currentPositiveCharge;
-    #endregion
+    public Action OnDapExplosion;
 
-    #region Actions
+    #region Energy Variables
 
-    public Action p_OnChargeExplosion;
-    public Action p_OnPositiveChargeChange;
-    public Action p_OnNegativeChargeChange;
-
+    [SerializeField] private ChargeType _pinataType = ChargeType.None;
+    [SerializeField] private float _baseEnergyDropValue = 5;
+    [SerializeField] private float _pinataEnergyDropValue = 10;
+    [SerializeField] private bool _dropXpOrb = false;
     #endregion
 
     
     public override void OnStartServer()
     {
+        base.OnStartServer();
+        
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
-
         
         //Initialising Score Target Module
         List<ScoreTargetModule> scoreModules = new List<ScoreTargetModule>();
@@ -94,7 +82,7 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyAttackModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyAttackModule found in {gameObject.name}");
         }
     
         foreach (EnemyLifeModule module in _lifeModules)
@@ -102,7 +90,7 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyLifeModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyLifeModule found in {gameObject.name}");
         }
     
         foreach (EnemyTargetModule module in _targetingModules)
@@ -110,36 +98,41 @@ public class EnemyCore : NetworkBusListener
             if (module != null)
                 module.InitialiseBehaviourModule(this);
             else
-                Debug.LogWarning($"Null EnemyTargetModule found in {gameObject.name}");
+                Debug.LogError($"Null EnemyTargetModule found in {gameObject.name}");
         }
 
         _movementModule?.InitialiseBehaviourModule(this);
     }
 
     public void SetInfos(Guid _readerId, PathfindingRequestManager pathfindingRequestManager,
-        PathfindingGridReader pathfindingGridReader, int cost)
+        PathfindingGridReader pathfindingGridReader)
     {
         p_gridReaderId = _readerId;
-        p_enemySpawnCost = cost;
         p_pathRequester = pathfindingRequestManager;
         p_gridReader = pathfindingGridReader;
     }
 
+    public void ClearPathReservation()
+    {
+        _movementModule.ClearPathReservation();
+    }
+
     private void OnNetworkTick()
     {
+        float tickDelta = (float)InstanceFinder.TimeManager.TickDelta;
         foreach (EnemyAttackModule module in _attackingModules)
         {
             if (module != null)
-                module.OnNetworkTick();
+                module.OnNetworkTick(tickDelta);
         }
 
         foreach (EnemyTargetModule module in _targetingModules)
         {
             if (module != null)
-                module.OnNetworkTick();
+                module.OnNetworkTick(tickDelta);
         }
 
-        _movementModule?.OnNetworkTick();
+        _movementModule?.OnNetworkTick(tickDelta);
     }
 
     public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
@@ -147,63 +140,66 @@ public class EnemyCore : NetworkBusListener
         _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
     }
 
-    #region Charges
-
-    [Server]
-    public void AddCharge(bool positive, float value)
+    public void ExplodeOnDapWave()
     {
-        if (positive)
-        {
-            p_currentPositiveCharge += value;
-            OnPositiveChangeObserverRpc();
-        }
-        else
-        {
-            p_currentNegativeCharge += value;
-            OnNegativeChangeObserverRpc();
-        }
-
-        CheckAllChargeAreFull();
+        ExplodeOnDapWaveObserverRpc();
+        KillEnemy(-1, ChargeType.None);
     }
 
-    [Server]
-    private void ResetAllCharged()
+    void ExplodeOnDapWaveObserverRpc()
     {
-        p_currentPositiveCharge = 0;
-        p_currentNegativeCharge = 0;
+        OnDapExplosion?.Invoke();
     }
-    
-    [Server]
-    private void CheckAllChargeAreFull()
+
+    public void KillEnemy(int playerObjectId, ChargeType charge)
     {
-        if (p_currentPositiveCharge >= p_positiveChargeMax && p_currentNegativeCharge >= p_negativeChargeMax)
+        if(_movementModule != null)
+            ClearPathReservation();
+
+        //if killed by dap wave
+        if (charge != ChargeType.None)
         {
-            //life module at position 0 is considered to be the main life module
-            // => There is feedback in the inspector
-            _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage);
+            InstanceFinder.ServerManager.Despawn(gameObject);
+            return;
+        }
+        
+        float signedEnergyAmount = GetSignedEnergyAmount(charge);
+        
+        EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_dropXpOrb ? 0 : signedEnergyAmount));
+        
+        
+        InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
+        
+        if (!_dropXpOrb)
+        {
+            InvokeEvent(new ModifyEnergyEvent
+            {
+                p_player = playerObjectId,
+                p_value = Mathf.Abs(signedEnergyAmount)
+            });
+        }
+        
+        InstanceFinder.ServerManager.Despawn(gameObject);
+    }
+
+    float GetSignedEnergyAmount(ChargeType charge)
+    {
+        switch (charge)
+        {
+            case ChargeType.Positive:
+                if (_pinataType == ChargeType.Positive)
+                    return _pinataEnergyDropValue;
+                return _baseEnergyDropValue;
             
+            case ChargeType.Negative:
+                if (_pinataType == ChargeType.Negative)
+                    return -_pinataEnergyDropValue;
+                return -_baseEnergyDropValue;
             
-            ResetAllCharged();
-            ExplosionObserversRpc();
+            default:
+                return 0f;
         }
     }
-
-    [ObserversRpc]
-    private void ExplosionObserversRpc()
-    {
-        p_OnChargeExplosion?.Invoke();
-    }
-
-    [ObserversRpc]
-    private void OnPositiveChangeObserverRpc()
-    {
-        p_OnPositiveChargeChange?.Invoke();
-    }
-    [ObserversRpc]
-    private void OnNegativeChangeObserverRpc()
-    {
-        p_OnNegativeChargeChange?.Invoke();
-    }
-    
-    #endregion
 }
+
+public enum ChargeType{Negative, Positive, None}

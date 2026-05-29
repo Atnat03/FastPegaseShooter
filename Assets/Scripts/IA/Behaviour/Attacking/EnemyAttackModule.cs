@@ -13,13 +13,17 @@ public abstract class EnemyAttackModule : EnemyBehaviourModule
     [HideInInspector][SerializeField] protected EnemyTargetModule _targetModule;
     [HideInInspector][SerializeField] protected int _damage = 10;
     [HideInInspector][SerializeField] protected float _attackDelay = 2f;
+    [HideInInspector][SerializeField] protected BulletTypes _bulletType;
+    [HideInInspector][SerializeField] protected bool _projectileUseGravity = false;
     [HideInInspector][SerializeField] protected float _maxPlayerDistance = 10f;
     protected float _waitedTimeSinceAttack;
 
     protected abstract bool CanAttack(Vector3 shootingPos, Vector3 projectileDir);
 
-    public virtual void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
+        base.OnNetworkTick(tickDelta);
+        
         _waitedTimeSinceAttack += (float)InstanceFinder.TimeManager.TickDelta;
     }
 

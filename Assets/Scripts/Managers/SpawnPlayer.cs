@@ -9,7 +9,6 @@ using MyPrint;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
-using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class SpawnPlayer : NetworkBehaviour
 {
@@ -37,7 +36,7 @@ public class SpawnPlayer : NetworkBehaviour
     private void OnSceneLoadEnd(SceneLoadEndEventArgs args)
     {
         if (!args.QueueData.AsServer) return;
-
+        
         foreach (var conn in InstanceFinder.ServerManager.Clients.Values)
         {
             if (!_spawnedClients.Contains(conn.ClientId))
@@ -56,18 +55,23 @@ public class SpawnPlayer : NetworkBehaviour
         SpawnPlayers(conn);
         _spawnedClients.Add(conn.ClientId);
     }
-    
     [Server]
     private void SpawnPlayers(NetworkConnection player)
     {
-        Debug.Log("SpawnPlayers called");
-   
+        Scene targetScene = UnityEngine.SceneManagement.SceneManager.GetSceneByName("PersistentObjects");
+
         NetworkObject playerObj = Instantiate(_playerPrefab);
+
+        if(targetScene.isLoaded)
+            UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(playerObj.gameObject, targetScene);
+
+        playerObj.transform.position =
+            _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
+
         InstanceFinder.ServerManager.Spawn(playerObj, player);
-        playerObj.transform.position = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
 
         FPSController fps = playerObj.GetComponent<FPSController>();
-    
+
         if (fps != null)
             SetUpLayerTargetRpc(player, fps);
     }
