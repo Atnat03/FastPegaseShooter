@@ -232,6 +232,12 @@ namespace GunDecorator
         {
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
+            
+            if (!target.IsSpawned)
+            {
+                Debug.LogWarning("ApplyDamage : target not spawned");
+                return;
+            }
 
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);

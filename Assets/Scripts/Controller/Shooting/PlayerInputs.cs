@@ -21,8 +21,6 @@ namespace Controller
         private bool shootingInputPressed;
 
         private InputAction _shootAction;
-
-        private bool _hasDap = true;
         
         #endregion
 
@@ -90,7 +88,6 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(!_canShoot) return;
-            if (_hasDap) return;
             
             _droneThrower.TryThrowDrone();
         }
@@ -154,8 +151,6 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
-            
-            _hasDap = true;
             
             AskForDapServerRpc();
         }
