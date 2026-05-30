@@ -144,6 +144,7 @@ GameObject:
   - component: {fileID: 4639033686446523756}
   - component: {fileID: -6673638721032206114}
   - component: {fileID: 4856717765235199756}
+  - component: {fileID: -8482099214543494113}
   - component: {fileID: -1059870798127094945}
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8280671740658429549}
@@ -267,6 +268,46 @@ MonoBehaviour:
   _speed: 4
   _traceWeight: 12
   _traceSpread: 3
+--- !u!114 &-8482099214543494113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23498b4b02aaf4e488d27c0b1c9abc28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SteeringBehaviourMovementModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 0}
+  _doFreezeWithoutTarget: 1
+  _targetModule: {fileID: -1059870798127094945}
+  _speed: 4
+  _traceWeight: 12
+  _traceSpread: 3
+  _nodeValidationDistance: 0.5
+  _seekSteeringCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _seekSteeringStrenght: 6
+  _WallViewDistance: 1
+  _agentWidth: 0.5
+  _wallSteeringStrenght: 200
+  _ignoredLayers:
+    serializedVersion: 2
+    m_Bits: 65728
+  _enemyViewDistance: 60
+  _enemySteeringStrenght: 10
+  _enemyLayers:
+    serializedVersion: 2
+    m_Bits: 65536
+  _maxSkippingStep: 3
 --- !u!114 &-1059870798127094945
 MonoBehaviour:
   m_ObjectHideFlags: 0
