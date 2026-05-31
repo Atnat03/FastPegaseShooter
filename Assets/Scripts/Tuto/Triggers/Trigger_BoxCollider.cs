@@ -16,7 +16,6 @@ namespace Tuto.Triggers
     {
         public override string DisplayName => "Trigger Box";
 
-        [Tooltip("Correspond au champ 'Proxy Index' du TriggerBoxProxy dans la scène")]
         public int proxyIndex = 0;
         public TriggerBoxMode mode = TriggerBoxMode.BothAtSameTime;
 
@@ -34,7 +33,7 @@ namespace Tuto.Triggers
         {
             if (_bridge == null)
             {
-                Debug.LogWarning($"[Trigger_BoxCollider] Aucun proxy trouvé pour l'index {proxyIndex}");
+                Debug.LogWarning($"Aucun proxy trouvé pour l'index {proxyIndex}");
                 return;
             }
             _bridge.OnPlayerEntered += HandlePlayerEntered;

@@ -18,9 +18,7 @@ namespace Tuto
         {
             Cons.Print("Start dialogue", ColorConsole.Blue);
             
-            // DialogueUI.Instance.Show(this);
             yield return new WaitForSeconds(_duration);
-            // DialogueUI.Instance.Hide();
             
             Cons.Print("End dialogue", ColorConsole.Blue);
         }
