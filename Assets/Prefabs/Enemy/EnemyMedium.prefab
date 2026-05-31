@@ -143,11 +143,11 @@ GameObject:
   - component: {fileID: 1227236921369466688}
   - component: {fileID: 4639033686446523756}
   - component: {fileID: -2585620934281341367}
-  - component: {fileID: -7403905012809937036}
   - component: {fileID: 1891565403973585591}
   - component: {fileID: 8499048331238972686}
   - component: {fileID: 8280671740658429549}
   - component: {fileID: 6176439864006220930}
+  - component: {fileID: -7819390584717042970}
   m_Layer: 0
   m_Name: EnemyMedium
   m_TagString: Enemy
@@ -194,7 +194,7 @@ MonoBehaviour:
   - {fileID: 4639033686446523756}
   _targetingModules:
   - {fileID: 8499048331238972686}
-  _movementModule: {fileID: -7403905012809937036}
+  _movementModule: {fileID: -7819390584717042970}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   _pinataType: 2
@@ -244,64 +244,6 @@ MonoBehaviour:
   _maxBulletLifeTime: 10
   _bulletAmount: 2
   _shootingSpreadAngle: 8
---- !u!114 &-7403905012809937036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5911405418369916473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23498b4b02aaf4e488d27c0b1c9abc28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteeringBehaviourMovementModule
-  _componentIndexCache: 3
-  _addedNetworkObject: {fileID: 8280671740658429549}
-  _networkObjectCache: {fileID: 8280671740658429549}
-  _doFreezeWithoutTarget: 1
-  _targetModule: {fileID: 8499048331238972686}
-  _speed: 9
-  _traceWeight: 9
-  _traceSpread: 3
-  _nodeValidationDistance: 0.5
-  _seekSteeringCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _seekSteeringStrenght: 6
-  _WallViewDistance: 1
-  _agentWidth: 0.5
-  _wallSteeringStrenght: 200
-  _ignoredLayers:
-    serializedVersion: 2
-    m_Bits: 65728
-  _enemyViewDistance: 60
-  _enemySteeringStrenght: 10
-  _enemyLayers:
-    serializedVersion: 2
-    m_Bits: 65536
-  _maxSkippingStep: 3
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -370,7 +312,7 @@ MonoBehaviour:
   - {fileID: 1227236921369466688}
   - {fileID: 4639033686446523756}
   - {fileID: -2585620934281341367}
-  - {fileID: -7403905012809937036}
+  - {fileID: 0}
   - {fileID: 8499048331238972686}
   - {fileID: 6176439864006220930}
   - {fileID: 1602071577645785696}
@@ -384,7 +326,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584215335663202305
+  _initializedTimestamp: -8584213599649568791
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -455,6 +397,27 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
+--- !u!114 &-7819390584717042970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911405418369916473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53783909ae03234408c4b1a8d6416c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DistanceAwareMovementModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 8280671740658429549}
+  _networkObjectCache: {fileID: 0}
+  _doFreezeWithoutTarget: 1
+  _targetModule: {fileID: 8499048331238972686}
+  _speed: 9
+  _traceWeight: 9
+  _traceSpread: 3
+  _idealDistance: 1
 --- !u!1001 &8007790814760535868
 PrefabInstance:
   m_ObjectHideFlags: 0
