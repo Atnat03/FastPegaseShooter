@@ -12,8 +12,6 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     [HideInInspector] [SerializeField] protected bool _doFreezeWithoutTarget = true;
     [HideInInspector] [SerializeField] protected EnemyTargetModule _targetModule;
     [HideInInspector] [SerializeField] protected float _speed = 3;
-    [HideInInspector] [SerializeField] protected int _traceWeight = 9;
-    [HideInInspector] [SerializeField] protected int _traceSpread = 3;
     
     protected List<PathfindingNode> _path = new List<PathfindingNode>();
     private int _pathReservationId = -1;
@@ -47,21 +45,12 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
                     RecalculatePathConcrete));
         }
     }
-    
-    public void ClearPathReservation()
-    {
-        if (_pathReservationId < 0) return;
-        _enemyCore.p_gridReader.ClearPathReservation(_pathReservationId);
-        _pathReservationId = -1;
-    }
 
     protected virtual void RecalculatePathConcrete()
     {
-        ClearPathReservation();
         
-        _enemyCore.p_gridReader.GetAndRegisterPath(
-            transform.position, _targetModule.GetTargetPosition(), _traceWeight, _traceSpread,
-            out _path, out _pathReservationId);
+        _enemyCore.p_gridReader.GetPath(
+            transform.position, _targetModule.GetTargetPosition(), out _path);
         _isPathUpdateRequested = false;
         
         _path.RemoveAt(_path.Count-1);

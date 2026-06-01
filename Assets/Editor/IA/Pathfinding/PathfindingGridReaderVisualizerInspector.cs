@@ -21,8 +21,7 @@ public class PathfindingGridReaderVisualizerInspector : Editor
         
         Undo.RecordObject(script, "Modify Pathfinding Debug");
         EditorGUI.BeginChangeCheck();
-
-        script.walkingCostGradient = EditorGUILayout.GradientField("walkingCostGradient", script.walkingCostGradient);
+        
         script.upperWalkingCostValue = EditorGUILayout.IntField("upperWalkingCostValue", script.upperWalkingCostValue);
         script.nodeDrawSize = EditorGUILayout.FloatField("nodeDrawSize", script.nodeDrawSize);
 

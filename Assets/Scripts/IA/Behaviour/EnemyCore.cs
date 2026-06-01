@@ -112,11 +112,6 @@ public class EnemyCore : NetworkBusListener
         p_gridReader = pathfindingGridReader;
     }
 
-    public void ClearPathReservation()
-    {
-        _movementModule.ClearPathReservation();
-    }
-
     private void OnNetworkTick()
     {
         float tickDelta = (float)InstanceFinder.TimeManager.TickDelta;
@@ -148,8 +143,6 @@ public class EnemyCore : NetworkBusListener
 
     public void KillEnemy(int playerObjectId, ChargeType charge)
     {
-        if(_movementModule != null)
-            ClearPathReservation();
 
         //if killed by dap wave
         if (charge != ChargeType.None)
