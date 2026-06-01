@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEngine.WSA;
+using Application = UnityEngine.Application;
 
 public class CSVDataExport : MonoBusListener
 {
@@ -12,8 +14,6 @@ public class CSVDataExport : MonoBusListener
     
     void Start()
     {
-        gameID = PlayerPrefs.GetInt("GameID", 0);
-        
         rows.Add(new string[]
         {
             "Time",
@@ -75,20 +75,21 @@ public class CSVDataExport : MonoBusListener
     {
         if(rows.Count < 2) return;
         ExportCSV();
-        PlayerPrefs.SetInt("GameID", ++gameID);
     }
 
     void ExportCSV()
     {
-        string fileName = "game_" + gameID;
 
-        string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+        string documentsPath = Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
         string folderPath = Path.Combine(documentsPath, "GamesData");
+        
 
         if (!Directory.Exists(folderPath))
         {
             Directory.CreateDirectory(folderPath);
         }
+        
+        string fileName = $"game_{Directory.GetFiles(folderPath).Length}";
 
         string path = Path.Combine(folderPath, fileName + ".csv");
 
@@ -102,12 +103,6 @@ public class CSVDataExport : MonoBusListener
         File.WriteAllText(path, sb.ToString());
 
         if(autoOpenFile)Application.OpenURL("file://" + folderPath); 
-    }
-    
-    [ContextMenu("resetGameCount")]
-    public void ResetGameCount()
-    {
-        PlayerPrefs.SetInt("GameID", 0);
     }
 }
 
