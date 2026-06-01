@@ -100,16 +100,9 @@ public class EnemyCoreInspector : Editor
         GUILayout.EndVertical();
         
         GUILayout.Space(10);
-        GUILayout.Label("Energy Drop", _titleStyle);
+        GUILayout.Label("Core Variables", _titleStyle);
         
-        EditorUtilities.Draw("_dropXpOrb", serializedObject);
-        EditorUtilities.Draw("_baseEnergyDropValue", serializedObject);
-
-        EditorGUILayout.PropertyField(_pinataType);
-        if ((ChargeType)_pinataType.enumValueFlag != ChargeType.None)
-        {
-            EditorUtilities.Draw("_pinataEnergyDropValue", serializedObject);
-        }
+        EditorUtilities.Draw("_coreSo", serializedObject);
         
         serializedObject.ApplyModifiedProperties();
     }

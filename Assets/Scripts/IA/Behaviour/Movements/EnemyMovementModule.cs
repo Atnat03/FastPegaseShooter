@@ -9,9 +9,8 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
 {
     //HideInInspector to prevent draw with "base.OnInspectorGUI"
     //SerializeField to get properties in custom inspector 
-    [HideInInspector] [SerializeField] protected bool _doFreezeWithoutTarget = true;
     [HideInInspector] [SerializeField] protected EnemyTargetModule _targetModule;
-    [HideInInspector] [SerializeField] protected float _speed = 3;
+    [HideInInspector] [SerializeField] protected MovementModuleSO _movementModuleSO;
     
     protected List<PathfindingNode> _path = new List<PathfindingNode>();
     private int _pathReservationId = -1;
@@ -28,7 +27,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     {
         base.OnNetworkTick(tickDelta);
         
-        if(!_targetModule.HasTarget() && _doFreezeWithoutTarget) return;
+        if(!_targetModule.HasTarget() && _movementModuleSO.p_doFreezeWithoutTarget) return;
         
         MoveAlongPath();
     }

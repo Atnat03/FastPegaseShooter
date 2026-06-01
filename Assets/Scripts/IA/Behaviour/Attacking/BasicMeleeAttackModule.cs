@@ -9,7 +9,7 @@ public class BasicMeleeAttackModule : EnemyAttackModule
     public override void OnNetworkTick(float tickDelta)
     {
         base.OnNetworkTick(tickDelta);
-        if (_waitedTimeSinceAttack >= _attackDelay && CanAttack(Vector3.zero, Vector3.zero))//can attack do not use projectile direction
+        if (_waitedTimeSinceAttack >= _attackModuleSO.p_attackDelay && CanAttack(Vector3.zero, Vector3.zero))//can attack do not use projectile direction
         {
             _waitedTimeSinceAttack = 0;
             
@@ -20,17 +20,17 @@ public class BasicMeleeAttackModule : EnemyAttackModule
                 InvokeEvent(new PlayerTakeDamageEvent
                 {
                     p_playerN = player,
-                    p_value = _damage,
+                    p_value = _attackModuleSO.p_damage,
                     p_attacker = transform.GetComponent<NetworkObject>(),
                 });
-                p_onHitPlayer?.Invoke(player.ObjectId, _damage);
+                p_onHitPlayer?.Invoke(player.ObjectId, _attackModuleSO.p_damage);
             }
         }
     }
 
     protected override bool CanAttack(Vector3 shootingPos, Vector3 projectileDir)
     {
-        if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
+        if (GetTargetSqrDistance() > _attackModuleSO.p_maxPlayerDistance * _attackModuleSO.p_maxPlayerDistance)
         {
             return false;
         }

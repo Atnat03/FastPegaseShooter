@@ -11,6 +11,7 @@ public class PathfindingGridReaderVisualizerInspector : Editor
         
         Color backgroundColor = GUI.color;
         GUILayout.Label("Debug");
+        script._visualisationColor = EditorGUILayout.ColorField("Visualisation Color", script._visualisationColor);
         GUILayout.BeginHorizontal();
         GUI.backgroundColor = script.drawNodes ? Color.green : Color.red;
         if(GUILayout.Button("Draw Nodes")) script.drawNodes = !script.drawNodes;
