@@ -14,8 +14,7 @@ public class DistanceAwareMovementModule : EnemyMovementModule
         {
             transform.position = Vector3.MoveTowards(transform.position, _path[^1].position, _speed * Time.deltaTime);
             
-            /*transform.position = Vector3.Lerp(_lastPos, _path[^2].position, _t);
-            _t += Time.deltaTime * _speed;*/
+            
             if ((_path[^1].position - transform.position).sqrMagnitude <= 0.01f)
             {
                 _path.RemoveAt(_path.Count - 1);

@@ -21,6 +21,7 @@ public class CSVDataExport : MonoBusListener
             "EntityID",
             "weapon",
             "target",
+            "targetID",
             "damages",
             "player1PVs",
             "player2PVs",
@@ -38,6 +39,7 @@ public class CSVDataExport : MonoBusListener
                 EntityID = -1,
                 weapon = "init",
                 targetName = "init",
+                targetID = -1,
                 damages = 0,
                 player1PVs = 100,
                 player2PVs = 100,
@@ -50,7 +52,7 @@ public class CSVDataExport : MonoBusListener
 
     void AddLog(OnDataLog data)
     {
-        string[] prev = rows.Count > 1 ? rows[^1] : new string[11];
+        string[] prev = rows.Count > 1 ? rows[^1] : new string[12];
 
         rows.Add(new[]
         {
@@ -58,13 +60,14 @@ public class CSVDataExport : MonoBusListener
             data.entityName   ?? prev[1],                                    
             data.EntityID     .HasValue ? data.EntityID.Value.ToString()     : prev[2],
             data.weapon       ?? prev[3],                                 
-            data.targetName   ?? prev[4],                                   
-            data.damages      .HasValue ? data.damages.Value.ToString("F2")  : prev[5], 
-            data.player1PVs   .HasValue ? data.player1PVs.Value.ToString("F2") : prev[6],
-            data.player2PVs   .HasValue ? data.player2PVs.Value.ToString("F2") : prev[7],
-            data.player1Energy.HasValue ? data.player1Energy.Value.ToString("F2") : prev[8], 
-            data.player2Energy.HasValue ? data.player2Energy.Value.ToString("F2") : prev[9], 
-            data.ArenaID      .HasValue ? data.ArenaID.Value.ToString()      : prev[10],
+            data.targetName   ?? prev[4],
+            data.targetID     .HasValue ? data.targetID.Value.ToString()    : prev[5],
+            data.damages      .HasValue ? data.damages.Value.ToString("F2")  : prev[6], 
+            data.player1PVs   .HasValue ? data.player1PVs.Value.ToString("F2") : prev[7],
+            data.player2PVs   .HasValue ? data.player2PVs.Value.ToString("F2") : prev[8],
+            data.player1Energy.HasValue ? data.player1Energy.Value.ToString("F2") : prev[9], 
+            data.player2Energy.HasValue ? data.player2Energy.Value.ToString("F2") : prev[10], 
+            data.ArenaID      .HasValue ? data.ArenaID.Value.ToString()      : prev[11],
         });
     }
     
@@ -115,6 +118,7 @@ struct OnDataLog
     public int?   EntityID;
     public string weapon;
     public string targetName;
+    public int?   targetID;
     public float? damages;
     public float? player1PVs;
     public float? player2PVs;

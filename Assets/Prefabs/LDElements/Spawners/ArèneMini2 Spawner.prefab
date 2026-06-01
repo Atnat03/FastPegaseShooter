@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cef386ddb5932e40bf94a56237adfb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
-  pathfindingGridSO: {fileID: 11400000, guid: 4274fcf5f995c604a9ce7780b182157c, type: 2}
+  pathfindingGridSO: {fileID: 11400000, guid: edeeb6bb647c0874890818aedd5c4f2a, type: 2}
   VariableChanged: 1
 --- !u!114 &368847391327520589
 MonoBehaviour:
@@ -179,7 +179,6 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 2781469791665419696}
   _networkObjectCache: {fileID: 0}
   _pathfindingRequestManager: {fileID: 0}
-  _subArenaName: Arena 1 - Zone 1
   _zoneActivated: 0
   _spawnPoints:
   - {fileID: 0}
@@ -188,6 +187,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  _arenaGaugePrefab: {fileID: 0}
   spawnDelayFirstWave: 1.4
   spawnMobsFirstWave:
   - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
@@ -206,8 +206,8 @@ MonoBehaviour:
     p_state: {fileID: 11400000, guid: 759ce88eb16b3314187a45078069775d, type: 2}
   - p_stateDuration: 25
     p_state: {fileID: 11400000, guid: 65391380cbb42ca4abb0c89edc37ed75, type: 2}
-  _maxSpawnEnemy: 8
-  _corrosionDamage: 15
+  _maxSpawnEnemy: 10
+  _corrosionDamage: 5
   _corrosionDelay: 1
   _maxEnabledTime: 999
   _currentStateIndex: 0
@@ -241,7 +241,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584224240368820090
+  _initializedTimestamp: -8584215425077887456
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -257,7 +257,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 29
+  <PrefabId>k__BackingField: 30
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 11340468880660284517
   SceneId: 0
@@ -281,9 +281,9 @@ MonoBehaviour:
   _events:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SpawnZone, Assembly-CSharp
-        m_MethodName: TriggerZone
+      - m_Target: {fileID: 368847391327520589}
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

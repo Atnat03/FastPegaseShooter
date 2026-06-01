@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cef386ddb5932e40bf94a56237adfb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
-  pathfindingGridSO: {fileID: 11400000, guid: bd3c01cfc4936a848b69b27ce44336c5, type: 2}
+  pathfindingGridSO: {fileID: 11400000, guid: 42d0a15a54733e0418f35ec5fe00c414, type: 2}
   VariableChanged: 1
 --- !u!114 &273197325415757339
 MonoBehaviour:
@@ -86,7 +86,6 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5651608469680430264}
   _networkObjectCache: {fileID: 5651608469680430264}
   _pathfindingRequestManager: {fileID: 0}
-  _subArenaName: Arena 1 - Zone 1
   _zoneActivated: 0
   _spawnPoints:
   - {fileID: 4052275527940667378}
@@ -95,6 +94,7 @@ MonoBehaviour:
   - {fileID: 8291505201428064764}
   - {fileID: 5647438671037012018}
   - {fileID: 5842782908955696475}
+  _arenaGaugePrefab: {fileID: 0}
   spawnDelayFirstWave: 1.4
   spawnMobsFirstWave:
   - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
@@ -113,8 +113,8 @@ MonoBehaviour:
     p_state: {fileID: 11400000, guid: 759ce88eb16b3314187a45078069775d, type: 2}
   - p_stateDuration: 25
     p_state: {fileID: 11400000, guid: 65391380cbb42ca4abb0c89edc37ed75, type: 2}
-  _maxSpawnEnemy: 8
-  _corrosionDamage: 15
+  _maxSpawnEnemy: 10
+  _corrosionDamage: 5
   _corrosionDelay: 1
   _maxEnabledTime: 999
   _currentStateIndex: 0
@@ -138,7 +138,6 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: 273197325415757339}
-  - {fileID: 0}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects:
   - {fileID: 6279194531240466456}
@@ -150,7 +149,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584217110564239637
+  _initializedTimestamp: -8584215425077887456
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -166,7 +165,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 42
+  <PrefabId>k__BackingField: 36
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 15742868034793577017
   SceneId: 0
@@ -190,9 +189,9 @@ MonoBehaviour:
   _events:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SpawnZone, Assembly-CSharp
-        m_MethodName: TriggerZone
+      - m_Target: {fileID: 273197325415757339}
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -432,7 +431,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1300058702531480593, guid: b52c05a3931b1b94bb6e9505d7939b59, type: 3}
       propertyPath: _initializedTimestamp
-      value: -8584217110564239637
+      value: -8584215425077887456
       objectReference: {fileID: 0}
     - target: {fileID: 1300058702531480593, guid: b52c05a3931b1b94bb6e9505d7939b59, type: 3}
       propertyPath: <IsNested>k__BackingField
