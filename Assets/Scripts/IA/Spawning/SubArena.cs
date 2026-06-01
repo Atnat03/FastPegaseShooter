@@ -18,6 +18,7 @@ public class SubArena : NetworkBusListener
     [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
     [SerializeField] private bool _zoneActivated;
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
+    [SerializeField] private SubArenaGauge _arenaGaugePrefab;
     
     [Header("----- First Wave -----")]
     [SerializeField] private float spawnDelayFirstWave;
@@ -57,7 +58,11 @@ public class SubArena : NetworkBusListener
         
         ListenToEvent<OnEnemyDieEvent>(OEDE =>
         {
-            _spawnedEnemies.Remove(OEDE.p_enemy);
+            if(_spawnedEnemies.Contains(OEDE.p_enemy))
+            {
+                NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
+                _spawnedEnemies.Remove(OEDE.p_enemy);
+            }
         });
         
 
@@ -97,6 +102,30 @@ public class SubArena : NetworkBusListener
 
     #endregion
 
+    #region Visual Notification
+
+    [ObserversRpc]
+    void NotifySubArenaStartObserverRpc(Guid arenaId)
+    {
+        EventBus.InvokeEvent(
+            new OnSubArenaStartEvent(
+                arenaId,
+                _arenaGaugePrefab)
+            );
+    }
+    [ObserversRpc]
+    void NotifySubArenaUpdateObserverRpc(Guid arenaId)
+    {
+        EventBus.InvokeEvent(
+            new OnSubArenaUpdateEvent(
+                arenaId, 
+                _spawnedEnemies.Count/(float)_maxSpawnEnemy,
+                _spawningStates[_currentStateIndex].p_state)
+            );
+    }
+
+    #endregion
+
     #region SubArena Starting
 
     [ServerRpc(RequireOwnership = false)]
@@ -111,6 +140,10 @@ public class SubArena : NetworkBusListener
     [Server]
     async void StartSpawning()
     {
+        if(!IsServerStarted) return;
+        
+        NotifySubArenaStartObserverRpc(_gridReader.p_id);
+        
         await SpawnFirstWave();
         await InfiniteSpawn();
     }
@@ -163,6 +196,7 @@ public class SubArena : NetworkBusListener
 
     #endregion
 
+    #region Wave Spawning
     [Server]
     async Task SpawnFirstWave()
     {
@@ -223,6 +257,7 @@ public class SubArena : NetworkBusListener
                     {
                         currentStateTime = 0;
                         _currentStateIndex = (_currentStateIndex + 1) % _spawningStates.Count;
+                        NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
                     }
                     
                     _currentBudget += _spawningStates[_currentStateIndex].p_state.p_budgetPerSecond;
@@ -238,6 +273,7 @@ public class SubArena : NetworkBusListener
                     //CustomLogger.Log($"Spawn enemy : {nextMobToSpawn.name}");
                     _currentBudget -= nextMobToSpawn.p_cost;
                     SpawnEnemy(nextMobToSpawn.p_prefab);
+                    NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
                 }
             }
         }
@@ -247,6 +283,7 @@ public class SubArena : NetworkBusListener
             return;
         }
     }
+    #endregion
 }
 
 [System.Serializable]

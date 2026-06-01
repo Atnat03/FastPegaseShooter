@@ -15,11 +15,10 @@ public class PVBagLifeModule : EnemyLifeModule
     [SerializeField] private float _damageMultWhenDestroyed = 1;
     
     [Server]
-    public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false)
+    public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false)
     {
-        if(!CanReceiveDamage(charge)) return false;
-        
         base.TakeDamage(attackerObjectId, rawDamageAmount, charge, isCritical);
+        
         if (IsServerInitialized)
         {
             int damages = GetDamageAmount(rawDamageAmount);
@@ -27,7 +26,7 @@ public class PVBagLifeModule : EnemyLifeModule
             
             if(p_life.Value <= 0)
             {
-                int damage = Mathf.RoundToInt(GetDamageAmount(rawDamageAmount) * _damageMultWhenDestroyed);
+                int damage = Mathf.RoundToInt(damages * _damageMultWhenDestroyed);
                 _enemyLifeModule.TakeDamage(attackerObjectId, damage, charge,  isCritical);
             }
         }
@@ -37,9 +36,9 @@ public class PVBagLifeModule : EnemyLifeModule
     }
 
     [Server]
-    public override void Death(int takenDamages)
+    public override void Death(int attackerObjectId, ChargeType charge)
     {
-        base.Death(takenDamages);
+        base.Death(attackerObjectId, charge);
         
         
         InstanceFinder.ServerManager.Despawn(gameObject);

@@ -1,7 +1,9 @@
 using System;
 using Controller;
+using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using Managers;
 using MyPrint;
 using UnityEngine;
 
@@ -14,47 +16,45 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     [HideInInspector][SerializeField] private int _life = 10;
     public readonly SyncVar<int> p_life = new SyncVar<int>();
     
+    [Header("debug")] [SerializeField] private SwapGunManager swapGunManager;
+    
     /// <summary>
     /// bool => Is Critical Damages <br/>
     /// int => Taken damages amount
     /// </summary>
     public Action<bool, int, int, int> OnLifeUpdate;
     public Action OnDeathViewer;
-    public Action<int> OnDeath;
     
     public Action<int, int> p_onHitPlayer;
     
     
     [HideInInspector] private float p_damageMultiplier = 1;
 
-    public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, EnemyCore.ChargeType charge, bool isCritical = false)
+    private void Start()// pour du debug, a tej en build finale
     {
-        if(!CanReceiveDamage(charge)) return false;
-        
+        swapGunManager = FindAnyObjectByType<SwapGunManager>();
+    }
+
+    public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false)
+    {
         if (IsServerInitialized)
         {
-            if (_enemyCore._hasShied.Value != 0)
-                return false;
+            int damages = GetDamageAmount(rawDamageAmount);
+            p_onHitPlayer?.Invoke(attackerObjectId, damages);
             
-            p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
-            OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
-
-            if (p_life.Value - GetDamageAmount(rawDamageAmount) <= 0)
+            if (p_life.Value - damages <= 0)
             {
-                OnDeath?.Invoke(attackerObjectId);
+                Death(attackerObjectId, charge);
+                return isCritical;
             }
+            
+            OnLifeUpdateObserverRPC(isCritical, damages);
+
         }
         return isCritical;
     }
-
-    protected bool CanReceiveDamage(EnemyCore.ChargeType charge)
-    {
-        if(_enemyCore.p_affinityType == EnemyCore.ChargeType.None) return true;
-        
-        return _enemyCore.p_affinityType != charge;
-    }
     
-    public virtual void Death(int takenDamages)
+    public virtual void Death(int attackerObjectId, ChargeType charge)
     {
         if(!IsServerInitialized) return;
         OnDeathObserverRPC();
@@ -64,29 +64,10 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     {
         base.OnStartServer();
         p_life.Value = _life;
-        p_life.OnChange += OnLifeChanged;
         
-        //ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
         ListenToEvent((EndOverloadEvent EOE) => p_damageMultiplier = 1);
     }
-
-    public override void OnStopServer()
-    {
-        p_life.OnChange -= OnLifeChanged;
-        base.OnStopServer();
-    }
-
-    [Server]
-    protected virtual void OnLifeChanged(int prev, int next, bool asServer)
-    {
-        if (next <= 0)
-        {
-            if (asServer)
-            {
-                Death(prev-next); // serveur uniquement
-            }
-        }
-    }
+    
 
     protected virtual int GetDamageAmount(int rawDamage) => Mathf.RoundToInt(rawDamage * p_damageMultiplier);
 

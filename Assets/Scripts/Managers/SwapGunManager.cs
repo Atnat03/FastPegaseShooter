@@ -25,8 +25,6 @@ namespace Managers
 
         private readonly SyncVar<bool> _canSwap = new SyncVar<bool>(true);
         private readonly SyncVar<float> _elapsedTimeForCombo = new SyncVar<float>();
-
-        [SerializeField] private TextMeshProUGUI _cooldownText;
         
         [Header("Without Bro concentement")]
         [SerializeField] private bool _instantSwapWithoutBroConsentement;
@@ -35,7 +33,7 @@ namespace Managers
         
         [Header("Polarized")]
         private readonly SyncVar<bool> _isPolarized = new SyncVar<bool>(false);
-        private Dictionary<int, int> _playerZones = new Dictionary<int, int>();
+        public Dictionary<int, int> p_playerZones = new Dictionary<int, int>();
         private Dictionary<int, bool> _playerCharges = new Dictionary<int, bool>();
 
         [Header("Conflict")]
@@ -78,7 +76,6 @@ namespace Managers
             base.OnStartClient();
             
             _elapsedTime.OnChange += OnElapsedTimeChanged;
-            _elapsedTimeForCombo.OnChange += OnElapsedComboTimeChanged;
             _isInConflict.OnChange += OnConflictChanged;
             _isShortCircuit.OnChange += OnShortCircuitChanged;
             _conflictTimer.OnChange += OnConflictTimerChanged;
@@ -88,8 +85,8 @@ namespace Managers
         {
             RegisterPlayer(data.playerId);
 
-            if (!_playerZones.ContainsKey(data.playerId))
-                _playerZones[data.playerId] = -1;
+            if (!p_playerZones.ContainsKey(data.playerId))
+                p_playerZones[data.playerId] = -1;
 
             if (!_playerCharges.ContainsKey(data.playerId))
                 _playerCharges[data.playerId] = data.isPositiveCharge;
@@ -112,7 +109,7 @@ namespace Managers
         
         private void OnPlayerChangeZone(OnPlayerChangeZone data)
         {
-            _playerZones[data.playerId] = data.newZone;
+            p_playerZones[data.playerId] = data.newZone;
             RegisterPlayer(data.playerId);
             EvaluateConflict();
         }
@@ -137,19 +134,19 @@ namespace Managers
             int p1 = _playerIds[0];
             int p2 = _playerIds[1];
             
-            if (_playerZones[p1] == -1 && _playerZones[p2] == -1)
+            if (p_playerZones[p1] == -1 && p_playerZones[p2] == -1)
             {
                 _isInConflict.Value = false;
                 return;
             }
             
-            bool zonesKnown = _playerZones.ContainsKey(p1) && _playerZones.ContainsKey(p2);
+            bool zonesKnown = p_playerZones.ContainsKey(p1) && p_playerZones.ContainsKey(p2);
             bool chargesKnown = _playerCharges.ContainsKey(p1) && _playerCharges.ContainsKey(p2);
 
             if (!zonesKnown || !chargesKnown) return;
 
             bool isAligned = _playerCharges[p1] == _playerCharges[p2];
-            bool isSameZone = _playerZones[p1] == _playerZones[p2];
+            bool isSameZone = p_playerZones[p1] == p_playerZones[p2];
 
             _canSwap.Value = !isAligned;
 
@@ -389,7 +386,7 @@ namespace Managers
         
         private bool CheckPolarized()
         {
-            if (_playerZones[0] == _playerZones[1])
+            if (p_playerZones[0] == p_playerZones[1])
             {
                 return true;
             }
@@ -409,13 +406,6 @@ namespace Managers
 
             if (next > prev)
                 _displayedTime = next;
-        }
-        
-        private void OnElapsedComboTimeChanged(float prev, float next, bool asServer)
-        {
-            _cooldownText.gameObject.SetActive(next > 0);
-            
-            _cooldownText.text = ((int)next).ToString();
         }
         
         private void OnConflictChanged(bool prev, bool next, bool asServer)
@@ -481,4 +471,5 @@ public struct OnPlayerSpawnEvent
     public int playerId;
     public bool isPositiveCharge;
     public GunSwitching gunSwitching;
+    public Transform Transform;
 }

@@ -14,9 +14,6 @@ using UnityEngine.UI;
 [AddComponentMenu("EnemyBehaviour/Core")]
 public class EnemyCore : NetworkBusListener
 {
-    [SerializeField] private float _maxEnemySwelling;
-    private float _swellingAmount;
-
     [SerializeField] private List<EnemyAttackModule> _attackingModules = new List<EnemyAttackModule>();
     [SerializeField] private List<EnemyLifeModule> _lifeModules = new List<EnemyLifeModule>();
     [SerializeField] private List<EnemyTargetModule> _targetingModules = new List<EnemyTargetModule>();
@@ -26,35 +23,14 @@ public class EnemyCore : NetworkBusListener
     public PathfindingRequestManager p_pathRequester;
     public PathfindingGridReader p_gridReader;
 
-    #region Charges Variables
+    public Action OnDapExplosion;
 
-    public ChargeType p_affinityType = ChargeType.None;
-    [SerializeField] private int _explosionChargedDamage = 50;
+    #region Energy Variables
 
-    public bool p_player1_IsPositive;
-    public float p_player1_ChargeMax = 5;
-    public float p_current_player1_Charge;  
-    
-    public bool p_player2_IsPositive;
-    public float p_player2_ChargeMax = 5;
-    public float p_current_player2_Charge;
-    
-    //Shied
-    public readonly SyncVar<int> _hasShied = new SyncVar<int>(0);
-    public ChargeType p_shiedType = ChargeType.None;
-    
-    public enum ChargeType{Negative, Positive, None}
-    
-    #endregion
-    
-    #region Actions
-
-    public Action p_OnChargeExplosion;
-    public Action<bool, float> p_OnPlayer1ChargeChange;
-    public Action<bool, float> p_OnPlayer2ChargeChange;
-
-    public Action<ChargeType> OnSetShied;
-
+    [SerializeField] private ChargeType _pinataType = ChargeType.None;
+    [SerializeField] private float _baseEnergyDropValue = 5;
+    [SerializeField] private float _pinataEnergyDropValue = 10;
+    [SerializeField] private bool _dropXpOrb = false;
     #endregion
 
     
@@ -64,8 +40,6 @@ public class EnemyCore : NetworkBusListener
         
         InitialiseEnemy();
         InstanceFinder.TimeManager.OnTick += OnNetworkTick;
-        
-        ListenToEvent<SwapingGunEvent>(TriggerExplosionOnSwap);
         
         //Initialising Score Target Module
         List<ScoreTargetModule> scoreModules = new List<ScoreTargetModule>();
@@ -94,20 +68,11 @@ public class EnemyCore : NetworkBusListener
                     module.p_onHitPlayer += scoreModule.OnDamageTaken;
             }
         }
-
-        _hasShied.Value = (int)p_shiedType;
-        
-        _lifeModules[0].OnDeath += DeathEvent;
     }
 
     public override void OnStopServer()
     {
         InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
-    }
-
-    public override void OnStartClient()
-    {
-        _hasShied.OnChange += OnShiedChange;
     }
 
     public void InitialiseEnemy()
@@ -174,99 +139,67 @@ public class EnemyCore : NetworkBusListener
     {
         _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
     }
+
+    public void ExplodeOnDapWave()
+    {
+        ExplodeOnDapWaveObserverRpc();
+        KillEnemy(-1, ChargeType.None);
+    }
+
+    void ExplodeOnDapWaveObserverRpc()
+    {
+        OnDapExplosion?.Invoke();
+    }
+
+    public void KillEnemy(int playerObjectId, ChargeType charge)
+    {
+        if(_movementModule != null)
+            ClearPathReservation();
+
+        //if killed by dap wave
+        if (charge != ChargeType.None)
+        {
+            InstanceFinder.ServerManager.Despawn(gameObject);
+            return;
+        }
         
-    private void DeathEvent(int playerObjectId)
-    {
-        ClearPathReservation();
+        float signedEnergyAmount = GetSignedEnergyAmount(charge);
+        
+        EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_dropXpOrb ? 0 : signedEnergyAmount));
+        
+        
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
-    }
-
-    #region Charges
-
-    [Server]
-    public void AddCharge(bool positive, float value, int isServer)
-    {
-        if (isServer == 0)
+        
+        if (!_dropXpOrb)
         {
-            if (positive != p_player1_IsPositive)
-                p_current_player1_Charge = 0;
-
-            p_player1_IsPositive = positive;
-            p_current_player1_Charge += value;
-
-            OnPlayer1ChangeObserverRpc(p_current_player1_Charge, p_player1_IsPositive, p_current_player1_Charge / p_player1_ChargeMax);
-        }
-        else
-        {
-            if (positive != p_player2_IsPositive)
-                p_current_player2_Charge = 0;
-
-            p_player2_IsPositive = positive;
-            p_current_player2_Charge += value;
-
-            OnPlayer2ChangeObserverRpc(p_current_player2_Charge, p_player2_IsPositive, p_current_player2_Charge / p_player2_ChargeMax);
-        }
-
-        if (p_shiedType != ChargeType.None && p_current_player1_Charge > 0 && p_current_player2_Charge > 0 && p_player1_IsPositive == p_player2_IsPositive)
-        {
-            ChargeType combinedType = p_player1_IsPositive ? ChargeType.Positive : ChargeType.Negative;
-
-            if (combinedType == p_shiedType)
+            InvokeEvent(new ModifyEnergyEvent
             {
-                _hasShied.Value = (int)ChargeType.None;
-                p_shiedType = ChargeType.None;
-                ResetAllCharged();
-            }
+                p_player = playerObjectId,
+                p_value = Mathf.Abs(signedEnergyAmount)
+            });
+        }
+        
+        InstanceFinder.ServerManager.Despawn(gameObject);
+    }
+
+    float GetSignedEnergyAmount(ChargeType charge)
+    {
+        switch (charge)
+        {
+            case ChargeType.Positive:
+                if (_pinataType == ChargeType.Positive)
+                    return _pinataEnergyDropValue;
+                return _baseEnergyDropValue;
+            
+            case ChargeType.Negative:
+                if (_pinataType == ChargeType.Negative)
+                    return -_pinataEnergyDropValue;
+                return -_baseEnergyDropValue;
+            
+            default:
+                return 0f;
         }
     }
-    
-    private void OnShiedChange(int prev, int next, bool asServer)
-    {
-        OnSetShied?.Invoke((ChargeType)next);
-    }
-
-    [Server]
-    private void ResetAllCharged()
-    {
-        p_current_player2_Charge = 0;
-        p_current_player1_Charge = 0;
-        ResetChargesObserverRpc();
-    }
-    
-    [ObserversRpc]
-    private void ResetChargesObserverRpc()
-    {
-        p_current_player2_Charge = 0;
-        p_current_player1_Charge = 0;
-    }
-    
-    [Server]
-    private void TriggerExplosionOnSwap(SwapingGunEvent data)
-    {
-        _lifeModules[0].TakeDamage(Owner.ClientId, _explosionChargedDamage, ChargeType.None);
-            
-        ResetAllCharged();
-        ExplosionObserversRpc();
-    }
-
-    [ObserversRpc]
-    private void ExplosionObserversRpc()
-    {
-        p_OnChargeExplosion?.Invoke();
-    }
-    
-    [ObserversRpc]
-    private void OnPlayer2ChangeObserverRpc(float value, bool positive, float ratio)
-    {
-        p_current_player2_Charge = value;
-        p_OnPlayer1ChargeChange?.Invoke(positive, ratio);
-    }
-    
-    [ObserversRpc]
-    private void OnPlayer1ChangeObserverRpc(float value, bool positive, float ratio)
-    {
-        p_current_player1_Charge = value;
-        p_OnPlayer2ChargeChange?.Invoke(positive, ratio);
-    }
-    #endregion
 }
+
+public enum ChargeType{Negative, Positive, None}

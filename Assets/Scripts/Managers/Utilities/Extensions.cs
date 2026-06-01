@@ -15,8 +15,8 @@ public static class Extensions
         return v;
     }
 
-    public static EnemyCore.ChargeType ToChargeType(this bool isPositive)
+    public static ChargeType ToChargeType(this bool isPositive)
     {
-        return isPositive ? EnemyCore.ChargeType.Positive : EnemyCore.ChargeType.Negative;
+        return isPositive ? ChargeType.Positive : ChargeType.Negative;
     }
 }

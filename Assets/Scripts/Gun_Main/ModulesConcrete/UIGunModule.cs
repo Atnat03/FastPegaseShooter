@@ -12,8 +12,7 @@ public class UIGunModule : GunModule
 	#region Properties
 
 	#endregion
-
-
+	
 	#region Variables
 	
 	[Header("Reload")]

@@ -82,10 +82,11 @@ public class PuddleEnemyBullet : EnemyBullet
                 EventBus.InvokeEvent(new PlayerTakeDamageEvent
                 {
                     p_playerN = playerNetworkObject,
-                    p_value = p_bulletDamage
+                    p_value = p_bulletDamage,
+                    p_attacker = p_attackModule.gameObject.GetComponent<NetworkObject>()
                 });
             
-                p_attackModule.p_onHitPlayer?.Invoke(playerNetworkObject.ObjectId, p_bulletDamage);
+                p_attackModule?.p_onHitPlayer?.Invoke(playerNetworkObject.ObjectId, p_bulletDamage);
             }
         }
     }

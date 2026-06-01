@@ -33,6 +33,9 @@ namespace GunDecorator.AmmoModules
         [SerializeField, Tooltip("Vitesse logique de la balle utilisée par certains systèmes (ex: calculs d'impact ou trajectoire).")]
         private float _BulletSpeed = 50;
         
+        [SerializeField, Tooltip("Vitesse logique de la balle utilisée par certains systèmes (ex: calculs d'impact ou trajectoire).")]
+        private float _timeToExplose = 3;
+        
         private float _dmgToApply = 0;
         
         private BulletData _bulletData;
@@ -121,7 +124,7 @@ namespace GunDecorator.AmmoModules
 
             IAmmo bullet = newBullet.GetComponent<IAmmo>();
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, 
-                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge, hadCharged);
+                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge,_timeToExplose, 0, false, hadCharged);
 
             DespawnBullet(newBullet, 5f);
         }

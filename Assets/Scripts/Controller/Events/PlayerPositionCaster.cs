@@ -51,15 +51,15 @@ public class PlayerPositionCaster : NetworkBusListener
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void PlayerPositionCastingServerRPC(Vector3 position, bool isHeartBeat, NetworkConnection conn = null)
+    void PlayerPositionCastingServerRPC(Vector3 position, bool isHeartBeat)
     {
-        PlayerPositionCastingObserverRPC(position, conn.ClientId,isHeartBeat);
+        PlayerPositionCastingObserverRPC(position,isHeartBeat);
     }
     
     [ObserversRpc]
-    void PlayerPositionCastingObserverRPC(Vector3 position, int playerId, bool isHeartBeat)
+    void PlayerPositionCastingObserverRPC(Vector3 position, bool isHeartBeat)
     {
-        InvokeEvent(new PlayerPositionUpdateEvent(playerId, position, _networkObject.ObjectId, isHeartBeat));
+        InvokeEvent(new PlayerPositionUpdateEvent(_networkObject.OwnerId, position, _networkObject.ObjectId, isHeartBeat));
     }
 
     void UpdateFakePositions()
