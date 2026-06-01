@@ -55,7 +55,7 @@ public class PlayerHealth : NetworkBusListener
 	[Header("Healing Self version")]
 	[SerializeField] private float _healAmount = 50;
 
-	private SwapGunManager swapGunManager; //debug
+	private PlayerZoneManager _playerZoneManager; //debug
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -105,7 +105,7 @@ public class PlayerHealth : NetworkBusListener
 		
 		 
 		
-		swapGunManager = FindAnyObjectByType<SwapGunManager>();// pour du debug, a tej en build finale
+		_playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();// pour du debug, a tej en build finale
 		
 	}
 
@@ -256,7 +256,7 @@ public class PlayerHealth : NetworkBusListener
 				damages = data.p_value,
 				player1PVs = player1PVs,
 				player2PVs = player2PVs,
-				ArenaID = (swapGunManager != null && swapGunManager.p_playerZones.ContainsKey(OwnerId)) ? swapGunManager.p_playerZones[OwnerId] : -1
+				ArenaID = (_playerZoneManager != null && _playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? _playerZoneManager.p_playerZones[OwnerId] : -1
 			});
 		}
 		catch (Exception e)
@@ -394,7 +394,7 @@ public class PlayerHealth : NetworkBusListener
 			player2PVs = player2PVs,
 			player1Energy = player1Energy,
 			player2Energy = player2Energy,
-			ArenaID = (swapGunManager != null && swapGunManager.p_playerZones.ContainsKey(OwnerId)) ? swapGunManager.p_playerZones[OwnerId] : -1
+			ArenaID = (_playerZoneManager != null && _playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? _playerZoneManager.p_playerZones[OwnerId] : -1
 		});
 		
 		//fin du debug

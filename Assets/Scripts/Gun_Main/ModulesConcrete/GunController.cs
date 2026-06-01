@@ -78,7 +78,7 @@ namespace GunDecorator
 
         [SerializeField] private int _reticuleID = 0;
 
-        [SerializeField] private SwapGunManager swapGunManager;
+        [SerializeField] private PlayerZoneManager playerZoneManager;
 
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
@@ -139,7 +139,7 @@ namespace GunDecorator
 
         private void Start() // pour du debug, a tej en build finale
         {
-            swapGunManager = FindAnyObjectByType<SwapGunManager>();
+            playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
         }
 
         public void TryFire()
@@ -260,7 +260,7 @@ namespace GunDecorator
                 weapon = gameObject.name,
                 targetName = target.name,
                 damages = damage,
-                ArenaID = (swapGunManager != null && swapGunManager.p_playerZones.ContainsKey(OwnerId)) ? swapGunManager.p_playerZones[OwnerId] : -1
+                ArenaID = (playerZoneManager != null && playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? playerZoneManager.p_playerZones[OwnerId] : -1
             });
 
             // fin du debug 
