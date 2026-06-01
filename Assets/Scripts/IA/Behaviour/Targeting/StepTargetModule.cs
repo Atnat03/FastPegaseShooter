@@ -6,6 +6,8 @@ public class StepTargetModule : ScoreTargetModule
 {
     [SerializeField] private float _fakeTargetSwitchingDistance;
     
+    [Tooltip("If this booléan is set to false, the enemy will only target te fake targets and never the player directly")]
+    [SerializeField] private bool _doSwitchTargeting = false;
     [Tooltip("If one of the value is negative, the target module won't ever switch back to fake target")]
     [SerializeField] private Vector2 _rangeTimeForDirectTargeting = new Vector2(10, 30);
 
@@ -17,6 +19,9 @@ public class StepTargetModule : ScoreTargetModule
     {
         base.OnNetworkTick(tickDelta);
         
+        if(!_doSwitchTargeting) return;
+        
+        //only usefull for switching target
         if (HasTarget())
         {
             if(!_reachedFakeTarget && (transform.position - GetTargetPosition()).sqrMagnitude <=
@@ -46,14 +51,14 @@ public class StepTargetModule : ScoreTargetModule
 
     public override Vector3 GetTargetPosition()
     {
-        if (_reachedFakeTarget)
+        if (_doSwitchTargeting && _reachedFakeTarget)
         {
             return p_playerVisualBridge.FPSController.transform.position;
         }
-        else if (_fakeTargetIndex < 0)
-        {
+        
+        
+        if (_fakeTargetIndex < 0)
             _fakeTargetIndex = p_playerVisualBridge.PlayerPositionCaster.GetTargetIndex();
-        }
 
         return p_playerVisualBridge.PlayerPositionCaster.GetFakeTargetPosition(_fakeTargetIndex);
     }
