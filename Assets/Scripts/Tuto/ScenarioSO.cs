@@ -14,7 +14,7 @@ namespace Tuto
     public class Scenario
     {
         public string ScenarioName;
-        public BaseTrigger trigger;
-        public List<BaseEvent> eventsList;
+        [SerializeReference] public BaseTrigger trigger;
+        [SerializeReference] public List<BaseEvent> eventsList = new List<BaseEvent>();
     }
 }

@@ -24,7 +24,6 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     /// </summary>
     public Action<bool, int, int, int> OnLifeUpdate;
     public Action OnDeathViewer;
-    public Action<int, ChargeType> OnDeath;
     
     public Action<int, int> p_onHitPlayer;
     
@@ -40,18 +39,22 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     {
         if (IsServerInitialized)
         {
-            p_onHitPlayer?.Invoke(attackerObjectId, GetDamageAmount(rawDamageAmount));
-            OnLifeUpdateObserverRPC(isCritical, GetDamageAmount(rawDamageAmount));
-
-            if (p_life.Value - GetDamageAmount(rawDamageAmount) <= 0)
+            int damages = GetDamageAmount(rawDamageAmount);
+            p_onHitPlayer?.Invoke(attackerObjectId, damages);
+            
+            if (p_life.Value - damages <= 0)
             {
-                OnDeath?.Invoke(attackerObjectId, charge);
+                Death(attackerObjectId, charge);
+                return isCritical;
             }
+            
+            OnLifeUpdateObserverRPC(isCritical, damages);
+
         }
         return isCritical;
     }
     
-    public virtual void Death(int takenDamages)
+    public virtual void Death(int attackerObjectId, ChargeType charge)
     {
         if(!IsServerInitialized) return;
         OnDeathObserverRPC();
@@ -61,29 +64,10 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     {
         base.OnStartServer();
         p_life.Value = _life;
-        p_life.OnChange += OnLifeChanged;
         
-        //ListenToEvent((SwapingGunEvent SGE) => p_damageMultiplier = SGE.dataSurcharge.damageMultiplier);
         ListenToEvent((EndOverloadEvent EOE) => p_damageMultiplier = 1);
     }
-
-    public override void OnStopServer()
-    {
-        p_life.OnChange -= OnLifeChanged;
-        base.OnStopServer();
-    }
-
-    [Server]
-    protected virtual void OnLifeChanged(int prev, int next, bool asServer)
-    {
-        if (next <= 0)
-        {
-            if (asServer)
-            {
-                Death(prev-next); // serveur uniquement
-            }
-        }
-    }
+    
 
     protected virtual int GetDamageAmount(int rawDamage) => Mathf.RoundToInt(rawDamage * p_damageMultiplier);
 

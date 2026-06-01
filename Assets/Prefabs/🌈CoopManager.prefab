@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7201495400392450832}
   - component: {fileID: 9070722851197112870}
   - component: {fileID: 2933970461129570940}
+  - component: {fileID: 2466775896773188487}
   m_Layer: 0
   m_Name: "\U0001F308CoopManager"
   m_TagString: Untagged
@@ -59,8 +60,8 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1894198244629999496}
+  - {fileID: 4366616008979837098}
   - {fileID: 3709122296254753378}
   - {fileID: 9070722851197112870}
   InitializedParentNetworkBehaviour: {fileID: 0}
@@ -73,7 +74,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584216240402637895
+  _initializedTimestamp: -8584215621610154861
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -226,6 +227,30 @@ MonoBehaviour:
   - Appuyez sur E pour dapper !
   - Veut dapper
   _dappingExplosion: {fileID: 5837227273581549219, guid: a24ce862462cc4e478105e8d2b2084dd, type: 3}
+--- !u!114 &2466775896773188487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195821754654841656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c9409d852344be9e78c44a44e47221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SwapGunManager
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 6325006552558930708}
+  _networkObjectCache: {fileID: 0}
+  _timeToAcceptSwap: 2
+  _swapingTime: 0
+  _cooldownSwap: 0
+  _swapEnergyGain: 20
+  _instantSwapWithoutBroConsentement: 0
+  _timeWindowToCancel: 3
+  _conflictTimerMax: 10
+  _shortCircuitDamageInterval: 2
+  _shortCircuitDamage: 10
 --- !u!1 &1648326429967676846
 GameObject:
   m_ObjectHideFlags: 0
