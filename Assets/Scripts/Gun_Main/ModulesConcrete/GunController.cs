@@ -259,6 +259,7 @@ namespace GunDecorator
                 EntityID = ObjectId,
                 weapon = gameObject.name,
                 targetName = target.name,
+                targetID = target.transform.GetRootTransform().GetComponent<NetworkObject>().ObjectId,
                 damages = damage,
                 ArenaID = (swapGunManager != null && swapGunManager.p_playerZones.ContainsKey(OwnerId)) ? swapGunManager.p_playerZones[OwnerId] : -1
             });
