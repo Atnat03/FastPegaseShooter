@@ -28,7 +28,7 @@ public class SteeringBehaviourMovementModule : EnemyMovementModule
     {
         base.RecalculatePathConcrete();
         
-        Debug.Log("path recalculation");
+        
         ClearPath();
     }
 
