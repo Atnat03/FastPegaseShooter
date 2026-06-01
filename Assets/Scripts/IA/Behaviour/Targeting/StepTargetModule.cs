@@ -23,7 +23,7 @@ public class StepTargetModule : ScoreTargetModule
                 _fakeTargetSwitchingDistance * _fakeTargetSwitchingDistance)
             {
                 _reachedFakeTarget = true;
-                p_onTargetPositionForceUpdate?.Invoke();
+                p_onTargetPositionUpdate?.Invoke();
                 _fakeTargetIndex = p_playerVisualBridge.PlayerPositionCaster.GetTargetIndex();
                 
                 _timeToFakeTargetTargeting = Random.Range(_rangeTimeForDirectTargeting.x,
@@ -38,7 +38,7 @@ public class StepTargetModule : ScoreTargetModule
                 if (_timeToFakeTargetTargeting <= 0)
                 {
                     _reachedFakeTarget = false;
-                    p_onTargetPositionForceUpdate?.Invoke();
+                    p_onTargetPositionUpdate?.Invoke();
                 }
             }
         }

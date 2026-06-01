@@ -93,6 +93,8 @@ public class ScoreTargetModule : EnemyTargetModule
         {
             Debug.LogError("player index wasn't found in dictionary");
         }
+        
+        p_onTargetPositionUpdate?.Invoke();
             
         float sqrDistance = (playerObject.transform.position-transform.position).sqrMagnitude;
 

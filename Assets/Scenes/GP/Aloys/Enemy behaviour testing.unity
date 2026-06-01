@@ -528,7 +528,7 @@ Transform:
   m_GameObject: {fileID: 230890950}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.9899697, y: -0.6875, z: 3.26132}
+  m_LocalPosition: {x: -2, y: -0.6875, z: 3.26132}
   m_LocalScale: {x: 1, y: 2, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -695,7 +695,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
   _life: 0
-  swapGunManager: {fileID: 0}
+  playerZoneManager: {fileID: 0}
 --- !u!1 &310595160
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,18 +1918,20 @@ MonoBehaviour:
   - {fileID: 1896252399}
   - {fileID: 20570170}
   _arenaGaugePrefab: {fileID: 2495519143773894194, guid: 40ba1b332db1bb540b22e2448922fbcd, type: 3}
-  spawnDelayFirstWave: 5
-  spawnMobsFirstWave: []
+  spawnDelayFirstWave: 0
+  spawnMobsFirstWave:
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
   _currentBudget: 0
   _spawnMobs:
   - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
-  - {fileID: 11400000, guid: 1ddabd5585812514da8b700e45659218, type: 2}
   _spawningStates:
   - p_stateDuration: 5
-    p_state: {fileID: 11400000, guid: b76ef31b4c0f92c4ba6a4f1de725c3d9, type: 2}
-  - p_stateDuration: 10
-    p_state: {fileID: 11400000, guid: 7d65cf201bff6a744ae0e08b0e161a1c, type: 2}
-  - p_stateDuration: 7
     p_state: {fileID: 11400000, guid: 8f43d0a4971893a45a05d5c9ef15dc69, type: 2}
   _maxSpawnEnemy: 10
   _corrosionDamage: 5
@@ -1969,7 +1971,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216813622}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c4c3930ecf31e843b6fff2c97f0bb92, type: 3}
   m_Name: 
@@ -2197,7 +2199,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
   _life: 10
-  swapGunManager: {fileID: 0}
+  playerZoneManager: {fileID: 0}
   _enemyLifeModule: {fileID: 277698849}
   _damageMultWhenDestroyed: 1
 --- !u!1 &1307022661

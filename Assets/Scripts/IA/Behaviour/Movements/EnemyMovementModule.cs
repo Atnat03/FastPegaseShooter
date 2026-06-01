@@ -23,7 +23,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     public override void InitialiseBehaviourModule(EnemyCore enemyCore)
     {
         base.InitialiseBehaviourModule(enemyCore);
-        _targetModule.p_onTargetPositionForceUpdate += PathUpdateRequest;
+        _targetModule.p_onTargetPositionUpdate += PathUpdateRequest;
     }
 
     public override void OnNetworkTick(float tickDelta)
@@ -33,14 +33,6 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         if(!_targetModule.HasTarget() && _doFreezeWithoutTarget) return;
         
         MoveAlongPath();
-    }
-
-    public virtual void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
-    {
-        if (!_targetModule.IsMyTarget(playerObjectId)) return;
-        
-        //Updating Pathfinding
-        PathUpdateRequest();
     }
 
     protected void PathUpdateRequest()
@@ -71,6 +63,8 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
             transform.position, _targetModule.GetTargetPosition(), _traceWeight, _traceSpread,
             out _path, out _pathReservationId);
         _isPathUpdateRequested = false;
+        
+        _path.RemoveAt(_path.Count-1);
     }
     protected abstract void MoveAlongPath();
 }

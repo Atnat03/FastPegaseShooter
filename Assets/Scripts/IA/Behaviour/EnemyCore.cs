@@ -135,11 +135,6 @@ public class EnemyCore : NetworkBusListener
         _movementModule?.OnNetworkTick(tickDelta);
     }
 
-    public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
-    {
-        _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
-    }
-
     public void ExplodeOnDapWave()
     {
         ExplodeOnDapWaveObserverRpc();
