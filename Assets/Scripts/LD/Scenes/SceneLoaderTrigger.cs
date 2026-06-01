@@ -6,7 +6,7 @@ namespace LD.Scenes
 {
 	public class SceneLoaderTrigger : MonoBusListener
 	{
-		[SerializeField] private GameObject Door;
+		[SerializeField] private GameObject _door;
 
 		#region Variables
 
@@ -25,7 +25,8 @@ namespace LD.Scenes
 
 		void OpenDoor(OnDapEvent evt)
 		{
-			Door.SetActive(false);
+			if(_door.GetComponent<Animation>()) _door.GetComponent<Animation>().Play();
+			else _door.SetActive(false);
 		}
 		
 
