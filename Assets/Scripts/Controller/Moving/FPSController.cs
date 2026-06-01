@@ -139,6 +139,7 @@ public class FPSController : NetworkBusListener
     [SerializeField] float wallJumpVerticalForce = 10f;
     [SerializeField] float wallJumpHorizontalForce = 7.5f;
     [SerializeField] float headtiltIntensity = 7f;
+    [SerializeField] private float headtiltSpeed = 10f;
     [SerializeField] float wallJumpCoyoteDuration = 0.2f;
 
     [Header("Crouch")] [SerializeField] float crouchSpeed = 5f;
@@ -894,7 +895,7 @@ public class FPSController : NetworkBusListener
 
     #endregion
 
-    #region WallRidingState
+        #region WallRidingState
 
     enum wallRideSide
     {
@@ -909,10 +910,14 @@ public class FPSController : NetworkBusListener
     private wallRideSide previousWallRideSide;
 
     Coroutine wallRidingCoroutine;
+    Coroutine cameraBackToDefaultCoroutine;
     bool wallRidingCoroutineRunning;
 
     private bool justWallridedOtherSide;
     private bool justWallridedSameSide;
+
+    private float currentHeadTilt = 0f;
+    float targetHeadTilt = 0f;
 
     void EnterWallRidingState()
     {
@@ -920,14 +925,15 @@ public class FPSController : NetworkBusListener
 
         wallRidingCoroutineRunning = true;
         wallRidingHeight = transform.position.y;
-
+        currentHeadTilt = currentRoll;
+        if(cameraBackToDefaultCoroutine != null) StopCoroutine(cameraBackToDefaultCoroutine);
+        
         if (leftSideAgainstWall)
         {
             wallRidingDirection = Vector3.Dot(Vector3.Cross(leftSideHit.normal, Vector3.up), rb.linearVelocity) *
                                   Vector3.Cross(leftSideHit.normal, Vector3.up);
             currentWallHit = leftSideHit;
-            cameraSpringTarget.rotation =
-                cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, -headtiltIntensity);
+            targetHeadTilt = -headtiltIntensity;
             previousWallRideSide = wallRideSide.leftSide;
         }
         else
@@ -935,12 +941,14 @@ public class FPSController : NetworkBusListener
             wallRidingDirection = Vector3.Dot(Vector3.Cross(rightSideHit.normal, Vector3.up), rb.linearVelocity) *
                                   Vector3.Cross(rightSideHit.normal, Vector3.up);
             currentWallHit = rightSideHit;
-            cameraSpringTarget.rotation =
-                cameraParentTransform.rotation = Quaternion.Euler(pitch, yaw, headtiltIntensity);
+            targetHeadTilt = headtiltIntensity;
             previousWallRideSide = wallRideSide.rightSide;
         }
 
-        if (Vector3.Dot(horizontalVelocity, wallRidingDirection) < 0 || (forwardWalllrideBeginning && Vector3.Angle(wallRidingDirection, YawForward) > wallRideForwardTolerenceAngle))
+        if (Vector3.Dot(horizontalVelocity, wallRidingDirection) < 0 || (forwardWalllrideBeginning &&
+                                                                         Vector3.Angle(wallRidingDirection,
+                                                                             YawForward) >
+                                                                         wallRideForwardTolerenceAngle))
         {
             stateMachine.ChangeState(ControlerState.Falling);
             return;
@@ -951,6 +959,11 @@ public class FPSController : NetworkBusListener
 
     void WallRidingUpdate()
     {
+        //headtilt
+
+        currentRoll = Mathf.Lerp(currentRoll, targetHeadTilt, headtiltSpeed * Time.deltaTime);
+        cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, currentRoll);
+
         if (omnidirectionalWallRide)
         {
             Debug.Log("detectWall : " + DetectWall());
@@ -994,7 +1007,6 @@ public class FPSController : NetworkBusListener
                     stateMachine.ChangeState(ControlerState.Grappling);
                 }
             }
-
         }
     }
 
@@ -1006,7 +1018,7 @@ public class FPSController : NetworkBusListener
         Vector3 velocity = move * wallRidingSpeed;
 
         rb.linearVelocity = velocity;
-        
+
         OnFootstep?.Invoke();
     }
 
@@ -1014,6 +1026,7 @@ public class FPSController : NetworkBusListener
     {
         cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
         StopCoroutine(wallRidingCoroutine);
+        cameraBackToDefaultCoroutine = StartCoroutine(CameraRollBackToDefaultCoroutine());
     }
 
     void WallRidingLateUpdate()
@@ -1034,6 +1047,18 @@ public class FPSController : NetworkBusListener
         }
 
         return isWall;
+    }
+
+    IEnumerator CameraRollBackToDefaultCoroutine()
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < 0.15f)
+        {
+            elapsedTime += Time.deltaTime;
+            currentRoll = Mathf.Lerp(currentRoll, 0, elapsedTime / 0.15f);
+            cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, currentRoll);
+            yield return null;
+        }
     }
 
     IEnumerator WallRidingDurationCoroutine()
