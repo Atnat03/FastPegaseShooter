@@ -5,10 +5,7 @@ using UnityEngine;
 public class EnemyAttackModuleInspector : EnemyBehaviourModuleInspector
 {
     private SerializedProperty _targetModule;
-    private SerializedProperty _damage;
-    private SerializedProperty _attackDelay;
-    private SerializedProperty _bulletType;
-    private SerializedProperty _projectileUseGravity;
+    private SerializedProperty _attackModuleSO;
     
     
     protected override void OnEnable()
@@ -16,10 +13,7 @@ public class EnemyAttackModuleInspector : EnemyBehaviourModuleInspector
         base.OnEnable();
         
         _targetModule = serializedObject.FindProperty("_targetModule");
-        _damage = serializedObject.FindProperty("_damage");
-        _attackDelay = serializedObject.FindProperty("_attackDelay");
-        _bulletType = serializedObject.FindProperty("_bulletType");
-        _projectileUseGravity = serializedObject.FindProperty("_projectileUseGravity");
+        _attackModuleSO = serializedObject.FindProperty("_attackModuleSO");
     }
 
     protected override void DrawCustomFields()
@@ -34,10 +28,7 @@ public class EnemyAttackModuleInspector : EnemyBehaviourModuleInspector
                 segmentLenght: 15,
                 gapLenght: 7));
 
-        EditorGUILayout.PropertyField(_damage);
-        EditorGUILayout.PropertyField(_attackDelay);
-        EditorGUILayout.PropertyField(_bulletType);
-        EditorGUILayout.PropertyField(_projectileUseGravity);
+        EditorGUILayout.PropertyField(_attackModuleSO);
         
         Rect targetBlockRect = EditorUtilities.WrapInBlock(() =>
             {

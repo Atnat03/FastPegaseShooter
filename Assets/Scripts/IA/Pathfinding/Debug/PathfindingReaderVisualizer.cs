@@ -9,7 +9,7 @@ public class PathfindingReaderVisualizer : MonoBehaviour
 {
     [HideInInspector] public bool drawNodes = true;
     [HideInInspector] public bool drawNodesConnections = true;
-    [HideInInspector] public Gradient walkingCostGradient = new Gradient();
+    [HideInInspector] public Color _visualisationColor = Color.white;
     [HideInInspector] public int upperWalkingCostValue = 1;
     [HideInInspector] public float nodeDrawSize = 0.1f;
     
@@ -46,7 +46,6 @@ public class PathfindingReaderVisualizer : MonoBehaviour
     private void OnEnable()
     {
         SceneView.duringSceneGui += NodeAndConnectionDrawing;
-        PGR.VariableChanged = true;
     }
 
     private void OnDisable()
@@ -75,18 +74,14 @@ public class PathfindingReaderVisualizer : MonoBehaviour
         
         foreach(PathfindingNode node in nodes)
         {
-            PGR._additionalWalkingCost.TryGetValue(node.index, out int addCostA);
-            float t = maxCost > 0 ? (node.travelCost + addCostA) / maxCost : 0f;
-            Color color = walkingCostGradient.Evaluate(t);
-            
-            nodeMatrix.Add((node.position, color));
+            nodeMatrix.Add((node.position, _visualisationColor));
             
             foreach(int n in node.neighborsIndex)
             {
                 if(computedNodes.Contains(n)) continue;
                 
-                lineMatrix.Add((node.position, color));
-                lineMatrix.Add((nodes[n].position, color));
+                lineMatrix.Add((node.position, _visualisationColor));
+                lineMatrix.Add((nodes[n].position, _visualisationColor));
             }
 
             computedNodes.Add(node.index);
@@ -142,10 +137,9 @@ public class PathfindingReaderVisualizer : MonoBehaviour
 
     void NodeAndConnectionDrawing(SceneView obj)
     {
-        if((PGR.VariableChanged || needToRebuildMatrix) && PGR.pathfindingGridSO != null)
+        if((needToRebuildMatrix) && PGR.pathfindingGridSO != null)
         {
             GenerateMatrices(PGR.pathfindingGridSO.nodes, upperWalkingCostValue);
-            PGR.VariableChanged = false;
             needToRebuildMatrix = false;
         }
         
