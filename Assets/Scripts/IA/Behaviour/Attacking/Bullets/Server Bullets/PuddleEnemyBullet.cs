@@ -16,7 +16,7 @@ public class PuddleEnemyBullet : EnemyBullet
         : base(ESE, direction, spawnTime, bulletId, layerMask)
     {
         if (ESE.p_enemyAttackModule is LobShootingAttackModule LSAModule)
-            _damageDelay = LSAModule.p_splashDamageDelay;
+            _damageDelay = LSAModule._lobShootingAttackModuleSo.p_splashDamageDelay;
         else
         {
             CustomLogger.CCErrorLog("Could not load LSAModule, delay defaulted back to 1 secondes");

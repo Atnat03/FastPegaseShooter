@@ -528,7 +528,7 @@ Transform:
   m_GameObject: {fileID: 230890950}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.9899697, y: -0.6875, z: 3.26132}
+  m_LocalPosition: {x: -2, y: -0.6875, z: 3.26132}
   m_LocalScale: {x: 1, y: 2, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -694,8 +694,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
-  _life: 0
-  swapGunManager: {fileID: 0}
+  _lifeModuleSO: {fileID: 0}
 --- !u!1 &310595160
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,10 +1361,7 @@ MonoBehaviour:
   _movementModule: {fileID: 1197237516}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
-  _pinataType: 2
-  _baseEnergyDropValue: 5
-  _pinataEnergyDropValue: 10
-  _dropXpOrb: 0
+  _coreSo: {fileID: 0}
 --- !u!1 &886799655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1619,13 +1615,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
   p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
-  _aggroPointWhenInDetectZone: 0
-  _aggroPointPerDamageTaken: 0
-  _aggroPointPerSecond: 0
-  _aggroPointPerDamageDealt: 0
-  _aggroPointsThreshold: 0000000064000000c8000000
-  _detectionZoneRadius: 0
-  _aggroZoneRadius: 0
+  _scoreTargetModuleSO: {fileID: 0}
 --- !u!114 &1085526714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1721,12 +1711,9 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
-  _doFreezeWithoutTarget: 1
   _targetModule: {fileID: 1085526714}
-  _speed: 3
-  _traceWeight: 9
-  _traceSpread: 3
-  _idealDistance: 0
+  _movementModuleSO: {fileID: 0}
+  _distanceAwareModuleSO: {fileID: 0}
 --- !u!114 &1197237517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1742,11 +1729,8 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
-  _doFreezeWithoutTarget: 1
   _targetModule: {fileID: 1085526714}
-  _speed: 3
-  _traceWeight: 9
-  _traceSpread: 3
+  _movementModuleSO: {fileID: 0}
 --- !u!1 &1204527987
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,18 +1902,14 @@ MonoBehaviour:
   - {fileID: 1896252399}
   - {fileID: 20570170}
   _arenaGaugePrefab: {fileID: 2495519143773894194, guid: 40ba1b332db1bb540b22e2448922fbcd, type: 3}
-  spawnDelayFirstWave: 5
-  spawnMobsFirstWave: []
+  spawnDelayFirstWave: 0
+  spawnMobsFirstWave:
+  - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
   _currentBudget: 0
   _spawnMobs:
   - {fileID: 11400000, guid: 6ee933e021cfbd94098059f4a18bd569, type: 2}
-  - {fileID: 11400000, guid: 1ddabd5585812514da8b700e45659218, type: 2}
   _spawningStates:
   - p_stateDuration: 5
-    p_state: {fileID: 11400000, guid: b76ef31b4c0f92c4ba6a4f1de725c3d9, type: 2}
-  - p_stateDuration: 10
-    p_state: {fileID: 11400000, guid: 7d65cf201bff6a744ae0e08b0e161a1c, type: 2}
-  - p_stateDuration: 7
     p_state: {fileID: 11400000, guid: 8f43d0a4971893a45a05d5c9ef15dc69, type: 2}
   _maxSpawnEnemy: 10
   _corrosionDamage: 5
@@ -1949,7 +1929,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
   pathfindingGridSO: {fileID: 11400000, guid: b933e9225e40920408f2840e973b2db2, type: 2}
-  VariableChanged: 0
 --- !u!114 &1216813628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1969,43 +1948,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216813622}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c4c3930ecf31e843b6fff2c97f0bb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingReaderVisualizer
   drawNodes: 1
   drawNodesConnections: 1
-  walkingCostGradient:
-    serializedVersion: 2
-    key0: {r: 0.10670447, g: 1, b: 0, a: 1}
-    key1: {r: 0, g: 1, b: 0.8759382, a: 1}
-    key2: {r: 0.5053053, g: 0, b: 1, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 32768
-    ctime2: 65535
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: 0
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
+  _visualisationColor: {r: 0.13948512, g: 1, b: 0, a: 1}
   upperWalkingCostValue: 10
   nodeDrawSize: 0.1
   needToRebuildMatrix: 0
@@ -2196,8 +2146,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
-  _life: 10
-  swapGunManager: {fileID: 0}
+  _lifeModuleSO: {fileID: 0}
   _enemyLifeModule: {fileID: 277698849}
   _damageMultWhenDestroyed: 1
 --- !u!1 &1307022661
@@ -2752,19 +2701,8 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 2008564967}
   _networkObjectCache: {fileID: 0}
   _targetModule: {fileID: 0}
-  _damage: 10
-  _attackDelay: 2
-  _bulletType: 1
-  _projectileUseGravity: 1
-  _maxPlayerDistance: 10
-  _bulletSize: 0.2
-  _bulletSpeed: 1
-  _maxBulletLifeTime: 10
-  _shootingAngle: 30
-  p_shootingOffset: {x: 0, y: 0, z: 0}
-  p_splashSize: 3
-  p_splashDuration: 30
-  p_splashDamageDelay: 1
+  _attackModuleSO: {fileID: 0}
+  _lobShootingAttackModuleSo: {fileID: 0}
 --- !u!1 &2014960547
 GameObject:
   m_ObjectHideFlags: 0
@@ -2881,11 +2819,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
   _targetModule: {fileID: 1085526714}
-  _damage: 10
-  _attackDelay: 2
-  _bulletType: 0
-  _projectileUseGravity: 0
-  _maxPlayerDistance: 10
+  _attackModuleSO: {fileID: 0}
   _bulletSize: 0.2
   _bulletSpeed: 1
   _maxBulletLifeTime: 10
@@ -2905,11 +2839,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 878397466}
   _networkObjectCache: {fileID: 0}
   _targetModule: {fileID: 1085526714}
-  _damage: 10
-  _attackDelay: 2
-  _bulletType: 0
-  _projectileUseGravity: 0
-  _maxPlayerDistance: 1.5
+  _attackModuleSO: {fileID: 0}
 --- !u!1001 &7853791551555895662
 PrefabInstance:
   m_ObjectHideFlags: 0

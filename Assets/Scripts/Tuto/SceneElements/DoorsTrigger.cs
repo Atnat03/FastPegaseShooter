@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace Tuto
 {
-    public class DoorsTrigger : NetworkBusListener
+    public class DoorsTrigger : MonoBusListener
     {
         [SerializeField] private int _index;
-        Animator animator;
+        [SerializeField] Animator animator;
 
-        public override void OnStartClient()
+        //public override void OnStartClient()
+        
+        private void Awake()
         {
             ListenToEvent<OnDoorOpen_TUTO>(OpenDoor);
         }

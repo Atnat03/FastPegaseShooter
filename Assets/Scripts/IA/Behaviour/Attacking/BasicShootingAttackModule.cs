@@ -16,7 +16,7 @@ public class BasicShootingAttackModule : EnemyAttackModule
     public override void OnNetworkTick(float tickDelta)
     {
         base.OnNetworkTick(tickDelta);
-        if (_waitedTimeSinceAttack >= _attackDelay)
+        if (_waitedTimeSinceAttack >= _attackModuleSO.p_attackDelay)
         {
             Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
             float length = delta.magnitude;
@@ -31,25 +31,25 @@ public class BasicShootingAttackModule : EnemyAttackModule
                 shootingPos, 
                 dir, 
                 _bulletSpeed, 
-                _damage, 
+                _attackModuleSO.p_damage, 
                 _bulletSize,
-                _bulletType,
+                _attackModuleSO.p_bulletType,
                 _maxBulletLifeTime, 
                 this,
-                _projectileUseGravity));
+                _attackModuleSO.p_projectileUseGravity));
         }
     }
 
     protected override bool CanAttack(Vector3 shootingPos, Vector3 projectileDir)
     {
-        if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
+        if (GetTargetSqrDistance() > _attackModuleSO.p_maxPlayerDistance * _attackModuleSO.p_maxPlayerDistance)
         {
             return false;
         }
 
-        Debug.DrawLine(shootingPos,shootingPos + projectileDir * _maxPlayerDistance, Color.red, _attackDelay);
+        Debug.DrawLine(shootingPos,shootingPos + projectileDir * _attackModuleSO.p_maxPlayerDistance, Color.red, _attackModuleSO.p_attackDelay);
         
-        if (Physics.Raycast(shootingPos, projectileDir, out RaycastHit hit, _maxPlayerDistance, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(shootingPos, projectileDir, out RaycastHit hit, _attackModuleSO.p_maxPlayerDistance, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -59,23 +59,4 @@ public class BasicShootingAttackModule : EnemyAttackModule
 
         return false;
     }
-
-
-    /*private void OnDrawGizmos()
-    {
-        if(!Application.isPlaying || !IsServerInitialized) return;
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, _maxPlayerDistance);
-        Gizmos.DrawSphere(_targetingModule.GetTargetPosition(), 0.1f);
-        
-        Vector3 delta = _targetingModule.GetTargetPosition() - transform.position;
-        float length = delta.magnitude;
-        Vector3 dir = delta / length;
-
-        Vector3 origin = transform.position + dir * 0.1f + Vector3.up * 0.5f;
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(origin, _bulletSize);
-        Gizmos.DrawWireSphere(origin+dir*length, _bulletSize);
-        Gizmos.DrawLine(origin, origin + dir * length);
-    }*/
 }
