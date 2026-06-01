@@ -20,7 +20,7 @@ public class BasicMovementModule : EnemyMovementModule
         if(_path.Count > 1)
         {
             transform.position = Vector3.Lerp(_lastPos, _path[^2].position, _t);
-            _t += Time.deltaTime * _speed;
+            _t += Time.deltaTime * _movementModuleSO.p_speed;
             if (_t >= 1)
             {
                 _t = 0;

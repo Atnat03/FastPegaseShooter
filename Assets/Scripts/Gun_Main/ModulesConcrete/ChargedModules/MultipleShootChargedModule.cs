@@ -39,7 +39,7 @@ namespace GunDecorator.ChargedModules
 
                 ApplyShoot(i);
                 
-                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
+                _gunController.RecoilModule.Recoil(_gunController.CurrentModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);
             }
             

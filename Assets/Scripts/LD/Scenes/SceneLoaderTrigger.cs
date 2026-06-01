@@ -4,12 +4,9 @@ using UnityEngine.SceneManagement;
 
 namespace LD.Scenes
 {
-	public class SceneLoaderTrigger : MonoBehaviour
+	public class SceneLoaderTrigger : MonoBusListener
 	{
-		#region Properties
-
-		#endregion
-
+		[SerializeField] private GameObject _door;
 
 		#region Variables
 
@@ -20,6 +17,18 @@ namespace LD.Scenes
 
 
 		#region Fonctions
+		
+		void Start()
+		{
+			ListenToEvent<OnDapEvent>(OpenDoor);
+		}
+
+		void OpenDoor(OnDapEvent evt)
+		{
+			if(_door.GetComponent<Animation>()) _door.GetComponent<Animation>().Play();
+			else _door.SetActive(false);
+		}
+		
 
 		private void OnTriggerEnter(Collider other)
 		{

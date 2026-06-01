@@ -139,6 +139,7 @@ public class ShootEnergy : NetworkBusListener
 			
 			if (!_isAiming.Value)
 			{
+				InvokeEvent(new OnLaserFired_TUTO());
 				OnDetectBro?.Invoke(true, screenPos);
 			}
 		}
