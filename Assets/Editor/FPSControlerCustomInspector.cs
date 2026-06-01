@@ -131,6 +131,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltIntensity"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpCoyoteDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideForwardTolerenceAngle"));
         }, ref showWallRide);
 

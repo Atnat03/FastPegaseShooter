@@ -7,8 +7,10 @@ public abstract class EnemyBehaviourModule : NetworkBusListener
 {
     protected EnemyCore _enemyCore;
 
-    public void InitialiseBehaviourModule(EnemyCore enemyCore)
+    public virtual void InitialiseBehaviourModule(EnemyCore enemyCore)
     {
         _enemyCore = enemyCore;
     }
+    
+    public virtual void OnNetworkTick(float tickDelta) {}
 }

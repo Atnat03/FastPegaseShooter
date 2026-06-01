@@ -5,6 +5,7 @@ using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
+using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
@@ -28,10 +29,8 @@ public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value, bool _infiniteAmmo);
-    public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator);
-    public Renderer ModelGun { get; }
+    public Transform ModelGun { get; }
     public void StopReload();
-    public void SetPercentageCharge(int percent);
 }
 
 namespace GunDecorator
@@ -45,7 +44,7 @@ namespace GunDecorator
         public bool IsInfiniteAmmo => _infiniteAmmo;
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
-        public Renderer ModelGun => _model;
+        public Transform ModelGun => _model;
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -59,7 +58,7 @@ namespace GunDecorator
         private GunModuleSettingsSO _settings;
 
         [SerializeField, Tooltip("Model 3d de l'arme")]
-        private Renderer _model;
+        private Transform _model;
 
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
@@ -72,12 +71,14 @@ namespace GunDecorator
         public Animator _animator;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
-        public VisualEffect _muzzleFlash; // test
+        public VFXRegistry p_particleData;
 
         [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]
         private bool _isFullAuto;
 
         [SerializeField] private int _reticuleID = 0;
+
+        [SerializeField] private PlayerZoneManager playerZoneManager;
 
         private bool ShootingInputPressed = true;
         private float _fireRateMultiplier = 1;
@@ -136,6 +137,11 @@ namespace GunDecorator
             }
         }
 
+        private void Start() // pour du debug, a tej en build finale
+        {
+            playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
+        }
+
         public void TryFire()
         {
             ShootingInputPressed = true;
@@ -145,6 +151,9 @@ namespace GunDecorator
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
+
+            if (!_model.gameObject.activeInHierarchy)
+                return;
 
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
@@ -194,40 +203,17 @@ namespace GunDecorator
             }
         }
 
-
         public void TryCancelShooting()
         {
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
 
             _recoilModule?.SetIsRecoil(false);
-
-            p_authorizedToShoot = true;
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
 
         public void SetAmmo(int value, bool infiniteAmmo) => _reloadModule.SetAmmo(value, _infiniteAmmo);
-
-        public void SetSurchargeStat(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
-        {
-            if (!IsServerInitialized)
-            {
-                SetSurchargeStatServerRpc(isOverload, dmgMultiplicator, cadenceMultiplicator);
-                return;
-            }
-
-            _isOverload.Value = isOverload;
-            SurchargeMultiplierDamage = dmgMultiplicator;
-            SurchargeMultiplierRate = cadenceMultiplicator;
-            _shootModule?.AmmoModule.SetDamage(dmgMultiplicator);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void SetSurchargeStatServerRpc(bool isOverload, float dmgMultiplicator, float cadenceMultiplicator)
-        {
-            SetSurchargeStat(isOverload, dmgMultiplicator, cadenceMultiplicator);
-        }
 
         public void TryReload()
         {
@@ -235,7 +221,7 @@ namespace GunDecorator
 
             _reloadModule?.Reload();
         }
-        
+
         [ServerRpc(RequireOwnership = true)]
         public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
         {
@@ -246,36 +232,52 @@ namespace GunDecorator
         {
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
-
-            bool crit = d.TakeDamage(OwnerId, damage, isCritical);
             
-            if (target.TryGetComponent<EnemyCore>(out var enemyCore))
+            if (!target.IsSpawned)
             {
-                enemyCore.AddCharge(IsPositivePlayerCharge, damage);
+                Debug.LogWarning("ApplyDamage : target not spawned");
+                return;
             }
 
+            bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
+            Cons.Print("Damage : " + crit);
+
+            /*if (target.TryGetComponent<EnemyCore>(out var enemyCore))
+            {
+                enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
+
+                Cons.Print("Add charge : " + IsPositivePlayerCharge);;
+            }*/
+
             ApplyDamageObservers(damage, isCritical, hadCharged);
+            
+
+            // debug clement
+            InvokeEvent(new OnDataLog
+            {
+                entityName = transform.GetRootTransform().gameObject.name,
+                EntityID = ObjectId,
+                weapon = gameObject.name,
+                targetName = target.name,
+                targetID = target.transform.GetRootTransform().GetComponent<NetworkObject>().ObjectId,
+                damages = damage,
+                ArenaID = (playerZoneManager != null && playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? playerZoneManager.p_playerZones[OwnerId] : -1
+            });
+
+            // fin du debug 
         }
 
         [ObserversRpc]
         private void ApplyDamageObservers(int damage, bool isCritical, bool hadCharged)
         {
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = Owner,
-                p_value = damage
-            });
-            
             InvokeEvent(new OnPlayerDoDamage
             {
                 p_ownerId = OwnerId,
                 p_value = damage,
                 p_critical = isCritical
             });
-
-            AddPercentageCharge(hadCharged);
         }
-        
+
         public void TryShootCharged()
         {
             _chargedModule?.TryShootCharging();
@@ -299,7 +301,7 @@ namespace GunDecorator
 
             if (clip == null) return;
 
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
 
             PlaySoundServerRpc(sound);
         }
@@ -313,14 +315,19 @@ namespace GunDecorator
         [ObserversRpc(ExcludeOwner = true)]
         void PlaySoundObserverRpc(string sound)
         {
-            AudioClip clip = SoundManager.GetAudioClip(_soundData, sound);
-            SoundManager.PlaySound(clip, _source, 0.5f);
+            SoundManager.PlaySound(_soundData, sound, _source);
         }
 
         [ObserversRpc]
         private void PlayMuzzleFlash()
         {
-            _muzzleFlash.Play();
+            if (p_particleData == null) return;
+
+            VFXData data = p_particleData.CreateVFX("Shoot");
+
+            ParticleSystem particle = Instantiate(data.p_particle, transform);
+            particle.transform.localPosition = data.p_spawnPos;
+            Destroy(particle.gameObject, data.p_timeBeforeDestroy);
         }
 
         public void StopReload() => _reloadModule.StopReload();
@@ -333,15 +340,7 @@ namespace GunDecorator
         {
             manager.ActivateReticules(_reticuleID);
         }
-
-        public void AddPercentageCharge(bool hadPercentage = true)
-        {
-            if(hadPercentage)
-            {
-                _chargedModule.AddPercentage();
-            }
-        }
-
-    public void SetPercentageCharge(int percent) => _chargedModule.SetPercentage(percent);
+        
+        public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
     }
 }

@@ -5,11 +5,12 @@ using UnityEngine;
 [CustomEditor(typeof(EnemyCore))]
 public class EnemyCoreInspector : Editor
 {
-    private SerializedProperty _maxEnemySwelling;
     private SerializedProperty _attackingModules;
     private SerializedProperty _lifeModules;
     private SerializedProperty _targetModules;
     private SerializedProperty _movementModule;
+    
+    private SerializedProperty _pinataType;    
     
     private SerializedProperty scriptProperty;
 
@@ -24,11 +25,11 @@ public class EnemyCoreInspector : Editor
     private bool _targetListOpened = true;
     private void OnEnable()
     {
-        _maxEnemySwelling = serializedObject.FindProperty("_maxEnemySwelling");
         _attackingModules = serializedObject.FindProperty("_attackingModules");
         _lifeModules = serializedObject.FindProperty("_lifeModules");
         _targetModules = serializedObject.FindProperty("_targetingModules");
         _movementModule = serializedObject.FindProperty("_movementModule");
+        _pinataType = serializedObject.FindProperty("_pinataType");
 
         _centeredTitleStyle = new GUIStyle
         {
@@ -89,7 +90,6 @@ public class EnemyCoreInspector : Editor
         GUI.Label(rect, "Enemy Core", _centeredTitleStyle);
         GUILayout.Space(10);
 
-        EditorGUILayout.PropertyField(_maxEnemySwelling);
         EditorUtilities.DrawList(_attackingModules, "Attacking Modules", _listStyle, ref _attackListOpened);
         EditorUtilities.DrawList(_lifeModules, "Life Modules", _lifeListStyle, ref _lifeListOpened);
         EditorUtilities.DrawList(_targetModules, "Target Modules", _listStyle, ref _targetListOpened);
@@ -100,11 +100,16 @@ public class EnemyCoreInspector : Editor
         GUILayout.EndVertical();
         
         GUILayout.Space(10);
-        GUILayout.Label("Charges", _titleStyle);
+        GUILayout.Label("Energy Drop", _titleStyle);
         
-        EditorUtilities.Draw("_explosionChargedDamage", serializedObject);
-        EditorUtilities.Draw("p_negativeChargeMax", serializedObject);
-        EditorUtilities.Draw("p_positiveChargeMax", serializedObject);
+        EditorUtilities.Draw("_dropXpOrb", serializedObject);
+        EditorUtilities.Draw("_baseEnergyDropValue", serializedObject);
+
+        EditorGUILayout.PropertyField(_pinataType);
+        if ((ChargeType)_pinataType.enumValueFlag != ChargeType.None)
+        {
+            EditorUtilities.Draw("_pinataEnergyDropValue", serializedObject);
+        }
         
         serializedObject.ApplyModifiedProperties();
     }

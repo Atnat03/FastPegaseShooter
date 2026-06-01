@@ -79,15 +79,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwapGun",
-                    "type": "Button",
-                    "id": "b853cd00-3dd8-4828-848f-5dbd3c46288d",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "bd6527c3-a655-4a50-b0e3-696f8e7e2b3e",
@@ -212,6 +203,42 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeMagneticCharge",
+                    "type": "Button",
+                    "id": "9905c890-7921-4a19-b18a-25d676945726",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeToMainGun",
+                    "type": "Button",
+                    "id": "d719cc28-405d-4f15-92ba-b78beb034159",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeToEnergyGun",
+                    "type": "Button",
+                    "id": "800c002a-a76f-426b-854b-bcefcf76d714",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeGunScroll",
+                    "type": "Value",
+                    "id": "5bb27db2-3a1c-4c7e-9b6b-d230f5ef0476",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -344,17 +371,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Grapple",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "64255a31-e792-4995-9d82-6efcfe1ccfa2",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SwapGun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -515,11 +531,55 @@
                 {
                     "name": "",
                     "id": "ce3c740b-c12f-44ad-8282-9775430c6933",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/alt",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "StatsPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "812ac437-65a0-48d0-9c00-f5d1c218a7c2",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeMagneticCharge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1dfc73e8-4a35-48d1-9660-deeb791f9884",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeToMainGun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3cb0bd13-72ef-426f-bd9c-127e45248e91",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeToEnergyGun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9072d6fd-77ee-4005-9051-e99bda383777",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeGunScroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

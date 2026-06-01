@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class BasicLifeViewer : MonoBehaviour
 {
+    private EnemyCore _enemyCore;
     [SerializeField] private EnemyLifeModule _enemyLifeModule;
     
     [Header("HitMark")] //visuals
@@ -18,8 +19,7 @@ public class BasicLifeViewer : MonoBehaviour
     [Header("Life")]
     [SerializeField] private TextMeshProUGUI _lifeTMP;
     [SerializeField] private Image _lifeBarImage;
-    [SerializeField] private Color _fullLifeColor;
-    [SerializeField] private Color _emptyLifeColor;
+    [SerializeField] private Gradient _NoneAffinityLifeGradient;
     [SerializeField] private float _fillSpeedBarFront = 10f;
     
     [SerializeField] private Image _lifeBarSecondImage;
@@ -33,19 +33,16 @@ public class BasicLifeViewer : MonoBehaviour
     
     void Awake()
     {
+        _enemyCore = _enemyLifeModule.gameObject.GetComponent<EnemyCore>();
+        
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
-        _lifeBarImage.color = _fullLifeColor;
+        _lifeBarImage.color = _NoneAffinityLifeGradient.Evaluate(1f);
+
         
         _lifeTMP.enabled = false;
         _lifeBarImage.enabled = false;
         _lifeBarSecondImage.enabled = false;
     }
-
-    /*void SetUI(int baseLife)
-    {
-        _lifeTMP.text = $"{baseLife}/{baseLife}";
-        _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, 1);
-    }*/
     
     private void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
@@ -56,7 +53,7 @@ public class BasicLifeViewer : MonoBehaviour
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
         _lifeTMP.text = $"{lifeAmount}/{fullLife}";
-        _lifeBarImage.color = Color.Lerp(_emptyLifeColor, _fullLifeColor, percentage);
+        _lifeBarImage.color = _NoneAffinityLifeGradient.Evaluate(percentage);
 
         //Percentage fills
         _frontFill = percentage;

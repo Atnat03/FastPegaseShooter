@@ -9,14 +9,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GunSwitching : NetworkBehaviour
+public class GunSwitching : NetworkBusListener
 {
 	#region Properties
 	public bool IsMainGun => _isMainGun.Value;
-	public GameObject CurrentMainGun => _mainGunsList[_currentMainGun.Value];
+	public GunController CurrentMainGun => _mainGunsList[_currentMainGun.Value];
 	public IGun IGunMain => _currentMainIGun;
 	public ISurcharge ISurchargeMain => _currentISurcharge;
-	
+	public ShootEnergy ShootEnergy => _shootEnergy;
 	public int CurrentMainGunIndex => _currentMainGun.Value;
 
 	public bool IsSwitching => !_canSwitch;
@@ -32,20 +32,25 @@ public class GunSwitching : NetworkBehaviour
 	
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
+	[SerializeField] private ShootEnergy _shootEnergy;
 	[SerializeField] private GrenadeThrower _throwerGrenade;
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
-
+	
+	[Header("Settings")]
+	[SerializeField] private float _cooldownChangeMagnetic = 5f;
+	
+	private bool _forceEnergyMode;
 	private bool _canSwitch = true;
-	private List<GameObject> _mainGunsList;
+	private bool _canChangemagnetic = true;
+	[HideInInspector]public List<GunController> _mainGunsList;
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
-
+	
 	//Actions
-	public Action OnStartSwitchGun;
-	public Action OnEndSwitchGun;
 	public Action<bool> OnSwapGun;
-
+	public Action<float> OnMagneticCooldown;
+	
 	private IGun _currentMainIGun;
 	private ISurcharge _currentISurcharge;
 	
@@ -57,54 +62,99 @@ public class GunSwitching : NetworkBehaviour
 	{
 		_currentMainGun.OnChange += OnCurrentGunMainChange;
 		
-		_mainGunsList = new List<GameObject>();
+		_mainGunsList = new List<GunController>();
 		
 		foreach (Transform gun in _mainGunParent.transform)
 		{
-			_mainGunsList.Add(gun.gameObject);
+			_mainGunsList.Add(gun.GetComponent<GunController>());
 		}
 	}
-	
+
 	public void Initialize(int startIndex)
 	{
 		Cons.Print("Connected", ColorConsole.Green);
-		
+
 		_currentMainGun.Value = startIndex;
 		
 		ActivateCurrentGun(_mainGunsList, startIndex);
-		
+
 		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
 		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
-
-		_isPositiveChargedPlayer.Value = startIndex == 0;
 		
+		_isMainGun.Value = true;
+
+		if (IsServerInitialized)
+		{
+			_isPositiveChargedPlayer.Value = (Owner.ClientId == 0);
+		}
+
 		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
 		
+		_shootEnergy.gameObject.SetActive(false);
+
 		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
 	}
 
-	private void ChangeMagneticCharge()
+	[ServerRpc]
+	public void RequestChangeMagneticCharge(int playerId)
+	{
+		ChangeMagneticCharge(playerId);
+	}
+	
+	public void ChangeMagneticCharge(int pId)
 	{
 		if (!IsServerInitialized) return;
+		if (!_canChangemagnetic) return;
 		
 		_isPositiveChargedPlayer.Value = !_isPositiveChargedPlayer.Value;
-		UpdateUIChargeObserversRpc();
+		
+		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
+
+		InvokeEvent(new OnPlayerChangeMagneticCharge
+		{
+			playerId = pId,
+			isPositiveCharged = _isPositiveChargedPlayer.Value
+		});
+
+		_canChangemagnetic = false;
+		
+		UpdateUIChargeObserversRpc(_isPositiveChargedPlayer.Value);
 	}
 
 	[ObserversRpc]
-	private void UpdateUIChargeObserversRpc()
+	private void UpdateUIChargeObserversRpc(bool isPositive)
 	{
-		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
+		OnSwapGun?.Invoke(isPositive);
+
+		StartCoroutine(CooldownChargeMagnetic());
 	}
 
-	private void ActivateCurrentGun(List<GameObject> list, int index)
+	IEnumerator CooldownChargeMagnetic()
 	{
+		float t = 0;
+
+		while (t < _cooldownChangeMagnetic)
+		{
+			t += Time.deltaTime;
+			
+			OnMagneticCooldown?.Invoke(t / _cooldownChangeMagnetic);
+			
+			yield return null;
+		}
+
+		if (IsServerInitialized)
+			_canChangemagnetic = true;
+	}
+
+	public void ActivateCurrentGun(List<GunController> list, int index)
+	{
+		if (_forceEnergyMode)
+			return;
+		
 		for (int i = 0; i < list.Count; i++)
 		{
-			if(i == index)
-				list[i].gameObject.SetActive(true);
-			else
-				list[i].gameObject.SetActive(false);
+			bool shouldBeActive = (i == index);
+			list[i].ModelGun.gameObject.SetActive(shouldBeActive);
 		}
 
 		IGunMain?.SetReticule(_reticuleManager);
@@ -112,9 +162,9 @@ public class GunSwitching : NetworkBehaviour
 
 	public void DesactivateAllMainGun()
 	{
-		foreach (GameObject t in _mainGunsList)
+		foreach (GunController gun in _mainGunsList)
 		{
-			t.gameObject.SetActive(false);
+			gun.ModelGun.gameObject.SetActive(false);
 		}
 	}
 	
@@ -123,10 +173,8 @@ public class GunSwitching : NetworkBehaviour
 	{
 		if (!IsMainGun) return;
 		
-		Cons.Print("change gun", ColorConsole.Orange);
-		
 		ChangeCurrentGun_Main(newIndex);
-		ChangeMagneticCharge();
+		//ChangeMagneticCharge();
 
 		if (_currentMainIGun != null)
 		{
@@ -137,31 +185,68 @@ public class GunSwitching : NetworkBehaviour
 	[Server]
 	public void ChangeCurrentGun_Main(int newIndex)
 	{
+		if (_currentMainGun.Value == newIndex)
+		{
+			ActivateCurrentGunObserversRpc(newIndex);
+			return;
+		}
+
 		_currentMainGun.Value = newIndex;
-		IGunMain.SetChargedPlayer(_isPositiveChargedPlayer.Value);
+	}
+	
+	[ObserversRpc]
+	private void ActivateCurrentGunObserversRpc(int index)
+	{
+		_currentMainIGun = _mainGunsList[index].GetComponent<IGun>();
+		_currentISurcharge = _mainGunsList[index].GetComponent<ISurcharge>();
+		ActivateCurrentGun(_mainGunsList, index);
 	}
 		
 	private void OnCurrentGunMainChange(int prev, int next, bool asServer)
 	{
 		if (_mainGunsList == null || _mainGunsList.Count == 0) return;
-       
-		if (next < _mainGunsList.Count)
+		if (next >= _mainGunsList.Count) return;
+
+		_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
+		_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
+    
+		_currentISurcharge.StopReload();
+    
+		if (IsOwner)
 		{
-			_currentMainIGun = CurrentMainGun.GetComponent<IGun>();
-			_currentISurcharge = CurrentMainGun.GetComponent<ISurcharge>();
-			
-			_currentISurcharge.StopReload();
-			
-			if (IsOwner)
-			{
-				CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
-				CurrentMainGun.GetComponent<GunController>().StopReload();
-			}
-          
-			if (!asServer)
-			{
-				ActivateCurrentGun(_mainGunsList, next);
-			}
+			CurrentMainGun.GetComponent<GunController>().p_authorizedToShoot = true;
+			CurrentMainGun.GetComponent<GunController>().StopReload();
+		}
+    
+		if (IsMainGun)
+			ActivateCurrentGun(_mainGunsList, next);
+	}
+	
+	[ServerRpc]
+	public void ChangeGunServerRpc(bool isMain)
+	{
+		SetGunModeObserversRpc(isMain);
+	}
+	
+	[ObserversRpc]
+	private void SetGunModeObserversRpc(bool isMain)
+	{
+		_isMainGun.Value = isMain;
+		
+		_shootEnergy.gameObject.SetActive(!isMain);
+
+		_forceEnergyMode = !isMain;
+
+		if (!isMain)
+		{
+			DesactivateAllMainGun();
+			_shootEnergy.gameObject.SetActive(true);
+		}
+		else
+		{
+			_forceEnergyMode = false;
+			ActivateCurrentGun(_mainGunsList, _currentMainGun.Value);
+			_shootEnergy.gameObject.SetActive(false);
 		}
 	}
 	
@@ -175,19 +260,20 @@ public class GunSwitching : NetworkBehaviour
 		DesactivateAllMainGun();
 		
 		yield return new WaitForSeconds(1f);
+		
+		if (!IsMainGun)
+			yield break;
 
 		ActivateCurrentGun(_mainGunsList, _currentMainGun.Value);
 
 		GunController g = CurrentMainGun.GetComponent<GunController>();
-		
-		Cons.PrintBool(g != null, "Gun controller not null");
 		
 		if (g.IsFullAuto)
 		{
 			g.ApplyShoot();
 		}
 	}
-
+	
 	private void OnEnable()
 	{
 		_throwerGrenade.OnStartThrow += DesactivateGunWhenThrow;
@@ -200,6 +286,12 @@ public class GunSwitching : NetworkBehaviour
 		_throwerGrenade.OnStartThrow -= DesactivateGunWhenThrow;
 		_throwerDrone.OnThrowing -= DesactivateGunWhenThrow;
 	}
-
+	
 	#endregion
+}
+
+public struct OnPlayerChangeMagneticCharge
+{
+	public int playerId;
+	public bool isPositiveCharged;
 }

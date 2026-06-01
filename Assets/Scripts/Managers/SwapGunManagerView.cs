@@ -15,7 +15,7 @@ public class SwapGunManagerView : NetworkBehaviour
 	#region Variables
 	
 	[Header("References")]
-	[SerializeField] private SwapGunManager _manager;
+	[SerializeField] private PlayerZoneManager _manager;
 
 	[Header("UI")]
 	[SerializeField] private GameObject _barUI;
@@ -23,27 +23,12 @@ public class SwapGunManagerView : NetworkBehaviour
 	[SerializeField] private TextMeshProUGUI _textSwapUI;
 	[SerializeField] private string _youAskSwapMessage;
 	[SerializeField] private string _broAskyouSwapMessage;
-
-	
+		
 	#endregion
 
 
 	#region Fonctions
-
-	private void OnEnable()
-	{
-		_manager.OnUpdateAskBroSwap += UpdateUI;
-		_manager._elapsedTime.OnChange += OnElapsedTimeChanged;
-		_manager.OnChangeAskText += ChangeAskText;
-	}
 	
-	private void OnDisable()
-	{
-		_manager.OnUpdateAskBroSwap -= UpdateUI;
-		_manager._elapsedTime.OnChange -= OnElapsedTimeChanged;
-		_manager.OnChangeAskText -= ChangeAskText;
-	}
-
 
 	private void ChangeAskText(bool isRequester)
 	{

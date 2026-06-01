@@ -126,13 +126,7 @@ public class ElementaryGrenade : NetworkBusListener
         {
             if (c.TryGetComponent(out IDamagable damagable))
             {
-                damagable.TakeDamage(_thrower.Value.ClientId, _damage.Value);
-                
-                InvokeEvent(new ModifyEnergyEvent
-                {
-                    p_player = _thrower.Value,
-                    p_value = _damage.Value
-                });
+                damagable.TakeDamage(_thrower.Value.ClientId, _damage.Value, _isPositive.Value.ToChargeType());
                 
                 InvokeEvent(new OnPlayerDoDamage
                 {
@@ -141,10 +135,10 @@ public class ElementaryGrenade : NetworkBusListener
                     p_critical = false
                 });
                         
-                if (c.TryGetComponent<EnemyCore>(out var enemyCore))
+                /*if (c.TryGetComponent<EnemyCore>(out var enemyCore))
                 {
-                    enemyCore.AddCharge(_isPositive.Value, _damage.Value);
-                }
+                    enemyCore.AddCharge(_isPositive.Value, _damage.Value, _thrower.Value.ClientId);
+                }*/
             }
         }
     }

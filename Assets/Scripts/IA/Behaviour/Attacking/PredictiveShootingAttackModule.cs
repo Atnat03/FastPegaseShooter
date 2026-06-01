@@ -12,17 +12,17 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
     [SerializeField] private float _shootingSpreadAngle = 0;
     
 
-    public override void OnNetworkTick()
+    public override void OnNetworkTick(float tickDelta)
     {
-        base.OnNetworkTick();
+        base.OnNetworkTick(tickDelta);
         if (_waitedTimeSinceAttack >= _attackDelay && _targetModule.HasTarget())
         {
             Vector3 shootDir = Vector3.zero;
             Vector3 shootingPos = transform.position + Vector3.up * 0.5f;
             if (TryGetShootingDirection(
-                    _targetModule.p_fpsController.transform.position,
+                    _targetModule.p_playerVisualBridge.transform.position,
                     shootingPos,
-                    _targetModule.p_fpsController.Rb.linearVelocity,
+                    _targetModule.p_playerVisualBridge.FPSController.Rb.linearVelocity,
                     _bulletSpeed, out Vector3 shootingDirection))
             {
                 //CustomLogger.HighlightLog("Using predictive shoot");
@@ -46,8 +46,10 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
                     _bulletSpeed, 
                     _damage, 
                     _bulletSize, 
+                    _bulletType,
                     _maxBulletLifeTime, 
                     this, 
+                    _projectileUseGravity,
                     _bulletAmount, 
                     _shootingSpreadAngle));
         }

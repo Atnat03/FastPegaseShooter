@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CustomConsole.Runtime.Logger;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -18,10 +19,17 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     private int _pathReservationId = -1;
     
     private bool _isPathUpdateRequested = false;
-    private Vector3 _targetPosition;
-    
-    public virtual void OnNetworkTick()
+
+    public override void InitialiseBehaviourModule(EnemyCore enemyCore)
     {
+        base.InitialiseBehaviourModule(enemyCore);
+        _targetModule.p_onTargetPositionForceUpdate += PathUpdateRequest;
+    }
+
+    public override void OnNetworkTick(float tickDelta)
+    {
+        base.OnNetworkTick(tickDelta);
+        
         if(!_targetModule.HasTarget() && _doFreezeWithoutTarget) return;
         
         MoveAlongPath();
@@ -31,20 +39,23 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     {
         if (!_targetModule.IsMyTarget(playerObjectId)) return;
         
-        _targetPosition = playerPosition;
-        
         //Updating Pathfinding
+        PathUpdateRequest();
+    }
+
+    protected void PathUpdateRequest()
+    {
         if (!_isPathUpdateRequested)
         {
             if(!_enemyCore.p_pathRequester) return;
             
             _isPathUpdateRequested = _enemyCore.p_pathRequester.TryRegisterPathRequest(
                 new PathRequest(
-                    _path.Count > 0 ?Vector3.SqrMagnitude(_path[0].position - _targetPosition) : float.MaxValue,
-                    RecalculatePath));
+                    _path.Count > 0 ?Vector3.SqrMagnitude(_path[0].position - _targetModule.GetTargetPosition()) : float.MaxValue,
+                    RecalculatePathConcrete));
         }
     }
-
+    
     public void ClearPathReservation()
     {
         if (_pathReservationId < 0) return;
@@ -52,12 +63,12 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         _pathReservationId = -1;
     }
 
-    protected virtual void RecalculatePath()
+    protected virtual void RecalculatePathConcrete()
     {
         ClearPathReservation();
         
         _enemyCore.p_gridReader.GetAndRegisterPath(
-            transform.position, _targetPosition, _traceWeight, _traceSpread,
+            transform.position, _targetModule.GetTargetPosition(), _traceWeight, _traceSpread,
             out _path, out _pathReservationId);
         _isPathUpdateRequested = false;
     }

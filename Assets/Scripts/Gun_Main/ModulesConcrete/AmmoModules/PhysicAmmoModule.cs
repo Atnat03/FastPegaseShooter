@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using FishNet.Object;
 using MyPrint;
 using UnityEngine;
@@ -31,11 +33,16 @@ namespace GunDecorator.AmmoModules
         [SerializeField, Tooltip("Vitesse logique de la balle utilisée par certains systèmes (ex: calculs d'impact ou trajectoire).")]
         private float _BulletSpeed = 50;
         
+        [SerializeField, Tooltip("Vitesse logique de la balle utilisée par certains systèmes (ex: calculs d'impact ou trajectoire).")]
+        private float _timeToExplose = 3;
+        
         private float _dmgToApply = 0;
         
         private BulletData _bulletData;
         
         private Vector3 _finalSpawnPoint;
+        
+        private Pooler<BulletPhysicBehaviour> _ammoPool;
 
         public override void SetVariable(GunSetting setting)
         {
@@ -51,6 +58,7 @@ namespace GunDecorator.AmmoModules
         void Start()
         {
             _dmgToApply = _damages;
+            _ammoPool = new Pooler<BulletPhysicBehaviour>(_ammoPrefab.GetComponent<BulletPhysicBehaviour>(), 10);
         }
         
         public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged)
@@ -95,30 +103,58 @@ namespace GunDecorator.AmmoModules
         [ServerRpc]
         private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
+            DoSpawnBullet(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
             SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
         }
-        
-        [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
+
+        private void DoSpawnBullet(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
             Vector3 baseDirection = _spawnPoint.forward;
             Vector3 spreadDirection = direction == Vector3.zero ? baseDirection : Quaternion.Euler(direction.y, direction.x, 0) * baseDirection;
     
-            GameObject newBullet = Instantiate(AmmoPrefab, spawnPoint + offset, Quaternion.LookRotation(spreadDirection)); // ← utiliser spawnPoint
-
+            BulletPhysicBehaviour newBullet = _ammoPool.Spawn(spawnPoint + offset, Quaternion.LookRotation(spreadDirection));
+            newBullet.OnCollision += DespawnBullet;
             if (newBullet.TryGetComponent(out Rigidbody rb))
             {
                 rb.mass = _bulletMass;
                 rb.AddForce(spreadDirection.normalized * _bulletThrowForce, ForceMode.Impulse);
             }
     
-            Vector3 targetPos = spawnPoint + _spawnPoint.forward * 2000f; // ← utiliser spawnPoint
+            Vector3 targetPos = spawnPoint + _spawnPoint.forward * 2000f;
 
-            IAmmoExplosif bullet = newBullet.GetComponent<IAmmoExplosif>();
+            IAmmo bullet = newBullet.GetComponent<IAmmo>();
             bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, 
-                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge, hadCharged);
+                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge,_timeToExplose, 0, false, hadCharged);
 
-            Destroy(newBullet, 5f);
+            DespawnBullet(newBullet, 5f);
+        }
+        
+        [ObserversRpc]
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
+        {
+            if (IsServerInitialized) return;
+            DoSpawnBullet(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
+        }
+
+        void DespawnBullet(BulletPhysicBehaviour bullet, float delay)
+        {
+            StartCoroutine(DespawnBulletCoroutine( bullet, delay));
+        }
+        
+        void DespawnBullet(BulletPhysicBehaviour bullet)
+        {
+            bullet.OnCollision -= DespawnBullet;
+            _ammoPool.ReturnToPool(bullet);
+        }
+
+        IEnumerator DespawnBulletCoroutine(BulletPhysicBehaviour bullet, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            if (bullet != null && bullet.gameObject != null && bullet.gameObject.activeSelf)
+            {
+                bullet.OnCollision -= DespawnBullet;
+                _ammoPool.ReturnToPool(bullet);
+            }
         }
 
         public void SetDamage(float multiplierDmg) => _dmgToApply = _damages * multiplierDmg;

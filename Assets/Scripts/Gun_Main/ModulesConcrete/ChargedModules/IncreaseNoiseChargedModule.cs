@@ -29,8 +29,6 @@ namespace GunDecorator.ChargedModules
         {
             base.TryShootCharging();
             
-            if (!_fullCharge) return;
-            
             _ammoModule.SetBulletData(new BulletData
             {
                 IsExplosive = _isExplosifAmmo,

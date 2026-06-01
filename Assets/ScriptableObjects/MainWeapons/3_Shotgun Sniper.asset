@@ -26,24 +26,27 @@ MonoBehaviour:
       data:
         displayName: TemplateShootModule
         headerColor: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
-        fireRate: 1
-        numberBulletSpread: 8
-        SpreadAngle: 8
+        fireRate: 0.5
+        numberBulletSpread: 12
+        SpreadAngle: 30
+        RadiusOffset: 0
     - rid: 5185309627850162263
       type: {class: RaycastAmmoSetting, ns: , asm: Assembly-CSharp}
       data:
         displayName: RaycastAmmoModule
         headerColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-        maxDistance: 10
-        damages: 7
+        maxDistance: 35
+        damages: 18
         bulletSpeed: 35
+        isDistanceReduced: 0
+        factorReduceDamageByDistance: 1
     - rid: 8760679503559655524
       type: {class: ReloadSetting, ns: , asm: Assembly-CSharp}
       data:
         displayName: ReloadModule
         headerColor: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
         isAutoReload: 1
-        magazineSize: 6
+        magazineSize: 10
         reloadDuration: 1
     - rid: 8760679503559655525
       type: {class: RecoilSetting, ns: , asm: Assembly-CSharp}
@@ -89,34 +92,15 @@ MonoBehaviour:
         headerColor: {r: 0, g: 1, b: 1, a: 1}
         IsExplosifAmmo: 0
         explosionRadius: 1
-        timeToCharge: 1
-        DeadZoneStartCharging: 0
+        OneAmmoAddPercentage: {x: 0, y: 0}
+        _damageChargedMultiplicator: 12
         recoilChargedMultiplier: 1.25
         RecoilX: 2
-        IsFullMultiplicator: 0.9
         NumberBulletInCharged: 10
-        NoiseEvolutionCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 0
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        startMaxNoiseAngle: 8
+        _posOffset:
+        - {x: 0.15, y: 0, z: 0}
+        - {x: 0.15, y: 0.15, z: 0}
+        - {x: -0.15, y: 0.15, z: 0}
+        - {x: -0.15, y: 0, z: 0}
+        - {x: 0.15, y: -0.15, z: 0}
+        - {x: 0.15, y: -0.15, z: 0}

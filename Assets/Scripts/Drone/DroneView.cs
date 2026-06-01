@@ -1,6 +1,7 @@
 using System;
 using FishNet;
 using FishNet.Object;
+using MyPrint;
 using UnityEngine;
 
 public class DroneView : NetworkBehaviour
@@ -14,9 +15,12 @@ public class DroneView : NetworkBehaviour
 
 	[SerializeField] private DroneEffectParent _droneEffect;
 	[SerializeField] private Drone _drone;
+	[SerializeField] private MeshRenderer _meshRenderer;
+	[SerializeField] private Material[] _materials;
 	
 	[Header("ApplysEffect")]
 	[SerializeField] private ParticleSystem _applyEffect;
+	[SerializeField] private Material[] _materialsParticles;
 
 	private RaycastHit hit;
 	
@@ -24,15 +28,9 @@ public class DroneView : NetworkBehaviour
 	
 	#region Fonctions
 
-	private void OnEnable()
-	{
-		_droneEffect.OnActivatedDrone += OnActivatedDrone;
-		_droneEffect.OnUpdateEffect += UpdatePosition;
-		_drone.OnIdThrowerChange += UpdateVisibility;
-	}
-	
 	public override void OnStartClient()
 	{
+		SetUpColor(_drone.IsPositive);
 		UpdateVisibility();
 	}
 	
@@ -59,12 +57,33 @@ public class DroneView : NetworkBehaviour
 		}
 	}
 	
+	private void SetUpColor(bool isPositive)
+	{
+		_meshRenderer.material = isPositive ? _materials[0] : _materials[1];
+		
+		ParticleSystemRenderer psRenderer = _applyEffect.GetComponent<ParticleSystemRenderer>();
+		psRenderer.material = isPositive ? _materialsParticles[0] : _materialsParticles[1];
+		
+		Cons.Print("Set up drone color : " + isPositive);
+	}
+	
 	#endregion
+	
+	private void OnEnable()
+	{
+		_droneEffect.OnActivatedDrone += OnActivatedDrone;
+		_droneEffect.OnUpdateEffect += UpdatePosition;
+		_drone.OnIdThrowerChange += UpdateVisibility;
+
+		_drone.OnSetUpColor += SetUpColor;
+	}
 	
 	private void OnDisable()
 	{
 		_droneEffect.OnActivatedDrone -= OnActivatedDrone;
 		_droneEffect.OnUpdateEffect -= UpdatePosition;
 		_drone.OnIdThrowerChange -= UpdateVisibility;
+		
+		_drone.OnSetUpColor -= SetUpColor;
 	}
 }

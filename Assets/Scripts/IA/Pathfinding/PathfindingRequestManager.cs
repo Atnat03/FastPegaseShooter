@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FishNet;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PathfindingRequestManager : MonoBehaviour
 {
@@ -10,12 +11,15 @@ public class PathfindingRequestManager : MonoBehaviour
     
     private Queue<PathRequest> _requests = new Queue<PathRequest>();
     
+    [Header("----- Options -----")]
+    [SerializeField] private bool _useDistanceCullingOptimization = true;
+    
     /// <summary>
     /// Add a pathRequest, previous check needs to be done to prevent registering multiple time the same request
     /// </summary>
     public bool TryRegisterPathRequest(PathRequest pathRequest)
     {
-        if(pathRequest._sqrDistanceEndNodeToTarget > _tolerableDistanceThreshold * _tolerableDistanceThreshold)
+        if(!_useDistanceCullingOptimization || pathRequest._sqrDistanceEndNodeToTarget > _tolerableDistanceThreshold * _tolerableDistanceThreshold)
         {
             _requests.Enqueue(pathRequest);
             return true;

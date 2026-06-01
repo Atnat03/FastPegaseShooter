@@ -1,11 +1,12 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Controller;
 using CustomConsole.Runtime.Logger;
 using FishNet.Connection;
-using FishNet.Managing;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -34,16 +35,27 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private PlayerInput _playerInputAction;
 	[SerializeField] private PlayerAnimation _playerAnimation;
 	[SerializeField] private GunSwitching _gunSwitching;
+	[SerializeField] private NetworkObject healThrowObject;
 
-	[Header("Healing")]
+	[Header("Healing throw version")]
+	[SerializeField] private bool throwableHeal = false;
 	[SerializeField] private PlayerEnergy _playerEnergy;
-	public Transform p_healThrowPoint;
 	public Transform p_healThrowDirection;
-	[SerializeField] private float _healthToGive = 30;
-	public float p_healThrowRadius = 3;
+	public float throwForce = 10;
+	public float maxThrowDistance = 100;
+	public float minSize = 3;
+	public float healSizeEffectFactor = .05f;
+	[SerializeField] private float _minHealthToGive = 15;
+	[SerializeField] private float healAmountEffectFactor = .1f;
+	public float showLineDelay = .5f;
 	[SerializeField] private float _healThrowCost = 20;
 	[SerializeField] private LayerMask _throwHitLayerMask;
 	[SerializeField] private LayerMask _throwHealLayerMask;
+	
+	[Header("Healing Self version")]
+	[SerializeField] private float _healAmount = 50;
+
+	private PlayerZoneManager _playerZoneManager; //debug
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -51,7 +63,6 @@ public class PlayerHealth : NetworkBusListener
 	private Vector3 _startPos;
 
 	private bool _isHealKeyDown;
-	[HideInInspector] public Vector3 p_healThrowLandingPos;
 	private bool _canThrowHeal = true;
 	
 	//Action
@@ -62,7 +73,9 @@ public class PlayerHealth : NetworkBusListener
 	
 	public Action OnThrowingVisualActivation;
 	public Action OnThrowing;
-	public Action<Vector3> OnHealThrowLanding;
+	public Action<Vector3, float, float> OnHealThrowLanding;
+	public Action OnThrowKeyReleased;
+	public Action OnHealCanceled;
 	
 	#endregion
 
@@ -79,6 +92,21 @@ public class PlayerHealth : NetworkBusListener
 
 		ListenToEvent<PlayerTakeDamageEvent>(TakeDamage);
 		ListenToEvent<AddHealthToPlayer>(AddHealth);
+		
+		InvokeEvent(new OnPlayerSpawnEvent
+		{
+			playerId = Owner.ClientId,
+			isPositiveCharge = Owner.ClientId == 0,
+			gunSwitching = _gunSwitching,
+			Transform = transform
+		});
+		
+		ListenToEvent<OnCorrosionEvent>(ApplyCorrosionDamage);
+		
+		 
+		
+		_playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();// pour du debug, a tej en build finale
+		
 	}
 
 	public override void OnStartClient()
@@ -88,7 +116,10 @@ public class PlayerHealth : NetworkBusListener
 		_respawnTimer.OnChange += OnRespawnTimerChange;
 
 		if (IsOwner)
+		{
 			_startPos = transform.position;
+			ListenToEvent<OnShortCircuitDamage>(ApplyShortCircuitDamage);
+		}
 
 		PlayerHealthManager.Instance?.Register(this);
 	}
@@ -103,12 +134,17 @@ public class PlayerHealth : NetworkBusListener
 	{
 		_playerInputAction.actions["Heal"].performed += HealKeyPerformed;
 		_playerInputAction.actions["Heal"].canceled += HealKeyCanceled;
+		_playerInputAction.actions["Shoot"].performed += CancelHealThrowing;
+		_playerInputAction.actions["Charge"].performed += CancelHealThrowing;
 	}
 
 	private void OnDisable()
 	{
 		_playerInputAction.actions["Heal"].performed -= HealKeyPerformed;
 		_playerInputAction.actions["Heal"].canceled -= HealKeyCanceled;
+		_playerInputAction.actions["Shoot"].performed -= CancelHealThrowing;
+		_playerInputAction.actions["Charge"].performed -= CancelHealThrowing;
+		
 	}
 
 	private void Update()
@@ -117,28 +153,20 @@ public class PlayerHealth : NetworkBusListener
 		{
 			if (_isDead.Value)
 			{
-				if (_respawnTimer.Value > 0)
-					_respawnTimer.Value -= Time.deltaTime;
-				else
-					Respawn();
-			}
-		}
-    
-		if (IsOwner)
-		{
-			if (_isHealKeyDown && _playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
-			{
-				if(Physics.Raycast(p_healThrowPoint.position, p_healThrowDirection.forward, out RaycastHit hit, 999f, _throwHitLayerMask, QueryTriggerInteraction.Ignore))
-					p_healThrowLandingPos = hit.point;
-				else
-					p_healThrowLandingPos = p_healThrowPoint.position;
-				
-				//Debug.DrawLine(p_healThrowPoint.position, p_healThrowLandingPos, Color.red, 2);
+				if (_respawnTimer.Value > 0) _respawnTimer.Value -= Time.deltaTime;
+				else Respawn();
 			}
 		}
 	}
-	
-	public void CancelHealThrowing() => _canThrowHeal = false;
+
+	public void CancelHealThrowing(InputAction.CallbackContext ctx)
+	{
+		if(!IsOwner) return;
+		
+		_canThrowHeal = false;
+		OnHealCanceled?.Invoke();
+	} 
+		
 
 	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
@@ -150,23 +178,49 @@ public class PlayerHealth : NetworkBusListener
 			return;
 		}
 
-		OnThrowingVisualActivation?.Invoke();
-		_isHealKeyDown = true;
+		if (throwableHeal)
+		{
+			OnThrowingVisualActivation?.Invoke();
+			_isHealKeyDown = true;
+		}
+		else
+		{
+			NotThrowableHealPressedServerRpc();
+		}
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	void NotThrowableHealPressedServerRpc()
+	{
+		AddHealth(new AddHealthToPlayer
+		{
+			p_delay = 0,
+			p_playerId = OwnerId,
+			p_value = _healAmount
+		});
+		
+		InvokeEvent(new ConsumeEnergyEvent()
+		{
+			p_player = Owner,
+			p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),
+		});
 	}
 	void HealKeyCanceled(InputAction.CallbackContext ctx)
 	{
 		if(!(IsOwner || _isHealKeyDown))return;
+		if(!throwableHeal)return;
+		OnThrowKeyReleased?.Invoke();
 		
 		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
 		{
 			return;
 		}
 		
-		if(_canThrowHeal && p_healThrowLandingPos != p_healThrowPoint.position)
+		if(_canThrowHeal)
 		{
 			OnThrowing?.Invoke();
 			
-			ThrowHealServerRpc(p_healThrowLandingPos, _healthToGive, Owner);
+			ThrowHealServerRpc(Owner);
 		}
 		
 		_isHealKeyDown = false;
@@ -176,6 +230,43 @@ public class PlayerHealth : NetworkBusListener
 	[Server]
 	void TakeDamage(PlayerTakeDamageEvent data)
 	{
+		
+		//debug clement
+		
+		try
+		{
+			float player1PVs = -1;
+			float player2PVs = -1;
+			if (PlayerHealthManager.Instance != null)
+			{
+				player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+					? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+					: 0;
+				player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+					? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+					: 0;
+			}
+
+			InvokeEvent(new OnDataLog
+			{
+				entityName = data.p_attacker.name,
+				EntityID = data.p_attacker.ObjectId,
+				weapon = "ennemy_Shoot",
+				targetName = transform.GetRootTransform().gameObject.name,
+				targetID = data.p_playerN.ObjectId,
+				damages = data.p_value,
+				player1PVs = player1PVs,
+				player2PVs = player2PVs,
+				ArenaID = (_playerZoneManager != null && _playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? _playerZoneManager.p_playerZones[OwnerId] : -1
+			});
+		}
+		catch (Exception e)
+		{
+			CustomLogger.CCErrorLog(e.Message);
+		}
+		
+		//fin du debug
+		
 		if (data.p_playerN.ObjectId != NetworkObject.ObjectId) return;
 		
 		if (IsDead) return;
@@ -193,6 +284,25 @@ public class PlayerHealth : NetworkBusListener
 			_currentHealth.Value = newHealth;
 		}
 	}
+	
+	private void ApplyShortCircuitDamage(OnShortCircuitDamage data)
+	{
+		RequestTakeDamageServerRpc(data.damage);
+	}
+	private void ApplyCorrosionDamage(OnCorrosionEvent data)
+	{
+		RequestTakeDamageServerRpc(data.p_corrosionDamage);
+	}
+
+	[ServerRpc]
+	private void RequestTakeDamageServerRpc(int damage)
+	{
+		TakeDamage(new PlayerTakeDamageEvent
+		{
+			p_playerN = NetworkObject,
+			p_value = damage,
+		});
+	}
 
 	[TargetRpc]
 	private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
@@ -202,14 +312,37 @@ public class PlayerHealth : NetworkBusListener
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	void ThrowHealServerRpc(Vector3 landingPos, float lifeToAdd, NetworkConnection throwerConnection)
+	void ThrowHealServerRpc(NetworkConnection throwerConnection)
 	{
 		InvokeEvent(new ConsumeEnergyEvent()
 		{
 			p_player = throwerConnection,
 			p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),
 		});
-		Collider[] colliders = Physics.OverlapSphere(landingPos, p_healThrowRadius, _throwHealLayerMask);
+
+		StartCoroutine(HealThrowCoroutine());
+	}
+
+	IEnumerator HealThrowCoroutine()
+	{
+		Vector3[] positions = HealThrowLine(out float distance);
+		NetworkObject throwObject = Instantiate(healThrowObject,  positions[0], Quaternion.identity);
+		Spawn(throwObject);
+		for (int i = 0; i < positions.Length; i+=2)
+		{
+			throwObject.transform.position = positions[i];
+			yield return new WaitForEndOfFrame();
+		}
+		Despawn(throwObject);
+		Destroy(throwObject.gameObject);
+		OnHealActivate(positions[^1],  distance * healAmountEffectFactor + _minHealthToGive, distance * healSizeEffectFactor + minSize);
+		ShowHealThrowObserverRpc(positions[^1], distance, 1f);
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	void OnHealActivate(Vector3 landingPos, float lifeToAdd,float scale)
+	{
+		Collider[] colliders = Physics.OverlapSphere(landingPos, scale, _throwHealLayerMask);
 		foreach (Collider collider in colliders)
 		{
 			if (collider != null && collider.TryGetComponent(out PlayerVisuelBridge visualBridge))
@@ -222,15 +355,54 @@ public class PlayerHealth : NetworkBusListener
 				});
 			}
 		}
-
-		ShowHealThrowObserverRpc(landingPos);
 	}
 
 	[Server]
 	async void AddHealth(AddHealthToPlayer data)
 	{
+		//debug clement
+		
+		float? player1PVs = -1;
+		float? player2PVs = -1;
+		float? player1Energy = -1;
+		float? player2Energy = -1;
+		if (PlayerHealthManager.Instance != null)
+		{
+			player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+				? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
+				: null;
+			player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+				? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
+				: null;
+			player1Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
+				? PlayerHealthManager.Instance.RegisteredPlayers[0].gameObject.GetComponent<PlayerEnergy>()
+					.CurrentEnergy
+				: null;
+			
+			player2Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
+				? PlayerHealthManager.Instance.RegisteredPlayers[1].gameObject.GetComponent<PlayerEnergy>()
+					.CurrentEnergy
+				: null;
+		}
+		InvokeEvent(new OnDataLog
+		{
+			entityName = name,
+			EntityID = ObjectId,
+			weapon = "heal",
+			targetName = gameObject.name,
+			targetID = ObjectId,
+			damages = (data.p_value * -1f),
+			player1PVs = player1PVs,
+			player2PVs = player2PVs,
+			player1Energy = player1Energy,
+			player2Energy = player2Energy,
+			ArenaID = (_playerZoneManager != null && _playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? _playerZoneManager.p_playerZones[OwnerId] : -1
+		});
+		
+		//fin du debug
+		
 		if (_isDead.Value || data.p_playerId != OwnerId) return;
-		if(data.p_delay != 0) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
+		if(data.p_delay != 0 && throwableHeal) await Task.Delay(Mathf.RoundToInt(data.p_delay * 1000));
 
 		float newHealth = (_currentHealth.Value + data.p_value) > _healthBase ? _healthBase : _currentHealth.Value + data.p_value;
 		_currentHealth.Value = newHealth;
@@ -277,12 +449,12 @@ public class PlayerHealth : NetworkBusListener
 	{
 		InvokeEvent(new OnPlayerDeathEvent { p_playerN = playerN });
 	}
-	
+
 
 	[ObserversRpc]
-	private void ShowHealThrowObserverRpc(Vector3 landingPos)
+	private void ShowHealThrowObserverRpc(Vector3 landingPos, float scale, float duration)
 	{
-		OnHealThrowLanding?.Invoke(landingPos);
+		OnHealThrowLanding?.Invoke(landingPos, scale, duration);
 	}
 	
 	private void OnHealthChange(float prev, float next, bool asServer)
@@ -324,6 +496,49 @@ public class PlayerHealth : NetworkBusListener
 		Debug.Log("Interact");
 		RespawnObserverRpc();
 	}
+	
+	private Vector3 startPos;
+	public Vector3[] HealThrowLine(out float distance)
+	{
+		startPos = transform.position + transform.forward + transform.right;
+		float simulatedTime = 0;
+		Vector3 previousPos = startPos;
+		Vector3 nextPos = GetNewPosition(Time.fixedDeltaTime);
+		List<Vector3>  posList = new();
+		distance = 0;
+		RaycastHit hit;
+		while (!Physics.Raycast(previousPos, nextPos - previousPos, out hit, (nextPos - previousPos).magnitude, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore) && distance < maxThrowDistance)
+		{
+			simulatedTime += Time.fixedDeltaTime;
+			distance += (nextPos - previousPos).magnitude;
+			posList.Add(previousPos);
+			previousPos = nextPos;
+			nextPos = GetNewPosition(simulatedTime);
+		}
+		if (hit.collider != null)
+			posList.Add(hit.point);
+		else
+			posList.Add(nextPos);
+		return posList.ToArray();
+	}
+	
+	Vector3 GetNewPosition(float overTime)
+	{
+		Vector3 forward = p_healThrowDirection.forward;
+		Vector3 planeNormal = Vector3.up; // plan horizontal
+		
+		Vector3 projectedForward = Vector3.ProjectOnPlane(forward, planeNormal);
+		
+		float pitch = Vector3.SignedAngle(
+			projectedForward,
+			forward,
+			p_healThrowDirection.right
+		);
+		
+		Vector3 throwAngle = new Vector3(p_healThrowDirection.forward.x, -pitch * 0.1f + .5f,  p_healThrowDirection.forward.z);
+		
+		return startPos + throwAngle * (throwForce * overTime) + Physics.gravity * (0.5f * overTime * overTime);
+	}
 }
 
 public struct AddHealthToPlayer
@@ -337,6 +552,7 @@ public struct PlayerTakeDamageEvent
 {
 	public NetworkObject p_playerN;
 	public float p_value;
+	public NetworkObject p_attacker;
 }
 
 public struct OnPlayerDeathEvent

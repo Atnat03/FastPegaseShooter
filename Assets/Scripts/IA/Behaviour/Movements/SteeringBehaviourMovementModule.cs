@@ -24,11 +24,11 @@ public class SteeringBehaviourMovementModule : EnemyMovementModule
     
     private Vector3 _currentVelocity;
 
-    protected override void RecalculatePath()
+    protected override void RecalculatePathConcrete()
     {
-        base.RecalculatePath();
+        base.RecalculatePathConcrete();
         
-        Debug.Log("path recalculation");
+        
         ClearPath();
     }
 
