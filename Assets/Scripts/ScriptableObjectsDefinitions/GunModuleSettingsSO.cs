@@ -125,6 +125,8 @@ public class GunSetting
         [Header("Salve")]
         public float intervaleCharge = 0.05f;
         public Vector2 noiseCharged = new Vector2(0, 0);
+        public int numberSalve = 1;
+        public float intervaleBetweenSalve = 0.5f;
     }
 
     //Charged Increase Noise

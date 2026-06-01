@@ -24,9 +24,6 @@ namespace Tuto
     public class TutoManager : NetworkBusListener
     {
         [SerializeField] private ScenarioSO _scenarioSequence;
- 
-        // Glisse ici tous les TriggerBoxProxy présents dans la scène.
-        // Leur champ "Proxy Index" doit correspondre à l'index configuré dans le ScenarioSO.
         [SerializeField] private List<TriggerBoxBridge> _sceneProxies = new();
  
         private void Start()
@@ -36,10 +33,8 @@ namespace Tuto
             StartCoroutine(RunTutorial());
         }
  
-        // Résout chaque Trigger_BoxCollider → proxy correspondant par index
         private void SetUpBridge()
         {
-            // Construit un dictionnaire index → proxy pour la résolution rapide
             Dictionary<int, TriggerBoxBridge> proxyMap = new Dictionary<int, TriggerBoxBridge>();
             foreach (TriggerBoxBridge proxy in _sceneProxies)
                 proxyMap[proxy.bridgeIndex] = proxy;
@@ -51,7 +46,7 @@ namespace Tuto
                     if (proxyMap.TryGetValue(boxTrigger.proxyIndex, out var proxy))
                         boxTrigger.InjectProxy(proxy);
                     else
-                        Debug.LogWarning($"[TutoManager] Aucun proxy avec l'index {boxTrigger.proxyIndex} trouvé dans la scène.");
+                        Debug.LogWarning($"Aucun proxy avec l'index {boxTrigger.proxyIndex} trouvé dans la scène.");
                 }
             }
         }
@@ -98,23 +93,47 @@ namespace Tuto
             void Handler() => fired = true;
         }
 
-        [ServerRpc]
-        public void AskForOpenDoorServerRpc(Event_OpenDoor.Door actionToDo, int doorIndex)
+        public void ActivateDoor()
         {
+            Cons.Print("Activating door");
+        }
+
+        /*public void AskForOpenDoor(int actionToDo, int doorIndex)
+        {
+            if (IsServerInitialized)
+            {
+                AskForOpenDoorObserversRpc(actionToDo, doorIndex);
+            }else
+            {
+                AskForOpenDoorServerRpc(actionToDo, doorIndex);
+            }
+        }
+        
+        [ServerRpc]
+        void AskForOpenDoorServerRpc(int actionToDo, int doorIndex)
+        {
+            Cons.Print("AskForOpenDoorServerRpc");
+            
             AskForOpenDoorObserversRpc(actionToDo, doorIndex);
         }
         
         [ObserversRpc]
-        private void AskForOpenDoorObserversRpc(Event_OpenDoor.Door actionToDo, int doorIndex)
+        void AskForOpenDoorObserversRpc(int actionToDo, int doorIndex)
         {
             Cons.Print("Ask for open door");
             
             InvokeEvent(new OnDoorOpen_TUTO
             {
-                action = actionToDo,
+                action = actionToDo, 
                 indexDoor = doorIndex
             });
-        }
+        }*/
+    }
+    
+    public struct OnDoorOpen_TUTO
+    {
+        public int action;
+        public int indexDoor;
     }
 
 }
