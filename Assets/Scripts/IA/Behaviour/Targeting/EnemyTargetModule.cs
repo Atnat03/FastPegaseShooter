@@ -20,12 +20,11 @@ public abstract class EnemyTargetModule : EnemyBehaviourModule
             if(obj == null) return;
             
             p_playerVisualBridge = obj.GetComponentInChildren<PlayerVisuelBridge>();
-            p_onTargetPositionForceUpdate?.Invoke();
         }
     }
 
     [HideInInspector] public Vector3 p_lastTargetPosition =  Vector3.negativeInfinity;
-    public Action p_onTargetPositionForceUpdate;
+    public Action p_onTargetPositionUpdate;
     protected virtual bool IsNewTargetValid(PlayerPositionUpdateEvent PPUE) => true;
 
     public override void OnStartServer()
@@ -42,6 +41,7 @@ public abstract class EnemyTargetModule : EnemyBehaviourModule
             p_targetId = PPUE.p_networkObjectId;
             p_lastTargetPosition = PPUE.p_playerPosition;
         }
+        p_onTargetPositionUpdate?.Invoke();
     }
     public virtual Vector3 GetTargetPosition()
     {

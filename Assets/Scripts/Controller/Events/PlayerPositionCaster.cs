@@ -88,7 +88,7 @@ public class PlayerPositionCaster : NetworkBusListener
     
     public Vector3 GetDirection(int index)
     {
-        Vector3 flatForward = Vector3.zero;
+        Vector3 flatForward = Vector3.forward;
         flatForward.x = transform.forward.x;
         flatForward.z = transform.forward.z;
         flatForward.Normalize();

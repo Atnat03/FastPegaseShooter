@@ -199,10 +199,7 @@ MonoBehaviour:
   _movementModule: {fileID: -7347254882641627743}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
-  _pinataType: 2
-  _baseEnergyDropValue: 5
-  _pinataEnergyDropValue: 10
-  _dropXpOrb: 0
+  _coreSo: {fileID: 11400000, guid: 3e1badfb81da8914eaeed2f052d8e455, type: 2}
 --- !u!114 &4639033686446523756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,8 +215,7 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _life: 360
-  playerZoneManager: {fileID: 0}
+  _lifeModuleSO: {fileID: 11400000, guid: 4c5449ecaba1cf348a73e85876afe3fd, type: 2}
 --- !u!114 &-6673638721032206114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,19 +232,8 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   _targetModule: {fileID: -1059870798127094945}
-  _damage: 10
-  _attackDelay: 2.5
-  _bulletType: 1
-  _projectileUseGravity: 1
-  _maxPlayerDistance: 10
-  _bulletSize: 0.2
-  _bulletSpeed: 1
-  _maxBulletLifeTime: 10
-  _shootingAngle: 30
-  p_shootingOffset: {x: 0, y: 0.5, z: 0}
-  p_splashSize: 7.5
-  p_splashDuration: 8
-  p_splashDamageDelay: 1.1
+  _attackModuleSO: {fileID: 11400000, guid: f7d78d07b89ac2b4487fc8ec1749842e, type: 2}
+  _lobShootingAttackModuleSo: {fileID: 11400000, guid: 01d06068502477a4785dd99cb38561f9, type: 2}
 --- !u!114 &-1059870798127094945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,13 +250,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
-  _aggroPointWhenInDetectZone: 100
-  _aggroPointPerDamageTaken: 2
-  _aggroPointPerSecond: 1
-  _aggroPointPerDamageDealt: 1
-  _aggroPointsThreshold: 0000000064000000c8000000
-  _detectionZoneRadius: 120
-  _aggroZoneRadius: 120
+  _scoreTargetModuleSO: {fileID: 11400000, guid: c98391b81be2d56409e87413f262aa38, type: 2}
 --- !u!114 &-5500397333362756841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,15 +267,8 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
   p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
-  _aggroPointWhenInDetectZone: 100
-  _aggroPointPerDamageTaken: 2
-  _aggroPointPerSecond: 1
-  _aggroPointPerDamageDealt: 1
-  _aggroPointsThreshold: 0000000064000000c8000000
-  _detectionZoneRadius: 120
-  _aggroZoneRadius: 120
-  _fakeTargetSwitchingDistance: 2.5
-  _rangeTimeForDirectTargeting: {x: 10, y: 30}
+  _scoreTargetModuleSO: {fileID: 11400000, guid: c98391b81be2d56409e87413f262aa38, type: 2}
+  _stepTargetModuleSO: {fileID: 11400000, guid: 3358f4cb1fefbf34ba9a7e1da189ccd4, type: 2}
 --- !u!136 &1891565403973585591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -357,7 +329,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584212872474924009
+  _initializedTimestamp: -8584213019959823438
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -443,12 +415,9 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 8280671740658429549}
   _networkObjectCache: {fileID: 8280671740658429549}
-  _doFreezeWithoutTarget: 1
   _targetModule: {fileID: -5500397333362756841}
-  _speed: 2
-  _traceWeight: 12
-  _traceSpread: 3
-  _idealDistance: 1
+  _movementModuleSO: {fileID: 0}
+  _distanceAwareModuleSO: {fileID: 11400000, guid: 7f74c96f49cdd6043a13dde81d738abb, type: 2}
 --- !u!1 &6364117521231957157
 GameObject:
   m_ObjectHideFlags: 0

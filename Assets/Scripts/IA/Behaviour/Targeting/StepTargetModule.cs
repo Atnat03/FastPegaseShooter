@@ -4,10 +4,7 @@ using UnityEngine;
 [AddComponentMenu("EnemyBehaviour/Target/StepTargetModule")]
 public class StepTargetModule : ScoreTargetModule
 {
-    [SerializeField] private float _fakeTargetSwitchingDistance;
-    
-    [Tooltip("If one of the value is negative, the target module won't ever switch back to fake target")]
-    [SerializeField] private Vector2 _rangeTimeForDirectTargeting = new Vector2(10, 30);
+    [SerializeField] private StepTargetModuleSO _stepTargetModuleSO;
 
     private bool _reachedFakeTarget;
     private int _fakeTargetIndex = -1;
@@ -17,28 +14,31 @@ public class StepTargetModule : ScoreTargetModule
     {
         base.OnNetworkTick(tickDelta);
         
+        if(!_stepTargetModuleSO.p_doSwitchTargeting) return;
+        
+        //only usefull for switching target
         if (HasTarget())
         {
             if(!_reachedFakeTarget && (transform.position - GetTargetPosition()).sqrMagnitude <=
-                _fakeTargetSwitchingDistance * _fakeTargetSwitchingDistance)
+               _stepTargetModuleSO.p_fakeTargetSwitchingDistance * _stepTargetModuleSO.p_fakeTargetSwitchingDistance)
             {
                 _reachedFakeTarget = true;
-                p_onTargetPositionForceUpdate?.Invoke();
+                p_onTargetPositionUpdate?.Invoke();
                 _fakeTargetIndex = p_playerVisualBridge.PlayerPositionCaster.GetTargetIndex();
                 
-                _timeToFakeTargetTargeting = Random.Range(_rangeTimeForDirectTargeting.x,
-                    _rangeTimeForDirectTargeting.y);
+                _timeToFakeTargetTargeting = Random.Range(_stepTargetModuleSO.p_rangeTimeForDirectTargeting.x,
+                    _stepTargetModuleSO.p_rangeTimeForDirectTargeting.y);
             }
 
             if (_reachedFakeTarget && 
                 //if both X and Y are greater or equal to 0
-                _rangeTimeForDirectTargeting is { x: >= 0, y: >= 0 })
+                _stepTargetModuleSO.p_rangeTimeForDirectTargeting is { x: >= 0, y: >= 0 })
             {
                 _timeToFakeTargetTargeting -= tickDelta;
                 if (_timeToFakeTargetTargeting <= 0)
                 {
                     _reachedFakeTarget = false;
-                    p_onTargetPositionForceUpdate?.Invoke();
+                    p_onTargetPositionUpdate?.Invoke();
                 }
             }
         }
@@ -46,14 +46,14 @@ public class StepTargetModule : ScoreTargetModule
 
     public override Vector3 GetTargetPosition()
     {
-        if (_reachedFakeTarget)
+        if (_stepTargetModuleSO.p_doSwitchTargeting && _reachedFakeTarget)
         {
             return p_playerVisualBridge.FPSController.transform.position;
         }
-        else if (_fakeTargetIndex < 0)
-        {
+        
+        
+        if (_fakeTargetIndex < 0)
             _fakeTargetIndex = p_playerVisualBridge.PlayerPositionCaster.GetTargetIndex();
-        }
 
         return p_playerVisualBridge.PlayerPositionCaster.GetFakeTargetPosition(_fakeTargetIndex);
     }
