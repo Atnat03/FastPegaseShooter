@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1039354952693192919}
   - component: {fileID: 4366616008979837098}
   - component: {fileID: 3709122296254753378}
+  - component: {fileID: 7201495400392450832}
   m_Layer: 0
   m_Name: "\U0001F308CoopManager"
   m_TagString: Untagged
@@ -119,7 +120,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584230311326436341
+  _initializedTimestamp: -8584218861460563981
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -135,7 +136,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 29
+  <PrefabId>k__BackingField: 33
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 11948202327552370993
   SceneId: 0
@@ -203,17 +204,29 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 6325006552558930708}
   _networkObjectCache: {fileID: 6325006552558930708}
   _normalBulletPrefab: {fileID: 4591400360090582569, guid: 563cd6461b623044c8d7fd34d0aecdac, type: 3}
-  _splashBulletPrefab: {fileID: 4591400360090582569, guid: 2533d02588202e9458704dd2cf3877aa, type: 3}
+  _viscousBulletPrefab: {fileID: 0}
   _puddleBulletPrefab: {fileID: 4591400360090582569, guid: a075766ba03e48f48ac3fc4d55e0e4ae, type: 3}
   _normalBulletLayerMask:
     serializedVersion: 2
     m_Bits: 458743
-  _splashBulletLayerMask:
+  _viscousBulletLayerMask:
     serializedVersion: 2
-    m_Bits: 458551
+    m_Bits: 2147417919
   _puddleBulletLayerMask:
     serializedVersion: 2
     m_Bits: 192
+--- !u!114 &7201495400392450832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195821754654841656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aee314f8eae5f646b6e911c17d62cfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DebugInputManager
 --- !u!1 &1648326429967676846
 GameObject:
   m_ObjectHideFlags: 0
