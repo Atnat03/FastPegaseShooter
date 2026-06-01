@@ -52,7 +52,6 @@ public class SubArena : NetworkBusListener
         
         ListenToEvent<OnDapEvent>(ODE =>
         {
-            //CustomLogger.Log("OnDapEvent zone stop");
             _zoneActivated = false;
         });
         
@@ -62,19 +61,6 @@ public class SubArena : NetworkBusListener
             {
                 NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
                 _spawnedEnemies.Remove(OEDE.p_enemy);
-            }
-        });
-        
-
-        //CustomLogger.ImportantLog("Not sure if this listening is usefull => to test");
-        ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
-        {
-            if (PPUE.p_isHeartBeat) return; //Heart beat isn't usefull for pathfinding
-            
-            for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
-            {
-                if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
-                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition);
             }
         });
 
