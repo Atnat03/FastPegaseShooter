@@ -63,7 +63,7 @@ namespace GunDecorator.ChargedModules
                     
                     _ammoModule.SpawnBullet(spread, Vector3.zero, false);
                     
-                    _gunController.RecoilModule?.Recoil(_gunController.ModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
+                    _gunController.RecoilModule?.Recoil(_gunController.CurrentModelGun.transform, 0.1f, false, _recoilChargedMultiplier, _recoilX);
                     _gunController.RecoilModule?.SetIsRecoil(true);
                     
                     yield return new WaitForSeconds(_intervaleCharge);

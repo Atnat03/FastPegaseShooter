@@ -101,7 +101,7 @@ public class GunSwitching : NetworkBusListener
 		for (int i = 0; i < list.Count; i++)
 		{
 			bool shouldBeActive = (i == index);
-			list[i].ModelGun.gameObject.SetActive(shouldBeActive);
+			list[i].CurrentModelGun.gameObject.SetActive(shouldBeActive);
 		}
 
 		IGunMain?.SetReticule(_reticuleManager);
@@ -111,7 +111,7 @@ public class GunSwitching : NetworkBusListener
 	{
 		foreach (GunController gun in _mainGunsList)
 		{
-			gun.ModelGun.gameObject.SetActive(false);
+			gun.CurrentModelGun.gameObject.SetActive(false);
 		}
 	}
 	
