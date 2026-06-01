@@ -42,14 +42,12 @@ public class GunSwitching : NetworkBusListener
 	
 	private bool _forceEnergyMode;
 	private bool _canSwitch = true;
-	private bool _canChangemagnetic = true;
 	[HideInInspector]public List<GunController> _mainGunsList;
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
 	
 	//Actions
 	public Action<bool> OnSwapGun;
-	public Action<float> OnMagneticCooldown;
 	
 	private IGun _currentMainIGun;
 	private ISurcharge _currentISurcharge;
@@ -95,57 +93,6 @@ public class GunSwitching : NetworkBusListener
 		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
 	}
 
-	[ServerRpc]
-	public void RequestChangeMagneticCharge(int playerId)
-	{
-		ChangeMagneticCharge(playerId);
-	}
-	
-	public void ChangeMagneticCharge(int pId)
-	{
-		if (!IsServerInitialized) return;
-		if (!_canChangemagnetic) return;
-		
-		_isPositiveChargedPlayer.Value = !_isPositiveChargedPlayer.Value;
-		
-		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
-
-		InvokeEvent(new OnPlayerChangeMagneticCharge
-		{
-			playerId = pId,
-			isPositiveCharged = _isPositiveChargedPlayer.Value
-		});
-
-		_canChangemagnetic = false;
-		
-		UpdateUIChargeObserversRpc(_isPositiveChargedPlayer.Value);
-	}
-
-	[ObserversRpc]
-	private void UpdateUIChargeObserversRpc(bool isPositive)
-	{
-		OnSwapGun?.Invoke(isPositive);
-
-		StartCoroutine(CooldownChargeMagnetic());
-	}
-
-	IEnumerator CooldownChargeMagnetic()
-	{
-		float t = 0;
-
-		while (t < _cooldownChangeMagnetic)
-		{
-			t += Time.deltaTime;
-			
-			OnMagneticCooldown?.Invoke(t / _cooldownChangeMagnetic);
-			
-			yield return null;
-		}
-
-		if (IsServerInitialized)
-			_canChangemagnetic = true;
-	}
-
 	public void ActivateCurrentGun(List<GunController> list, int index)
 	{
 		if (_forceEnergyMode)
@@ -154,7 +101,7 @@ public class GunSwitching : NetworkBusListener
 		for (int i = 0; i < list.Count; i++)
 		{
 			bool shouldBeActive = (i == index);
-			list[i].ModelGun.gameObject.SetActive(shouldBeActive);
+			list[i].CurrentModelGun.gameObject.SetActive(shouldBeActive);
 		}
 
 		IGunMain?.SetReticule(_reticuleManager);
@@ -164,7 +111,7 @@ public class GunSwitching : NetworkBusListener
 	{
 		foreach (GunController gun in _mainGunsList)
 		{
-			gun.ModelGun.gameObject.SetActive(false);
+			gun.CurrentModelGun.gameObject.SetActive(false);
 		}
 	}
 	
@@ -231,7 +178,8 @@ public class GunSwitching : NetworkBusListener
 	[ObserversRpc]
 	private void SetGunModeObserversRpc(bool isMain)
 	{
-		_isMainGun.Value = isMain;
+		if(IsServerInitialized)
+			_isMainGun.Value = isMain;
 		
 		_shootEnergy.gameObject.SetActive(!isMain);
 

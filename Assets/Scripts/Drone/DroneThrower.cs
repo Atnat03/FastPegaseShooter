@@ -38,6 +38,8 @@ public class DroneThrower : NetworkBusListener
 	private readonly SyncVar<bool> _canThrow = new(false);
 	
 	private Drone _currentDroneInTerrain = null;
+
+	public bool p_unlockCapa = true;
 	
 	//Actions
 	public Action OnThrowing;
@@ -60,11 +62,14 @@ public class DroneThrower : NetworkBusListener
 		if (_isCanceled) return;
 		if (_target == null) return;
 		if (!_playerCapacity.CanDrone) return;
+		if (!p_unlockCapa) return;
 		
 		InvokeEvent(new OnUseCapacity
 		{
 			p_capacityData = Capacity.Drone
 		});
+		
+		InvokeEvent(new OnDroneUsed_TUTO());
 		
 		_isCharging = false;
 		
