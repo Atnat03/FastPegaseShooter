@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Tuto
 {
-    public class DoorsTrigger : MonoBusListener
+    public class DoorsTrigger : NetworkBusListener
     {
         [SerializeField] private int _index;
         Animator animator;
-        
-        private void Awake()
+
+        public override void OnStartClient()
         {
             ListenToEvent<OnDoorOpen_TUTO>(OpenDoor);
         }
@@ -20,8 +20,15 @@ namespace Tuto
                 return;
 
             Cons.Print("Open door");
-            
-            animator.SetTrigger(data.action == Event_OpenDoor.Door.Open ? "Open" : "Close");
+
+            if (data.action == 0)
+            {
+                animator.SetTrigger("Open");
+            }
+            else
+            {
+                animator.SetTrigger("Close");
+            }
         }
     }
 }

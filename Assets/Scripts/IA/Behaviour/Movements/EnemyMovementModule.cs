@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CustomConsole.Runtime.Logger;
 using UnityEngine;
 using UnityEngine.Serialization;
 
