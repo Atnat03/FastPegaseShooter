@@ -1,4 +1,5 @@
 using System.Collections;
+using MyPrint;
 
 namespace Tuto
 {
@@ -15,7 +16,8 @@ namespace Tuto
         {
             if (manager != null)
             {
-                manager.AskForOpenDoorServerRpc(actionToDo, doorIndex);
+                //manager.AskForOpenDoor((int)actionToDo, doorIndex);
+                manager.ActivateDoor();
             }
             
             yield break;
