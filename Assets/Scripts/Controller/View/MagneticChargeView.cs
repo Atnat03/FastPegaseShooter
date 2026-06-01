@@ -39,7 +39,6 @@ public class MagneticChargeView : MonoBusListener
 	private void OnEnable()
 	{
 		_gunSwitching.OnSwapGun += UpdateUI;
-		_gunSwitching.OnMagneticCooldown += CooldownMagneticCharge;
 		
 		ListenToEvent<OnPolarizationStateChanged>(UpdatePolarisation);
 		ListenToEvent<OnConflictUIUpdate>(UpdateConflictText);
@@ -49,13 +48,6 @@ public class MagneticChargeView : MonoBusListener
 	private void OnDisable()
 	{
 		_gunSwitching.OnSwapGun -= UpdateUI;
-		_gunSwitching.OnMagneticCooldown -= CooldownMagneticCharge;
-	}
-
-	private void CooldownMagneticCharge(float ratio)
-	{
-		_cooldown.gameObject.SetActive(ratio > 0);
-		_cooldown.fillAmount = 1 - ratio;
 	}
 
 	private void UpdatePolarisation(OnPolarizationStateChanged data)

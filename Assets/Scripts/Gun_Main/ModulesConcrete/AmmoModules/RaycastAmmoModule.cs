@@ -121,7 +121,6 @@ namespace GunDecorator.AmmoModules
             NetworkObject target = null, float factorReduceDamageByDistance = 1, bool isDistanceReduce = false, bool hadCharged = true)
         {
             BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
-            Debug.Log($"ammo pool size: {_ammoPool.Size}");
             
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy

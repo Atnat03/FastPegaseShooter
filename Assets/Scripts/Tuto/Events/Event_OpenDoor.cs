@@ -16,8 +16,7 @@ namespace Tuto
         {
             if (manager != null)
             {
-                //manager.AskForOpenDoor((int)actionToDo, doorIndex);
-                manager.ActivateDoor();
+                manager.AskForOpenDoor((int)actionToDo, doorIndex);
             }
             
             yield break;

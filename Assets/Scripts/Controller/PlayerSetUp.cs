@@ -2,6 +2,7 @@ using Controller;
 using FishNet.Object;
 using UnityEngine;
 
+[DefaultExecutionOrder(-1)]
 public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField] private GunBridgePlayer _gunBridge;

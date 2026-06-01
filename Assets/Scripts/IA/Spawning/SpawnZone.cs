@@ -57,7 +57,7 @@ public class SpawnZone : NetworkBusListener
             for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
             {
                 if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
-                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition);
+                //else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition);
             }
         });
     }
