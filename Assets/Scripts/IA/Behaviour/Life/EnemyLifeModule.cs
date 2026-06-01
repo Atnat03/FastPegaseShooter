@@ -16,7 +16,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     [HideInInspector][SerializeField] private int _life = 10;
     public readonly SyncVar<int> p_life = new SyncVar<int>();
     
-    [Header("debug")] [SerializeField] private SwapGunManager swapGunManager;
+    [Header("debug")] [SerializeField] private PlayerZoneManager playerZoneManager;
     
     /// <summary>
     /// bool => Is Critical Damages <br/>
@@ -32,7 +32,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
 
     private void Start()// pour du debug, a tej en build finale
     {
-        swapGunManager = FindAnyObjectByType<SwapGunManager>();
+        playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
     }
 
     public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false)
