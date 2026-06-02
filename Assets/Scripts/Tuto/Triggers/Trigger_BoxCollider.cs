@@ -33,7 +33,6 @@ namespace Tuto.Triggers
         {
             if (_bridge == null)
             {
-                Debug.LogWarning($"Aucun proxy trouvé pour l'index {proxyIndex}");
                 return;
             }
             _bridge.OnPlayerEntered += HandlePlayerEntered;

@@ -98,9 +98,9 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     private void HandleDirectHit(RaycastHit hit)
     {
         if (_gunController.IsServerInitialized)
-            _gunController.ApplyDamage(hit.transform.GetComponent<NetworkObject>(), (int)p_damage, p_isCritical,p_hadCharged);
+            _gunController.ApplyDamage(hit.collider.gameObject, (int)p_damage, p_isCritical,p_hadCharged);
         else
-            _gunController.RequestApplyDamage(hit.transform.GetComponent<NetworkObject>(), (int)p_damage, p_isCritical, p_hadCharged);
+            _gunController.RequestApplyDamage(hit.collider.gameObject, (int)p_damage, p_isCritical, p_hadCharged);
     }
 
     IEnumerator DelayBeforeExplosion(float duration)
@@ -119,13 +119,13 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 
         foreach (Collider c in colliders)
         {
-            if (!c.TryGetComponent<IDamagable>(out _)) continue;
-            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
+            /*if (!c.TryGetComponent<IDamagable>(out _)) continue;
+            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;*/
 
             if (_gunController.IsServerInitialized)
-                _gunController.ApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
+                _gunController.ApplyDamage(c.gameObject, (int)p_damage, p_isCritical, p_hadCharged);
             else
-                _gunController.RequestApplyDamage(netObj, (int)p_damage, p_isCritical, p_hadCharged);
+                _gunController.RequestApplyDamage(c.gameObject, (int)p_damage, p_isCritical, p_hadCharged);
         }
     }
 

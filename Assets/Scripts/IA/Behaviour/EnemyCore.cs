@@ -141,14 +141,13 @@ public class EnemyCore : NetworkBusListener
         //if killed by dap wave
         if (charge != ChargeType.None)
         {
-            InstanceFinder.ServerManager.Despawn(gameObject);
+            InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
             return;
         }
         
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
         
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
-        
         
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
         

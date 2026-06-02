@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
@@ -239,21 +240,22 @@ namespace GunDecorator
         }
 
         [ServerRpc(RequireOwnership = true)]
-        public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
+        public void RequestApplyDamage(GameObject target, int damage, bool isCritical, bool hadCharged)
         {
             ApplyDamage(target, damage, isCritical, hadCharged);
         }
 
-        public void ApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
+        public void ApplyDamage(GameObject target, int damage, bool isCritical, bool hadCharged)
         {
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
             
-            if (!target.IsSpawned)
+            /*if (!target.IsSpawned)
             {
                 Debug.LogWarning("ApplyDamage : target not spawned");
                 return;
             }
+            CustomLogger.HighlightLog("ApplyDamage 4");*/
 
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
@@ -274,8 +276,8 @@ namespace GunDecorator
                 entityName = transform.GetRootTransform().gameObject.name,
                 EntityID = ObjectId,
                 weapon = gameObject.name,
-                targetName = target.name,
-                targetID = target.transform.GetRootTransform().GetComponent<NetworkObject>().ObjectId,
+                targetName = target.transform.root.name,
+                targetID = target.transform.root.GetComponent<NetworkObject>().ObjectId,
                 damages = damage,
                 ArenaID = (playerZoneManager != null && playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? playerZoneManager.p_playerZones[OwnerId] : -1
             });
@@ -296,7 +298,7 @@ namespace GunDecorator
 
         public void TryShootCharged()
         {
-            _chargedModule?.TryShootCharging();
+            _chargedModule?.StartChargedShoot();
         }
 
         public void Disable(bool state)
@@ -339,7 +341,7 @@ namespace GunDecorator
         {
             if (p_particleData == null) return;
 
-            VFXData data = p_particleData.CreateVFX("Shoot");
+            VFXData data = p_particleData.CreateVFX("Mitraillette_Load_Nega");
 
             ParticleSystem particle = Instantiate(data.p_particle, transform);
             particle.transform.localPosition = data.p_spawnPos;

@@ -78,6 +78,7 @@ namespace GunDecorator
             
             GameObject s = Instantiate(_killMarkerPrefab, _hitMarkerParent);
             _currentKillMarker = s;
+            s.transform.position = _hitMarkerParent.position;
             
             SoundManager.PlaySound(_gunController._soundData, "Kill", _gunController._source);
             

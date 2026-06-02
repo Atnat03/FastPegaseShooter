@@ -1,4 +1,5 @@
 using System;
+using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
@@ -135,15 +136,17 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
             if (p_isDistanceReduce)
                 damage *= (1 / (1 + p_ratioDistanceReduce * Vector3.Distance(hit.point, _shootPos)));
-
-            if (hit.collider.TryGetComponent<NetworkObject>(out var netObj))
+            
+            _gunController.ApplyDamage(hit.collider.gameObject, (int)damage, p_isCritical, p_hadCharged);
+            
+            /*if (hit.collider.TryGetComponent<G>(out var core))
             {
-                _gunController.ApplyDamage(netObj, (int)damage, p_isCritical, p_hadCharged);
+                _gunController.ApplyDamage(core.NetworkObject, (int)damage, p_isCritical, p_hadCharged);
             }
             else
             {
                 Debug.LogWarning("Touched object has no NetworkObject");
-            }
+            }*/
         }
 
         CreateHitMark(hit);
@@ -159,10 +162,10 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         
         foreach (Collider c in Physics.OverlapSphere(transform.position, radius))
         {
-            if (!c.TryGetComponent<IDamagable>(out _)) continue;
-            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
+            /*if (!c.TryGetComponent<IDamagable>(out _)) continue;
+            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;*/
 
-            _gunController.ApplyDamage(netObj, damage, p_isCritical, p_hadCharged);
+            _gunController.ApplyDamage(c.gameObject, damage, p_isCritical, p_hadCharged);
         }
     }
 
