@@ -83,6 +83,15 @@ namespace Controller
             {
                 p_capacityData = Capacity.ChargedShoot
             });
+
+            InvokeEvent(new OnDataLog
+            {
+                entityName = transform.GetRootTransform().gameObject.name,
+                EntityID = ObjectId,
+                weapon = gameObject.name,
+                skillUsed = "ChargedShoot",
+                ArenaID = -1,
+            });
             
             CurrentGun.TryShootCharged();
         }

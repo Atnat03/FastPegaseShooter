@@ -4,7 +4,7 @@ using UnityEngine;
 [CustomEditor(typeof(EnemyLifeModule), true)]
 public class EnemyLifeModuleInspector : EnemyBehaviourModuleInspector
 {
-    private SerializedProperty _life;
+    private SerializedProperty _lifeModuleSO;
 
     private SerializedProperty _enemyLifeModule;
     
@@ -13,7 +13,7 @@ public class EnemyLifeModuleInspector : EnemyBehaviourModuleInspector
     {
         base.OnEnable();
         
-        _life = serializedObject.FindProperty("_life");
+        _lifeModuleSO = serializedObject.FindProperty("_lifeModuleSO");
         _enemyLifeModule = serializedObject.FindProperty("_enemyLifeModule");
     }
 
@@ -29,7 +29,7 @@ public class EnemyLifeModuleInspector : EnemyBehaviourModuleInspector
                 segmentLenght: 15,
                 gapLenght: 7));
 
-        EditorGUILayout.PropertyField(_life);
+        EditorGUILayout.PropertyField(_lifeModuleSO);
         if (target.GetType() == typeof(PVBagLifeModule) || target.GetType() == typeof(WeakPointLifeModule))
         {
             Rect targetBlockRect = EditorUtilities.WrapInBlock(() =>

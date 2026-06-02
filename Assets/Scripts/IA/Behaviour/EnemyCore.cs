@@ -25,13 +25,7 @@ public class EnemyCore : NetworkBusListener
 
     public Action OnDapExplosion;
 
-    #region Energy Variables
-
-    [SerializeField] private ChargeType _pinataType = ChargeType.None;
-    [SerializeField] private float _baseEnergyDropValue = 5;
-    [SerializeField] private float _pinataEnergyDropValue = 10;
-    [SerializeField] private bool _dropXpOrb = false;
-    #endregion
+    [SerializeField] private EnemyCoreSO _coreSo;
 
     
     public override void OnStartServer()
@@ -112,11 +106,6 @@ public class EnemyCore : NetworkBusListener
         p_gridReader = pathfindingGridReader;
     }
 
-    public void ClearPathReservation()
-    {
-        _movementModule.ClearPathReservation();
-    }
-
     private void OnNetworkTick()
     {
         float tickDelta = (float)InstanceFinder.TimeManager.TickDelta;
@@ -135,11 +124,6 @@ public class EnemyCore : NetworkBusListener
         _movementModule?.OnNetworkTick(tickDelta);
     }
 
-    public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
-    {
-        _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
-    }
-
     public void ExplodeOnDapWave()
     {
         ExplodeOnDapWaveObserverRpc();
@@ -153,8 +137,6 @@ public class EnemyCore : NetworkBusListener
 
     public void KillEnemy(int playerObjectId, ChargeType charge)
     {
-        if(_movementModule != null)
-            ClearPathReservation();
 
         //if killed by dap wave
         if (charge != ChargeType.None)
@@ -165,11 +147,11 @@ public class EnemyCore : NetworkBusListener
         
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
         
-        EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_dropXpOrb ? 0 : signedEnergyAmount));
+        EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
         
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
         
-        if (!_dropXpOrb)
+        if (!_coreSo.p_dropXpOrb)
         {
             InvokeEvent(new ModifyEnergyEvent
             {
@@ -186,14 +168,14 @@ public class EnemyCore : NetworkBusListener
         switch (charge)
         {
             case ChargeType.Positive:
-                if (_pinataType == ChargeType.Positive)
-                    return _pinataEnergyDropValue;
-                return _baseEnergyDropValue;
+                if (_coreSo.p_pinataType == ChargeType.Positive)
+                    return _coreSo.p_pinataEnergyDropValue;
+                return _coreSo.p_baseEnergyDropValue;
             
             case ChargeType.Negative:
-                if (_pinataType == ChargeType.Negative)
-                    return -_pinataEnergyDropValue;
-                return -_baseEnergyDropValue;
+                if (_coreSo.p_pinataType == ChargeType.Negative)
+                    return -_coreSo.p_pinataEnergyDropValue;
+                return -_coreSo.p_baseEnergyDropValue;
             
             default:
                 return 0f;

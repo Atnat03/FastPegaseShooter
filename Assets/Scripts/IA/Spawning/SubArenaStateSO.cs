@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SubArenaStateSO", menuName = "Scriptable Objects/SubArenaStateSO")]
+[CreateAssetMenu(fileName = "SubArenaStateSO", menuName = "Scriptable Objects/AI/Spawning/SubArenaStateSO")]
 public class SubArenaStateSO : ScriptableObject
 {
     public int p_budgetPerSecond;
