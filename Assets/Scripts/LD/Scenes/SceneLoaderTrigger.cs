@@ -25,6 +25,7 @@ namespace LD.Scenes
 
 		void OpenDoor(OnDapEvent evt)
 		{
+			if (!_door) return;
 			if(_door.GetComponent<Animation>()) _door.GetComponent<Animation>().Play();
 			else _door.SetActive(false);
 		}
