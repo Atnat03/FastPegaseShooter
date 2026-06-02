@@ -34,6 +34,7 @@ namespace LD.Scenes
 		{
 			if (other.TryGetComponent(out PlayerVisuelBridge player))
 			{
+				InvokeEvent(new OnSceneLoadTrigger());
 				SceneManaging.LoadScene(_sceneToLoad);
 				SceneManaging.UnloadScene(_sceneToUnload);
 			}
@@ -41,4 +42,9 @@ namespace LD.Scenes
 
 		#endregion
 	}
+}
+
+public struct OnSceneLoadTrigger
+{
+	
 }
