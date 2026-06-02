@@ -69,6 +69,15 @@ public class DroneThrower : NetworkBusListener
 			p_capacityData = Capacity.Drone
 		});
 		
+		InvokeEvent(new OnDataLog
+		{
+			entityName = transform.GetRootTransform().gameObject.name,
+			EntityID = ObjectId,
+			weapon = "Drone",
+			skillUsed = "Drone",
+			ArenaID = -1,
+		});
+		
 		InvokeEvent(new OnDroneUsed_TUTO());
 		
 		_isCharging = false;
