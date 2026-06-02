@@ -26,6 +26,7 @@ public class CSVDataExport : MonoBusListener
             "player2PVs",
             "player1Energy",
             "player2Energy",
+            "skillUsed",
             "subArenaID",
         });
         
@@ -44,6 +45,7 @@ public class CSVDataExport : MonoBusListener
                 player2PVs = 100,
                 player1Energy = 100,
                 player2Energy = 100,
+                skillUsed = "init",
                 ArenaID = -1,
             });
     }
@@ -51,7 +53,7 @@ public class CSVDataExport : MonoBusListener
 
     void AddLog(OnDataLog data)
     {
-        string[] prev = rows.Count > 1 ? rows[^1] : new string[12];
+        string[] prev = rows.Count > 1 ? rows[^1] : new string[13];
 
         rows.Add(new[]
         {
@@ -65,8 +67,9 @@ public class CSVDataExport : MonoBusListener
             data.player1PVs   .HasValue ? data.player1PVs.Value.ToString("F2") : prev[7],
             data.player2PVs   .HasValue ? data.player2PVs.Value.ToString("F2") : prev[8],
             data.player1Energy.HasValue ? data.player1Energy.Value.ToString("F2") : prev[9], 
-            data.player2Energy.HasValue ? data.player2Energy.Value.ToString("F2") : prev[10], 
-            data.ArenaID      .HasValue ? data.ArenaID.Value.ToString()      : prev[11],
+            data.player2Energy.HasValue ? data.player2Energy.Value.ToString("F2") : prev[10],
+            data.skillUsed    ?? prev[11],
+            data.ArenaID      .HasValue ? data.ArenaID.Value.ToString()      : prev[12],
         });
     }
     
@@ -118,5 +121,6 @@ struct OnDataLog
     public float? player2PVs;
     public float? player1Energy;
     public float? player2Energy;
+    public string skillUsed;
     public int?   ArenaID;
 }
