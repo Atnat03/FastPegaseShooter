@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CustomConsole.Runtime.Console;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using GameKit.Dependencies.Utilities;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
