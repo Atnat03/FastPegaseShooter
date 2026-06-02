@@ -25,11 +25,10 @@ namespace GunDecorator.ChargedModules
         public override void TryShootCharging()
         {
             base.TryShootCharging();
-
+            
                 Cons.Print("Apply shoot : " + _posOffset.Length);
             for (int i = 0; i < _posOffset.Length; i++)
             {
-                
                 _ammoModule.SetBulletData(new BulletData
                 {
                     IsExplosive = _isExplosifAmmo,
