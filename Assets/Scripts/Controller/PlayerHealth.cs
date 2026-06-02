@@ -413,6 +413,7 @@ public class PlayerHealth : NetworkBusListener
 			player2PVs = player2PVs,
 			player1Energy = player1Energy,
 			player2Energy = player2Energy,
+			skillUsed = "Heal",
 			ArenaID = (_playerZoneManager != null && _playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? _playerZoneManager.p_playerZones[OwnerId] : -1
 		});
 		
