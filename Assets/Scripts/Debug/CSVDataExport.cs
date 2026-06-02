@@ -13,8 +13,19 @@ public class CSVDataExport : MonoBusListener
     
     void Start()
     {
-        rows.Add(new string[]
-        {
+        DontDestroyOnLoad(this);
+        
+        ListenToEvent<OnDataLog>(AddLog);
+        ListenToEvent<OnSceneLoadTrigger>(ExportCSV);
+        
+        InitLogger();
+    }
+
+    void InitLogger()
+    {
+        rows.Clear();
+        
+        rows.Add(new string[] {
             "Time",
             "EntityType",
             "EntityID",
@@ -30,11 +41,7 @@ public class CSVDataExport : MonoBusListener
             "subArenaID",
         });
         
-        ListenToEvent<OnDataLog>(AddLog);
-        
-        AddLog(
-            new OnDataLog()
-            {
+        AddLog(new OnDataLog() {
                 entityName = "init",
                 EntityID = -1,
                 weapon = "init",
@@ -75,13 +82,14 @@ public class CSVDataExport : MonoBusListener
     
     private void OnApplicationQuit()
     {
-        if(rows.Count < 2) return;
-        ExportCSV();
+        ExportCSV(new OnSceneLoadTrigger());
     }
 
-    void ExportCSV()
+    void ExportCSV(OnSceneLoadTrigger trigger)
     {
+        if(rows.Count < 2) return;
 
+        
         string documentsPath = Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
         string folderPath = Path.Combine(documentsPath, "GamesData");
         
@@ -105,6 +113,8 @@ public class CSVDataExport : MonoBusListener
         File.WriteAllText(path, sb.ToString());
 
         if(autoOpenFile)Application.OpenURL("file://" + folderPath); 
+        
+        InitLogger();
     }
 }
 

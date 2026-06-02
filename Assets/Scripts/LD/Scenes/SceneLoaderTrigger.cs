@@ -25,6 +25,7 @@ namespace LD.Scenes
 
 		void OpenDoor(OnDapEvent evt)
 		{
+			if (!_door) return;
 			if(_door.GetComponent<Animation>()) _door.GetComponent<Animation>().Play();
 			else _door.SetActive(false);
 		}
@@ -34,6 +35,7 @@ namespace LD.Scenes
 		{
 			if (other.TryGetComponent(out PlayerVisuelBridge player))
 			{
+				InvokeEvent(new OnSceneLoadTrigger());
 				SceneManaging.LoadScene(_sceneToLoad);
 				SceneManaging.UnloadScene(_sceneToUnload);
 			}
@@ -41,4 +43,9 @@ namespace LD.Scenes
 
 		#endregion
 	}
+}
+
+public struct OnSceneLoadTrigger
+{
+	
 }
