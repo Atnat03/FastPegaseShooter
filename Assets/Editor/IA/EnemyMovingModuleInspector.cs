@@ -4,7 +4,7 @@ using UnityEngine;
 [CustomEditor(typeof(EnemyMovementModule), true)]
 public class EnemyMovingModuleInspector : EnemyBehaviourModuleInspector
 {
-    private SerializedProperty _movementModuleSO;
+    private SerializedProperty p_movementModuleSO;
     private SerializedProperty _targetModule;
     
     
@@ -12,7 +12,7 @@ public class EnemyMovingModuleInspector : EnemyBehaviourModuleInspector
     {
         base.OnEnable();
         
-        _movementModuleSO = serializedObject.FindProperty("_movementModuleSO");
+        p_movementModuleSO = serializedObject.FindProperty("p_movementModuleSO");
         _targetModule = serializedObject.FindProperty("_targetModule");
     }
 
@@ -28,7 +28,7 @@ public class EnemyMovingModuleInspector : EnemyBehaviourModuleInspector
                 segmentLenght: 15,
                 gapLenght: 7));
 
-        EditorGUILayout.PropertyField(_movementModuleSO);
+        EditorGUILayout.PropertyField(p_movementModuleSO);
 
         GUILayout.Space(10);
         Rect targetBlockRect = EditorUtilities.WrapInBlock(() =>

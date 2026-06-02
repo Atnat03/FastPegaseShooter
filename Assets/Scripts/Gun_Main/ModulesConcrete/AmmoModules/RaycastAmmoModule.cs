@@ -21,7 +21,7 @@ namespace GunDecorator.AmmoModules
         [SerializeField][Tooltip("vitesse de la balle en Unité/secondes")] private float _BulletSpeed = 50;
         private float _dmgToApply = 1;
 
-        [SerializeField, Tooltip("scriptable object des vfx en fonction de la surface touché")] ImpactBulletSO _impactVFXData;
+        [SerializeField, Tooltip("scriptable object des vfx en fonction de la surface touché")] GameObject _impactVFXData;
         
         [SerializeField] private bool _isDistanceReduced = false;
         [SerializeField] private float _factorReduceDamageByDistance = 1;
@@ -126,11 +126,8 @@ namespace GunDecorator.AmmoModules
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     
             IAmmo bullet = newBullet.GetComponent<IAmmo>();
-
-            SurfaceType surface = ImpactSurface.GetSurfaceType(touchObject);
-            GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, _impactVFXData, isExplosive, radius, _gunController,
                 isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, 0,factorReduceDamageByDistance, isDistanceReduce, hadCharged);
         }
 

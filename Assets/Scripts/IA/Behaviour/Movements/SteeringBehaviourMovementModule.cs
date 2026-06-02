@@ -60,7 +60,7 @@ public class SteeringBehaviourMovementModule : EnemyMovementModule
         {
             _currentVelocity += (GetSeekSteeringForce() + GetWallSteeringForce() + GetEnemyScatterSteeringForce()) * Time.deltaTime;
 
-            _currentVelocity = _currentVelocity.normalized * _movementModuleSO.p_speed;
+            _currentVelocity = _currentVelocity.normalized * p_movementModuleSO.p_speed;
             
             transform.position += _currentVelocity * Time.deltaTime;
             
@@ -76,7 +76,7 @@ public class SteeringBehaviourMovementModule : EnemyMovementModule
 
     Vector3 GetSeekSteeringForce()
     {
-        Vector3 desiredVelocity = (_path[^1].position - transform.position).normalized.RemoveY() * _movementModuleSO.p_speed;
+        Vector3 desiredVelocity = (_path[^1].position - transform.position).normalized.RemoveY() * p_movementModuleSO.p_speed;
         Vector3 seekSteeringForce = (desiredVelocity - _currentVelocity) * _seekSteeringStrenght;
         float dirChangeProp = 
             (Vector3.Dot(_currentVelocity.normalized, desiredVelocity.normalized) + 1) *0.5f;
