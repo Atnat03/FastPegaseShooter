@@ -9,6 +9,7 @@ using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.VFX;
 
 public interface IGun
@@ -29,7 +30,7 @@ public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value, bool _infiniteAmmo);
-    public Transform ModelGun { get; }
+    public Transform CurrentModelGun { get; }
     public void StopReload();
 }
 
@@ -44,7 +45,7 @@ namespace GunDecorator
         public bool IsInfiniteAmmo => _infiniteAmmo;
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
-        public Transform ModelGun => _model;
+        public Transform CurrentModelGun => currentModel;
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -58,13 +59,15 @@ namespace GunDecorator
         private GunModuleSettingsSO _settings;
 
         [SerializeField, Tooltip("Model 3d de l'arme")]
-        private Transform _model;
+        private Transform currentModel;
+
+        [SerializeField, Tooltip("Model 3d de l'arme suivant la charge")]
+        private Transform[] _modelsList;
 
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
 
-        [SerializeField,
-         Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
+        [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
         public SoundsDataSO _soundData;
 
         [SerializeField, Tooltip("Animation du modele de l'arme")]
@@ -137,6 +140,19 @@ namespace GunDecorator
             }
         }
 
+        public override void OnStartClient()
+        {
+            if(_modelsList.Length <2)
+                return;
+            
+            foreach (Transform t in _modelsList)
+            {
+                t.gameObject.SetActive(false);
+            }
+            
+            _modelsList[LocalConnection.ClientId].gameObject.SetActive(true);
+        }
+
         private void Start() // pour du debug, a tej en build finale
         {
             playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
@@ -152,7 +168,7 @@ namespace GunDecorator
         {
             if (!ShootingInputPressed) return;
 
-            if (!_model.gameObject.activeInHierarchy)
+            if (!currentModel.gameObject.activeInHierarchy)
                 return;
 
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
@@ -169,7 +185,7 @@ namespace GunDecorator
 
                 _shootModule?.TryShoot();
 
-                _recoilModule?.Recoil(_model.transform, 0.1f, false);
+                _recoilModule?.Recoil(currentModel.transform, 0.1f, false);
                 _recoilModule?.SetIsRecoil(true);
 
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
@@ -190,7 +206,7 @@ namespace GunDecorator
                 s.TryShoot();
                 PlayMuzzleFlash();
 
-                _recoilModule?.Recoil(_model.transform, s.FireRate, true);
+                _recoilModule?.Recoil(currentModel.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
 
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
@@ -285,7 +301,7 @@ namespace GunDecorator
 
         public void Disable(bool state)
         {
-            _model.gameObject.SetActive(state);
+            currentModel.gameObject.SetActive(state);
         }
 
         public void SetFireRate(float multiplier)

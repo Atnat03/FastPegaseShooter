@@ -64,6 +64,8 @@ public class PlayerHealth : NetworkBusListener
 
 	private bool _isHealKeyDown;
 	private bool _canThrowHeal = true;
+
+	public bool p_unlockCapa = true;
 	
 	//Action
 	public Action<float> OnUpdateHealth;	
@@ -171,6 +173,8 @@ public class PlayerHealth : NetworkBusListener
 	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
 		if(!IsOwner)return;
+		
+		if(!p_unlockCapa)return;
 
 		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
 		{
@@ -178,6 +182,8 @@ public class PlayerHealth : NetworkBusListener
 			return;
 		}
 
+		InvokeEvent(new OnHealUsed_TUTO());
+		
 		if (throwableHeal)
 		{
 			OnThrowingVisualActivation?.Invoke();
@@ -292,6 +298,17 @@ public class PlayerHealth : NetworkBusListener
 	private void ApplyCorrosionDamage(OnCorrosionEvent data)
 	{
 		RequestTakeDamageServerRpc(data.p_corrosionDamage);
+	}
+	
+	[ServerRpc(RequireOwnership = false)]
+	public void RequestTakeDamageFromTutoServerRpc(int damage)
+	{
+		TakeDamage(new PlayerTakeDamageEvent
+		{
+			p_playerN = NetworkObject,
+			p_value = damage,
+			p_attacker = null
+		});
 	}
 
 	[ServerRpc]
