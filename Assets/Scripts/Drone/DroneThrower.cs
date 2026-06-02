@@ -73,6 +73,7 @@ public class DroneThrower : NetworkBusListener
 		{
 			entityName = transform.GetRootTransform().gameObject.name,
 			EntityID = ObjectId,
+			weapon = "Drone",
 			skillUsed = "Drone",
 			ArenaID = -1,
 		});
