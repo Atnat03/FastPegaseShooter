@@ -49,6 +49,11 @@ public struct EnemyMeleeAttackEvent
     
 }
 
+public struct GetPathfindingRequestManagerRequest
+{
+    public Action<PathfindingRequestManager> p_OnGetPathfindingRequestManager;
+}
+
 
 public struct OnEnemyDieEvent
 {
