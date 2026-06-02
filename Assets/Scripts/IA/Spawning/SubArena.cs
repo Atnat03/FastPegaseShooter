@@ -12,7 +12,6 @@ using Random = UnityEngine.Random;
 public class SubArena : NetworkBusListener
 {
     [Header("----- General -----")]
-    [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
     [SerializeField] private bool _zoneActivated;
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     [SerializeField] private SubArenaGauge _arenaGaugePrefab;
@@ -32,6 +31,7 @@ public class SubArena : NetworkBusListener
     [SerializeField] private int _corrosionDelay = 3;
 
     private List<(float cumulativeWeight, MobSpawnSO mob)> orderedSpawnPriority = new();
+    private PathfindingRequestManager _pathfindingRequestManager;
     private int _currentSpawnPointIndex = 0;
     
     [Header("----- Debug -----")]
@@ -58,6 +58,14 @@ public class SubArena : NetworkBusListener
             {
                 NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
                 _spawnedEnemies.Remove(OEDE.p_enemy);
+            }
+        });
+        
+        InvokeEvent(new GetPathfindingRequestManagerRequest
+        {
+            p_OnGetPathfindingRequestManager = (PRM) =>
+            {
+                _pathfindingRequestManager = PRM;
             }
         });
 

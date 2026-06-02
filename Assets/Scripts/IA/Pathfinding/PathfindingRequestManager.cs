@@ -4,7 +4,7 @@ using FishNet;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class PathfindingRequestManager : MonoBehaviour
+public class PathfindingRequestManager : MonoBusListener
 {
     [SerializeField] private int _maxRequestsPerFrame = 2;
     [SerializeField] private float _tolerableDistanceThreshold = 0.5f;
@@ -13,7 +13,15 @@ public class PathfindingRequestManager : MonoBehaviour
     
     [Header("----- Options -----")]
     [SerializeField] private bool _useDistanceCullingOptimization = true;
-    
+
+    private void Awake()
+    {
+        ListenToEvent<GetPathfindingRequestManagerRequest>(GPRMR =>
+        {
+            GPRMR.p_OnGetPathfindingRequestManager?.Invoke(this);
+        });
+    }
+
     /// <summary>
     /// Add a pathRequest, previous check needs to be done to prevent registering multiple time the same request
     /// </summary>
