@@ -162,7 +162,7 @@ public class SubArena : NetworkBusListener
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         
         
-        EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
+        EnemyCore enemyCore =  enemy.GetComponentInChildren<EnemyCore>();
         enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
         _spawnedEnemies.Add(enemyCore);

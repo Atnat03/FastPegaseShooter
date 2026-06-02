@@ -104,10 +104,9 @@ public class PlayerHealth : NetworkBusListener
 		});
 		
 		ListenToEvent<OnCorrosionEvent>(ApplyCorrosionDamage);
-		
 		 
 		
-		_playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();// pour du debug, a tej en build finale
+		_playerZoneManager = FindAnyObjectByType<PlayerZoneManager>(); // pour du debug, a tej en build finale
 		
 	}
 
@@ -155,8 +154,10 @@ public class PlayerHealth : NetworkBusListener
 		{
 			if (_isDead.Value)
 			{
-				if (_respawnTimer.Value > 0) _respawnTimer.Value -= Time.deltaTime;
-				else Respawn();
+				if (_respawnTimer.Value > 0) 
+					_respawnTimer.Value -= Time.deltaTime;
+				else 
+					Respawn();
 			}
 		}
 	}
@@ -256,7 +257,7 @@ public class PlayerHealth : NetworkBusListener
 			InvokeEvent(new OnDataLog
 			{
 				entityName = data.p_attacker.name,
-				EntityID = data.p_attacker.ObjectId,
+				EntityID = data.p_attacker ? data.p_attacker.ObjectId : -1,
 				weapon = "ennemy_Shoot",
 				targetName = transform.GetRootTransform().gameObject.name,
 				targetID = data.p_playerN.ObjectId,
