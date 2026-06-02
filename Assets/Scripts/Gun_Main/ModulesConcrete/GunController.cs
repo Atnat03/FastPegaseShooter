@@ -339,7 +339,7 @@ namespace GunDecorator
         {
             if (p_particleData == null) return;
 
-            VFXData data = p_particleData.CreateVFX("Shoot");
+            VFXData data = p_particleData.CreateVFX("Mitraillette_Load_Nega");
 
             ParticleSystem particle = Instantiate(data.p_particle, transform);
             particle.transform.localPosition = data.p_spawnPos;

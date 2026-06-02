@@ -136,7 +136,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
             if (p_isDistanceReduce)
                 damage *= (1 / (1 + p_ratioDistanceReduce * Vector3.Distance(hit.point, _shootPos)));
 
-            if (hit.collider.TryGetComponent<NetworkObject>(out var netObj))
+            if (hit.collider.TryGetComponent<NetworkObject>(out NetworkObject netObj))
             {
                 _gunController.ApplyDamage(netObj, (int)damage, p_isCritical, p_hadCharged);
             }

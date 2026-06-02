@@ -167,7 +167,6 @@ public class EnemyCore : NetworkBusListener
         
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_dropXpOrb ? 0 : signedEnergyAmount));
         
-        
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
         
         if (!_dropXpOrb)
