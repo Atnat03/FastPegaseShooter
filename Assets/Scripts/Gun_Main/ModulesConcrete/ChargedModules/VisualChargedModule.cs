@@ -1,3 +1,4 @@
+using System;
 using GunDecorator;
 using GunDecorator.ChargedModules;
 using MyPrint;
@@ -16,11 +17,28 @@ public class VisualChargedModule : GunModule
 
 	[SerializeField] private ChargedParentModule _chargedModule;
 	
+	[Header("VFX")]
+	[SerializeField] private ParticleSystem _chargedParticleSystem;
 	
 	#endregion
 
 
 	#region Fonctions
+
+	private void OnEnable()
+	{
+		_chargedModule.OnStartCharged += Charging;
+	}
+
+	private void OnDisable()
+	{
+		_chargedModule.OnStartCharged -= Charging;
+	}
+
+	private void Charging()
+	{
+		_chargedParticleSystem.Play();
+	}
 
 	#endregion
 }

@@ -1,15 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Controller;
-using CustomConsole.Runtime.Logger;
 using FishNet;
-using FishNet.Connection;
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
-using MyPrint;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 [AddComponentMenu("EnemyBehaviour/Core")]
 public class EnemyCore : NetworkBusListener
@@ -139,16 +131,15 @@ public class EnemyCore : NetworkBusListener
     {
 
         //if killed by dap wave
-        if (charge != ChargeType.None)
+        if (charge == ChargeType.None)
         {
-            InstanceFinder.ServerManager.Despawn(gameObject);
+            InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
             return;
         }
         
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
         
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
-        
         
         InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
         
@@ -161,7 +152,7 @@ public class EnemyCore : NetworkBusListener
             });
         }
         
-        InstanceFinder.ServerManager.Despawn(gameObject);
+        InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
     }
 
     float GetSignedEnergyAmount(ChargeType charge)

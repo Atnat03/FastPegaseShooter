@@ -207,14 +207,14 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 355935911}
   _networkObjectCache: {fileID: 0}
   _normalBulletPrefab: {fileID: 0}
-  _splashBulletPrefab: {fileID: 0}
+  _viscousBulletPrefab: {fileID: 0}
   _puddleBulletPrefab: {fileID: 0}
   _normalBulletLayerMask:
     serializedVersion: 2
     m_Bits: 458743
-  _splashBulletLayerMask:
+  _viscousBulletLayerMask:
     serializedVersion: 2
-    m_Bits: 458551
+    m_Bits: 2147417919
   _puddleBulletLayerMask:
     serializedVersion: 2
     m_Bits: 192
@@ -574,7 +574,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 932571560}
   _networkObjectCache: {fileID: 0}
   _sceneToDisable: 
-  _playerPrefab: {fileID: 7927807153383519047, guid: 754619bae7058254c9ea0ab17bdbbe8d, type: 3}
+  _playerPrefab: {fileID: 7927807153383519047, guid: a0a1ffb0440bfcb4a8037f0ccde27d0a, type: 3}
   _spawnPoints:
   - {fileID: 1029515664}
   - {fileID: 1039084780}
@@ -1368,7 +1368,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
   pathfindingGridSO: {fileID: 11400000, guid: 0945379079c569d4b82e2d5b68ea0708, type: 2}
-  VariableChanged: 1
 --- !u!114 &2019655463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1419,7 +1418,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2019655461}
         m_TargetAssemblyTypeName: SpawnZone, Assembly-CSharp
-        m_MethodName: TriggerZone
+        m_MethodName: StartSpawning
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1429,6 +1428,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _activateOnce: 1
 --- !u!1001 &7853791551555895662
 PrefabInstance:
   m_ObjectHideFlags: 0

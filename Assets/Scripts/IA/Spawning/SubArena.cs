@@ -2,20 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CustomConsole.Runtime.Console;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using GameKit.Dependencies.Utilities;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
 public class SubArena : NetworkBusListener
 {
     [Header("----- General -----")]
-    [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
     [SerializeField] private bool _zoneActivated;
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     [SerializeField] private SubArenaGauge _arenaGaugePrefab;
@@ -35,6 +31,7 @@ public class SubArena : NetworkBusListener
     [SerializeField] private int _corrosionDelay = 3;
 
     private List<(float cumulativeWeight, MobSpawnSO mob)> orderedSpawnPriority = new();
+    private PathfindingRequestManager _pathfindingRequestManager;
     private int _currentSpawnPointIndex = 0;
     
     [Header("----- Debug -----")]
@@ -61,6 +58,14 @@ public class SubArena : NetworkBusListener
             {
                 NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
                 _spawnedEnemies.Remove(OEDE.p_enemy);
+            }
+        });
+        
+        InvokeEvent(new GetPathfindingRequestManagerRequest
+        {
+            p_OnGetPathfindingRequestManager = (PRM) =>
+            {
+                _pathfindingRequestManager = PRM;
             }
         });
 
@@ -162,7 +167,7 @@ public class SubArena : NetworkBusListener
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         
         
-        EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
+        EnemyCore enemyCore =  enemy.GetComponentInChildren<EnemyCore>();
         enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
         _spawnedEnemies.Add(enemyCore);
