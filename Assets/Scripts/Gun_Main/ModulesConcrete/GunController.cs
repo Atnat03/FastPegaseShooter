@@ -296,7 +296,7 @@ namespace GunDecorator
 
         public void TryShootCharged()
         {
-            _chargedModule?.TryShootCharging();
+            _chargedModule?.StartChargedShoot();
         }
 
         public void Disable(bool state)
