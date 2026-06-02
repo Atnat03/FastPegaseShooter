@@ -141,7 +141,7 @@ public class EnemyCore : NetworkBusListener
         //if killed by dap wave
         if (charge != ChargeType.None)
         {
-            InstanceFinder.ServerManager.Despawn(gameObject);
+            InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
             return;
         }
         

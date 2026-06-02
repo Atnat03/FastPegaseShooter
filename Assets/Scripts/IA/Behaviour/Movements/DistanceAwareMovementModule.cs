@@ -12,7 +12,7 @@ public class DistanceAwareMovementModule : EnemyMovementModule
         if(_path.Count >= 1 &&
            _targetModule.GetTargetSqrDistance(transform.position) >= _distanceAwareModuleSO.p_idealDistance*_distanceAwareModuleSO.p_idealDistance)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _path[^1].position, _movementModuleSO.p_speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _path[^1].position, p_movementModuleSO.p_speed * Time.deltaTime);
             
             
             if ((_path[^1].position - transform.position).sqrMagnitude <= 0.01f)
