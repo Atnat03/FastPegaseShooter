@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(PathfindingGridReader))]
 public class SpawnZoneTutorial : NetworkBusListener
 {
-    [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
+    private PathfindingRequestManager _pathfindingRequestManager;
 
     private bool _zoneActivated;
     [SerializeField] private float _spawnDelay;
@@ -39,6 +39,14 @@ public class SpawnZoneTutorial : NetworkBusListener
                 {
                     p_onSpawnZoneComplete?.Invoke(this);
                 }
+            }
+        });
+        
+        InvokeEvent(new GetPathfindingRequestManagerRequest
+        {
+            p_OnGetPathfindingRequestManager = (PRM) =>
+            {
+                _pathfindingRequestManager = PRM;
             }
         });
     }
