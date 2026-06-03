@@ -22,13 +22,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     [SerializeField] private GameObject _negativeExplosionVFX;
     
     [Header("View")]    
-    [SerializeField] private MeshRenderer _meshRenderer;
-    [SerializeField] private Material _positiveMaterial;
-    [SerializeField] private Material _negativeMaterial;
-    
-    [SerializeField] private TrailRenderer _trailRenderer;
-    [SerializeField] private Gradient _positiveLineColor;
-    [SerializeField] private Gradient _negativeLineColor;
+    [SerializeField] private GameObject[] _models;
 
     private GameObject _vfx;
     private NetworkObject _targetNetworkObject;
@@ -49,13 +43,9 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
         p_hadCharged = hadCharged;
         
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
-        _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
-        _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
-
-        if (isExplosive)
-        {
-            StartCoroutine(DelayBeforeExplosion(durationBeforeExplosion));
-        }
+        
+        _models[0].SetActive(isPositive);
+        _models[1].SetActive(!isPositive);
     }
     
     void FixedUpdate()
@@ -89,7 +79,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     private void HandleExplosion()
     {
         if (_vfx != null)
-            Destroy(Instantiate(_vfx, transform.position, Quaternion.identity), 3f);
+            Destroy(Instantiate(_vfx, transform.position + transform.up, Quaternion.identity), 3f);
 
         if (_gunController.IsServerInitialized)
             Explosed(p_explosionRadius, (int)p_damage);
@@ -113,15 +103,12 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     public void Explosed(float radius, int damage)
     {
         if (_vfx != null)
-            Instantiate(_vfx, transform.position, Quaternion.identity);
+            Destroy(Instantiate(_vfx, transform.position + Vector3.up, Quaternion.Euler(-90, 0, 0)), 5f);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
         foreach (Collider c in colliders)
         {
-            /*if (!c.TryGetComponent<IDamagable>(out _)) continue;
-            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;*/
-
             if (_gunController.IsServerInitialized)
                 _gunController.ApplyDamage(c.gameObject, (int)p_damage, p_isCritical, p_hadCharged);
             else
@@ -137,5 +124,6 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     public void ReturnToPool()
     {
         _hasHit = false;
+        _lastPosition = transform.position;
     }
 }

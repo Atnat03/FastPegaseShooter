@@ -12,9 +12,7 @@ namespace GunDecorator
         
         public float FireRate { get; }
         public bool CanShoot { get; }
-        
         public IAmmoModule AmmoModule { get; }
-        
         
         public void SetDirectionModifier(Vector3 direction);
         public void SetBulletOffset(Vector3 offset);
