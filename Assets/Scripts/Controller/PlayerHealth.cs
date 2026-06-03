@@ -185,6 +185,11 @@ public class PlayerHealth : NetworkBusListener
 
 		InvokeEvent(new OnHealUsed_TUTO());
 		
+		InvokeEvent(new OnUseCapacity
+		{
+			p_capacityData = Capacity.Heal
+		});
+		
 		if (throwableHeal)
 		{
 			OnThrowingVisualActivation?.Invoke();
