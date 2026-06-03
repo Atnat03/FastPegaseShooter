@@ -342,7 +342,7 @@ namespace GunDecorator
             if (p_particlesMuzzleFlash.Length < 2) 
                 return;
 
-            if (_isPositivePlayerCharge.Value)
+            if (IsPositivePlayerCharge)
             {
                 p_particlesMuzzleFlash[0].Play();
             }
