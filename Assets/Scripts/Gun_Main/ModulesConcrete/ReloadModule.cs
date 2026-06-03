@@ -63,6 +63,9 @@ namespace GunDecorator
                 _isReloading = false;
                 _gunController?._animator.ResetTrigger("Reload");
                 
+                if(_gunController?._animatorArm)
+                    _gunController?._animatorArm.ResetTrigger("Reload");
+                
                 _gunController?.OnEndReload?.Invoke();
             }
         }
@@ -78,6 +81,10 @@ namespace GunDecorator
             _gunController?.OnStartReload?.Invoke(reloadDuration);
             
             _gunController?._animator.SetTrigger("Reload");
+            
+            if(_gunController?._animatorArm)
+                _gunController?._animatorArm.SetTrigger("Reload");
+            
             _gunController?.PlaySound("Reload");
             
             _isReloading = true;
