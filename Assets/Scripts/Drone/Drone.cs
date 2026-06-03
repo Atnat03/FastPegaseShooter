@@ -31,8 +31,6 @@ public class Drone : NetworkBusListener
 	[Header("Vol Stationnaire")] 
 	[SerializeField] private float _speedFloat = 2f;
 	[SerializeField] private float _amplitudeFloat = 0.5f;	
-	[SerializeField] private Transform _pales;
-	[SerializeField] private float _speedPaleRotation = 360f;
 
 	[Header("Activated")]
 	private readonly SyncVar<bool> _IsActivated = new (false);
@@ -124,11 +122,6 @@ public class Drone : NetworkBusListener
 		}
 
 		InstanceFinder.ServerManager.Despawn(gameObject);
-	}
-
-	private void LateUpdate()
-	{
-		_pales.Rotate(Vector3.up * _speedPaleRotation * Time.deltaTime);
 	}
 
 	void Activated()
