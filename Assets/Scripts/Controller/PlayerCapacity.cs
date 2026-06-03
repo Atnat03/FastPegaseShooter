@@ -30,7 +30,6 @@ public struct OnUseCapacity
 	public Capacity p_capacityData;
 }
 
-
 public class PlayerCapacity : MonoBusListener
 {
 	#region Properties
