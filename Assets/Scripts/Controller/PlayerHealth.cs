@@ -55,7 +55,7 @@ public class PlayerHealth : NetworkBusListener
 	[Header("Healing Self version")]
 	[SerializeField] private float _healAmount = 50;
 
-	private SwapGunManager swapGunManager; //debug
+	private PlayerZoneManager _playerZoneManager; //debug
 	
 	private bool _initialized = false;
 	private bool _isCritik = false;
@@ -64,6 +64,8 @@ public class PlayerHealth : NetworkBusListener
 
 	private bool _isHealKeyDown;
 	private bool _canThrowHeal = true;
+
+	public bool p_unlockCapa = true;
 	
 	//Action
 	public Action<float> OnUpdateHealth;	
@@ -102,10 +104,9 @@ public class PlayerHealth : NetworkBusListener
 		});
 		
 		ListenToEvent<OnCorrosionEvent>(ApplyCorrosionDamage);
-		
 		 
 		
-		swapGunManager = FindAnyObjectByType<SwapGunManager>();// pour du debug, a tej en build finale
+		_playerZoneManager = FindAnyObjectByType<PlayerZoneManager>(); // pour du debug, a tej en build finale
 		
 	}
 
@@ -153,8 +154,10 @@ public class PlayerHealth : NetworkBusListener
 		{
 			if (_isDead.Value)
 			{
-				if (_respawnTimer.Value > 0) _respawnTimer.Value -= Time.deltaTime;
-				else Respawn();
+				if (_respawnTimer.Value > 0) 
+					_respawnTimer.Value -= Time.deltaTime;
+				else 
+					Respawn();
 			}
 		}
 	}
@@ -171,6 +174,8 @@ public class PlayerHealth : NetworkBusListener
 	void HealKeyPerformed(InputAction.CallbackContext ctx)
 	{
 		if(!IsOwner)return;
+		
+		if(!p_unlockCapa)return;
 
 		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
 		{
@@ -178,6 +183,8 @@ public class PlayerHealth : NetworkBusListener
 			return;
 		}
 
+		InvokeEvent(new OnHealUsed_TUTO());
+		
 		if (throwableHeal)
 		{
 			OnThrowingVisualActivation?.Invoke();
@@ -237,8 +244,6 @@ public class PlayerHealth : NetworkBusListener
 		{
 			float player1PVs = -1;
 			float player2PVs = -1;
-			float player1Energy = -1;
-			float player2Energy = -1;
 			if (PlayerHealthManager.Instance != null)
 			{
 				player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
@@ -247,29 +252,19 @@ public class PlayerHealth : NetworkBusListener
 				player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
 					? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
 					: 0;
-				player1Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
-					? PlayerHealthManager.Instance.RegisteredPlayers[0].gameObject.GetComponent<PlayerEnergy>()
-						.CurrentEnergy
-					: 0;
-
-				player2Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
-					? PlayerHealthManager.Instance.RegisteredPlayers[1].gameObject.GetComponent<PlayerEnergy>()
-						.CurrentEnergy
-					: 0;
 			}
 
 			InvokeEvent(new OnDataLog
 			{
 				entityName = data.p_attacker.name,
-				EntityID = data.p_attacker.ObjectId,
+				EntityID = data.p_attacker ? data.p_attacker.ObjectId : -1,
 				weapon = "ennemy_Shoot",
 				targetName = transform.GetRootTransform().gameObject.name,
+				targetID = data.p_playerN.ObjectId,
 				damages = data.p_value,
 				player1PVs = player1PVs,
 				player2PVs = player2PVs,
-				player1Energy = player1Energy,
-				player2Energy = player2Energy,
-				ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+				ArenaID = (_playerZoneManager != null && _playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? _playerZoneManager.p_playerZones[OwnerId] : -1
 			});
 		}
 		catch (Exception e)
@@ -304,6 +299,17 @@ public class PlayerHealth : NetworkBusListener
 	private void ApplyCorrosionDamage(OnCorrosionEvent data)
 	{
 		RequestTakeDamageServerRpc(data.p_corrosionDamage);
+	}
+	
+	[ServerRpc(RequireOwnership = false)]
+	public void RequestTakeDamageFromTutoServerRpc(int damage)
+	{
+		TakeDamage(new PlayerTakeDamageEvent
+		{
+			p_playerN = NetworkObject,
+			p_value = damage,
+			p_attacker = null
+		});
 	}
 
 	[ServerRpc]
@@ -374,27 +380,27 @@ public class PlayerHealth : NetworkBusListener
 	{
 		//debug clement
 		
-		float player1PVs = -1;
-		float player2PVs = -1;
-		float player1Energy = -1;
-		float player2Energy = -1;
+		float? player1PVs = -1;
+		float? player2PVs = -1;
+		float? player1Energy = -1;
+		float? player2Energy = -1;
 		if (PlayerHealthManager.Instance != null)
 		{
 			player1PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
 				? PlayerHealthManager.Instance.RegisteredPlayers[0].CurrentHealth
-				: 0;
+				: null;
 			player2PVs = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
 				? PlayerHealthManager.Instance.RegisteredPlayers[1].CurrentHealth
-				: 0;
+				: null;
 			player1Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 0
 				? PlayerHealthManager.Instance.RegisteredPlayers[0].gameObject.GetComponent<PlayerEnergy>()
 					.CurrentEnergy
-				: 0;
+				: null;
 			
 			player2Energy = PlayerHealthManager.Instance.RegisteredPlayers.Count > 1
 				? PlayerHealthManager.Instance.RegisteredPlayers[1].gameObject.GetComponent<PlayerEnergy>()
 					.CurrentEnergy
-				: 0;
+				: null;
 		}
 		InvokeEvent(new OnDataLog
 		{
@@ -402,12 +408,14 @@ public class PlayerHealth : NetworkBusListener
 			EntityID = ObjectId,
 			weapon = "heal",
 			targetName = gameObject.name,
+			targetID = ObjectId,
 			damages = (data.p_value * -1f),
 			player1PVs = player1PVs,
 			player2PVs = player2PVs,
 			player1Energy = player1Energy,
 			player2Energy = player2Energy,
-			ArenaID = swapGunManager.p_playerZones.ContainsKey(OwnerId) ? swapGunManager.p_playerZones[OwnerId] : -1
+			skillUsed = "Heal",
+			ArenaID = (_playerZoneManager != null && _playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? _playerZoneManager.p_playerZones[OwnerId] : -1
 		});
 		
 		//fin du debug

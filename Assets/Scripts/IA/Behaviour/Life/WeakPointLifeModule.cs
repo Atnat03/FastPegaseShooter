@@ -16,6 +16,7 @@ public class WeakPointLifeModule : EnemyLifeModule
     public override bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false)
     {
         base.TakeDamage(attackerObjectId, rawDamageAmount, charge, isCritical);
+        
         if (IsServerInitialized)
         {
             int damage = Mathf.RoundToInt(GetDamageAmount(rawDamageAmount) * _damageMult);

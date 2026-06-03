@@ -22,15 +22,12 @@ namespace GunDecorator.ChargedModules
                 _numberBulletInCharge = s.NumberBulletInCharged;
                 _noiseAngle = s.noiseAngle;
                 _maximumNoiseAngle = s.maxNoiseAngle;
-                _oneAmmoAddPercentage = s.OneAmmoAddPercentage;
             }
         }
         
         public override void TryShootCharging()
         {
             base.TryShootCharging();
-            
-            if (!_fullCharge) return;
             
             _ammoModule.SetBulletData(new BulletData
             {
@@ -39,7 +36,7 @@ namespace GunDecorator.ChargedModules
                 ExplosionRadius = _explosionRadius
             });
 
-            _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
+            _gunController.RecoilModule.Recoil(_gunController.CurrentModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
             _gunController.RecoilModule?.SetIsRecoil(true);
 
             ApplyShoot();

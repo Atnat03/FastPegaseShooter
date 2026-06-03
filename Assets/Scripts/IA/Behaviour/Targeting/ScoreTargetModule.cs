@@ -9,16 +9,7 @@ using UnityEngine.Serialization;
 [AddComponentMenu("EnemyBehaviour/Target/ScoreTargetModule")]
 public class ScoreTargetModule : EnemyTargetModule
 {
-    [Header("Aggro")]
-    [SerializeField] private int _aggroPointWhenInDetectZone;
-    [SerializeField] private int _aggroPointPerDamageTaken;
-    [SerializeField] private int _aggroPointPerSecond;
-    [SerializeField] private int _aggroPointPerDamageDealt;
-    [SerializeField] private List<int> _aggroPointsThreshold = new List<int>(){0,100,200};
-    
-    [Header("Zones")]
-    [SerializeField] private float _detectionZoneRadius;
-    [SerializeField] private float _aggroZoneRadius;
+    [SerializeField] private ScoreTargetModuleSO _scoreTargetModuleSO;
     
 
     private HashSet<int> _players = new HashSet<int>();
@@ -59,12 +50,12 @@ public class ScoreTargetModule : EnemyTargetModule
             
             
             //Player in aggro zone
-            if(sqrDistance <= _aggroZoneRadius * _aggroZoneRadius && _timeSincePointAdded > 1)
-                    _playerAggroValue[playerId] += _aggroPointPerSecond;
+            if(sqrDistance <= _scoreTargetModuleSO.p_aggroZoneRadius * _scoreTargetModuleSO.p_aggroZoneRadius && _timeSincePointAdded > 1)
+                    _playerAggroValue[playerId] += _scoreTargetModuleSO.p_aggroPointPerSecond;
             
             //switching aggroCheck
-            if (_currentThreshold < _aggroPointsThreshold.Count &&
-                _playerAggroValue[playerId] > _aggroPointsThreshold[_currentThreshold])
+            if (_currentThreshold < _scoreTargetModuleSO.p_aggroPointsThreshold.Count &&
+                _playerAggroValue[playerId] > _scoreTargetModuleSO.p_aggroPointsThreshold[_currentThreshold])
             {
                 p_targetId = playerId;
                 _currentThreshold++;
@@ -93,30 +84,35 @@ public class ScoreTargetModule : EnemyTargetModule
         {
             Debug.LogError("player index wasn't found in dictionary");
         }
+        
+        p_onTargetPositionUpdate?.Invoke();
+
+        float sqrDetectionRadius =
+            _scoreTargetModuleSO.p_detectionZoneRadius * _scoreTargetModuleSO.p_detectionZoneRadius;
             
         float sqrDistance = (playerObject.transform.position-transform.position).sqrMagnitude;
 
         if (!_playerAggroValue.ContainsKey(PPUE.p_networkObjectId))
         {
-            int aggroValue = sqrDistance > _detectionZoneRadius * _detectionZoneRadius
+            int aggroValue = sqrDistance > _scoreTargetModuleSO.p_detectionZoneRadius * _scoreTargetModuleSO.p_detectionZoneRadius
                 ? 0
-                : _aggroPointWhenInDetectZone;
+                : _scoreTargetModuleSO.p_aggroPointWhenInDetectZone;
             
             _playerAggroValue.Add(PPUE.p_networkObjectId, aggroValue);
-            _playerInDetectionZone.Add(PPUE.p_networkObjectId, sqrDistance <= _detectionZoneRadius*_detectionZoneRadius);
+            _playerInDetectionZone.Add(PPUE.p_networkObjectId, sqrDistance <= sqrDetectionRadius*sqrDetectionRadius);
             
             _playerToAdd.Add(PPUE.p_networkObjectId);
         }
         
-        if (_playerInDetectionZone[PPUE.p_networkObjectId] && sqrDistance > _detectionZoneRadius*_detectionZoneRadius)
+        if (_playerInDetectionZone[PPUE.p_networkObjectId] && sqrDistance > sqrDetectionRadius*sqrDetectionRadius)
         {
-            _playerAggroValue[PPUE.p_networkObjectId] -= _aggroPointWhenInDetectZone;
+            _playerAggroValue[PPUE.p_networkObjectId] -= _scoreTargetModuleSO.p_aggroPointWhenInDetectZone;
             _playerAggroValue[PPUE.p_networkObjectId] = Mathf.Max(_playerAggroValue[PPUE.p_networkObjectId], 0);
             _playerInDetectionZone[PPUE.p_networkObjectId] = false;
         }
-        else if(!_playerInDetectionZone[PPUE.p_networkObjectId] && sqrDistance <= _detectionZoneRadius*_detectionZoneRadius)
+        else if(!_playerInDetectionZone[PPUE.p_networkObjectId] && sqrDistance <= sqrDetectionRadius*sqrDetectionRadius)
         {
-            _playerAggroValue[PPUE.p_networkObjectId] += _aggroPointWhenInDetectZone;
+            _playerAggroValue[PPUE.p_networkObjectId] += _scoreTargetModuleSO.p_aggroPointWhenInDetectZone;
             _playerInDetectionZone[PPUE.p_networkObjectId] = true;
         }
     }
@@ -129,16 +125,16 @@ public class ScoreTargetModule : EnemyTargetModule
     public void OnHitPlayer(int playerId, int damages)
     {
         if(_playerAggroValue.ContainsKey(playerId))
-            _playerAggroValue[playerId] += damages*_aggroPointPerDamageDealt;
+            _playerAggroValue[playerId] += damages*_scoreTargetModuleSO.p_aggroPointPerDamageDealt;
         else 
-            _playerAggroValue.Add(playerId, damages*_aggroPointPerDamageDealt);
+            _playerAggroValue.Add(playerId, damages*_scoreTargetModuleSO.p_aggroPointPerDamageDealt);
     }
     public void OnDamageTaken(int playerId, int damages)
     {
         if(_playerAggroValue.ContainsKey(playerId))
-            _playerAggroValue[playerId] += damages*_aggroPointPerDamageTaken;
+            _playerAggroValue[playerId] += damages*_scoreTargetModuleSO.p_aggroPointPerDamageTaken;
         else 
-            _playerAggroValue.Add(playerId, damages*_aggroPointPerDamageTaken);
+            _playerAggroValue.Add(playerId, damages*_scoreTargetModuleSO.p_aggroPointPerDamageTaken);
     }
 
     /*private void OnDrawGizmos()

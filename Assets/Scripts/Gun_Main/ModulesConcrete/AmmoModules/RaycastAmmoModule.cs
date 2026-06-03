@@ -21,7 +21,10 @@ namespace GunDecorator.AmmoModules
         [SerializeField][Tooltip("vitesse de la balle en Unité/secondes")] private float _BulletSpeed = 50;
         private float _dmgToApply = 1;
 
-        [SerializeField, Tooltip("scriptable object des vfx en fonction de la surface touché")] ImpactBulletSO _impactVFXData;
+        [SerializeField, Tooltip("scriptable object des vfx en fonction de la surface touché")] GameObject _impactVFXData;
+        
+        [SerializeField] private bool _isDistanceReduced = false;
+        [SerializeField] private float _factorReduceDamageByDistance = 1;
 
         private BulletData _bulletData;
         
@@ -41,6 +44,8 @@ namespace GunDecorator.AmmoModules
                 _maxDistance = s.maxDistance;
                 _damages = s.damages;
                 _BulletSpeed = s.bulletSpeed;
+                _isDistanceReduced = s.isDistanceReduced;
+                _factorReduceDamageByDistance = s.factorReduceDamageByDistance;
             }
         }
         
@@ -99,43 +104,39 @@ namespace GunDecorator.AmmoModules
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
             
-            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, _finalSpawnPoint, damagableObject, hadCharged);
+            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, _finalSpawnPoint, damagableObject, _factorReduceDamageByDistance, _isDistanceReduced, hadCharged);
         }
         
         [ServerRpc]
         private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
+            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, Vector3 finalPos, NetworkObject target = null, float ratio = 1, bool isDistanceReduce = false, bool hadCharged = true)
         {
             bool isCritical = _gunController.IsOverload;
-            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, hadCharged);
-            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, hadCharged);
+            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target,ratio, isDistanceReduce, hadCharged);
+            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, ratio, isDistanceReduce, hadCharged);
         }
 
         private void DoSpawnBullet(Vector3 direction, float travel, bool isExplosive,
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos,
-            NetworkObject target = null, bool hadCharged = true)
+            NetworkObject target = null, float factorReduceDamageByDistance = 1, bool isDistanceReduce = false, bool hadCharged = true)
         {
             BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
-            Debug.Log($"ammo pool size: {_ammoPool.Size}");
             
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
     
             IAmmo bullet = newBullet.GetComponent<IAmmo>();
-
-            SurfaceType surface = ImpactSurface.GetSurfaceType(touchObject);
-            GameObject vfx = _impactVFXData.GetVFXFromSurface(surface);
             
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, vfx, isExplosive, radius, _gunController,
-                isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, 0, hadCharged);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, _impactVFXData, isExplosive, radius, _gunController,
+                isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, 0,factorReduceDamageByDistance, isDistanceReduce, hadCharged);
         }
 
         [ObserversRpc]
         private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, bool hadCharged = true)
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, float ratio = 1, bool isDistanceReduce = false, bool hadCharged = true)
         {
             if (IsServerInitialized) return;
-            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObject, finalPos, target, hadCharged);
+            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObject, finalPos, target,ratio, isDistanceReduce, hadCharged);
         }
         
         void DespawnBullet(BulletBehaviour bullet, float delay)

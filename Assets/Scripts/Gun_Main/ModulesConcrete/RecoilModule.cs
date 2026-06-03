@@ -73,7 +73,7 @@ public class RecoilModule : GunModule, IRecoilModule
     
     void Start()
     {
-        _initialLocalPos = _gunController.ModelGun.transform.localPosition;
+        _initialLocalPos = _gunController.CurrentModelGun.transform.localPosition;
     }
 
     public void Recoil(Transform model, float time, bool isFullAuto, float multiplier = 1, float newX = 1)
@@ -125,8 +125,8 @@ public class RecoilModule : GunModule, IRecoilModule
 
         _targetZ = Mathf.Lerp(_targetZ, 0, _z_returnSpeed * Time.deltaTime);
         _currentZ = Mathf.Lerp(_currentZ, _targetZ, _snapiness * Time.deltaTime);
-
-        _gunController.ModelGun.transform.localPosition = _initialLocalPos + new Vector3(0, 0, -_currentZ);
+        
+        _gunController.CurrentModelGun.transform.localPosition = _initialLocalPos + new Vector3(0, 0, -_currentZ);
     }
 
     public void SetIsRecoil(bool state)

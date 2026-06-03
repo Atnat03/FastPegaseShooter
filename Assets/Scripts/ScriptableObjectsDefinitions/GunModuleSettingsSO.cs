@@ -37,6 +37,8 @@ public class GunSetting
         public float maxDistance = 2000;
         public float damages;
         public float bulletSpeed = 100;
+        public bool isDistanceReduced = false;
+        public float factorReduceDamageByDistance = 1;
     }
 
     //PhysicAmmo
@@ -122,6 +124,9 @@ public class GunSetting
 
         [Header("Salve")]
         public float intervaleCharge = 0.05f;
+        public Vector2 noiseCharged = new Vector2(0, 0);
+        public int numberSalve = 1;
+        public float intervaleBetweenSalve = 0.5f;
     }
 
     //Charged Increase Noise
@@ -157,8 +162,8 @@ public class GunSetting
         public float RecoilX = 2;
         public int NumberBulletInCharged = 10;
 
-        [Header("Noise")] 
-        public float startMaxNoiseAngle = 10;
+        [Header("Positions")] 
+        public Vector3[] _posOffset;
     }
 
 #endregion

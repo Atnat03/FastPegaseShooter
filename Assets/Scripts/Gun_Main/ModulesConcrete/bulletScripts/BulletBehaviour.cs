@@ -1,4 +1,5 @@
 using System;
+using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
@@ -13,6 +14,9 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     [HideInInspector] public float p_explosionRadius;
     [HideInInspector] public bool p_isCritical;
     [HideInInspector] public bool p_hadCharged;
+    [HideInInspector] public bool p_isDistanceReduce;
+    [HideInInspector] public float p_ratioDistanceReduce;
+    
     public Action<BulletBehaviour> OnCollision;
 
     [SerializeField] private GameObject _positiveExplosionVFX;
@@ -32,6 +36,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     private GunController _gunController;
     private Vector3 _targetPoint;
     private NetworkObject _targetNetworkObject;
+    private Vector3 _shootPos;
 
     private bool _hasHit = false;
 
@@ -56,7 +61,9 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         bool isCritical,
         Vector3 targetPoint,
         NetworkObject target,
-        bool isPositive, float duration = 0, bool hadCharged = true)
+        bool isPositive, float duration = 0, 
+        float factorReduceDamageByDistance = 1,
+        bool isDistanceReduce = false, bool hadCharged = true)
     {
         p_damage = damage;
         p_speed = speed;
@@ -68,11 +75,15 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         _targetPoint = targetPoint;
         _targetNetworkObject = target;
         p_hadCharged = hadCharged;
-
+        p_isDistanceReduce = isDistanceReduce;
+        p_ratioDistanceReduce = factorReduceDamageByDistance;
+        
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
         
         _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
         _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
+        
+        _shootPos = transform.position;
     }
 
     private void Move()
@@ -113,8 +124,30 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
     private void HandleDirectHit(RaycastHit hit)
     {
+        if (_gunController == null)
+        {
+            Debug.LogError("GunController is NULL");
+            return;
+        }
+
         if (_gunController.IsServerInitialized)
-            _gunController.ApplyDamage(_targetNetworkObject, (int)p_damage, p_isCritical, p_hadCharged);
+        {
+            float damage = p_damage;
+
+            if (p_isDistanceReduce)
+                damage *= (1 / (1 + p_ratioDistanceReduce * Vector3.Distance(hit.point, _shootPos)));
+            
+            _gunController.ApplyDamage(hit.collider.gameObject, (int)damage, p_isCritical, p_hadCharged);
+            
+            /*if (hit.collider.TryGetComponent<G>(out var core))
+            {
+                _gunController.ApplyDamage(core.NetworkObject, (int)damage, p_isCritical, p_hadCharged);
+            }
+            else
+            {
+                Debug.LogWarning("Touched object has no NetworkObject");
+            }*/
+        }
 
         CreateHitMark(hit);
     }
@@ -129,10 +162,10 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         
         foreach (Collider c in Physics.OverlapSphere(transform.position, radius))
         {
-            if (!c.TryGetComponent<IDamagable>(out _)) continue;
-            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
+            /*if (!c.TryGetComponent<IDamagable>(out _)) continue;
+            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;*/
 
-            _gunController.ApplyDamage(netObj, damage, p_isCritical, p_hadCharged);
+            _gunController.ApplyDamage(c.gameObject, damage, p_isCritical, p_hadCharged);
         }
     }
 

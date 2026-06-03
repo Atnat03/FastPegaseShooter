@@ -81,18 +81,23 @@ MonoBehaviour:
         displayName: RaycastAmmoModule
         headerColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
         maxDistance: 40
-        damages: 18
+        damages: 21
         bulletSpeed: 70
+        isDistanceReduced: 0
+        factorReduceDamageByDistance: 0.5
     - rid: 8760679503559655528
       type: {class: ChargedSalveSetting, ns: , asm: Assembly-CSharp}
       data:
         displayName: SalveChargedModule
         headerColor: {r: 0, g: 1, b: 1, a: 1}
-        IsExplosifAmmo: 1
+        IsExplosifAmmo: 0
         explosionRadius: 1
         OneAmmoAddPercentage: {x: 0, y: 0}
-        _damageChargedMultiplicator: 1.25
+        _damageChargedMultiplicator: 0.75
         recoilChargedMultiplier: 0
         RecoilX: 0
-        NumberBulletInCharged: 10
-        intervaleCharge: 0.02
+        NumberBulletInCharged: 20
+        intervaleCharge: 0.008
+        noiseCharged: {x: 8, y: 4}
+        numberSalve: 5
+        intervaleBetweenSalve: 0.125

@@ -1,0 +1,356 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using FishNet.Connection;
+using FishNet.Object;
+using MyPrint;
+using ScriptableObjectsDefinitions;
+using Tuto.Triggers;
+using UnityEngine;
+
+namespace Tuto
+{
+    public enum PlayerSide { Red, Blue }
+    public enum Speaker { Red, Blue, AI }
+    public enum NotificationTarget { Red, Blue, Both }
+    public enum NotificationDisableAction
+    {
+        AfterDelay,
+        OnFireModeChanged,
+        OnLaserFired,
+        OnDroneUsed,
+        OnHealUsed
+    }
+    
+    public struct OnLocalPlayerReady
+    {
+        public PlayerSide side;
+    }
+    
+    public class TutoManager : NetworkBusListener
+    {
+        [SerializeField] private ScenarioSO _scenarioSequence;
+        [SerializeField] private List<TriggerBoxBridge> _sceneProxies = new();
+        
+        [Header("Sound")]
+        [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private SoundsDataSO _soundsData;
+
+        Dictionary<PlayerSide, NetworkObject> _playerList = new();
+
+        public override void OnStartNetwork()
+        {
+            SetUpBridge();
+            InitializeTriggers();
+            StartCoroutine(RunTutorial());
+            ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
+        }
+
+        private void OnPlayerSpawn(OnPlayerSpawnEvent data)
+        {
+            NetworkObject no = data.Transform.GetComponent<NetworkObject>();
+            if (no == null) return;
+
+            PlayerSide side = no.OwnerId == 0 ? PlayerSide.Red : PlayerSide.Blue;
+
+            if (!_playerList.ContainsKey(side))
+                _playerList[side] = no;
+
+            if (no.IsOwner)
+                InvokeEvent(new OnLocalPlayerReady { side = side });
+        }
+
+        private void SetUpBridge()
+        {
+            Dictionary<int, TriggerBoxBridge> proxyMap = new Dictionary<int, TriggerBoxBridge>();
+            foreach (TriggerBoxBridge proxy in _sceneProxies)
+                proxyMap[proxy.bridgeIndex] = proxy;
+ 
+            foreach (Scenario scenario in _scenarioSequence._scenarioList)
+            {
+                if (scenario.trigger is Trigger_BoxCollider boxTrigger)
+                {
+                    if (proxyMap.TryGetValue(boxTrigger.proxyIndex, out var proxy))
+                        boxTrigger.InjectProxy(proxy);
+                    else
+                        Debug.LogWarning($"Aucun proxy avec l'index {boxTrigger.proxyIndex} trouvé dans la scène.");
+                }
+            }
+        }
+ 
+        private void InitializeTriggers()
+        {
+            foreach (Scenario scenario in _scenarioSequence._scenarioList)
+                scenario.trigger?.Initialize();
+        }
+ 
+        private IEnumerator RunTutorial()
+        {
+            foreach (Scenario scenario in _scenarioSequence._scenarioList)
+            {
+                if (scenario.trigger != null)
+                    yield return WaitForTrigger(scenario.trigger);
+ 
+                foreach (BaseEvent evt in scenario.eventsList)
+                {
+                    if (evt == null)
+                        continue;
+
+                    evt.SetManager(this);
+                    
+                    yield return StartCoroutine(evt.Execute());
+                }
+            }
+        }
+ 
+        private IEnumerator WaitForTrigger(BaseTrigger trigger)
+        {
+            bool fired = false;
+
+            trigger.OnActivated += Handler;
+            
+            yield return new WaitUntil(() => fired);
+            
+            trigger.OnActivated -= Handler;
+            
+            trigger.Dispose();
+            
+            yield break;
+
+            void Handler() => fired = true;
+        }
+
+        #region Events
+        
+        #region DOOR
+        public void AskForOpenDoor(int actionToDo, int doorIndex)
+        {
+            if (IsServerInitialized)
+            {
+                AskForOpenDoorObserversRpc(actionToDo, doorIndex);
+            }else
+            {
+                AskForOpenDoorServerRpc(actionToDo, doorIndex);
+            }
+        }
+        
+        [ServerRpc]
+        void AskForOpenDoorServerRpc(int actionToDo, int doorIndex) => AskForOpenDoorObserversRpc(actionToDo, doorIndex);
+        
+        [ObserversRpc]
+        void AskForOpenDoorObserversRpc(int actionToDo, int doorIndex)
+        {
+            InvokeEvent(new OnDoorOpen_TUTO
+            {
+                action = actionToDo, 
+                indexDoor = doorIndex
+            });
+        }       
+        #endregion
+        
+        #region DIALOGUE
+        public void AskForDialogue(float duration, string dialogue, Speaker speaker, string keyVoceline)
+        {
+            if (IsServerInitialized)
+            {
+                AskForDialogueObserversRpc(duration,dialogue, speaker, keyVoceline);
+            }
+            else
+            {
+                AskForDialogueServerRpc(duration,dialogue, speaker, keyVoceline);
+            }
+        }
+
+        [ServerRpc]
+        private void AskForDialogueServerRpc(float duration, string dialogue, Speaker speaker, string keyVoceline)
+        {
+            AskForDialogueObserversRpc(duration,dialogue, speaker, keyVoceline);
+        }
+
+        [ObserversRpc]
+        private void AskForDialogueObserversRpc(float duration, string dialogue, Speaker speaker, string keyVoceline)
+        {
+            SoundManager.PlaySound(_soundsData, keyVoceline, _audioSource);
+            
+            InvokeEvent(new OnDialogue_TUTO
+            {
+                dialogue = dialogue,
+                duration = duration,
+                speaker = speaker
+            });
+        }
+        #endregion
+        
+        #region NOTIFICATION
+        
+        public void AskForNotification(NotificationData data)
+        {
+            if(IsServerInitialized)
+                SendNotificationToTargets(data);
+        }
+
+        private void SendNotificationToTargets(NotificationData data)
+        {
+            List<NetworkObject> targets = data.target switch
+            {
+                NotificationTarget.Red  => GetPlayer(PlayerSide.Red),
+                NotificationTarget.Blue => GetPlayer(PlayerSide.Blue),
+                NotificationTarget.Both => GetAllPlayers(),
+                _ => new List<NetworkObject>()
+            };
+
+            foreach (NetworkObject player in targets)
+            {
+                if (player != null && player.Owner != null)
+                    SendNotificationTargetRpc(player.Owner, data);
+            }
+        }
+        
+        [TargetRpc]
+        private void SendNotificationTargetRpc(NetworkConnection conn, NotificationData data)
+        {
+            InvokeEvent(new OnNotification_TUTO
+            {
+                notificationText = data.text,
+                speaker = data.target,
+                activated = true,
+                disableAction = data.disableAction,
+                duration = data.duration
+            });
+
+            SoundManager.PlaySound(_soundsData, "Notification", _audioSource);
+        }
+        
+        #endregion
+
+        #region TakeDamage
+        
+        public void TakeDamage(int damage)
+        {
+            if (IsServerInitialized)
+            {
+                foreach (NetworkObject player in GetAllPlayers())
+                {
+                    SendDamageToPlayer(player, damage);
+                }
+            }
+            else
+            {
+                TakeDamageServerRpc(damage);
+            }
+        }
+
+        [ServerRpc]
+        private void TakeDamageServerRpc(int damage)
+        {
+            foreach (NetworkObject player in GetAllPlayers())
+            {
+                SendDamageToPlayer(player, damage);
+            }
+        }
+        
+        private void SendDamageToPlayer(NetworkObject target, float damage)
+        {
+            if (target == null) return;
+
+            TargetTakeDamageRpc(target.Owner, target, damage);
+        }
+        
+        [TargetRpc]
+        private void TargetTakeDamageRpc(NetworkConnection conn, NetworkObject target, float damage)
+        {
+            target.GetComponent<PlayerHealth>().RequestTakeDamageFromTutoServerRpc(Mathf.RoundToInt(damage));
+        }
+
+        #endregion
+
+
+        #region Fill Amount
+
+        public void FillAmount(float maxAmount, float speed, bool activated, AnimationBar type)
+        {
+            if (IsServerInitialized)
+            {
+                AskForFillAmountObserversRpc(maxAmount, speed, activated, type);
+            }
+            else
+            {
+                AskForFillAmountServerRpc(maxAmount, speed, activated, type);
+            }
+        }
+
+        [ServerRpc]
+        private void AskForFillAmountServerRpc(float maxAmount, float speed, bool activated, AnimationBar type)
+        {
+            AskForFillAmountObserversRpc(maxAmount, speed, activated, type);
+        }
+
+        [ObserversRpc]
+        private void AskForFillAmountObserversRpc(float maxAmount, float speed, bool activated, AnimationBar type)
+        {
+            //SoundManager.PlaySound(_soundsData, keyVoceline, _audioSource);
+            
+            InvokeEvent(new OnFillAmount_TUTO
+            {
+                activated = activated,
+                maxPercentage = maxAmount,
+                speed = speed,
+                type = type
+            });
+        }
+
+        #endregion
+
+
+        #region Unlock Capa
+
+        public void AskForUnlockCapa(Capacity_TUTO capa)
+        {
+            if (IsServerInitialized)
+            {
+                AskForUnlockCapaObserversRpc(capa);
+            }
+            else
+            {
+                AskForUnlockCapaServerRpc(capa);
+            }
+        }
+
+        [ServerRpc]
+        private void AskForUnlockCapaServerRpc(Capacity_TUTO capa)
+        {
+            AskForUnlockCapaObserversRpc(capa);
+        }
+
+        [ObserversRpc]
+        private void AskForUnlockCapaObserversRpc(Capacity_TUTO capa)
+        {
+            foreach (NetworkObject player in _playerList.Values.Where(player => player != null && player.Owner != null))
+            {
+                if(player.transform.root.TryGetComponent(out PlayerTuto playerTuto))
+                {
+                    playerTuto.UnlockCapa(capa);
+                }
+            }
+        }
+
+        #endregion
+        
+        private List<NetworkObject> GetPlayer(PlayerSide side)
+        {
+            if (_playerList.TryGetValue(side, out NetworkObject player))
+                return new List<NetworkObject> { player };
+
+            return new List<NetworkObject>();
+        }
+
+        private List<NetworkObject> GetAllPlayers()
+        {
+            return new List<NetworkObject>(_playerList.Values);
+        }
+
+        #endregion
+
+    }
+}

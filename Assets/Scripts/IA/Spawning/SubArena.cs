@@ -2,20 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CustomConsole.Runtime.Console;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using GameKit.Dependencies.Utilities;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
 public class SubArena : NetworkBusListener
 {
     [Header("----- General -----")]
-    [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
     [SerializeField] private bool _zoneActivated;
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     [SerializeField] private SubArenaGauge _arenaGaugePrefab;
@@ -35,6 +31,7 @@ public class SubArena : NetworkBusListener
     [SerializeField] private int _corrosionDelay = 3;
 
     private List<(float cumulativeWeight, MobSpawnSO mob)> orderedSpawnPriority = new();
+    private PathfindingRequestManager _pathfindingRequestManager;
     private int _currentSpawnPointIndex = 0;
     
     [Header("----- Debug -----")]
@@ -52,7 +49,6 @@ public class SubArena : NetworkBusListener
         
         ListenToEvent<OnDapEvent>(ODE =>
         {
-            //CustomLogger.Log("OnDapEvent zone stop");
             _zoneActivated = false;
         });
         
@@ -65,16 +61,11 @@ public class SubArena : NetworkBusListener
             }
         });
         
-
-        //CustomLogger.ImportantLog("Not sure if this listening is usefull => to test");
-        ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
+        InvokeEvent(new GetPathfindingRequestManagerRequest
         {
-            if (PPUE.p_isHeartBeat) return; //Heart beat isn't usefull for pathfinding
-            
-            for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
+            p_OnGetPathfindingRequestManager = (PRM) =>
             {
-                if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
-                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition);
+                _pathfindingRequestManager = PRM;
             }
         });
 
@@ -176,7 +167,7 @@ public class SubArena : NetworkBusListener
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         
         
-        EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
+        EnemyCore enemyCore =  enemy.GetComponentInChildren<EnemyCore>();
         enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
         _spawnedEnemies.Add(enemyCore);

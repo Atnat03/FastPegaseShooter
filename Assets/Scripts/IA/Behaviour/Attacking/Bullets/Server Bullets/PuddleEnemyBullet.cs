@@ -16,7 +16,7 @@ public class PuddleEnemyBullet : EnemyBullet
         : base(ESE, direction, spawnTime, bulletId, layerMask)
     {
         if (ESE.p_enemyAttackModule is LobShootingAttackModule LSAModule)
-            _damageDelay = LSAModule.p_splashDamageDelay;
+            _damageDelay = LSAModule._lobShootingAttackModuleSo.p_splashDamageDelay;
         else
         {
             CustomLogger.CCErrorLog("Could not load LSAModule, delay defaulted back to 1 secondes");
@@ -83,10 +83,10 @@ public class PuddleEnemyBullet : EnemyBullet
                 {
                     p_playerN = playerNetworkObject,
                     p_value = p_bulletDamage,
-                    p_attacker = p_attackModule.gameObject.GetComponent<NetworkObject>()
+                    p_attacker = p_attackModule?.NetworkObject
                 });
             
-                p_attackModule.p_onHitPlayer?.Invoke(playerNetworkObject.ObjectId, p_bulletDamage);
+                p_attackModule?.p_onHitPlayer?.Invoke(playerNetworkObject.ObjectId, p_bulletDamage);
             }
         }
     }
