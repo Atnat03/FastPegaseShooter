@@ -1,18 +1,16 @@
-using System;
+using FishNet;
+using FishNet.Managing.Scened;
+using FishNet.Object;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace LD.Scenes
 {
-	public class SceneLoaderTrigger : MonoBusListener
+	public class SceneLoaderTrigger : NetworkBusListener
 	{
-		[SerializeField] private GameObject _door;
 
 		#region Variables
-
-		[SerializeField] private SceneField[] _sceneToLoad;
-		[SerializeField] private SceneField[] _sceneToUnload;
-
+		[SerializeField] private GameObject _door;
+		[SerializeField] private SceneField _sceneToLoad;
 		#endregion
 
 
@@ -36,11 +34,23 @@ namespace LD.Scenes
 			if (other.TryGetComponent(out PlayerVisuelBridge player))
 			{
 				InvokeEvent(new OnSceneLoadTrigger());
-				SceneManaging.LoadScene(_sceneToLoad);
-				SceneManaging.UnloadScene(_sceneToUnload);
+				LoadSceneForAll();
 			}
 		}
 
+		[Server]
+		private void LoadSceneForAll()
+		{
+			SceneLoadData sld = new SceneLoadData(_sceneToLoad.SceneName);
+			sld.ReplaceScenes = ReplaceOption.All;
+			sld.MovedNetworkObjects = new NetworkObject[]
+			{
+				
+			};
+            
+			InstanceFinder.SceneManager.LoadGlobalScenes(sld);
+		}
+		
 		#endregion
 	}
 }

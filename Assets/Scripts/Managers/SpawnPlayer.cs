@@ -12,25 +12,26 @@ using Random = UnityEngine.Random;
 
 public class SpawnPlayer : NetworkBehaviour
 {
-    [SerializeField] private string _sceneToDisable;
-    
     [SerializeField] private NetworkObject _playerPrefab;
-    [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private LevelSpawnPoints[] _spawnPointsByLevel;
 
     private HashSet<int> _spawnedClients = new HashSet<int>();
-
+    private List<NetworkObject> players = new List<NetworkObject>();
+    
     private void OnEnable()
     {
         InstanceFinder.SceneManager.OnLoadEnd += OnSceneLoadEnd;
         InstanceFinder.ServerManager.OnRemoteConnectionState += OnPlayerConnectionState;
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += SetPlayerPos;
     }
-
+    
     private void OnDisable()
     {
         if (InstanceFinder.SceneManager == null) return;
         
         InstanceFinder.SceneManager.OnLoadEnd -= OnSceneLoadEnd;
         InstanceFinder.ServerManager.OnRemoteConnectionState -= OnPlayerConnectionState;
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SetPlayerPos;
     }
 
     private void OnSceneLoadEnd(SceneLoadEndEventArgs args)
@@ -66,10 +67,10 @@ public class SpawnPlayer : NetworkBehaviour
             UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(playerObj.gameObject, targetScene);
 
         playerObj.transform.position =
-            _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
+            _spawnPointsByLevel[0].p_spawnPoints[Random.Range(0, _spawnPointsByLevel[0].p_spawnPoints.Length)].position;
 
         InstanceFinder.ServerManager.Spawn(playerObj, player);
-
+        players.Add(playerObj);
         FPSController fps = playerObj.GetComponent<FPSController>();
 
         if (fps != null)
@@ -81,4 +82,20 @@ public class SpawnPlayer : NetworkBehaviour
     {
         fpsController.SetUpLayer();
     }
+
+    private void SetPlayerPos(Scene scene, LoadSceneMode arg1)
+    {
+        foreach (NetworkObject player in players)
+        {
+            //player.transform.position = _spawnPointsByLevel[scene.buildIndex].p_spawnPoints[Random.Range(0, _spawnPointsByLevel[scene.buildIndex].p_spawnPoints.Length)].position;
+            player.transform.position = new Vector3(-22.96f, 1.52f, -30.15f);            //je teste un truc
+
+        }
+    }
+}
+
+[Serializable]
+public class LevelSpawnPoints
+{
+    public Transform[] p_spawnPoints;
 }
