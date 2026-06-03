@@ -105,9 +105,6 @@ namespace GunDecorator.AmmoModules
         private void SpawnVisualBulletServerRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
             DoSpawnBullet(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
-         
-            Debug.Log($"[CLIENT] shootDirection: {direction}, cam forward: {_camera.transform.forward}");
-            
             SpawnVisualBulletObserverRpc(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
         }
 

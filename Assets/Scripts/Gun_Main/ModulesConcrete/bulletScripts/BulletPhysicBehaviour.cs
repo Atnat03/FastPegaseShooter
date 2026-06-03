@@ -61,7 +61,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 
         if (distance <= 0f) return;
 
-        if (!Physics.SphereCast(_lastPosition, 0.15f, direction.normalized, out RaycastHit hit,
+        if (!Physics.SphereCast(_lastPosition, 0.5f, direction.normalized, out RaycastHit hit,
                 distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
             return;
 
