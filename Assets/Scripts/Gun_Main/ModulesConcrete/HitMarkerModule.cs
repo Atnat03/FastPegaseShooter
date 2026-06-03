@@ -70,7 +70,6 @@ namespace GunDecorator
             Destroy(s.gameObject, 0.5f);
         }
         
-        
         private void PlayerDoKill(OnPlayerDoKill data)
         {
             if (_killMarkerPrefab == null) return;

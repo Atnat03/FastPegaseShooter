@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FishNet;
+using FishNet.Object;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Core")]
@@ -140,8 +141,8 @@ public class EnemyCore : NetworkBusListener
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
         
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
-        
-        InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
+
+        PlayerDoKillObserversRpc(playerObjectId);
         
         if (!_coreSo.p_dropXpOrb)
         {
@@ -155,6 +156,12 @@ public class EnemyCore : NetworkBusListener
         InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
     }
 
+    [ObserversRpc]
+    private void PlayerDoKillObserversRpc(int index)
+    {
+        InvokeEvent(new OnPlayerDoKill{p_owerId = index});
+    }
+    
     float GetSignedEnergyAmount(ChargeType charge)
     {
         switch (charge)
