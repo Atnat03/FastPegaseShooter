@@ -33,7 +33,6 @@ public class GunSwitching : NetworkBusListener
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
 	[SerializeField] private ShootEnergy _shootEnergy;
-	[SerializeField] private GrenadeThrower _throwerGrenade;
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
 	
@@ -224,14 +223,12 @@ public class GunSwitching : NetworkBusListener
 	
 	private void OnEnable()
 	{
-		_throwerGrenade.OnStartThrow += DesactivateGunWhenThrow;
 		_throwerDrone.OnThrowing += DesactivateGunWhenThrow;
 		
 	}
 	
 	private void OnDisable()
 	{
-		_throwerGrenade.OnStartThrow -= DesactivateGunWhenThrow;
 		_throwerDrone.OnThrowing -= DesactivateGunWhenThrow;
 	}
 	

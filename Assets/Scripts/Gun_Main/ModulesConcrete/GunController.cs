@@ -71,7 +71,7 @@ namespace GunDecorator
         [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
         public SoundsDataSO _soundData;
 
-        [SerializeField, Tooltip("Animation du modele de l'arme")]
+        [HideInInspector, Tooltip("Animation du modele de l'arme")]
         public Animator _animator;
         
         [SerializeField, Tooltip("Animation du bras")]
@@ -156,7 +156,8 @@ namespace GunDecorator
             
             _modelsList[LocalConnection.ClientId].gameObject.SetActive(true);
 
-            _animator = _modelsList[LocalConnection.ClientId].GetComponent<Animator>();
+            if (_modelsList[LocalConnection.ClientId].TryGetComponent(out Animator animator))
+                _animator = animator;
         }
 
         private void Start() // pour du debug, a tej en build finale
