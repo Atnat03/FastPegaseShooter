@@ -9,14 +9,12 @@ public class DroneView : NetworkBehaviour
 	#region Properties
 
 	#endregion
-
-
+	
 	#region Variables
 
 	[SerializeField] private DroneEffectParent _droneEffect;
 	[SerializeField] private Drone _drone;
-	[SerializeField] private MeshRenderer _meshRenderer;
-	[SerializeField] private Material[] _materials;
+	[SerializeField] private GameObject[] _models;
 	
 	[Header("ApplysEffect")]
 	[SerializeField] private ParticleSystem _applyEffect;
@@ -59,7 +57,8 @@ public class DroneView : NetworkBehaviour
 	
 	private void SetUpColor(bool isPositive)
 	{
-		_meshRenderer.material = isPositive ? _materials[0] : _materials[1];
+		_models[0].gameObject.SetActive(isPositive);
+		_models[1].gameObject.SetActive(!isPositive);
 		
 		ParticleSystemRenderer psRenderer = _applyEffect.GetComponent<ParticleSystemRenderer>();
 		psRenderer.material = isPositive ? _materialsParticles[0] : _materialsParticles[1];
