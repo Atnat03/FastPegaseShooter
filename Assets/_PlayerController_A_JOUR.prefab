@@ -31464,7 +31464,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _mainGunParent: {fileID: 7010684394084671937}
   _shootEnergy: {fileID: 5211221750857496501}
-  _throwerGrenade: {fileID: 0}
   _throwerDrone: {fileID: 931936587992237131}
   _reticuleManager: {fileID: 8014742524321164357}
   _cooldownChangeMagnetic: 3
@@ -31486,7 +31485,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _gunSwitching: {fileID: 3154577241410043838}
   _gunSurcharge: {fileID: 8957410558547212102}
-  _grenadeThrower: {fileID: 0}
   _playerCapacity: {fileID: 6914351051837942534}
   p_unlockSwapEnergyLaser: 1
   p_unlockChargedShoot: 1
@@ -31522,7 +31520,7 @@ MonoBehaviour:
   _swayAmount: 0.02
   _maxSwayAmount: 0.05
   _smooth: 5
-  _idleCoef: 0.005
+  _idleCoef: 0.015
   _bobSpeed: 12
   _bobAmount: 0.04
   _verticalBumpForce: 0.005
@@ -37648,6 +37646,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: -3824217941074476164, guid: aae83671688611941b466e9c804f5b0a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d279a2b6833a0ad4faae224b35312afd, type: 2}
     - target: {fileID: -1404579766811411403, guid: aae83671688611941b466e9c804f5b0a, type: 3}
       propertyPath: m_Layer
       value: 11
@@ -37751,7 +37753,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aae83671688611941b466e9c804f5b0a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7056486064745959499}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aae83671688611941b466e9c804f5b0a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6536789593793858046}
   m_SourcePrefab: {fileID: 100100000, guid: aae83671688611941b466e9c804f5b0a, type: 3}
+--- !u!137 &2075626702565198201 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3824217941074476164, guid: aae83671688611941b466e9c804f5b0a, type: 3}
+  m_PrefabInstance: {fileID: 6207013027731098117}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5884238833773391342 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aae83671688611941b466e9c804f5b0a, type: 3}
@@ -37784,6 +37794,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6536789593793858046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6549030624260224852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 232f8bc7f4d33ce44a3f690c496a6a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  _renderer: {fileID: 2075626702565198201}
+  _materialsList:
+  - {fileID: 2100000, guid: d279a2b6833a0ad4faae224b35312afd, type: 2}
+  - {fileID: 2100000, guid: e5ff3948e965c4048994429de43ded06, type: 2}
 --- !u!1001 &6221577594825271104
 PrefabInstance:
   m_ObjectHideFlags: 0

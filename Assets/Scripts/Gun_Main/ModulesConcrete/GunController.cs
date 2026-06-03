@@ -110,7 +110,8 @@ namespace GunDecorator
 
         private void OnEnable()
         {
-            _animator.ResetTrigger("Reload");
+            if(_animator)
+                _animator.ResetTrigger("Reload");
         }
 
         private void Awake()
@@ -334,8 +335,26 @@ namespace GunDecorator
             SoundManager.PlaySound(_soundData, sound, _source);
         }
 
-        [ObserversRpc]
         private void PlayMuzzleFlash()
+        {
+            if (IsServerInitialized)
+            {
+                PlayMuzzleFlashObserversRpc();
+            }
+            else
+            {
+                PlayMuzzleFlashServerRpc();
+            }
+        }
+
+        [ServerRpc(RequireOwnership = true)]
+        private void PlayMuzzleFlashServerRpc()
+        {
+            PlayMuzzleFlashObserversRpc();
+        }
+        
+        [ObserversRpc]
+        private void PlayMuzzleFlashObserversRpc()
         {
             if (p_particlesMuzzleFlash.Length < 2) 
                 return;

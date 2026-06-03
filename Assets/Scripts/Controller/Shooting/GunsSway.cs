@@ -60,16 +60,15 @@ public class GunsSway : MonoBusListener
         
         Vector2 moveInput = _playerInput.actions["Move"].ReadValue<Vector2>();
 
+        float idleY = Mathf.Cos(Time.time * 1.5f) * _idleCoef;
+        finalPosition.y += idleY;
+
         if (moveInput.magnitude > 0.1f && Mathf.Abs(_playerRB.linearVelocity.y) < 0.1f)
         {
-            float idleY = Mathf.Cos(Time.time * 1.5f) * _idleCoef;
-
-            finalPosition += new Vector3(0, idleY, 0);
-
             _bobTimer += Time.deltaTime * _bobSpeed;
 
             float bobY = Mathf.Sin(_bobTimer) * _bobAmount;
-            finalPosition += new Vector3(0, bobY, 0);
+            finalPosition.y += bobY;
         }
         else
         {
