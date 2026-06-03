@@ -237,8 +237,12 @@ namespace GunDecorator
         {
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
-
             _recoilModule?.SetIsRecoil(false);
+
+            _animator?.ResetTrigger("Shoot");
+
+            if (_animatorArm)
+                _animatorArm?.ResetTrigger("Shoot");
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
