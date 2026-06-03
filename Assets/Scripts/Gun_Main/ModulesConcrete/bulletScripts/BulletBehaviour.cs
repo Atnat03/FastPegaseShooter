@@ -23,13 +23,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     [SerializeField] private GameObject _negativeExplosionVFX;
 
     [Header("View")]    
-    [SerializeField]private MeshRenderer _meshRenderer;
-    [SerializeField]private Material _positiveMaterial;
-    [SerializeField] private Material _negativeMaterial;
-    
-    [SerializeField]private TrailRenderer _trailRenderer;
-    [SerializeField]private Gradient _positiveLineColor;
-    [SerializeField]private Gradient _negativeLineColor;
+    [SerializeField] private GameObject[] _models;
     
     private GameObject _vfx;
     
@@ -80,8 +74,8 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
         
-        _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
-        _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
+        _models[0].SetActive(isPositive);
+        _models[1].SetActive(!isPositive);
         
         _shootPos = transform.position;
     }
