@@ -20,7 +20,6 @@ namespace Controller
         
         [SerializeField] private GunSwitching _gunSwitching;
         [SerializeField] private GunSurcharge _gunSurcharge;
-        [SerializeField] private GrenadeThrower _grenadeThrower;
         [SerializeField] private PlayerCapacity _playerCapacity;
         
         private bool _isInitialized = false;
@@ -39,7 +38,6 @@ namespace Controller
 
         public void InitializeWithGunId(int gunId)
         {
-            _grenadeThrower.Initialize(gunId);
             _gunSwitching.Initialize(gunId);
             _isInitialized = true;
         }
