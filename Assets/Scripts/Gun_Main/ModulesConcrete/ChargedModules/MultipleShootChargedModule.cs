@@ -47,8 +47,6 @@ namespace GunDecorator.ChargedModules
 
         private void ApplyShoot(int index)
         {
-            Cons.Print("Apply shoot : " + _posOffset[index]);
-            
             _ammoModule.SpawnBullet(Vector3.zero, _posOffset[index], false);
         }
     }
