@@ -34,7 +34,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
 
     protected void PathUpdateRequest()
     {
-        if (!_isPathUpdateRequested)
+        if (!_isPathUpdateRequested && _targetModule.HasTarget())
         {
             if(!_enemyCore.p_pathRequester) return;
             
