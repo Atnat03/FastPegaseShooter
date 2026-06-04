@@ -1699,13 +1699,13 @@ public class FPSController : NetworkBusListener
 
             if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.3f))
             {
-                if (Vector3.Dot(horizontalVelocity, playerFeet.position - stepHit.point) < 0.3)
+                if (Vector3.Dot(horizontalVelocity, stepHit.collider.ClosestPoint(playerFeet.position)) < 0.3)
                 {
-                    float stepHeight = stepHit.point.y - playerFeet.position.y;
+                    float stepHeight = stepHit.point.y - stepHit.collider.ClosestPoint(playerFeet.position).y;
 
                     if (stepHeight > 0 && stepHeight <= maxStepHeight)
                     {
-                        rb.position += Vector3.up * (maxStepHeight - stepHeight);
+                        rb.position += Vector3.up * (/*maxStepHeight -*/ stepHeight);
                         continue;
                     }
                 }
