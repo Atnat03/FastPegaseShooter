@@ -21,6 +21,8 @@ public class EnemyCoreSOInspector : Editor
     }
     public override void OnInspectorGUI()
     {
+        serializedObject.Update();
+        
         GUILayout.Label("Energy Drop", _titleStyle);
         EditorUtilities.Draw("p_dropXpOrb", serializedObject);
         EditorUtilities.Draw("p_baseEnergyDropValue", serializedObject);
@@ -30,5 +32,7 @@ public class EnemyCoreSOInspector : Editor
         {
             EditorUtilities.Draw("p_pinataEnergyDropValue", serializedObject);
         }
+        
+        serializedObject.ApplyModifiedProperties();
     }
 }
