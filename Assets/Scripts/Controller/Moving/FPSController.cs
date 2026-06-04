@@ -1208,18 +1208,27 @@ public class FPSController : NetworkBusListener
 
     void SlidingUpdate()
     {
-        if (!Grounded() && mustBeGrounded)
+        if (mustBeGrounded)
         {
-            stateMachine.ChangeState(ControlerState.Falling);
-            if (Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, .75f, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
+            bool nearGround = Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, .75f,
+                ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore);
+
+            if (!nearGround)
             {
-                if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide 
-                    && slopeSlideUnlocked 
-                    && playerInput.actions["Crouch"].IsPressed()) stateMachine.ChangeState(ControlerState.SlopeSliding);
+                Debug.Log("! nearGround -> on part en chute");
+                stateMachine.ChangeState(ControlerState.Falling);
+                return;
             }
-            
-            else stateMachine.ChangeState(ControlerState.Falling);
-            return;
+
+            if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide
+                && slopeSlideUnlocked
+                && playerInput.actions["Crouch"].IsPressed())
+            {
+                stateMachine.ChangeState(ControlerState.SlopeSliding);
+                return;
+            }
+
+            // Sol plat détecté → on continue le slide normalement
         }
 
         if (playerInput.actions["Jump"].WasPressedThisFrame() && !jumpSlideOnEndOfSlide)
@@ -1231,36 +1240,38 @@ public class FPSController : NetworkBusListener
 
         if (!mustSlide)
         {
-            if (!Physics.SphereCast(topHeightCrouchedCollider.position, bodyRadius, Vector3.up, out RaycastHit hit,
-                    Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position)))
+            bool ceilingBlocked = Physics.SphereCast(
+                topHeightCrouchedCollider.position, bodyRadius, Vector3.up, out RaycastHit hit,
+                Vector3.Distance(topHeightCrouchedCollider.position, topHeightStandUpCollider.position));
+
+            if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked)
+            {
+                stateMachine.ChangeState(ControlerState.SlopeSliding);
+                return;
+            }
+
+            if (!ceilingBlocked)
             {
                 if (playerInput.actions["Jump"].IsPressed())
                 {
                     SlideJump();
                     stateMachine.ChangeState(ControlerState.Idle);
                 }
-
                 else if (playerInput.actions["Crouch"].IsPressed())
                 {
                     stateMachine.ChangeState(ControlerState.Crouching);
                     StartCoroutine(SlidingSlowDownCoroutine());
                 }
-
                 else
                 {
-                    if (Vector3.Angle(groundedHit.normal, Vector3.up) > minSlopeAngleToSlopeSlide && slopeSlideUnlocked)
-                        stateMachine.ChangeState(ControlerState.SlopeSliding);
-                    else
-                        stateMachine.ChangeState(ControlerState.Idle);
+                    stateMachine.ChangeState(ControlerState.Idle);
                 }
-            }
+            } 
         }
     }
 
     void SlidingFixedUpdate()
     {
-        landingDirection = AlignVelocityToWall(landingDirection, true);
-        landingDirection = InterpolateSlope(landingDirection);
         rb.linearVelocity = landingDirection;
     }
 
