@@ -10,5 +10,12 @@ namespace Tuto
         public abstract string DisplayName { get; }
         public virtual void Initialize() { }
         public virtual void Dispose() { }
+        
+        public virtual BaseTrigger Clone()
+        {
+            BaseTrigger copy = (BaseTrigger)MemberwiseClone();
+            copy.OnActivated = null;
+            return copy;
+        }
     }
 }

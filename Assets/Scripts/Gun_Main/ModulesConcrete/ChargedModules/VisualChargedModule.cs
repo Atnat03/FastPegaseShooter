@@ -18,7 +18,7 @@ public class VisualChargedModule : GunModule
 	[SerializeField] private ChargedParentModule _chargedModule;
 	
 	[Header("VFX")]
-	[SerializeField] private ParticleSystem _chargedParticleSystem;
+	[SerializeField] private ParticleSystem[] _chargedParticleSystem;
 	
 	#endregion
 
@@ -37,7 +37,7 @@ public class VisualChargedModule : GunModule
 
 	private void Charging()
 	{
-		_chargedParticleSystem.Play();
+		_chargedParticleSystem[_gunController.IsPositivePlayerCharge ? 0 : 1].Play();
 	}
 
 	#endregion

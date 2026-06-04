@@ -26,6 +26,7 @@ public class BasicLifeModule : EnemyLifeModule
         //No specific logic modifying critical behaviour
         return isCritical;
     }
+    
     [Server]
     public override void Death(int attackerObjectId, ChargeType charge)
     {
