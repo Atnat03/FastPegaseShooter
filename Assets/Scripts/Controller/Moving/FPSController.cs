@@ -1199,7 +1199,7 @@ public class FPSController : NetworkBusListener
         landingDirection.Normalize();
         landingDirection *= slideSpeed;
         
-        _playerAnimation.SetSlideAnim();
+        _playerAnimation.SetSlideAnim(true);
 
         Crouch();
         StartCoroutine(SlidingCoroutine());
@@ -1259,6 +1259,9 @@ public class FPSController : NetworkBusListener
     void ExitSlidingState()
     {
         UnCrouch();
+        
+        _playerAnimation.SetSlideAnim(false);
+        
         StartCoroutine(JustSlidedCoroutine());
         StartCoroutine(BringBackFOVCoroutine());
     }
