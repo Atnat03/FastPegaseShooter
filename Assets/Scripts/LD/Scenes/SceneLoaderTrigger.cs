@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FishNet;
 using FishNet.Managing.Scened;
 using FishNet.Object;
@@ -12,8 +13,7 @@ namespace LD.Scenes
 		[SerializeField] private GameObject _door;
 		[SerializeField] private SceneField _sceneToLoad;
 		#endregion
-
-
+		
 		#region Fonctions
 		
 		void Start()
@@ -34,23 +34,37 @@ namespace LD.Scenes
 			if (other.TryGetComponent(out PlayerVisuelBridge player))
 			{
 				InvokeEvent(new OnSceneLoadTrigger());
-				LoadSceneForAll();
+				LoadSceneServerRpc();
 			}
+		}
+
+		[ServerRpc(RequireOwnership = false)]
+		private void LoadSceneServerRpc()
+		{
+			LoadSceneForAll();
 		}
 
 		[Server]
 		private void LoadSceneForAll()
 		{
+			
+			// Ajoute ce debug temporaire dans LoadSceneForAll
+			Debug.Log($"Chargement de la scène : '{_sceneToLoad.SceneName}'");
+			Debug.Log($"Nombre de joueurs : {PlayerHealthManager.Instance.RegisteredPlayers.Count}");
+			
+			
 			SceneLoadData sld = new SceneLoadData(_sceneToLoad.SceneName);
 			sld.ReplaceScenes = ReplaceOption.All;
 
-			NetworkObject[] objs = new NetworkObject[PlayerHealthManager.Instance.RegisteredPlayers.Count + 1];
-			for (int i = 0; i < PlayerHealthManager.Instance.RegisteredPlayers.Count; i++)
+			List<NetworkObject> objsList = new List<NetworkObject>();
+
+			foreach (var player in PlayerHealthManager.Instance.RegisteredPlayers)
 			{
-				objs[i] = PlayerHealthManager.Instance.RegisteredPlayers[i].NetworkObject;
+				objsList.Add(player.NetworkObject);
 			}
-			sld.MovedNetworkObjects = objs;
-            
+			
+			sld.MovedNetworkObjects = objsList.ToArray();
+
 			InstanceFinder.SceneManager.LoadGlobalScenes(sld);
 		}
 		

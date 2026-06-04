@@ -110,7 +110,7 @@ namespace GunDecorator
 
         private void OnEnable()
         {
-            _animator.ResetTrigger("Reload");
+            _animator?.ResetTrigger("Reload");
         }
 
         private void Awake()
