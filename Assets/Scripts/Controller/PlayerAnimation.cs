@@ -15,10 +15,14 @@ public class PlayerAnimation : MonoBehaviour
 	#region Fonctions
 	
 	public void SetMovingAnim(bool isMoving) => _animator.SetBool("Move", isMoving);
+	public void SetMovingBackwardAnim(bool isMoving) => _animator.SetBool("MoveBackward", isMoving);
 	public void SetJumpAnim(bool isJumping) => _animator.SetBool("Jump", isJumping);
 	public void SetFallingAnim(bool isFalling) => _animator.SetBool("Falling", isFalling);
 	public void SetGroundedAnim(bool isGrounded) => _animator.SetBool("Grounded", isGrounded);
 	public void SetDeadAnim(bool isDead) => _animator.SetBool("Dead", isDead);
+	public void SetDashAnim() => _animator.SetTrigger("Dash");
+	public void SetSlideAnim() => _animator.SetTrigger("Slide");
+	public void SetShootAnim() => _animator.SetTrigger("Shoot");
 
 	public void ChangeAirState(bool isGrounded)
 	{
