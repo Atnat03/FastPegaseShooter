@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine.PlayerLoop;
 
 public class FPSController : NetworkBusListener
@@ -33,6 +34,7 @@ public class FPSController : NetworkBusListener
     [SerializeField] float bodyRadius = .6f;
     [SerializeField] PlayerInput playerInput;
     [SerializeField] private GameObject _playerVisual;
+    [SerializeField] private GameObject _playerFPS;
     [SerializeField] public PlayerAnimation _playerAnimation;
 
     [Header("parameters")] [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")] [SerializeField]
@@ -277,6 +279,7 @@ public class FPSController : NetworkBusListener
         }
         else
         {
+            SetLayerRecursively(_playerFPS, LayerMask.NameToLayer("TargetMiniMap"));
             _camera.gameObject.SetActive(false);
         }
 
