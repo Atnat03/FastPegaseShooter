@@ -130,7 +130,6 @@ public class EnemyCore : NetworkBusListener
 
     public void KillEnemy(int playerObjectId, ChargeType charge)
     {
-
         //if killed by dap wave
         if (charge == ChargeType.None)
         {
