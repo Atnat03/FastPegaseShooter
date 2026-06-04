@@ -171,9 +171,35 @@ public class GunSwitching : NetworkBusListener
 	[ServerRpc]
 	public void ChangeGunServerRpc(bool isMain)
 	{
+		StartCoroutine(DelaySwitch(isMain));
+	}
+
+	IEnumerator DelaySwitch(bool isMain)
+	{
+		PlayAnimationObserverRpc(isMain);
+		
+		yield return new WaitForSeconds(0.5f);
+		
 		SetGunModeObserversRpc(isMain);
 	}
-	
+
+	[ObserversRpc]
+	private void PlayAnimationObserverRpc(bool isMain)
+	{
+		Animator gun = CurrentMainGun._animator;
+		Animator arm = CurrentMainGun._animatorArm;
+
+		string trigger = isMain ? "Prendre" : "Retirer";
+		
+		Cons.Print("Switch : " + isMain, ColorConsole.Black);
+		
+		if(gun)
+			gun.SetTrigger(trigger);
+		
+		if(arm)
+			arm.SetTrigger(trigger);
+	}
+
 	[ObserversRpc]
 	private void SetGunModeObserversRpc(bool isMain)
 	{

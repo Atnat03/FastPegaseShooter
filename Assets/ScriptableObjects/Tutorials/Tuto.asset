@@ -13,71 +13,104 @@ MonoBehaviour:
   m_Name: Tuto
   m_EditorClassIdentifier: Assembly-CSharp::Tuto.ScenarioSO
   _scenarioList:
-  - ScenarioName: Event 1
+  - ScenarioName: StartDialogue
     trigger:
-      rid: 6001466592840646780
+      rid: 5406076671141347503
     eventsList:
-    - rid: 6001466592840646782
-    - rid: 6001466592840646783
-    - rid: 5406076671141347421
-    - rid: 5406076671141347423
-    - rid: 5406076671141347429
-  - ScenarioName: Event 2
+    - rid: 5406076671141347504
+    - rid: 5406076671141347505
+    - rid: 5406076671141347506
+    - rid: 5406076671141347507
+  - ScenarioName: DialogueJumps
     trigger:
-      rid: 6001466592840646784
+      rid: 5406076671141347512
     eventsList:
-    - rid: 6001466592840646785
-    - rid: 6001466592840646786
+    - rid: 5406076671141347504
+    - rid: 5406076671141347505
+    - rid: 5406076671141347513
+  - ScenarioName: Pre-SalleMonstres
+    trigger:
+      rid: 5406076671141347514
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076671141347505
+    - rid: 5406076671141347515
+    - rid: 5406076671141347516
+    - rid: 5406076671141347517
+  - ScenarioName: CloseDoor
+    trigger:
+      rid: 5406076671141347518
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076671141347519
   references:
     version: 2
     RefIds:
-    - rid: 5406076671141347421
-      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        activated: 1
-        maxPercentage: 0
-        speedFill: 3
-        animationType: 0
-    - rid: 5406076671141347423
-      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        notificationText: 
-        target: 0
-        disableAction: 0
-        duration: 0
-    - rid: 5406076671141347429
-      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _durationToWait: 0
-    - rid: 6001466592840646780
-      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data:
-        proxyIndex: 0
-        mode: 1
-    - rid: 6001466592840646782
-      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        actionToDo: 0
-        doorIndex: 0
-    - rid: 6001466592840646783
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: Bienvenus dans Brobot
-        _keyVoceline: 
-        _duration: 3
-        speaker: 2
-    - rid: 6001466592840646784
+    - rid: 5406076671141347503
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         proxyIndex: 1
-        mode: 1
-    - rid: 6001466592840646785
-      type: {class: Event_UnlockShootEnergy, ns: Tuto, asm: Assembly-CSharp}
-      data: 
-    - rid: 6001466592840646786
-      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+        mode: 3
+    - rid: 5406076671141347504
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
-        notificationText: Change de mode de tir avec la molette de la souris
-        target: 0
-        disableAction: 1
-        duration: 0
+        _durationToWait: 1
+    - rid: 5406076671141347505
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Salle Pre-Monstre]'
+        _keyVoceline: test
+        _duration: 2
+        speaker: 2
+    - rid: 5406076671141347506
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076671141347507
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 1
+    - rid: 5406076671141347512
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 1
+        mode: 3
+    - rid: 5406076671141347513
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Jump 2]'
+        _keyVoceline: test
+        _duration: 2
+        speaker: 0
+    - rid: 5406076671141347514
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 3
+        mode: 0
+    - rid: 5406076671141347515
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 2
+    - rid: 5406076671141347516
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076671141347517
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Salle Monstre]'
+        _keyVoceline: test
+        _duration: 1
+        speaker: 2
+    - rid: 5406076671141347518
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 4
+        mode: 0
+    - rid: 5406076671141347519
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 1
+        doorIndex: 2

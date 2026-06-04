@@ -35,7 +35,7 @@ public class FPSController : NetworkBusListener
     [SerializeField] float bodyRadius = .6f;
     [SerializeField] PlayerInput playerInput;
     [SerializeField] private GameObject _playerVisual;
-    [SerializeField] private PlayerAnimation _playerAnimation;
+    [SerializeField] public PlayerAnimation _playerAnimation;
 
     [Header("parameters")] [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")] [SerializeField]
     private bool landSnap = true;
@@ -528,6 +528,7 @@ public class FPSController : NetworkBusListener
 
 
         _playerAnimation.SetMovingAnim(false);
+        _playerAnimation.SetMovingBackwardAnim(false);
 
         if (Grounded())
         {
@@ -633,7 +634,12 @@ public class FPSController : NetworkBusListener
 
     void OnEnterMovingState()
     {
-        _playerAnimation.SetMovingAnim(true);
+        if(verticalInput >= 0.1)
+            _playerAnimation.SetMovingAnim(true);
+        else if (verticalInput <= -0.1)
+        {
+            _playerAnimation.SetMovingBackwardAnim(true);
+        }
     }
 
     void MovingUpdate()
@@ -1192,6 +1198,8 @@ public class FPSController : NetworkBusListener
         landingDirection.y = 0f;
         landingDirection.Normalize();
         landingDirection *= slideSpeed;
+        
+        _playerAnimation.SetSlideAnim(true);
 
         Crouch();
         StartCoroutine(SlidingCoroutine());
@@ -1251,6 +1259,9 @@ public class FPSController : NetworkBusListener
     void ExitSlidingState()
     {
         UnCrouch();
+        
+        _playerAnimation.SetSlideAnim(false);
+        
         StartCoroutine(JustSlidedCoroutine());
         StartCoroutine(BringBackFOVCoroutine());
     }
@@ -1356,6 +1367,8 @@ public class FPSController : NetworkBusListener
             else dashingDirection = (YawForward * verticalInput + YawRight * horizontalInput).normalized;
         }
 
+        _playerAnimation.SetDashAnim();
+        
         OnDash?.Invoke();
         
         dashingDirection = dashingDirection.normalized * dashSpeed.Evaluate(0);
