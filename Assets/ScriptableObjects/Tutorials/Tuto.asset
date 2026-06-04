@@ -19,6 +19,9 @@ MonoBehaviour:
     eventsList:
     - rid: 6001466592840646782
     - rid: 6001466592840646783
+    - rid: 5406076671141347421
+    - rid: 5406076671141347423
+    - rid: 5406076671141347429
   - ScenarioName: Event 2
     trigger:
       rid: 6001466592840646784
@@ -28,6 +31,24 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 5406076671141347421
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 0
+        speedFill: 3
+        animationType: 0
+    - rid: 5406076671141347423
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: 
+        target: 0
+        disableAction: 0
+        duration: 0
+    - rid: 5406076671141347429
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 0
     - rid: 6001466592840646780
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
@@ -44,7 +65,7 @@ MonoBehaviour:
         _dialogue: Bienvenus dans Brobot
         _keyVoceline: 
         _duration: 3
-        speaker: 0
+        speaker: 2
     - rid: 6001466592840646784
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
