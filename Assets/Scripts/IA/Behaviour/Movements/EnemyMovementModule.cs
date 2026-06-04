@@ -52,12 +52,12 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
             transform.position, _targetModule.GetTargetPosition(), out _path);
         _isPathUpdateRequested = false;
 
-        if (_path != null && _path.Count > 0)
+        if (_path == null || _path.Count < 0)
         {
             _path = new List<PathfindingNode>();
             return;
         }
-            
+        
         _path.RemoveAt(_path.Count-1);
     }
     protected abstract void MoveAlongPath();
