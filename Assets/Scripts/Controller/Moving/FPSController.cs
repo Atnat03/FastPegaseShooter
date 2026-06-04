@@ -907,7 +907,7 @@ public class FPSController : NetworkBusListener
 
     #endregion
 
-        #region WallRidingState
+    #region WallRidingState
 
     enum wallRideSide
     {
@@ -935,7 +935,6 @@ public class FPSController : NetworkBusListener
     {
         hasDashed = false; // ligne a retirer si on veut que le joueur doive toucher le sol avant de redasher
 
-        wallRidingCoroutineRunning = true;
         wallRidingHeight = transform.position.y;
         currentHeadTilt = currentRoll;
         if(cameraBackToDefaultCoroutine != null) StopCoroutine(cameraBackToDefaultCoroutine);
@@ -1036,7 +1035,8 @@ public class FPSController : NetworkBusListener
 
     void ExitWallRidingState()
     {
-        cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+        //cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+        wallRidingCoroutineRunning = false;
         StopCoroutine(wallRidingCoroutine);
         cameraBackToDefaultCoroutine = StartCoroutine(CameraRollBackToDefaultCoroutine());
     }
@@ -1075,6 +1075,7 @@ public class FPSController : NetworkBusListener
 
     IEnumerator WallRidingDurationCoroutine()
     {
+        wallRidingCoroutineRunning = true;
         yield return new WaitForSeconds(wallRidingDuration);
         wallRidingCoroutineRunning = false;
         fellOffWallrinding = true;
