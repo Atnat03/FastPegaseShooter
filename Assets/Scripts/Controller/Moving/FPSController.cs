@@ -422,9 +422,21 @@ public class FPSController : NetworkBusListener
         stateMachine?.LateUpdate();
     }
 
+    public void SetFreeze(bool isFreeze)
+    {
+        IsFreeze = isFreeze;
 
+        if (isFreeze)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
+    
     void UpdateInputs() // appelé en update dans tout les states // update des inputs
     {
+        if (IsFreeze) return;
+        
         Vector2 rawInput = playerInput.actions["Move"].ReadValue<Vector2>();
         
         horizontalInput = Mathf.Abs(rawInput.x) > 0.1f ?  rawInput.x : 0;
@@ -895,7 +907,7 @@ public class FPSController : NetworkBusListener
 
     #endregion
 
-        #region WallRidingState
+    #region WallRidingState
 
     enum wallRideSide
     {
@@ -923,7 +935,6 @@ public class FPSController : NetworkBusListener
     {
         hasDashed = false; // ligne a retirer si on veut que le joueur doive toucher le sol avant de redasher
 
-        wallRidingCoroutineRunning = true;
         wallRidingHeight = transform.position.y;
         currentHeadTilt = currentRoll;
         if(cameraBackToDefaultCoroutine != null) StopCoroutine(cameraBackToDefaultCoroutine);
@@ -1024,7 +1035,8 @@ public class FPSController : NetworkBusListener
 
     void ExitWallRidingState()
     {
-        cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+        //cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+        wallRidingCoroutineRunning = false;
         StopCoroutine(wallRidingCoroutine);
         cameraBackToDefaultCoroutine = StartCoroutine(CameraRollBackToDefaultCoroutine());
     }
@@ -1063,6 +1075,7 @@ public class FPSController : NetworkBusListener
 
     IEnumerator WallRidingDurationCoroutine()
     {
+        wallRidingCoroutineRunning = true;
         yield return new WaitForSeconds(wallRidingDuration);
         wallRidingCoroutineRunning = false;
         fellOffWallrinding = true;
