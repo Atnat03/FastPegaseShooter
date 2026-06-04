@@ -422,9 +422,21 @@ public class FPSController : NetworkBusListener
         stateMachine?.LateUpdate();
     }
 
+    public void SetFreeze(bool isFreeze)
+    {
+        IsFreeze = isFreeze;
 
+        if (isFreeze)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
+    
     void UpdateInputs() // appelé en update dans tout les states // update des inputs
     {
+        if (IsFreeze) return;
+        
         Vector2 rawInput = playerInput.actions["Move"].ReadValue<Vector2>();
         
         horizontalInput = Mathf.Abs(rawInput.x) > 0.1f ?  rawInput.x : 0;
