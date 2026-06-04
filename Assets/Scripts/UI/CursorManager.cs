@@ -23,7 +23,7 @@ public class CursorManager : MonoBehaviour
     {
         _states.Push(state);
         
-        ApplyState();
+        ApplyState(fps);
     }
 
     public  void PopState(FPSController fps)
@@ -31,10 +31,10 @@ public class CursorManager : MonoBehaviour
         if (_states.Count > 0)
             _states.Pop();
 
-        ApplyState();
+        ApplyState(fps);
     }
 
-    private void ApplyState()
+    private void ApplyState(FPSController fps)
     {
         CursorState state = _states.Count > 0 ? _states.Peek() : CursorState.Gameplay;
 
@@ -43,11 +43,13 @@ public class CursorManager : MonoBehaviour
             case CursorState.Gameplay:
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+                fps.SetFreeze(false);
                 break;
 
             case CursorState.UI:
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+                fps.SetFreeze(true);
                 break;
         }
     }
