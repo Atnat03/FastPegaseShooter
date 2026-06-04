@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomConsole.Runtime.Logger;
+using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -36,6 +37,24 @@ public class PlayerHealth : NetworkBusListener
 	[SerializeField] private PlayerAnimation _playerAnimation;
 	[SerializeField] private GunSwitching _gunSwitching;
 	[SerializeField] private NetworkObject healThrowObject;
+	
+	[Header("Invincibility")]
+	[SerializeField] private float _invicibilityDuration = 3f;
+	private float _respawnTime;
+	private bool _isInvincible = false;
+
+	private bool IsInvincible
+	{
+		get
+		{
+			//if the player as respawn recently
+			float currentTime = Time.time;
+			if(_respawnTime + _invicibilityDuration > currentTime) return true;
+			
+			return _isInvincible;
+		}
+		set => _isInvincible = value;
+	}
 
 	[Header("Healing throw version")]
 	[SerializeField] private bool throwableHeal = false;
@@ -107,7 +126,8 @@ public class PlayerHealth : NetworkBusListener
 		 
 		
 		_playerZoneManager = FindAnyObjectByType<PlayerZoneManager>(); // pour du debug, a tej en build finale
-		
+
+		_respawnTime = Time.time;
 	}
 
 	public override void OnStartClient()
@@ -280,8 +300,7 @@ public class PlayerHealth : NetworkBusListener
 		//fin du debug
 		
 		if (data.p_playerN.ObjectId != NetworkObject.ObjectId) return;
-		
-		if (IsDead) return;
+		if (IsDead || IsInvincible) return;
 		
 		float newHealth = _currentHealth.Value - data.p_value;
 
@@ -441,6 +460,7 @@ public class PlayerHealth : NetworkBusListener
 		NotifyDeathRpc(NetworkObject);
 	}
 
+	[Server]
 	void Respawn()
 	{
 		Debug.Log("Respawn");
@@ -450,6 +470,8 @@ public class PlayerHealth : NetworkBusListener
 		_currentHealth.Value = _healthBase;
 
 		transform.position = new Vector3(30, 0, -23.5f);
+		
+		_respawnTime = Time.time;
 		
 		RespawnObserverRpc();
 	}

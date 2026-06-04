@@ -1264,6 +1264,8 @@ GameObject:
   - component: {fileID: 8673833726976892631}
   - component: {fileID: 7292736145924730888}
   - component: {fileID: 2255272205365369614}
+  - component: {fileID: 8256762297802085294}
+  - component: {fileID: 5871034159884170091}
   - component: {fileID: 877197612966674740}
   - component: {fileID: 1117176494355191935}
   m_Layer: 16
@@ -1303,11 +1305,13 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 2681610064374458973}
   _networkObjectCache: {fileID: 2681610064374458973}
-  _attackingModules: []
+  _attackingModules:
+  - {fileID: 5871034159884170091}
   _lifeModules:
   - {fileID: 8673833726976892631}
   _targetingModules:
   - {fileID: 7292736145924730888}
+  - {fileID: 8256762297802085294}
   _movementModule: {fileID: 2255272205365369614}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
@@ -1364,6 +1368,41 @@ MonoBehaviour:
   _targetModule: {fileID: 7292736145924730888}
   p_movementModuleSO: {fileID: 11400000, guid: 65360b0ab34f2764fb9f4aa06a8d45bb, type: 2}
   _distanceAwareModuleSO: {fileID: 11400000, guid: 16551fa67ef88854cb2a25362862767d, type: 2}
+--- !u!114 &8256762297802085294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8249554089242385299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 551daad7dd080364381524025b5adc95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreTargetModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 2681610064374458973}
+  _networkObjectCache: {fileID: 0}
+  p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
+  _scoreTargetModuleSO: {fileID: 11400000, guid: ec2a937d225ce4249a4488a435dbde4e, type: 2}
+--- !u!114 &5871034159884170091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8249554089242385299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1438ebc3a6f0dce4bbb71d4cbcd12b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PredictiveShootingAttackModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 2681610064374458973}
+  _networkObjectCache: {fileID: 0}
+  _targetModule: {fileID: 8256762297802085294}
+  _attackModuleSO: {fileID: 11400000, guid: 35e7c130a49d05c4e98e9061540f7458, type: 2}
+  _predictiveShootingAttackModuleSO: {fileID: 11400000, guid: 9265b695656fcf44daef8cf14afc0927, type: 2}
 --- !u!136 &877197612966674740
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1381,7 +1420,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
