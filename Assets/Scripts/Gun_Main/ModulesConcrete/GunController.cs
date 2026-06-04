@@ -71,8 +71,11 @@ namespace GunDecorator
         [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
         public SoundsDataSO _soundData;
 
-        [SerializeField, Tooltip("Animation du modele de l'arme")]
+        [HideInInspector, Tooltip("Animation du modele de l'arme")]
         public Animator _animator;
+        
+        [SerializeField, Tooltip("Animation du bras")]
+        public Animator _animatorArm;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
         public ParticleSystem[] p_particlesMuzzleFlash;
@@ -152,6 +155,9 @@ namespace GunDecorator
             }
             
             _modelsList[LocalConnection.ClientId].gameObject.SetActive(true);
+
+            if (_modelsList[LocalConnection.ClientId].TryGetComponent(out Animator animator))
+                _animator = animator;
         }
 
         private void Start() // pour du debug, a tej en build finale
@@ -193,6 +199,9 @@ namespace GunDecorator
                 PlayMuzzleFlash();
 
                 _animator?.SetTrigger("Shoot");
+                
+                if(_animatorArm)
+                    _animatorArm?.SetTrigger("Shoot");
             }
         }
 
@@ -213,6 +222,9 @@ namespace GunDecorator
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
 
                 _animator?.SetTrigger("Shoot");
+                
+                if(_animatorArm)
+                    _animatorArm?.SetTrigger("Shoot");
 
                 yield return new WaitForSeconds(s.FireRate);
 
@@ -249,23 +261,9 @@ namespace GunDecorator
         {
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
-            
-            /*if (!target.IsSpawned)
-            {
-                Debug.LogWarning("ApplyDamage : target not spawned");
-                return;
-            }
-            CustomLogger.HighlightLog("ApplyDamage 4");*/
 
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
-
-            /*if (target.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
-
-                Cons.Print("Add charge : " + IsPositivePlayerCharge);;
-            }*/
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
             
