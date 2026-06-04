@@ -5,6 +5,7 @@ public class GunsSway : MonoBusListener
 {
     [Header("Sway")]
     [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private FPSController _fps;
     [SerializeField] float _swayAmount = 0.02f;
     [SerializeField] float _maxSwayAmount = 0.06f;
     [SerializeField] float _smooth = 6f;
@@ -43,6 +44,7 @@ public class GunsSway : MonoBusListener
     void LateUpdate()
     {
         if (!_hasSway) return;
+        if (_fps.IsFreeze) return;
         
         #region Sway
         
