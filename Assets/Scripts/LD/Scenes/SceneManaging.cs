@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace LD.Scenes
@@ -6,13 +7,24 @@ namespace LD.Scenes
     {
         public static void LoadScene(SceneField[] sceneToLoad)
         {
-            for (int i = 0; i < sceneToLoad.Length; i++)
+            if (sceneToLoad.Length == 0) return;
+
+            // On gère le premier élément séparément pour setter la scène active
+            AsyncOperation firstOp = SceneManager.LoadSceneAsync(sceneToLoad[0], LoadSceneMode.Additive);
+            firstOp.completed += _ =>
+            {
+                Scene newScene = SceneManager.GetSceneByName(sceneToLoad[0].SceneName);
+                if (newScene.IsValid())
+                    SceneManager.SetActiveScene(newScene);
+            };
+
+            // On charge le reste normalement
+            for (int i = 1; i < sceneToLoad.Length; i++)
             {
                 bool isSceneLoaded = false;
                 for (int j = 0; j < SceneManager.sceneCount; j++)
                 {
-                    Scene loadedScene = SceneManager.GetSceneAt(j);
-                    if (loadedScene.name == sceneToLoad[i].SceneName)
+                    if (SceneManager.GetSceneAt(j).name == sceneToLoad[i].SceneName)
                     {
                         isSceneLoaded = true;
                         break;
@@ -20,9 +32,7 @@ namespace LD.Scenes
                 }
 
                 if (!isSceneLoaded)
-                {
                     SceneManager.LoadSceneAsync(sceneToLoad[i], LoadSceneMode.Additive);
-                }
             }
         }
 
