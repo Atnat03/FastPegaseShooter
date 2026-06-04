@@ -4,18 +4,13 @@ using UnityEngine;
 [AddComponentMenu("EnemyBehaviour/Attack/PredictiveShootAttackModule")]
 public class PredictiveShootingAttackModule : EnemyAttackModule
 {
-    [SerializeField] private float _bulletSize = 0.2f;
-    [SerializeField] private float _bulletSpeed = 1;
-    [SerializeField] private float _maxBulletLifeTime = 10f;
-
-    [SerializeField] private int _bulletAmount = 1;
-    [SerializeField] private float _shootingSpreadAngle = 0;
+    [SerializeField] private PredictiveShootingAttackModuleSO _predictiveShootingAttackModuleSO;
     
 
     public override void OnNetworkTick(float tickDelta)
     {
         base.OnNetworkTick(tickDelta);
-        if (_waitedTimeSinceAttack >= _attackDelay && _targetModule.HasTarget())
+        if (_waitedTimeSinceAttack >= _attackModuleSO.p_attackDelay && _targetModule.HasTarget())
         {
             Vector3 shootDir = Vector3.zero;
             Vector3 shootingPos = transform.position + Vector3.up * 0.5f;
@@ -23,7 +18,7 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
                     _targetModule.p_playerVisualBridge.transform.position,
                     shootingPos,
                     _targetModule.p_playerVisualBridge.FPSController.Rb.linearVelocity,
-                    _bulletSpeed, out Vector3 shootingDirection))
+                    _predictiveShootingAttackModuleSO.p_bulletSpeed, out Vector3 shootingDirection))
             {
                 //CustomLogger.HighlightLog("Using predictive shoot");
                 shootDir = shootingDirection;
@@ -43,15 +38,15 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
                 new EnemyShootingEvent(
                     shootingPos, 
                     shootDir, 
-                    _bulletSpeed, 
-                    _damage, 
-                    _bulletSize, 
-                    _bulletType,
-                    _maxBulletLifeTime, 
+                    _predictiveShootingAttackModuleSO.p_bulletSpeed, 
+                    _attackModuleSO.p_damage, 
+                    _predictiveShootingAttackModuleSO.p_bulletSize, 
+                    _attackModuleSO.p_bulletType,
+                    _predictiveShootingAttackModuleSO.p_maxBulletLifeTime, 
                     this, 
-                    _projectileUseGravity,
-                    _bulletAmount, 
-                    _shootingSpreadAngle));
+                    _attackModuleSO.p_projectileUseGravity,
+                    _predictiveShootingAttackModuleSO.p_bulletAmount, 
+                    _predictiveShootingAttackModuleSO.p_shootingSpreadAngle));
         }
     }
 
@@ -88,7 +83,7 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
 
     protected override bool CanAttack(Vector3 shootingPos, Vector3 projectileDir)
     {
-        if (GetTargetSqrDistance() > _maxPlayerDistance * _maxPlayerDistance)
+        if (GetTargetSqrDistance() > _attackModuleSO.p_maxPlayerDistance * _attackModuleSO.p_maxPlayerDistance)
         {
             return false;
         }
@@ -98,9 +93,9 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
 
     bool HasLineOfSight(Vector3 shootingPos, Vector3 projectileDir)
     {
-        Debug.DrawLine(shootingPos,shootingPos + projectileDir * _maxPlayerDistance, Color.red, _attackDelay);
+        Debug.DrawLine(shootingPos,shootingPos + projectileDir * _attackModuleSO.p_maxPlayerDistance, Color.red, _attackModuleSO.p_attackDelay);
         
-        if (Physics.Raycast(shootingPos, projectileDir, out RaycastHit hit, _maxPlayerDistance, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(shootingPos, projectileDir, out RaycastHit hit, _attackModuleSO.p_maxPlayerDistance, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.CompareTag("Player"))
             {

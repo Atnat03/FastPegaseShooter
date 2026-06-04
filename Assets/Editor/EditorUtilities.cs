@@ -9,7 +9,7 @@ public sealed class EditorUtilities : Editor
 {
     #region List Drawing
     //for direct list access
-    public static void DrawList<T>(List<T> list, string listTitle, EditorListDrawerStyle listStyle, ref bool isOpened)
+    public static void DrawList<T>(List<T> list, string listTitle, EditorListDrawerStyle listStyle, ref bool isOpened, Func<T,T> drawingMethod = null)
     {
         Color oldColor = GUI.backgroundColor;
         int elementToRemove = -1;
@@ -36,7 +36,11 @@ public sealed class EditorUtilities : Editor
         {
             object value = list[i];
             EditorGUILayout.BeginHorizontal();
-            if(typeof(T) == typeof(Vector2))
+            if (drawingMethod != null)
+            {
+                value = drawingMethod.Invoke((T)value);
+            }
+            else if(typeof(T) == typeof(Vector2))
             {
                 GUILayout.Label(listStyle.p_label?.Invoke(i), GUILayout.Width(80));
                 value = EditorGUILayout.Vector2Field("", (Vector2)value);

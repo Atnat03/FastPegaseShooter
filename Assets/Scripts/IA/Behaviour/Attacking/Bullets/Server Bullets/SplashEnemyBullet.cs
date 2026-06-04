@@ -24,9 +24,9 @@ public class SplashEnemyBullet : EnemyBullet
             Vector3.up,
             0,
             p_bulletDamage,
-            LSAModule.p_splashSize,
+            LSAModule._lobShootingAttackModuleSo.p_splashSize,
             BulletTypes.GooPuddle,
-            LSAModule.p_splashDuration,
+            LSAModule._lobShootingAttackModuleSo.p_splashDuration,
             p_attackModule,
             false));
     }

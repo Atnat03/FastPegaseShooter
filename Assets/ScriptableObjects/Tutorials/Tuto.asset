@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b19f28374c4eb2ba0a96b9d3b397bf, type: 3}
+  m_Name: Tuto
+  m_EditorClassIdentifier: Assembly-CSharp::Tuto.ScenarioSO
+  _scenarioList:
+  - ScenarioName: Event 1
+    trigger:
+      rid: 6001466592840646780
+    eventsList:
+    - rid: 6001466592840646782
+    - rid: 6001466592840646783
+    - rid: 5406076671141347421
+    - rid: 5406076671141347423
+    - rid: 5406076671141347429
+  - ScenarioName: Event 2
+    trigger:
+      rid: 6001466592840646784
+    eventsList:
+    - rid: 6001466592840646785
+    - rid: 6001466592840646786
+  references:
+    version: 2
+    RefIds:
+    - rid: 5406076671141347421
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 0
+        speedFill: 3
+        animationType: 0
+    - rid: 5406076671141347423
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: 
+        target: 0
+        disableAction: 0
+        duration: 0
+    - rid: 5406076671141347429
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 0
+    - rid: 6001466592840646780
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 0
+        mode: 1
+    - rid: 6001466592840646782
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 0
+    - rid: 6001466592840646783
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: Bienvenus dans Brobot
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 6001466592840646784
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 1
+        mode: 1
+    - rid: 6001466592840646785
+      type: {class: Event_UnlockShootEnergy, ns: Tuto, asm: Assembly-CSharp}
+      data: 
+    - rid: 6001466592840646786
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Change de mode de tir avec la molette de la souris
+        target: 0
+        disableAction: 1
+        duration: 0

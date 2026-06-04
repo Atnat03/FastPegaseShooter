@@ -47,8 +47,8 @@ namespace GunDecorator
             
             if (_autoReload)
             {
-                if (_currentAmmo <= 0)
-                {
+                if (_currentAmmo <= 0 && !_isReloading)
+                { 
                     Reload();
                 }
             }
@@ -63,6 +63,9 @@ namespace GunDecorator
                 _isReloading = false;
                 _gunController?._animator.ResetTrigger("Reload");
                 
+                if(_gunController?._animatorArm)
+                    _gunController?._animatorArm.ResetTrigger("Reload");
+                
                 _gunController?.OnEndReload?.Invoke();
             }
         }
@@ -76,19 +79,21 @@ namespace GunDecorator
         IEnumerator ReloadCoroutine()
         {
             _gunController?.OnStartReload?.Invoke(reloadDuration);
-            
-            _gunController?._animator.SetTrigger("Reload");
             _gunController?.PlaySound("Reload");
-            
             _isReloading = true;
 
+            yield return null;
+    
+            _gunController?._animator?.SetTrigger("Reload");
+            if (_gunController?._animatorArm)
+                _gunController._animatorArm.SetTrigger("Reload");
+
             yield return new WaitForSeconds(reloadDuration);
-            
+
             _isReloading = false;
             SetAmmo(_magazineSize, false);
-            
             p_reloadCoroutine = null;
-            
+
             if (_gunController.IsFullAuto)
             {
                 _gunController.ResetNoise();

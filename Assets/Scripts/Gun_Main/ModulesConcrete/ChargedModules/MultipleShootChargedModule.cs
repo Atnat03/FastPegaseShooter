@@ -25,11 +25,10 @@ namespace GunDecorator.ChargedModules
         public override void TryShootCharging()
         {
             base.TryShootCharging();
-
+            
                 Cons.Print("Apply shoot : " + _posOffset.Length);
             for (int i = 0; i < _posOffset.Length; i++)
             {
-                
                 _ammoModule.SetBulletData(new BulletData
                 {
                     IsExplosive = _isExplosifAmmo,
@@ -39,7 +38,7 @@ namespace GunDecorator.ChargedModules
 
                 ApplyShoot(i);
                 
-                _gunController.RecoilModule.Recoil(_gunController.ModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
+                _gunController.RecoilModule.Recoil(_gunController.CurrentModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);
             }
             
@@ -48,8 +47,6 @@ namespace GunDecorator.ChargedModules
 
         private void ApplyShoot(int index)
         {
-            Cons.Print("Apply shoot : " + _posOffset[index]);
-            
             _ammoModule.SpawnBullet(Vector3.zero, _posOffset[index], false);
         }
     }

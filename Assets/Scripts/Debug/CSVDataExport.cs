@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using Application = UnityEngine.Application;
 
 public class CSVDataExport : MonoBusListener
 {
@@ -12,10 +13,19 @@ public class CSVDataExport : MonoBusListener
     
     void Start()
     {
-        gameID = PlayerPrefs.GetInt("GameID", 0);
+        DontDestroyOnLoad(this);
         
-        rows.Add(new string[]
-        {
+        ListenToEvent<OnDataLog>(AddLog);
+        ListenToEvent<OnSceneLoadTrigger>(ExportCSV);
+        
+        InitLogger();
+    }
+
+    void InitLogger()
+    {
+        rows.Clear();
+        
+        rows.Add(new string[] {
             "Time",
             "EntityType",
             "EntityID",
@@ -27,14 +37,11 @@ public class CSVDataExport : MonoBusListener
             "player2PVs",
             "player1Energy",
             "player2Energy",
+            "skillUsed",
             "subArenaID",
         });
         
-        ListenToEvent<OnDataLog>(AddLog);
-        
-        AddLog(
-            new OnDataLog()
-            {
+        AddLog(new OnDataLog() {
                 entityName = "init",
                 EntityID = -1,
                 weapon = "init",
@@ -45,6 +52,7 @@ public class CSVDataExport : MonoBusListener
                 player2PVs = 100,
                 player1Energy = 100,
                 player2Energy = 100,
+                skillUsed = "init",
                 ArenaID = -1,
             });
     }
@@ -52,7 +60,7 @@ public class CSVDataExport : MonoBusListener
 
     void AddLog(OnDataLog data)
     {
-        string[] prev = rows.Count > 1 ? rows[^1] : new string[12];
+        string[] prev = rows.Count > 1 ? rows[^1] : new string[13];
 
         rows.Add(new[]
         {
@@ -66,29 +74,32 @@ public class CSVDataExport : MonoBusListener
             data.player1PVs   .HasValue ? data.player1PVs.Value.ToString("F2") : prev[7],
             data.player2PVs   .HasValue ? data.player2PVs.Value.ToString("F2") : prev[8],
             data.player1Energy.HasValue ? data.player1Energy.Value.ToString("F2") : prev[9], 
-            data.player2Energy.HasValue ? data.player2Energy.Value.ToString("F2") : prev[10], 
-            data.ArenaID      .HasValue ? data.ArenaID.Value.ToString()      : prev[11],
+            data.player2Energy.HasValue ? data.player2Energy.Value.ToString("F2") : prev[10],
+            data.skillUsed    ?? prev[11],
+            data.ArenaID      .HasValue ? data.ArenaID.Value.ToString()      : prev[12],
         });
     }
     
     private void OnApplicationQuit()
     {
-        if(rows.Count < 2) return;
-        ExportCSV();
-        PlayerPrefs.SetInt("GameID", ++gameID);
+        ExportCSV(new OnSceneLoadTrigger());
     }
 
-    void ExportCSV()
+    void ExportCSV(OnSceneLoadTrigger trigger)
     {
-        string fileName = "game_" + gameID;
+        if(rows.Count < 2) return;
 
-        string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+        
+        string documentsPath = Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
         string folderPath = Path.Combine(documentsPath, "GamesData");
+        
 
         if (!Directory.Exists(folderPath))
         {
             Directory.CreateDirectory(folderPath);
         }
+        
+        string fileName = $"game_{Directory.GetFiles(folderPath).Length}";
 
         string path = Path.Combine(folderPath, fileName + ".csv");
 
@@ -102,12 +113,8 @@ public class CSVDataExport : MonoBusListener
         File.WriteAllText(path, sb.ToString());
 
         if(autoOpenFile)Application.OpenURL("file://" + folderPath); 
-    }
-    
-    [ContextMenu("resetGameCount")]
-    public void ResetGameCount()
-    {
-        PlayerPrefs.SetInt("GameID", 0);
+        
+        InitLogger();
     }
 }
 
@@ -124,5 +131,6 @@ struct OnDataLog
     public float? player2PVs;
     public float? player1Energy;
     public float? player2Energy;
+    public string skillUsed;
     public int?   ArenaID;
 }

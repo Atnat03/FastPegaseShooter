@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
@@ -9,6 +10,7 @@ using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.VFX;
 
 public interface IGun
@@ -29,7 +31,7 @@ public interface ISurcharge
 {
     public int GetCurrentAmmo();
     public void SetAmmo(int value, bool _infiniteAmmo);
-    public Transform ModelGun { get; }
+    public Transform CurrentModelGun { get; }
     public void StopReload();
 }
 
@@ -44,7 +46,7 @@ namespace GunDecorator
         public bool IsInfiniteAmmo => _infiniteAmmo;
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
-        public Transform ModelGun => _model;
+        public Transform CurrentModelGun => currentModel;
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -58,20 +60,25 @@ namespace GunDecorator
         private GunModuleSettingsSO _settings;
 
         [SerializeField, Tooltip("Model 3d de l'arme")]
-        private Transform _model;
+        private Transform currentModel;
+
+        [SerializeField, Tooltip("Model 3d de l'arme suivant la charge")]
+        private Transform[] _modelsList;
 
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
 
-        [SerializeField,
-         Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
+        [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
         public SoundsDataSO _soundData;
 
-        [SerializeField, Tooltip("Animation du modele de l'arme")]
+        [HideInInspector, Tooltip("Animation du modele de l'arme")]
         public Animator _animator;
+        
+        [SerializeField, Tooltip("Animation du bras")]
+        public Animator _animatorArm;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
-        public VFXRegistry p_particleData;
+        public ParticleSystem[] p_particlesMuzzleFlash;
 
         [SerializeField] [Tooltip("est ce que le maintient du clic provoque un tir automatique")]
         private bool _isFullAuto;
@@ -103,7 +110,8 @@ namespace GunDecorator
 
         private void OnEnable()
         {
-            _animator.ResetTrigger("Reload");
+            if(_animator)
+                _animator.ResetTrigger("Reload");
         }
 
         private void Awake()
@@ -137,6 +145,22 @@ namespace GunDecorator
             }
         }
 
+        public override void OnStartClient()
+        {
+            if(_modelsList.Length <2)
+                return;
+            
+            foreach (Transform t in _modelsList)
+            {
+                t.gameObject.SetActive(false);
+            }
+            
+            _modelsList[LocalConnection.ClientId].gameObject.SetActive(true);
+
+            if (_modelsList[LocalConnection.ClientId].TryGetComponent(out Animator animator))
+                _animator = animator;
+        }
+
         private void Start() // pour du debug, a tej en build finale
         {
             playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
@@ -152,7 +176,7 @@ namespace GunDecorator
         {
             if (!ShootingInputPressed) return;
 
-            if (!_model.gameObject.activeInHierarchy)
+            if (!currentModel.gameObject.activeInHierarchy)
                 return;
 
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
@@ -169,13 +193,16 @@ namespace GunDecorator
 
                 _shootModule?.TryShoot();
 
-                _recoilModule?.Recoil(_model.transform, 0.1f, false);
+                _recoilModule?.Recoil(currentModel.transform, 0.1f, false);
                 _recoilModule?.SetIsRecoil(true);
 
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
                 PlayMuzzleFlash();
 
                 _animator?.SetTrigger("Shoot");
+                
+                if(_animatorArm)
+                    _animatorArm?.SetTrigger("Shoot");
             }
         }
 
@@ -190,12 +217,15 @@ namespace GunDecorator
                 s.TryShoot();
                 PlayMuzzleFlash();
 
-                _recoilModule?.Recoil(_model.transform, s.FireRate, true);
+                _recoilModule?.Recoil(currentModel.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
 
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
 
                 _animator?.SetTrigger("Shoot");
+                
+                if(_animatorArm)
+                    _animatorArm?.SetTrigger("Shoot");
 
                 yield return new WaitForSeconds(s.FireRate);
 
@@ -207,8 +237,12 @@ namespace GunDecorator
         {
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
-
             _recoilModule?.SetIsRecoil(false);
+
+            _animator?.ResetTrigger("Shoot");
+
+            if (_animatorArm)
+                _animatorArm?.ResetTrigger("Shoot");
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
@@ -223,31 +257,18 @@ namespace GunDecorator
         }
 
         [ServerRpc(RequireOwnership = true)]
-        public void RequestApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
+        public void RequestApplyDamage(GameObject target, int damage, bool isCritical, bool hadCharged)
         {
             ApplyDamage(target, damage, isCritical, hadCharged);
         }
 
-        public void ApplyDamage(NetworkObject target, int damage, bool isCritical, bool hadCharged)
+        public void ApplyDamage(GameObject target, int damage, bool isCritical, bool hadCharged)
         {
             if (target == null) return;
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
-            
-            if (!target.IsSpawned)
-            {
-                Debug.LogWarning("ApplyDamage : target not spawned");
-                return;
-            }
 
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
             Cons.Print("Damage : " + crit);
-
-            /*if (target.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                enemyCore.AddCharge(IsPositivePlayerCharge, damage, Owner.ClientId);
-
-                Cons.Print("Add charge : " + IsPositivePlayerCharge);;
-            }*/
 
             ApplyDamageObservers(damage, isCritical, hadCharged);
             
@@ -258,8 +279,8 @@ namespace GunDecorator
                 entityName = transform.GetRootTransform().gameObject.name,
                 EntityID = ObjectId,
                 weapon = gameObject.name,
-                targetName = target.name,
-                targetID = target.transform.GetRootTransform().GetComponent<NetworkObject>().ObjectId,
+                targetName = target.transform.root.name,
+                targetID = target.transform.root.GetComponent<NetworkObject>().ObjectId,
                 damages = damage,
                 ArenaID = (playerZoneManager != null && playerZoneManager.p_playerZones.ContainsKey(OwnerId)) ? playerZoneManager.p_playerZones[OwnerId] : -1
             });
@@ -280,12 +301,12 @@ namespace GunDecorator
 
         public void TryShootCharged()
         {
-            _chargedModule?.TryShootCharging();
+            _chargedModule?.StartChargedShoot();
         }
 
         public void Disable(bool state)
         {
-            _model.gameObject.SetActive(state);
+            currentModel.gameObject.SetActive(state);
         }
 
         public void SetFireRate(float multiplier)
@@ -318,16 +339,38 @@ namespace GunDecorator
             SoundManager.PlaySound(_soundData, sound, _source);
         }
 
-        [ObserversRpc]
         private void PlayMuzzleFlash()
         {
-            if (p_particleData == null) return;
+            if (IsServerInitialized)
+            {
+                PlayMuzzleFlashObserversRpc();
+            }
+            else
+            {
+                PlayMuzzleFlashServerRpc();
+            }
+        }
 
-            VFXData data = p_particleData.CreateVFX("Shoot");
+        [ServerRpc(RequireOwnership = true)]
+        private void PlayMuzzleFlashServerRpc()
+        {
+            PlayMuzzleFlashObserversRpc();
+        }
+        
+        [ObserversRpc]
+        private void PlayMuzzleFlashObserversRpc()
+        {
+            if (p_particlesMuzzleFlash.Length < 2) 
+                return;
 
-            ParticleSystem particle = Instantiate(data.p_particle, transform);
-            particle.transform.localPosition = data.p_spawnPos;
-            Destroy(particle.gameObject, data.p_timeBeforeDestroy);
+            if (IsPositivePlayerCharge)
+            {
+                p_particlesMuzzleFlash[0].Play();
+            }
+            else
+            {
+                p_particlesMuzzleFlash[1].Play();
+            }
         }
 
         public void StopReload() => _reloadModule.StopReload();
