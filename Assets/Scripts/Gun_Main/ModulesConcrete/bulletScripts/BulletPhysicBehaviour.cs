@@ -79,7 +79,12 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     private void HandleExplosion()
     {
         if (_vfx != null)
-            Destroy(Instantiate(_vfx, transform.position + transform.up, Quaternion.identity), 3f);
+        {
+            Cons.Print("EXPLOSION", ColorConsole.Red);
+            GameObject v = Instantiate(_vfx);
+            v.transform.position = transform.position + transform.up * 0.1f;
+            Destroy(v.gameObject, 3f);
+        }
 
         if (_gunController.IsServerInitialized)
             Explosed(p_explosionRadius, (int)p_damage);
@@ -102,9 +107,6 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 
     public void Explosed(float radius, int damage)
     {
-        if (_vfx != null)
-            Destroy(Instantiate(_vfx, transform.position + Vector3.up, Quaternion.Euler(-90, 0, 0)), 5f);
-
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
         foreach (Collider c in colliders)
