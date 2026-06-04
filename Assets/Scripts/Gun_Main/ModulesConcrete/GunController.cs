@@ -302,6 +302,11 @@ namespace GunDecorator
         public void TryShootCharged()
         {
             _chargedModule?.StartChargedShoot();
+            
+            _animator?.SetTrigger("ChargeShoot");
+                
+            if(_animatorArm)
+                _animatorArm?.SetTrigger("ChargeShoot");
         }
 
         public void Disable(bool state)
