@@ -525,7 +525,7 @@ public class PlayerHealth : NetworkBusListener
 	
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{
-		_playerAnimation.SetDeadAnim(next);
+		_playerAnimation?.SetDeadAnim(next);
 		if (IsOwner)
 		{
 			OnKOPlayer?.Invoke(next, _timeToRespawn);
