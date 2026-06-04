@@ -8,8 +8,7 @@ namespace LD.Scenes
         public static void LoadScene(SceneField[] sceneToLoad)
         {
             if (sceneToLoad.Length == 0) return;
-
-            // On gère le premier élément séparément pour setter la scène active
+            // changement de lighting en mettant la scene active
             AsyncOperation firstOp = SceneManager.LoadSceneAsync(sceneToLoad[0], LoadSceneMode.Additive);
             firstOp.completed += _ =>
             {
@@ -18,7 +17,7 @@ namespace LD.Scenes
                     SceneManager.SetActiveScene(newScene);
             };
 
-            // On charge le reste normalement
+            // loading du reste
             for (int i = 1; i < sceneToLoad.Length; i++)
             {
                 bool isSceneLoaded = false;
