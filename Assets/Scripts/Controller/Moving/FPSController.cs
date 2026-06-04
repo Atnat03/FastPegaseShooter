@@ -907,7 +907,7 @@ public class FPSController : NetworkBusListener
 
     #endregion
 
-        #region WallRidingState
+    #region WallRidingState
 
     enum wallRideSide
     {
@@ -1035,7 +1035,8 @@ public class FPSController : NetworkBusListener
 
     void ExitWallRidingState()
     {
-        cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+        //cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+        wallRidingCoroutineRunning = false;
         StopCoroutine(wallRidingCoroutine);
         cameraBackToDefaultCoroutine = StartCoroutine(CameraRollBackToDefaultCoroutine());
     }
