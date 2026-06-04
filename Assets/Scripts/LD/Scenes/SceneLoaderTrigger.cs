@@ -43,10 +43,13 @@ namespace LD.Scenes
 		{
 			SceneLoadData sld = new SceneLoadData(_sceneToLoad.SceneName);
 			sld.ReplaceScenes = ReplaceOption.All;
-			sld.MovedNetworkObjects = new NetworkObject[]
+
+			NetworkObject[] objs = new NetworkObject[PlayerHealthManager.Instance.RegisteredPlayers.Count + 1];
+			for (int i = 0; i < PlayerHealthManager.Instance.RegisteredPlayers.Count; i++)
 			{
-				
-			};
+				objs[i] = PlayerHealthManager.Instance.RegisteredPlayers[i].NetworkObject;
+			}
+			sld.MovedNetworkObjects = objs;
             
 			InstanceFinder.SceneManager.LoadGlobalScenes(sld);
 		}
