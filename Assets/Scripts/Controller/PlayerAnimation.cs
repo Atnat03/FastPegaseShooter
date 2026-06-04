@@ -63,11 +63,11 @@ public class PlayerAnimation : NetworkBehaviour
 	{
 		if (IsServerInitialized)
 		{
-			_animator.SetTrigger(name);
+			UpdateAnimationBoolClientRpc(name, value);
 		}
 		else
 		{
-			UpdateAnimationBoolClientRpc(name, value);
+			_animator.SetTrigger(name);
 		}
 	}
 
