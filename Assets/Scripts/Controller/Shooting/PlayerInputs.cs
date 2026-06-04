@@ -16,6 +16,7 @@ namespace Controller
         [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private GrenadeThrower _grenadeThrower;
         [SerializeField] private DroneThrower _droneThrower;
+        private FPSController _fps;
         
         private bool _canShoot = true;
         private bool shootingInputPressed;
@@ -26,12 +27,9 @@ namespace Controller
 
         #region Fonctions
 
-        private void Start()
+        private void Awake()
         {
-            ListenToEvent<OnPauseEvent>(data =>
-            {
-                _canShoot = !data.p_isPause;
-            });
+            _fps = GetComponent<FPSController>();
         }
 
         void Update()
@@ -43,12 +41,13 @@ namespace Controller
                 if (!IsOwner) return;
                 if (_playerHealth.IsDead) return;
                 if (!_canShoot) return;
+                if(_fps.IsFreeze) return;
 
                 if (_bridgePlayer != null)
                     _bridgePlayer.TryShootWithCurrentGun();
             }
         }
-
+        
         private void CancelShooting()
         {
             if (!IsOwner) return;
@@ -64,6 +63,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(_fps.IsFreeze) return;
             
             if (_bridgePlayer != null)
             {
@@ -76,6 +76,7 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(!_canShoot) return;
+            if(_fps.IsFreeze) return;
 
             if (_bridgePlayer != null)
             {
@@ -88,6 +89,7 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(!_canShoot) return;
+            if(_fps.IsFreeze) return;
             
             _droneThrower.TryThrowDrone();
         }
@@ -110,6 +112,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(_fps.IsFreeze) return;
 
             InvokeEvent(new OnPlayerInteract());
         }
@@ -118,6 +121,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(_fps.IsFreeze) return;
             
             _bridgePlayer.TryChangeMain(true);
         }
@@ -126,6 +130,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(_fps.IsFreeze) return;
             
             _bridgePlayer.TryChangeMain(false);
         }
@@ -134,6 +139,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(_fps.IsFreeze) return;
 
             float scroll = obj.ReadValue<float>();
             
@@ -151,6 +157,7 @@ namespace Controller
         {
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
+            if(_fps.IsFreeze) return;
             
             AskForDapServerRpc();
         }
