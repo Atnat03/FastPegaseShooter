@@ -923,7 +923,6 @@ public class FPSController : NetworkBusListener
     {
         hasDashed = false; // ligne a retirer si on veut que le joueur doive toucher le sol avant de redasher
 
-        wallRidingCoroutineRunning = true;
         wallRidingHeight = transform.position.y;
         currentHeadTilt = currentRoll;
         if(cameraBackToDefaultCoroutine != null) StopCoroutine(cameraBackToDefaultCoroutine);
@@ -1063,6 +1062,7 @@ public class FPSController : NetworkBusListener
 
     IEnumerator WallRidingDurationCoroutine()
     {
+        wallRidingCoroutineRunning = true;
         yield return new WaitForSeconds(wallRidingDuration);
         wallRidingCoroutineRunning = false;
         fellOffWallrinding = true;
