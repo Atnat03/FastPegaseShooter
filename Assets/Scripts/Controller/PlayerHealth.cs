@@ -448,33 +448,55 @@ public class PlayerHealth : NetworkBusListener
 		NotifyDeathRpc(NetworkObject);
 	}
 
+	
 	[Server]
 	void Respawn()
 	{
-		Debug.Log("Respawn");
-		
 		_respawnTimer.Value = 0;
-		_isDead.Value = false;
-		_currentHealth.Value = _healthBase;
-
-		transform.position = new Vector3(30, 0, -23.5f);
-		
 		_respawnTime = Time.time;
-		
+
+		Vector3 respawnPos = Managers.RespawnPointManager.Instance != null
+			? Managers.RespawnPointManager.Instance.GetRespawnPosition(OwnerId)
+			: new Vector3(30, 0, -23.5f);
+
+		// ✅ D'abord mettre à jour les stats SANS lever _isDead
+		_currentHealth.Value = _healthBase;
+    
+		// ✅ Téléporter
+		TeleportOwnerTargetRpc(Owner, respawnPos);
+    
+		// ✅ Lever _isDead EN DERNIER pour que le NT reprenne depuis la bonne pos
+		_isDead.Value = false;
+    
 		RespawnObserverRpc();
 	}
-	
+
+	[TargetRpc]
+	private void TeleportOwnerTargetRpc(NetworkConnection conn, Vector3 respawnPos)
+	{
+		Debug.Log($"[TeleportRpc] Reçu, pos cible={respawnPos}");
+
+		Rigidbody rb = GetComponent<Rigidbody>();
+    
+		if (rb != null)
+		{
+			rb.linearVelocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;
+			rb.position = respawnPos;        // ✅ Téléporte le rigidbody directement
+			transform.position = respawnPos; // ✅ Sync le transform aussi
+			Debug.Log($"[TeleportRpc] Via RB, rb.position={rb.position}, transform={transform.position}");
+		}
+		else
+		{
+			transform.position = respawnPos;
+		}
+
+		_gunSwitching.IGunMain.TryCancelShooting();
+	}
+
 	[ObserversRpc]
 	private void RespawnObserverRpc()
 	{
-		Debug.Log("RespawnObserverRpc");
-		
-		if (IsOwner)
-		{
-			transform.position = new Vector3(30, 0, -23.5f);
-			_gunSwitching.IGunMain.TryCancelShooting();
-		}
-
 		InvokeEvent(new OnPlayerRespawnEvent { p_playerN = NetworkObject });
 	}
 	

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using Managers;
 using UnityEngine;
 
 public class RespawnManager : NetworkBusListener
@@ -9,14 +10,12 @@ public class RespawnManager : NetworkBusListener
     #region Variables
 
     private readonly HashSet<int> _deadPlayerIds = new HashSet<int>();
-
     private readonly SyncVar<bool> _isGameOver = new SyncVar<bool>(false);
 
     [Header("UI")]
     [SerializeField] private GameObject _playerUIEnd;
 
     #endregion
-
 
     #region Fonctions
 
@@ -31,7 +30,7 @@ public class RespawnManager : NetworkBusListener
         _playerUIEnd.SetActive(false);
         _isGameOver.OnChange += OnGameOverChange;
     }
-    
+
     [Server]
     private void OnPlayerDied(OnPlayerDeathEvent data)
     {
@@ -56,7 +55,7 @@ public class RespawnManager : NetworkBusListener
             _isGameOver.Value = false;
         }
     }
-    
+
     [ObserversRpc]
     private void TriggerGameOverObserversRpc()
     {
@@ -64,7 +63,7 @@ public class RespawnManager : NetworkBusListener
         Cursor.visible = true;
         _playerUIEnd.SetActive(true);
     }
-    
+
     private void OnGameOverChange(bool prev, bool next, bool asServer)
     {
         if (!next)
