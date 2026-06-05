@@ -23,20 +23,20 @@ public class GrapplePoint : MonoBehaviour
     
     void Update()
     {
-        if(p_playerTransform!=null) 
-            _canvas.transform.LookAt(p_playerTransform);
-
+        _canvas.SetActive(p_mustShowCanvas);
         if (p_mustShowCanvas)
         {
-            _canvas.SetActive(true);
-            elapsedTime += Time.deltaTime;
+            //elapsedTime += Time.deltaTime;
+            
+            if(p_playerTransform!=null) 
+                _canvas.transform.LookAt(p_playerTransform);
 
-            if (elapsedTime >= 2)
+            /*if (elapsedTime >= .1 && !p_mustShowCanvas)
             {
                 _canvas.SetActive(false);
                 p_mustShowCanvas = false;
                 elapsedTime = 0;
-            }
+            }*/
         }
     }
     
