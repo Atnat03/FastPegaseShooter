@@ -39,12 +39,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163824980454752737}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0bd92b3b31c0b4e48b174b6bf79ba4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CSVDataExport
-  autoOpenFile: 1
+  autoOpenFile: 0
 --- !u!1 &2439378196780910739
 GameObject:
   m_ObjectHideFlags: 0
@@ -54,6 +54,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7097750493315146274}
+  - component: {fileID: 3424201434278550899}
+  - component: {fileID: 1071327693559591396}
+  - component: {fileID: 5161362696540942404}
   m_Layer: 0
   m_Name: Arene2_BalanceParent
   m_TagString: Untagged
@@ -79,6 +82,130 @@ Transform:
   - {fileID: 7218249177593323403}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3424201434278550899
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2439378196780910739}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 50, y: 20, z: 1}
+  m_Center: {x: 0, y: -5.3, z: 57.5}
+--- !u!114 &1071327693559591396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2439378196780910739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3033b966d29e55441ae76ccf436b19ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerZoneServerToClient
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 5161362696540942404}
+  _networkObjectCache: {fileID: 0}
+  _clientEvents:
+    m_PersistentCalls:
+      m_Calls: []
+  _serverEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7435662848663130165}
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4776918070559633880}
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _activateOnce: 1
+--- !u!114 &5161362696540942404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2439378196780910739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+  <IsNested>k__BackingField: 0
+  WasActiveDuringEdit: 0
+  WasActiveDuringEdit_Set1: 1
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  <PredictedOwner>k__BackingField: {fileID: 0}
+  NetworkBehaviours:
+  - {fileID: 0}
+  - {fileID: 7435662848663130165}
+  - {fileID: 4776918070559633880}
+  InitializedParentNetworkBehaviour: {fileID: 0}
+  InitializedNestedNetworkObjects: []
+  RuntimeParentNetworkBehaviour: {fileID: 0}
+  RuntimeChildNetworkBehaviours: []
+  _isNetworked: 1
+  _isSpawnable: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _preventDespawnOnDisconnect: 0
+  _defaultDespawnType: 0
+  _initializedTimestamp: -8584209219067887519
+  NetworkObserver: {fileID: 0}
+  _enablePrediction: 0
+  _predictionType: 0
+  _localReconcileCorrectionType: 2
+  _graphicalObject: {fileID: 0}
+  _detachGraphicalObject: 0
+  _enableStateForwarding: 1
+  _networkTransform: {fileID: 0}
+  _ownerInterpolation: 1
+  _ownerSmoothedProperties: 255
+  _adaptiveInterpolation: 3
+  _spectatorSmoothedProperties: 255
+  _spectatorInterpolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  <PrefabId>k__BackingField: 6
+  <SpawnableCollectionId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 6495268031670109363
+  SceneId: 0
+  SerializedTransformProperties:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    Scale: {x: 1, y: 1, z: 1}
+    IsValid: 1
 --- !u!1001 &2751578772259004579
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229,12 +356,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1729803781805421488, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+    - {fileID: 8837983242953784692, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+    - {fileID: 4400878467749057927, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+    - {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6143355840616620817, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2276005674624102555, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
-      insertIndex: 3
+      insertIndex: -1
       addedObject: {fileID: 7435662848663130165}
   m_SourcePrefab: {fileID: 100100000, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
 --- !u!4 &44462344502493617 stripped
@@ -279,9 +409,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubArena
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 4987059843056240130}
-  _networkObjectCache: {fileID: 0}
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 5161362696540942404}
+  _networkObjectCache: {fileID: 5161362696540942404}
   _zoneActivated: 0
   _spawnPoints:
   - {fileID: 4751416970993019182}
@@ -329,17 +459,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7484981339508033933, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
   m_PrefabInstance: {fileID: 2751578772259004579}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4987059843056240130 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7141032054849496737, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
-  m_PrefabInstance: {fileID: 2751578772259004579}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4159757373423931448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
 --- !u!4 &5098918443207379288 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6984358579416377851, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
@@ -564,6 +683,7 @@ PrefabInstance:
     - {fileID: 4070920540654852810, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     - {fileID: 8442919097825990346, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     - {fileID: 2845018961135553267, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+    - {fileID: 5626854157473161853, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     m_RemovedGameObjects:
     - {fileID: 8403741077371464184, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
     - {fileID: 2426734625193879238, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
@@ -573,7 +693,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2189633458858471923, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
-      insertIndex: 3
+      insertIndex: -1
       addedObject: {fileID: 4776918070559633880}
   m_SourcePrefab: {fileID: 100100000, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
 --- !u!4 &13661016653847116 stripped
@@ -591,17 +711,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5697366080667569796, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
   m_PrefabInstance: {fileID: 7898315105421368702}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2561116310262005507 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5626854157473161853, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
-  m_PrefabInstance: {fileID: 7898315105421368702}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8358495891160542349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
 --- !u!4 &2827734080656441701 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5377951717058223131, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
@@ -639,9 +748,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubArena
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 2561116310262005507}
-  _networkObjectCache: {fileID: 0}
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 5161362696540942404}
+  _networkObjectCache: {fileID: 5161362696540942404}
   _zoneActivated: 0
   _spawnPoints:
   - {fileID: 3839543792601305156}

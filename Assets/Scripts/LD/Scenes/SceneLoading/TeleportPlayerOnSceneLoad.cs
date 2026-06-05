@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using CustomConsole.Runtime.Logger;
+using FishNet;
 using UnityEngine;
 
-public class TYeleportPlayerOnSceneLoad : MonoBusListener
+public class TeleportPlayerOnSceneLoad : MonoBusListener
 {
     [SerializeField] private List<Transform> _spawnPositions = new List<Transform>();
     private void Start()

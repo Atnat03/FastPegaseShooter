@@ -1,3 +1,4 @@
+using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class TriggerZoneServerToClient : NetworkBehaviour
         
         if (other.CompareTag("Player"))
         {
+            CustomLogger.HighlightLog($"[SubArena]Trigger on server={InstanceFinder.IsServerStarted} client={InstanceFinder.IsClientStarted}");
             _activated = true;
             _serverEvents?.Invoke();
             TriggerActionObserverRpc();
