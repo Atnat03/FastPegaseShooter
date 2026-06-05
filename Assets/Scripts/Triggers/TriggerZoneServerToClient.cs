@@ -5,7 +5,8 @@ using UnityEngine.Events;
 
 public class TriggerZoneServerToClient : NetworkBehaviour
 {
-    [SerializeField] private UnityEvent _events;
+    [SerializeField] private UnityEvent _clientEvents;
+    [SerializeField] private UnityEvent _serverEvents;
     [SerializeField] private bool _activateOnce = true;
 
     private bool _activated;
@@ -17,6 +18,7 @@ public class TriggerZoneServerToClient : NetworkBehaviour
         if (other.CompareTag("Player"))
         {
             _activated = true;
+            _serverEvents?.Invoke();
             TriggerActionObserverRpc();
         }
     }
@@ -24,6 +26,6 @@ public class TriggerZoneServerToClient : NetworkBehaviour
     [ObserversRpc]
     void TriggerActionObserverRpc()
     {
-        _events?.Invoke();
+        _clientEvents?.Invoke();
     }
 }

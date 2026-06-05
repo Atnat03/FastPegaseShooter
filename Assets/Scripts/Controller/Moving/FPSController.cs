@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine.PlayerLoop;
 
 public class FPSController : NetworkBusListener
 {
