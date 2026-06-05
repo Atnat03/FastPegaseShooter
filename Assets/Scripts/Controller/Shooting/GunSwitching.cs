@@ -253,6 +253,7 @@ public class GunSwitching : NetworkBusListener
 		
 	}
 	
+	
 	private void OnDisable()
 	{
 		_throwerDrone.OnThrowing -= DesactivateGunWhenThrow;
