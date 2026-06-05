@@ -47,8 +47,7 @@ public class SettingsPausePanelBehaviour : PausePanel
         // load des playerprefs
         
         //resolution
-        if (PlayerPrefs.HasKey("ResolutionIndex")) _resolutionDropdown.value = PlayerPrefs.GetInt("ResolutionIndex", 0);
-        else _resolutionDropdown.value = _resolutionDropdown.options.Count - 1;
+        _resolutionDropdown.value = PlayerPrefs.GetInt("ResolutionIndex", _resolutionDropdown.options.Count - 1);
         _resolutionDropdown.RefreshShownValue();
 
         //fullscreen ?

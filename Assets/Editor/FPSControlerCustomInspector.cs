@@ -44,6 +44,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playerInput"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerVisual"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerAnimation"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerFPS"));
         }, ref showParameters);
 
         DrawSection("Parameters", new Color(0.8f, 0.9f, 1f), () =>
@@ -129,6 +130,7 @@ public class FPSControlerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpVerticalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpHorizontalForce"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltIntensity"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallJumpCoyoteDuration"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("headtiltSpeed"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wallRideForwardTolerenceAngle"));
