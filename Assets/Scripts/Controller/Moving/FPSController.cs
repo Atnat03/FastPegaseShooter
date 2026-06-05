@@ -34,6 +34,7 @@ public class FPSController : NetworkBusListener
     [SerializeField] private GameObject _playerVisual;
     [SerializeField] private GameObject _playerFPS;
     [SerializeField] public PlayerAnimation _playerAnimation;
+    [SerializeField] public LineRenderer grappleLineRenderer;
 
     [Header("parameters")] [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")] [SerializeField]
     private bool landSnap = true;
@@ -63,6 +64,9 @@ public class FPSController : NetworkBusListener
     
     [Tooltip("est ce que le player doit regarder dans la direction du wallride pour le commencer (sinon on peut commencer un wallride a l'envers)")]
     [SerializeField] private bool forwardWalllrideBeginning = true; 
+    
+    [Tooltip("est ce qu'on doit attendre que le lasso ai atteind sa cible avant de commencer a bouger")]
+    [SerializeField] private bool mustWaitLineReachGrapplePoint = true;
         
 
     [Header("UnlockedCapacities")] public bool wallRideUnlocked = true;
@@ -175,6 +179,7 @@ public class FPSController : NetworkBusListener
      private float _grapplingSpeed = 15;
     [SerializeField] float _grappleRedirectionSpeed = 8f;
      private float _endGrappleImpulseForce = 3f;
+     [SerializeField] private float grappleLineTravelTime = .2f;
 
     #endregion
 
@@ -186,6 +191,25 @@ public class FPSController : NetworkBusListener
     private float _cameraDefaultFOV;
 
     private bool Grounded() =>(Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, 0.25f, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore) && !justJumped);
+
+    private bool CanGrapple(out RaycastHit grappleHit)
+    {
+        grappleHit = new RaycastHit();
+        RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
+            _castWidth, cameraParentTransform.forward,
+            _castMaxDistance,
+            LayerMask.GetMask("Default"),
+            QueryTriggerInteraction.Collide);
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.GetComponent<GrapplePoint>() != null)
+            {
+                grappleHit = hit;
+                return true;
+            }
+        }
+        return false;
+    } 
     [HideInInspector] public bool leftSideAgainstWall;
     [HideInInspector] public bool rightSideAgainstWall;
     RaycastHit leftSideHit;
@@ -375,6 +399,8 @@ public class FPSController : NetworkBusListener
         height = Vector3.Distance(capsuleTop, playerFeet.position);
         point1 = playerFeet.position + height * Vector3.up - Vector3.up * bodyRadius;
         point2 = playerFeet.position + Vector3.up * bodyRadius;
+        
+        grappleLineRenderer?.gameObject.SetActive(false);
     }
 
 
@@ -463,14 +489,12 @@ public class FPSController : NetworkBusListener
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
     }
 
+    
     private GrapplePoint currentLookedGrapplePoint;
-
     void UpdateLdInteractions() // appelé en update dans tout les states
     {
         // grapplepoints 
-        if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, Mathf.Infinity,  LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide))
+        if (CanGrapple(out RaycastHit hit))
         {
             currentLookedGrapplePoint = hit.collider.GetComponent<GrapplePoint>();
             if (currentLookedGrapplePoint != null)
@@ -577,18 +601,10 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
-                _castWidth, cameraParentTransform.forward,
-                _castMaxDistance,
-                LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide);
-            foreach (RaycastHit hit in hits)
+            if (CanGrapple(out RaycastHit hit))
             {
-                if (hit.collider.GetComponent<GrapplePoint>() != null)
-                {
-                    _currentGrapplePoint = hit.collider.transform;
-                    stateMachine.ChangeState(ControlerState.Grappling);
-                }
+                _currentGrapplePoint = hit.collider.transform;
+                stateMachine.ChangeState(ControlerState.Grappling);
             }
         }
     }
@@ -680,20 +696,11 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
-                _castWidth, cameraParentTransform.forward,
-                _castMaxDistance,
-                LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide);
-            foreach (RaycastHit hit in hits)
+            if (CanGrapple(out RaycastHit hit))
             {
-                if (hit.collider.GetComponent<GrapplePoint>() != null)
-                {
-                    _currentGrapplePoint = hit.collider.transform;
-                    stateMachine.ChangeState(ControlerState.Grappling);
-                }
+                _currentGrapplePoint = hit.collider.transform;
+                stateMachine.ChangeState(ControlerState.Grappling);
             }
-
         }
     }
 
@@ -796,20 +803,11 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
-                _castWidth, cameraParentTransform.forward,
-                _castMaxDistance,
-                LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide);
-            foreach (RaycastHit hit in hits)
+            if (CanGrapple(out RaycastHit hit))
             {
-                if (hit.collider.GetComponent<GrapplePoint>() != null)
-                {
-                    _currentGrapplePoint = hit.collider.transform;
-                    stateMachine.ChangeState(ControlerState.Grappling);
-                }
+                _currentGrapplePoint = hit.collider.transform;
+                stateMachine.ChangeState(ControlerState.Grappling);
             }
-
         }
     }
 
@@ -1550,6 +1548,7 @@ public class FPSController : NetworkBusListener
     Vector3 grappleDirection;
     Vector3 grappleStartingDistance;
     private float grappleTimer;
+    private bool lineReachedTarget;
 
     void EnterGrappleState()
     {
@@ -1570,7 +1569,7 @@ public class FPSController : NetworkBusListener
                 grappleDirection = _currentGrapplePoint.position - transform.position;
                 grappleStartingDistance = grappleDirection;
                 grappleDirection.Normalize();
-                
+                StartCoroutine(SendGrappleLine());
                 OnGrappling?.Invoke();
                 
                 return;
@@ -1590,7 +1589,7 @@ public class FPSController : NetworkBusListener
         
         bool isFarEnough = distance > 0.75f;
         bool inputValid = playerInput.actions["Grapple"].IsPressed() || singleClicGrapple;
-        bool isStuck = distance < grappleStartingDistance.magnitude && rb.linearVelocity.magnitude < 0.05f;
+        bool isStuck = distance < grappleStartingDistance.magnitude && rb.linearVelocity.magnitude < 0.05f && lineReachedTarget;
 
         if ((!isFarEnough || !inputValid || isStuck) && !ignoreStartCheck)
         {
@@ -1612,6 +1611,7 @@ public class FPSController : NetworkBusListener
 
     void GrappleFixedUpdate()
     {
+        if (!lineReachedTarget && mustWaitLineReachGrapplePoint) return;
         grappleDirection = (_currentGrapplePoint.position - transform.position).normalized;
 
         Vector3 newDir = grappleDirection;
@@ -1628,11 +1628,28 @@ public class FPSController : NetworkBusListener
 
     void ExitGrappleState()
     {
+        grappleLineRenderer.gameObject.SetActive(false);
     }
 
     void GrappleLateUpdate()
     {
         UpdateCameraPositionAndRotation();
+    }
+
+    IEnumerator SendGrappleLine()
+    {
+        float elapsedTime = 0f;
+        lineReachedTarget = false;
+        grappleLineRenderer?.gameObject.SetActive(true);
+        if(grappleLineRenderer)grappleLineRenderer.positionCount = 2;
+        while (elapsedTime < grappleLineTravelTime)//mettre une variable de travel time
+        {
+            grappleLineRenderer?.SetPosition(0, grappleLineRenderer.transform.position);
+            grappleLineRenderer?.SetPosition(1, Vector3.Lerp(grappleLineRenderer.transform.position, _currentGrapplePoint.position , elapsedTime / grappleLineTravelTime));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        lineReachedTarget = true;
     }
 
     #endregion
