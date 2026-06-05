@@ -188,6 +188,25 @@ public class FPSController : NetworkBusListener
     private float _cameraDefaultFOV;
 
     private bool Grounded() =>(Physics.Raycast(playerFeet.position, Vector3.down, out groundedHit, 0.25f, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore) && !justJumped);
+
+    private bool CanGrapple(out RaycastHit grappleHit)
+    {
+        grappleHit = new RaycastHit();
+        RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
+            _castWidth, cameraParentTransform.forward,
+            _castMaxDistance,
+            LayerMask.GetMask("Default"),
+            QueryTriggerInteraction.Collide);
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.GetComponent<GrapplePoint>() != null)
+            {
+                grappleHit = hit;
+                return true;
+            }
+        }
+        return false;
+    } 
     [HideInInspector] public bool leftSideAgainstWall;
     [HideInInspector] public bool rightSideAgainstWall;
     RaycastHit leftSideHit;
@@ -465,14 +484,12 @@ public class FPSController : NetworkBusListener
         horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
     }
 
+    
     private GrapplePoint currentLookedGrapplePoint;
-
     void UpdateLdInteractions() // appelé en update dans tout les states
     {
         // grapplepoints 
-        if (Physics.SphereCast(cameraParentTransform.position, _castWidth, cameraParentTransform.forward,
-                out RaycastHit hit, Mathf.Infinity,  LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide))
+        if (CanGrapple(out RaycastHit hit))
         {
             currentLookedGrapplePoint = hit.collider.GetComponent<GrapplePoint>();
             if (currentLookedGrapplePoint != null)
@@ -579,18 +596,10 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
-                _castWidth, cameraParentTransform.forward,
-                _castMaxDistance,
-                LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide);
-            foreach (RaycastHit hit in hits)
+            if (CanGrapple(out RaycastHit hit))
             {
-                if (hit.collider.GetComponent<GrapplePoint>() != null)
-                {
-                    _currentGrapplePoint = hit.collider.transform;
-                    stateMachine.ChangeState(ControlerState.Grappling);
-                }
+                _currentGrapplePoint = hit.collider.transform;
+                stateMachine.ChangeState(ControlerState.Grappling);
             }
         }
     }
@@ -682,20 +691,11 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
-                _castWidth, cameraParentTransform.forward,
-                _castMaxDistance,
-                LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide);
-            foreach (RaycastHit hit in hits)
+            if (CanGrapple(out RaycastHit hit))
             {
-                if (hit.collider.GetComponent<GrapplePoint>() != null)
-                {
-                    _currentGrapplePoint = hit.collider.transform;
-                    stateMachine.ChangeState(ControlerState.Grappling);
-                }
+                _currentGrapplePoint = hit.collider.transform;
+                stateMachine.ChangeState(ControlerState.Grappling);
             }
-
         }
     }
 
@@ -798,20 +798,11 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
-                _castWidth, cameraParentTransform.forward,
-                _castMaxDistance,
-                LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide);
-            foreach (RaycastHit hit in hits)
+            if (CanGrapple(out RaycastHit hit))
             {
-                if (hit.collider.GetComponent<GrapplePoint>() != null)
-                {
-                    _currentGrapplePoint = hit.collider.transform;
-                    stateMachine.ChangeState(ControlerState.Grappling);
-                }
+                _currentGrapplePoint = hit.collider.transform;
+                stateMachine.ChangeState(ControlerState.Grappling);
             }
-
         }
     }
 
