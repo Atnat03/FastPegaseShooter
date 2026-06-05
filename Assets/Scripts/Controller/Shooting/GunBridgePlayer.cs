@@ -27,15 +27,6 @@ namespace Controller
         public bool p_unlockSwapEnergyLaser = true;
         public bool p_unlockChargedShoot = true;
         
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-            {
-                if(!IsOwner)
-                    SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
-            }
-        }
-
         public void InitializeWithGunId(int gunId)
         {
             _gunSwitching.Initialize(gunId);

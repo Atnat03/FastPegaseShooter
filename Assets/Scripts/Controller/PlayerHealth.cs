@@ -197,12 +197,6 @@ public class PlayerHealth : NetworkBusListener
 		
 		if(!p_unlockCapa)return;
 
-		if (!_playerEnergy.CanThrow(_playerEnergy.p_costThrowHeal))
-		{
-			CustomLogger.ImportantLog($"Energy amount : {_playerEnergy.CurrentEnergy}");
-			return;
-		}
-
 		InvokeEvent(new OnHealUsed_TUTO());
 		
 		InvokeEvent(new OnUseCapacity
@@ -229,12 +223,6 @@ public class PlayerHealth : NetworkBusListener
 			p_delay = 0,
 			p_playerId = OwnerId,
 			p_value = _healAmount
-		});
-		
-		InvokeEvent(new ConsumeEnergyEvent()
-		{
-			p_player = Owner,
-			p_value = -(_playerEnergy.p_costThrowHeal * _playerEnergy.EnergyOneBar),
 		});
 	}
 	void HealKeyCanceled(InputAction.CallbackContext ctx)
@@ -525,7 +513,7 @@ public class PlayerHealth : NetworkBusListener
 	
 	private void OnDeadChange(bool prev, bool next, bool asServer)
 	{
-		_playerAnimation.SetDeadAnim(next);
+		_playerAnimation?.SetDeadAnim(next);
 		if (IsOwner)
 		{
 			OnKOPlayer?.Invoke(next, _timeToRespawn);

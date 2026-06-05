@@ -76,6 +76,7 @@ namespace GunDecorator
         
         [SerializeField, Tooltip("Animation du bras")]
         public Animator _animatorArm;
+        public Animator _animatorBall;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
         public ParticleSystem[] p_particlesMuzzleFlash;
@@ -93,6 +94,8 @@ namespace GunDecorator
         private readonly SyncVar<bool> _isPositivePlayerCharge = new SyncVar<bool>(false);
 
         [HideInInspector] public bool p_authorizedToShoot = true;
+        
+        PlayerAnimation _playerAnimation;
 
         //Action
 
@@ -143,6 +146,8 @@ namespace GunDecorator
                     }
                 }
             }
+            
+            _playerAnimation = transform.root.GetComponentInChildren<PlayerAnimation>();
         }
 
         public override void OnStartClient()
@@ -227,6 +232,8 @@ namespace GunDecorator
                 if(_animatorArm)
                     _animatorArm?.SetTrigger("Shoot");
 
+                _playerAnimation.SetShootAnim();
+                
                 yield return new WaitForSeconds(s.FireRate);
 
                 p_authorizedToShoot = true;
@@ -302,6 +309,13 @@ namespace GunDecorator
         public void TryShootCharged()
         {
             _chargedModule?.StartChargedShoot();
+            
+            _animator?.SetTrigger("ChargeShoot");
+                
+            if(_animatorArm)
+                _animatorArm?.SetTrigger("ChargeShoot");
+            
+            _playerAnimation.SetShootAnim();
         }
 
         public void Disable(bool state)
