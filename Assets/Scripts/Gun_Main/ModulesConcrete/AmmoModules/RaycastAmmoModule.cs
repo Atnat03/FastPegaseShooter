@@ -98,9 +98,6 @@ namespace GunDecorator.AmmoModules
                 targetPoint = cameraRay.GetPoint(_maxDistance);
             }
             
-            Debug.Log($"Client SpawnPoint: {_spawnPoint.position}");
-            
-            
             bulletDirection = spreadDirection.normalized;
             travelTime = Vector3.Distance(_finalSpawnPoint, targetPoint) / _BulletSpeed;
 
