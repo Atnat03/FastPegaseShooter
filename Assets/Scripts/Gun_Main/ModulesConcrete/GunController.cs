@@ -76,6 +76,7 @@ namespace GunDecorator
         
         [SerializeField, Tooltip("Animation du bras")]
         public Animator _animatorArm;
+        public Animator _animatorBall;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
         public ParticleSystem[] p_particlesMuzzleFlash;

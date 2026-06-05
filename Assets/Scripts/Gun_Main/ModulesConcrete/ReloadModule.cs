@@ -66,6 +66,9 @@ namespace GunDecorator
                 if(_gunController?._animatorArm)
                     _gunController?._animatorArm.ResetTrigger("Reload");
                 
+                if(_gunController?._animatorBall)
+                    _gunController?._animatorBall.ResetTrigger("Reload");
+                
                 _gunController?.OnEndReload?.Invoke();
             }
         }
@@ -87,6 +90,8 @@ namespace GunDecorator
             _gunController?._animator?.SetTrigger("Reload");
             if (_gunController?._animatorArm)
                 _gunController._animatorArm.SetTrigger("Reload");
+            if (_gunController?._animatorBall)
+                _gunController._animatorBall.SetTrigger("Reload");
 
             yield return new WaitForSeconds(reloadDuration);
 
