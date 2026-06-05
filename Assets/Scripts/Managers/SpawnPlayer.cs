@@ -58,7 +58,7 @@ public class SpawnPlayer : NetworkBehaviour
     [Server]
     private void SpawnPlayers(NetworkConnection player)
     {
-        Scene targetScene = UnityEngine.SceneManagement.SceneManager.GetSceneByName("PersistentObjects");
+        Scene targetScene = UnityEngine.SceneManagement.SceneManager.GetSceneByName("Permanent");
 
         NetworkObject playerObj = Instantiate(_playerPrefab);
 
