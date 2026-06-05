@@ -25,7 +25,6 @@ public class NormalEnemyBullet : EnemyBullet
                 p_value = p_bulletDamage,
                 p_attacker = p_attackModule.gameObject.GetComponentInParent<NetworkObject>()
             });
-            Debug.Log(p_attackModule.gameObject.GetComponentInParent<NetworkObject>());
             p_attackModule.p_onHitPlayer?.Invoke(PVB.NetworkObject.ObjectId, p_bulletDamage);
         }
     }
