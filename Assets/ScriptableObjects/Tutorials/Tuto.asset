@@ -43,6 +43,24 @@ MonoBehaviour:
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076671141347519
+  - ScenarioName: Mob Deads
+    trigger:
+      rid: 5406076695212458146
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076695212458154
+    - rid: 5406076695212458155
+  - ScenarioName: Seperation Start
+    trigger:
+      rid: 5406076695212458147
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076695212458148
+    - rid: 5406076695212458149
+    - rid: 5406076695212458150
+    - rid: 5406076695212458151
+    - rid: 5406076695212458152
+    - rid: 5406076695212458153
   references:
     version: 2
     RefIds:
@@ -50,11 +68,11 @@ MonoBehaviour:
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         proxyIndex: 1
-        mode: 3
+        mode: 0
     - rid: 5406076671141347504
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _durationToWait: 1
+        _durationToWait: 2
     - rid: 5406076671141347505
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -112,5 +130,66 @@ MonoBehaviour:
     - rid: 5406076671141347519
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
-        actionToDo: 1
-        doorIndex: 2
+        actionToDo: 0
+        doorIndex: 3
+    - rid: 5406076695212458146
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: -10
+        mode: 0
+    - rid: 5406076695212458147
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 5
+        mode: 0
+    - rid: 5406076695212458148
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: "[Dialogue s\xE9paration]"
+        _keyVoceline: test
+        _duration: 3
+        speaker: 2
+    - rid: 5406076695212458149
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Heal]'
+        _keyVoceline: test
+        _duration: 2
+        speaker: 2
+    - rid: 5406076695212458150
+      type: {class: Event_TakeDamage, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        damage: 50
+    - rid: 5406076695212458151
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076695212458152
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: "[R\xE9action d\xE9g\xE2ts]"
+        _keyVoceline: test
+        _duration: 1
+        speaker: 0
+    - rid: 5406076695212458153
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Healez-vous]'
+        _keyVoceline: test
+        _duration: 2
+        speaker: 2
+    - rid: 5406076695212458154
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Energy]'
+        _keyVoceline: test
+        _duration: 3
+        speaker: 2
+    - rid: 5406076695212458155
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Change your firemode (wheel) and chanel your energy to
+          your mate.
+        target: 0
+        disableAction: 2
+        duration: 0
