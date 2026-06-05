@@ -14,7 +14,6 @@ namespace Controller
         [SerializeField] private PlayerInput _playerInputAction;
         [SerializeField] private GunBridgePlayer _bridgePlayer;
         [SerializeField] private PlayerHealth _playerHealth;
-        [SerializeField] private GrenadeThrower _grenadeThrower;
         [SerializeField] private DroneThrower _droneThrower;
         private FPSController _fps;
         
@@ -44,7 +43,9 @@ namespace Controller
                 if(_fps.IsFreeze) return;
 
                 if (_bridgePlayer != null)
+                {
                     _bridgePlayer.TryShootWithCurrentGun();
+                }
             }
         }
         
