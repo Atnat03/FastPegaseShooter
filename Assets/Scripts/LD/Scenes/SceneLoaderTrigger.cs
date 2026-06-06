@@ -15,25 +15,14 @@ namespace LD.Scenes
         [SerializeField] private SceneField[] _sceneToUnload;
         private int playerCount = 0;
         private List<PlayerVisuelBridge> alreadyCountedPlayers = new List<PlayerVisuelBridge>();
+        [SerializeField] bool need2Players = false;
 
         #endregion
 
 
         #region Fonctions
-
-        void Start()
-        {
-            ListenToEvent<OnDapEvent>(OpenDoor);
-        }
-
-        void OpenDoor(OnDapEvent evt)
-        {
-            if (!_door) return;
-            if (_door.GetComponent<Animation>()) _door.GetComponent<Animation>().Play();
-            else _door.SetActive(false);
-        }
-
-
+        
+        
         private void OnTriggerEnter(Collider other)
         {
             if (other.TryGetComponent(out PlayerVisuelBridge player))
@@ -42,9 +31,10 @@ namespace LD.Scenes
                 {
                     playerCount++;
                     alreadyCountedPlayers.Add(player);
-                    if (playerCount >= 2)
+                    if (playerCount >= 2 || !need2Players)
                     {
                         InvokeEvent(new OnSceneLoadTrigger());
+                        _door.SetActive(!_door.activeSelf);
                         SceneManaging.LoadScene(_sceneToLoad);
                         SceneManaging.UnloadScene(_sceneToUnload);
                     }
