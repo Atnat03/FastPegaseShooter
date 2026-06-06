@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine.PlayerLoop;
 
 public class FPSController : NetworkBusListener
@@ -249,6 +249,10 @@ public class FPSController : NetworkBusListener
 
     public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
 
+    private float animMoveH;
+    private float animMoveV;
+    private float animationSmoothSpeed = 8f;
+    
     #endregion
 
     #region Actions
@@ -415,10 +419,13 @@ public class FPSController : NetworkBusListener
         if (isDead.Value) return;
         //if (IsFreeze) return;
         
-        if (!IsFreeze)UpdateInputs();
-        UpdateGameContext();
+        if (!IsFreeze)
+            UpdateInputs();
         
+        UpdateGameContext();
         UpdateLdInteractions();
+        UpdateAnimationValues();
+        
         if (!IsFreeze)stateMachine?.Update();
     }
 
@@ -517,6 +524,18 @@ public class FPSController : NetworkBusListener
             currentLookedGrapplePoint = null;
         }
     }
+    
+    void UpdateAnimationValues()
+    {
+        float targetH = horizontalInput;
+        float targetV = verticalInput;
+
+        animMoveH = Mathf.Lerp(animMoveH, targetH, animationSmoothSpeed * Time.deltaTime);
+        animMoveV = Mathf.Lerp(animMoveV, targetV, animationSmoothSpeed * Time.deltaTime);
+
+        _playerAnimation.SetMovingHAnim(animMoveH);
+        _playerAnimation.SetMovingVAnim(animMoveV);
+    }
 
     #endregion
 
@@ -550,11 +569,7 @@ public class FPSController : NetworkBusListener
         }
         
         else if(stateMachine.previousState == stateMachine.GetState(ControlerState.Dashing) && Grounded()) rb.linearVelocity = Vector3.zero;
-
-
-        _playerAnimation.SetMovingAnim(false);
-        _playerAnimation.SetMovingBackwardAnim(false);
-
+        
         if (Grounded())
         {
             fellOffWallrinding = false;
@@ -650,14 +665,7 @@ public class FPSController : NetworkBusListener
     #region MovingState
 
     void OnEnterMovingState()
-    {
-        if(verticalInput >= 0.1)
-            _playerAnimation.SetMovingAnim(true);
-        else if (verticalInput <= -0.1)
-        {
-            _playerAnimation.SetMovingBackwardAnim(true);
-        }
-    }
+    { }
 
     void MovingUpdate()
     {
@@ -740,7 +748,7 @@ public class FPSController : NetworkBusListener
     void EnterFallingState()
     {
         _playerAnimation.ChangeAirState(false);
-
+        
         if (!hasJumped)
             StartCoroutine(CoyoteTimeCoroutine());
     }
@@ -879,14 +887,10 @@ public class FPSController : NetworkBusListener
 
     void ExitFallingState()
     {
-        /* _playerAnimation.SetFallingAnim(false);
-         _playerAnimation.SetGroundedAnim(true);*/
-
         _playerAnimation.ChangeAirState(true);
 
         hasJumped = false;
         mustHeadTilt = false;
-        _playerAnimation.SetFallingAnim(false);
         
         OnLanding?.Invoke();
         
@@ -1825,11 +1829,10 @@ public class FPSController : NetworkBusListener
 
     IEnumerator JumpAntiLagCoroutine()
     {
-        _playerAnimation.SetJumpAnim(true);
+        _playerAnimation.SetJumpAnim();
         justJumped = true;
         yield return new WaitForSeconds(.1f);
         justJumped = false;
-        _playerAnimation.SetJumpAnim(false);
     }
 
     IEnumerator SuperJumpCoroutine()
@@ -1855,6 +1858,8 @@ public class FPSController : NetworkBusListener
 
         if (enoughtEnegyToDoubleJump)
         {
+            _playerAnimation.SetDoubleJumpAnim();
+            
             currentAirJumpCount =
                 Mathf.Min(currentAirJumpCount++,
                     airJumpCount);
