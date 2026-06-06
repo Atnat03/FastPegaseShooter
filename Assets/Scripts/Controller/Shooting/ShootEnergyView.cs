@@ -59,7 +59,7 @@ public class ShootEnergyView : MonoBehaviour
 
 		if (isActive)
 		{
-			_targetLaserPos = endPos + Vector3.up;
+			_targetLaserPos = endPos; // + Vector3.up;
 		}
 	}
 

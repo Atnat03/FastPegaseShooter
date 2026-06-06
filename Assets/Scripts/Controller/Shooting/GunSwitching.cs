@@ -186,7 +186,8 @@ public class GunSwitching : NetworkBusListener
 	[ServerRpc]
 	public void ChangeGunServerRpc(bool isMain)
 	{
-		StartCoroutine(DelaySwitch(isMain));
+		SetGunModeObserversRpc(isMain);
+		//StartCoroutine(DelaySwitch(isMain));
 	}
 
 	IEnumerator DelaySwitch(bool isMain)
