@@ -140,6 +140,17 @@ public class PlayerHealth : NetworkBusListener
 		{
 			_startPos = transform.position;
 			ListenToEvent<OnShortCircuitDamage>(ApplyShortCircuitDamage);
+			
+			ListenToEvent<OnPlayerSpawnTPEvent>((OPSTE) =>
+			{
+				if(!IsOwner) return;
+				
+				Rigidbody rb = GetComponent<Rigidbody>();
+				rb.linearVelocity = Vector3.zero;
+				rb.angularVelocity = Vector3.zero;
+				rb.position = OwnerId == 0 ? OPSTE.p_spawnPositions[0] : OPSTE.p_spawnPositions[1];
+				transform.position = OwnerId == 0 ? OPSTE.p_spawnPositions[0] : OPSTE.p_spawnPositions[1];
+			});
 		}
 
 		PlayerHealthManager.Instance?.Register(this);

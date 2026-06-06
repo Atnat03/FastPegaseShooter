@@ -1,4 +1,6 @@
 using System;
+using CustomConsole.Runtime.Logger;
+using FishNet;
 using UnityEngine;
 using UnityEngine.Events;
 
