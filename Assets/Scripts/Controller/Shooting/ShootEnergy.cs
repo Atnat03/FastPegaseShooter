@@ -132,10 +132,10 @@ public class ShootEnergy : NetworkBusListener
 		if (!IsOwner) return;
 		
 		_target = GetTarget();
-
+		
 		if (_target)
 		{
-			Vector3 screenPos = _camera.WorldToScreenPoint(_target.position + Vector3.up);
+			Vector3 screenPos = _camera.WorldToScreenPoint(_target.position);
 			
 			if (!_isAiming.Value)
 			{

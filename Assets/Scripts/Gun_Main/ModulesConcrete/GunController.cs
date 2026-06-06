@@ -62,9 +62,6 @@ namespace GunDecorator
         [SerializeField, Tooltip("Model 3d de l'arme")]
         private Transform currentModel;
 
-        [SerializeField, Tooltip("Model 3d de l'arme suivant la charge")]
-        private Transform[] _modelsList;
-
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
 
@@ -152,17 +149,7 @@ namespace GunDecorator
 
         public override void OnStartClient()
         {
-            if(_modelsList.Length <2)
-                return;
-            
-            foreach (Transform t in _modelsList)
-            {
-                t.gameObject.SetActive(false);
-            }
-            
-            _modelsList[LocalConnection.ClientId].gameObject.SetActive(true);
-
-            if (_modelsList[LocalConnection.ClientId].TryGetComponent(out Animator animator))
+            if (currentModel.TryGetComponent(out Animator animator))
                 _animator = animator;
         }
 
