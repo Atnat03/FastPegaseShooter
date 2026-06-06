@@ -42,8 +42,6 @@ namespace GunDecorator.ChargedModules
             });
                 
             StartCoroutine(ShootSalve(_numberBulletInCharge));
-            
-            ResetCharging();
         }
 
         IEnumerator ShootSalve(int numberBullet)
@@ -72,11 +70,12 @@ namespace GunDecorator.ChargedModules
                 yield return new WaitForSeconds(_intervaleBetweenSalve);
             }
             
-            _gunController?.OnStopCharging?.Invoke();
             _ammoModule.ResetBulletData();
             _ammoModule.SetDamage(1);
 
             _isChargedShooting = false;
+            
+            ResetCharging();
         }
     }
 }

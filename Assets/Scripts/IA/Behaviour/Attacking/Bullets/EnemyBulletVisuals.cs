@@ -47,6 +47,8 @@ public class EnemyBulletVisuals : MonoBusListener, IPoolable
 
     private void OnNetworkTick()
     {
+        if(gameObject == null) return;
+        
         float networkTime = InstanceFinder.TimeManager.Tick * (float)InstanceFinder.TimeManager.TickDelta - _spawnTime;
         networkTime *= _speed;
         
@@ -68,5 +70,11 @@ public class EnemyBulletVisuals : MonoBusListener, IPoolable
         
         if(InstanceFinder.TimeManager != null)
             InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
     }
 }

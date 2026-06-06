@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using GunDecorator;
 using Managers;
 using MyPrint;
 using UnityEngine;
@@ -43,6 +44,7 @@ namespace Controller
 
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
+            if(CurrentGun.IsChargeShooting())return;
             
             CurrentGun.TryFire();
         }
@@ -89,6 +91,7 @@ namespace Controller
         {
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
+            if(CurrentGun.IsChargeShooting())return;
             
             CurrentGun.TryReload();
         }
