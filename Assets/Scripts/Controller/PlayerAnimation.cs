@@ -23,13 +23,13 @@ public class PlayerAnimation : NetworkBehaviour
 		_renderer.material = _materialList[_switching.IsPositive ? 0 : 1];
 	}
 
-	public void SetMovingAnim(float value) => UpdateAnimationFloatServerRpc("Move", value);
-	public void SetJumpAnim(bool isJumping) => UpdateAnimationBoolServerRpc("Jump", isJumping);
-	public void SetFallingAnim(bool isFalling) => UpdateAnimationBoolServerRpc("Falling", isFalling);
-	public void SetGroundedAnim(bool isGrounded) => UpdateAnimationBoolServerRpc("Grounded", isGrounded);
+	public void SetMovingHAnim(float value) => UpdateAnimationFloatServerRpc("MoveH", value);
+	public void SetMovingVAnim(float value) => UpdateAnimationFloatServerRpc("MoveV", value);
+	public void SetJumpAnim() => UpdateAnimationTriggerServerRpc("Jump");
+	public void SetDoubleJumpAnim() => UpdateAnimationTriggerServerRpc("DoubleJump"); 
 	public void SetDeadAnim(bool isDead) => UpdateAnimationBoolServerRpc("Dead", isDead);
 	public void SetDashAnim() => UpdateAnimationTriggerServerRpc("Dash");
-	public void SetSlideAnim(bool isSlide) => UpdateAnimationBoolServerRpc("Slide", isSlide);
+	public void SetSlideAnim(bool isSlide) => UpdateAnimationTriggerServerRpc(isSlide ? "Slide" : "StopSlide");
 	public void SetShootAnim() => UpdateAnimationTriggerServerRpc("Shoot");
 
 	public void ChangeAirState(bool isGrounded)
