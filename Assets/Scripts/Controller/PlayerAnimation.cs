@@ -14,6 +14,16 @@ public class PlayerAnimation : NetworkBehaviour
 	[SerializeField] private SkinnedMeshRenderer _renderer;
 	[SerializeField] private Material[] _materialList;
 	
+	[Header("IK Arm")]
+	[Header("IK Targets")]
+	[SerializeField] private Transform rig1Target;
+	[SerializeField] private Transform rig1Hint;
+
+	[SerializeField] private float followSpeed = 20f;
+
+	private Transform _rightHandSource;
+	private Transform _rightHintSource;
+	
 	#endregion
 
 	#region Fonctions
@@ -95,5 +105,33 @@ public class PlayerAnimation : NetworkBehaviour
 		_animator.SetFloat(name, value);
 	}
 	
+	#endregion
+
+	#region  IK
+
+	void LateUpdate()
+	{
+		if (_rightHandSource != null)
+		{
+			rig1Target.position = Vector3.Lerp(rig1Target.position, _rightHandSource.position, followSpeed * Time.deltaTime);
+			rig1Target.rotation = Quaternion.Slerp(rig1Target.rotation, _rightHandSource.rotation, followSpeed * Time.deltaTime);
+		}
+
+		if (_rightHintSource != null)
+			rig1Hint.position = Vector3.Lerp(rig1Hint.position, _rightHintSource.position, followSpeed * Time.deltaTime);
+	}
+
+	public void SetWeaponTargets(Transform rightHand, Transform leftHand)
+	{
+		rig1Target.SetParent(rightHand);
+		rig1Target.localPosition = Vector3.zero;
+		rig1Target.localRotation = Quaternion.identity;
+	}
+
+	public void SetIKWeight(float weight)
+	{
+		GetComponentInChildren<UnityEngine.Animations.Rigging.Rig>().weight = weight;
+	}
+
 	#endregion
 }
