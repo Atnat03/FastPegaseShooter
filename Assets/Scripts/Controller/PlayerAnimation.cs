@@ -23,8 +23,7 @@ public class PlayerAnimation : NetworkBehaviour
 		_renderer.material = _materialList[_switching.IsPositive ? 0 : 1];
 	}
 
-	public void SetMovingAnim(bool isMoving) => UpdateAnimationBoolServerRpc("Move", isMoving);
-	public void SetMovingBackwardAnim(bool isMoving) => UpdateAnimationBoolServerRpc("MoveBackward", isMoving);
+	public void SetMovingAnim(float value) => UpdateAnimationFloatServerRpc("Move", value);
 	public void SetJumpAnim(bool isJumping) => UpdateAnimationBoolServerRpc("Jump", isJumping);
 	public void SetFallingAnim(bool isFalling) => UpdateAnimationBoolServerRpc("Falling", isFalling);
 	public void SetGroundedAnim(bool isGrounded) => UpdateAnimationBoolServerRpc("Grounded", isGrounded);
@@ -67,7 +66,7 @@ public class PlayerAnimation : NetworkBehaviour
 		}
 		else
 		{
-			_animator.SetTrigger(name);
+			_animator.SetBool(name, value);
 		}
 	}
 
@@ -75,6 +74,25 @@ public class PlayerAnimation : NetworkBehaviour
 	private void UpdateAnimationBoolClientRpc(string name, bool value)
 	{
 		_animator.SetBool(name, value);
+	}
+	
+	[ServerRpc]
+	private void UpdateAnimationFloatServerRpc(string name, float value)
+	{
+		if (IsServerInitialized)
+		{
+			UpdateAnimationFloatClientRpc(name, value);
+		}
+		else
+		{
+			_animator.SetFloat(name, value);
+		}
+	}
+
+	[ObserversRpc]
+	private void UpdateAnimationFloatClientRpc(string name, float value)
+	{
+		_animator.SetFloat(name, value);
 	}
 	
 	#endregion
