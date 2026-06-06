@@ -98,6 +98,7 @@ public class XpOrbManager : NetworkBusListener
     {
         ReturnOrbToPoolObserverRpc(orbId);
     }
+    
     [ObserversRpc]
     void ReturnOrbToPoolObserverRpc(int orbId)
     {

@@ -552,8 +552,7 @@ public class FPSController : NetworkBusListener
         else if(stateMachine.previousState == stateMachine.GetState(ControlerState.Dashing) && Grounded()) rb.linearVelocity = Vector3.zero;
 
 
-        _playerAnimation.SetMovingAnim(false);
-        _playerAnimation.SetMovingBackwardAnim(false);
+        _playerAnimation.SetMovingAnim(0);
 
         if (Grounded())
         {
@@ -651,12 +650,7 @@ public class FPSController : NetworkBusListener
 
     void OnEnterMovingState()
     {
-        if(verticalInput >= 0.1)
-            _playerAnimation.SetMovingAnim(true);
-        else if (verticalInput <= -0.1)
-        {
-            _playerAnimation.SetMovingBackwardAnim(true);
-        }
+        _playerAnimation.SetMovingAnim(verticalInput);
     }
 
     void MovingUpdate()
