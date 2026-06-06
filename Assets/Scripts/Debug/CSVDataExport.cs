@@ -75,7 +75,7 @@ public class CSVDataExport : MonoBusListener
             data.player2PVs   .HasValue ? data.player2PVs.Value.ToString("F2") : prev[8],
             data.player1Energy.HasValue ? data.player1Energy.Value.ToString("F2") : prev[9], 
             data.player2Energy.HasValue ? data.player2Energy.Value.ToString("F2") : prev[10],
-            data.skillUsed    ?? prev[11],
+            data.skillUsed    ?? "",
             data.ArenaID      .HasValue ? data.ArenaID.Value.ToString()      : prev[12],
         });
     }
