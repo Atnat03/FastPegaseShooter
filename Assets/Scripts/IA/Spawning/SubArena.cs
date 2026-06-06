@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using GameKit.Dependencies.Utilities;
@@ -30,7 +31,7 @@ public class SubArena : NetworkBusListener
     [SerializeField] private int _corrosionDamage = 5;
     [SerializeField] private int _corrosionDelay = 3;
 
-    private List<(float cumulativeWeight, MobSpawnSO mob)> orderedSpawnPriority = new();
+    private float _enemyTotalWeight;
     private PathfindingRequestManager _pathfindingRequestManager;
     private int _currentSpawnPointIndex = 0;
     
@@ -61,6 +62,11 @@ public class SubArena : NetworkBusListener
             }
         });
         
+        ListenToEvent<ForceStopEnemySpawn>(FSES =>
+        {
+            _zoneActivated = false;
+        });
+        
         InvokeEvent(new GetPathfindingRequestManagerRequest
         {
             p_OnGetPathfindingRequestManager = (PRM) =>
@@ -78,17 +84,10 @@ public class SubArena : NetworkBusListener
     void InitialiseSpawnProbability()
     {
         _spawnMobs = _spawnMobs.OrderByDescending(s => s.p_spawnProba).ToList();
-        float totalWeight = 0;
+        _enemyTotalWeight = 0;
         
         foreach (MobSpawnSO spawnMob in _spawnMobs)
-            totalWeight += spawnMob.p_spawnProba;
-
-        float currentWeight = 0;
-        foreach (MobSpawnSO spawnMob in _spawnMobs)
-        {
-            currentWeight += spawnMob.p_spawnProba / totalWeight;
-            orderedSpawnPriority.Add((currentWeight, spawnMob));
-        }
+            _enemyTotalWeight += spawnMob.p_spawnProba;
     }
 
     #endregion
@@ -123,7 +122,7 @@ public class SubArena : NetworkBusListener
     public void TriggerSubArenaSpawning()
     {
         if(_zoneActivated) return;
-        
+        CustomLogger.HighlightLog("Subarena Starting 1");
         _zoneActivated = true;
         StartSpawning();
     }
@@ -132,10 +131,11 @@ public class SubArena : NetworkBusListener
     async void StartSpawning()
     {
         if(!IsServerStarted) return;
-        
+        CustomLogger.HighlightLog("Subarena Starting 2");
         NotifySubArenaStartObserverRpc(_gridReader.p_id);
-        
+        CustomLogger.HighlightLog("Subarena Starting 3");
         await SpawnFirstWave();
+        CustomLogger.HighlightLog("Subarena Starting 4");
         await InfiniteSpawn();
     }
 
@@ -147,17 +147,19 @@ public class SubArena : NetworkBusListener
     MobSpawnSO GetNextEnemyToSpawn()
     {
         float random01 = Random.Range(0f, 1f);
-        foreach (var mobSpawn in orderedSpawnPriority)
+        float currentWeight = 0;
+        foreach (var mobSpawn in _spawnMobs)
         {
-            if(random01 <= mobSpawn.cumulativeWeight)
+            currentWeight += mobSpawn.p_spawnProba/_enemyTotalWeight;
+            if(random01 <= currentWeight)
             {
                 //CustomLogger.HighlightLog($"Chosen Enemy : {mobSpawn.mob.name}, random01 : {random01}");
-                return mobSpawn.mob;
+                return mobSpawn;
             }
         }
         
         //fallback for float imprecision
-        return orderedSpawnPriority[^1].mob;
+        return _spawnMobs[^1];
     }
 
     [Server]
@@ -212,12 +214,15 @@ public class SubArena : NetworkBusListener
     [Server]
     async Task InfiniteSpawn()
     {
+        CustomLogger.HighlightLog("Subarena Starting 5");
         try
         {
             int enabledTime = 0;
             int currentStateTime = 0;
             
-            while (_zoneActivated && enabledTime < _maxEnabledTime && Application.isPlaying)
+            CustomLogger.HighlightLog("Subarena Starting 6");
+            
+            while (Application.isPlaying && _zoneActivated && enabledTime < _maxEnabledTime)
             {
                 //Corrosion
                 if (_spawnedEnemies.Count >= _maxSpawnEnemy)
@@ -238,11 +243,12 @@ public class SubArena : NetworkBusListener
                 }
                 
                 MobSpawnSO nextMobToSpawn = GetNextEnemyToSpawn();
+                CustomLogger.ImportantLog($"choosen Enemy is null :  {nextMobToSpawn == null}");
 
                 //generating budget
-                while (_currentBudget < nextMobToSpawn.p_cost &&
-                       enabledTime < _maxEnabledTime && _zoneActivated
-                       && Application.isPlaying)
+                while (Application.isPlaying &&
+                       _currentBudget < nextMobToSpawn.p_cost &&
+                       enabledTime < _maxEnabledTime && _zoneActivated)
                 {
                     if (currentStateTime >= _spawningStates[_currentStateIndex].p_stateDuration)
                     {
@@ -259,7 +265,7 @@ public class SubArena : NetworkBusListener
                 }
 
                 //Enemy Spawning
-                if(_zoneActivated)
+                if(Application.isPlaying && _zoneActivated)
                 {
                     //CustomLogger.Log($"Spawn enemy : {nextMobToSpawn.name}");
                     _currentBudget -= nextMobToSpawn.p_cost;
