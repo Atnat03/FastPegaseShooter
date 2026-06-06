@@ -39,6 +39,7 @@ public class GrapplePoint : MonoBehaviour
             {
                 foreach (ParticleSystem particule in grappleParticulesLookedAt)
                 {
+                    particule.gameObject.SetActive(true);
                     particule.Play();
                 }
 
@@ -58,6 +59,8 @@ public class GrapplePoint : MonoBehaviour
             foreach (ParticleSystem particule in grappleParticulesLookedAt)
             {
                 particule.Stop();
+                particule.gameObject.SetActive(false);
+
             }
             particulesPlaying = false;
             
