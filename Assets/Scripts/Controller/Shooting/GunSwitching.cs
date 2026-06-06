@@ -36,6 +36,7 @@ public class GunSwitching : NetworkBusListener
 	[SerializeField] private ShootEnergy _shootEnergy;
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
+	[SerializeField] private PlayerAnimation _playerAnimation;
 	
 	[Header("Settings")]
 	[SerializeField] private float _cooldownChangeMagnetic = 5f;
@@ -117,7 +118,7 @@ public class GunSwitching : NetworkBusListener
 			bool shouldBeActive = (i == index);
 			_mainGunsListTPS[i].gameObject.SetActive(shouldBeActive);
 		}
-
+		
 		IGunMain?.SetReticule(_reticuleManager);
 	}
 

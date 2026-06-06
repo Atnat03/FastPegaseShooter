@@ -42,10 +42,10 @@ GameObject:
   - component: {fileID: 7902967571896485682}
   - component: {fileID: 978980290201534219}
   - component: {fileID: 2120530428348468344}
-  - component: {fileID: 4070920540654852810}
   - component: {fileID: 5626854157473161853}
   - component: {fileID: 8442919097825990346}
   - component: {fileID: 2845018961135553267}
+  - component: {fileID: 2318525884812370464}
   m_Layer: 2
   m_Name: Arene2_Spawner_2
   m_TagString: Untagged
@@ -103,61 +103,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
   pathfindingGridSO: {fileID: 11400000, guid: edeeb6bb647c0874890818aedd5c4f2a, type: 2}
---- !u!114 &4070920540654852810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2189633458858471923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717f604ce1be2ce4986941635a51955e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnZone
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 5626854157473161853}
-  _networkObjectCache: {fileID: 5626854157473161853}
-  _pathfindingRequestManager: {fileID: 0}
-  _budgetMin: 9
-  _budgetMax: 15
-  _currentBudget: 0
-  spawnDelayFirstWave: 1.4
-  spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  spawnDelay: 2
-  spawnMobs:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  _spawnPoints:
-  - {fileID: 6400950982878989626}
-  - {fileID: 5362569249936224632}
-  - {fileID: 6950056187015305280}
-  - {fileID: 5377951717058223131}
-  - {fileID: 2165125395364659213}
-  - {fileID: 5697366080667569796}
-  - {fileID: 2213957659086199679}
-  - {fileID: 6575264581263834424}
-  - {fileID: 1804558857250632540}
-  - {fileID: 7276364778946193254}
 --- !u!114 &5626854157473161853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +122,7 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
-  - {fileID: 4070920540654852810}
+  - {fileID: 0}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -188,7 +133,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584212092317853982
+  _initializedTimestamp: -8584208569322985560
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -204,7 +149,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 12
+  <PrefabId>k__BackingField: 13
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 9936221137626363765
   SceneId: 0
@@ -228,7 +173,7 @@ MonoBehaviour:
   _events:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4070920540654852810}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SpawnZone, Assembly-CSharp
         m_MethodName: StartSpawning
         m_Mode: 1
@@ -262,6 +207,34 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 50, y: 20, z: 1}
   m_Center: {x: 8.66, y: 0, z: 4.43}
+--- !u!114 &2318525884812370464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2189633458858471923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubArena
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 5626854157473161853}
+  _networkObjectCache: {fileID: 0}
+  _zoneActivated: 0
+  _spawnPoints: []
+  _arenaGaugePrefab: {fileID: 0}
+  spawnDelayFirstWave: 0
+  spawnMobsFirstWave: []
+  _currentBudget: 0
+  _spawnMobs: []
+  _spawningStates: []
+  _maxSpawnEnemy: 10
+  _corrosionDamage: 5
+  _corrosionDelay: 3
+  _maxEnabledTime: 0
+  _currentStateIndex: 0
 --- !u!1 &2426734625193879238
 GameObject:
   m_ObjectHideFlags: 0
