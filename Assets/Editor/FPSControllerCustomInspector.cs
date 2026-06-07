@@ -180,6 +180,7 @@ public class FPSControllerCustomInspector : Editor
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_castWidth"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_grappleRedirectionSpeed"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("grappleLineTravelTime"));
         }, ref showGapple);
 
         serializedObject.ApplyModifiedProperties();
