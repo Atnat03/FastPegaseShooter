@@ -180,6 +180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2879167156334002763}
   - component: {fileID: 1012583612264570566}
+  - component: {fileID: 4457611267821145884}
   - component: {fileID: 1884870759674653081}
   - component: {fileID: 2944710071310434788}
   - component: {fileID: 8625582699949576798}
@@ -202,7 +203,7 @@ Transform:
   m_GameObject: {fileID: 1653756694460721782}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -24.11, y: 12.7300005, z: -10.429995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -221,10 +222,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64a1c781ee30e74ab600190581d48f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RespawnManager
-  _componentIndexCache: 0
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 2201437854264306698}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2201437854264306698}
   _playerUIEnd: {fileID: 5072971198491009814}
+--- !u!114 &4457611267821145884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653756694460721782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 461d0ee16e55480aa7100eabbd1a062f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.RespawnPointManager
+  _defaultPosition: {x: -24.11, y: 12.7300005, z: -10.429995}
 --- !u!114 &1884870759674653081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,9 +263,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675578607ae91a744a74b5efa2b6aac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthManager
-  _componentIndexCache: 1
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 2201437854264306698}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2201437854264306698}
 --- !u!114 &8625582699949576798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,9 +290,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78a2d6a3e7fc284b9790828720ba139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DapManager
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 2201437854264306698}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2201437854264306698}
   _maxEnergy: 800
   _valueOneBar: 160
   _percentageGainPerSecond: 4
@@ -322,9 +336,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c9409d852344be9e78c44a44e47221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.SwapGunManager
-  _componentIndexCache: 3
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 2201437854264306698}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2201437854264306698}
 --- !u!1 &3456645685974181456
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,6 +747,7 @@ Transform:
   - {fileID: 2879167156334002763}
   - {fileID: 9101300511949536448}
   - {fileID: 2099165572865667397}
+  - {fileID: 7125909178998139428}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2201437854264306698
@@ -755,12 +770,15 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: 3615664646917007850}
+  - {fileID: 1012583612264570566}
+  - {fileID: 2944710071310434788}
+  - {fileID: 7612577011346760552}
+  - {fileID: 8890341182078668831}
   - {fileID: 2938364182004047939}
+  - {fileID: 8321721243852601419}
   - {fileID: 1480436034256370176}
   InitializedParentNetworkBehaviour: {fileID: 0}
-  InitializedNestedNetworkObjects:
-  - {fileID: 0}
-  - {fileID: 0}
+  InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
   _isNetworked: 1
@@ -769,7 +787,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584209264660681356
+  _initializedTimestamp: -8584207681776864648
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -785,13 +803,13 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 12
+  <PrefabId>k__BackingField: 15
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 9494514003261256721
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: -0, y: -0, z: -0, w: 1}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
     Scale: {x: 1, y: 1, z: 1}
     IsValid: 1
 --- !u!114 &3615664646917007850
@@ -992,9 +1010,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a33e7b2fd211990488a6fdcfe5975ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 2
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 2201437854264306698}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2201437854264306698}
   _musicList:
   - {fileID: 8300000, guid: 42eb55da27449f649a79c134c2d25f80, type: 3}
   - {fileID: 8300000, guid: 6c2aab5c56befab4d841b5ce2032387e, type: 3}
@@ -1257,7 +1275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fd6a2859f6c82d43b3d191e2029b3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBulletManager
-  _componentIndexCache: 1
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 2201437854264306698}
   _networkObjectCache: {fileID: 2201437854264306698}
   _normalBulletPrefab: {fileID: -5877786095843465243, guid: 563cd6461b623044c8d7fd34d0aecdac, type: 3}
@@ -1284,9 +1302,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3748fea7ad30c498436d675108108f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::XpOrbManager
-  _componentIndexCache: 255
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 2201437854264306698}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2201437854264306698}
   _energyOrbPrefab: {fileID: 1873913466632457273, guid: 4923aa52fb51f8e46ada7aca0663d8a2, type: 3}
   _orbSpawnRadius: 0.5
   _orbVerticalOffset: 0.1
@@ -1396,6 +1414,73 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &8456171465812106090
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7125909178998139428}
+  - component: {fileID: 7225394546548508903}
+  - component: {fileID: 3256248290626906905}
+  m_Layer: 0
+  m_Name: SpawnZoneTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7125909178998139428
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8456171465812106090}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -24.11, y: 12.7300005, z: -10.429995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4962665897501859610}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7225394546548508903
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8456171465812106090}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 10, z: 50}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3256248290626906905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8456171465812106090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 239c1ac205bf4a408f0dece164583f2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SpawnZone
+  _zoneId: 0
 --- !u!1 &8495462148766796682
 GameObject:
   m_ObjectHideFlags: 0
