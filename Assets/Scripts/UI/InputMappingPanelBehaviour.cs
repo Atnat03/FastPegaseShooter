@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class InputMappingPanelBehaviour : PausePanel
 {
+    public override void Init()
+    { 
+        gameObject.SetActive(false);
+    }
+
     public override void OnPause(bool isPause)
     {
         gameObject.SetActive(false);
