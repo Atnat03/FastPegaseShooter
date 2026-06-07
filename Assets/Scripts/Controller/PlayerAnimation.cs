@@ -14,6 +14,16 @@ public class PlayerAnimation : NetworkBehaviour
 	[SerializeField] private SkinnedMeshRenderer _renderer;
 	[SerializeField] private Material[] _materialList;
 	
+	[Header("IK Arm")]
+	[Header("IK Targets")]
+	[SerializeField] private Transform rig1Target;
+	[SerializeField] private Transform rig1Hint;
+
+	[SerializeField] private float followSpeed = 20f;
+
+	private Transform _rightHandSource;
+	private Transform _rightHintSource;
+	
 	#endregion
 
 	#region Fonctions
@@ -23,14 +33,13 @@ public class PlayerAnimation : NetworkBehaviour
 		_renderer.material = _materialList[_switching.IsPositive ? 0 : 1];
 	}
 
-	public void SetMovingAnim(bool isMoving) => UpdateAnimationBoolServerRpc("Move", isMoving);
-	public void SetMovingBackwardAnim(bool isMoving) => UpdateAnimationBoolServerRpc("MoveBackward", isMoving);
-	public void SetJumpAnim(bool isJumping) => UpdateAnimationBoolServerRpc("Jump", isJumping);
-	public void SetFallingAnim(bool isFalling) => UpdateAnimationBoolServerRpc("Falling", isFalling);
-	public void SetGroundedAnim(bool isGrounded) => UpdateAnimationBoolServerRpc("Grounded", isGrounded);
+	public void SetMovingHAnim(float value) => UpdateAnimationFloatServerRpc("MoveH", value);
+	public void SetMovingVAnim(float value) => UpdateAnimationFloatServerRpc("MoveV", value);
+	public void SetJumpAnim() => UpdateAnimationTriggerServerRpc("Jump");
+	public void SetDoubleJumpAnim() => UpdateAnimationTriggerServerRpc("DoubleJump"); 
 	public void SetDeadAnim(bool isDead) => UpdateAnimationBoolServerRpc("Dead", isDead);
 	public void SetDashAnim() => UpdateAnimationTriggerServerRpc("Dash");
-	public void SetSlideAnim(bool isSlide) => UpdateAnimationBoolServerRpc("Slide", isSlide);
+	public void SetSlideAnim(bool isSlide) => UpdateAnimationTriggerServerRpc(isSlide ? "Slide" : "StopSlide");
 	public void SetShootAnim() => UpdateAnimationTriggerServerRpc("Shoot");
 
 	public void ChangeAirState(bool isGrounded)
@@ -67,7 +76,7 @@ public class PlayerAnimation : NetworkBehaviour
 		}
 		else
 		{
-			_animator.SetTrigger(name);
+			_animator.SetBool(name, value);
 		}
 	}
 
@@ -77,5 +86,52 @@ public class PlayerAnimation : NetworkBehaviour
 		_animator.SetBool(name, value);
 	}
 	
+	[ServerRpc]
+	private void UpdateAnimationFloatServerRpc(string name, float value)
+	{
+		if (IsServerInitialized)
+		{
+			UpdateAnimationFloatClientRpc(name, value);
+		}
+		else
+		{
+			_animator.SetFloat(name, value);
+		}
+	}
+
+	[ObserversRpc]
+	private void UpdateAnimationFloatClientRpc(string name, float value)
+	{
+		_animator.SetFloat(name, value);
+	}
+	
+	#endregion
+
+	#region  IK
+
+	void LateUpdate()
+	{
+		if (_rightHandSource != null)
+		{
+			rig1Target.position = Vector3.Lerp(rig1Target.position, _rightHandSource.position, followSpeed * Time.deltaTime);
+			rig1Target.rotation = Quaternion.Slerp(rig1Target.rotation, _rightHandSource.rotation, followSpeed * Time.deltaTime);
+		}
+
+		if (_rightHintSource != null)
+			rig1Hint.position = Vector3.Lerp(rig1Hint.position, _rightHintSource.position, followSpeed * Time.deltaTime);
+	}
+
+	public void SetWeaponTargets(Transform rightHand, Transform leftHand)
+	{
+		rig1Target.SetParent(rightHand);
+		rig1Target.localPosition = Vector3.zero;
+		rig1Target.localRotation = Quaternion.identity;
+	}
+
+	public void SetIKWeight(float weight)
+	{
+		GetComponentInChildren<UnityEngine.Animations.Rigging.Rig>().weight = weight;
+	}
+
 	#endregion
 }

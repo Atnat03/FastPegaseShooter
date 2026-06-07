@@ -24,6 +24,7 @@ public interface IGun
     public void SetInfiniteAmmo(bool infiniteAmmo);
     public void SetChargedPlayer(bool b);
     public void SetReticule(ReticulesManager manager);
+    public bool IsChargeShooting();
 }
 
 
@@ -62,9 +63,6 @@ namespace GunDecorator
         [SerializeField, Tooltip("Model 3d de l'arme")]
         private Transform currentModel;
 
-        [SerializeField, Tooltip("Model 3d de l'arme suivant la charge")]
-        private Transform[] _modelsList;
-
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
 
@@ -96,6 +94,8 @@ namespace GunDecorator
         [HideInInspector] public bool p_authorizedToShoot = true;
         
         PlayerAnimation _playerAnimation;
+
+        private bool _isChargeShooting;
 
         //Action
 
@@ -152,17 +152,7 @@ namespace GunDecorator
 
         public override void OnStartClient()
         {
-            if(_modelsList.Length <2)
-                return;
-            
-            foreach (Transform t in _modelsList)
-            {
-                t.gameObject.SetActive(false);
-            }
-            
-            _modelsList[LocalConnection.ClientId].gameObject.SetActive(true);
-
-            if (_modelsList[LocalConnection.ClientId].TryGetComponent(out Animator animator))
+            if (currentModel.TryGetComponent(out Animator animator))
                 _animator = animator;
         }
 
@@ -397,7 +387,20 @@ namespace GunDecorator
         {
             manager.ActivateReticules(_reticuleID);
         }
-        
+
         public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
+        
+        public bool IsChargeShooting() => _isChargeShooting;
+
+        public void OnChargingInvoke(float ratio)
+        {
+            _isChargeShooting = true;
+            OnCharging?.Invoke(ratio);
+        }
+        public void OnStopChargingInvoke()
+        {
+            _isChargeShooting = false;
+            OnStopCharging?.Invoke();
+        }
     }
 }
