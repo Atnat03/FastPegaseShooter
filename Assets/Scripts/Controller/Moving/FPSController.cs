@@ -269,7 +269,6 @@ public class FPSController : NetworkBusListener
     
     #endregion
     
-    
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -408,8 +407,7 @@ public class FPSController : NetworkBusListener
         
         grappleLineRenderer?.gameObject.SetActive(false);
     }
-
-
+    
     #region Function Calling
 
     void Update()
@@ -1651,7 +1649,7 @@ public class FPSController : NetworkBusListener
         while (elapsedTime < grappleLineTravelTime)//mettre une variable de travel time
         {
             grappleLineRenderer?.SetPosition(0, grappleLineRenderer.transform.position);
-            grappleLineRenderer?.SetPosition(1, Vector3.Lerp(grappleLineRenderer.transform.position, _currentGrapplePoint.position , elapsedTime / grappleLineTravelTime));
+            grappleLineRenderer?.SetPosition(1, Vector3.Lerp(grappleLineRenderer.transform.position, _currentGrapplePoint.parent.position , elapsedTime / grappleLineTravelTime));
             elapsedTime += Time.deltaTime;
             yield return null;
         }
