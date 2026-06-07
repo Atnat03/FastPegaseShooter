@@ -6,7 +6,8 @@ using UnityEngine.Events;
 
 public class DoublePlayerTriggerZoneServerToClient : NetworkBehaviour
 {
-    [SerializeField] private UnityEvent _events;
+    [SerializeField] private UnityEvent _clientEvents;
+    [SerializeField] private UnityEvent _serverEvents;
     [SerializeField] private bool _activateOnce = true;
     
     private HashSet<int> _enteredPlayers = new HashSet<int>();
@@ -25,6 +26,7 @@ public class DoublePlayerTriggerZoneServerToClient : NetworkBehaviour
             {
                 _activated = true;
                 _enteredPlayers.Clear();
+                _serverEvents?.Invoke();
                 TriggerActionObserverRpc();
             }
         }
@@ -33,6 +35,6 @@ public class DoublePlayerTriggerZoneServerToClient : NetworkBehaviour
     [ObserversRpc]
     void TriggerActionObserverRpc()
     {
-        _events?.Invoke();
+        _clientEvents?.Invoke();
     }
 }
