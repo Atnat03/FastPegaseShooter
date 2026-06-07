@@ -44,7 +44,7 @@ namespace Controller
 
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
-            if(CurrentGun.IsChargeShooting())return;
+            if(CurrentGun.IsChargeShooting)return;
             
             CurrentGun.TryFire();
         }
@@ -91,7 +91,7 @@ namespace Controller
         {
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
-            if(CurrentGun.IsChargeShooting())return;
+            if(CurrentGun.IsChargeShooting)return;
             
             CurrentGun.TryReload();
         }
