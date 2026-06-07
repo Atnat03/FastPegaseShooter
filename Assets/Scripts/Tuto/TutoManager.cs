@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FishNet.Connection;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MyPrint;
 using ScriptableObjectsDefinitions;
 using Tuto.Triggers;
@@ -30,7 +31,14 @@ namespace Tuto
     
     public class TutoManager : NetworkBusListener
     {
+        public DapManager DapManagerScript => _dapManager;
+        
         [SerializeField] private ScenarioSO _scenarioSequence;
+
+        [Header("References")] 
+        [SerializeField] private DapManager _dapManager;
+        
+        [Header("LD Elements")]
         [SerializeField] private List<TriggerBoxBridge> _sceneProxies = new();
         [SerializeField] private List<SpawnZoneTutorial> _sceneSpawnZones = new();
         
@@ -40,12 +48,35 @@ namespace Tuto
 
         Dictionary<PlayerSide, NetworkObject> _playerList = new();
 
+        private int _numberPlayerUsedHeal = 0;
+        
+        //Actions
+        public Action OnBothUseHeal;
+        
         public override void OnStartNetwork()
         {
             SetUpBridge();
             InitializeTriggers();
             StartCoroutine(RunTutorial());
+            
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
+            ListenToEvent<OnHealUsed_TUTO>(CheckHealUse);
+        }
+        
+        private void CheckHealUse(OnHealUsed_TUTO data)
+        {
+            OnAddPlayerUsedHealServerRpc();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void OnAddPlayerUsedHealServerRpc()
+        {
+            _numberPlayerUsedHeal++;
+
+            if (_numberPlayerUsedHeal == 2)
+            {
+                OnBothUseHeal?.Invoke();
+            }
         }
 
         private void OnPlayerSpawn(OnPlayerSpawnEvent data)
@@ -86,7 +117,7 @@ namespace Tuto
         private void InitializeTriggers()
         {
             foreach (Scenario scenario in _scenarioSequence._scenarioList)
-                scenario.trigger?.Initialize();
+                scenario.trigger?.Initialize(this);
         }
  
         private IEnumerator RunTutorial()
@@ -268,8 +299,7 @@ namespace Tuto
         }
 
         #endregion
-
-
+        
         #region Fill Amount
 
         public void FillAmount(float maxAmount, float speed, bool activated, AnimationBar type)
@@ -305,8 +335,7 @@ namespace Tuto
         }
 
         #endregion
-
-
+        
         #region Unlock Capa
 
         public void AskForUnlockCapa(Capacity_TUTO capa)
@@ -354,6 +383,33 @@ namespace Tuto
             return new List<NetworkObject>(_playerList.Values);
         }
 
+        #region Spawners
+
+        public void AskForStartSpawn(int spawn)
+        {
+            if (IsServerInitialized)
+            {
+                InvokeEvent(new OnStartSpawner_TUTO()
+                {
+                    spawnIndex = spawn
+                });
+            }else
+            {
+                AskForStartSpawnServerRpc(spawn);
+            }
+        }
+
+        [ServerRpc]
+        void AskForStartSpawnServerRpc(int spawnIndex)
+        {
+            InvokeEvent(new OnStartSpawner_TUTO()
+            {
+                spawnIndex = spawnIndex
+            });
+        }
+
+        #endregion
+        
         #endregion
 
     }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
+using MyPrint;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -27,7 +28,6 @@ public class SpawnZoneTutorial : NetworkBusListener
     {
         base.OnStartServer();
         
-        
         _gridReader = GetComponent<PathfindingGridReader>();
         
         ListenToEvent<OnEnemyDieEvent>(OEDE =>
@@ -42,6 +42,8 @@ public class SpawnZoneTutorial : NetworkBusListener
             }
         });
         
+        ListenToEvent<OnStartSpawner_TUTO>(StartSpawning);
+        
         InvokeEvent(new GetPathfindingRequestManagerRequest
         {
             p_OnGetPathfindingRequestManager = (PRM) =>
@@ -52,9 +54,11 @@ public class SpawnZoneTutorial : NetworkBusListener
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void StartSpawning()
+    public void StartSpawning(OnStartSpawner_TUTO data)
     {
         if(_zoneActivated) return;
+        
+        Cons.Print("Start spawn zone", ColorConsole.Red);
         
         _zoneActivated = true;
         Spawn();
@@ -68,6 +72,8 @@ public class SpawnZoneTutorial : NetworkBusListener
     [Server]
     public void SpawnEnemy(GameObject enemyPrefab)
     {
+        Cons.Print("SpawnEnemy", ColorConsole.Red);
+        
         Vector3 position = GetValidSpawnPoint().position;
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         

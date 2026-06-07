@@ -23,11 +23,10 @@ namespace Tuto.Triggers
                 .ToList();
         }
 
-        public override void Initialize()
+        public override void Initialize(TutoManager tuto)
         {
             if (_spawnZones == null || _spawnZones.Count == 0)
-            {
-                Debug.LogWarning("Trigger_AllMobsDead : aucune SpawnZone injectée.");
+            { 
                 return;
             }
 

@@ -135,14 +135,14 @@ namespace Tuto.Editor
     {
         protected override Color ColorForType(Type t)
         {
-            if (t == typeof(Event_Wait))     return new Color(0.7f, 0.9f, 1f);
-            if (t == typeof(Event_Dialogue)) return new Color(1f,  0.95f, 0.7f);
-            if (t == typeof(Event_Notification)) return new Color(0.9f, 0.75f, 1f);
-            if (t == typeof(Event_OpenDoor)) return new Color(0.9f, 0.75f, 1f);
-            if (t == typeof(Event_UnlockCapacity)) return new Color(0.9f, 0.75f, 1f);
-            if (t == typeof(Event_UnlockShootEnergy)) return new Color(0.9f, 0.75f, 1f);
-            if (t.Name.Contains("Unlock"))      return new Color(0.7f, 1f,   0.75f);
-            if (t.Name.Contains("Ult"))         return new Color(0.9f, 0.75f, 1f);
+            if (t == typeof(Event_Wait))     return Color.gray6;
+            if (t == typeof(Event_Dialogue)) return Color.pink;
+            if (t == typeof(Event_Notification)) return Color.cornflowerBlue;
+            if (t == typeof(Event_OpenDoor)) return Color.lightGreen;
+            if (t == typeof(Event_UnlockCapacity)) return Color.bisque;
+            if (t == typeof(Event_ChangeFillAmount)) return Color.aquamarine;
+            if (t == typeof(Event_StartSpawn)) return Color.darkSalmon;
+            if (t == typeof(Event_TakeDamage)) return Color.indianRed;
             return Color.white;
         }
     }
@@ -152,7 +152,11 @@ namespace Tuto.Editor
     {
         protected override Color ColorForType(Type t)
         {
-            if (t == typeof(Trigger_BoxCollider))    return new Color(1f,   0.85f, 0.7f);
+            if (t == typeof(Trigger_BoxCollider))    return Color.green;
+            if (t == typeof(Trigger_50PercentDap))    return Color.blue;
+            if (t == typeof(Trigger_AllMobsDead))    return Color.yellow;
+            if (t == typeof(Trigger_Heal))    return Color.red;
+            
             return Color.white;
         }
     }

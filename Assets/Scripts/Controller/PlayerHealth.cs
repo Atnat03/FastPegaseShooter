@@ -22,8 +22,7 @@ public class PlayerHealth : NetworkBusListener
     public int OwnerId => Owner.ClientId;
 
     #endregion
-
-
+    
     #region Variables
 
     private readonly SyncVar<float> _currentHealth = new SyncVar<float>();
@@ -484,13 +483,10 @@ public class PlayerHealth : NetworkBusListener
             ? Managers.RespawnPointManager.Instance.GetRespawnPosition(OwnerId)
             : new Vector3(30, 0, -23.5f);
 
-        // ✅ D'abord mettre à jour les stats SANS lever _isDead
         _currentHealth.Value = _healthBase;
 
-        // ✅ Téléporter
         TeleportOwnerTargetRpc(Owner, respawnPos);
 
-        // ✅ Lever _isDead EN DERNIER pour que le NT reprenne depuis la bonne pos
         _isDead.Value = false;
 
         RespawnObserverRpc();
@@ -499,17 +495,14 @@ public class PlayerHealth : NetworkBusListener
     [TargetRpc]
     private void TeleportOwnerTargetRpc(NetworkConnection conn, Vector3 respawnPos)
     {
-        Debug.Log($"[TeleportRpc] Reçu, pos cible={respawnPos}");
-
         Rigidbody rb = GetComponent<Rigidbody>();
 
         if (rb != null)
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            rb.position = respawnPos; // ✅ Téléporte le rigidbody directement
-            transform.position = respawnPos; // ✅ Sync le transform aussi
-            Debug.Log($"[TeleportRpc] Via RB, rb.position={rb.position}, transform={transform.position}");
+            rb.position = respawnPos;
+            transform.position = respawnPos;
         }
         else
         {
