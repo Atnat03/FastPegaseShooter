@@ -181,7 +181,7 @@ public class FPSController : NetworkBusListener
      private float _grapplingSpeed = 15;
     [SerializeField] float _grappleRedirectionSpeed = 8f;
      private float _endGrappleImpulseForce = 3f;
-     [SerializeField] private float grappleLineTravelTime = .2f;
+    [SerializeField] private float grappleLineTravelTime = .2f;
 
     #endregion
 
