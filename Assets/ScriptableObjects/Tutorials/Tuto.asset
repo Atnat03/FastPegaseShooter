@@ -19,14 +19,13 @@ MonoBehaviour:
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076671141347505
-    - rid: 5406076671141347506
     - rid: 5406076671141347507
   - ScenarioName: DialogueJumps
     trigger:
       rid: 5406076671141347512
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076671141347505
+    - rid: 5406076746262118506
     - rid: 5406076742743621903
     - rid: 5406076671141347513
   - ScenarioName: Pre-SalleMonstres
@@ -34,10 +33,11 @@ MonoBehaviour:
       rid: 5406076671141347514
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076671141347505
+    - rid: 5406076746262118507
     - rid: 5406076671141347515
     - rid: 5406076671141347516
     - rid: 5406076671141347517
+    - rid: 5406076746262118500
   - ScenarioName: CloseDoor
     trigger:
       rid: 5406076671141347518
@@ -46,11 +46,18 @@ MonoBehaviour:
     - rid: 5406076671141347519
   - ScenarioName: Mob Deads
     trigger:
-      rid: 5406076695212458146
+      rid: 5406076746262118502
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076695212458154
     - rid: 5406076695212458155
+  - ScenarioName: Well Done Energy
+    trigger:
+      rid: 5406076746262118504
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076695212458148
+    - rid: 5406076746262118505
   - ScenarioName: Seperation Start
     trigger:
       rid: 5406076695212458147
@@ -73,18 +80,14 @@ MonoBehaviour:
     - rid: 5406076671141347504
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _durationToWait: 2
+        _durationToWait: 0.5
     - rid: 5406076671141347505
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue Premonstre]'
+        _dialogue: '[Dialogue Start]'
         _keyVoceline: test
         _duration: 2
         speaker: 2
-    - rid: 5406076671141347506
-      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _durationToWait: 1
     - rid: 5406076671141347507
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -94,7 +97,7 @@ MonoBehaviour:
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         proxyIndex: 1
-        mode: 3
+        mode: 0
     - rid: 5406076671141347513
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -106,7 +109,7 @@ MonoBehaviour:
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         proxyIndex: 3
-        mode: 3
+        mode: 0
     - rid: 5406076671141347515
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -127,26 +130,21 @@ MonoBehaviour:
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         proxyIndex: 4
-        mode: 3
+        mode: 0
     - rid: 5406076671141347519
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
         actionToDo: 1
         doorIndex: 2
-    - rid: 5406076695212458146
-      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data:
-        proxyIndex: -10
-        mode: 0
     - rid: 5406076695212458147
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         proxyIndex: 5
-        mode: 3
+        mode: 0
     - rid: 5406076695212458148
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: "[Dialogue s\xE9paration]"
+        _dialogue: '[Dialogue welldone energy]'
         _keyVoceline: test
         _duration: 3
         speaker: 2
@@ -198,3 +196,34 @@ MonoBehaviour:
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
         _durationToWait: 0.2
+    - rid: 5406076746262118500
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 0
+    - rid: 5406076746262118502
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 00000000
+    - rid: 5406076746262118504
+      type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        _percentToReach: 1
+    - rid: 5406076746262118505
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 3
+    - rid: 5406076746262118506
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Jump1]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 5406076746262118507
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Premonstre]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 0
