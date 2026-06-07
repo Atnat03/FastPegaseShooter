@@ -32,6 +32,7 @@ namespace Tuto
     {
         [SerializeField] private ScenarioSO _scenarioSequence;
         [SerializeField] private List<TriggerBoxBridge> _sceneProxies = new();
+        [SerializeField] private List<SpawnZoneTutorial> _sceneSpawnZones = new();
         
         [Header("Sound")]
         [SerializeField] private AudioSource _audioSource;
@@ -66,15 +67,18 @@ namespace Tuto
             Dictionary<int, TriggerBoxBridge> proxyMap = new Dictionary<int, TriggerBoxBridge>();
             foreach (TriggerBoxBridge proxy in _sceneProxies)
                 proxyMap[proxy.bridgeIndex] = proxy;
- 
+
             foreach (Scenario scenario in _scenarioSequence._scenarioList)
             {
                 if (scenario.trigger is Trigger_BoxCollider boxTrigger)
                 {
                     if (proxyMap.TryGetValue(boxTrigger.proxyIndex, out var proxy))
                         boxTrigger.InjectProxy(proxy);
-                    else
-                        Debug.LogWarning($"Aucun proxy avec l'index {boxTrigger.proxyIndex} trouvé dans la scène.");
+                }
+        
+                if (scenario.trigger is Trigger_AllMobsDead mobTrigger)
+                {
+                    mobTrigger.InjectSpawnZones(_sceneSpawnZones);
                 }
             }
         }
