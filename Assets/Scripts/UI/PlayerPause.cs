@@ -46,7 +46,11 @@ public class PlayerPause : NetworkBusListener
         if(_isPause)
             CursorManager.instance.PushState(CursorState.UI, _fpsController);
         else
+        {
             CursorManager.instance.PopState(_fpsController);
+            Cursor.lockState = CursorLockMode.Locked; // jsp ce que fait la ligne du dessus mais elle marche pas bien
+            Cursor.visible = false;
+        }
         
         //InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
     }
