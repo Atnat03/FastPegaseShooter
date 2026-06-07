@@ -15,6 +15,9 @@ public class GrapplePoint : MonoBehaviour
 
      private float elapsedTime = 0;
 
+     public ParticleSystem[] grappleParticulesLookedAt;
+     private bool particulesPlaying = false;
+
     void Start()
     {
         p_playerTransform = Camera.main?.transform;
@@ -31,12 +34,36 @@ public class GrapplePoint : MonoBehaviour
             if(p_playerTransform!=null) 
                 _canvas.transform.LookAt(p_playerTransform);
 
+
+            if (!particulesPlaying)
+            {
+                foreach (ParticleSystem particule in grappleParticulesLookedAt)
+                {
+                    particule.gameObject.SetActive(true);
+                    particule.Play();
+                }
+
+                particulesPlaying = true;
+            }
+
             /*if (elapsedTime >= .1 && !p_mustShowCanvas)
             {
                 _canvas.SetActive(false);
                 p_mustShowCanvas = false;
                 elapsedTime = 0;
             }*/
+        }
+
+        else if(particulesPlaying)
+        {
+            foreach (ParticleSystem particule in grappleParticulesLookedAt)
+            {
+                particule.Stop();
+                particule.gameObject.SetActive(false);
+
+            }
+            particulesPlaying = false;
+            
         }
     }
     

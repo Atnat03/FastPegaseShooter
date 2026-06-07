@@ -24,6 +24,7 @@ public interface IGun
     public void SetInfiniteAmmo(bool infiniteAmmo);
     public void SetChargedPlayer(bool b);
     public void SetReticule(ReticulesManager manager);
+    public bool IsChargeShooting();
 }
 
 
@@ -93,6 +94,8 @@ namespace GunDecorator
         [HideInInspector] public bool p_authorizedToShoot = true;
         
         PlayerAnimation _playerAnimation;
+
+        private bool _isChargeShooting;
 
         //Action
 
@@ -384,7 +387,20 @@ namespace GunDecorator
         {
             manager.ActivateReticules(_reticuleID);
         }
-        
+
         public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
+        
+        public bool IsChargeShooting() => _isChargeShooting;
+
+        public void OnChargingInvoke(float ratio)
+        {
+            _isChargeShooting = true;
+            OnCharging?.Invoke(ratio);
+        }
+        public void OnStopChargingInvoke()
+        {
+            _isChargeShooting = false;
+            OnStopCharging?.Invoke();
+        }
     }
 }
