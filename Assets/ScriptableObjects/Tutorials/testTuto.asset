@@ -15,7 +15,7 @@ MonoBehaviour:
   _scenarioList:
   - ScenarioName: 
     trigger:
-      rid: 4696936823209328895
+      rid: 6001466706489245849
     eventsList:
     - rid: 4696936823209328896
   - ScenarioName: 
@@ -37,12 +37,11 @@ MonoBehaviour:
         target: 0
         disableAction: 0
         duration: 1
-    - rid: 4696936823209328895
-      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data:
-        proxyIndex: 0
-        mode: 1
     - rid: 4696936823209328896
       type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
         _indexSpawn: 0000000001000000
+    - rid: 6001466706489245849
+      type: {class: Trigger_Heal, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        _numberUseOfHealNeed: 2
