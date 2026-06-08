@@ -24,7 +24,7 @@ public interface IGun
     public void SetInfiniteAmmo(bool infiniteAmmo);
     public void SetChargedPlayer(bool b);
     public void SetReticule(ReticulesManager manager);
-    public bool IsChargeShooting();
+    public bool IsChargeShooting { get; }
 }
 
 
@@ -48,6 +48,8 @@ namespace GunDecorator
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
         public Transform CurrentModelGun => currentModel;
+        public bool IsChargeShooting => _chargedModule._isChargedShooting;
+        
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -170,14 +172,14 @@ namespace GunDecorator
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
-
+            
             if (!currentModel.gameObject.activeInHierarchy)
                 return;
-
+            
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 if (!_shootModule.CanShoot) return;
-
+                
                 _shootModule.SetFireRate(_fireRateMultiplier);
 
                 if (IsFullAuto)
@@ -389,18 +391,5 @@ namespace GunDecorator
         }
 
         public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
-        
-        public bool IsChargeShooting() => _isChargeShooting;
-
-        public void OnChargingInvoke(float ratio)
-        {
-            _isChargeShooting = true;
-            OnCharging?.Invoke(ratio);
-        }
-        public void OnStopChargingInvoke()
-        {
-            _isChargeShooting = false;
-            OnStopCharging?.Invoke();
-        }
     }
 }

@@ -29,7 +29,7 @@ namespace Tuto.Triggers
             _bridge = bridge;
         }
 
-        public override void Initialize()
+        public override void Initialize(TutoManager tuto)
         {
             if (_bridge == null)
             {
