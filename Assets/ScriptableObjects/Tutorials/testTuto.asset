@@ -15,33 +15,18 @@ MonoBehaviour:
   _scenarioList:
   - ScenarioName: 
     trigger:
-      rid: 6001466706489245849
+      rid: 6001466707935232197
     eventsList:
-    - rid: 4696936823209328896
-  - ScenarioName: 
-    trigger:
-      rid: 4696936823209328892
-    eventsList:
-    - rid: 4696936823209328893
+    - rid: 6001466707935232198
   references:
     version: 2
     RefIds:
-    - rid: 4696936823209328892
-      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+    - rid: 6001466707935232197
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
-        spawnZoneIndices: 0000000001000000
-    - rid: 4696936823209328893
-      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+        proxyIndex: 0
+        mode: 1
+    - rid: 6001466707935232198
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
       data:
-        notificationText: 
-        target: 0
-        disableAction: 0
-        duration: 1
-    - rid: 4696936823209328896
-      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _indexSpawn: 0000000001000000
-    - rid: 6001466706489245849
-      type: {class: Trigger_Heal, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data:
-        _numberUseOfHealNeed: 2
+        capacityToUnlock: 3
