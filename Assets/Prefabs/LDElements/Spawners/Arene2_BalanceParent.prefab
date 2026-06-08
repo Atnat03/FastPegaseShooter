@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 7097750493315146274}
   - component: {fileID: 3424201434278550899}
   - component: {fileID: 1071327693559591396}
-  - component: {fileID: 5161362696540942404}
+  - component: {fileID: 6569849761975482603}
   m_Layer: 0
   m_Name: Arene2_BalanceParent
   m_TagString: Untagged
@@ -116,8 +116,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TriggerZoneServerToClient
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 5161362696540942404}
-  _networkObjectCache: {fileID: 5161362696540942404}
+  _addedNetworkObject: {fileID: 6569849761975482603}
+  _networkObjectCache: {fileID: 0}
   _clientEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -149,7 +149,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _activateOnce: 1
---- !u!114 &5161362696540942404
+--- !u!114 &6569849761975482603
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,10 +167,7 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
-  NetworkBehaviours:
-  - {fileID: 1071327693559591396}
-  - {fileID: 0}
-  - {fileID: 5233076031012915598}
+  NetworkBehaviours: []
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -181,7 +178,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584207818218986818
+  _initializedTimestamp: 0
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -197,15 +194,15 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 7
+  <PrefabId>k__BackingField: 65535
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 6495268031670109363
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0, w: 1}
-    Scale: {x: 1, y: 1, z: 1}
-    IsValid: 1
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
+    Scale: {x: 0, y: 0, z: 0}
+    IsValid: 0
 --- !u!1001 &2751578772259004579
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -214,6 +211,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7097750493315146274}
     m_Modifications:
+    - target: {fileID: -4100547401570036684, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 326007122912547632, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
       propertyPath: WasActiveDuringEdit
       value: 1
@@ -258,14 +259,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1462491198288973516, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
-      propertyPath: _addedNetworkObject
-      value: 
-      objectReference: {fileID: 5161362696540942404}
-    - target: {fileID: 1462491198288973516, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
-      propertyPath: _networkObjectCache
-      value: 
-      objectReference: {fileID: 5161362696540942404}
     - target: {fileID: 2276005674624102555, guid: afef525bb7d39914cb6fe3b583c32149, type: 3}
       propertyPath: m_Name
       value: Arene2_Spawner_1
@@ -307,14 +300,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Arene2_Spawner_2
       objectReference: {fileID: 0}
-    - target: {fileID: 2667236337850832112, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
-      propertyPath: _addedNetworkObject
-      value: 
-      objectReference: {fileID: 5161362696540942404}
-    - target: {fileID: 2667236337850832112, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
-      propertyPath: _networkObjectCache
-      value: 
-      objectReference: {fileID: 5161362696540942404}
     - target: {fileID: 7902967571896485682, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -354,6 +339,10 @@ PrefabInstance:
     - target: {fileID: 7902967571896485682, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8323112751248399650, guid: 006d8f6d90b9d9a45ab3dceda1cfb31f, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
