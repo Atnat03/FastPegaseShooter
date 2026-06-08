@@ -18,12 +18,14 @@ public class SpawnZoneTutorial : NetworkBusListener
     [SerializeField] private List<MobSpawnSO> _spawnWave = new List<MobSpawnSO>();
     
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
+    [SerializeField] private int _zoneIndex;
     
     private PathfindingGridReader _gridReader;
     private int _spawnedEnemies;
-
+    private HashSet<EnemyCore> _spawnedEnemySet = new();
+    
     public Action<SpawnZoneTutorial> p_onSpawnZoneComplete;
-
+    
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -32,6 +34,8 @@ public class SpawnZoneTutorial : NetworkBusListener
         
         ListenToEvent<OnEnemyDieEvent>(OEDE =>
         {
+            if (!_spawnedEnemySet.Contains(OEDE.p_enemy)) return;
+            
             if(OEDE.p_enemy.p_gridReaderId == _gridReader.p_id)
             {
                 _spawnedEnemies--;
@@ -56,9 +60,8 @@ public class SpawnZoneTutorial : NetworkBusListener
     [ServerRpc(RequireOwnership = false)]
     public void StartSpawning(OnStartSpawner_TUTO data)
     {
+        if (data.spawnIndex != _zoneIndex) return;
         if(_zoneActivated) return;
-        
-        Cons.Print("Start spawn zone", ColorConsole.Red);
         
         _zoneActivated = true;
         Spawn();
@@ -72,8 +75,6 @@ public class SpawnZoneTutorial : NetworkBusListener
     [Server]
     public void SpawnEnemy(GameObject enemyPrefab)
     {
-        Cons.Print("SpawnEnemy", ColorConsole.Red);
-        
         Vector3 position = GetValidSpawnPoint().position;
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         
@@ -81,6 +82,7 @@ public class SpawnZoneTutorial : NetworkBusListener
         EnemyCore enemyCore =  enemy.GetComponentInChildren<EnemyCore>();
         enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
+        _spawnedEnemySet.Add(enemyCore);
         _spawnedEnemies++;
         
         InstanceFinder.ServerManager.Spawn(enemy);
@@ -107,6 +109,5 @@ public class SpawnZoneTutorial : NetworkBusListener
     }
 
     Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];
-    bool IsSpawnZoneComplete() => _spawnedEnemies <= 0 && _spawnWave.Count <= 0;
-    
+    bool IsSpawnZoneComplete() => _spawnedEnemies <= 0 && _spawnWave.Count <= 0;    
 }

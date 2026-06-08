@@ -23,12 +23,13 @@ namespace Tuto.Triggers
                 .ToList();
         }
 
-        public override void Initialize(TutoManager tuto)
+        public override void Initialize(TutoManager tuto) { }
+
+        public override void Activate()
         {
-            if (_spawnZones == null || _spawnZones.Count == 0)
-            { 
-                return;
-            }
+            _completedZones.Clear();
+
+            if (_spawnZones == null || _spawnZones.Count == 0) return;
 
             foreach (SpawnZoneTutorial zone in _spawnZones)
             {
@@ -49,7 +50,7 @@ namespace Tuto.Triggers
         private void OnZoneComplete(SpawnZoneTutorial zone)
         {
             _completedZones.Add(zone);
-
+            
             if (_completedZones.Count >= _spawnZones.Count)
                 OnActivated?.Invoke();
         }
