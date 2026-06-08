@@ -20,9 +20,7 @@ public class PlayerHealthView : MonoBehaviour
 	[Header("UI")]
 	[SerializeField] private float _healthVisualFillingSpeed = 1;
 	[SerializeField] private Image _healthBar;
-	[SerializeField] private CanvasGroup _damagedWarningImage;
 	[SerializeField] private CanvasGroup _damagedImage;
-	[SerializeField] private Image _cooldownHealImage;
 	
 	[Header("Dead")]
 	[SerializeField] private GameObject _normalCanva;

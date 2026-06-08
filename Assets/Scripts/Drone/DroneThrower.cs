@@ -9,10 +9,6 @@ using UnityEngine;
 
 public class DroneThrower : NetworkBusListener
 {
-	#region Properties
-
-	#endregion
-	
 	#region Variables
 	
 	[SerializeField] private ArmBridgeAnimation _bridgeAnimation;

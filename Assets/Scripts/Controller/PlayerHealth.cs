@@ -476,7 +476,7 @@ public class PlayerHealth : NetworkBusListener
 
 
     [Server]
-    void Respawn()
+    public void Respawn()
     {
         _respawnTimer.Value = 0;
         _respawnTime = Time.time;
