@@ -69,6 +69,18 @@ MonoBehaviour:
     - rid: 5406076695212458151
     - rid: 5406076695212458152
     - rid: 5406076695212458153
+  - ScenarioName: UseHeal
+    trigger:
+      rid: 5406076761526239318
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076695212458148
+    - rid: 5406076761526239319
+    - rid: 5406076761526239320
+    - rid: 5406076761526239321
+    - rid: 5406076761526239322
+    - rid: 5406076761526239324
+    - rid: 5406076761526239325
   references:
     version: 2
     RefIds:
@@ -96,7 +108,7 @@ MonoBehaviour:
     - rid: 5406076671141347512
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
-        proxyIndex: 1
+        proxyIndex: 2
         mode: 0
     - rid: 5406076671141347513
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
@@ -144,7 +156,7 @@ MonoBehaviour:
     - rid: 5406076695212458148
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue welldone energy]'
+        _dialogue: '[Dialogue well done heal]'
         _keyVoceline: test
         _duration: 3
         speaker: 2
@@ -227,3 +239,36 @@ MonoBehaviour:
         _keyVoceline: 
         _duration: 3
         speaker: 0
+    - rid: 5406076761526239318
+      type: {class: Trigger_Heal, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data: 
+    - rid: 5406076761526239319
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 0.2
+    - rid: 5406076761526239320
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: "[R\xE9action rouge]"
+        _keyVoceline: test
+        _duration: 3
+        speaker: 0
+    - rid: 5406076761526239321
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 0.2
+    - rid: 5406076761526239322
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Mob en approche]'
+        _keyVoceline: test
+        _duration: 3
+        speaker: 2
+    - rid: 5406076761526239324
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 1
+    - rid: 5406076761526239325
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 2
