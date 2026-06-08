@@ -21,10 +21,14 @@ public class UIGunModule : GunModule
 	[Header("Noise")]
 	[SerializeField] private List<ReticuleUI> _reticules;
 	
+	[Header("Silouette")]
+	[SerializeField] private Image _imageSilouette;
+	[SerializeField] private Sprite _spriteSilouette;
+	
 	#endregion
 	
 	#region Fonctions
-
+	
 	private void OnEnable()
 	{
 		_gunController.OnShootAmmo += OnAmmoChange;
@@ -32,8 +36,10 @@ public class UIGunModule : GunModule
 
 		_gunController.OnCharging += OnNoiseChange;
 		_gunController.OnStopCharging += StopCharging;
+		
+		_gunController.OnSetUp += OnSetUp;
 	}
-	
+
 	private void OnDisable()
 	{
 		_gunController.OnShootAmmo -= OnAmmoChange;
@@ -41,6 +47,8 @@ public class UIGunModule : GunModule
 		
 		_gunController.OnCharging -= OnNoiseChange;
 		_gunController.OnStopCharging -= StopCharging;
+		
+		_gunController.OnSetUp -= OnSetUp;
 	}
 
 	private void OnNoiseChange(float ratio)
@@ -65,6 +73,13 @@ public class UIGunModule : GunModule
 			r.image.transform.localPosition = r.minPos;
 		}
 	}
+	
+	private void OnSetUp()
+	{
+		if(_imageSilouette && _spriteSilouette)
+			_imageSilouette.sprite = _spriteSilouette;
+	}
+
 	
 	#endregion
 }

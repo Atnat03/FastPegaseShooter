@@ -57,6 +57,7 @@ public class PlayerCapacity : MonoBusListener
 	
 	//Actions
 	public Action<CapacityData> OnUpdateCapacity;
+	public Action<CapacityData> OnUseCapacity;
 	
 	#endregion
 
@@ -134,6 +135,8 @@ public class PlayerCapacity : MonoBusListener
 		
 		OnUpdateCapacity?.Invoke(data);
 
+		OnUseCapacity?.Invoke(data);
+		
 		StartCoroutine(CooldownCapa(data));
 	}
 
