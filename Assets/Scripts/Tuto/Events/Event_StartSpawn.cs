@@ -1,5 +1,6 @@
 ﻿using System.Collections;
-//using TMPro.EditorUtilities;
+using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 namespace Tuto
@@ -8,7 +9,7 @@ namespace Tuto
     {
         public override string DisplayName => "Start Spawn";
 
-        [SerializeField] private int _indexSpawn;
+        [SerializeField] private List<int> _indexSpawn =  new List<int>();
         
         public override IEnumerator Execute()
         {
