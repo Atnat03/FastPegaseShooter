@@ -36,7 +36,8 @@ public class PlayerHealth : NetworkBusListener
     [SerializeField] private PlayerAnimation _playerAnimation;
     [SerializeField] private GunSwitching _gunSwitching;
     [SerializeField] private NetworkObject healThrowObject;
-
+    [SerializeField] private PlayerCapacity _playerCapacity;
+    
     [Header("Invincibility")] [SerializeField]
     private float _invicibilityDuration = 3f;
 
@@ -210,6 +211,7 @@ public class PlayerHealth : NetworkBusListener
         if (!IsOwner) return;
 
         if (!p_unlockCapa) return;
+        if (!_playerCapacity.CanDrone) return;
 
         InvokeEvent(new OnHealUsed_TUTO());
 
