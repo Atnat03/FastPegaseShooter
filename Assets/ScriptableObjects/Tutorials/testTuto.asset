@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b19f28374c4eb2ba0a96b9d3b397bf, type: 3}
+  m_Name: testTuto
+  m_EditorClassIdentifier: Assembly-CSharp::Tuto.ScenarioSO
+  _scenarioList:
+  - ScenarioName: 
+    trigger:
+      rid: 4696936823209328895
+    eventsList:
+    - rid: 4696936823209328896
+    - rid: 4696936823209328897
+  - ScenarioName: 
+    trigger:
+      rid: 4696936823209328892
+    eventsList:
+    - rid: 4696936823209328893
+  references:
+    version: 2
+    RefIds:
+    - rid: 4696936823209328892
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 0000000001000000
+    - rid: 4696936823209328893
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: 
+        target: 0
+        disableAction: 0
+        duration: 1
+    - rid: 4696936823209328895
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 0
+        mode: 1
+    - rid: 4696936823209328896
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 0
+    - rid: 4696936823209328897
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 1

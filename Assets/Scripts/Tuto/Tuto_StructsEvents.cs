@@ -41,3 +41,8 @@ public struct OnFillAmount_TUTO
     public float speed;
     public AnimationBar type;
 }
+
+public struct OnStartSpawner_TUTO
+{
+    public int spawnIndex;
+}
