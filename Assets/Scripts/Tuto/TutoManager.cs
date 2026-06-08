@@ -47,8 +47,6 @@ namespace Tuto
         [SerializeField] private SoundsDataSO _soundsData;
 
         Dictionary<PlayerSide, NetworkObject> _playerList = new();
-
-        private int _numberPlayerUsedHeal = 0;
         
         //Actions
         public Action OnBothUseHeal;
@@ -71,12 +69,7 @@ namespace Tuto
         [ServerRpc(RequireOwnership = false)]
         private void OnAddPlayerUsedHealServerRpc()
         {
-            _numberPlayerUsedHeal++;
-
-            if (_numberPlayerUsedHeal == 2)
-            {
-                OnBothUseHeal?.Invoke();
-            }
+            OnBothUseHeal?.Invoke();
         }
 
         private void OnPlayerSpawn(OnPlayerSpawnEvent data)

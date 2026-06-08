@@ -36,7 +36,7 @@ public class PlayerHealth : NetworkBusListener
     [SerializeField] private PlayerAnimation _playerAnimation;
     [SerializeField] private GunSwitching _gunSwitching;
     [SerializeField] private NetworkObject healThrowObject;
-    private PlayerCapacity _playerCapacity;
+    [SerializeField] private PlayerCapacity _playerCapacity;
     
     [Header("Invincibility")] [SerializeField]
     private float _invicibilityDuration = 3f;
@@ -169,8 +169,6 @@ public class PlayerHealth : NetworkBusListener
 
     private void OnEnable()
     {
-        _playerCapacity = GetComponent<PlayerCapacity>();
-        
         _playerInputAction.actions["Heal"].performed += HealKeyPerformed;
         _playerInputAction.actions["Heal"].canceled += HealKeyCanceled;
         _playerInputAction.actions["Shoot"].performed += CancelHealThrowing;
