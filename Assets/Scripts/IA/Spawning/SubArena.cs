@@ -122,7 +122,6 @@ public class SubArena : NetworkBusListener
     public void TriggerSubArenaSpawning()
     {
         if(_zoneActivated) return;
-        CustomLogger.HighlightLog("Subarena Starting 1");
         _zoneActivated = true;
         StartSpawning();
     }
@@ -131,11 +130,8 @@ public class SubArena : NetworkBusListener
     async void StartSpawning()
     {
         if(!IsServerStarted) return;
-        CustomLogger.HighlightLog("Subarena Starting 2");
         NotifySubArenaStartObserverRpc(_gridReader.p_id);
-        CustomLogger.HighlightLog("Subarena Starting 3");
         await SpawnFirstWave();
-        CustomLogger.HighlightLog("Subarena Starting 4");
         await InfiniteSpawn();
     }
 
@@ -214,13 +210,11 @@ public class SubArena : NetworkBusListener
     [Server]
     async Task InfiniteSpawn()
     {
-        CustomLogger.HighlightLog("Subarena Starting 5");
         try
         {
             int enabledTime = 0;
             int currentStateTime = 0;
             
-            CustomLogger.HighlightLog("Subarena Starting 6");
             
             while (Application.isPlaying && _zoneActivated && enabledTime < _maxEnabledTime)
             {
@@ -243,7 +237,6 @@ public class SubArena : NetworkBusListener
                 }
                 
                 MobSpawnSO nextMobToSpawn = GetNextEnemyToSpawn();
-                CustomLogger.ImportantLog($"choosen Enemy is null :  {nextMobToSpawn == null}");
 
                 //generating budget
                 while (Application.isPlaying &&
