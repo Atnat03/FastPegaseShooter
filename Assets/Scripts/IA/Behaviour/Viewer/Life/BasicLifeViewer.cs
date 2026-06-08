@@ -17,6 +17,7 @@ public class BasicLifeViewer : MonoBehaviour
     private TextMeshProUGUI _hitMarker;
 
     [Header("Life")]
+    [SerializeField] private GameObject _lifeBarParent;
     [SerializeField] private TextMeshProUGUI _lifeTMP;
     [SerializeField] private Image _lifeBarImage;
     [SerializeField] private Gradient _NoneAffinityLifeGradient;
@@ -38,17 +39,18 @@ public class BasicLifeViewer : MonoBehaviour
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
         _lifeBarImage.color = _NoneAffinityLifeGradient.Evaluate(1f);
 
-        
-        _lifeTMP.enabled = false;
+        _lifeBarParent.SetActive(false);
+        /*_lifeTMP.enabled = false;
         _lifeBarImage.enabled = false;
-        _lifeBarSecondImage.enabled = false;
+        _lifeBarSecondImage.enabled = false;*/
     }
     
     private void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
-        _lifeTMP.enabled = true;
+        _lifeBarParent .SetActive(true);
+        /*_lifeTMP.enabled = true;
         _lifeBarImage.enabled = true;
-        _lifeBarSecondImage.enabled = true;
+        _lifeBarSecondImage.enabled = true;*/
         
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
