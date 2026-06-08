@@ -80,7 +80,25 @@ MonoBehaviour:
     - rid: 5406076761526239321
     - rid: 5406076761526239322
     - rid: 5406076761526239324
-    - rid: 5406076761526239325
+  - ScenarioName: EndPinata
+    trigger:
+      rid: 5406076761526239331
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076695212458148
+    - rid: 5406076761526239319
+    - rid: 5406076761526239320
+    - rid: 5406076761526239321
+    - rid: 5406076761526239322
+    - rid: 5406076761526239332
+  - ScenarioName: HealezVous
+    trigger:
+      rid: 5406076761526239334
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076761526239335
+    - rid: 5406076761526239338
+    - rid: 5406076761526239339
   references:
     version: 2
     RefIds:
@@ -156,7 +174,7 @@ MonoBehaviour:
     - rid: 5406076695212458148
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue well done heal]'
+        _dialogue: "[Dialogue Bien jou\xE9]"
         _keyVoceline: test
         _duration: 3
         speaker: 2
@@ -211,7 +229,7 @@ MonoBehaviour:
     - rid: 5406076746262118500
       type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _indexSpawn: 0
+        _indexSpawn: 01000000
     - rid: 5406076746262118502
       type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
@@ -219,7 +237,7 @@ MonoBehaviour:
     - rid: 5406076746262118504
       type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
-        _percentToReach: 1
+        _percentToReach: 20
     - rid: 5406076746262118505
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -260,15 +278,43 @@ MonoBehaviour:
     - rid: 5406076761526239322
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Mob en approche]'
+        _dialogue: "[R\xE9action bleu]"
         _keyVoceline: test
         _duration: 3
-        speaker: 2
+        speaker: 1
     - rid: 5406076761526239324
       type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _indexSpawn: 1
-    - rid: 5406076761526239325
-      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+        _indexSpawn: 0200000003000000
+    - rid: 5406076761526239331
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
-        _indexSpawn: 2
+        spawnZoneIndices: 0200000003000000
+    - rid: 5406076761526239332
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: "Echangez-vous de l'\xE9nergie !"
+        target: 2
+        disableAction: 2
+        duration: 1
+    - rid: 5406076761526239334
+      type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        _percentToReach: 35
+    - rid: 5406076761526239335
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Healez-vous
+        target: 2
+        disableAction: 4
+        duration: 1
+    - rid: 5406076761526239338
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 4
+    - rid: 5406076761526239339
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 5
