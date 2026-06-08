@@ -159,6 +159,11 @@ public class ConnectionWithCode : MonoBehaviour
     
     private void OnEnable()
     {
+        if (_networkManager == null)
+            _networkManager = InstanceFinder.NetworkManager;
+    
+        if (_networkManager == null) return;
+    
         _networkManager.ClientManager.OnClientConnectionState += OnClientConnectionState;
     }
 

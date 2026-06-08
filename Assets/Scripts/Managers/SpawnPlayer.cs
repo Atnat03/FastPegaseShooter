@@ -19,20 +19,29 @@ public class SpawnPlayer : NetworkBehaviour
 
     private HashSet<int> _spawnedClients = new HashSet<int>();
 
-    private void OnEnable()
+    public override void OnStartServer()
     {
+        base.OnStartServer();
         InstanceFinder.SceneManager.OnLoadEnd += OnSceneLoadEnd;
         InstanceFinder.ServerManager.OnRemoteConnectionState += OnPlayerConnectionState;
+
+        foreach (NetworkConnection conn in InstanceFinder.ServerManager.Clients.Values)
+        {
+            if (!_spawnedClients.Contains(conn.ClientId))
+            {
+                SpawnPlayers(conn);
+                _spawnedClients.Add(conn.ClientId);
+            }
+        }
     }
 
-    private void OnDisable()
+    public override void OnStopServer()
     {
-        if (InstanceFinder.SceneManager == null) return;
-        
+        base.OnStopServer();
         InstanceFinder.SceneManager.OnLoadEnd -= OnSceneLoadEnd;
         InstanceFinder.ServerManager.OnRemoteConnectionState -= OnPlayerConnectionState;
     }
-
+    
     private void OnSceneLoadEnd(SceneLoadEndEventArgs args)
     {
         if (!args.QueueData.AsServer) return;

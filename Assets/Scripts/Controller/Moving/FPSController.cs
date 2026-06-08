@@ -454,11 +454,11 @@ public class FPSController : NetworkBusListener
         stateMachine?.LateUpdate();
     }
 
-    public void SetFreeze(bool isFreeze)
+    public void SetFreeze(bool freeze)
     {
-        IsFreeze = isFreeze;
+        IsFreeze = freeze;
 
-        if (isFreeze)
+        if (freeze)
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
@@ -947,6 +947,9 @@ public class FPSController : NetworkBusListener
 
     private float currentHeadTilt = 0f;
     float targetHeadTilt = 0f;
+    
+    private readonly RaycastHit[] _grappleHitBuffer = new RaycastHit[16];
+
 
     void EnterWallRidingState()
     {
@@ -982,6 +985,7 @@ public class FPSController : NetworkBusListener
             return;
         }
 
+        if(wallRidingCoroutine != null) StopCoroutine(wallRidingCoroutine);
         wallRidingCoroutine = StartCoroutine(WallRidingDurationCoroutine());
     }
 
@@ -1022,17 +1026,23 @@ public class FPSController : NetworkBusListener
 
         if (playerInput.actions["Grapple"].WasPressedThisFrame())
         {
-            RaycastHit[] hits = Physics.SphereCastAll(cameraParentTransform.position,
-                _castWidth, cameraParentTransform.forward,
+            int hitCount = Physics.SphereCastNonAlloc(
+                cameraParentTransform.position,
+                _castWidth,
+                cameraParentTransform.forward,
+                _grappleHitBuffer,
                 _castMaxDistance,
                 LayerMask.GetMask("Default"),
-                QueryTriggerInteraction.Collide);
-            foreach (RaycastHit hit in hits)
+                QueryTriggerInteraction.Collide
+            );
+
+            for (int i = 0; i < hitCount; i++)
             {
-                if (hit.collider.GetComponent<GrapplePoint>() != null)
+                if (_grappleHitBuffer[i].collider.GetComponent<GrapplePoint>() != null)
                 {
-                    _currentGrapplePoint = hit.collider.transform;
+                    _currentGrapplePoint = _grappleHitBuffer[i].collider.transform;
                     stateMachine.ChangeState(ControlerState.Grappling);
+                    break; // inutile de continuer après avoir trouvé
                 }
             }
         }

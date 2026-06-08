@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using FishNet.Object;
 using MyPrint;
 using UnityEngine;
 
@@ -84,12 +85,16 @@ public class PlayerEnergizedState : NetworkBusListener
 					p_percentageValue = _reloadCapacityValue[(int)capa] * Time.deltaTime * ratio
 				});
 				
-				if(ratio > 0 && IsServerInitialized)
-				{
-					InvokeEvent(new OnAddDapPercentage{p_ratio = Time.deltaTime});
-				}
+				if (ratio > 0)
+					AddDapPercentageServerRpc(Time.deltaTime);
 			}
 			yield return null;
 		}
+	}
+	
+	[ServerRpc]
+	private void AddDapPercentageServerRpc(float deltaTime)
+	{
+		InvokeEvent(new OnAddDapPercentage { p_ratio = deltaTime });
 	}
 }
