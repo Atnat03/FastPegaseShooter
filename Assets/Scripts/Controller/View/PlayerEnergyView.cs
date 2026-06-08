@@ -12,9 +12,7 @@ public class PlayerEnergyView : MonoBehaviour
 	[SerializeField] private PlayerEnergy _energyPlayer;
 	
 	[Header("UI")]
-	[SerializeField] private Image _imageBarPrefab;
-	[SerializeField] private Sprite[] _energyBarSprites;
-	[SerializeField] private Transform _barParent;
+	[SerializeField] private Image[] _energyBarSprites;
     
 	[SerializeField] private Color[] _energyBarColorFull;
 	[SerializeField] private Color[] _energyBarColorNotFull;
@@ -56,24 +54,9 @@ public class PlayerEnergyView : MonoBehaviour
 
 	private void CreateUI(int totalBars)
 	{
-		for (int i = 0; i < totalBars; i++)
+		foreach (Image i in _energyBarSprites)
 		{
-			Image newImage = Instantiate(_imageBarPrefab, _barParent);
-            
-			if(i == 0)
-			{
-				newImage.sprite = _energyBarSprites[0];
-			}
-			else if(i == totalBars-1)
-			{
-				newImage.sprite = _energyBarSprites[2];
-			}
-			else
-			{
-				newImage.sprite = _energyBarSprites[1];
-			}
-            
-			_energyBarsImageList.Add(newImage);
+			_energyBarsImageList.Add(i);
 		}
 	}
 

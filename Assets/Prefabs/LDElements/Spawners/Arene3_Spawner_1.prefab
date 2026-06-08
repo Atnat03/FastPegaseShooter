@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 632814189338136518}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3000002, y: -14.400001, z: 17.2}
+  m_LocalPosition: {x: 5.92, y: -1.04, z: 11.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 1758843289277406276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.1, y: -14.400001, z: 7.9}
+  m_LocalPosition: {x: -12.48, y: 2.58, z: 8.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -92,7 +92,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2276005674624102555}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cef386ddb5932e40bf94a56237adfb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
-  pathfindingGridSO: {fileID: 11400000, guid: 06f8af95133e4d549843b215b8c76188, type: 2}
+  pathfindingGridSO: {fileID: 11400000, guid: 9b4994e673ed3b849a16126d216a0817, type: 2}
 --- !u!114 &7141032054849496737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,9 +204,21 @@ MonoBehaviour:
   _events:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 8187143561549632812}
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SpawnZone, Assembly-CSharp
-        m_MethodName: StartSpawning
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -237,7 +249,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 50, y: 20, z: 1}
-  m_Center: {x: 0, y: -5.3, z: 43.95}
+  m_Center: {x: 0, y: 1.9, z: -46.67}
 --- !u!114 &8187143561549632812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,13 +266,42 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7141032054849496737}
   _networkObjectCache: {fileID: 7141032054849496737}
   _zoneActivated: 0
-  _spawnPoints: []
-  _arenaGaugePrefab: {fileID: 0}
-  spawnDelayFirstWave: 0
-  spawnMobsFirstWave: []
+  _spawnPoints:
+  - {fileID: 7484981339508033933}
+  - {fileID: 4090596136256573623}
+  - {fileID: 1816736669173997273}
+  - {fileID: 8271317793281665827}
+  - {fileID: 2788401159947362578}
+  - {fileID: 6123096202982382514}
+  - {fileID: 6984358579416377851}
+  - {fileID: 528521104935977285}
+  - {fileID: 3120718870017778370}
+  - {fileID: 8390266222350747730}
+  _arenaGaugePrefab: {fileID: 3964303480415723311, guid: 6a7fc6e67d805e743b987a983de0261a, type: 3}
+  spawnDelayFirstWave: 0.8
+  spawnMobsFirstWave:
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   _currentBudget: 0
-  _spawnMobs: []
-  _spawningStates: []
+  _spawnMobs:
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
+  - {fileID: 11400000, guid: 7554cc37a0d26ac4683769fef2707f0f, type: 2}
+  - {fileID: 11400000, guid: cd26272afa8b20c4f9155881ace28d0f, type: 2}
+  - {fileID: 11400000, guid: 58baac394f7673d4f94d03f6d4386f2f, type: 2}
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 11b0bbdfefc21a04f90d714c4d3b868e, type: 2}
+  - {fileID: 11400000, guid: 049c70c340fc8574587b4bf920743112, type: 2}
+  _spawningStates:
+  - p_stateDuration: 20
+    p_state: {fileID: 11400000, guid: a636d817328cb4348a0bf8247c9a7a7b, type: 2}
+  - p_stateDuration: 20
+    p_state: {fileID: 11400000, guid: 5887bcdbd5eec764db54a8725052c699, type: 2}
+  - p_stateDuration: 20
+    p_state: {fileID: 11400000, guid: 708668fcb5137f44ca0707c4ec449d27, type: 2}
   _maxSpawnEnemy: 12
   _corrosionDamage: 7
   _corrosionDelay: 1
@@ -291,7 +332,7 @@ Transform:
   m_GameObject: {fileID: 3050675338622431470}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.3, y: -14.400001, z: -4.4}
+  m_LocalPosition: {x: -17.8, y: 3.373, z: 11.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -322,7 +363,7 @@ Transform:
   m_GameObject: {fileID: 4186560173459820901}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.800001, y: -13.6, z: 37.9}
+  m_LocalPosition: {x: -24.84, y: 3.87, z: 27.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -353,7 +394,7 @@ Transform:
   m_GameObject: {fileID: 4693511546420541887}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.100002, y: -14.400001, z: 23.1}
+  m_LocalPosition: {x: 24.54, y: 4.28, z: 18.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -384,7 +425,7 @@ Transform:
   m_GameObject: {fileID: 5814710483383074524}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.2, y: -14.3, z: 42}
+  m_LocalPosition: {x: 14.01, y: 3.5, z: 33.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -415,7 +456,7 @@ Transform:
   m_GameObject: {fileID: 7761134592488536638}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.2, y: -14.3, z: 32.100002}
+  m_LocalPosition: {x: 17.37, y: 1.43, z: 18.71}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -446,7 +487,7 @@ Transform:
   m_GameObject: {fileID: 8003473843590048880}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.7000003, y: -14.3, z: 41.600002}
+  m_LocalPosition: {x: -6.11, y: 3.69, z: 36.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -477,7 +518,7 @@ Transform:
   m_GameObject: {fileID: 8184658224719048228}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -14.3, z: 34.8}
+  m_LocalPosition: {x: 2.84, y: 5.26, z: 30.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -508,7 +549,7 @@ Transform:
   m_GameObject: {fileID: 8683750419898856593}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.6, y: -14.400001, z: 21.4}
+  m_LocalPosition: {x: -38.5, y: 3.18, z: 1.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

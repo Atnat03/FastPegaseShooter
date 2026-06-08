@@ -463,6 +463,7 @@ public class FPSController : NetworkBusListener
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
+        stateMachine.ChangeState(ControlerState.Idle);
     }
     
     void UpdateInputs() // appelé en update dans tout les states // update des inputs
@@ -985,6 +986,7 @@ public class FPSController : NetworkBusListener
             return;
         }
 
+        if(wallRidingCoroutine != null) StopCoroutine(wallRidingCoroutine);
         wallRidingCoroutine = StartCoroutine(WallRidingDurationCoroutine());
     }
 
