@@ -24,7 +24,7 @@ public class ArmColorChange : NetworkBusListener
 
 	private void PlayerSpawn(OnPlayerSpawnEvent data)
 	{
-		_renderer.material = _materialsList[data.isPositiveCharge ? 0 : 1];
+		if(_renderer) _renderer.material = _materialsList[data.isPositiveCharge ? 0 : 1];
 	}
 
 	#endregion
