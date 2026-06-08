@@ -985,6 +985,7 @@ public class FPSController : NetworkBusListener
             return;
         }
 
+        if(wallRidingCoroutine != null) StopCoroutine(wallRidingCoroutine);
         wallRidingCoroutine = StartCoroutine(WallRidingDurationCoroutine());
     }
 
