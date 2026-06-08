@@ -49,13 +49,15 @@ public class ShootEnergyView : MonoBehaviour
 		_shootEnergy.OnLaserActivate += ActivatedLaser;
 	}
 
-	void OnDisable()
+	
+	void OnDestroy()
 	{
 		_gunSwitching.OnSwapGun -= SetUpColor;
 		_shootEnergy.CantThrowEnergy -= CantThrowEnergy;
 		_shootEnergy.OnDetectBro -= DetectBro;
 		_shootEnergy.OnLaserActivate -= ActivatedLaser;
 	}
+	
 
 	private void ActivatedLaser(bool isActive, Vector3 endPos)
 	{
@@ -85,6 +87,7 @@ public class ShootEnergyView : MonoBehaviour
 
 	private void SetUpColor(bool isPositive)
 	{
+		Debug.Log("assigned color color is positiv ? :" + isPositive);
 		_modelRenderer.material = isPositive ? _modelMaterial[0] : _modelMaterial[1];
 		_assignedLaser = isPositive ? _lasers[0] : _lasers[1];
 	}
@@ -100,13 +103,13 @@ public class ShootEnergyView : MonoBehaviour
 		_uiTarget.GetComponent<RectTransform>().localPosition = localPos;
 	}
 
-	private void Update()
+	/*private void Update()
 	{
 		if(_assignedLaser.gameObject.activeSelf)
 		{
 			_assignedLaser.transform.LookAt(_targetLaserPos);
 		}	
-	}
+	}*/
 
 	#endregion
 }
