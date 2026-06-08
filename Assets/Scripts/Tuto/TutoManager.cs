@@ -122,20 +122,26 @@ namespace Tuto
  
         private IEnumerator RunTutorial()
         {
-            foreach (Scenario scenario in _scenarioSequence._scenarioList)
-            {
-                if (scenario.trigger != null)
-                    yield return WaitForTrigger(scenario.trigger);
- 
-                foreach (BaseEvent evt in scenario.eventsList)
-                {
-                    if (evt == null)
-                        continue;
+            List<Coroutine> runningScenarios = new();
 
-                    evt.SetManager(this);
-                    
-                    yield return StartCoroutine(evt.Execute());
-                }
+            foreach (Scenario scenario in _scenarioSequence._scenarioList)
+                runningScenarios.Add(StartCoroutine(RunScenario(scenario)));
+
+            foreach (Coroutine coroutine in runningScenarios)
+                yield return coroutine;
+        }
+
+        private IEnumerator RunScenario(Scenario scenario)
+        {
+            if (scenario.trigger != null)
+                yield return WaitForTrigger(scenario.trigger);
+
+            foreach (BaseEvent evt in scenario.eventsList)
+            {
+                if (evt == null) continue;
+
+                evt.SetManager(this);
+                yield return StartCoroutine(evt.Execute());
             }
         }
  
@@ -143,6 +149,7 @@ namespace Tuto
         {
             bool fired = false;
 
+            trigger.Activate();
             trigger.OnActivated += Handler;
             
             yield return new WaitUntil(() => fired);
@@ -385,27 +392,24 @@ namespace Tuto
 
         #region Spawners
 
-        public void AskForStartSpawn(int spawn)
+        public void AskForStartSpawn(List<int> spawnIndices)
         {
             if (IsServerInitialized)
             {
-                InvokeEvent(new OnStartSpawner_TUTO()
-                {
-                    spawnIndex = spawn
-                });
-            }else
+                foreach (int index in spawnIndices)
+                    InvokeEvent(new OnStartSpawner_TUTO { spawnIndex = index });
+            }
+            else
             {
-                AskForStartSpawnServerRpc(spawn);
+                AskForStartSpawnServerRpc(spawnIndices.ToArray());
             }
         }
 
         [ServerRpc]
-        void AskForStartSpawnServerRpc(int spawnIndex)
+        void AskForStartSpawnServerRpc(int[] spawnIndices)
         {
-            InvokeEvent(new OnStartSpawner_TUTO()
-            {
-                spawnIndex = spawnIndex
-            });
+            foreach (int index in spawnIndices)
+                InvokeEvent(new OnStartSpawner_TUTO { spawnIndex = index });
         }
 
         #endregion
