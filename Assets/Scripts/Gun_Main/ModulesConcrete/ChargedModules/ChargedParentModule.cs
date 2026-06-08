@@ -63,14 +63,11 @@ namespace GunDecorator.ChargedModules
         public virtual void TryShootCharging()
         {
             //Put 1 in ration, but didn't really understand what it does (Aloys)
-            _gunController?.OnChargingInvoke(1);
         }
 
         protected void ResetCharging()
         {
             _gunController?.RecoilModule?.SetIsRecoil(false);
-            
-            _gunController?.OnStopChargingInvoke();
         }
     }
 }
