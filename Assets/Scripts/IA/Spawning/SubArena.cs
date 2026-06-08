@@ -2,20 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CustomConsole.Runtime.Console;
 using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using GameKit.Dependencies.Utilities;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
 public class SubArena : NetworkBusListener
 {
     [Header("----- General -----")]
-    [SerializeField] private PathfindingRequestManager _pathfindingRequestManager;
     [SerializeField] private bool _zoneActivated;
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     [SerializeField] private SubArenaGauge _arenaGaugePrefab;
@@ -34,7 +31,8 @@ public class SubArena : NetworkBusListener
     [SerializeField] private int _corrosionDamage = 5;
     [SerializeField] private int _corrosionDelay = 3;
 
-    private List<(float cumulativeWeight, MobSpawnSO mob)> orderedSpawnPriority = new();
+    private float _enemyTotalWeight;
+    private PathfindingRequestManager _pathfindingRequestManager;
     private int _currentSpawnPointIndex = 0;
     
     [Header("----- Debug -----")]
@@ -52,7 +50,6 @@ public class SubArena : NetworkBusListener
         
         ListenToEvent<OnDapEvent>(ODE =>
         {
-            //CustomLogger.Log("OnDapEvent zone stop");
             _zoneActivated = false;
         });
         
@@ -65,16 +62,16 @@ public class SubArena : NetworkBusListener
             }
         });
         
-
-        //CustomLogger.ImportantLog("Not sure if this listening is usefull => to test");
-        ListenToEvent<PlayerPositionUpdateEvent>(PPUE =>
+        ListenToEvent<ForceStopEnemySpawn>(FSES =>
         {
-            if (PPUE.p_isHeartBeat) return; //Heart beat isn't usefull for pathfinding
-            
-            for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
+            _zoneActivated = false;
+        });
+        
+        InvokeEvent(new GetPathfindingRequestManagerRequest
+        {
+            p_OnGetPathfindingRequestManager = (PRM) =>
             {
-                if(!_spawnedEnemies[i]) _spawnedEnemies.RemoveAt(i);
-                else _spawnedEnemies[i].OnPlayerMoving(PPUE.p_networkObjectId, PPUE.p_playerPosition);
+                _pathfindingRequestManager = PRM;
             }
         });
 
@@ -87,17 +84,10 @@ public class SubArena : NetworkBusListener
     void InitialiseSpawnProbability()
     {
         _spawnMobs = _spawnMobs.OrderByDescending(s => s.p_spawnProba).ToList();
-        float totalWeight = 0;
+        _enemyTotalWeight = 0;
         
         foreach (MobSpawnSO spawnMob in _spawnMobs)
-            totalWeight += spawnMob.p_spawnProba;
-
-        float currentWeight = 0;
-        foreach (MobSpawnSO spawnMob in _spawnMobs)
-        {
-            currentWeight += spawnMob.p_spawnProba / totalWeight;
-            orderedSpawnPriority.Add((currentWeight, spawnMob));
-        }
+            _enemyTotalWeight += spawnMob.p_spawnProba;
     }
 
     #endregion
@@ -132,7 +122,6 @@ public class SubArena : NetworkBusListener
     public void TriggerSubArenaSpawning()
     {
         if(_zoneActivated) return;
-        
         _zoneActivated = true;
         StartSpawning();
     }
@@ -141,9 +130,7 @@ public class SubArena : NetworkBusListener
     async void StartSpawning()
     {
         if(!IsServerStarted) return;
-        
         NotifySubArenaStartObserverRpc(_gridReader.p_id);
-        
         await SpawnFirstWave();
         await InfiniteSpawn();
     }
@@ -156,17 +143,19 @@ public class SubArena : NetworkBusListener
     MobSpawnSO GetNextEnemyToSpawn()
     {
         float random01 = Random.Range(0f, 1f);
-        foreach (var mobSpawn in orderedSpawnPriority)
+        float currentWeight = 0;
+        foreach (var mobSpawn in _spawnMobs)
         {
-            if(random01 <= mobSpawn.cumulativeWeight)
+            currentWeight += mobSpawn.p_spawnProba/_enemyTotalWeight;
+            if(random01 <= currentWeight)
             {
                 //CustomLogger.HighlightLog($"Chosen Enemy : {mobSpawn.mob.name}, random01 : {random01}");
-                return mobSpawn.mob;
+                return mobSpawn;
             }
         }
         
         //fallback for float imprecision
-        return orderedSpawnPriority[^1].mob;
+        return _spawnMobs[^1];
     }
 
     [Server]
@@ -176,7 +165,7 @@ public class SubArena : NetworkBusListener
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         
         
-        EnemyCore enemyCore =  enemy.GetComponent<EnemyCore>();
+        EnemyCore enemyCore =  enemy.GetComponentInChildren<EnemyCore>();
         enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
         _spawnedEnemies.Add(enemyCore);
@@ -226,7 +215,8 @@ public class SubArena : NetworkBusListener
             int enabledTime = 0;
             int currentStateTime = 0;
             
-            while (_zoneActivated && enabledTime < _maxEnabledTime && Application.isPlaying)
+            
+            while (Application.isPlaying && _zoneActivated && enabledTime < _maxEnabledTime)
             {
                 //Corrosion
                 if (_spawnedEnemies.Count >= _maxSpawnEnemy)
@@ -249,9 +239,9 @@ public class SubArena : NetworkBusListener
                 MobSpawnSO nextMobToSpawn = GetNextEnemyToSpawn();
 
                 //generating budget
-                while (_currentBudget < nextMobToSpawn.p_cost &&
-                       enabledTime < _maxEnabledTime && _zoneActivated
-                       && Application.isPlaying)
+                while (Application.isPlaying &&
+                       _currentBudget < nextMobToSpawn.p_cost &&
+                       enabledTime < _maxEnabledTime && _zoneActivated)
                 {
                     if (currentStateTime >= _spawningStates[_currentStateIndex].p_stateDuration)
                     {
@@ -268,7 +258,7 @@ public class SubArena : NetworkBusListener
                 }
 
                 //Enemy Spawning
-                if(_zoneActivated)
+                if(Application.isPlaying && _zoneActivated)
                 {
                     //CustomLogger.Log($"Spawn enemy : {nextMobToSpawn.name}");
                     _currentBudget -= nextMobToSpawn.p_cost;

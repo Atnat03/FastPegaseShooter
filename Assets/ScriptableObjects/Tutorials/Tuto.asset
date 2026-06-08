@@ -1,0 +1,195 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b19f28374c4eb2ba0a96b9d3b397bf, type: 3}
+  m_Name: Tuto
+  m_EditorClassIdentifier: Assembly-CSharp::Tuto.ScenarioSO
+  _scenarioList:
+  - ScenarioName: StartDialogue
+    trigger:
+      rid: 5406076671141347503
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076671141347505
+    - rid: 5406076671141347506
+    - rid: 5406076671141347507
+  - ScenarioName: DialogueJumps
+    trigger:
+      rid: 5406076671141347512
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076671141347505
+    - rid: 5406076671141347513
+  - ScenarioName: Pre-SalleMonstres
+    trigger:
+      rid: 5406076671141347514
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076671141347505
+    - rid: 5406076671141347515
+    - rid: 5406076671141347516
+    - rid: 5406076671141347517
+  - ScenarioName: CloseDoor
+    trigger:
+      rid: 5406076671141347518
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076671141347519
+  - ScenarioName: Mob Deads
+    trigger:
+      rid: 5406076695212458146
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076695212458154
+    - rid: 5406076695212458155
+  - ScenarioName: Seperation Start
+    trigger:
+      rid: 5406076695212458147
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076695212458148
+    - rid: 5406076695212458149
+    - rid: 5406076695212458150
+    - rid: 5406076695212458151
+    - rid: 5406076695212458152
+    - rid: 5406076695212458153
+  references:
+    version: 2
+    RefIds:
+    - rid: 5406076671141347503
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 1
+        mode: 0
+    - rid: 5406076671141347504
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 2
+    - rid: 5406076671141347505
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Jump 1]'
+        _keyVoceline: test
+        _duration: 2
+        speaker: 2
+    - rid: 5406076671141347506
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076671141347507
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 1
+    - rid: 5406076671141347512
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 1
+        mode: 3
+    - rid: 5406076671141347513
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Jump 2]'
+        _keyVoceline: test
+        _duration: 2
+        speaker: 0
+    - rid: 5406076671141347514
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 3
+        mode: 0
+    - rid: 5406076671141347515
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 2
+    - rid: 5406076671141347516
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076671141347517
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Salle Monstre]'
+        _keyVoceline: test
+        _duration: 1
+        speaker: 2
+    - rid: 5406076671141347518
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 4
+        mode: 0
+    - rid: 5406076671141347519
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 3
+    - rid: 5406076695212458146
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: -10
+        mode: 0
+    - rid: 5406076695212458147
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 5
+        mode: 0
+    - rid: 5406076695212458148
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: "[Dialogue s\xE9paration]"
+        _keyVoceline: test
+        _duration: 3
+        speaker: 2
+    - rid: 5406076695212458149
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Heal]'
+        _keyVoceline: test
+        _duration: 2
+        speaker: 2
+    - rid: 5406076695212458150
+      type: {class: Event_TakeDamage, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        damage: 50
+    - rid: 5406076695212458151
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076695212458152
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: "[R\xE9action d\xE9g\xE2ts]"
+        _keyVoceline: test
+        _duration: 1
+        speaker: 0
+    - rid: 5406076695212458153
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Healez-vous]'
+        _keyVoceline: test
+        _duration: 2
+        speaker: 2
+    - rid: 5406076695212458154
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Energy]'
+        _keyVoceline: test
+        _duration: 3
+        speaker: 2
+    - rid: 5406076695212458155
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Change your firemode (wheel) and chanel your energy to
+          your mate.
+        target: 0
+        disableAction: 2
+        duration: 0

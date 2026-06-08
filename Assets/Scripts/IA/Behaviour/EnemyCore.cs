@@ -1,15 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Controller;
-using CustomConsole.Runtime.Logger;
 using FishNet;
-using FishNet.Connection;
 using FishNet.Object;
-using FishNet.Object.Synchronizing;
-using MyPrint;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 [AddComponentMenu("EnemyBehaviour/Core")]
 public class EnemyCore : NetworkBusListener
@@ -25,13 +18,7 @@ public class EnemyCore : NetworkBusListener
 
     public Action OnDapExplosion;
 
-    #region Energy Variables
-
-    [SerializeField] private ChargeType _pinataType = ChargeType.None;
-    [SerializeField] private float _baseEnergyDropValue = 5;
-    [SerializeField] private float _pinataEnergyDropValue = 10;
-    [SerializeField] private bool _dropXpOrb = false;
-    #endregion
+    [SerializeField] private EnemyCoreSO _coreSo;
 
     
     public override void OnStartServer()
@@ -112,11 +99,6 @@ public class EnemyCore : NetworkBusListener
         p_gridReader = pathfindingGridReader;
     }
 
-    public void ClearPathReservation()
-    {
-        _movementModule.ClearPathReservation();
-    }
-
     private void OnNetworkTick()
     {
         float tickDelta = (float)InstanceFinder.TimeManager.TickDelta;
@@ -135,11 +117,6 @@ public class EnemyCore : NetworkBusListener
         _movementModule?.OnNetworkTick(tickDelta);
     }
 
-    public void OnPlayerMoving(int playerObjectId, Vector3 playerPosition)
-    {
-        _movementModule?.OnPlayerMoving(playerObjectId, playerPosition);
-    }
-
     public void ExplodeOnDapWave()
     {
         ExplodeOnDapWaveObserverRpc();
@@ -153,48 +130,56 @@ public class EnemyCore : NetworkBusListener
 
     public void KillEnemy(int playerObjectId, ChargeType charge)
     {
-        if(_movementModule != null)
-            ClearPathReservation();
-
         //if killed by dap wave
-        if (charge != ChargeType.None)
+        if (charge == ChargeType.None)
         {
-            InstanceFinder.ServerManager.Despawn(gameObject);
+            InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
             return;
         }
         
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
         
-        EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_dropXpOrb ? 0 : signedEnergyAmount));
+        EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
+
+        PlayerDoKillObserversRpc(playerObjectId);
         
-        
-        InvokeEvent(new OnPlayerDoKill{p_owerId = playerObjectId});
-        
-        if (!_dropXpOrb)
+        if (!_coreSo.p_dropXpOrb)
         {
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = playerObjectId,
-                p_value = Mathf.Abs(signedEnergyAmount)
-            });
+            AddEnergyWhenEnemyKillObserversRpc(playerObjectId, signedEnergyAmount);
         }
         
-        InstanceFinder.ServerManager.Despawn(gameObject);
+        InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
     }
 
+    [ObserversRpc]
+    private void AddEnergyWhenEnemyKillObserversRpc(int id, float value)
+    {
+        InvokeEvent(new ModifyEnergyEvent
+        {
+            p_player = id,
+            p_value = Mathf.Abs(value)
+        });
+    }
+
+    [ObserversRpc]
+    private void PlayerDoKillObserversRpc(int index)
+    {
+        InvokeEvent(new OnPlayerDoKill{p_owerId = index});
+    }
+    
     float GetSignedEnergyAmount(ChargeType charge)
     {
         switch (charge)
         {
             case ChargeType.Positive:
-                if (_pinataType == ChargeType.Positive)
-                    return _pinataEnergyDropValue;
-                return _baseEnergyDropValue;
+                if (_coreSo.p_pinataType == ChargeType.Positive)
+                    return _coreSo.p_pinataEnergyDropValue;
+                return _coreSo.p_baseEnergyDropValue;
             
             case ChargeType.Negative:
-                if (_pinataType == ChargeType.Negative)
-                    return -_pinataEnergyDropValue;
-                return -_baseEnergyDropValue;
+                if (_coreSo.p_pinataType == ChargeType.Negative)
+                    return -_coreSo.p_pinataEnergyDropValue;
+                return -_coreSo.p_baseEnergyDropValue;
             
             default:
                 return 0f;

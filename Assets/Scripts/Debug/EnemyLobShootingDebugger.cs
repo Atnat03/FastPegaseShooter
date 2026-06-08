@@ -24,7 +24,7 @@ public class EnemyLobShootingDebugger : MonoBehaviour
             if (!shootVelocity.HasValue)
                 return;
             
-            Vector3 startPos = transform.position + LSAModule.p_shootingOffset;
+            Vector3 startPos = transform.position + LSAModule._lobShootingAttackModuleSo.p_shootingOffset;
             Vector3 velocity = shootVelocity.Value;
 
             // Direction horizontale vers la cible

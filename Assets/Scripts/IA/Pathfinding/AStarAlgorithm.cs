@@ -22,7 +22,7 @@ public class AStarAlgorithm : MonoBehaviour
         });
     }
     
-    public List<PathfindingNode> FindPathFromGrid(List<PathfindingNode> grid, Dictionary<int,int> additionalCost, PathfindingNode startNode, PathfindingNode targetNode)
+    public List<PathfindingNode> FindPathFromGrid(List<PathfindingNode> grid, PathfindingNode startNode, PathfindingNode targetNode)
     {
         //Creating a SortedSet where elements are ordered by F, then H
         //last return is a security.
@@ -53,14 +53,11 @@ public class AStarAlgorithm : MonoBehaviour
                 
                 //Heap and Pool clearing
                 _toSearch.Clear();
-                while (_toSearch.Count > 0)
-                {
-                    ReleaseNode(_toSearch.RemoveMin());
-                }
                 while (_nodeToRelease.Count > 0)
                 {
                     ReleaseNode(_nodeToRelease.Pop());
                 }
+                //_nodeToRelease.Clear();
                 
                 return path;
             }
@@ -71,13 +68,13 @@ public class AStarAlgorithm : MonoBehaviour
                 if(searched.Contains(grid[neighbor])) continue;
 
                 bool inSearch = toSearchHash.ContainsKey(grid[neighbor]);
-                int costToNeighbor = currentNode.G + GetDistance(currentNode.Node, grid[neighbor], additionalCost);
+                int costToNeighbor = currentNode.G + GetDistance(currentNode.Node, grid[neighbor]);
                 
                 if(!inSearch || (inSearch && costToNeighbor < toSearchHash[grid[neighbor]].G))
                 {
                     if (!inSearch)
                     {
-                        int distToTarget = GetDistance(grid[neighbor], targetNode, additionalCost);
+                        int distToTarget = GetDistance(grid[neighbor], targetNode);
 
                         AStarNode newNode = PoolNode();
                         newNode.Node = grid[neighbor];
@@ -86,14 +83,6 @@ public class AStarAlgorithm : MonoBehaviour
                         newNode.H = distToTarget;
                         newNode.F = costToNeighbor + distToTarget;
                         
-                            /*new AStarNode
-                        {
-                            Node = grid[neighbor],
-                            toStart = currentNode,
-                            G = costToNeighbor,
-                            H = distToTarget,
-                            F = costToNeighbor + distToTarget
-                        };*/
                             
                         _toSearch.Add(newNode);
                         toSearchHash.Add(newNode.Node, newNode);
@@ -128,7 +117,7 @@ public class AStarAlgorithm : MonoBehaviour
         //return path;
     }
 
-    int GetDistance(PathfindingNode nodeA, PathfindingNode nodeB, Dictionary<int, int> additionalCost)
+    int GetDistance(PathfindingNode nodeA, PathfindingNode nodeB)
     {
         const int diagonalCost = 14;
         const int straightCost = 10;
@@ -140,9 +129,7 @@ public class AStarAlgorithm : MonoBehaviour
             ? diagonalCost * distY + straightCost * (distX - distY)
             : diagonalCost * distX + straightCost * (distY - distX);
 
-        additionalCost.TryGetValue(nodeB.index, out int addCost);
-
-        return baseCost + nodeB.travelCost + addCost;
+        return baseCost + nodeB.travelCost;
     }
 
     public class AStarNode

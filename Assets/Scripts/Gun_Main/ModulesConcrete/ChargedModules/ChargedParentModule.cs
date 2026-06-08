@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using MyPrint;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace GunDecorator.ChargedModules
         [SerializeField] protected float _explosionRadius = 1f;
 
         [Header("Charging")] 
-        
+        [SerializeField] protected float _timeForCharging = 0.5f;
         [SerializeField] protected float _damageChargedMultiplicator = 10;
         [SerializeField] protected float _recoilChargedMultiplier = 1.25f;
         [SerializeField] protected float _recoilX = 2f;
@@ -32,8 +33,7 @@ namespace GunDecorator.ChargedModules
         public bool _isChargedShooting = false;
         
         //Action
-        public Action<int> OnPercentageChargeChange;
-        public Action<bool, bool> OnFullCharged;
+        public Action OnStartCharged;
         
         #endregion
         
@@ -44,19 +44,30 @@ namespace GunDecorator.ChargedModules
 
             _shootModule = GetComponent<ShootModule>();
             
-            OnFullCharged?.Invoke(false, false);
         }
-        
-        
+
+        public void StartChargedShoot()
+        {
+            StartCoroutine(StartingCharging());
+        }
+
+        IEnumerator StartingCharging()
+        {
+            OnStartCharged?.Invoke();
+            
+            yield return new WaitForSeconds(_timeForCharging);
+
+            TryShootCharging();
+        }
+
         public virtual void TryShootCharging()
-        { }
+        {
+            //Put 1 in ration, but didn't really understand what it does (Aloys)
+        }
 
         protected void ResetCharging()
         {
-            _gunController.RecoilModule?.SetIsRecoil(false);
-            OnFullCharged?.Invoke(false, false);
-            
-            _gunController?.OnStopCharging?.Invoke();
+            _gunController?.RecoilModule?.SetIsRecoil(false);
         }
     }
 }

@@ -11,12 +11,9 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
 {
-    //HideInInspector to prevent draw with "base.OnInspectorGUI"
-    //SerializeField to get properties in custom inspector
-    [HideInInspector][SerializeField] private int _life = 10;
     public readonly SyncVar<int> p_life = new SyncVar<int>();
     
-    [Header("debug")] [SerializeField] private SwapGunManager swapGunManager;
+    [HideInInspector,SerializeField] private LifeModuleSO _lifeModuleSO;
     
     /// <summary>
     /// bool => Is Critical Damages <br/>
@@ -29,11 +26,6 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     
     
     [HideInInspector] private float p_damageMultiplier = 1;
-
-    private void Start()// pour du debug, a tej en build finale
-    {
-        swapGunManager = FindAnyObjectByType<SwapGunManager>();
-    }
 
     public virtual bool TakeDamage(int attackerObjectId, int rawDamageAmount, ChargeType charge, bool isCritical = false)
     {
@@ -63,7 +55,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     public override void OnStartServer()
     {
         base.OnStartServer();
-        p_life.Value = _life;
+        p_life.Value = _lifeModuleSO.p_life;
         
         ListenToEvent((EndOverloadEvent EOE) => p_damageMultiplier = 1);
     }
@@ -74,7 +66,7 @@ public abstract class EnemyLifeModule : EnemyBehaviourModule, IDamagable
     [ObserversRpc]
     protected void OnLifeUpdateObserverRPC(bool isCritical, int dmg)
     {
-        OnLifeUpdate?.Invoke(isCritical, dmg, p_life.Value, _life);
+        OnLifeUpdate?.Invoke(isCritical, dmg, p_life.Value, _lifeModuleSO.p_life);
     }
     
     [ObserversRpc]

@@ -4,18 +4,17 @@ using UnityEngine;
 [AddComponentMenu("EnemyBehaviour/Movement/DistanceAwareMovementModule")]
 public class DistanceAwareMovementModule : EnemyMovementModule
 {
-    [SerializeField] private float _idealDistance;
+    [SerializeField] private DistanceAwareMovementModuleSO _distanceAwareModuleSO;
     
     protected override void MoveAlongPath()
     {
         //cuts Execution if the enemy is close enough from the player
-        if(_path.Count >= 1 &&
-           _targetModule.GetTargetSqrDistance(transform.position) >= _idealDistance*_idealDistance)
+        if(_path.Count > 0 &&
+           _targetModule.GetTargetSqrDistance(transform.position) >= _distanceAwareModuleSO.p_idealDistance*_distanceAwareModuleSO.p_idealDistance)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _path[^1].position, _speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _path[^1].position, p_movementModuleSO.p_speed * Time.deltaTime);
             
-            /*transform.position = Vector3.Lerp(_lastPos, _path[^2].position, _t);
-            _t += Time.deltaTime * _speed;*/
+            
             if ((_path[^1].position - transform.position).sqrMagnitude <= 0.01f)
             {
                 _path.RemoveAt(_path.Count - 1);

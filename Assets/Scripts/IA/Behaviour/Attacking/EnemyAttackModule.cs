@@ -10,12 +10,8 @@ public abstract class EnemyAttackModule : EnemyBehaviourModule
     
     //HideInInspector to prevent draw with "base.OnInspectorGUI"
     //SerializeField to get properties in custom inspector 
-    [HideInInspector][SerializeField] protected EnemyTargetModule _targetModule;
-    [HideInInspector][SerializeField] protected int _damage = 10;
-    [HideInInspector][SerializeField] protected float _attackDelay = 2f;
-    [HideInInspector][SerializeField] protected BulletTypes _bulletType;
-    [HideInInspector][SerializeField] protected bool _projectileUseGravity = false;
-    [HideInInspector][SerializeField] protected float _maxPlayerDistance = 10f;
+    [HideInInspector, SerializeField] protected EnemyTargetModule _targetModule;
+    [HideInInspector, SerializeField] protected AttackModuleSO _attackModuleSO;
     protected float _waitedTimeSinceAttack;
 
     protected abstract bool CanAttack(Vector3 shootingPos, Vector3 projectileDir);

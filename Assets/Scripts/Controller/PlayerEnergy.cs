@@ -19,13 +19,13 @@ public class PlayerEnergy : NetworkBusListener
 
 	[SerializeField] private float _maxEnergy = 100f;
 	[SerializeField] private float _valueOneBar = 20f;
-	[SerializeField] private float _convertionTaux = 10;
+	[HideInInspector] private float _convertionTaux = 1;
 	[SerializeField] private GunSwitching _gunSwitching;
 	
 	[Header("Cost")]
-	public int p_costThrowGrenade = 1;
-	public int p_costThrowDrone = 2;
-	public int p_costThrowHeal = 1;
+	[HideInInspector]public int p_costThrowGrenade = 1;
+	[HideInInspector]public int p_costThrowDrone = 2;
+	[HideInInspector]public int p_costThrowHeal = 1;
 
 	private int _totalBars;
 
@@ -51,7 +51,7 @@ public class PlayerEnergy : NetworkBusListener
 		_totalBars = Mathf.CeilToInt(_maxEnergy / _valueOneBar);
 
 		if (IsServerInitialized)
-			_currentEnergy.Value = _maxEnergy;
+			_currentEnergy.Value = 0;
 
 		//Créer UI
 		OnCreateBarUI?.Invoke(_totalBars);

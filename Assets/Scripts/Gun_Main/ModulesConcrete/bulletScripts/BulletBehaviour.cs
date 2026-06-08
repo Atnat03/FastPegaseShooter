@@ -1,4 +1,5 @@
 using System;
+using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
@@ -22,13 +23,7 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
     [SerializeField] private GameObject _negativeExplosionVFX;
 
     [Header("View")]    
-    [SerializeField]private MeshRenderer _meshRenderer;
-    [SerializeField]private Material _positiveMaterial;
-    [SerializeField] private Material _negativeMaterial;
-    
-    [SerializeField]private TrailRenderer _trailRenderer;
-    [SerializeField]private Gradient _positiveLineColor;
-    [SerializeField]private Gradient _negativeLineColor;
+    [SerializeField] private GameObject[] _models;
     
     private GameObject _vfx;
     
@@ -79,8 +74,8 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         
         _vfx = isPositive ? _positiveExplosionVFX : _negativeExplosionVFX;
         
-        _trailRenderer.colorGradient = isPositive ? _positiveLineColor : _negativeLineColor;
-        _meshRenderer.material = isPositive ? _positiveMaterial : _negativeMaterial;
+        _models[0].SetActive(isPositive);
+        _models[1].SetActive(!isPositive);
         
         _shootPos = transform.position;
     }
@@ -135,15 +130,17 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
 
             if (p_isDistanceReduce)
                 damage *= (1 / (1 + p_ratioDistanceReduce * Vector3.Distance(hit.point, _shootPos)));
-
-            if (hit.collider.TryGetComponent<NetworkObject>(out var netObj))
+            
+            _gunController.ApplyDamage(hit.collider.gameObject, (int)damage, p_isCritical, p_hadCharged);
+            
+            /*if (hit.collider.TryGetComponent<G>(out var core))
             {
-                _gunController.ApplyDamage(netObj, (int)damage, p_isCritical, p_hadCharged);
+                _gunController.ApplyDamage(core.NetworkObject, (int)damage, p_isCritical, p_hadCharged);
             }
             else
             {
                 Debug.LogWarning("Touched object has no NetworkObject");
-            }
+            }*/
         }
 
         CreateHitMark(hit);
@@ -159,10 +156,10 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         
         foreach (Collider c in Physics.OverlapSphere(transform.position, radius))
         {
-            if (!c.TryGetComponent<IDamagable>(out _)) continue;
-            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;
+            /*if (!c.TryGetComponent<IDamagable>(out _)) continue;
+            if (!c.TryGetComponent<NetworkObject>(out var netObj)) continue;*/
 
-            _gunController.ApplyDamage(netObj, damage, p_isCritical, p_hadCharged);
+            _gunController.ApplyDamage(c.gameObject, damage, p_isCritical, p_hadCharged);
         }
     }
 

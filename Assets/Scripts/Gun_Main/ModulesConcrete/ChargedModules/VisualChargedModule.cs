@@ -1,3 +1,4 @@
+using System;
 using GunDecorator;
 using GunDecorator.ChargedModules;
 using MyPrint;
@@ -15,46 +16,28 @@ public class VisualChargedModule : GunModule
 	#region Variables
 
 	[SerializeField] private ChargedParentModule _chargedModule;
-
-	[Header("UI")]
-	[SerializeField] private TextMeshPro _percentageChargeText;
-	[SerializeField] private MeshRenderer _textMat;
-	[SerializeField] private Color _normalTextColor;
-	[SerializeField] private Color _fullChargedTextColor;
-	[SerializeField] private Color _OverloadTextColor;
+	
+	[Header("VFX")]
+	[SerializeField] private ParticleSystem[] _chargedParticleSystem;
 	
 	#endregion
 
 
 	#region Fonctions
 
-	void OnEnable()
+	private void OnEnable()
 	{
-		_chargedModule.OnPercentageChargeChange += PercentageChanged;
-		_chargedModule.OnFullCharged += FullCharged;
+		_chargedModule.OnStartCharged += Charging;
 	}
 
-	void OnDisable()
+	private void OnDisable()
 	{
-		_chargedModule.OnPercentageChargeChange -= PercentageChanged;
+		_chargedModule.OnStartCharged -= Charging;
 	}
-	private void PercentageChanged(int percent)
-	{
-		if(_percentageChargeText != null)
-			_percentageChargeText.text = percent + "%";
-	}
-	
-	private void FullCharged(bool isFull, bool isOverload)
-	{
-		if(!isOverload)
-			_textMat.material.SetColor("_FresnelColor" , isFull ? _fullChargedTextColor : _normalTextColor);
-		else
-			_textMat.material.SetColor("_FresnelColor" , _OverloadTextColor);
 
-		if (isFull)
-		{
-			_gunController.PlaySound("IsCharged");
-		}
+	private void Charging()
+	{
+		_chargedParticleSystem[_gunController.IsPositivePlayerCharge ? 0 : 1].Play();
 	}
 
 	#endregion

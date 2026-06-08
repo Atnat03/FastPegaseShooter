@@ -100,6 +100,15 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""GetInvincible"",
+                    ""type"": ""Button"",
+                    ""id"": ""70fb227f-a9e5-473a-a204-58244b214d03"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -113,6 +122,17 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
                     ""action"": ""StopZoneSpawning"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2be7f9bc-258d-4683-b4c2-8b0bc18da8d7"",
+                    ""path"": ""<Keyboard>/numpad0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GetInvincible"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_StopZoneSpawning = m_Debug.FindAction("StopZoneSpawning", throwIfNotFound: true);
+        m_Debug_GetInvincible = m_Debug.FindAction("GetInvincible", throwIfNotFound: true);
     }
 
     ~@DebugInput()
@@ -203,6 +224,7 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Debug;
     private List<IDebugActions> m_DebugActionsCallbackInterfaces = new List<IDebugActions>();
     private readonly InputAction m_Debug_StopZoneSpawning;
+    private readonly InputAction m_Debug_GetInvincible;
     /// <summary>
     /// Provides access to input actions defined in input action map "Debug".
     /// </summary>
@@ -218,6 +240,10 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Debug/StopZoneSpawning".
         /// </summary>
         public InputAction @StopZoneSpawning => m_Wrapper.m_Debug_StopZoneSpawning;
+        /// <summary>
+        /// Provides access to the underlying input action "Debug/GetInvincible".
+        /// </summary>
+        public InputAction @GetInvincible => m_Wrapper.m_Debug_GetInvincible;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -247,6 +273,9 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
             @StopZoneSpawning.started += instance.OnStopZoneSpawning;
             @StopZoneSpawning.performed += instance.OnStopZoneSpawning;
             @StopZoneSpawning.canceled += instance.OnStopZoneSpawning;
+            @GetInvincible.started += instance.OnGetInvincible;
+            @GetInvincible.performed += instance.OnGetInvincible;
+            @GetInvincible.canceled += instance.OnGetInvincible;
         }
 
         /// <summary>
@@ -261,6 +290,9 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
             @StopZoneSpawning.started -= instance.OnStopZoneSpawning;
             @StopZoneSpawning.performed -= instance.OnStopZoneSpawning;
             @StopZoneSpawning.canceled -= instance.OnStopZoneSpawning;
+            @GetInvincible.started -= instance.OnGetInvincible;
+            @GetInvincible.performed -= instance.OnGetInvincible;
+            @GetInvincible.canceled -= instance.OnGetInvincible;
         }
 
         /// <summary>
@@ -308,5 +340,12 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnStopZoneSpawning(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "GetInvincible" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnGetInvincible(InputAction.CallbackContext context);
     }
 }

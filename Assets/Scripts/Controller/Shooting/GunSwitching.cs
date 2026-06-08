@@ -32,24 +32,24 @@ public class GunSwitching : NetworkBusListener
 	
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
+	[SerializeField] private GameObject _mainGunParentTPS;
 	[SerializeField] private ShootEnergy _shootEnergy;
-	[SerializeField] private GrenadeThrower _throwerGrenade;
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
+	[SerializeField] private PlayerAnimation _playerAnimation;
 	
 	[Header("Settings")]
 	[SerializeField] private float _cooldownChangeMagnetic = 5f;
 	
 	private bool _forceEnergyMode;
 	private bool _canSwitch = true;
-	private bool _canChangemagnetic = true;
 	[HideInInspector]public List<GunController> _mainGunsList;
+	[HideInInspector]public List<GameObject> _mainGunsListTPS;
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
 	
 	//Actions
 	public Action<bool> OnSwapGun;
-	public Action<float> OnMagneticCooldown;
 	
 	private IGun _currentMainIGun;
 	private ISurcharge _currentISurcharge;
@@ -67,6 +67,13 @@ public class GunSwitching : NetworkBusListener
 		foreach (Transform gun in _mainGunParent.transform)
 		{
 			_mainGunsList.Add(gun.GetComponent<GunController>());
+		}
+		
+		_mainGunsListTPS = new List<GameObject>();
+		
+		foreach (Transform gun in _mainGunParentTPS.transform)
+		{
+			_mainGunsListTPS.Add(gun.gameObject);
 		}
 	}
 
@@ -95,57 +102,6 @@ public class GunSwitching : NetworkBusListener
 		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
 	}
 
-	[ServerRpc]
-	public void RequestChangeMagneticCharge(int playerId)
-	{
-		ChangeMagneticCharge(playerId);
-	}
-	
-	public void ChangeMagneticCharge(int pId)
-	{
-		if (!IsServerInitialized) return;
-		if (!_canChangemagnetic) return;
-		
-		_isPositiveChargedPlayer.Value = !_isPositiveChargedPlayer.Value;
-		
-		_currentMainIGun.SetChargedPlayer(_isPositiveChargedPlayer.Value);
-
-		InvokeEvent(new OnPlayerChangeMagneticCharge
-		{
-			playerId = pId,
-			isPositiveCharged = _isPositiveChargedPlayer.Value
-		});
-
-		_canChangemagnetic = false;
-		
-		UpdateUIChargeObserversRpc(_isPositiveChargedPlayer.Value);
-	}
-
-	[ObserversRpc]
-	private void UpdateUIChargeObserversRpc(bool isPositive)
-	{
-		OnSwapGun?.Invoke(isPositive);
-
-		StartCoroutine(CooldownChargeMagnetic());
-	}
-
-	IEnumerator CooldownChargeMagnetic()
-	{
-		float t = 0;
-
-		while (t < _cooldownChangeMagnetic)
-		{
-			t += Time.deltaTime;
-			
-			OnMagneticCooldown?.Invoke(t / _cooldownChangeMagnetic);
-			
-			yield return null;
-		}
-
-		if (IsServerInitialized)
-			_canChangemagnetic = true;
-	}
-
 	public void ActivateCurrentGun(List<GunController> list, int index)
 	{
 		if (_forceEnergyMode)
@@ -154,9 +110,15 @@ public class GunSwitching : NetworkBusListener
 		for (int i = 0; i < list.Count; i++)
 		{
 			bool shouldBeActive = (i == index);
-			list[i].ModelGun.gameObject.SetActive(shouldBeActive);
+			list[i].CurrentModelGun.gameObject.SetActive(shouldBeActive);
 		}
-
+		
+		for (int i = 0; i < _mainGunsListTPS.Count; i++)
+		{
+			bool shouldBeActive = (i == index);
+			_mainGunsListTPS[i].gameObject.SetActive(shouldBeActive);
+		}
+		
 		IGunMain?.SetReticule(_reticuleManager);
 	}
 
@@ -164,7 +126,7 @@ public class GunSwitching : NetworkBusListener
 	{
 		foreach (GunController gun in _mainGunsList)
 		{
-			gun.ModelGun.gameObject.SetActive(false);
+			gun.CurrentModelGun.gameObject.SetActive(false);
 		}
 	}
 	
@@ -226,12 +188,40 @@ public class GunSwitching : NetworkBusListener
 	public void ChangeGunServerRpc(bool isMain)
 	{
 		SetGunModeObserversRpc(isMain);
+		//StartCoroutine(DelaySwitch(isMain));
 	}
-	
+
+	IEnumerator DelaySwitch(bool isMain)
+	{
+		PlayAnimationObserverRpc(isMain);
+		
+		yield return new WaitForSeconds(0.5f);
+		
+		SetGunModeObserversRpc(isMain);
+	}
+
+	[ObserversRpc]
+	private void PlayAnimationObserverRpc(bool isMain)
+	{
+		Animator gun = CurrentMainGun._animator;
+		Animator arm = CurrentMainGun._animatorArm;
+
+		string trigger = isMain ? "Prendre" : "Retirer";
+		
+		Cons.Print("Switch : " + isMain, ColorConsole.Black);
+		
+		if(gun)
+			gun.SetTrigger(trigger);
+		
+		if(arm)
+			arm.SetTrigger(trigger);
+	}
+
 	[ObserversRpc]
 	private void SetGunModeObserversRpc(bool isMain)
 	{
-		_isMainGun.Value = isMain;
+		if(IsServerInitialized)
+			_isMainGun.Value = isMain;
 		
 		_shootEnergy.gameObject.SetActive(!isMain);
 
@@ -276,14 +266,13 @@ public class GunSwitching : NetworkBusListener
 	
 	private void OnEnable()
 	{
-		_throwerGrenade.OnStartThrow += DesactivateGunWhenThrow;
 		_throwerDrone.OnThrowing += DesactivateGunWhenThrow;
 		
 	}
 	
+	
 	private void OnDisable()
 	{
-		_throwerGrenade.OnStartThrow -= DesactivateGunWhenThrow;
 		_throwerDrone.OnThrowing -= DesactivateGunWhenThrow;
 	}
 	

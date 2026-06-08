@@ -49,8 +49,6 @@ public class ParticleXpOrbManager : NetworkBusListener
         _playerDetectionDistanceSqr = _playerDetectionDistance * _playerDetectionDistance;
         _playerCollectDistanceSqr = _playerCollectDistance * _playerCollectDistance;
     }
-
-    
     
     public override void OnStartServer()
     {

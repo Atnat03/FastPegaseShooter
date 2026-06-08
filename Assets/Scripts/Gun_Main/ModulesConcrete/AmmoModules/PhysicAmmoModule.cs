@@ -66,38 +66,39 @@ namespace GunDecorator.AmmoModules
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
             bool isCritical = _bulletData?.IsCritical ?? _gunController.IsOverload;
-            
+
             Ray cameraRay;
-            Vector3 spreadDirection;
-            
+
             if (direction != Vector3.zero)
             {
-                spreadDirection = _camera.transform.rotation 
-                                  * Quaternion.Euler(direction.y, direction.x, 0) 
-                                  * Vector3.forward;
-                cameraRay = new Ray(_camera.transform.position, spreadDirection);
+                Vector3 spreadDir = _camera.transform.rotation
+                                    * Quaternion.Euler(direction.y, direction.x, 0)
+                                    * Vector3.forward;
+                cameraRay = new Ray(_camera.transform.position, spreadDir);
             }
             else
             {
                 cameraRay = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             }
-            
-            RaycastHit hit;
+
             _finalSpawnPoint = _spawnPoint.position;
             Vector3 camPos = _camera.transform.position;
-            Vector3 targetPoint;
-            
-            if (Physics.Raycast(cameraRay, out hit, 2000, ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
+
+            Vector3 targetPoint = cameraRay.origin + cameraRay.direction.normalized * 2000f;
+
+            if (Physics.Raycast(cameraRay, out RaycastHit hit, 2000f,
+                    ~LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
             {
                 targetPoint = hit.point;
 
                 if ((targetPoint - camPos).sqrMagnitude < (_finalSpawnPoint - camPos).sqrMagnitude)
-                {
                     _finalSpawnPoint = targetPoint - (_spawnPoint.forward * 0.5f);
-                }
             }
-            
-            SpawnVisualBulletServerRpc(direction, isExplosive, radius, offset, isCritical, _finalSpawnPoint, hadCharged);
+
+            Vector3 shootDirection = (targetPoint - (_finalSpawnPoint + offset)).normalized;
+
+            SpawnVisualBulletServerRpc(shootDirection, isExplosive, radius, offset, 
+                isCritical, _finalSpawnPoint, hadCharged);
         }
         
         [ServerRpc]
@@ -109,30 +110,31 @@ namespace GunDecorator.AmmoModules
 
         private void DoSpawnBullet(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
-            Vector3 baseDirection = _spawnPoint.forward;
-            Vector3 spreadDirection = direction == Vector3.zero ? baseDirection : Quaternion.Euler(direction.y, direction.x, 0) * baseDirection;
-    
+            Vector3 spreadDirection = direction.normalized;
+
             BulletPhysicBehaviour newBullet = _ammoPool.Spawn(spawnPoint + offset, Quaternion.LookRotation(spreadDirection));
             newBullet.OnCollision += DespawnBullet;
+    
             if (newBullet.TryGetComponent(out Rigidbody rb))
             {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
                 rb.mass = _bulletMass;
-                rb.AddForce(spreadDirection.normalized * _bulletThrowForce, ForceMode.Impulse);
+                rb.AddForce(spreadDirection * _bulletThrowForce, ForceMode.Impulse);
             }
-    
-            Vector3 targetPos = spawnPoint + _spawnPoint.forward * 2000f;
+
+            Vector3 targetPos = spawnPoint + spreadDirection * 2000f;
 
             IAmmo bullet = newBullet.GetComponent<IAmmo>();
-            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController, 
-                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge,_timeToExplose, 0, false, hadCharged);
+            bullet.SetUpVariables(_dmgToApply, _BulletSpeed, null, isExplosive, radius, _gunController,
+                isCritical, targetPos, null, _gunController.IsPositivePlayerCharge, _timeToExplose, 0, false, hadCharged);
 
             DespawnBullet(newBullet, 5f);
         }
         
-        [ObserversRpc]
+        [ObserversRpc(ExcludeServer = true)]
         private void SpawnVisualBulletObserverRpc(Vector3 direction, bool isExplosive, float radius, Vector3 offset, bool isCritical, Vector3 spawnPoint, bool hadCharged)
         {
-            if (IsServerInitialized) return;
             DoSpawnBullet(direction, isExplosive, radius, offset, isCritical, spawnPoint, hadCharged);
         }
 

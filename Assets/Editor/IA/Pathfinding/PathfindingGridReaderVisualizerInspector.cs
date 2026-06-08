@@ -11,6 +11,7 @@ public class PathfindingGridReaderVisualizerInspector : Editor
         
         Color backgroundColor = GUI.color;
         GUILayout.Label("Debug");
+        script._visualisationColor = EditorGUILayout.ColorField("Visualisation Color", script._visualisationColor);
         GUILayout.BeginHorizontal();
         GUI.backgroundColor = script.drawNodes ? Color.green : Color.red;
         if(GUILayout.Button("Draw Nodes")) script.drawNodes = !script.drawNodes;
@@ -21,8 +22,7 @@ public class PathfindingGridReaderVisualizerInspector : Editor
         
         Undo.RecordObject(script, "Modify Pathfinding Debug");
         EditorGUI.BeginChangeCheck();
-
-        script.walkingCostGradient = EditorGUILayout.GradientField("walkingCostGradient", script.walkingCostGradient);
+        
         script.upperWalkingCostValue = EditorGUILayout.IntField("upperWalkingCostValue", script.upperWalkingCostValue);
         script.nodeDrawSize = EditorGUILayout.FloatField("nodeDrawSize", script.nodeDrawSize);
 
