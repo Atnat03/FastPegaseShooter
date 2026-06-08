@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class ShootEnergyView : MonoBehaviour
 {
-	#region Properties
-
-	#endregion
-
 
 	#region Variables
 
@@ -30,9 +26,9 @@ public class ShootEnergyView : MonoBehaviour
 	[SerializeField] private GameObject _uiTarget;
 	
 	[Header("Laser")]
-	[SerializeField] private LineRenderer _laser;
-	[SerializeField] private Gradient[] _laserColors;
+	[SerializeField] private GameObject[] _lasers;
 	[SerializeField] private Transform _laserSpawnPoint;
+	private GameObject _assignedLaser;
 	private Vector3 _targetLaserPos;
 
 	#endregion
@@ -53,9 +49,17 @@ public class ShootEnergyView : MonoBehaviour
 		_shootEnergy.OnLaserActivate += ActivatedLaser;
 	}
 
+	void OnDisable()
+	{
+		_gunSwitching.OnSwapGun -= SetUpColor;
+		_shootEnergy.CantThrowEnergy -= CantThrowEnergy;
+		_shootEnergy.OnDetectBro -= DetectBro;
+		_shootEnergy.OnLaserActivate -= ActivatedLaser;
+	}
+
 	private void ActivatedLaser(bool isActive, Vector3 endPos)
 	{
-		_laser.gameObject.SetActive(isActive);
+		_assignedLaser.gameObject.SetActive(isActive);
 
 		if (isActive)
 		{
@@ -82,7 +86,7 @@ public class ShootEnergyView : MonoBehaviour
 	private void SetUpColor(bool isPositive)
 	{
 		_modelRenderer.material = isPositive ? _modelMaterial[0] : _modelMaterial[1];
-		_laser.colorGradient = isPositive ? _laserColors[0] : _laserColors[1];
+		_assignedLaser = isPositive ? _lasers[0] : _lasers[1];
 	}
 	
 	private void DetectBro(bool hasDetect, Vector3 pos)
@@ -98,10 +102,9 @@ public class ShootEnergyView : MonoBehaviour
 
 	private void Update()
 	{
-		if(_laser.gameObject.activeSelf)
+		if(_assignedLaser.gameObject.activeSelf)
 		{
-			_laser.SetPosition(0, Vector3.Lerp(_laser.GetPosition(0), _laserSpawnPoint.position, Time.deltaTime * 25));
-			_laser.SetPosition(1, Vector3.Lerp(_laser.GetPosition(1), _targetLaserPos, Time.deltaTime * 25));
+			_assignedLaser.transform.LookAt(_targetLaserPos);
 		}	
 	}
 
