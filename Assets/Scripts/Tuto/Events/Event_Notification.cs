@@ -23,7 +23,7 @@ namespace Tuto
 
         public NotificationTarget target;
         public NotificationDisableAction disableAction;
-        public float duration;
+        public float duration = 1;
 
         public NotificationData GetData()
         {

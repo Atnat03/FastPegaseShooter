@@ -22,6 +22,8 @@ public class DapManager : NetworkBusListener
 {
 	#region Properties
 
+	public float GetPercentageDap => _dapPercentage.Value;
+	
 	#endregion
 
 	#region Variables
@@ -48,6 +50,7 @@ public class DapManager : NetworkBusListener
 	public Action<int> OnCreateBarUI;
 	public Action<int> OnMessageUpdate;
 	public Action<Vector3> OnDapping;
+	public Action<float> OnDapReachPercentage;
 	
 	#endregion
 	
@@ -122,6 +125,7 @@ public class DapManager : NetworkBusListener
 		if (IsServerInitialized)
 		{
 			_dapPercentage.Value += _percentageGainPerSecond * data.p_ratio;
+			OnDapReachPercentage?.Invoke(GetPercentageDap);
 		}
 	}
 	
