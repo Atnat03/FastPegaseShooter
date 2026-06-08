@@ -100,6 +100,7 @@ namespace GunDecorator
         private bool _isChargeShooting;
 
         //Action
+        public Action OnSetUp;
 
         //Shoot
         public Action<int, int> OnShootAmmo;
@@ -387,6 +388,7 @@ namespace GunDecorator
 
         public void SetReticule(ReticulesManager manager)
         {
+            OnSetUp?.Invoke();
             manager.ActivateReticules(_reticuleID);
         }
 
