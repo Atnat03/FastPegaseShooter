@@ -69,6 +69,8 @@ MonoBehaviour:
     - rid: 5406076695212458151
     - rid: 5406076695212458152
     - rid: 5406076695212458153
+    - rid: 5406076763678179434
+    - rid: 5406076763678179436
   - ScenarioName: UseHeal
     trigger:
       rid: 5406076761526239318
@@ -97,8 +99,52 @@ MonoBehaviour:
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076761526239335
-    - rid: 5406076761526239338
-    - rid: 5406076761526239339
+  - ScenarioName: DroneStart
+    trigger:
+      rid: 5406076763678179407
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076763678179420
+    - rid: 5406076763678179428
+    - rid: 5406076763678179435
+  - ScenarioName: DroneOtherSide
+    trigger:
+      rid: 5406076763678179430
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076763678179420
+    - rid: 5406076763678179428
+  - ScenarioName: EndDrone
+    trigger:
+      rid: 5406076763678179431
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076763678179420
+    - rid: 5406076763678179432
+    - rid: 5406076763678179433
+  - ScenarioName: Start ArenaFinal
+    trigger:
+      rid: 5406076763678179442
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076763678179432
+    - rid: 5406076763678179420
+    - rid: 5406076763678179443
+    - rid: 5406076763678179444
+    - rid: 5406076763678179445
+    - rid: 5406076763678179446
+    - rid: 5406076763678179447
+    - rid: 5406076763678179448
+    - rid: 5406076763678179450
+    - rid: 5406076763678179451
+    - rid: 5406076763678179452
+  - ScenarioName: End Tuto
+    trigger:
+      rid: 5406076763678179455
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076763678179432
+    - rid: 5406076763678179420
   references:
     version: 2
     RefIds:
@@ -259,7 +305,8 @@ MonoBehaviour:
         speaker: 0
     - rid: 5406076761526239318
       type: {class: Trigger_Heal, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data: 
+      data:
+        _numberUseOfHealNeed: 1
     - rid: 5406076761526239319
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -308,13 +355,117 @@ MonoBehaviour:
         target: 2
         disableAction: 4
         duration: 1
-    - rid: 5406076761526239338
+    - rid: 5406076763678179407
+      type: {class: Trigger_Heal, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        _numberUseOfHealNeed: 2
+    - rid: 5406076763678179420
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue finito]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 5406076763678179428
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 05000000
+    - rid: 5406076763678179430
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 05000000
+    - rid: 5406076763678179431
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 05000000
+    - rid: 5406076763678179432
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
         actionToDo: 0
-        doorIndex: 4
-    - rid: 5406076761526239339
+        doorIndex: 7
+    - rid: 5406076763678179433
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
         actionToDo: 0
         doorIndex: 5
+    - rid: 5406076763678179434
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 3
+    - rid: 5406076763678179435
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 2
+    - rid: 5406076763678179436
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 1
+    - rid: 5406076763678179442
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 6
+        mode: 0
+    - rid: 5406076763678179443
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 0
+        speedFill: 3
+        animationType: 0
+    - rid: 5406076763678179444
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue UI Arena]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 5406076763678179445
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 100
+        speedFill: 3
+        animationType: 0
+    - rid: 5406076763678179446
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue UI Arena 2]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 5406076763678179447
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 0
+        speedFill: 3
+        animationType: 0
+    - rid: 5406076763678179448
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue DAP]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 5406076763678179450
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 0
+        speedFill: 3
+        animationType: 1
+    - rid: 5406076763678179451
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Lezgo]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 5406076763678179452
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 06000000
+    - rid: 5406076763678179455
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 06000000
