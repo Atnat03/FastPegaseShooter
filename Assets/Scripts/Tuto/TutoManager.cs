@@ -340,14 +340,7 @@ namespace Tuto
 
         public void AskForUnlockCapa(Capacity_TUTO capa)
         {
-            if (IsServerInitialized)
-            {
-                AskForUnlockCapaObserversRpc(capa);
-            }
-            else
-            {
-                AskForUnlockCapaServerRpc(capa);
-            }
+            AskForUnlockCapaServerRpc(capa);
         }
 
         [ServerRpc]

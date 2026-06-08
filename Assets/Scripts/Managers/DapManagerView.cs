@@ -11,9 +11,11 @@ public class DapManagerView : MonoBusListener
     [Header("UI Bar")]
     [SerializeField] private Image _energyBar;
     [SerializeField] private TextMeshProUGUI _textPercentage;
+    
     [Header("Messages")]
     [SerializeField] private TextMeshProUGUI _textMessage;
     [SerializeField] private string[] _messages;
+    [SerializeField] private GameObject _dapNotification;
 
     [Header("Dapping")]
     [SerializeField] private GameObject _dappingExplosion;
@@ -35,21 +37,28 @@ public class DapManagerView : MonoBusListener
     private void Dapping(Vector3 pos)
     {
         Cons.Print("Dapping effect !! ");
+        
+        _dapNotification.SetActive(false);
 
         Destroy(Instantiate(_dappingExplosion, pos, Quaternion.identity), 5f);
     }
 
     private void UpdateMessages(int idMessage)
     {
+        if (_textMessage == null)
+            return;
+
         _textMessage.gameObject.SetActive(idMessage > -1);
 
         if (_textMessage.gameObject.activeSelf)
             _textMessage.text = _messages[idMessage];
     }
 
-    private void UpdateUI(int activeBarIndex, float activeFill)
+    private void UpdateUI(float fillAmount)
     {
-        _energyBar.fillAmount = activeFill;
-        _textPercentage.text = ((int)(activeFill * 100)).ToString();
+        _energyBar.fillAmount = fillAmount;
+        _textPercentage.text = Mathf.RoundToInt(fillAmount * 100f) + "%";
+
+        _dapNotification.SetActive(fillAmount >= 1f);
     }
 }
