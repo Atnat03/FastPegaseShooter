@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using CustomConsole.Runtime.Logger;
 using UnityEngine;
 

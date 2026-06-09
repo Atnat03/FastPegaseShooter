@@ -1,5 +1,3 @@
-using CustomConsole.Runtime.Logger;
-using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
