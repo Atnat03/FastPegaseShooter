@@ -145,17 +145,11 @@ public class SpawnZoneTutorial : NetworkBusListener
 
     async Task ApplyCorrosion()
     {
-        int t = 0;
-
         while (_corrosionActivated)
         {
-            await Task.Delay(500);
-            t += 500;
-            if (t >= _corrosionDelay_Miliss * 1000)
-            {
-                EventBus.InvokeEvent(new OnCorrosionEvent(_corrosionDamage));
-                t -= _corrosionDelay_Miliss * 1000;
-            }
+            await Task.Delay(_corrosionDelay_Miliss);
+
+            EventBus.InvokeEvent(new OnCorrosionEvent(_corrosionDamage));
         }
     }
 
