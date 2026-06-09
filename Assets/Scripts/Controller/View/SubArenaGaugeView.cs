@@ -25,16 +25,15 @@ public class SubArenaGaugeView : MonoBusListener
         {
             if (!_idToInfos.TryGetValue(OSAUE.p_arenaID, out var info)) return;
 
-            info.p_gauge.fillAmount = OSAUE.p_overCrowdingPercent;
-            info.p_gauge.color = OSAUE.p_state.p_color;
+            if(info.p_gauge)
+            {
+                info.p_gauge.fillAmount = OSAUE.p_overCrowdingPercent;
+                info.p_gauge.color = OSAUE.p_state.p_color;
+            }
             
-            info.p_icon.sprite = OSAUE.p_state.p_icon;
+            if(info.p_icon) info.p_icon.sprite = OSAUE.p_state.p_icon;
             
-            /*info.p_nameTMP.text = $"{OSAUE.p_arenaName} - {OSAUE.p_state.p_name}";
-            info.p_nameTMP.color = OSAUE.p_state.p_color;*/
-            
-            
-            info.p_overCrowded.SetActive(OSAUE.p_overCrowdingPercent >= 1);
+            if(info.p_overCrowded) info.p_overCrowded.SetActive(OSAUE.p_overCrowdingPercent >= 1);
         });
         
         ListenToEvent<OnDapEvent>(ODE =>
