@@ -32,13 +32,15 @@ public class AscenseurManager : NetworkBusListener
 
     private void FillPool()
     {
-        for (int i = 0; i < _partsList.Length - 1; i++)
+        int count = _partsList.Length;
+
+        for (int i = 0; i < count; i++)
         {
             Ascenseur a = _partsList[i].GetComponent<Ascenseur>();
-            //a.OnThresholdReached += HandleThreshold;
-            //a.gameObject.SetActive(i == 0);
             _pool.Add(a);
-            a.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling);
+
+            float timeOffset = (_durationTraveling / count) * i;
+            a?.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling, timeOffset);
         }
     }
 
