@@ -3,7 +3,6 @@ using UnityEngine;
 using FishNet;
 using FishNet.Object;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class EnemyBulletManager : NetworkBusListener
