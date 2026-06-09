@@ -2438,14 +2438,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2859158800756073130}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.043577887, y: 0.043577887, z: -0.0019026523, w: 0.99809736}
+  m_LocalPosition: {x: 0.1, y: -0.093, z: -0.013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9218068156396851577}
   m_Father: {fileID: 1217779493801121915}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 5, y: 5, z: 0}
 --- !u!1 &3153661936363678950
 GameObject:
   m_ObjectHideFlags: 0
@@ -4778,6 +4778,8 @@ GameObject:
   - component: {fileID: 8824872197090131092}
   - component: {fileID: 3960452511176637144}
   - component: {fileID: 2377347567611109029}
+  - component: {fileID: 3997425252521186284}
+  - component: {fileID: 6132351721615362568}
   m_Layer: 7
   m_Name: PlayerControllerViews
   m_TagString: Untagged
@@ -5045,6 +5047,32 @@ MonoBehaviour:
     p_currentImage: {fileID: 5916125843691560591}
     p_numberCapacityText: {fileID: 6022630561453978929}
     p_particleGetCharge: {fileID: 9098331410032294801}
+--- !u!114 &3997425252521186284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6972727970303002869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a3cd977fd98ec46ab3f6c3337f9d55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CorrosionView
+  _corrodedFeedback: {fileID: 7421015696956441043}
+--- !u!114 &6132351721615362568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6972727970303002869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc4ba81c2d5d244084cf9c580365b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubArenaGaugeView
+  SubArenaGaugeParent: {fileID: 6052123781535006738}
 --- !u!1 &7010684394084671937
 GameObject:
   m_ObjectHideFlags: 0
@@ -10545,6 +10573,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 7920348795953197160}
+    - target: {fileID: 2456822345977431441, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2631863821163547510, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -6.2572074
@@ -10801,6 +10833,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!224 &6052123781535006738 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2600107052604547360, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+  m_PrefabInstance: {fileID: 8640183463756816690}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6450088080165202751 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3344848488278493709, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
@@ -10864,6 +10901,11 @@ MonoBehaviour:
 --- !u!224 &7193329494199463948 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1457985425279062334, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+  m_PrefabInstance: {fileID: 8640183463756816690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7421015696956441043 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1230792630795903201, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
   m_PrefabInstance: {fileID: 8640183463756816690}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &7438235482765740885 stripped
