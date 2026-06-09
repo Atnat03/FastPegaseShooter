@@ -19,7 +19,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         base.InitialiseBehaviourModule(enemyCore);
         _targetModule.p_onTargetPositionUpdate += PathUpdateRequest;
     }
-    public Vector3 GetNextTargetPosition() => _path[^1].position;
+    public Vector3? GetNextTargetPosition() => _path.Count > 0 ? _path[^1].position : null;
 
     public override void OnNetworkTick(float tickDelta)
     {

@@ -14,12 +14,13 @@ public class FollowMovementModuleViewer : MonoBehaviour
                 _movementModule.transform.position,
                 Time.deltaTime * _movementModule.p_movementModuleSO.p_speed);
 
-            transform.rotation = Quaternion.Slerp(
+            if(_movementModule.GetNextTargetPosition().HasValue)
+                transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 
                 Quaternion.LookRotation(
                     (transform.position.RemoveY() - 
-                     _movementModule.GetNextTargetPosition().RemoveY())
+                     _movementModule.GetNextTargetPosition().Value.RemoveY())
                         .normalized),
                 
                 Time.deltaTime * _rotationSpeed);
