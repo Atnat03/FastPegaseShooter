@@ -1,5 +1,4 @@
 using TMPro;
-using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.UI;
 
