@@ -38,18 +38,13 @@ public class BasicLifeViewer : MonoBehaviour
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
         _lifeBarImage.color = _NoneAffinityLifeGradient.Evaluate(1f);
 
-        _lifeBarParent.SetActive(false);
-        /*_lifeTMP.enabled = false;
-        _lifeBarImage.enabled = false;
-        _lifeBarSecondImage.enabled = false;*/
+        if(_lifeBarParent) _lifeBarParent.SetActive(false);
+        
     }
     
     private void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
-        _lifeBarParent .SetActive(true);
-        /*_lifeTMP.enabled = true;
-        _lifeBarImage.enabled = true;
-        _lifeBarSecondImage.enabled = true;*/
+        if(_lifeBarParent) _lifeBarParent.SetActive(true);
         
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
