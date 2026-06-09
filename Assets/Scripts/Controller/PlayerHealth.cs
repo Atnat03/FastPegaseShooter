@@ -211,7 +211,7 @@ public class PlayerHealth : NetworkBusListener
         if (!IsOwner) return;
 
         if (!p_unlockCapa) return;
-        if (!_playerCapacity.CanDrone) return;
+        if (!_playerCapacity.CanHeal) return;
 
         InvokeEvent(new OnHealUsed_TUTO());
 
