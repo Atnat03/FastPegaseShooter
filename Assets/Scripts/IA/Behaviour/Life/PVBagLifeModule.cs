@@ -1,8 +1,5 @@
-using System;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Life/PVBagLifeModule")]

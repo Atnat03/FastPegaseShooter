@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 /// <summary>
 /// Min-heap optimized for A* pathfinding. No allocations after initial capacity is reached.
