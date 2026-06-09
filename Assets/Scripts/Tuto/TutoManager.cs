@@ -56,7 +56,9 @@ namespace Tuto
         {
             SetUpBridge();
             InitializeTriggers();
-            StartCoroutine(RunTutorial());
+            
+            if (IsServerInitialized)
+                StartCoroutine(RunTutorial());
             
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
             ListenToEvent<OnHealUsed_TUTO>(CheckHealUse);
@@ -200,8 +202,16 @@ namespace Tuto
         private IEnumerator DialogueRoutine(float duration, Action onComplete)
         {
             yield return new WaitForSeconds(duration);
-            InvokeEvent(new OnDialogueEnd_TUTO());
+
+            AskForDialogueEndObserversRpc();
+
             onComplete?.Invoke();
+        }
+
+        [ObserversRpc]
+        private void AskForDialogueEndObserversRpc()
+        {
+            InvokeEvent(new OnDialogueEnd_TUTO());
         }
 
         [ServerRpc]
@@ -409,7 +419,6 @@ namespace Tuto
         
         private void DapUsed(OnDapEvent data)
         {
-            Cons.Print("Dap event", ColorConsole.Pink);
             OnDapUsed?.Invoke();
         }
         

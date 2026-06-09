@@ -18,9 +18,9 @@ namespace Tuto
         public override IEnumerator Execute()
         {
             bool dialogueEnded = false;
-
+            
             manager.AskForDialogue(_duration, _dialogue, speaker, _keyVoceline, () => dialogueEnded = true);
-
+            
             yield return new WaitUntil(() => dialogueEnded);
         }
     }

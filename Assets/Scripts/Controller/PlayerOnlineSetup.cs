@@ -3,14 +3,14 @@ using FishNet.Object;
 using UnityEngine;
 
 [DefaultExecutionOrder(-1)]
-public class PlayerSetup : NetworkBehaviour
+public class PlayerOnlineSetup : NetworkBehaviour
 {
     [SerializeField] private GunBridgePlayer _gunBridge;
     
     public override void OnStartClient()
     {
         if (!IsOwner) return;
-
+        
         PlayerLocalData data = PlayerLocalData.Instance;
         int gunId = data != null ? data.LocalPlayerGunId : 0;
 

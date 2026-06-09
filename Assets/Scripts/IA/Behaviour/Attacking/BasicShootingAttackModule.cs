@@ -1,8 +1,4 @@
-using System;
-using FishNet;
 using UnityEngine;
-using FishNet.Object;
-using UnityEngine.Serialization;
 
 [AddComponentMenu("EnemyBehaviour/Attack/BasicShootAttackModule")]
 public class BasicShootingAttackModule : EnemyAttackModule

@@ -35,10 +35,12 @@ public class SpawnZoneTutorial : NetworkBusListener
 
     private bool _stopInfiniteSpawn;
 
-    [Header("Gauge")]
-    [SerializeField] private Image _gaugeImage;
+    [Header("Corrosion")]
+    [SerializeField] private Image _corrosionImage;
     [SerializeField] private int _maxMobsInArena = 10;
-
+    [SerializeField] private int _corrosionDelay_Miliss = 500;
+    [SerializeField] private int _corrosionDamage = 5;
+    
     private int  _currentMobsInArena;
     private bool _spawnPaused;
     private bool _corrosionActivated;
@@ -138,7 +140,17 @@ public class SpawnZoneTutorial : NetworkBusListener
         if (_corrosionActivated) return;
         _corrosionActivated = true;
 
-        //InvokeEvent(new OnCorrosionActivatedEvent { p_zoneIndex = _zoneIndex });
+        _ = ApplyCorrosion();
+    }
+
+    async Task ApplyCorrosion()
+    {
+        while (_corrosionActivated)
+        {
+            await Task.Delay(_corrosionDelay_Miliss);
+
+            EventBus.InvokeEvent(new OnCorrosionEvent(_corrosionDamage));
+        }
     }
 
     [Server]
@@ -197,7 +209,7 @@ public class SpawnZoneTutorial : NetworkBusListener
     [ObserversRpc]
     void UpdateGaugeObservers(int current, int max, bool isActivated = true)
     {
-        if (_gaugeImage == null) return;
+        if (_corrosionImage == null) return;
         
         InvokeEvent(new OnFillAmount_TUTO
         {
