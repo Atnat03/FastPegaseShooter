@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
-using Controller;
-using CustomConsole.Runtime.Logger;
-using FishNet;
-using FishNet.CodeGenerating;
+
 using FishNet.Object;
-using FishNet.Object.Synchronizing;
-using TMPro;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Life/BasicLifeModule")]

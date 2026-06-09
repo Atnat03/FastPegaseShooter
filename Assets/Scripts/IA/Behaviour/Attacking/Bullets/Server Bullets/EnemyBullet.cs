@@ -1,6 +1,3 @@
-using System;
-using CustomConsole.Runtime.Logger;
-using FishNet;
 using UnityEngine;
 
 public abstract class EnemyBullet

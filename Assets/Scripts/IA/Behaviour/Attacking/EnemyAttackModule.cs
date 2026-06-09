@@ -1,7 +1,6 @@
 using System;
 using FishNet;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 //[AddComponentMenu("EnemyBehaviour/Attack")]
 public abstract class EnemyAttackModule : EnemyBehaviourModule

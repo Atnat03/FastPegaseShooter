@@ -1,10 +1,7 @@
 using System;
 using Controller;
-using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using Managers;
-using MyPrint;
 using UnityEngine;
 
 //[AddComponentMenu("EnemyBehaviour/Life")]

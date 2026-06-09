@@ -1,4 +1,3 @@
-using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Movement/DistanceAwareMovementModule")]
