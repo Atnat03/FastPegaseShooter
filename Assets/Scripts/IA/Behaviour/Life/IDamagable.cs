@@ -1,6 +1,3 @@
-using FishNet.Object;
-using UnityEngine;
-
 public interface IDamagable
 {
     /// <summary>

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
