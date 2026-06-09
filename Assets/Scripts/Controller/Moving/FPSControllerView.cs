@@ -26,6 +26,7 @@ public class FPSControllerView : NetworkBusListener
 	
 	[Header("Dash")] 
 	[SerializeField] private Image _dashCooldownImage;
+	[SerializeField] private ParticleSystem _dashParticles;
 
 	private bool _canSoundLand = true;
 	
@@ -117,6 +118,7 @@ public class FPSControllerView : NetworkBusListener
 	private void Dash()
 	{
 		PlaySound("Dash");
+		_dashParticles.Play();
 	}
 
 	#region SFX

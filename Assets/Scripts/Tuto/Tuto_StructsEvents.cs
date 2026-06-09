@@ -9,9 +9,10 @@ public struct OnDoorOpen_TUTO
 public struct OnDialogue_TUTO
 {
     public string dialogue;
-    public float duration;
     public Speaker speaker;
 }
+
+public struct OnDialogueEnd_TUTO{}
 
 public struct OnNotification_TUTO
 {
