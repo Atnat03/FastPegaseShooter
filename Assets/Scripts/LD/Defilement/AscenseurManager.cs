@@ -19,32 +19,30 @@ public class AscenseurManager : NetworkBusListener
     
     private List<Ascenseur> _pool = new();
     
-    public override void OnStartClient()
+    /*public override void OnStartClient()
     {
         ListenToEvent<OnAscenseurStart>(CreatePool);
-    }
+    }*/
 
     public override void OnStartNetwork()
     {
+        Debug.Log("OnStartNetwork");
         FillPool();
     }
 
     private void FillPool()
     {
-        Ascenseur first = _partsList[0].GetComponent<Ascenseur>();
-        first.OnThresholdReached += HandleThreshold;
-        first.gameObject.SetActive(true);
-        _pool.Add(first);
-
-        for (int i = 0; i < _pool.Count - 1; i++)
+        for (int i = 0; i < _partsList.Length - 1; i++)
         {
             Ascenseur a = _partsList[i].GetComponent<Ascenseur>();
-            a.OnThresholdReached += HandleThreshold;
-            a.gameObject.SetActive(false);
+            //a.OnThresholdReached += HandleThreshold;
+            //a.gameObject.SetActive(i == 0);
             _pool.Add(a);
+            a.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling);
         }
     }
 
+    /*
     private void CreatePool(OnAscenseurStart data)
     {
         LaunchNext();
@@ -75,7 +73,7 @@ public class AscenseurManager : NetworkBusListener
     }
 
     [ServerRpc]
-    private void RequestActivateAscenseurServerRpc() => ActivateNextAscenseurObserverRpc();
+    private void RequestActivateAscenseurServerRpc() => ActivateNextAscenseurObserverRpc();*/
 }
 
 public struct OnAscenseurStart
