@@ -172,7 +172,6 @@ public class BulletBehaviour : MonoBusListener, IAmmo, IPoolable
         _targetNetworkObject = null;
         _gunController = null;
         _vfx = null;
-
     }
 
     public void Spawn() { }
