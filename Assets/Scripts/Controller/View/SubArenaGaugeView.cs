@@ -36,7 +36,16 @@ public class SubArenaGaugeView : MonoBusListener
             if(info.p_overCrowded) info.p_overCrowded.SetActive(OSAUE.p_overCrowdingPercent >= 1);
         });
         
+        //clear all gauges
         ListenToEvent<OnDapEvent>(ODE =>
+        {
+            foreach (var SubArenaInfoPair in _idToInfos)
+            {
+                Destroy(SubArenaInfoPair.Value.gameObject);
+            }
+            _idToInfos.Clear();
+        });
+        ListenToEvent<OnPlayerSpawnTPEvent>(OPSTPE =>
         {
             foreach (var SubArenaInfoPair in _idToInfos)
             {
