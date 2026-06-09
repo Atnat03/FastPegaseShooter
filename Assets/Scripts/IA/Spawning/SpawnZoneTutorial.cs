@@ -5,6 +5,7 @@ using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using MyPrint;
+using Tuto;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -194,16 +195,24 @@ public class SpawnZoneTutorial : NetworkBusListener
     }
 
     [ObserversRpc]
-    void UpdateGaugeObservers(int current, int max)
+    void UpdateGaugeObservers(int current, int max, bool isActivated = true)
     {
         if (_gaugeImage == null) return;
-        _gaugeImage.fillAmount = max > 0 ? (float)current / max : 0f;
+        
+        InvokeEvent(new OnFillAmount_TUTO
+        {
+            activated = isActivated,
+            speed = 10,
+            maxPercentage = (max > 0 ? (float)current / max : 0f) * 100,
+            type = AnimationBar.None
+        });
     }
     
     [Server]
     public void StopInfiniteWave(OnDapEvent data)
     {
         _stopInfiniteSpawn = true;
+        UpdateGaugeObservers(0, 0, false);
     }
 
     Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];

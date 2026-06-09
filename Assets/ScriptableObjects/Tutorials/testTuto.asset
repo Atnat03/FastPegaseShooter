@@ -15,37 +15,26 @@ MonoBehaviour:
   _scenarioList:
   - ScenarioName: 
     trigger:
-      rid: 6001466728532672763
+      rid: 6001466728532673182
     eventsList:
-    - rid: 6001466728532672759
-    - rid: 6001466728532672760
-    - rid: 6001466728532672764
+    - rid: 6001466728532673218
+    - rid: 6001466728532673183
   references:
     version: 2
     RefIds:
-    - rid: 6001466728532672759
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: red 1
-        _keyVoceline: 
-        _duration: 1
-        speaker: 0
-    - rid: 6001466728532672760
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: blue 1
-        _keyVoceline: 
-        _duration: 1
-        speaker: 1
-    - rid: 6001466728532672763
+    - rid: 6001466728532673182
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         proxyIndex: 0
         mode: 1
-    - rid: 6001466728532672764
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+    - rid: 6001466728532673183
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: 'red 2 '
-        _keyVoceline: 
-        _duration: 1
-        speaker: 0
+        _indexSpawn: 00000000
+    - rid: 6001466728532673218
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 0
+        speedFill: 3
+        animationType: 0
