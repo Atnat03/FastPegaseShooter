@@ -244,7 +244,8 @@ public class FPSController : NetworkBusListener
         Sliding,
         Dashing,
         SlopeSliding,
-        Grappling
+        Grappling,
+        Pause
     }
 
     public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
@@ -395,6 +396,13 @@ public class FPSController : NetworkBusListener
             onExit: ExitGrappleState,
             onLateUpdate: GrappleLateUpdate
         ));
+        
+        stateMachine.Add(new State<ControlerState>(
+            iD: ControlerState.Pause,
+            onEnter:EnterPauseState,
+            PauseStateUpdate,
+            PauseStateFixedUpdate
+            ));
 
         stateMachine.ChangeState(ControlerState.Idle);
 
@@ -424,7 +432,7 @@ public class FPSController : NetworkBusListener
         UpdateLdInteractions();
         UpdateAnimationValues();
         
-        if (!IsFreeze)stateMachine?.Update();
+        stateMachine?.Update();
     }
 
     void FixedUpdate()
@@ -432,7 +440,6 @@ public class FPSController : NetworkBusListener
         if (!IsOwner) return;
 
         if (isDead.Value) return;
-        if (IsFreeze) return;
         
         rb.MoveRotation(Quaternion.Euler(0, yaw, 0));
         
@@ -458,12 +465,7 @@ public class FPSController : NetworkBusListener
     {
         IsFreeze = freeze;
 
-        if (freeze)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-        stateMachine.ChangeState(ControlerState.Idle);
+        stateMachine.ChangeState(freeze ? ControlerState.Pause : ControlerState.Idle);
     }
     
     void UpdateInputs() // appelé en update dans tout les states // update des inputs
@@ -1662,6 +1664,27 @@ public class FPSController : NetworkBusListener
             yield return null;
         }
         lineReachedTarget = true;
+    }
+
+    #endregion
+
+    #region PauseSate
+
+    void EnterPauseState()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    void PauseStateUpdate()
+    {
+        
+    }
+
+    void PauseStateFixedUpdate()
+    {
+        Vector3 HorizontalMovement = horizontalVelocity * .01f;
+        rb.linearVelocity = new Vector3(HorizontalMovement.x, rb.linearVelocity.y, HorizontalMovement.z);
     }
 
     #endregion
