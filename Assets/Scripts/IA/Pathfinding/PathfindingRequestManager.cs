@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using FishNet;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PathfindingRequestManager : MonoBusListener
 {

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Movement/BasicMovementModule")]
@@ -25,7 +24,10 @@ public class BasicMovementModule : EnemyMovementModule
             {
                 _t = 0;
                 _path.RemoveAt(_path.Count - 1);
-                if (_path.Count > 0) _lastPos = _path[^1].position;
+                if (_path.Count > 0)
+                {
+                    _lastPos = _path[^1].position;
+                }
             }
         }
     }

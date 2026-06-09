@@ -1,11 +1,9 @@
-using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Movement/DistanceAwareMovementModule")]
 public class DistanceAwareMovementModule : EnemyMovementModule
 {
     [SerializeField] private DistanceAwareMovementModuleSO _distanceAwareModuleSO;
-    
     protected override void MoveAlongPath()
     {
         //cuts Execution if the enemy is close enough from the player
