@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
-using CustomConsole.Runtime.Logger;
-using FishNet.Object;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 //[AddComponentMenu("EnemyBehaviour/Movement")]
 public abstract class EnemyMovementModule : EnemyBehaviourModule
