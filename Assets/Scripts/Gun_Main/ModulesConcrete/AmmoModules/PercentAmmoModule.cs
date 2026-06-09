@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 namespace GunDecorator.AmmoModules
 {
-    public class RaycastAmmoModule : GunModule, IAmmoModule
+    public class PercentAmmoModule : GunModule, IAmmoModule
     {
         [Header("references")]
         [SerializeField] private Camera _camera;
@@ -33,9 +33,9 @@ namespace GunDecorator.AmmoModules
         
         private Vector3 _finalSpawnPoint;
         
-        private Pooler<BulletBehaviour> _ammoPool;
+        private Pooler<BulletPercentBehaviour> _ammoPool;
         
-        private Dictionary<BulletBehaviour, Coroutine> bulletsLifetime =  new Dictionary<BulletBehaviour, Coroutine>();
+        private Dictionary<BulletPercentBehaviour, Coroutine> bulletsLifetime =  new Dictionary<BulletPercentBehaviour, Coroutine>();
         
         public override void SetVariable(GunSetting setting)
         {
@@ -52,7 +52,7 @@ namespace GunDecorator.AmmoModules
         void Start()
         {
             _dmgToApply = _damages;
-            _ammoPool = new Pooler<BulletBehaviour>(BulletPrefab.GetComponent<BulletBehaviour>(), 100);
+            _ammoPool = new Pooler<BulletPercentBehaviour>(BulletPrefab.GetComponent<BulletPercentBehaviour>(), 100);
         }
 
         public void SpawnBullet(Vector3 direction, Vector3 offset, bool hadCharged = true)
@@ -136,7 +136,7 @@ namespace GunDecorator.AmmoModules
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos,
             NetworkObject target = null, float factorReduceDamageByDistance = 1, bool isDistanceReduce = false, bool hadCharged = true)
         {
-            BulletBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
+            BulletPercentBehaviour newBullet = _ammoPool.Spawn(finalPos + offset, Quaternion.LookRotation(direction));
             
             newBullet.OnCollision += DespawnBullet;
             DespawnBullet(newBullet, 5f);//équivalent du destroy
@@ -159,12 +159,12 @@ namespace GunDecorator.AmmoModules
                 targetPoint, touchObject, finalPos, target, ratio, isDistanceReduce, hadCharged);
         }
         
-        void DespawnBullet(BulletBehaviour bullet, float delay)
+        void DespawnBullet(BulletPercentBehaviour bullet, float delay)
         {
             bulletsLifetime.Add(bullet,StartCoroutine(DespawnBulletCoroutine( bullet, delay)));
         }
         
-        IEnumerator DespawnBulletCoroutine(BulletBehaviour bullet, float delay)
+        IEnumerator DespawnBulletCoroutine(BulletPercentBehaviour bullet, float delay)
         {
             yield return new WaitForSeconds(delay);
             if (bullet != null && bullet.gameObject != null && bullet.gameObject.activeSelf)
@@ -173,7 +173,7 @@ namespace GunDecorator.AmmoModules
             }
         }
 
-        void DespawnBullet(BulletBehaviour bullet)
+        void DespawnBullet(BulletPercentBehaviour bullet)
         {
             if (bulletsLifetime.ContainsKey(bullet)) 
             {

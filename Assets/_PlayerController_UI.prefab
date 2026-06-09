@@ -20260,6 +20260,7 @@ GameObject:
   - component: {fileID: 7048642797284340988}
   - component: {fileID: 4693748091335889128}
   - component: {fileID: 7875450069064227382}
+  - component: {fileID: 7188804204190902235}
   m_Layer: 11
   m_Name: ShotgunSniper
   m_TagString: Untagged
@@ -20559,7 +20560,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   moduleName: DecreaseNoiseChargedModule
   moduleColor: {r: 0, g: 1, b: 1, a: 1}
-  _ammoType: {fileID: 7048642797284340988}
+  _ammoType: {fileID: 7188804204190902235}
   _isExplosifAmmo: 0
   _explosionRadius: 1
   _timeForCharging: 0.75
@@ -20570,12 +20571,7 @@ MonoBehaviour:
   _coolDownCharge: 0.5
   _isChargedShooting: 0
   _posOffset:
-  - {x: 0.15, y: 0, z: 0}
-  - {x: 0.15, y: 0.15, z: 0}
-  - {x: -0.15, y: 0.15, z: 0}
-  - {x: -0.15, y: 0, z: 0}
-  - {x: 0.15, y: -0.15, z: 0}
-  - {x: -0.15, y: -0.15, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!114 &7048642797284340988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20652,6 +20648,32 @@ MonoBehaviour:
     maxScale: {x: 1, y: 1, z: 1}
   _imageSilouette: {fileID: 266814514720469119}
   _spriteSilouette: {fileID: 21300000, guid: 7d29163af516f3f48925e0f459dd54ce, type: 3}
+--- !u!114 &7188804204190902235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5218239709253605311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a121663cb14415f9ac35283d65aed06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunDecorator.AmmoModules.PercentAmmoModule
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
+  moduleName: PercentAmmoModule
+  moduleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _camera: {fileID: 3061844143884342809}
+  BulletPrefab: {fileID: 9013429817892366803, guid: fe7924340b811b84d83740679aa5aafb, type: 3}
+  _spawnPoint: {fileID: 3560423205210205096}
+  _maxDistance: 200
+  _damages: 120
+  _BulletSpeed: 50
+  _impactVFXData: {fileID: 8208715393216506349, guid: 711d7691352cacd42bb278dec4521f17, type: 3}
+  _isDistanceReduced: 0
+  _factorReduceDamageByDistance: 1
 --- !u!1 &5287947843769632182
 GameObject:
   m_ObjectHideFlags: 0
