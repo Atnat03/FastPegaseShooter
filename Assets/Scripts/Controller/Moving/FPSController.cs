@@ -946,7 +946,6 @@ public class FPSController : NetworkBusListener
     private bool justWallridedOtherSide;
     private bool justWallridedSameSide;
 
-    private float currentHeadTilt = 0f;
     float targetHeadTilt = 0f;
     
     private readonly RaycastHit[] _grappleHitBuffer = new RaycastHit[16];
@@ -957,7 +956,6 @@ public class FPSController : NetworkBusListener
         hasDashed = false; // ligne a retirer si on veut que le joueur doive toucher le sol avant de redasher
 
         wallRidingHeight = transform.position.y;
-        currentHeadTilt = currentRoll;
         if(cameraBackToDefaultCoroutine != null) StopCoroutine(cameraBackToDefaultCoroutine);
         
         if (leftSideAgainstWall)
@@ -1062,10 +1060,9 @@ public class FPSController : NetworkBusListener
     }
 
     void ExitWallRidingState()
-    {
-        //cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+    { 
         wallRidingCoroutineRunning = false;
-        StopCoroutine(wallRidingCoroutine);
+        if(wallRidingCoroutine != null)StopCoroutine(wallRidingCoroutine);
         cameraBackToDefaultCoroutine = StartCoroutine(CameraRollBackToDefaultCoroutine());
     }
 

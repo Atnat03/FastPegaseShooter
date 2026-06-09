@@ -1495,7 +1495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCoreViewer
   _enemyCore: {fileID: 7477333178389888924}
-  _explosionVfx: {fileID: 725748389856807712, guid: 03f721bf7a42fa64f9a90fc0fdd87d46, type: 3}
+  _explosionVfx: {fileID: 0}
 --- !u!114 &5470431298585535539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2862,10 +2862,16 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: -5091274446042719544}
+  - {fileID: 7477333178389888924}
+  - {fileID: 2560679916755944934}
+  - {fileID: 8369308968552502317}
+  - {fileID: 2913185895975382911}
+  - {fileID: 6629053338906500468}
+  - {fileID: 684674022696784175}
+  - {fileID: 5124354536009310438}
   - {fileID: 3338362503603711441}
   InitializedParentNetworkBehaviour: {fileID: 0}
-  InitializedNestedNetworkObjects:
-  - {fileID: 0}
+  InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
   _isNetworked: 1
@@ -2874,7 +2880,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584212092317853982
+  _initializedTimestamp: -8584206132111878578
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -2890,7 +2896,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 14
+  <PrefabId>k__BackingField: 20
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 10251560951667394465
   SceneId: 0
@@ -3031,7 +3037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd37eadeed8c574bba4e12cadbadf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 1
+  _componentIndexCache: 8
   _addedNetworkObject: {fileID: 990463738319832270}
   _networkObjectCache: {fileID: 990463738319832270}
   _distanceMax: 100
@@ -4761,9 +4767,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f6b4475ac4843d4798768881fa904fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCore
-  _componentIndexCache: 0
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 990463738319832270}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 990463738319832270}
   _attackingModules:
   - {fileID: 8369308968552502317}
   _lifeModules:
@@ -4787,9 +4793,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3141c02e2afe434e8d51531588cbb6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyLife
-  _componentIndexCache: 1
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 990463738319832270}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 990463738319832270}
   _lifeModuleSO: {fileID: 11400000, guid: ef439af68a51d7e489f95407a3ec92dc, type: 2}
 --- !u!114 &8369308968552502317
 MonoBehaviour:
@@ -4803,9 +4809,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1438ebc3a6f0dce4bbb71d4cbcd12b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PredictiveShootingAttackModule
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 990463738319832270}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 990463738319832270}
   _targetModule: {fileID: 2913185895975382911}
   _attackModuleSO: {fileID: 11400000, guid: b9f048accdb1ebc4999e1a861c2ac908, type: 2}
   _predictiveShootingAttackModuleSO: {fileID: 11400000, guid: 9265b695656fcf44daef8cf14afc0927, type: 2}
@@ -4844,9 +4850,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 551daad7dd080364381524025b5adc95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreTargetModule
-  _componentIndexCache: 3
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 990463738319832270}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 990463738319832270}
   p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
   _scoreTargetModuleSO: {fileID: 11400000, guid: 89f714d22668fdf4d876ed06cd27ee4a, type: 2}
 --- !u!114 &6629053338906500468
@@ -4861,9 +4867,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Component.Transforming.NetworkTransform
-  _componentIndexCache: 4
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 990463738319832270}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 990463738319832270}
   _componentConfiguration: 0
   _synchronizeParent: 0
   _packing:
@@ -4907,9 +4913,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53783909ae03234408c4b1a8d6416c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DistanceAwareMovementModule
-  _componentIndexCache: 5
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 990463738319832270}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 990463738319832270}
   _targetModule: {fileID: 5124354536009310438}
   p_movementModuleSO: {fileID: 11400000, guid: a4ec99ac20de1ea41abf6c27105262ae, type: 2}
   _distanceAwareModuleSO: {fileID: 11400000, guid: 33df87d00951ea140b7d7daf40be1a01, type: 2}
@@ -4925,9 +4931,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593ca9c98e0878348b930253a591e899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StepTargetModule
-  _componentIndexCache: 6
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 990463738319832270}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 990463738319832270}
   p_lastTargetPosition: {x: -Infinity, y: -Infinity, z: -Infinity}
   _scoreTargetModuleSO: {fileID: 11400000, guid: 89f714d22668fdf4d876ed06cd27ee4a, type: 2}
   _stepTargetModuleSO: {fileID: 11400000, guid: 17e4e1b407764b24f9679d7f1b789e49, type: 2}
