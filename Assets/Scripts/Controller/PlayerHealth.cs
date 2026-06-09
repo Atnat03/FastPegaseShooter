@@ -329,7 +329,11 @@ public class PlayerHealth : NetworkBusListener
 
     private void ApplyCorrosionDamage(OnCorrosionEvent data)
     {
-        RequestTakeDamageServerRpc(data.p_corrosionDamage);
+        TakeDamage(new PlayerTakeDamageEvent
+        {
+            p_playerN = NetworkObject,
+            p_value = data.p_corrosionDamage,
+        });
     }
 
     [ServerRpc(RequireOwnership = false)]
