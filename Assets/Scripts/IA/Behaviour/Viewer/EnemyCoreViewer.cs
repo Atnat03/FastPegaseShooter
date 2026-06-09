@@ -1,7 +1,4 @@
-using System;
-using MyPrint;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EnemyCoreViewer : MonoBehaviour
 {

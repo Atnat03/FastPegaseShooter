@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
-using CustomConsole.Runtime.Logger;
-using FishNet.Object;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 //[AddComponentMenu("EnemyBehaviour/Movement")]
 public abstract class EnemyMovementModule : EnemyBehaviourModule
@@ -23,7 +19,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         base.InitialiseBehaviourModule(enemyCore);
         _targetModule.p_onTargetPositionUpdate += PathUpdateRequest;
     }
-    public Vector3 GetNextTargetPosition() => _path[^1].position;
+    public Vector3? GetNextTargetPosition() => _path.Count > 0 ? _path[^1].position : null;
 
     public override void OnNetworkTick(float tickDelta)
     {

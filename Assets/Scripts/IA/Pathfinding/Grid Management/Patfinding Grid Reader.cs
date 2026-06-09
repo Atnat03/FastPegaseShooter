@@ -1,9 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using CustomConsole.Runtime.Logger;
-using Unity.Profiling;
-using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(AStarAlgorithm))]
