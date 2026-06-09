@@ -17,6 +17,7 @@ public class Ascenseur : MonoBusListener
     {
         gameObject.SetActive(true);
 
+        elevatorGoing = true;
         Vector3 rail = endPosition - startPosition;
         Vector3 railDir = rail.normalized;
 
@@ -40,7 +41,7 @@ public class Ascenseur : MonoBusListener
     {
         float elapsed = startElapsed;
 
-        while (true)
+        while (elevatorGoing)
         {
             while (elapsed < duration)
             {
@@ -51,8 +52,11 @@ public class Ascenseur : MonoBusListener
 
             elapsed = 0f;
             transform.position = localStart; // reset en haut du rail propre à cet objet
+            OnLoop();
         }
     }
+    
+    protected virtual void OnLoop(){}
     
     void StopElevator(OnDapEvent e)
     {
