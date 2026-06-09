@@ -73,7 +73,7 @@ public class EnemyBulletVisuals : MonoBusListener, IPoolable
 
     protected override void OnDestroy()
     {
-        base.OnDestroy();
         InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
+        base.OnDestroy();
     }
 }
