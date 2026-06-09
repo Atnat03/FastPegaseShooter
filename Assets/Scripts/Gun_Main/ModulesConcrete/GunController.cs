@@ -393,5 +393,20 @@ namespace GunDecorator
         }
 
         public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
+
+        public void ActivatedGun(bool state)
+        {
+            CurrentModelGun.gameObject.SetActive(state);
+            
+            if (_animatorArm)
+            {
+                _animatorArm.gameObject.SetActive(state);
+            }
+
+            if (_animatorBall)
+            {
+                _animatorBall.gameObject.SetActive(state);
+            }
+        }
     }
 }
