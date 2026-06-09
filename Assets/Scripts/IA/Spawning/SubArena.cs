@@ -23,7 +23,6 @@ public class SubArena : NetworkBusListener
 
     [Header("----- Infinite Spawn -----")]
     [SerializeField] private int _currentBudget;
-    [SerializeField] private List<MobSpawnSO> _spawnMobs = new();
     [SerializeField] private List<SpawningState> _spawningStates = new();
     
     [Header("----- Corrosion -----")]
@@ -31,7 +30,6 @@ public class SubArena : NetworkBusListener
     [SerializeField] private int _corrosionDamage = 5;
     [SerializeField] private int _corrosionDelay = 3;
 
-    private float _enemyTotalWeight;
     private PathfindingRequestManager _pathfindingRequestManager;
     private int _currentSpawnPointIndex = 0;
     
@@ -83,11 +81,10 @@ public class SubArena : NetworkBusListener
 
     void InitialiseSpawnProbability()
     {
-        _spawnMobs = _spawnMobs.OrderByDescending(s => s.p_spawnProba).ToList();
-        _enemyTotalWeight = 0;
-        
-        foreach (MobSpawnSO spawnMob in _spawnMobs)
-            _enemyTotalWeight += spawnMob.p_spawnProba;
+        for (int i = 0; i < _spawningStates.Count; i++)
+        {
+            _spawningStates[i].Initialize();
+        }
     }
 
     #endregion
@@ -131,6 +128,7 @@ public class SubArena : NetworkBusListener
     {
         if(!IsServerStarted) return;
         NotifySubArenaStartObserverRpc(_gridReader.p_id);
+        NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
         await SpawnFirstWave();
         await InfiniteSpawn();
     }
@@ -144,9 +142,9 @@ public class SubArena : NetworkBusListener
     {
         float random01 = Random.Range(0f, 1f);
         float currentWeight = 0;
-        foreach (var mobSpawn in _spawnMobs)
+        foreach (var mobSpawn in _spawningStates[_currentStateIndex].p_state.p_spawnMobs)
         {
-            currentWeight += mobSpawn.p_spawnProba/_enemyTotalWeight;
+            currentWeight += mobSpawn.p_spawnProba/_spawningStates[_currentStateIndex].p_totalWeight;
             if(random01 <= currentWeight)
             {
                 //CustomLogger.HighlightLog($"Chosen Enemy : {mobSpawn.mob.name}, random01 : {random01}");
@@ -155,7 +153,7 @@ public class SubArena : NetworkBusListener
         }
         
         //fallback for float imprecision
-        return _spawnMobs[^1];
+        return _spawningStates[_currentStateIndex].p_state.p_spawnMobs[^1];
     }
 
     [Server]
@@ -277,8 +275,19 @@ public class SubArena : NetworkBusListener
 }
 
 [System.Serializable]
-public struct SpawningState
+public class SpawningState
 {
     [Tooltip("Duration is expressed in seconds")] public int p_stateDuration;
     public SubArenaStateSO p_state;
+    
+    public float p_totalWeight;
+
+    public void Initialize()
+    {
+        p_totalWeight = 0;
+        
+        foreach (MobSpawnSO spawnMob in p_state.p_spawnMobs)
+            p_totalWeight += spawnMob.p_spawnProba;
+    }
+    
 }
