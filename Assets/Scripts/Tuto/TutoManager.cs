@@ -50,6 +50,7 @@ namespace Tuto
         
         //Actions
         public Action OnBothUseHeal;
+        public Action OnDapUsed;
         
         public override void OnStartNetwork()
         {
@@ -59,8 +60,9 @@ namespace Tuto
             
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
             ListenToEvent<OnHealUsed_TUTO>(CheckHealUse);
+            ListenToEvent<OnDapEvent>(DapUsed);
         }
-        
+
         private void CheckHealUse(OnHealUsed_TUTO data)
         {
             OnAddPlayerUsedHealServerRpc();
@@ -185,16 +187,21 @@ namespace Tuto
         #endregion
         
         #region DIALOGUE
-        public void AskForDialogue(float duration, string dialogue, Speaker speaker, string keyVoceline)
+        public void AskForDialogue(float duration, string dialogue, Speaker speaker, string keyVoceline, Action onComplete = null)
         {
             if (IsServerInitialized)
-            {
-                AskForDialogueObserversRpc(duration,dialogue, speaker, keyVoceline);
-            }
+                AskForDialogueObserversRpc(duration, dialogue, speaker, keyVoceline);
             else
-            {
-                AskForDialogueServerRpc(duration,dialogue, speaker, keyVoceline);
-            }
+                AskForDialogueServerRpc(duration, dialogue, speaker, keyVoceline);
+
+            StartCoroutine(DialogueRoutine(duration, onComplete));
+        }
+
+        private IEnumerator DialogueRoutine(float duration, Action onComplete)
+        {
+            yield return new WaitForSeconds(duration);
+            InvokeEvent(new OnDialogueEnd_TUTO());
+            onComplete?.Invoke();
         }
 
         [ServerRpc]
@@ -211,10 +218,10 @@ namespace Tuto
             InvokeEvent(new OnDialogue_TUTO
             {
                 dialogue = dialogue,
-                duration = duration,
                 speaker = speaker
             });
         }
+        
         #endregion
         
         #region NOTIFICATION
@@ -399,6 +406,12 @@ namespace Tuto
         }
 
         #endregion
+        
+        private void DapUsed(OnDapEvent data)
+        {
+            Cons.Print("Dap event", ColorConsole.Pink);
+            OnDapUsed?.Invoke();
+        }
         
         #endregion
 
