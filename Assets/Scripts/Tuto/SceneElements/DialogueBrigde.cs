@@ -21,6 +21,7 @@ public class DialogueBrigde : MonoBusListener
 	private void Awake()
 	{
 		ListenToEvent<OnDialogue_TUTO>(OnDialogue);
+		ListenToEvent<OnDialogueEnd_TUTO>(CloseDialogue);
 		
 		_ui.SetActive(false);
 	}
@@ -31,17 +32,15 @@ public class DialogueBrigde : MonoBusListener
 		
 		_backGroundDialogue.color = GetColor(data.speaker);
 		_dialogueText.text = data.dialogue;
-
-		StartCoroutine(DialogueWaiter(data.duration));
-	}
-
-	IEnumerator DialogueWaiter(float duration)
-	{
-		yield return new WaitForSeconds(duration);
 		
+	}
+	
+	private void CloseDialogue(OnDialogueEnd_TUTO data)
+	{
 		_ui.SetActive(false);
 	}
 
+	
 	private Color GetColor(Speaker dataSpeaker)
 	{
 		switch (dataSpeaker)
