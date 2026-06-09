@@ -53,14 +53,11 @@ public class AStarAlgorithm : MonoBehaviour
                 
                 //Heap and Pool clearing
                 _toSearch.Clear();
-                while (_toSearch.Count > 0)
-                {
-                    ReleaseNode(_toSearch.RemoveMin());
-                }
                 while (_nodeToRelease.Count > 0)
                 {
                     ReleaseNode(_nodeToRelease.Pop());
                 }
+                //_nodeToRelease.Clear();
                 
                 return path;
             }

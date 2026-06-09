@@ -130,7 +130,6 @@ public class EnemyCore : NetworkBusListener
 
     public void KillEnemy(int playerObjectId, ChargeType charge)
     {
-
         //if killed by dap wave
         if (charge == ChargeType.None)
         {
@@ -146,14 +145,20 @@ public class EnemyCore : NetworkBusListener
         
         if (!_coreSo.p_dropXpOrb)
         {
-            InvokeEvent(new ModifyEnergyEvent
-            {
-                p_player = playerObjectId,
-                p_value = Mathf.Abs(signedEnergyAmount)
-            });
+            AddEnergyWhenEnemyKillObserversRpc(playerObjectId, signedEnergyAmount);
         }
         
         InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
+    }
+
+    [ObserversRpc]
+    private void AddEnergyWhenEnemyKillObserversRpc(int id, float value)
+    {
+        InvokeEvent(new ModifyEnergyEvent
+        {
+            p_player = id,
+            p_value = Mathf.Abs(value)
+        });
     }
 
     [ObserversRpc]

@@ -24,6 +24,7 @@ public interface IGun
     public void SetInfiniteAmmo(bool infiniteAmmo);
     public void SetChargedPlayer(bool b);
     public void SetReticule(ReticulesManager manager);
+    public bool IsChargeShooting { get; }
 }
 
 
@@ -47,6 +48,8 @@ namespace GunDecorator
         public bool IsPositivePlayerCharge => _isPositivePlayerCharge.Value;
         public IRecoilModule RecoilModule => _recoilModule;
         public Transform CurrentModelGun => currentModel;
+        public bool IsChargeShooting => _chargedModule._isChargedShooting;
+        
 
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
@@ -62,9 +65,6 @@ namespace GunDecorator
         [SerializeField, Tooltip("Model 3d de l'arme")]
         private Transform currentModel;
 
-        [SerializeField, Tooltip("Model 3d de l'arme suivant la charge")]
-        private Transform[] _modelsList;
-
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
 
@@ -76,6 +76,7 @@ namespace GunDecorator
         
         [SerializeField, Tooltip("Animation du bras")]
         public Animator _animatorArm;
+        public Animator _animatorBall;
 
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
         public ParticleSystem[] p_particlesMuzzleFlash;
@@ -93,8 +94,13 @@ namespace GunDecorator
         private readonly SyncVar<bool> _isPositivePlayerCharge = new SyncVar<bool>(false);
 
         [HideInInspector] public bool p_authorizedToShoot = true;
+        
+        PlayerAnimation _playerAnimation;
+
+        private bool _isChargeShooting;
 
         //Action
+        public Action OnSetUp;
 
         //Shoot
         public Action<int, int> OnShootAmmo;
@@ -110,7 +116,8 @@ namespace GunDecorator
 
         private void OnEnable()
         {
-            _animator?.ResetTrigger("Reload");
+            if(_animator)
+                _animator.ResetTrigger("Reload");
         }
 
         private void Awake()
@@ -142,21 +149,13 @@ namespace GunDecorator
                     }
                 }
             }
+            
+            _playerAnimation = transform.root.GetComponentInChildren<PlayerAnimation>();
         }
 
         public override void OnStartClient()
         {
-            if(_modelsList.Length <2)
-                return;
-            
-            foreach (Transform t in _modelsList)
-            {
-                t.gameObject.SetActive(false);
-            }
-            
-            _modelsList[LocalConnection.ClientId].gameObject.SetActive(true);
-
-            if (_modelsList[LocalConnection.ClientId].TryGetComponent(out Animator animator))
+            if (currentModel.TryGetComponent(out Animator animator))
                 _animator = animator;
         }
 
@@ -174,14 +173,14 @@ namespace GunDecorator
         public void ApplyShoot()
         {
             if (!ShootingInputPressed) return;
-
+            
             if (!currentModel.gameObject.activeInHierarchy)
                 return;
-
+            
             if (GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && p_authorizedToShoot)
             {
                 if (!_shootModule.CanShoot) return;
-
+                
                 _shootModule.SetFireRate(_fireRateMultiplier);
 
                 if (IsFullAuto)
@@ -226,6 +225,8 @@ namespace GunDecorator
                 if(_animatorArm)
                     _animatorArm?.SetTrigger("Shoot");
 
+                _playerAnimation.SetShootAnim();
+                
                 yield return new WaitForSeconds(s.FireRate);
 
                 p_authorizedToShoot = true;
@@ -236,8 +237,12 @@ namespace GunDecorator
         {
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
-
             _recoilModule?.SetIsRecoil(false);
+
+            _animator?.ResetTrigger("Shoot");
+
+            if (_animatorArm)
+                _animatorArm?.ResetTrigger("Shoot");
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
@@ -297,6 +302,13 @@ namespace GunDecorator
         public void TryShootCharged()
         {
             _chargedModule?.StartChargedShoot();
+            
+            _animator?.SetTrigger("ChargeShoot");
+                
+            if(_animatorArm)
+                _animatorArm?.SetTrigger("ChargeShoot");
+            
+            _playerAnimation.SetShootAnim();
         }
 
         public void Disable(bool state)
@@ -334,8 +346,26 @@ namespace GunDecorator
             SoundManager.PlaySound(_soundData, sound, _source);
         }
 
-        [ObserversRpc]
         private void PlayMuzzleFlash()
+        {
+            if (IsServerInitialized)
+            {
+                PlayMuzzleFlashObserversRpc();
+            }
+            else
+            {
+                PlayMuzzleFlashServerRpc();
+            }
+        }
+
+        [ServerRpc(RequireOwnership = true)]
+        private void PlayMuzzleFlashServerRpc()
+        {
+            PlayMuzzleFlashObserversRpc();
+        }
+        
+        [ObserversRpc]
+        private void PlayMuzzleFlashObserversRpc()
         {
             if (p_particlesMuzzleFlash.Length < 2) 
                 return;
@@ -358,9 +388,10 @@ namespace GunDecorator
 
         public void SetReticule(ReticulesManager manager)
         {
+            OnSetUp?.Invoke();
             manager.ActivateReticules(_reticuleID);
         }
-        
+
         public void SetDamage(float ratio) => _shootModule.AmmoModule.SetDamage(ratio);
     }
 }

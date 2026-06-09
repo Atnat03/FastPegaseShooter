@@ -22,19 +22,20 @@ public class DapManager : NetworkBusListener
 {
 	#region Properties
 
+	public float GetPercentageDap => _dapPercentage.Value;
+	
 	#endregion
 
 	#region Variables
 
+	[SerializeField] private Canvas _globalCanva;
+
 	[Header("Bars Settings")]
 	[SerializeField] private float _maxEnergy = 100f;
-	[SerializeField] private float _valueOneBar = 20f;
-	
+
 	[Header("Dap Settings")]
 	[SerializeField] private float _percentageGainPerSecond = 2;
 	[SerializeField] private float _distanceToDap = 10f;
-	
-	private int _totalBars;
 	
 	private readonly SyncVar<float> _dapPercentage = new(0);
 	private readonly SyncVar<bool> _canDapping = new(false);
@@ -44,10 +45,10 @@ public class DapManager : NetworkBusListener
 	private HashSet<int> _playersReadyToDap = new();
 	
 	//Actions
-	public Action<int, float> OnPercentageChange;
-	public Action<int> OnCreateBarUI;
+	public Action<float> OnPercentageChange;
 	public Action<int> OnMessageUpdate;
 	public Action<Vector3> OnDapping;
+	public Action<float> OnDapReachPercentage;
 	
 	#endregion
 	
@@ -61,15 +62,21 @@ public class DapManager : NetworkBusListener
 
 		_dapPercentage.OnChange += OnDapChange;
 		_canDapping.OnChange += OnCanDappingChange;
-		
-		_totalBars = Mathf.CeilToInt(_maxEnergy / _valueOneBar);
-		
-		OnCreateBarUI?.Invoke(_totalBars);
+
 		_dapPercentage.Value = 0;
 	}
 	public override void OnStartClient()
 	{
 		_dapPercentage.OnChange += OnDapChange;
+		
+		OnPercentageChange?.Invoke(_dapPercentage.Value);
+
+		if (IsOwner)
+		{
+			_globalCanva.renderMode = RenderMode.ScreenSpaceCamera;
+			_globalCanva.worldCamera = Camera.main;
+			_globalCanva.sortingLayerID = SortingLayer.NameToID("UI");
+		}
 	}
 
 	private void OnPlayerSpawn(OnPlayerSpawnEvent data)
@@ -95,8 +102,9 @@ public class DapManager : NetworkBusListener
 			DappingObserverRpc(pos);
 			
 			InvokeEvent(new OnDapEvent());
-
+			
 			_dapPercentage.Value = 0;
+			_canDapping.Value = false;
 			_playersReadyToDap.Clear();
 		}
 	}
@@ -122,6 +130,7 @@ public class DapManager : NetworkBusListener
 		if (IsServerInitialized)
 		{
 			_dapPercentage.Value += _percentageGainPerSecond * data.p_ratio;
+			OnDapReachPercentage?.Invoke(GetPercentageDap);
 		}
 	}
 	
@@ -129,6 +138,9 @@ public class DapManager : NetworkBusListener
 	{
 		if (_dapPercentage.Value >= _maxEnergy)
 		{
+			_dapPercentage.Value = _maxEnergy;
+			_canDapping.Value = true;
+
 			OnMessageUpdate?.Invoke(0);
 		}
 		
@@ -152,28 +164,23 @@ public class DapManager : NetworkBusListener
 		if (!IsServerInitialized) 
 			return;
 		
-		if (_dapPercentage.Value >= _maxEnergy)
+		if (_playerList.Count < 2)
+			return;
+
+		if (_dapPercentage.Value < _maxEnergy)
 		{
-			_canDapping.Value = 
-				(_playerList[0].position-_playerList[1].position).magnitude <= _distanceToDap;
+			_canDapping.Value = false;
+			return;
 		}
+
+		_canDapping.Value = Vector3.Distance(_playerList[0].position, _playerList[1].position) <= _distanceToDap;
 	}
 
 	private void UpdateUI(float energy)
 	{
-		energy = Mathf.Clamp(energy, 0f, _maxEnergy);
+		float fillAmount = Mathf.Clamp01(energy / _maxEnergy);
 
-		int activeBarIndex = Mathf.FloorToInt(energy / _valueOneBar);
-		float activeFill = (energy % _valueOneBar) / _valueOneBar;
-
-		//Cas énergie max
-		if (Mathf.Approximately(energy, _maxEnergy))
-		{
-			activeBarIndex = _totalBars - 1;
-			activeFill = 1f;
-		}
-		
-		OnPercentageChange?.Invoke(activeBarIndex, activeFill);
+		OnPercentageChange?.Invoke(fillAmount);
 	}
 	
 	#endregion

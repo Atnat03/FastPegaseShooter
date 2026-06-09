@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using GunDecorator;
 using Managers;
 using MyPrint;
 using UnityEngine;
@@ -27,15 +28,6 @@ namespace Controller
         public bool p_unlockSwapEnergyLaser = true;
         public bool p_unlockChargedShoot = true;
         
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-            {
-                if(!IsOwner)
-                    SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
-            }
-        }
-
         public void InitializeWithGunId(int gunId)
         {
             _gunSwitching.Initialize(gunId);
@@ -52,6 +44,7 @@ namespace Controller
 
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
+            if(CurrentGun.IsChargeShooting)return;
             
             CurrentGun.TryFire();
         }
@@ -98,6 +91,7 @@ namespace Controller
         {
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
+            if(CurrentGun.IsChargeShooting)return;
             
             CurrentGun.TryReload();
         }

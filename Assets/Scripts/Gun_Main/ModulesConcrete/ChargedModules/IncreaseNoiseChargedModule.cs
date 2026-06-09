@@ -40,8 +40,6 @@ namespace GunDecorator.ChargedModules
             _gunController.RecoilModule?.SetIsRecoil(true);
 
             ApplyShoot();
-            
-            ResetCharging();
         }
 
         private void ApplyShoot()
@@ -65,7 +63,8 @@ namespace GunDecorator.ChargedModules
             }
 
             _gunController.PlaySound("Charged");
-            _gunController?.OnStopCharging?.Invoke();
+            
+            ResetCharging();
         }
     }
 }

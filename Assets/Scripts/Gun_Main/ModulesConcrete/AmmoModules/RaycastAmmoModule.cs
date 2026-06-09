@@ -103,18 +103,34 @@ namespace GunDecorator.AmmoModules
 
             bool isExplosive = _bulletData != null && _bulletData.IsExplosive;
             float radius = _bulletData?.ExplosionRadius ?? 0f;
-            
-            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius, offset, targetPoint, touchTag, _finalSpawnPoint, damagableObject, _factorReduceDamageByDistance, _isDistanceReduced, hadCharged);
+
+            DoSpawnBullet(bulletDirection, travelTime, isExplosive, radius, offset,
+                _gunController.IsOverload,
+                targetPoint, touchTag, _finalSpawnPoint, damagableObject,
+                _factorReduceDamageByDistance, _isDistanceReduced, hadCharged);
+
+            SpawnVisualBulletServerRpc(bulletDirection, travelTime, isExplosive, radius,
+                offset, targetPoint, touchTag, _finalSpawnPoint, damagableObject,
+                _factorReduceDamageByDistance, _isDistanceReduced, hadCharged);        
         }
         
         [ServerRpc]
-        private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag, Vector3 finalPos, NetworkObject target = null, float ratio = 1, bool isDistanceReduce = false, bool hadCharged = true)
+        private void SpawnVisualBulletServerRpc(Vector3 direction, float travel, bool isExplosive,
+            float radius, Vector3 offset, Vector3 targetPoint, string touchObjectTag,
+            Vector3 finalPos, NetworkObject target = null, float ratio = 1,
+            bool isDistanceReduce = false, bool hadCharged = true)
         {
             bool isCritical = _gunController.IsOverload;
-            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target,ratio, isDistanceReduce, hadCharged);
-            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObjectTag, finalPos, target, ratio, isDistanceReduce, hadCharged);
+
+            if (!IsOwner)
+                DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical,
+                    targetPoint, touchObjectTag, finalPos, target, ratio, isDistanceReduce, hadCharged);
+
+            SpawnVisualBulletObserverRpc(direction, travel, isExplosive, radius, offset,
+                isCritical, targetPoint, touchObjectTag, finalPos, target,
+                ratio, isDistanceReduce, hadCharged);
         }
+        
 
         private void DoSpawnBullet(Vector3 direction, float travel, bool isExplosive,
             float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos,
@@ -131,12 +147,16 @@ namespace GunDecorator.AmmoModules
                 isCritical, targetPoint, target, _gunController.IsPositivePlayerCharge, 0,factorReduceDamageByDistance, isDistanceReduce, hadCharged);
         }
 
-        [ObserversRpc]
-        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive, 
-            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint, string touchObject, Vector3 finalPos, NetworkObject target = null, float ratio = 1, bool isDistanceReduce = false, bool hadCharged = true)
+        [ObserversRpc(ExcludeOwner = true)] 
+        private void SpawnVisualBulletObserverRpc(Vector3 direction, float travel, bool isExplosive,
+            float radius, Vector3 offset, bool isCritical, Vector3 targetPoint,
+            string touchObject, Vector3 finalPos, NetworkObject target = null,
+            float ratio = 1, bool isDistanceReduce = false, bool hadCharged = true)
         {
             if (IsServerInitialized) return;
-            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical, targetPoint, touchObject, finalPos, target,ratio, isDistanceReduce, hadCharged);
+
+            DoSpawnBullet(direction, travel, isExplosive, radius, offset, isCritical,
+                targetPoint, touchObject, finalPos, target, ratio, isDistanceReduce, hadCharged);
         }
         
         void DespawnBullet(BulletBehaviour bullet, float delay)

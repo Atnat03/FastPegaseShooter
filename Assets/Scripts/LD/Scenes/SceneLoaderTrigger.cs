@@ -1,78 +1,51 @@
+using System;
 using System.Collections.Generic;
-using FishNet;
-using FishNet.Managing.Scened;
-using FishNet.Object;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace LD.Scenes
 {
-	public class SceneLoaderTrigger : NetworkBusListener
-	{
+    public class SceneLoaderTrigger : MonoBusListener
+    {
+        [SerializeField] private GameObject _door;
 
-		#region Variables
-		[SerializeField] private GameObject _door;
-		[SerializeField] private SceneField _sceneToLoad;
-		#endregion
-		
-		#region Fonctions
-		
-		void Start()
-		{
-			ListenToEvent<OnDapEvent>(OpenDoor);
-		}
+        #region Variables
 
-		void OpenDoor(OnDapEvent evt)
-		{
-			if (!_door) return;
-			if(_door.GetComponent<Animation>()) _door.GetComponent<Animation>().Play();
-			else _door.SetActive(false);
-		}
-		
+        [SerializeField] private SceneField[] _sceneToLoad;
+        [SerializeField] private SceneField[] _sceneToUnload;
+        private int playerCount = 0;
+        private List<PlayerVisuelBridge> alreadyCountedPlayers = new List<PlayerVisuelBridge>();
+        [SerializeField] bool need2Players = false;
 
-		private void OnTriggerEnter(Collider other)
-		{
-			if (other.TryGetComponent(out PlayerVisuelBridge player))
-			{
-				InvokeEvent(new OnSceneLoadTrigger());
-				LoadSceneServerRpc();
-			}
-		}
+        #endregion
 
-		[ServerRpc(RequireOwnership = false)]
-		private void LoadSceneServerRpc()
-		{
-			LoadSceneForAll();
-		}
 
-		[Server]
-		private void LoadSceneForAll()
-		{
-			
-			// Ajoute ce debug temporaire dans LoadSceneForAll
-			Debug.Log($"Chargement de la scène : '{_sceneToLoad.SceneName}'");
-			Debug.Log($"Nombre de joueurs : {PlayerHealthManager.Instance.RegisteredPlayers.Count}");
-			
-			
-			SceneLoadData sld = new SceneLoadData(_sceneToLoad.SceneName);
-			sld.ReplaceScenes = ReplaceOption.All;
+        #region Fonctions
+        
+        
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out PlayerVisuelBridge player))
+            {
+                if (!alreadyCountedPlayers.Contains(player))
+                {
+                    playerCount++;
+                    alreadyCountedPlayers.Add(player);
+                    if (playerCount >= 2 || !need2Players)
+                    {
+                        InvokeEvent(new OnSceneLoadTrigger());
+                        _door.SetActive(!_door.activeSelf);
+                        SceneManaging.LoadScene(_sceneToLoad);
+                        SceneManaging.UnloadScene(_sceneToUnload);
+                    }
+                }
+            }
+        }
 
-			List<NetworkObject> objsList = new List<NetworkObject>();
-
-			foreach (var player in PlayerHealthManager.Instance.RegisteredPlayers)
-			{
-				objsList.Add(player.NetworkObject);
-			}
-			
-			sld.MovedNetworkObjects = objsList.ToArray();
-
-			InstanceFinder.SceneManager.LoadGlobalScenes(sld);
-		}
-		
-		#endregion
-	}
+        #endregion
+    }
 }
 
 public struct OnSceneLoadTrigger
 {
-	
 }

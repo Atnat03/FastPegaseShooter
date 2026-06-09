@@ -11,7 +11,6 @@ using UnityEngine.UI;
 
 public class PlayerHealthView : MonoBehaviour
 {
-
 	#region Variables
 
 	[Header("References")]
@@ -21,10 +20,7 @@ public class PlayerHealthView : MonoBehaviour
 	[Header("UI")]
 	[SerializeField] private float _healthVisualFillingSpeed = 1;
 	[SerializeField] private Image _healthBar;
-	[SerializeField] private CanvasGroup _damagedWarningImage;
-	[SerializeField] private Image _frameDeccordImage;
 	[SerializeField] private CanvasGroup _damagedImage;
-	[SerializeField] private Image _cooldownHealImage;
 	
 	[Header("Dead")]
 	[SerializeField] private GameObject _normalCanva;
@@ -51,8 +47,7 @@ public class PlayerHealthView : MonoBehaviour
 	private float _healTargetFillAmount = 1;
 	
 	#endregion
-
-
+	
 	#region Fonctions
 
 	private void Start()
@@ -68,33 +63,7 @@ public class PlayerHealthView : MonoBehaviour
 	
 	private void UpdateHealth(float targetFill)
 	{
-		_healTargetFillAmount = targetFill;
-		ShowWarning();
-	}
-	
-	void ShowWarning()
-	{
-		bool critik = _playerHealth.IsCritik;
-		
-		_frameDeccordImage.color = critik ? Color.red : Color.white;
-		_damagedWarningImage.gameObject.SetActive(critik);
-
-		if (critik)
-		{
-			_elapsedTimeShowWarning -= Time.deltaTime;
-
-			if (_elapsedTimeShowWarning <= 0)
-			{
-				_isShowedWarning = !_isShowedWarning;
-				_elapsedTimeShowWarning = 1f;
-			}
-			
-			_damagedWarningImage.alpha = Mathf.Sin(_elapsedTimeShowWarning * Mathf.PI);
-		}
-		else
-		{
-			_damagedWarningImage.alpha = 0f;
-		}
+		_healTargetFillAmount = targetFill; 
 	}
 
 	private Coroutine _koCoroutine;
@@ -139,8 +108,6 @@ public class PlayerHealthView : MonoBehaviour
 
 		_deathTimer.text = "0.00";
 		_koCoroutine = null;
-		
-		_frameDeccordImage.color = Color.white;
 	}
 
 	private void StartWarning()

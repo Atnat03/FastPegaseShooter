@@ -16,11 +16,13 @@ public class DebugInputManager : MonoBehaviour
     {
         _debugInput.Enable();
         _debugInput.Debug.StopZoneSpawning.started += StopZoneSpawningOnStarted;
+        _debugInput.Debug.GetInvincible.performed += GetInvincible;
     }
 
     private void OnDisable()
     {
         _debugInput.Debug.StopZoneSpawning.started -= StopZoneSpawningOnStarted;
+        _debugInput.Debug.GetInvincible.performed -= GetInvincible;
         _debugInput.Disable();
     }
 
@@ -29,5 +31,10 @@ public class DebugInputManager : MonoBehaviour
         CustomLogger.CCErrorLog("This inputs needs to be replaced by OnDapEvent");
         
         if(InstanceFinder.IsServerStarted) EventBus.InvokeEvent(new OnDapEvent());
+    }
+
+    private void GetInvincible(InputAction.CallbackContext obj)
+    {
+        if(InstanceFinder.IsServerStarted) EventBus.InvokeEvent(new GetInvincibleEvent());
     }
 }

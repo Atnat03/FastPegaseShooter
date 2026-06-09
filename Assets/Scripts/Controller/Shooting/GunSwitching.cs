@@ -32,9 +32,11 @@ public class GunSwitching : NetworkBusListener
 	
 	[Header("References")]
 	[SerializeField] private GameObject _mainGunParent;
+	[SerializeField] private GameObject _mainGunParentTPS;
 	[SerializeField] private ShootEnergy _shootEnergy;
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
+	[SerializeField] private PlayerAnimation _playerAnimation;
 	
 	[Header("Settings")]
 	[SerializeField] private float _cooldownChangeMagnetic = 5f;
@@ -42,6 +44,7 @@ public class GunSwitching : NetworkBusListener
 	private bool _forceEnergyMode;
 	private bool _canSwitch = true;
 	[HideInInspector]public List<GunController> _mainGunsList;
+	[HideInInspector]public List<GameObject> _mainGunsListTPS;
 	
 	private readonly SyncVar<int> _currentMainGun = new SyncVar<int>(0);
 	
@@ -64,6 +67,13 @@ public class GunSwitching : NetworkBusListener
 		foreach (Transform gun in _mainGunParent.transform)
 		{
 			_mainGunsList.Add(gun.GetComponent<GunController>());
+		}
+		
+		_mainGunsListTPS = new List<GameObject>();
+		
+		foreach (Transform gun in _mainGunParentTPS.transform)
+		{
+			_mainGunsListTPS.Add(gun.gameObject);
 		}
 	}
 
@@ -102,7 +112,13 @@ public class GunSwitching : NetworkBusListener
 			bool shouldBeActive = (i == index);
 			list[i].CurrentModelGun.gameObject.SetActive(shouldBeActive);
 		}
-
+		
+		for (int i = 0; i < _mainGunsListTPS.Count; i++)
+		{
+			bool shouldBeActive = (i == index);
+			_mainGunsListTPS[i].gameObject.SetActive(shouldBeActive);
+		}
+		
 		IGunMain?.SetReticule(_reticuleManager);
 	}
 
@@ -172,8 +188,35 @@ public class GunSwitching : NetworkBusListener
 	public void ChangeGunServerRpc(bool isMain)
 	{
 		SetGunModeObserversRpc(isMain);
+		//StartCoroutine(DelaySwitch(isMain));
 	}
-	
+
+	IEnumerator DelaySwitch(bool isMain)
+	{
+		PlayAnimationObserverRpc(isMain);
+		
+		yield return new WaitForSeconds(0.5f);
+		
+		SetGunModeObserversRpc(isMain);
+	}
+
+	[ObserversRpc]
+	private void PlayAnimationObserverRpc(bool isMain)
+	{
+		Animator gun = CurrentMainGun._animator;
+		Animator arm = CurrentMainGun._animatorArm;
+
+		string trigger = isMain ? "Prendre" : "Retirer";
+		
+		Cons.Print("Switch : " + isMain, ColorConsole.Black);
+		
+		if(gun)
+			gun.SetTrigger(trigger);
+		
+		if(arm)
+			arm.SetTrigger(trigger);
+	}
+
 	[ObserversRpc]
 	private void SetGunModeObserversRpc(bool isMain)
 	{
@@ -226,6 +269,7 @@ public class GunSwitching : NetworkBusListener
 		_throwerDrone.OnThrowing += DesactivateGunWhenThrow;
 		
 	}
+	
 	
 	private void OnDisable()
 	{

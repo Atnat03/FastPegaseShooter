@@ -12,28 +12,36 @@ using Random = UnityEngine.Random;
 
 public class SpawnPlayer : NetworkBehaviour
 {
+    [SerializeField] private string _sceneToDisable;
+    
     [SerializeField] private NetworkObject _playerPrefab;
-    [SerializeField] private LevelSpawnPoints[] _spawnPointsByLevel;
+    [SerializeField] private Transform[] _spawnPoints;
 
     private HashSet<int> _spawnedClients = new HashSet<int>();
-    private List<NetworkObject> players = new List<NetworkObject>();
-    
-    private void OnEnable()
+
+    public override void OnStartServer()
     {
+        base.OnStartServer();
         InstanceFinder.SceneManager.OnLoadEnd += OnSceneLoadEnd;
         InstanceFinder.ServerManager.OnRemoteConnectionState += OnPlayerConnectionState;
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded += SetPlayerPos;
-    }
-    
-    private void OnDisable()
-    {
-        if (InstanceFinder.SceneManager == null) return;
-        
-        InstanceFinder.SceneManager.OnLoadEnd -= OnSceneLoadEnd;
-        InstanceFinder.ServerManager.OnRemoteConnectionState -= OnPlayerConnectionState;
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SetPlayerPos;
+
+        foreach (NetworkConnection conn in InstanceFinder.ServerManager.Clients.Values)
+        {
+            if (!_spawnedClients.Contains(conn.ClientId))
+            {
+                SpawnPlayers(conn);
+                _spawnedClients.Add(conn.ClientId);
+            }
+        }
     }
 
+    public override void OnStopServer()
+    {
+        base.OnStopServer();
+        InstanceFinder.SceneManager.OnLoadEnd -= OnSceneLoadEnd;
+        InstanceFinder.ServerManager.OnRemoteConnectionState -= OnPlayerConnectionState;
+    }
+    
     private void OnSceneLoadEnd(SceneLoadEndEventArgs args)
     {
         if (!args.QueueData.AsServer) return;
@@ -59,7 +67,7 @@ public class SpawnPlayer : NetworkBehaviour
     [Server]
     private void SpawnPlayers(NetworkConnection player)
     {
-        Scene targetScene = UnityEngine.SceneManagement.SceneManager.GetSceneByName("PersistentObjects");
+        Scene targetScene = UnityEngine.SceneManagement.SceneManager.GetSceneByName("Permanent");
 
         NetworkObject playerObj = Instantiate(_playerPrefab);
 
@@ -67,10 +75,10 @@ public class SpawnPlayer : NetworkBehaviour
             UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(playerObj.gameObject, targetScene);
 
         playerObj.transform.position =
-            _spawnPointsByLevel[0].p_spawnPoints[Random.Range(0, _spawnPointsByLevel[0].p_spawnPoints.Length)].position;
+            _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
 
         InstanceFinder.ServerManager.Spawn(playerObj, player);
-        players.Add(playerObj);
+
         FPSController fps = playerObj.GetComponent<FPSController>();
 
         if (fps != null)
@@ -82,20 +90,4 @@ public class SpawnPlayer : NetworkBehaviour
     {
         fpsController.SetUpLayer();
     }
-
-    private void SetPlayerPos(Scene scene, LoadSceneMode arg1)
-    {
-        foreach (NetworkObject player in players)
-        {
-            //player.transform.position = _spawnPointsByLevel[scene.buildIndex].p_spawnPoints[Random.Range(0, _spawnPointsByLevel[scene.buildIndex].p_spawnPoints.Length)].position;
-            player.transform.position = new Vector3(-22.96f, 1.52f, -30.15f);            //je teste un truc
-
-        }
-    }
-}
-
-[Serializable]
-public class LevelSpawnPoints
-{
-    public Transform[] p_spawnPoints;
 }
