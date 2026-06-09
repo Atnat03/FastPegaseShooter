@@ -139,6 +139,8 @@ public class SpawnZoneTutorial : NetworkBusListener
     {
         if (_corrosionActivated) return;
         _corrosionActivated = true;
+
+        _ = ApplyCorrosion();
     }
 
     async Task ApplyCorrosion()
