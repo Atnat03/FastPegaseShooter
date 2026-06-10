@@ -3,7 +3,7 @@ using FishNet.Object;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 
-public class SoundManager : NetworkBehaviour
+public class SoundManager : MonoBehaviour
 {
 	public static AudioClip GetAudioClip(SoundsDataSO data, string soundName)
 	{

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,10 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     private int _pathReservationId = -1;
     
     private bool _isPathUpdateRequested = false;
+
+    //true => enemy isWalking // false => enemy isIdle
+    public Action<bool> p_onChangeMovement;
+    protected bool _isWalking = false;
 
     public override void InitialiseBehaviourModule(EnemyCore enemyCore)
     {
