@@ -20,11 +20,6 @@ public class DroneThrower : NetworkBusListener
 	[SerializeField] private Transform _spawnPoint;
 
 	[Header("Detection Bro")]
-	[SerializeField] private float _range = 50f;
-	[SerializeField] private float _aimAngle = 0.95f; 
-	[SerializeField] private LayerMask _targetLayer;
-	[SerializeField] private Camera _camera;
-	[SerializeField] private GameObject _uiTarget;
 	private Transform _target = null;
 	
 	private float _currentChargeTime = 0f;
@@ -50,6 +45,16 @@ public class DroneThrower : NetworkBusListener
 		if (IsServerInitialized)
 		{
 			OnGetDrone?.Invoke();
+		}
+		
+		ListenToEvent<OnPlayerSpawnEvent>(SetTarget);
+	}
+
+	private void SetTarget(OnPlayerSpawnEvent data)
+	{
+		if (!IsOwner)
+		{
+			_target = data.Transform;
 		}
 	}
 
@@ -114,63 +119,6 @@ public class DroneThrower : NetworkBusListener
 	public void GiveDroneBackTargetRpc(NetworkConnection target)
 	{
 		OnGetDrone?.Invoke();
-	}
-	
-	Transform GetTarget()
-	{
-		Collider[] targets = Physics.OverlapSphere(
-			_camera.transform.position,
-			_range,
-			_targetLayer
-		);
-
-		Transform bestTarget = null;
-		float bestScore = _aimAngle;
-
-		foreach (Collider col in targets)
-		{
-			Vector3 dir = (col.transform.position - _camera.transform.position).normalized;
-
-			float dot = Vector3.Dot(_camera.transform.forward, dir);
-
-			if (dot > bestScore)
-			{
-				bestScore = dot;
-				bestTarget = col.transform;
-			}
-		}
-
-		return bestTarget;
-	}
-	
-	private void Update()
-	{
-		if (!IsOwner) return;
-		
-		_target = GetTarget();
-
-		if (_target)
-		{
-			if (_target == transform) return;
-			
-			_uiTarget.SetActive(true);
-			
-			Vector3 screenPos = _camera.WorldToScreenPoint(_target.position + Vector3.up);
-			Canvas canvas = _uiTarget.GetComponentInParent<Canvas>();
-
-			RectTransformUtility.ScreenPointToLocalPointInRectangle(
-				canvas.transform as RectTransform,
-				screenPos,
-				canvas.worldCamera,
-				out Vector2 localPos
-			);
-
-			_uiTarget.GetComponent<RectTransform>().localPosition = localPos;
-		}
-		else
-		{
-			_uiTarget.SetActive(false);
-		}
 	}
 
 	#endregion
