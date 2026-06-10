@@ -5,7 +5,7 @@ public class AscensseurIncrement : Ascenseur
 {
     public int currentIdx;
     public string baseTxt = "GR-0";
-    public TextMeshProUGUI tmp;
+    public TextMeshPro tmp;
     
     protected override void OnLoop()
     {

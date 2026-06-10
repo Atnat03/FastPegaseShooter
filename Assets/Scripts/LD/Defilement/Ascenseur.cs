@@ -15,6 +15,7 @@ public class Ascenseur : MonoBusListener
     void Start()
     {
         ListenToEvent<OnDapEvent>(e => StopElevator());
+        OnLoop();
     }
     
 
