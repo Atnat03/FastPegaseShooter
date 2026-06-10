@@ -13,6 +13,8 @@ public abstract class EnemyAttackModule : EnemyBehaviourModule
     [HideInInspector, SerializeField] protected AttackModuleSO _attackModuleSO;
     protected float _waitedTimeSinceAttack;
 
+    public Action p_onAttack;
+
     protected abstract bool CanAttack(Vector3 shootingPos, Vector3 projectileDir);
 
     public override void OnNetworkTick(float tickDelta)

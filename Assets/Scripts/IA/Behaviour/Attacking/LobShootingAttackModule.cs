@@ -28,6 +28,7 @@ public class LobShootingAttackModule : EnemyAttackModule
                 this,
                 _attackModuleSO.p_projectileUseGravity
                 ));
+            p_onAttack?.Invoke();
         }
     }
 

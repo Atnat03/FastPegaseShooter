@@ -33,6 +33,8 @@ public class BasicShootingAttackModule : EnemyAttackModule
                 _maxBulletLifeTime, 
                 this,
                 _attackModuleSO.p_projectileUseGravity));
+            
+            p_onAttack?.Invoke();
         }
     }
 

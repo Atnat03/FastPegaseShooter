@@ -47,6 +47,7 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
                     _attackModuleSO.p_projectileUseGravity,
                     _predictiveShootingAttackModuleSO.p_bulletAmount, 
                     _predictiveShootingAttackModuleSO.p_shootingSpreadAngle));
+            p_onAttack?.Invoke();
         }
     }
 
