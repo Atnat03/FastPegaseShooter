@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 978980290201534219}
   - component: {fileID: 2120530428348468344}
   - component: {fileID: 2667236337850832112}
-  - component: {fileID: -4503731271812230316}
+  - component: {fileID: 7733318719413821543}
   m_Layer: 2
   m_Name: Arene2_Spawner_2
   m_TagString: Untagged
@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubArena
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: -4503731271812230316}
-  _networkObjectCache: {fileID: -4503731271812230316}
+  _addedNetworkObject: {fileID: 7733318719413821543}
+  _networkObjectCache: {fileID: 0}
   _zoneActivated: 0
   _spawnPoints:
   - {fileID: 6400950982878989626}
@@ -120,32 +120,39 @@ MonoBehaviour:
   - {fileID: 5377951717058223131}
   - {fileID: 2165125395364659213}
   - {fileID: 5697366080667569796}
-  _arenaGaugePrefab: {fileID: 5685526713634106081, guid: fd5c119e7b4144944bdf9bc41471fc93, type: 3}
+  _arenaGaugePrefab: {fileID: 4064732673162575477, guid: de84feea596c40248b014df665cbe9a6, type: 3}
   spawnDelayFirstWave: 1
   spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   _currentBudget: 0
   _spawningStates:
-  - p_stateDuration: 20
+  - p_stateDuration: 15
+    p_state: {fileID: 11400000, guid: 18d684ccbb87f3f4a8a08f76c10eb2a3, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 15
+    p_state: {fileID: 11400000, guid: 172c55f186412e64bb88dd7f37a88d33, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 15
     p_state: {fileID: 11400000, guid: 683baad9fd008124b9f38b4cc3773575, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 15
+    p_state: {fileID: 11400000, guid: 10e4a9134960b1c479f3f7802dc35242, type: 2}
     p_totalWeight: 0
   - p_stateDuration: 15
     p_state: {fileID: 11400000, guid: 67dda866a48828146b418019cd6a63f6, type: 2}
     p_totalWeight: 0
-  - p_stateDuration: 20
+  - p_stateDuration: 15
     p_state: {fileID: 11400000, guid: 50403fe522a7d39459fe3839dc5f4f8d, type: 2}
     p_totalWeight: 0
   _maxSpawnEnemy: 12
-  _corrosionDamage: 5
+  _corrosionDamage: 3
   _corrosionDelay: 1
   _maxEnabledTime: 999
   _currentStateIndex: 0
---- !u!114 &-4503731271812230316
+--- !u!114 &7733318719413821543
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,8 +170,7 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
-  NetworkBehaviours:
-  - {fileID: 2667236337850832112}
+  NetworkBehaviours: []
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -175,7 +181,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584205982169017613
+  _initializedTimestamp: 0
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -191,15 +197,15 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 26
+  <PrefabId>k__BackingField: 65535
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 9936221137626363765
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0, w: 1}
-    Scale: {x: 1, y: 1, z: 1}
-    IsValid: 1
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
+    Scale: {x: 0, y: 0, z: 0}
+    IsValid: 0
 --- !u!1 &3172276851625683629
 GameObject:
   m_ObjectHideFlags: 0
