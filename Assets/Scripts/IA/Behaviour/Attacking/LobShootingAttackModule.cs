@@ -11,14 +11,13 @@ public class LobShootingAttackModule : EnemyAttackModule
         {
             Vector3? shootingInitialVelocity = GetShootingVelocity(_targetModule.GetTargetPosition());
             if(!shootingInitialVelocity.HasValue) return;
-
-            Vector3 shootingPos = transform.position + _lobShootingAttackModuleSo.p_shootingOffset;
             
-            if(!CanAttack(shootingPos, shootingInitialVelocity.Value)) return;
+            
+            if(!CanAttack(_shootingPos.position, shootingInitialVelocity.Value)) return;
             _waitedTimeSinceAttack = 0;
             
             InvokeEvent(new EnemyShootingEvent(
-                shootingPos,
+                _shootingPos.position,
                 shootingInitialVelocity.Value,
                 _lobShootingAttackModuleSo.p_bulletSpeed,
                 _attackModuleSO.p_damage,
@@ -44,8 +43,8 @@ public class LobShootingAttackModule : EnemyAttackModule
 
     float? GetLaunchingSpeed(Vector3 targetPosition)
     {
-        float hDist = ((transform.position + _lobShootingAttackModuleSo.p_shootingOffset) - targetPosition).RemoveY().magnitude;
-        float vDist = targetPosition.y - (transform.position.y + _lobShootingAttackModuleSo.p_shootingOffset.y);
+        float hDist = (_shootingPos.position - targetPosition).RemoveY().magnitude;
+        float vDist = targetPosition.y - (transform.position.y +_shootingPos.position.y);
 
         float cosTheta = Mathf.Cos(_lobShootingAttackModuleSo.p_shootingAngle * Mathf.Deg2Rad);
         float tanTheta = Mathf.Tan(_lobShootingAttackModuleSo.p_shootingAngle * Mathf.Deg2Rad);
@@ -71,7 +70,7 @@ public class LobShootingAttackModule : EnemyAttackModule
         float launchSpeed = launchResult.Value;
         
         Vector3 launchVelocity =
-            (targetPos - (transform.position+_lobShootingAttackModuleSo.p_shootingOffset)).RemoveY().normalized * (launchSpeed * Mathf.Cos(radAngle));
+            (targetPos - _shootingPos.position).RemoveY().normalized * (launchSpeed * Mathf.Cos(radAngle));
         launchVelocity.y = launchSpeed * Mathf.Sin(radAngle);
 
         return launchVelocity;

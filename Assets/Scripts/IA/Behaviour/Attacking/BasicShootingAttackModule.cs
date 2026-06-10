@@ -17,14 +17,12 @@ public class BasicShootingAttackModule : EnemyAttackModule
             Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
             float length = delta.magnitude;
             Vector3 dir = delta / length;
-
-            Vector3 shootingPos = transform.position + Vector3.up * 0.5f;
             
-            if(!CanAttack(shootingPos, dir)) return;
+            if(!CanAttack(_shootingPos.position, dir)) return;
             _waitedTimeSinceAttack = 0;
             
             InvokeEvent(new EnemyShootingEvent(
-                shootingPos, 
+                _shootingPos.position, 
                 dir, 
                 _bulletSpeed, 
                 _attackModuleSO.p_damage, 
