@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b19f28374c4eb2ba0a96b9d3b397bf, type: 3}
+  m_Name: test_unlock capa
+  m_EditorClassIdentifier: Assembly-CSharp::Tuto.ScenarioSO
+  _scenarioList:
+  - ScenarioName: 
+    trigger:
+      rid: 6001466733914489062
+    eventsList:
+    - rid: 6001466754689925697
+    - rid: 6001466754689925698
+    - rid: 6001466754689925699
+    - rid: 6001466754689925700
+    - rid: 6001466754689925701
+  references:
+    version: 2
+    RefIds:
+    - rid: 6001466733914489062
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 0
+        mode: 1
+    - rid: 6001466754689925697
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 0
+    - rid: 6001466754689925698
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 6001466754689925699
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 1
+    - rid: 6001466754689925700
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 2
+    - rid: 6001466754689925701
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 3

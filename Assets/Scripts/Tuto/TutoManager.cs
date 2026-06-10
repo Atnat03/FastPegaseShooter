@@ -357,25 +357,28 @@ namespace Tuto
 
         public void AskForUnlockCapa(Capacity_TUTO capa)
         {
-            AskForUnlockCapaServerRpc(capa);
+            if (IsServerInitialized)
+            {
+                AskForUnlockCapaObserversRpc(capa);
+            }
+            else
+            {
+                AskForUnlockCapaServerRpc(capa);
+            }
         }
 
         [ServerRpc]
         private void AskForUnlockCapaServerRpc(Capacity_TUTO capa)
         {
+            Cons.Print("AskForUnlockCapaServerRpc");
             AskForUnlockCapaObserversRpc(capa);
         }
 
         [ObserversRpc]
         private void AskForUnlockCapaObserversRpc(Capacity_TUTO capa)
         {
-            foreach (NetworkObject player in _playerList.Values.Where(player => player != null && player.Owner != null))
-            {
-                if(player.transform.root.TryGetComponent(out PlayerTuto playerTuto))
-                {
-                    playerTuto.UnlockCapa(capa);
-                }
-            }
+            Cons.Print("AskForUnlockCapaObserversRpc");
+            InvokeEvent(new OnUnlockCapa_TUTO{capa = capa});
         }
 
         #endregion

@@ -56,14 +56,15 @@ public class DroneView : NetworkBehaviour
 		_models[0].gameObject.SetActive(isPositive);
 		_models[1].gameObject.SetActive(!isPositive);
 		
+		_applyEffects[0].gameObject.SetActive(isPositive);
+		_applyEffects[1].gameObject.SetActive(!isPositive);
+		
+		_applyEffectAssigned = isPositive ? _applyEffects[0] : _applyEffects[1];
+		
 		/*
 		ParticleSystemRenderer psRenderer = _applyEffectAssigned.GetComponent<ParticleSystemRenderer>();
 		psRenderer.material = isPositive ? _materialsParticles[0] : _materialsParticles[1];
 		*/
-		
-		_applyEffectAssigned = isPositive ? _applyEffects[0] : _applyEffects[1];
-		
-		Cons.Print("Set up drone color : " + isPositive);
 	}
 	
 	#endregion
