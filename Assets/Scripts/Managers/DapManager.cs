@@ -84,10 +84,12 @@ public class DapManager : NetworkBusListener
 	{
 		yield return new WaitUntil(() => Camera.main != null);
 
-		Cons.Print("Set up canva");
+		Cons.Print($"Camera trouvée : {Camera.main.name}");
 
 		_globalCanva.renderMode = RenderMode.ScreenSpaceCamera;
-		_globalCanva.worldCamera = Camera.main;
+		Camera cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponentInChildren<FPSController>().Camera;
+
+		_globalCanva.worldCamera = cam;
 	}
 	
 	private void OnPlayerSpawn(OnPlayerSpawnEvent data)
