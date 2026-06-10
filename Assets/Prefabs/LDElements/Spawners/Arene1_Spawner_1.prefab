@@ -40,7 +40,6 @@ Transform:
   - {fileID: 4832200282331709771}
   - {fileID: 8291505201428064764}
   - {fileID: 5647438671037012018}
-  - {fileID: 5842782908955696475}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4487584025630424715
@@ -83,7 +82,6 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 5651608469680430264}
   _networkObjectCache: {fileID: 5651608469680430264}
-  _pathfindingRequestManager: {fileID: 0}
   _zoneActivated: 0
   _spawnPoints:
   - {fileID: 4052275527940667378}
@@ -91,8 +89,7 @@ MonoBehaviour:
   - {fileID: 4832200282331709771}
   - {fileID: 8291505201428064764}
   - {fileID: 5647438671037012018}
-  - {fileID: 5842782908955696475}
-  _arenaGaugePrefab: {fileID: 0}
+  _arenaGaugePrefab: {fileID: 4947851719586564028, guid: 91030e22bea37f948bea9694033f483c, type: 3}
   spawnDelayFirstWave: 1.4
   spawnMobsFirstWave:
   - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
@@ -101,18 +98,27 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   _currentBudget: 0
-  _spawnMobs:
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   _spawningStates:
-  - p_stateDuration: 20
-    p_state: {fileID: 11400000, guid: 4a613f8c475c147479fd86507e001004, type: 2}
-  - p_stateDuration: 15
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: 3a805b33c11934f49b601f745b404567, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: f9c2a61cc4f4e1942b6f6a7308acd19f, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
     p_state: {fileID: 11400000, guid: 759ce88eb16b3314187a45078069775d, type: 2}
-  - p_stateDuration: 25
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: 4a613f8c475c147479fd86507e001004, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
     p_state: {fileID: 11400000, guid: 65391380cbb42ca4abb0c89edc37ed75, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: 92e6fd318e8e29e48b3d5a2ff74525df, type: 2}
+    p_totalWeight: 0
   _maxSpawnEnemy: 10
-  _corrosionDamage: 5
+  _corrosionDamage: 2
   _corrosionDelay: 1
   _maxEnabledTime: 999
   _currentStateIndex: 0
@@ -146,7 +152,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584212092317853982
+  _initializedTimestamp: -8584212983358331233
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -162,7 +168,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 20
+  <PrefabId>k__BackingField: 21
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 16840513375332452309
   SceneId: 0
@@ -277,37 +283,6 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -17.84, y: -26.495, z: -13.63}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6140387316111891358}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6811449726035775371
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5842782908955696475}
-  m_Layer: 2
-  m_Name: SpawnPoint (5)
-  m_TagString: Untagged
-  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5842782908955696475
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6811449726035775371}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.700001, y: -24.4, z: 12.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
