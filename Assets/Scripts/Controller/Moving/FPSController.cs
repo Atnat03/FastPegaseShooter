@@ -265,7 +265,7 @@ public class FPSController : NetworkBusListener
 
     public Action OnFootstep;
     public Action OnJump;
-    public Action OnLanding;
+    public Action<float> OnLanding;
     public Action OnGrappling;
     
     #endregion
@@ -893,7 +893,7 @@ public class FPSController : NetworkBusListener
         hasJumped = false;
         mustHeadTilt = false;
         
-        OnLanding?.Invoke();
+        OnLanding?.Invoke(rb.linearVelocity.y);
         
         StartCoroutine(CoyoteSlideCoroutine());
     }
