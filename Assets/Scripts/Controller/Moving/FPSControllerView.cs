@@ -76,9 +76,9 @@ public class FPSControllerView : NetworkBusListener
 		SoundManager.PlaySound(_soundsDataFps, "Grapple", _audioSource);
 	}
 
-	private void Landing()
+	private void Landing(float verticalVelocity)
 	{
-		if (!_canSoundLand) return;
+		if (!_canSoundLand || verticalVelocity >-5f) return;
 		
 		PlaySound("Landing");
 		StartCoroutine(LandingSoundBuffer());
