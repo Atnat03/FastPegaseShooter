@@ -10443,7 +10443,7 @@ Transform:
   m_GameObject: {fileID: 53180415}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.5, y: -7.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -14541,10 +14541,10 @@ MonoBehaviour:
           m_CallState: 2
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 424070958}
-          m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-          m_MethodName: SetTrigger
-          m_Mode: 5
+        - m_Target: {fileID: 501408377}
+          m_TargetAssemblyTypeName: AscenseurManager, Assembly-CSharp
+          m_MethodName: LaunchElevator
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -14570,11 +14570,48 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 0}
   _clientEvents:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 78570234}
+        m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _serverEvents:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2104267780}
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1451470434}
+        m_TargetAssemblyTypeName: SubArena, Assembly-CSharp
+        m_MethodName: TriggerSubArenaSpawning
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _activateOnce: 1
+  _forceActivationWithSinglePlayer: 1
 --- !u!114 &78570239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85169,7 +85206,19 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 0}
   _clientEvents:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 53180417}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Shift
+          m_BoolArgument: 0
+        m_CallState: 2
   _serverEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -135980,7 +136029,7 @@ Transform:
   m_GameObject: {fileID: 668243730}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -38.5}
+  m_LocalPosition: {x: 2, y: -10.31, z: 103.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -261330,6 +261379,10 @@ PrefabInstance:
       propertyPath: WasActiveDuringEdit
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6569849761975482603, guid: c8a4e49065536e44188372ea2a295803, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7005489466974712983, guid: c8a4e49065536e44188372ea2a295803, type: 3}
       propertyPath: SceneId
       value: 3183468402
@@ -261378,7 +261431,9 @@ PrefabInstance:
       propertyPath: SceneId
       value: 4152179830
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3424201434278550899, guid: c8a4e49065536e44188372ea2a295803, type: 3}
+    - {fileID: 1071327693559591396, guid: c8a4e49065536e44188372ea2a295803, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -301291,6 +301346,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7972421448582031126, guid: d9245ee27b715fe4dbd9eb4e60c4e9a9, type: 3}
   m_PrefabInstance: {fileID: 1091771826}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1451470434 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5233076031012915598, guid: c8a4e49065536e44188372ea2a295803, type: 3}
+  m_PrefabInstance: {fileID: 1227760132}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubArena
 --- !u!43 &1452484425
 Mesh:
   m_ObjectHideFlags: 0
@@ -389074,7 +389140,19 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 0}
   _clientEvents:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4440410426051874350}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Open
+          m_BoolArgument: 0
+        m_CallState: 2
   _serverEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -438871,6 +438949,17 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &2104267780 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3631130208270462575, guid: c8a4e49065536e44188372ea2a295803, type: 3}
+  m_PrefabInstance: {fileID: 1227760132}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubArena
 --- !u!43 &2104660356
 Mesh:
   m_ObjectHideFlags: 0

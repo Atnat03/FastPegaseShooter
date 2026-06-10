@@ -19,13 +19,7 @@ public class AscenseurManager : NetworkBusListener
     
     private List<Ascenseur> _pool = new();
 
-    public override void OnStartNetwork()
-    {
-        Debug.Log("OnStartNetwork");
-        FillPool();
-    }
-
-    private void FillPool()
+    public void LaunchElevator()
     {
         int count = _partsList.Length;
 
@@ -33,9 +27,8 @@ public class AscenseurManager : NetworkBusListener
         {
             Ascenseur a = _partsList[i].GetComponent<Ascenseur>();
             _pool.Add(a);
-
-            float timeOffset = (_durationTraveling / count) * i;
-            //a?.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling, timeOffset);
+            
+            a?.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling);
         }
     }
 }
