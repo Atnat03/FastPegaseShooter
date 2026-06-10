@@ -57,6 +57,7 @@ public class DroneThrower : NetworkBusListener
 	{
 		if (_isCanceled) return;
 		if (_target == null) return;
+		if (_target == transform) return;
 		if (!_playerCapacity.CanDrone) return;
 		if (!p_unlockCapa) return;
 		
@@ -150,6 +151,8 @@ public class DroneThrower : NetworkBusListener
 
 		if (_target)
 		{
+			if (_target == transform) return;
+			
 			_uiTarget.SetActive(true);
 			
 			Vector3 screenPos = _camera.WorldToScreenPoint(_target.position + Vector3.up);
