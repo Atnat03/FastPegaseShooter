@@ -48,6 +48,9 @@ public class SoundManager : MonoBehaviour
 		}
 	}
 
+	public static void StopSound(AudioSource source) => source.Stop();
+	
+
 	private static void PlayGlobalSound(float volume, AudioClip clip, AudioSource source)
 	{
 		source.PlayOneShot(clip, volume);
