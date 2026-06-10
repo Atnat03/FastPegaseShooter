@@ -9,6 +9,7 @@ public class AscensseurIncrement : Ascenseur
     
     protected override void OnLoop()
     {
+        currentIdx++;
         tmp.text = baseTxt + currentIdx;
     }
 }
