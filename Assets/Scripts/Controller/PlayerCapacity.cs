@@ -55,6 +55,8 @@ public class PlayerCapacity : MonoBusListener
 	public bool _canChargedShoot = true;
 	public bool _canDrone = true;
 	public bool _canHeal = true;
+
+	private PlayerTuto _playerTuto;
 	
 	//Actions
 	public Action<CapacityData> OnUpdateCapacity;
@@ -69,6 +71,8 @@ public class PlayerCapacity : MonoBusListener
 		ListenToEvent<OnUseCapacity>(UseCapacity);
 		ListenToEvent<OnAddPercentageCapactity>(AddPercentage);
 		ListenToEvent<OnCapacityUnlocked>(OnUnlocked);
+
+		_playerTuto = GetComponent<PlayerTuto>();
 	}
 
 	void UseCapacity(OnUseCapacity data)
@@ -92,21 +96,23 @@ public class PlayerCapacity : MonoBusListener
 		switch (data.p_capacityData)
 		{
 			case Capacity.ChargedShoot:
-				CheckPercentageCapa(ref _tirChargeCapaData, data.p_percentageValue);
+				CheckPercentageCapa(ref _tirChargeCapaData, data.p_percentageValue, _playerTuto.IsCapaUnlock(Capacity_TUTO.ChargedShoot));
 				break;
 			
 			case Capacity.Drone:
-				CheckPercentageCapa(ref _droneCapaData, data.p_percentageValue);
+				CheckPercentageCapa(ref _droneCapaData, data.p_percentageValue, _playerTuto.IsCapaUnlock(Capacity_TUTO.Drone));
 				break;
 			
 			case Capacity.Heal:
-				CheckPercentageCapa(ref _healCapaData, data.p_percentageValue);
+				CheckPercentageCapa(ref _healCapaData, data.p_percentageValue, _playerTuto.IsCapaUnlock(Capacity_TUTO.Heal));
 				break;
 		}
 	}
 
-	void CheckPercentageCapa(ref CapacityData data, float valuePercentage)
+	void CheckPercentageCapa(ref CapacityData data, float valuePercentage, bool isUnlocked)
 	{
+		if (!isUnlocked) return;
+		
 		if (data.p_currentNumberCapacity <= data.p_maxNumberCapacity)
 		{
 			data.p_currentPercentageCapacity += valuePercentage;
