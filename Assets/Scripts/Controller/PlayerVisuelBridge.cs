@@ -13,8 +13,7 @@ public class PlayerVisuelBridge : NetworkBehaviour
 	public PlayerPositionCaster PlayerPositionCaster => _playerPositionCaster;
 	
 	#endregion
-
-
+	
 	#region Variables
 
 	[SerializeField] private PlayerHealth _playerHealth;
@@ -22,13 +21,6 @@ public class PlayerVisuelBridge : NetworkBehaviour
 	[SerializeField] private PlayerDroneView _playerDroneView;
 	[SerializeField] private FPSController _fpsController;
 	[SerializeField] private PlayerPositionCaster _playerPositionCaster;
-	
-	#endregion
-
-
-	#region Fonctions
-
-	
 	
 	#endregion
 }
