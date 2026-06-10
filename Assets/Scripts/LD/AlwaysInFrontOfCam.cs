@@ -3,7 +3,7 @@ using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
-public class AlwaysInFrontOfCam : NetworkBehaviour
+public class AlwaysInFrontOfCam : MonoBehaviour
 {
 	#region Properties
 
@@ -22,9 +22,8 @@ public class AlwaysInFrontOfCam : NetworkBehaviour
 
 	#region Fonctions
 
-	public override void OnStartClient()
+	public void Start()
 	{
-		//cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponent<FPSController>().Camera;
 		cam = Camera.main;
 	}
 

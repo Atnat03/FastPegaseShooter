@@ -11,9 +11,13 @@ public abstract class EnemyAttackModule : EnemyBehaviourModule
     //SerializeField to get properties in custom inspector 
     [HideInInspector, SerializeField] protected EnemyTargetModule _targetModule;
     [HideInInspector, SerializeField] protected AttackModuleSO _attackModuleSO;
+    [HideInInspector, SerializeField] protected Transform _shootingPos;
     protected float _waitedTimeSinceAttack;
 
+    public Action p_onAttack;
+
     protected abstract bool CanAttack(Vector3 shootingPos, Vector3 projectileDir);
+    public Vector3 GetShootingPos() => _shootingPos.position;
 
     public override void OnNetworkTick(float tickDelta)
     {
