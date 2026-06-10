@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using FishNet;
 using FishNet.Object;
@@ -70,15 +71,27 @@ public class DapManager : NetworkBusListener
 		_dapPercentage.OnChange += OnDapChange;
 		
 		OnPercentageChange?.Invoke(_dapPercentage.Value);
+		
+		Cons.Print("Start client");
+		
+		if (!IsOwner)
+			return;
 
-		if (IsOwner)
-		{
-			_globalCanva.renderMode = RenderMode.ScreenSpaceCamera;
-			_globalCanva.worldCamera = Camera.main;
-			_globalCanva.sortingLayerID = SortingLayer.NameToID("UI");
-		}
+		StartCoroutine(SetupCanvas());
 	}
 
+	private IEnumerator SetupCanvas()
+	{
+		yield return new WaitUntil(() => Camera.main != null);
+
+		Cons.Print($"Camera trouvée : {Camera.main.name}");
+
+		_globalCanva.renderMode = RenderMode.ScreenSpaceCamera;
+		Camera cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponentInChildren<FPSController>().Camera;
+
+		_globalCanva.worldCamera = cam;
+	}
+	
 	private void OnPlayerSpawn(OnPlayerSpawnEvent data)
 	{
 		_playerList.Add(data.Transform);

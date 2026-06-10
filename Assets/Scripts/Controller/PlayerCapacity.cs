@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using MyPrint;
 using NUnit.Framework;
+using Tuto;
 using UnityEngine;
 
 public enum Capacity
@@ -63,10 +64,11 @@ public class PlayerCapacity : MonoBusListener
 
 	#region Fonctions
 
-	private void OnEnable()
+	private void Awake()
 	{
 		ListenToEvent<OnUseCapacity>(UseCapacity);
 		ListenToEvent<OnAddPercentageCapactity>(AddPercentage);
+		ListenToEvent<OnCapacityUnlocked>(OnUnlocked);
 	}
 
 	void UseCapacity(OnUseCapacity data)
@@ -164,6 +166,27 @@ public class PlayerCapacity : MonoBusListener
 				break;
 		}
 	}
+	
+	void OnUnlocked(OnCapacityUnlocked data)
+	{
+		switch (data.capacity)
+		{
+			case Capacity_TUTO.ChargedShoot:
+				OnUpdateCapacity?.Invoke(_tirChargeCapaData);
+				break;
+			case Capacity_TUTO.Drone:
+				OnUpdateCapacity?.Invoke(_droneCapaData);
+				break;
+			case Capacity_TUTO.Heal:
+				OnUpdateCapacity?.Invoke(_healCapaData);
+				break;
+		}
+	}
 
 	#endregion
+}
+
+public struct OnCapacityUnlocked
+{
+	public Capacity_TUTO capacity;
 }
