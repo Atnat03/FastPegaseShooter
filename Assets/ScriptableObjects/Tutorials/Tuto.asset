@@ -78,6 +78,7 @@ MonoBehaviour:
     - rid: 5406076786627313776
     - rid: 5406076786627313777
     - rid: 5406076786627313778
+    - rid: 5406076807428964460
   - ScenarioName: UseHeal
     trigger:
       rid: 5406076761526239318
@@ -94,11 +95,7 @@ MonoBehaviour:
       rid: 5406076761526239331
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076695212458148
-    - rid: 5406076761526239319
     - rid: 5406076761526239320
-    - rid: 5406076761526239321
-    - rid: 5406076761526239322
     - rid: 5406076761526239332
   - ScenarioName: HealezVous
     trigger:
@@ -282,10 +279,10 @@ MonoBehaviour:
     - rid: 5406076761526239320
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: "[R\xE9action rouge]"
+        _dialogue: '[GG Pinata]'
         _keyVoceline: test
         _duration: 3
-        speaker: 0
+        speaker: 2
     - rid: 5406076761526239321
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -315,7 +312,7 @@ MonoBehaviour:
     - rid: 5406076761526239334
       type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
-        _percentToReach: 42
+        _percentToReach: 38
     - rid: 5406076761526239335
       type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -546,3 +543,7 @@ MonoBehaviour:
         target: 2
         disableAction: 4
         duration: 1
+    - rid: 5406076807428964460
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 3
