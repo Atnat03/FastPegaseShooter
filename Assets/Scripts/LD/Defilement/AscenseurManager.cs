@@ -40,7 +40,7 @@ public class AscenseurManager : NetworkBusListener
             _pool.Add(a);
 
             float timeOffset = (_durationTraveling / count) * i;
-            a?.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling, timeOffset);
+            //a?.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling, timeOffset);
         }
     }
 
