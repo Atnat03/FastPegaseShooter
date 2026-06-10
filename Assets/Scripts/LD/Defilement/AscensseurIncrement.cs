@@ -21,6 +21,7 @@ public class AscensseurIncrement : Ascenseur
         {
             if (elapsed / duration < .5 && elapsed / duration > .45)
             {
+                Debug.Log(elapsed / duration);
                 animator.SetTrigger("Open");
             }
         }

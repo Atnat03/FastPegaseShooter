@@ -12,10 +12,12 @@ public class Ascenseur : MonoBusListener
     private float _doorInterval;
     private Action<Ascenseur> _onAtDoor;
     protected float elapsed;
+    private bool mustStop;
 
     void Start()
     {
         ListenToEvent<OnDapEvent>(e => StopElevator());
+        ListenToEvent<OnDoorAtHeight>(StopElevatorRightNow);
         OnLoop();
     }
     
@@ -42,12 +44,9 @@ public class Ascenseur : MonoBusListener
         _currentCoroutine = StartCoroutine(DescenteAscenseur(_localStart, localEnd, duration, startElapsed));
     }
 
-    private bool IsAtDoorHeight()
+    private bool IsAtDoorHeight(float elapsed , float duration)
     {
-        float distFromTop = Vector3.Dot(transform.position - _localStart, _railDir);
-        float remainder = distFromTop % 63.639f;
-        float frameTolerance = 0.1f;
-        return remainder < frameTolerance;
+        return (!_elevatorGoing && (elapsed / duration < .462 && elapsed / duration > .4615)) ;
     }
 
     private IEnumerator DescenteAscenseur(Vector3 localStart, Vector3 localEnd, float duration, float startElapsed)
@@ -62,32 +61,35 @@ public class Ascenseur : MonoBusListener
                 elapsed += Time.deltaTime;
                 transform.position = Vector3.Lerp(localStart, localEnd, elapsed / duration);
 
-                if (!_elevatorGoing && IsAtDoorHeight())
+                if (!_elevatorGoing && (IsAtDoorHeight(elapsed, duration)|| mustStop))
                 {
-                    // Snap cleanly to the nearest floor
-                    float distFromTop = Vector3.Dot(transform.position - localStart, _railDir);
-                    float snapped = Mathf.Round(distFromTop / 63.63f) * 63.63f;
-                    transform.position = localStart + _railDir * snapped;
+                    InvokeEvent<OnDoorAtHeight>(new OnDoorAtHeight());
                     OnAscenseurStop(duration);
-                    yield break; // stop the coroutine entirely
+                    yield break;
                 }
 
                 yield return null;
             }
-
-            // Looped back to top
+            
             elapsed = 0f;
             transform.position = localStart;
             OnLoop();
         }
     }
     
-    public void StopElevator()
+    private void StopElevator()
     {
         _elevatorGoing = false;
     }
+    
+    private void StopElevatorRightNow(OnDoorAtHeight e) => mustStop = true;
 
     protected virtual void OnLoop() { }
     
     protected virtual void OnAscenseurStop(float duration) {}
+}
+
+public struct OnDoorAtHeight
+{
+    
 }
