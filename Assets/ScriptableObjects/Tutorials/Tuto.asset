@@ -24,14 +24,13 @@ MonoBehaviour:
     - rid: 5406076763678179462
     - rid: 5406076763678179463
     - rid: 5406076763678179464
+    - rid: 5406076763678179481
     - rid: 5406076763678179467
     - rid: 5406076763678179471
     - rid: 5406076763678179470
     - rid: 5406076763678179469
     - rid: 5406076763678179468
-    - rid: 5406076763678179466
     - rid: 5406076763678179465
-    - rid: 5406076763678179481
   - ScenarioName: DialogueJumps
     trigger:
       rid: 5406076671141347512
@@ -68,21 +67,17 @@ MonoBehaviour:
       rid: 5406076746262118504
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076695212458148
+    - rid: 5406076786627313773
     - rid: 5406076746262118505
-  - ScenarioName: Seperation Start
+  - ScenarioName: "SeparationD\xE9but"
     trigger:
-      rid: 5406076695212458147
+      rid: 5406076786627313775
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076695212458148
-    - rid: 5406076695212458149
-    - rid: 5406076695212458150
-    - rid: 5406076695212458151
-    - rid: 5406076695212458152
-    - rid: 5406076695212458153
-    - rid: 5406076763678179434
-    - rid: 5406076763678179436
+    - rid: 5406076763678179420
+    - rid: 5406076786627313776
+    - rid: 5406076786627313777
+    - rid: 5406076786627313778
   - ScenarioName: UseHeal
     trigger:
       rid: 5406076761526239318
@@ -219,46 +214,12 @@ MonoBehaviour:
       data:
         actionToDo: 1
         doorIndex: 2
-    - rid: 5406076695212458147
-      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data:
-        proxyIndex: 5
-        mode: 3
     - rid: 5406076695212458148
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: "[Dialogue Bien jou\xE9 Heal]"
+        _dialogue: "[Dialogue Bien jou\xE9 Energy Exchange]"
         _keyVoceline: test
         _duration: 3
-        speaker: 2
-    - rid: 5406076695212458149
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: '[Dialogue Heal]'
-        _keyVoceline: test
-        _duration: 2
-        speaker: 2
-    - rid: 5406076695212458150
-      type: {class: Event_TakeDamage, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        damage: 50
-    - rid: 5406076695212458151
-      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _durationToWait: 1
-    - rid: 5406076695212458152
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "[R\xE9action d\xE9g\xE2ts]"
-        _keyVoceline: test
-        _duration: 1
-        speaker: 0
-    - rid: 5406076695212458153
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: '[Healez-vous]'
-        _keyVoceline: test
-        _duration: 2
         speaker: 2
     - rid: 5406076695212458154
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
@@ -369,7 +330,7 @@ MonoBehaviour:
     - rid: 5406076763678179420
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue finito]'
+        _dialogue: "[Dialogue Heal pr\xE9s]"
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -395,18 +356,10 @@ MonoBehaviour:
       data:
         actionToDo: 0
         doorIndex: 5
-    - rid: 5406076763678179434
-      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        capacityToUnlock: 3
     - rid: 5406076763678179435
       type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
       data:
         capacityToUnlock: 2
-    - rid: 5406076763678179436
-      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        capacityToUnlock: 1
     - rid: 5406076763678179442
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
@@ -520,13 +473,6 @@ MonoBehaviour:
         _keyVoceline: 
         _duration: 3
         speaker: 1
-    - rid: 5406076763678179466
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: Ouverture de la porte.
-        _keyVoceline: 
-        _duration: 3
-        speaker: 2
     - rid: 5406076763678179467
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -570,3 +516,33 @@ MonoBehaviour:
       data:
         actionToDo: 0
         doorIndex: 1
+    - rid: 5406076786627313773
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Welldone exchange energy]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 5406076786627313775
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 5
+        mode: 0
+    - rid: 5406076786627313776
+      type: {class: Event_TakeDamage, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        damage: 50
+    - rid: 5406076786627313777
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[Dialogue Healez vous]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 0
+    - rid: 5406076786627313778
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Healez vous avec F
+        target: 2
+        disableAction: 4
+        duration: 1
