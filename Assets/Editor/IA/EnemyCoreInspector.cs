@@ -102,7 +102,7 @@ public class EnemyCoreInspector : Editor
         GUILayout.Space(10);
         GUILayout.Label("Core Variables", _titleStyle);
         
-        EditorUtilities.Draw("_coreSo", serializedObject);
+        EditorUtilities.Draw("p_coreSo", serializedObject);
         
         serializedObject.ApplyModifiedProperties();
     }
