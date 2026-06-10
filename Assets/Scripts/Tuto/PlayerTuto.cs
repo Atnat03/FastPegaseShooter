@@ -1,5 +1,6 @@
 using System;
 using Controller;
+using MyPrint;
 using UnityEngine;
 
 namespace Tuto
@@ -12,6 +13,11 @@ namespace Tuto
 
         public Action<Capacity_TUTO, bool> OnUnlockCapa;
 
+        public override void OnStartNetwork()
+        {
+            ListenToEvent<OnUnlockCapa_TUTO>(UnlockCapa);
+        }
+
         private void Start()
         {
             OnUnlockCapa?.Invoke(Capacity_TUTO.ChargedShoot, _gunPlayer.p_unlockChargedShoot);
@@ -19,9 +25,9 @@ namespace Tuto
             OnUnlockCapa?.Invoke(Capacity_TUTO.Drone, _dronePlayer.p_unlockCapa);
         }
 
-        public void UnlockCapa(Capacity_TUTO capacity)
+        public void UnlockCapa(OnUnlockCapa_TUTO data)
         {
-            switch (capacity)
+            switch (data.capa)
             {
                 case Capacity_TUTO.EnergyShoot:
                     _gunPlayer.p_unlockSwapEnergyLaser = true;
@@ -37,7 +43,10 @@ namespace Tuto
                     break;
             }
             
-            OnUnlockCapa?.Invoke(capacity, true);
+            Cons.Print("Unlock capa");
+            
+            OnUnlockCapa?.Invoke(data.capa, true);
+            InvokeEvent(new OnCapacityUnlocked { capacity = data.capa });
         }
     }
 }

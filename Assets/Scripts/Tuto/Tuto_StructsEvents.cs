@@ -47,3 +47,8 @@ public struct OnStartSpawner_TUTO
 {
     public int spawnIndex;
 }
+
+public struct OnUnlockCapa_TUTO
+{
+    public Capacity_TUTO capa;
+}

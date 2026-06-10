@@ -895,6 +895,8 @@ MonoBehaviour:
     maxPos: {x: -75, y: 0}
     minScale: {x: 1, y: 1, z: 1}
     maxScale: {x: 1, y: 1, z: 1}
+  _imageSilouette: {fileID: 0}
+  _spriteSilouette: {fileID: 0}
 --- !u!1 &201965493437334714
 GameObject:
   m_ObjectHideFlags: 0
@@ -13778,7 +13780,7 @@ MonoBehaviour:
   _minHealthToGive: 15
   healAmountEffectFactor: 0.1
   showLineDelay: 0
-  _healThrowCost: 20
+  _healThrowCost: 0
   _throwHitLayerMask:
     serializedVersion: 2
     m_Bits: 65335
@@ -13931,7 +13933,7 @@ MonoBehaviour:
   - 66
   - 20
   - 50
-  _percentageFreeze: 0
+  _percentageFreeze: 1
   _percentagePerSecondDecrease: 0.5
 --- !u!114 &6914351051837942534
 MonoBehaviour:
@@ -21230,6 +21232,8 @@ MonoBehaviour:
     maxPos: {x: 0, y: 0}
     minScale: {x: 1, y: 1, z: 1}
     maxScale: {x: 1, y: 1, z: 1}
+  _imageSilouette: {fileID: 0}
+  _spriteSilouette: {fileID: 0}
 --- !u!1 &5287947843769632182
 GameObject:
   m_ObjectHideFlags: 0
@@ -22030,6 +22034,8 @@ MonoBehaviour:
     maxPos: {x: 0, y: 0}
     minScale: {x: 1, y: 1, z: 1}
     maxScale: {x: 2, y: 2, z: 2}
+  _imageSilouette: {fileID: 0}
+  _spriteSilouette: {fileID: 0}
 --- !u!1 &5496600853579520116
 GameObject:
   m_ObjectHideFlags: 0
@@ -25317,9 +25323,7 @@ MonoBehaviour:
   _droneThrower: {fileID: 931936587992237131}
   _healthVisualFillingSpeed: 4
   _healthBar: {fileID: 3134779535442495518}
-  _damagedWarningImage: {fileID: 5315133112455716009}
   _damagedImage: {fileID: 8429352862573681573}
-  _cooldownHealImage: {fileID: 1897999391278995240}
   _normalCanva: {fileID: 4255987790164677789}
   _deathCanva: {fileID: 4168195006909438693}
   _deathTimer: {fileID: 5308597181428668573}
@@ -25459,12 +25463,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEnergyView
   _energyPlayer: {fileID: 29235095159055250}
-  _imageBarPrefab: {fileID: 7619886682169414630, guid: c09496d7f8606de4896136f69e2ff335, type: 3}
   _energyBarSprites:
   - {fileID: 21300000, guid: fe004411296a9474abd1fa3968251332, type: 3}
   - {fileID: 21300000, guid: 91a31607d6cc4594da84ffd7943cb7e9, type: 3}
   - {fileID: 21300000, guid: 1500796b36a19f748b790ca7510b0543, type: 3}
-  _barParent: {fileID: 645727648668030002}
   _energyBarColorFull:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0.60537386, b: 1, a: 1}
@@ -25538,12 +25540,15 @@ MonoBehaviour:
   _uiChargedShoot:
     p_currentImage: {fileID: 3090745708699314534}
     p_numberCapacityText: {fileID: 2684678891409757291}
+    p_particleGetCharge: {fileID: 0}
   _uiDrone:
     p_currentImage: {fileID: 9019656515017828316}
     p_numberCapacityText: {fileID: 6740296731976269141}
+    p_particleGetCharge: {fileID: 0}
   _uiHeal:
     p_currentImage: {fileID: 1170483584544442394}
     p_numberCapacityText: {fileID: 9048304954041532542}
+    p_particleGetCharge: {fileID: 0}
 --- !u!114 &24536267851929145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36715,6 +36720,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _renderer: {fileID: 1444433409293357018}
+  _rendererClassic: {fileID: 0}
   _materialsList:
   - {fileID: 2100000, guid: 270ee35d97d89f3428048d4050880c58, type: 2}
   - {fileID: 2100000, guid: baa7606a45d3b1841aef7699c5d0ecfd, type: 2}
@@ -38349,6 +38355,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _renderer: {fileID: 0}
+  _rendererClassic: {fileID: 0}
   _materialsList: []
 --- !u!4 &7876860365717372455 stripped
 Transform:
@@ -38470,6 +38477,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _renderer: {fileID: 0}
+  _rendererClassic: {fileID: 0}
   _materialsList:
   - {fileID: 2100000, guid: d279a2b6833a0ad4faae224b35312afd, type: 2}
   - {fileID: 2100000, guid: e5ff3948e965c4048994429de43ded06, type: 2}
@@ -39100,6 +39108,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _renderer: {fileID: 2075626702565198201}
+  _rendererClassic: {fileID: 0}
   _materialsList:
   - {fileID: 2100000, guid: d279a2b6833a0ad4faae224b35312afd, type: 2}
   - {fileID: 2100000, guid: e5ff3948e965c4048994429de43ded06, type: 2}
@@ -40851,6 +40860,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _renderer: {fileID: 4452063349488463795}
+  _rendererClassic: {fileID: 0}
   _materialsList:
   - {fileID: 2100000, guid: d279a2b6833a0ad4faae224b35312afd, type: 2}
   - {fileID: 2100000, guid: e5ff3948e965c4048994429de43ded06, type: 2}
