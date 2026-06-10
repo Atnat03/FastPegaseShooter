@@ -42,8 +42,8 @@ GameObject:
   - component: {fileID: 7902967571896485682}
   - component: {fileID: 978980290201534219}
   - component: {fileID: 2120530428348468344}
-  - component: {fileID: 5626854157473161853}
   - component: {fileID: -3803905668730861571}
+  - component: {fileID: 431299012364443804}
   m_Layer: 2
   m_Name: Arene3_Spawner_2
   m_TagString: Untagged
@@ -101,61 +101,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
   pathfindingGridSO: {fileID: 11400000, guid: 01b638b60ec711d48b81574f90ee816b, type: 2}
---- !u!114 &5626854157473161853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2189633458858471923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
-  <IsNested>k__BackingField: 0
-  WasActiveDuringEdit: 0
-  WasActiveDuringEdit_Set1: 1
-  <ComponentIndex>k__BackingField: 0
-  <PredictedSpawn>k__BackingField: {fileID: 0}
-  <PredictedOwner>k__BackingField: {fileID: 0}
-  NetworkBehaviours:
-  - {fileID: -3803905668730861571}
-  InitializedParentNetworkBehaviour: {fileID: 0}
-  InitializedNestedNetworkObjects: []
-  RuntimeParentNetworkBehaviour: {fileID: 0}
-  RuntimeChildNetworkBehaviours: []
-  _isNetworked: 1
-  _isSpawnable: 1
-  _isGlobal: 0
-  _initializeOrder: 0
-  _preventDespawnOnDisconnect: 0
-  _defaultDespawnType: 0
-  _initializedTimestamp: -8584208562462473415
-  NetworkObserver: {fileID: 0}
-  _enablePrediction: 0
-  _predictionType: 0
-  _localReconcileCorrectionType: 2
-  _graphicalObject: {fileID: 0}
-  _detachGraphicalObject: 0
-  _enableStateForwarding: 1
-  _networkTransform: {fileID: 0}
-  _ownerInterpolation: 1
-  _ownerSmoothedProperties: 255
-  _adaptiveInterpolation: 3
-  _spectatorSmoothedProperties: 255
-  _spectatorInterpolation: 2
-  _enableTeleport: 0
-  _teleportThreshold: 1
-  <PrefabId>k__BackingField: 7
-  <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 4543539906732307709
-  SceneId: 0
-  SerializedTransformProperties:
-    Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: -0, y: -0, z: -0, w: 1}
-    Scale: {x: 1, y: 1, z: 1}
-    IsValid: 1
 --- !u!114 &-3803905668730861571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,8 +114,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubArena
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 5626854157473161853}
-  _networkObjectCache: {fileID: 5626854157473161853}
+  _addedNetworkObject: {fileID: 431299012364443804}
+  _networkObjectCache: {fileID: 0}
   _zoneActivated: 0
   _spawnPoints:
   - {fileID: 6400950982878989626}
@@ -193,26 +138,84 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   _currentBudget: 0
-  _spawnMobs:
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 7554cc37a0d26ac4683769fef2707f0f, type: 2}
-  - {fileID: 11400000, guid: cd26272afa8b20c4f9155881ace28d0f, type: 2}
-  - {fileID: 11400000, guid: 58baac394f7673d4f94d03f6d4386f2f, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 11b0bbdfefc21a04f90d714c4d3b868e, type: 2}
-  - {fileID: 11400000, guid: 049c70c340fc8574587b4bf920743112, type: 2}
   _spawningStates:
-  - p_stateDuration: 20
-    p_state: {fileID: 11400000, guid: 708668fcb5137f44ca0707c4ec449d27, type: 2}
-  - p_stateDuration: 20
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: ec7cc22daef518f4695bc1ecffb5beff, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: 101c5ad3b00477044a1303e8fb3692ca, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
     p_state: {fileID: 11400000, guid: 5887bcdbd5eec764db54a8725052c699, type: 2}
-  - p_stateDuration: 20
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: 708668fcb5137f44ca0707c4ec449d27, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
     p_state: {fileID: 11400000, guid: a636d817328cb4348a0bf8247c9a7a7b, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: f4629eec8885cef44b184a99fe051e51, type: 2}
+    p_totalWeight: 0
   _maxSpawnEnemy: 12
-  _corrosionDamage: 7
+  _corrosionDamage: 4
   _corrosionDelay: 1
-  _maxEnabledTime: 0
+  _maxEnabledTime: 999
   _currentStateIndex: 0
+--- !u!114 &431299012364443804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2189633458858471923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
+  <IsNested>k__BackingField: 0
+  WasActiveDuringEdit: 0
+  WasActiveDuringEdit_Set1: 1
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  <PredictedOwner>k__BackingField: {fileID: 0}
+  NetworkBehaviours: []
+  InitializedParentNetworkBehaviour: {fileID: 0}
+  InitializedNestedNetworkObjects: []
+  RuntimeParentNetworkBehaviour: {fileID: 0}
+  RuntimeChildNetworkBehaviours: []
+  _isNetworked: 1
+  _isSpawnable: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _preventDespawnOnDisconnect: 0
+  _defaultDespawnType: 0
+  _initializedTimestamp: 0
+  NetworkObserver: {fileID: 0}
+  _enablePrediction: 0
+  _predictionType: 0
+  _localReconcileCorrectionType: 2
+  _graphicalObject: {fileID: 0}
+  _detachGraphicalObject: 0
+  _enableStateForwarding: 1
+  _networkTransform: {fileID: 0}
+  _ownerInterpolation: 1
+  _ownerSmoothedProperties: 255
+  _adaptiveInterpolation: 3
+  _spectatorSmoothedProperties: 255
+  _spectatorInterpolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  <PrefabId>k__BackingField: 65535
+  <SpawnableCollectionId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 4543539906732307709
+  SceneId: 0
+  SerializedTransformProperties:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
+    Scale: {x: 0, y: 0, z: 0}
+    IsValid: 0
 --- !u!1 &2426734625193879238
 GameObject:
   m_ObjectHideFlags: 0

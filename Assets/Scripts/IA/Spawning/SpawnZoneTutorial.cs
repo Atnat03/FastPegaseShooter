@@ -53,25 +53,22 @@ public class SpawnZoneTutorial : NetworkBusListener
         
         ListenToEvent<OnEnemyDieEvent>(OEDE =>
         {
-            if (!_spawnedEnemySet.Contains(OEDE.p_enemy)) return;
-            
-            if (OEDE.p_enemy.p_gridReaderId == _gridReader.p_id)
-            {
-                _spawnedEnemies--;
-                _currentMobsInArena--;
+            if (OEDE.p_enemy.p_gridReaderId != _gridReader.p_id)
+                return;
 
-                UpdateGaugeObservers(_currentMobsInArena, _maxMobsInArena);
+            if (!_spawnedEnemySet.Remove(OEDE.p_enemy))
+                return;
 
-                if (_spawnPaused && _currentMobsInArena < _maxMobsInArena)
-                {
-                    _spawnPaused = false;
-                }
+            _spawnedEnemies--;
+            _currentMobsInArena--;
 
-                if (IsSpawnZoneComplete())
-                {
-                    p_onSpawnZoneComplete?.Invoke(this);
-                }
-            }
+            UpdateGaugeObservers(_currentMobsInArena, _maxMobsInArena);
+
+            if (_spawnPaused && _currentMobsInArena < _maxMobsInArena)
+                _spawnPaused = false;
+
+            if (IsSpawnZoneComplete())
+                p_onSpawnZoneComplete?.Invoke(this);
         });
         
         ListenToEvent<OnStartSpawner_TUTO>(StartSpawning);
@@ -228,5 +225,13 @@ public class SpawnZoneTutorial : NetworkBusListener
     }
 
     Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];
-    bool IsSpawnZoneComplete() => _spawnedEnemies <= 0 && _spawnWave.Count <= 0;
+
+    bool IsSpawnZoneComplete()
+    {
+        bool clear = _spawnedEnemySet.Count == 0 && _spawnWave.Count == 0;
+
+        Cons.PrintBool(clear, "is zone clear");
+
+        return clear;
+    }
 }
