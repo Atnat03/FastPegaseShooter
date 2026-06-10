@@ -19,18 +19,7 @@ MonoBehaviour:
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076671141347505
-    - rid: 5406076763678179460
-    - rid: 5406076763678179461
-    - rid: 5406076763678179462
-    - rid: 5406076763678179463
-    - rid: 5406076763678179464
     - rid: 5406076763678179481
-    - rid: 5406076763678179467
-    - rid: 5406076763678179471
-    - rid: 5406076763678179470
-    - rid: 5406076763678179469
-    - rid: 5406076763678179468
-    - rid: 5406076763678179465
   - ScenarioName: DialogueJumps
     trigger:
       rid: 5406076671141347512
@@ -61,6 +50,7 @@ MonoBehaviour:
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076695212458154
+    - rid: 5406076807428964493
     - rid: 5406076695212458155
   - ScenarioName: Well Done Energy
     trigger:
@@ -79,6 +69,7 @@ MonoBehaviour:
     - rid: 5406076786627313777
     - rid: 5406076786627313778
     - rid: 5406076807428964460
+    - rid: 5406076807428964492
   - ScenarioName: UseHeal
     trigger:
       rid: 5406076761526239318
@@ -108,16 +99,9 @@ MonoBehaviour:
       rid: 5406076763678179407
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076763678179420
+    - rid: 5406076807428964495
     - rid: 5406076763678179428
     - rid: 5406076763678179435
-  - ScenarioName: DroneOtherSide
-    trigger:
-      rid: 5406076763678179430
-    eventsList:
-    - rid: 5406076671141347504
-    - rid: 5406076763678179420
-    - rid: 5406076763678179428
   - ScenarioName: EndDrone
     trigger:
       rid: 5406076763678179431
@@ -149,6 +133,13 @@ MonoBehaviour:
     - rid: 5406076671141347504
     - rid: 5406076763678179432
     - rid: 5406076763678179420
+  - ScenarioName: SpawnOtherSide
+    trigger:
+      rid: 5406076807428964499
+    eventsList:
+    - rid: 5406076807428964500
+    - rid: 5406076807428964502
+    - rid: 5406076807428964501
   references:
     version: 2
     RefIds:
@@ -228,8 +219,7 @@ MonoBehaviour:
     - rid: 5406076695212458155
       type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
       data:
-        notificationText: Change your firemode (wheel) and chanel your energy to
-          your mate.
+        notificationText: "Echangez de l'\xE9nergie"
         target: 0
         disableAction: 2
         duration: 0
@@ -248,7 +238,7 @@ MonoBehaviour:
     - rid: 5406076746262118504
       type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
-        _percentToReach: 20
+        _percentToReach: 35
     - rid: 5406076746262118505
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -301,7 +291,7 @@ MonoBehaviour:
     - rid: 5406076761526239331
       type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
-        spawnZoneIndices: 0200000003000000
+        spawnZoneIndices: 02000000
     - rid: 5406076761526239332
       type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -327,18 +317,14 @@ MonoBehaviour:
     - rid: 5406076763678179420
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: "[Dialogue Heal pr\xE9s]"
+        _dialogue: '[Dialogue ]'
         _keyVoceline: 
         _duration: 3
         speaker: 2
     - rid: 5406076763678179428
       type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _indexSpawn: 05000000
-    - rid: 5406076763678179430
-      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data:
-        spawnZoneIndices: 05000000
+        _indexSpawn: 04000000
     - rid: 5406076763678179431
       type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
@@ -426,88 +412,6 @@ MonoBehaviour:
       type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         spawnZoneIndices: 06000000
-    - rid: 5406076763678179460
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "En vrai \xE7a va, on a loup\xE9 la zone d\u2019atterrissage que
-          de genre 5 kilom\xE8tres"
-        _keyVoceline: 
-        _duration: 3
-        speaker: 0
-    - rid: 5406076763678179461
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Tu penses qu\u2019il d\xE9duiront les d\xE9g\xE2ts de notre salaire
-          ?"
-        _keyVoceline: 
-        _duration: 3
-        speaker: 1
-    - rid: 5406076763678179462
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Eh, c\u2019est eux qui ont mal con\xE7us leur vaisseau hein"
-        _keyVoceline: 
-        _duration: 3
-        speaker: 0
-    - rid: 5406076763678179463
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Connexion r\xE9tablie. . ."
-        _keyVoceline: 
-        _duration: 2
-        speaker: 2
-    - rid: 5406076763678179464
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Trajectoire de d\xE9ploiement compromise. . ."
-        _keyVoceline: 
-        _duration: 2
-        speaker: 2
-    - rid: 5406076763678179465
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: Merci bien
-        _keyVoceline: 
-        _duration: 3
-        speaker: 1
-    - rid: 5406076763678179467
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Et en plus ils nous ont encore coll\xE9 leur IA rabat joie pour
-          nous surveiller.."
-        _keyVoceline: 
-        _duration: 3
-        speaker: 1
-    - rid: 5406076763678179468
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Piratage des syst\xE8mes d\u2019ouverture. . ."
-        _keyVoceline: 
-        _duration: 3
-        speaker: 2
-    - rid: 5406076763678179469
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "On a d\xFB tomber dans le placard \xE0 balais je pense. Y\u2019a
-          moyen de nous ouvrir la porte ?"
-        _keyVoceline: 
-        _duration: 3
-        speaker: 1
-    - rid: 5406076763678179470
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Du monde ? J\u2019ai vu des toilettes plus grandes. "
-        _keyVoceline: 
-        _duration: 3
-        speaker: 0
-    - rid: 5406076763678179471
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Bienvenue au M.S.R, le plus grand laboratoire d\u2019analyse
-          min\xE9rale du monde"
-        _keyVoceline: 
-        _duration: 3
-        speaker: 2
     - rid: 5406076763678179481
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -547,3 +451,37 @@ MonoBehaviour:
       type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
       data:
         capacityToUnlock: 3
+    - rid: 5406076807428964492
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 1
+    - rid: 5406076807428964493
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 0
+    - rid: 5406076807428964495
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[GG Heal 2]'
+        _keyVoceline: 
+        _duration: 3
+        speaker: 2
+    - rid: 5406076807428964499
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 04000000
+    - rid: 5406076807428964500
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 0.5
+    - rid: 5406076807428964501
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 05000000
+    - rid: 5406076807428964502
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: '[GG, spawn other side]'
+        _keyVoceline: test
+        _duration: 3
+        speaker: 2
