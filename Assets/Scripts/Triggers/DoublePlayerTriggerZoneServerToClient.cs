@@ -15,6 +15,15 @@ public class DoublePlayerTriggerZoneServerToClient : NetworkBehaviour
     
     private HashSet<int> _enteredPlayers = new HashSet<int>();
     private bool _activated;
+    
+    
+    #if !UNITY_EDITOR
+    void OnServerInitialized()
+    {
+       _forceActivationWithSinglePlayer = false;
+    }   
+    #endif
+    
     public void OnTriggerEnter(Collider other)
     {
         if(!InstanceFinder.IsServerStarted) return;
