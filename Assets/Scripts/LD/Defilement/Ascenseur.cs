@@ -11,6 +11,7 @@ public class Ascenseur : MonoBusListener
     private Vector3 _railDir;
     private float _doorInterval;
     private Action<Ascenseur> _onAtDoor;
+    protected float elapsed;
 
     void Start()
     {
@@ -45,13 +46,13 @@ public class Ascenseur : MonoBusListener
     {
         float distFromTop = Vector3.Dot(transform.position - _localStart, _railDir);
         float remainder = distFromTop % 63.639f;
-        float frameTolerance = _speed * Time.deltaTime + 0.05f;
+        float frameTolerance = 0.1f;
         return remainder < frameTolerance;
     }
 
     private IEnumerator DescenteAscenseur(Vector3 localStart, Vector3 localEnd, float duration, float startElapsed)
     {
-        float elapsed = startElapsed;
+        elapsed = startElapsed;
 
         while (true)
         {
@@ -67,6 +68,7 @@ public class Ascenseur : MonoBusListener
                     float distFromTop = Vector3.Dot(transform.position - localStart, _railDir);
                     float snapped = Mathf.Round(distFromTop / 63.63f) * 63.63f;
                     transform.position = localStart + _railDir * snapped;
+                    OnAscenseurStop(duration);
                     yield break; // stop the coroutine entirely
                 }
 
@@ -86,4 +88,6 @@ public class Ascenseur : MonoBusListener
     }
 
     protected virtual void OnLoop() { }
+    
+    protected virtual void OnAscenseurStop(float duration) {}
 }
