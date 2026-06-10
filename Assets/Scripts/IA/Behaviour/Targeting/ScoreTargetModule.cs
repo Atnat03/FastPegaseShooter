@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [AddComponentMenu("EnemyBehaviour/Target/ScoreTargetModule")]
 public class ScoreTargetModule : EnemyTargetModule
