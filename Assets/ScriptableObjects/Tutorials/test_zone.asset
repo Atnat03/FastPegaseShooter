@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1b19f28374c4eb2ba0a96b9d3b397bf, type: 3}
-  m_Name: testTuto
+  m_Name: test_zone
   m_EditorClassIdentifier: Assembly-CSharp::Tuto.ScenarioSO
   _scenarioList:
   - ScenarioName: 
@@ -18,6 +18,11 @@ MonoBehaviour:
       rid: 6001466733914489062
     eventsList:
     - rid: 6001466733914489063
+  - ScenarioName: 
+    trigger:
+      rid: 6001466754689925703
+    eventsList:
+    - rid: 6001466754689925704
   references:
     version: 2
     RefIds:
@@ -29,4 +34,15 @@ MonoBehaviour:
     - rid: 6001466733914489063
       type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _indexSpawn: 00000000
+        _indexSpawn: 0000000001000000
+    - rid: 6001466754689925703
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 0000000001000000
+    - rid: 6001466754689925704
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: all dead
+        _keyVoceline: 
+        _duration: 3
+        speaker: 0
