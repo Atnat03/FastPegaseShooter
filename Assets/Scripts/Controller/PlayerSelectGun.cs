@@ -61,11 +61,13 @@ public class PlayerSelectGun : NetworkBusListener
 	[SerializeField] private SkinnedMeshRenderer playerMesh;
 	[SerializeField] private GameObject[] gunMeshList;
 	[SerializeField] private MeshRenderer coinGunMesh;
+	[SerializeField] private Image equipButton;
+	[SerializeField] private Color[] equipButtonColors;
 	
 	private int _newIndexGun = 0;
+	private int equipedGun = 0;
 	
 	#endregion
-
 
 	#region Fonctions
 	
@@ -90,6 +92,7 @@ public class PlayerSelectGun : NetworkBusListener
 		CursorManager.instance.PushState(CursorState.UI, _fps);
 
 		_newIndexGun = _gun.CurrentMainGunIndex;
+		equipedGun = _newIndexGun;
 
 		UpdateUI_Color();
 		UpdateUI_Gun();
@@ -124,6 +127,7 @@ public class PlayerSelectGun : NetworkBusListener
 		if (!IsOwner) return;
 		
 		_newIndexGun = id;
+		
 		UpdateUI_Gun();
 	}
 
@@ -132,15 +136,23 @@ public class PlayerSelectGun : NetworkBusListener
 		if (!IsOwner) return;
 		
 		_uiMain.SetActive(false);
-		_gun.ChangeCurrentGun_Main_ServerRpc(_newIndexGun);
+		_gun.ChangeCurrentGun_Main_ServerRpc(equipedGun);
 		_fps.IsFreeze = false;
 		
 		CursorManager.instance.PopState(_fps);
 	}
 
+	public void EquipedGun()
+	{
+		equipedGun = _newIndexGun;
+		equipButton.color = equipButtonColors[1];
+	}
+	
 	private void UpdateUI_Gun()
 	{
 		UISelectGun dataGun = uiGunData[_newIndexGun];
+
+		equipButton.color = equipedGun == _newIndexGun ? equipButtonColors[1] : equipButtonColors[0];
 
 		for (int i = 0; i < gunMeshList.Length; i++)
 		{
@@ -191,7 +203,7 @@ public class PlayerSelectGun : NetworkBusListener
 
 		MeshRenderer[] m_mesh = gunMeshList[1].GetComponentsInChildren<MeshRenderer>();
 		foreach (MeshRenderer m in m_mesh)
-			m.material = colorData.mitrailleteMaterial;
+			m.material = colorData.lanceGrenadeMaterial;
 		
 		gunMeshList[0].GetComponent<MeshRenderer>().material = colorData.mitrailleteMaterial;
 		gunMeshList[2].GetComponent<MeshRenderer>().material = colorData.shotgunMaterial;
