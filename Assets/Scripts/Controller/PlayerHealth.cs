@@ -338,14 +338,23 @@ public class PlayerHealth : NetworkBusListener
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void RequestTakeDamageFromTutoServerRpc(int damage)
+    public void RequestTakeDamageFromTutoServerRpc(int damage, int seuil)
     {
-        TakeDamage(new PlayerTakeDamageEvent
+        int dmg = damage;
+
+        if (_currentHealth.Value - dmg < seuil)
         {
-            p_playerN = NetworkObject,
-            p_value = damage,
-            p_attacker = null
-        });
+            _currentHealth.Value = seuil;
+        }
+        else
+        {
+            TakeDamage(new PlayerTakeDamageEvent
+            {
+                p_playerN = NetworkObject,
+                p_value = damage,
+                p_attacker = null
+            });
+        }
     }
 
     [ServerRpc]
