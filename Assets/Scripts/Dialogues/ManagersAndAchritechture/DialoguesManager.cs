@@ -84,7 +84,9 @@ public class DialoguesManager : NetworkBusListener
             if (AdressedToMe(line))
             {
                 DisplayLine(line);
-                yield return new WaitForSeconds(line.duration);
+                yield return new WaitForSeconds(line.audioClip.length);
+                CleanDialogue();
+                yield return new WaitForSeconds(line.DelayBeforeNextLine);
             }
         }
 
@@ -96,6 +98,11 @@ public class DialoguesManager : NetworkBusListener
     {
         if(!AdressedToMe(line)) return;
 
+        foreach (GameObject go in EverythingRelated)
+        {
+            go.SetActive(true);
+        }
+        
         switch (line.speaker)
         {
             case DialogueSpeaker.IA :
