@@ -8,6 +8,9 @@ public class BroHealthView : MonoBehaviour
     [SerializeField] private Image _broHealthBar;
     [SerializeField] private float _fillSpeed = 5f;
 
+    [SerializeField] private Color[] _colorBar;
+    [SerializeField] private Color[] _colorBar2;
+    
     [SerializeField] private PlayerHealth _localPlayerHealth;
 
     private PlayerHealth _trackedAlly;
@@ -75,6 +78,25 @@ public class BroHealthView : MonoBehaviour
     private void OnAllyHealthChanged(float fillAmount)
     {
         _targetFill = fillAmount;
+        
+        if (fillAmount > 0.5f)
+        {
+            _broHealthBar.material.SetColor("_Color", _colorBar[0]);
+            _broHealthBar.material.SetColor("_Color2", _colorBar2[0]);
+        }
+        else if (fillAmount is <= 0.5f and >= 0.25f)
+        {
+            _broHealthBar.material.SetColor("_Color", _colorBar[1]);
+            _broHealthBar.material.SetColor("_Color2", _colorBar2[1]);
+        }
+        else
+        {
+            if (fillAmount < 0.25f)
+            {
+                _broHealthBar.material.SetColor("_Color", _colorBar[2]);
+                _broHealthBar.material.SetColor("_Color2", _colorBar2[2]);
+            }
+        }
     }
 
     private void OnAllyKO(bool isDead, float respawnDuration)

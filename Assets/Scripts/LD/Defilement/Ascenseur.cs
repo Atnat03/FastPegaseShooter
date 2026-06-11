@@ -5,57 +5,91 @@ using UnityEngine;
 public class Ascenseur : MonoBusListener
 {
     private Coroutine _currentCoroutine;
-    private Vector3 _offset;
-    private bool elevatorGoing = false;
+    private bool _elevatorGoing = false;
+    private float _speed;
+    private Vector3 _localStart;
+    private Vector3 _railDir;
+    private float _doorInterval;
+    private Action<Ascenseur> _onAtDoor;
+    protected float elapsed;
+    private bool mustStop;
 
     void Start()
     {
-        ListenToEvent<OnDapEvent>(StopElevator);
+        ListenToEvent<OnDapEvent>(e => StopElevator());
+        ListenToEvent<OnDoorAtHeight>(StopElevatorRightNow);
+        OnLoop();
     }
     
+
     public void StartDescente(Vector3 startPosition, Vector3 endPosition, float duration)
     {
         gameObject.SetActive(true);
+        _elevatorGoing = true;
 
-        Vector3 rail = endPosition - startPosition;
-        Vector3 railDir = rail.normalized;
+        float distance = Vector3.Distance(startPosition, endPosition);
+        _railDir = (endPosition - startPosition).normalized;
+        _speed = distance / duration;
 
-        // Projection latérale : on garde la composante perpendiculaire au rail
         Vector3 lateralOffset = transform.position - startPosition;
-        lateralOffset -= Vector3.Dot(lateralOffset, railDir) * railDir; // on retire la composante sur le rail
+        lateralOffset -= Vector3.Dot(lateralOffset, _railDir) * _railDir;
 
-        // localStart = en haut du rail + décalage latéral seulement
-        Vector3 localStart = startPosition + lateralOffset;
-        Vector3 localEnd   = endPosition   + lateralOffset;
+        _localStart = startPosition + lateralOffset;
+        Vector3 localEnd = endPosition + lateralOffset;
 
-        // Avancement initial sur le rail
-        float progress = Vector3.Dot(transform.position - startPosition, railDir) / rail.magnitude;
+        float progress = Vector3.Dot(transform.position - startPosition, _railDir) / distance;
         float startElapsed = Mathf.Clamp01(progress) * duration;
 
         if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-        _currentCoroutine = StartCoroutine(DescenteAscenseur(localStart, localEnd, duration, startElapsed));
+        _currentCoroutine = StartCoroutine(DescenteAscenseur(_localStart, localEnd, duration, startElapsed));
+    }
+
+    private bool IsAtDoorHeight(float elapsed , float duration)
+    {
+        return (!_elevatorGoing && (elapsed / duration < .462 && elapsed / duration > .4615)) ;
     }
 
     private IEnumerator DescenteAscenseur(Vector3 localStart, Vector3 localEnd, float duration, float startElapsed)
     {
-        float elapsed = startElapsed;
+        elapsed = startElapsed;
 
         while (true)
         {
+            // Move until end of rail, but stop mid-loop if elevator should stop AND we're at a floor
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
                 transform.position = Vector3.Lerp(localStart, localEnd, elapsed / duration);
+
+                if (!_elevatorGoing && (IsAtDoorHeight(elapsed, duration)|| mustStop))
+                {
+                    InvokeEvent<OnDoorAtHeight>(new OnDoorAtHeight());
+                    OnAscenseurStop(duration);
+                    yield break;
+                }
+
                 yield return null;
             }
-
+            
             elapsed = 0f;
-            transform.position = localStart; // reset en haut du rail propre à cet objet
+            transform.position = localStart;
+            OnLoop();
         }
     }
     
-    void StopElevator(OnDapEvent e)
+    private void StopElevator()
     {
-        elevatorGoing = false;
+        _elevatorGoing = false;
     }
+    
+    private void StopElevatorRightNow(OnDoorAtHeight e) => mustStop = true;
+
+    protected virtual void OnLoop() { }
+    
+    protected virtual void OnAscenseurStop(float duration) {}
+}
+
+public struct OnDoorAtHeight
+{
+    
 }

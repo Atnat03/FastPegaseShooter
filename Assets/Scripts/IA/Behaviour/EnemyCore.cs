@@ -18,7 +18,7 @@ public class EnemyCore : NetworkBusListener
 
     public Action OnDapExplosion;
 
-    [SerializeField] private EnemyCoreSO _coreSo;
+    public EnemyCoreSO p_coreSo;
 
     
     public override void OnStartServer()
@@ -139,11 +139,11 @@ public class EnemyCore : NetworkBusListener
         
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
         
-        EventBus.InvokeEvent(new OnEnemyDieEvent(this, !_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
+        EventBus.InvokeEvent(new OnEnemyDieEvent(this, !p_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
 
         PlayerDoKillObserversRpc(playerObjectId);
         
-        if (!_coreSo.p_dropXpOrb)
+        if (!p_coreSo.p_dropXpOrb)
         {
             AddEnergyWhenEnemyKillObserversRpc(playerObjectId, signedEnergyAmount);
         }
@@ -172,14 +172,14 @@ public class EnemyCore : NetworkBusListener
         switch (charge)
         {
             case ChargeType.Positive:
-                if (_coreSo.p_pinataType == ChargeType.Positive)
-                    return _coreSo.p_pinataEnergyDropValue;
-                return _coreSo.p_baseEnergyDropValue;
+                if (p_coreSo.p_pinataType == ChargeType.Positive)
+                    return p_coreSo.p_pinataEnergyDropValue;
+                return p_coreSo.p_baseEnergyDropValue;
             
             case ChargeType.Negative:
-                if (_coreSo.p_pinataType == ChargeType.Negative)
-                    return -_coreSo.p_pinataEnergyDropValue;
-                return -_coreSo.p_baseEnergyDropValue;
+                if (p_coreSo.p_pinataType == ChargeType.Negative)
+                    return -p_coreSo.p_pinataEnergyDropValue;
+                return -p_coreSo.p_baseEnergyDropValue;
             
             default:
                 return 0f;

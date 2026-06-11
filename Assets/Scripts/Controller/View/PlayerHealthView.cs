@@ -21,6 +21,8 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private float _healthVisualFillingSpeed = 1;
 	[SerializeField] private Image _healthBar;
 	[SerializeField] private CanvasGroup _damagedImage;
+	[SerializeField] private Color[] _colorBar;
+	[SerializeField] private Color[] _colorBar2;
 	
 	[Header("Dead")]
 	[SerializeField] private GameObject _normalCanva;
@@ -59,11 +61,31 @@ public class PlayerHealthView : MonoBehaviour
 		_healingTrajectoryLine.positionCount = 4;
 		_healingThrowPosObj = Instantiate(_healingThrowPosObj, Vector3.zero, Quaternion.identity);
 		_healingThrowPosObj.SetActive(false);
+		
 	}
 	
 	private void UpdateHealth(float targetFill)
 	{
-		_healTargetFillAmount = targetFill; 
+		_healTargetFillAmount = targetFill;
+
+		if (targetFill > 0.5f)
+		{
+			_healthBar.material.SetColor("_Color", _colorBar[0]);
+			_healthBar.material.SetColor("_Color2", _colorBar2[0]);
+		}
+		else if (targetFill is <= 0.5f and >= 0.25f)
+		{
+			_healthBar.material.SetColor("_Color", _colorBar[1]);
+			_healthBar.material.SetColor("_Color2", _colorBar2[1]);
+		}
+		else
+		{
+			if (targetFill < 0.25f)
+			{
+				_healthBar.material.SetColor("_Color", _colorBar[2]);
+				_healthBar.material.SetColor("_Color2", _colorBar2[2]);
+			}
+		}
 	}
 
 	private Coroutine _koCoroutine;
@@ -82,6 +104,7 @@ public class PlayerHealthView : MonoBehaviour
 		if (state)
 		{
 			_koCoroutine = StartCoroutine(KoAnimation(duration));
+			SoundManager.PlaySound(_soundsData, "Death", _audioSource);
 		}
 		else
 		{
@@ -194,6 +217,11 @@ public class PlayerHealthView : MonoBehaviour
 		if(_healingTrajectoryLine.enabled == false) _healingThrowPosObj.SetActive(false);
 	}
 
+	private void OnHeal()
+	{
+		SoundManager.PlaySound(_soundsData, "Heal", _audioSource);
+	}
+
 	void HideGun()
 	{
 		gunSwitching.DesactivateAllMainGun();
@@ -216,6 +244,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnThrowKeyReleased += StopPreview;
 		_playerHealth.OnHealThrowLanding += ShowHealSphereEffect;
 		_playerHealth.OnHealCanceled += StopPreview;
+		_playerHealth.OnHeal += OnHeal;
 		
 		//Drone Throw
 		_droneThrower.OnThrowing += StopPreview;
@@ -227,6 +256,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnStartWarning -= StartWarning;
 		_playerHealth.OnKOPlayer -= KoPlayerUI;
 		_playerHealth.OnTakeDamage -= TakeDamageEffect;
+		_playerHealth.OnHeal -= OnHeal;
     
 		//Healing
 		_playerHealth.OnThrowingVisualActivation -= OnThrowingVisualActivation;
