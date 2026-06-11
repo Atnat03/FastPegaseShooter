@@ -23,6 +23,10 @@ public class EnemyCoreSOInspector : Editor
     {
         serializedObject.Update();
         
+        GUILayout.Label("Spawn Death Time", _titleStyle);
+        EditorUtilities.Draw("p_spawningTime", serializedObject);
+        EditorUtilities.Draw("p_deathTime", serializedObject);
+        
         GUILayout.Label("Energy Drop", _titleStyle);
         EditorUtilities.Draw("p_dropXpOrb", serializedObject);
         EditorUtilities.Draw("p_baseEnergyDropValue", serializedObject);

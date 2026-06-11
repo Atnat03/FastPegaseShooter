@@ -6,6 +6,10 @@ public abstract class EnemyBehaviourModule : NetworkBusListener
     {
         _enemyCore = enemyCore;
     }
-    
-    public virtual void OnNetworkTick(float tickDelta) {}
+
+    public virtual void OnNetworkTick(float tickDelta)
+    {
+        //cuts logic when spawning or dying
+        if(_enemyCore.p_isSpawning || _enemyCore.p_isDying) return;
+    }
 }

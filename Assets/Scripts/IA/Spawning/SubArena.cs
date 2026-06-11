@@ -172,6 +172,7 @@ public class SubArena : NetworkBusListener
         
         _spawnedEnemies.Add(enemyCore);
         
+        InvokeEvent(new OnEnemySpawnEvent());
         InstanceFinder.ServerManager.Spawn(enemy);
     }
     Transform GetNextSpawnPoint()
