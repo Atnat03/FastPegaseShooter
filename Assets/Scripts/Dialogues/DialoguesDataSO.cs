@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "DialoguesDataSO", menuName = "DialoguesDataSO")]
 public class DialoguesDataSO : ScriptableObject
 {
     public List<DialogueLine> lines;

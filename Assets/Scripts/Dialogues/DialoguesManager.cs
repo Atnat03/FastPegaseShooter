@@ -17,12 +17,13 @@ public class DialoguesManager : NetworkBusListener
     [Header("UI Elements")] 
     public Image speakerImage;
     public TextMeshProUGUI dialogueText;
+    public GameObject[] EverythingRelated;
 
     [Header("audio Elements")] 
     public AudioSource audioSource;
 
     [Header("References")] 
-    private GunSwitching gunSwitch;
+    [SerializeField]private GunSwitching gunSwitch;
 
     private bool dialogueRunning;
     private Coroutine dialogueCoroutine;
@@ -51,6 +52,8 @@ public class DialoguesManager : NetworkBusListener
     private void OnServerInitialized()
     {
         ListenToEvent<OnDialogueStart>(StartDialogue);
+        
+        CleanDialogue();
     }
 
     void StartDialogue(OnDialogueStart data)
@@ -67,6 +70,10 @@ public class DialoguesManager : NetworkBusListener
     IEnumerator DisplayDialogue(OnDialogueStart data)
     {
         dialogueRunning = true;
+        foreach (GameObject go in EverythingRelated)
+        {
+            go.SetActive(true);
+        }
         foreach (DialogueLine line in data.dialogueData.lines)
         {
             DisplayLine(line);
@@ -110,6 +117,11 @@ public class DialoguesManager : NetworkBusListener
         speakerImage.sprite = null;
         dialogueText.text = "";
         audioSource.Stop();
+        
+        foreach (GameObject go in EverythingRelated)
+        {
+            go.SetActive(false);
+        }
     }
 }
 
