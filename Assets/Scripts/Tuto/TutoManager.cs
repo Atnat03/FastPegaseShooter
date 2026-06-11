@@ -148,8 +148,11 @@ namespace Tuto
 
             trigger.Activate();
             trigger.OnActivated += Handler;
-            
+            Debug.Log("[TutoManager] WaitForTrigger — listening for OnActivated");
+
             yield return new WaitUntil(() => fired);
+
+            Debug.Log("[TutoManager] WaitForTrigger — trigger fired!");
             
             trigger.OnActivated -= Handler;
             
