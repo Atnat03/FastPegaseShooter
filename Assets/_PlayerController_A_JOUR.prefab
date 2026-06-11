@@ -498,13 +498,6 @@ MonoBehaviour:
   _playerCapacity: {fileID: 6914351051837942534}
   _dronePrefab: {fileID: 377463757777460365, guid: f1c05ad0ae4860046b6a4cb55f69529a, type: 3}
   _spawnPoint: {fileID: 8380329674851811601}
-  _range: 5000
-  _aimAngle: 0.7
-  _targetLayer:
-    serializedVersion: 2
-    m_Bits: 192
-  _camera: {fileID: 3061844143884342809}
-  _uiTarget: {fileID: 4790013413098127870}
   p_unlockCapa: 0
 --- !u!1 &422471979967415668
 GameObject:
@@ -4895,6 +4888,14 @@ MonoBehaviour:
   _healthVisualFillingSpeed: 4
   _healthBar: {fileID: 4644700419354362672}
   _damagedImage: {fileID: 3188851577056787914}
+  _colorBar:
+  - {r: 0.45882353, g: 1, b: 0.83137256, a: 1}
+  - {r: 1, g: 0.79607844, b: 0.45882353, a: 1}
+  - {r: 1, g: 0.3019608, b: 0.2509804, a: 1}
+  _colorBar2:
+  - {r: 0.56078434, g: 0.98039216, b: 0.7137255, a: 1}
+  - {r: 0.98039216, g: 0.9372549, b: 0.56078434, a: 1}
+  - {r: 0.98039216, g: 0.60784316, b: 0.56078434, a: 1}
   _normalCanva: {fileID: 7438235482765740885}
   _deathCanva: {fileID: 4168195006909438693}
   _deathTimer: {fileID: 5308597181428668573}
@@ -5083,6 +5084,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BroHealthView
   _broHealthBar: {fileID: 7706770980869166161}
   _fillSpeed: 5
+  _colorBar:
+  - {r: 0.45882353, g: 1, b: 0.83137256, a: 1}
+  - {r: 1, g: 0.79607844, b: 0.45882353, a: 1}
+  - {r: 1, g: 0.3019608, b: 0.2509804, a: 1}
+  _colorBar2:
+  - {r: 0.56078434, g: 0.98039216, b: 0.7137255, a: 1}
+  - {r: 0.98039216, g: 0.9372549, b: 0.56078434, a: 1}
+  - {r: 0.98039216, g: 0.60784316, b: 0.56078434, a: 1}
   _localPlayerHealth: {fileID: 5365301951764690734}
 --- !u!114 &3960452511176637144
 MonoBehaviour:
@@ -12144,7 +12153,8 @@ PrefabInstance:
       value: 0.506
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3860027739876614348, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6238431236283784637, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       insertIndex: 0
@@ -12324,11 +12334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &4790013413098127870 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3860027739876614348, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
-  m_PrefabInstance: {fileID: 8640183463756816690}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4940829860452653103 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3709069992407447837, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
