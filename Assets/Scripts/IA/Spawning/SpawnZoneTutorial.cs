@@ -13,6 +13,9 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(PathfindingGridReader))]
 public class SpawnZoneTutorial : NetworkBusListener
 {
+    public bool IsComplete => _spawnedEnemySet.Count == 0 && _spawnWave.Count == 0 && _zoneActivated;
+    public int ZoneIndex => _zoneIndex;
+    
     private PathfindingRequestManager _pathfindingRequestManager;
 
     private bool _zoneActivated;
@@ -53,11 +56,9 @@ public class SpawnZoneTutorial : NetworkBusListener
         
         ListenToEvent<OnEnemyDieEvent>(OEDE =>
         {
-            if (OEDE.p_enemy.p_gridReaderId != _gridReader.p_id)
-                return;
+            if (OEDE.p_enemy.p_gridReaderId != _gridReader.p_id) return;
 
-            if (!_spawnedEnemySet.Remove(OEDE.p_enemy))
-                return;
+            if (!_spawnedEnemySet.Remove(OEDE.p_enemy)) return;
 
             _spawnedEnemies--;
             _currentMobsInArena--;
@@ -66,9 +67,12 @@ public class SpawnZoneTutorial : NetworkBusListener
 
             if (_spawnPaused && _currentMobsInArena < _maxMobsInArena)
                 _spawnPaused = false;
-
+            
             if (IsSpawnZoneComplete())
+            {
+                Debug.Log($"[Zone {_zoneIndex}] Invoking p_onSpawnZoneComplete, listeners: {p_onSpawnZoneComplete?.GetInvocationList()?.Length ?? 0}");
                 p_onSpawnZoneComplete?.Invoke(this);
+            }
         });
         
         ListenToEvent<OnStartSpawner_TUTO>(StartSpawning);
@@ -122,13 +126,14 @@ public class SpawnZoneTutorial : NetworkBusListener
         EnemyCore enemyCore = enemy.GetComponentInChildren<EnemyCore>();
         enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
+        InstanceFinder.ServerManager.Spawn(enemy);
+        
         _spawnedEnemySet.Add(enemyCore);
         _spawnedEnemies++;
         _currentMobsInArena++;
 
         UpdateGaugeObservers(_currentMobsInArena, _maxMobsInArena);
         
-        InstanceFinder.ServerManager.Spawn(enemy);
     }
 
     [Server]
@@ -230,8 +235,8 @@ public class SpawnZoneTutorial : NetworkBusListener
     {
         bool clear = _spawnedEnemySet.Count == 0 && _spawnWave.Count == 0;
 
-        Cons.PrintBool(clear, "is zone clear");
-
+        Debug.Log($"[Zone {_zoneIndex}] IsComplete check — enemies: {_spawnedEnemySet.Count}, wave remaining: {_spawnWave.Count}, result: {clear}");
+        
         return clear;
     }
 }
