@@ -9,9 +9,10 @@ public struct OnDoorOpen_TUTO
 public struct OnDialogue_TUTO
 {
     public string dialogue;
-    public float duration;
     public Speaker speaker;
 }
+
+public struct OnDialogueEnd_TUTO{}
 
 public struct OnNotification_TUTO
 {
@@ -45,4 +46,9 @@ public struct OnFillAmount_TUTO
 public struct OnStartSpawner_TUTO
 {
     public int spawnIndex;
+}
+
+public struct OnUnlockCapa_TUTO
+{
+    public Capacity_TUTO capa;
 }

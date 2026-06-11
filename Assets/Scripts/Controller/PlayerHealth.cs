@@ -211,7 +211,7 @@ public class PlayerHealth : NetworkBusListener
         if (!IsOwner) return;
 
         if (!p_unlockCapa) return;
-        if (!_playerCapacity.CanDrone) return;
+        if (!_playerCapacity.CanHeal) return;
 
         InvokeEvent(new OnHealUsed_TUTO());
 
@@ -329,7 +329,11 @@ public class PlayerHealth : NetworkBusListener
 
     private void ApplyCorrosionDamage(OnCorrosionEvent data)
     {
-        RequestTakeDamageServerRpc(data.p_corrosionDamage);
+        TakeDamage(new PlayerTakeDamageEvent
+        {
+            p_playerN = NetworkObject,
+            p_value = data.p_corrosionDamage,
+        });
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -476,7 +480,7 @@ public class PlayerHealth : NetworkBusListener
 
 
     [Server]
-    void Respawn()
+    public void Respawn()
     {
         _respawnTimer.Value = 0;
         _respawnTime = Time.time;

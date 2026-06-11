@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using CustomConsole.Runtime.Logger;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 //[AddComponentMenu("EnemyBehaviour/Movement")]
 public abstract class EnemyMovementModule : EnemyBehaviourModule
@@ -17,11 +15,16 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     
     private bool _isPathUpdateRequested = false;
 
+    //true => enemy isWalking // false => enemy isIdle
+    public Action<bool> p_onChangeMovement;
+    protected bool _isWalking = false;
+
     public override void InitialiseBehaviourModule(EnemyCore enemyCore)
     {
         base.InitialiseBehaviourModule(enemyCore);
         _targetModule.p_onTargetPositionUpdate += PathUpdateRequest;
     }
+    public Vector3? GetNextTargetPosition() => _path.Count > 0 ? _path[^1].position : null;
 
     public override void OnNetworkTick(float tickDelta)
     {

@@ -17,6 +17,8 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     [HideInInspector] public bool p_hadCharged;
     public Action<BulletPhysicBehaviour> OnCollision;
     private GunController _gunController;
+
+    [SerializeField] private float _radius = 0.5f;
     
     [SerializeField] private GameObject _positiveExplosionVFX;
     [SerializeField] private GameObject _negativeExplosionVFX;
@@ -61,7 +63,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
 
         if (distance <= 0f) return;
 
-        if (!Physics.SphereCast(_lastPosition, 0.5f, direction.normalized, out RaycastHit hit,
+        if (!Physics.SphereCast(_lastPosition, _radius, direction.normalized, out RaycastHit hit,
                 distance, ~LayerMask.GetMask("Owner"), QueryTriggerInteraction.Ignore))
             return;
 

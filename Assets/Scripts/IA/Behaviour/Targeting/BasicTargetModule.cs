@@ -1,4 +1,3 @@
-using FishNet;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Target/BasicTargetModule")]

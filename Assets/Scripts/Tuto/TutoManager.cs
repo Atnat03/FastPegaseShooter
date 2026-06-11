@@ -50,17 +50,21 @@ namespace Tuto
         
         //Actions
         public Action OnBothUseHeal;
+        public Action OnDapUsed;
         
         public override void OnStartNetwork()
         {
             SetUpBridge();
             InitializeTriggers();
-            StartCoroutine(RunTutorial());
+            
+            if (IsServerInitialized)
+                StartCoroutine(RunTutorial());
             
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
             ListenToEvent<OnHealUsed_TUTO>(CheckHealUse);
+            ListenToEvent<OnDapEvent>(DapUsed);
         }
-        
+
         private void CheckHealUse(OnHealUsed_TUTO data)
         {
             OnAddPlayerUsedHealServerRpc();
@@ -185,16 +189,29 @@ namespace Tuto
         #endregion
         
         #region DIALOGUE
-        public void AskForDialogue(float duration, string dialogue, Speaker speaker, string keyVoceline)
+        public void AskForDialogue(float duration, string dialogue, Speaker speaker, string keyVoceline, Action onComplete = null)
         {
             if (IsServerInitialized)
-            {
-                AskForDialogueObserversRpc(duration,dialogue, speaker, keyVoceline);
-            }
+                AskForDialogueObserversRpc(duration, dialogue, speaker, keyVoceline);
             else
-            {
-                AskForDialogueServerRpc(duration,dialogue, speaker, keyVoceline);
-            }
+                AskForDialogueServerRpc(duration, dialogue, speaker, keyVoceline);
+
+            StartCoroutine(DialogueRoutine(duration, onComplete));
+        }
+
+        private IEnumerator DialogueRoutine(float duration, Action onComplete)
+        {
+            yield return new WaitForSeconds(duration);
+
+            AskForDialogueEndObserversRpc();
+
+            onComplete?.Invoke();
+        }
+
+        [ObserversRpc]
+        private void AskForDialogueEndObserversRpc()
+        {
+            InvokeEvent(new OnDialogueEnd_TUTO());
         }
 
         [ServerRpc]
@@ -211,10 +228,10 @@ namespace Tuto
             InvokeEvent(new OnDialogue_TUTO
             {
                 dialogue = dialogue,
-                duration = duration,
                 speaker = speaker
             });
         }
+        
         #endregion
         
         #region NOTIFICATION
@@ -353,19 +370,15 @@ namespace Tuto
         [ServerRpc]
         private void AskForUnlockCapaServerRpc(Capacity_TUTO capa)
         {
+            Cons.Print("AskForUnlockCapaServerRpc");
             AskForUnlockCapaObserversRpc(capa);
         }
 
         [ObserversRpc]
         private void AskForUnlockCapaObserversRpc(Capacity_TUTO capa)
         {
-            foreach (NetworkObject player in _playerList.Values.Where(player => player != null && player.Owner != null))
-            {
-                if(player.transform.root.TryGetComponent(out PlayerTuto playerTuto))
-                {
-                    playerTuto.UnlockCapa(capa);
-                }
-            }
+            Cons.Print("AskForUnlockCapaObserversRpc");
+            InvokeEvent(new OnUnlockCapa_TUTO{capa = capa});
         }
 
         #endregion
@@ -406,6 +419,11 @@ namespace Tuto
         }
 
         #endregion
+        
+        private void DapUsed(OnDapEvent data)
+        {
+            OnDapUsed?.Invoke();
+        }
         
         #endregion
 

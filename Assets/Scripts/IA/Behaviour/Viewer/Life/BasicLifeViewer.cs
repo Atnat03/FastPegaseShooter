@@ -1,5 +1,4 @@
 using TMPro;
-using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,9 +16,10 @@ public class BasicLifeViewer : MonoBehaviour
     private TextMeshProUGUI _hitMarker;
 
     [Header("Life")]
+    [SerializeField] private GameObject _lifeBarParent;
     [SerializeField] private TextMeshProUGUI _lifeTMP;
     [SerializeField] private Image _lifeBarImage;
-    [SerializeField] private Gradient _NoneAffinityLifeGradient;
+    [SerializeField] private Gradient _lifeGradient;
     [SerializeField] private float _fillSpeedBarFront = 10f;
     
     [SerializeField] private Image _lifeBarSecondImage;
@@ -36,24 +36,20 @@ public class BasicLifeViewer : MonoBehaviour
         _enemyCore = _enemyLifeModule.gameObject.GetComponent<EnemyCore>();
         
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
-        _lifeBarImage.color = _NoneAffinityLifeGradient.Evaluate(1f);
+        _lifeBarImage.color = _lifeGradient.Evaluate(1f);
 
+        if(_lifeBarParent) _lifeBarParent.SetActive(false);
         
-        _lifeTMP.enabled = false;
-        _lifeBarImage.enabled = false;
-        _lifeBarSecondImage.enabled = false;
     }
     
     private void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
-        _lifeTMP.enabled = true;
-        _lifeBarImage.enabled = true;
-        _lifeBarSecondImage.enabled = true;
+        if(_lifeBarParent) _lifeBarParent.SetActive(true);
         
         _cumulatifDmg += dmg;
         float percentage = lifeAmount / (float)fullLife;
         _lifeTMP.text = $"{lifeAmount}/{fullLife}";
-        _lifeBarImage.color = _NoneAffinityLifeGradient.Evaluate(percentage);
+        _lifeBarImage.color = _lifeGradient.Evaluate(percentage);
 
         //Percentage fills
         _frontFill = percentage;

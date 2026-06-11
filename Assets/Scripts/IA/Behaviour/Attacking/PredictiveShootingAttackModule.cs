@@ -13,10 +13,9 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
         if (_waitedTimeSinceAttack >= _attackModuleSO.p_attackDelay && _targetModule.HasTarget())
         {
             Vector3 shootDir = Vector3.zero;
-            Vector3 shootingPos = transform.position + Vector3.up * 0.5f;
             if (TryGetShootingDirection(
                     _targetModule.p_playerVisualBridge.transform.position,
-                    shootingPos,
+                    _shootingPos.position,
                     _targetModule.p_playerVisualBridge.FPSController.Rb.linearVelocity,
                     _predictiveShootingAttackModuleSO.p_bulletSpeed, out Vector3 shootingDirection))
             {
@@ -31,12 +30,12 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
                 shootDir = delta / length;
             }
             
-            if(!CanAttack(shootingPos, shootDir)) return;
+            if(!CanAttack(_shootingPos.position, shootDir)) return;
             _waitedTimeSinceAttack = 0;
             
             InvokeEvent(
                 new EnemyShootingEvent(
-                    shootingPos, 
+                    _shootingPos.position, 
                     shootDir, 
                     _predictiveShootingAttackModuleSO.p_bulletSpeed, 
                     _attackModuleSO.p_damage, 
@@ -47,6 +46,7 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
                     _attackModuleSO.p_projectileUseGravity,
                     _predictiveShootingAttackModuleSO.p_bulletAmount, 
                     _predictiveShootingAttackModuleSO.p_shootingSpreadAngle));
+            p_onAttack?.Invoke();
         }
     }
 

@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class DroneView : NetworkBehaviour
 {
-	#region Properties
-
-	#endregion
-	
 	#region Variables
 
 	[SerializeField] private DroneEffectParent _droneEffect;
@@ -17,8 +13,8 @@ public class DroneView : NetworkBehaviour
 	[SerializeField] private GameObject[] _models;
 	
 	[Header("ApplysEffect")]
-	[SerializeField] private ParticleSystem _applyEffect;
-	[SerializeField] private Material[] _materialsParticles;
+	[SerializeField] private ParticleSystem[] _applyEffects;
+	private ParticleSystem _applyEffectAssigned;
 
 	private RaycastHit hit;
 	
@@ -43,15 +39,15 @@ public class DroneView : NetworkBehaviour
 	
 	private void OnActivatedDrone(float radius)
 	{
-		_applyEffect.gameObject.SetActive(true);
-		_applyEffect.transform.localScale = Vector3.one * 4f * radius;
+		_applyEffectAssigned.gameObject.SetActive(true);
+		_applyEffectAssigned.transform.localScale = Vector3.one * 4f * radius;
 	}
 	
 	private void UpdatePosition()
 	{
 		if (Physics.Raycast(transform.position, Vector3.down, out hit, 1000, LayerMask.NameToLayer("Ground"), QueryTriggerInteraction.Ignore))
 		{
-			_applyEffect.transform.position = hit.point;
+			_applyEffectAssigned.transform.position = hit.point;
 		}
 	}
 	
@@ -60,10 +56,15 @@ public class DroneView : NetworkBehaviour
 		_models[0].gameObject.SetActive(isPositive);
 		_models[1].gameObject.SetActive(!isPositive);
 		
-		ParticleSystemRenderer psRenderer = _applyEffect.GetComponent<ParticleSystemRenderer>();
-		psRenderer.material = isPositive ? _materialsParticles[0] : _materialsParticles[1];
+		_applyEffects[0].gameObject.SetActive(isPositive);
+		_applyEffects[1].gameObject.SetActive(!isPositive);
 		
-		Cons.Print("Set up drone color : " + isPositive);
+		_applyEffectAssigned = isPositive ? _applyEffects[0] : _applyEffects[1];
+		
+		/*
+		ParticleSystemRenderer psRenderer = _applyEffectAssigned.GetComponent<ParticleSystemRenderer>();
+		psRenderer.material = isPositive ? _materialsParticles[0] : _materialsParticles[1];
+		*/
 	}
 	
 	#endregion

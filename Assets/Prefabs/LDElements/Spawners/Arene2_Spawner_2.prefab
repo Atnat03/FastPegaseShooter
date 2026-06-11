@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 978980290201534219}
   - component: {fileID: 2120530428348468344}
   - component: {fileID: 2667236337850832112}
-  - component: {fileID: 8323112751248399650}
+  - component: {fileID: 7733318719413821543}
   m_Layer: 2
   m_Name: Arene2_Spawner_2
   m_TagString: Untagged
@@ -109,8 +109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d438e4c486814fa4f9ad9c817135f8e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubArena
-  _componentIndexCache: 2
-  _addedNetworkObject: {fileID: 8323112751248399650}
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 7733318719413821543}
   _networkObjectCache: {fileID: 0}
   _zoneActivated: 0
   _spawnPoints:
@@ -120,36 +120,39 @@ MonoBehaviour:
   - {fileID: 5377951717058223131}
   - {fileID: 2165125395364659213}
   - {fileID: 5697366080667569796}
-  _arenaGaugePrefab: {fileID: 5685526713634106081, guid: fd5c119e7b4144944bdf9bc41471fc93, type: 3}
+  _arenaGaugePrefab: {fileID: 4064732673162575477, guid: de84feea596c40248b014df665cbe9a6, type: 3}
   spawnDelayFirstWave: 1
   spawnMobsFirstWave:
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
+  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   _currentBudget: 0
-  _spawnMobs:
-  - {fileID: 11400000, guid: 7554cc37a0d26ac4683769fef2707f0f, type: 2}
-  - {fileID: 11400000, guid: cd26272afa8b20c4f9155881ace28d0f, type: 2}
-  - {fileID: 11400000, guid: 58baac394f7673d4f94d03f6d4386f2f, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 11b0bbdfefc21a04f90d714c4d3b868e, type: 2}
-  - {fileID: 11400000, guid: 049c70c340fc8574587b4bf920743112, type: 2}
   _spawningStates:
-  - p_stateDuration: 20
+  - p_stateDuration: 15
+    p_state: {fileID: 11400000, guid: 18d684ccbb87f3f4a8a08f76c10eb2a3, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 15
+    p_state: {fileID: 11400000, guid: 172c55f186412e64bb88dd7f37a88d33, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 15
     p_state: {fileID: 11400000, guid: 683baad9fd008124b9f38b4cc3773575, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 15
+    p_state: {fileID: 11400000, guid: 10e4a9134960b1c479f3f7802dc35242, type: 2}
+    p_totalWeight: 0
   - p_stateDuration: 15
     p_state: {fileID: 11400000, guid: 67dda866a48828146b418019cd6a63f6, type: 2}
-  - p_stateDuration: 20
+    p_totalWeight: 0
+  - p_stateDuration: 15
     p_state: {fileID: 11400000, guid: 50403fe522a7d39459fe3839dc5f4f8d, type: 2}
+    p_totalWeight: 0
   _maxSpawnEnemy: 12
-  _corrosionDamage: 5
+  _corrosionDamage: 3
   _corrosionDelay: 1
   _maxEnabledTime: 999
   _currentStateIndex: 0
---- !u!114 &8323112751248399650
+--- !u!114 &7733318719413821543
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

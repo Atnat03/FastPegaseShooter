@@ -11,10 +11,7 @@ public class RespawnManager : NetworkBusListener
 
     private readonly HashSet<int> _deadPlayerIds = new HashSet<int>();
     private readonly SyncVar<bool> _isGameOver = new SyncVar<bool>(false);
-
-    [Header("UI")]
-    [SerializeField] private GameObject _playerUIEnd;
-
+    
     #endregion
 
     #region Fonctions
@@ -24,13 +21,7 @@ public class RespawnManager : NetworkBusListener
         ListenToEvent<OnPlayerDeathEvent>(OnPlayerDied);
         ListenToEvent<OnPlayerRespawnEvent>(OnPlayerRespawned);
     }
-
-    public override void OnStartClient()
-    {
-        _playerUIEnd.SetActive(false);
-        _isGameOver.OnChange += OnGameOverChange;
-    }
-
+    
     [Server]
     private void OnPlayerDied(OnPlayerDeathEvent data)
     {
@@ -49,11 +40,6 @@ public class RespawnManager : NetworkBusListener
     private void OnPlayerRespawned(OnPlayerRespawnEvent data)
     {
         _deadPlayerIds.Remove(data.p_playerN.ObjectId);
-
-        if (_deadPlayerIds.Count == 0)
-        {
-            _isGameOver.Value = false;
-        }
     }
 
     [ObserversRpc]
@@ -61,17 +47,6 @@ public class RespawnManager : NetworkBusListener
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        _playerUIEnd.SetActive(true);
-    }
-
-    private void OnGameOverChange(bool prev, bool next, bool asServer)
-    {
-        if (!next)
-        {
-            _playerUIEnd.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
     }
 
     public void Quit()

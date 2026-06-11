@@ -1,4 +1,3 @@
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
@@ -24,6 +23,7 @@ public class BasicMeleeAttackModule : EnemyAttackModule
                     p_attacker = transform.GetComponent<NetworkObject>(),
                 });
                 p_onHitPlayer?.Invoke(player.ObjectId, _attackModuleSO.p_damage);
+                p_onAttack?.Invoke();
             }
         }
     }

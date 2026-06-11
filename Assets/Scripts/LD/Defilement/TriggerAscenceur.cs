@@ -3,11 +3,6 @@ using UnityEngine;
 
 public class TriggerAscenceur : MonoBusListener
 {
-	#region Properties
-
-	#endregion
-
-
 	#region Variables
 	
 	[SerializeField] Animator[] _animatorToTrigger;
@@ -21,13 +16,16 @@ public class TriggerAscenceur : MonoBusListener
 	{
 		TriggerAnimators(false);
 	}
-
-	private void TriggerAnimators(bool state)
+	
+	//debug
+	[ContextMenu("TriggerAscenseur")]
+	void Trigger()
 	{
-		foreach (Animator animator in _animatorToTrigger)
-		{
-			animator.enabled = state;
-		}
+		TriggerAnimators(true);
+				
+		InvokeEvent(new OnAscenseurStart());
+				
+		enabled = false;
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -39,6 +37,14 @@ public class TriggerAscenceur : MonoBusListener
 			InvokeEvent(new OnAscenseurStart());
 				
 			enabled = false;
+		}
+	}
+	
+	private void TriggerAnimators(bool state)
+	{
+		foreach (Animator animator in _animatorToTrigger)
+		{
+			animator.enabled = state;
 		}
 	}
 	

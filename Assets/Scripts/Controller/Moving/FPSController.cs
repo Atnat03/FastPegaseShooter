@@ -244,7 +244,8 @@ public class FPSController : NetworkBusListener
         Sliding,
         Dashing,
         SlopeSliding,
-        Grappling
+        Grappling,
+        Pause
     }
 
     public StateMachine<ControlerState> stateMachine = new StateMachine<ControlerState>();
@@ -264,8 +265,11 @@ public class FPSController : NetworkBusListener
 
     public Action OnFootstep;
     public Action OnJump;
-    public Action OnLanding;
+    public Action<float> OnLanding;
     public Action OnGrappling;
+    public Action OnSlide;
+    public Action OnEndSlide;
+    
     
     #endregion
     
@@ -395,6 +399,13 @@ public class FPSController : NetworkBusListener
             onExit: ExitGrappleState,
             onLateUpdate: GrappleLateUpdate
         ));
+        
+        stateMachine.Add(new State<ControlerState>(
+            iD: ControlerState.Pause,
+            onEnter:EnterPauseState,
+            PauseStateUpdate,
+            PauseStateFixedUpdate
+            ));
 
         stateMachine.ChangeState(ControlerState.Idle);
 
@@ -424,7 +435,7 @@ public class FPSController : NetworkBusListener
         UpdateLdInteractions();
         UpdateAnimationValues();
         
-        if (!IsFreeze)stateMachine?.Update();
+        stateMachine?.Update();
     }
 
     void FixedUpdate()
@@ -432,7 +443,6 @@ public class FPSController : NetworkBusListener
         if (!IsOwner) return;
 
         if (isDead.Value) return;
-        if (IsFreeze) return;
         
         rb.MoveRotation(Quaternion.Euler(0, yaw, 0));
         
@@ -458,11 +468,7 @@ public class FPSController : NetworkBusListener
     {
         IsFreeze = freeze;
 
-        if (freeze)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
+        stateMachine.ChangeState(freeze ? ControlerState.Pause : ControlerState.Idle);
     }
     
     void UpdateInputs() // appelé en update dans tout les states // update des inputs
@@ -890,7 +896,7 @@ public class FPSController : NetworkBusListener
         hasJumped = false;
         mustHeadTilt = false;
         
-        OnLanding?.Invoke();
+        OnLanding?.Invoke(rb.linearVelocity.y);
         
         StartCoroutine(CoyoteSlideCoroutine());
     }
@@ -945,7 +951,6 @@ public class FPSController : NetworkBusListener
     private bool justWallridedOtherSide;
     private bool justWallridedSameSide;
 
-    private float currentHeadTilt = 0f;
     float targetHeadTilt = 0f;
     
     private readonly RaycastHit[] _grappleHitBuffer = new RaycastHit[16];
@@ -956,7 +961,6 @@ public class FPSController : NetworkBusListener
         hasDashed = false; // ligne a retirer si on veut que le joueur doive toucher le sol avant de redasher
 
         wallRidingHeight = transform.position.y;
-        currentHeadTilt = currentRoll;
         if(cameraBackToDefaultCoroutine != null) StopCoroutine(cameraBackToDefaultCoroutine);
         
         if (leftSideAgainstWall)
@@ -1061,10 +1065,9 @@ public class FPSController : NetworkBusListener
     }
 
     void ExitWallRidingState()
-    {
-        //cameraSpringTarget.rotation = Quaternion.Euler(pitch, yaw, 0);
+    { 
         wallRidingCoroutineRunning = false;
-        StopCoroutine(wallRidingCoroutine);
+        if(wallRidingCoroutine != null)StopCoroutine(wallRidingCoroutine);
         cameraBackToDefaultCoroutine = StartCoroutine(CameraRollBackToDefaultCoroutine());
     }
 
@@ -1222,7 +1225,8 @@ public class FPSController : NetworkBusListener
         landingDirection *= slideSpeed;
         
         _playerAnimation.SetSlideAnim(true);
-
+        OnSlide?.Invoke();
+        
         Crouch();
         StartCoroutine(SlidingCoroutine());
     }
@@ -1301,6 +1305,8 @@ public class FPSController : NetworkBusListener
         UnCrouch();
         
         _playerAnimation.SetSlideAnim(false);
+        OnEndSlide?.Invoke();
+
         
         StartCoroutine(JustSlidedCoroutine());
         StartCoroutine(BringBackFOVCoroutine());
@@ -1497,6 +1503,8 @@ public class FPSController : NetworkBusListener
             ? Vector3.ProjectOnPlane(rb.linearVelocity, groundedHit.normal).normalized * rb.linearVelocity.magnitude
             : slopeDirection;
 
+        OnSlide?.Invoke();
+        
         Crouch();
     }
 
@@ -1548,6 +1556,7 @@ public class FPSController : NetworkBusListener
     void ExitSlopeSlidingState()
     {
         UnCrouch();
+        OnEndSlide?.Invoke();
     }
 
     void SlopeSlidingLateUpdate()
@@ -1664,6 +1673,27 @@ public class FPSController : NetworkBusListener
             yield return null;
         }
         lineReachedTarget = true;
+    }
+
+    #endregion
+
+    #region PauseSate
+
+    void EnterPauseState()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    void PauseStateUpdate()
+    {
+        
+    }
+
+    void PauseStateFixedUpdate()
+    {
+        Vector3 HorizontalMovement = horizontalVelocity * .01f;
+        rb.linearVelocity = new Vector3(HorizontalMovement.x, rb.linearVelocity.y, HorizontalMovement.z);
     }
 
     #endregion

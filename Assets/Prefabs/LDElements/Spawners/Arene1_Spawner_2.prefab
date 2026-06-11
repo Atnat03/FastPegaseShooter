@@ -106,8 +106,8 @@ GameObject:
   - component: {fileID: 1762011846837400999}
   - component: {fileID: 368847391327520589}
   - component: {fileID: 2781469791665419696}
-  - component: {fileID: 4387859355087612513}
-  - component: {fileID: 39972676355750075}
+  - component: {fileID: 3297991409658290850}
+  - component: {fileID: 3487012015996538473}
   m_Layer: 2
   m_Name: Arene1_Spawner_2
   m_TagString: Untagged
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cef386ddb5932e40bf94a56237adfb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathfindingGridReader
-  pathfindingGridSO: {fileID: 11400000, guid: edeeb6bb647c0874890818aedd5c4f2a, type: 2}
+  pathfindingGridSO: {fileID: 11400000, guid: 22e4fe3601b0d99499b21419b008d73c, type: 2}
 --- !u!114 &368847391327520589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,37 +176,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SubArena
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 2781469791665419696}
-  _networkObjectCache: {fileID: 2781469791665419696}
-  _pathfindingRequestManager: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
   _zoneActivated: 0
   _spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _arenaGaugePrefab: {fileID: 0}
+  - {fileID: 980620478835117577}
+  - {fileID: 8046433814624876438}
+  - {fileID: 5430887823922571721}
+  - {fileID: 2513047331417288399}
+  - {fileID: 1828209782330500718}
+  - {fileID: 1983593388443427301}
+  - {fileID: 1274432393482594302}
+  _arenaGaugePrefab: {fileID: 2556904585582833789, guid: fd3ebc306f4153f4a94d938b57517511, type: 3}
   spawnDelayFirstWave: 1.4
   spawnMobsFirstWave:
   - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   _currentBudget: 0
-  _spawnMobs:
-  - {fileID: 11400000, guid: 514df65c062380547b5b8f53e3aabe52, type: 2}
-  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   _spawningStates:
-  - p_stateDuration: 20
+  - p_stateDuration: 12
     p_state: {fileID: 11400000, guid: 4a613f8c475c147479fd86507e001004, type: 2}
-  - p_stateDuration: 15
-    p_state: {fileID: 11400000, guid: 759ce88eb16b3314187a45078069775d, type: 2}
-  - p_stateDuration: 25
+    p_totalWeight: 0
+  - p_stateDuration: 12
     p_state: {fileID: 11400000, guid: 65391380cbb42ca4abb0c89edc37ed75, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: 92e6fd318e8e29e48b3d5a2ff74525df, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: 3a805b33c11934f49b601f745b404567, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: f9c2a61cc4f4e1942b6f6a7308acd19f, type: 2}
+    p_totalWeight: 0
+  - p_stateDuration: 12
+    p_state: {fileID: 11400000, guid: 759ce88eb16b3314187a45078069775d, type: 2}
+    p_totalWeight: 0
   _maxSpawnEnemy: 10
-  _corrosionDamage: 5
+  _corrosionDamage: 2
   _corrosionDelay: 1
   _maxEnabledTime: 999
   _currentStateIndex: 0
@@ -240,7 +246,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584212092317853982
+  _initializedTimestamp: -8584212983358331233
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -256,7 +262,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 3
+  <PrefabId>k__BackingField: 16
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 2335143434069023465
   SceneId: 0
@@ -265,7 +271,28 @@ MonoBehaviour:
     Rotation: {x: 0, y: 0, z: 0, w: 1}
     Scale: {x: 1, y: 1, z: 1}
     IsValid: 1
---- !u!114 &4387859355087612513
+--- !u!65 &3297991409658290850
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6340360562080667667}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 20.2, z: 8}
+  m_Center: {x: 22.7, y: 1.5, z: -20.96}
+--- !u!114 &3487012015996538473
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -293,27 +320,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _activateOnce: 1
---- !u!65 &39972676355750075
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6340360562080667667}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 28.7, z: 95.7}
-  m_Center: {x: -26.46, y: -12.45, z: -5.2}
 --- !u!1 &7425626130130000769
 GameObject:
   m_ObjectHideFlags: 0

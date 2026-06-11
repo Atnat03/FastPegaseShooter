@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7856045746221537441}
+  - component: {fileID: 1960128887299531794}
   m_Layer: 0
   m_Name: Arene3_BalanceParent
   m_TagString: Untagged
@@ -34,6 +35,21 @@ Transform:
   - {fileID: 8078906496487037540}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1960128887299531794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054332903946257527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6a39c46bf52104ba8efe3100bce3f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.EmptyNetworkBehaviour
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
 --- !u!1 &8508592605574515902
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,6 +103,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7856045746221537441}
     m_Modifications:
+    - target: {fileID: -107976643356006987, guid: e712f5610c49bcb47a306c60207a52d3, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1437782805840429614, guid: e712f5610c49bcb47a306c60207a52d3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -139,7 +159,20 @@ PrefabInstance:
       propertyPath: WasActiveDuringEdit
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8187143561549632812, guid: e712f5610c49bcb47a306c60207a52d3, type: 3}
+      propertyPath: _addedNetworkObject
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187143561549632812, guid: e712f5610c49bcb47a306c60207a52d3, type: 3}
+      propertyPath: _networkObjectCache
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187143561549632812, guid: e712f5610c49bcb47a306c60207a52d3, type: 3}
+      propertyPath: _componentIndexCache
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -107976643356006987, guid: e712f5610c49bcb47a306c60207a52d3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -157,6 +190,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7856045746221537441}
     m_Modifications:
+    - target: {fileID: -3803905668730861571, guid: ddb1db4b8f18bee4880a2e2fc24f713f, type: 3}
+      propertyPath: _addedNetworkObject
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -3803905668730861571, guid: ddb1db4b8f18bee4880a2e2fc24f713f, type: 3}
+      propertyPath: _networkObjectCache
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -3803905668730861571, guid: ddb1db4b8f18bee4880a2e2fc24f713f, type: 3}
+      propertyPath: _componentIndexCache
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 431299012364443804, guid: ddb1db4b8f18bee4880a2e2fc24f713f, type: 3}
+      propertyPath: WasActiveDuringEdit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2189633458858471923, guid: ddb1db4b8f18bee4880a2e2fc24f713f, type: 3}
       propertyPath: m_Name
       value: Arene3_Spawner_2
@@ -205,7 +254,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 431299012364443804, guid: ddb1db4b8f18bee4880a2e2fc24f713f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

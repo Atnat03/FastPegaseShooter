@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using GameKit.Dependencies.Utilities;
@@ -23,7 +21,6 @@ public class SubArena : NetworkBusListener
 
     [Header("----- Infinite Spawn -----")]
     [SerializeField] private int _currentBudget;
-    [SerializeField] private List<MobSpawnSO> _spawnMobs = new();
     [SerializeField] private List<SpawningState> _spawningStates = new();
     
     [Header("----- Corrosion -----")]
@@ -31,7 +28,6 @@ public class SubArena : NetworkBusListener
     [SerializeField] private int _corrosionDamage = 5;
     [SerializeField] private int _corrosionDelay = 3;
 
-    private float _enemyTotalWeight;
     private PathfindingRequestManager _pathfindingRequestManager;
     private int _currentSpawnPointIndex = 0;
     
@@ -57,7 +53,10 @@ public class SubArena : NetworkBusListener
         {
             if(_spawnedEnemies.Contains(OEDE.p_enemy))
             {
-                NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
+                NotifySubArenaUpdateObserverRpc(
+                    _gridReader.p_id,
+                    _spawnedEnemies.Count/(float)_maxSpawnEnemy,
+                    _currentStateIndex);
                 _spawnedEnemies.Remove(OEDE.p_enemy);
             }
         });
@@ -83,11 +82,10 @@ public class SubArena : NetworkBusListener
 
     void InitialiseSpawnProbability()
     {
-        _spawnMobs = _spawnMobs.OrderByDescending(s => s.p_spawnProba).ToList();
-        _enemyTotalWeight = 0;
-        
-        foreach (MobSpawnSO spawnMob in _spawnMobs)
-            _enemyTotalWeight += spawnMob.p_spawnProba;
+        for (int i = 0; i < _spawningStates.Count; i++)
+        {
+            _spawningStates[i].Initialize();
+        }
     }
 
     #endregion
@@ -104,13 +102,13 @@ public class SubArena : NetworkBusListener
             );
     }
     [ObserversRpc]
-    void NotifySubArenaUpdateObserverRpc(Guid arenaId)
+    void NotifySubArenaUpdateObserverRpc(Guid arenaId, float overCrowdingPercent, int stateIndex)
     {
         EventBus.InvokeEvent(
             new OnSubArenaUpdateEvent(
                 arenaId, 
-                _spawnedEnemies.Count/(float)_maxSpawnEnemy,
-                _spawningStates[_currentStateIndex].p_state)
+                overCrowdingPercent,
+                _spawningStates[stateIndex].p_state)
             );
     }
 
@@ -131,6 +129,10 @@ public class SubArena : NetworkBusListener
     {
         if(!IsServerStarted) return;
         NotifySubArenaStartObserverRpc(_gridReader.p_id);
+        NotifySubArenaUpdateObserverRpc(
+            _gridReader.p_id,
+            _spawnedEnemies.Count/(float)_maxSpawnEnemy,
+            _currentStateIndex);
         await SpawnFirstWave();
         await InfiniteSpawn();
     }
@@ -144,9 +146,9 @@ public class SubArena : NetworkBusListener
     {
         float random01 = Random.Range(0f, 1f);
         float currentWeight = 0;
-        foreach (var mobSpawn in _spawnMobs)
+        foreach (var mobSpawn in _spawningStates[_currentStateIndex].p_state.p_spawnMobs)
         {
-            currentWeight += mobSpawn.p_spawnProba/_enemyTotalWeight;
+            currentWeight += mobSpawn.p_spawnProba/_spawningStates[_currentStateIndex].p_totalWeight;
             if(random01 <= currentWeight)
             {
                 //CustomLogger.HighlightLog($"Chosen Enemy : {mobSpawn.mob.name}, random01 : {random01}");
@@ -155,7 +157,7 @@ public class SubArena : NetworkBusListener
         }
         
         //fallback for float imprecision
-        return _spawnMobs[^1];
+        return _spawningStates[_currentStateIndex].p_state.p_spawnMobs[^1];
     }
 
     [Server]
@@ -247,7 +249,10 @@ public class SubArena : NetworkBusListener
                     {
                         currentStateTime = 0;
                         _currentStateIndex = (_currentStateIndex + 1) % _spawningStates.Count;
-                        NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
+                        NotifySubArenaUpdateObserverRpc(
+                            _gridReader.p_id,
+                            _spawnedEnemies.Count/(float)_maxSpawnEnemy,
+                            _currentStateIndex);
                     }
                     
                     _currentBudget += _spawningStates[_currentStateIndex].p_state.p_budgetPerSecond;
@@ -263,7 +268,10 @@ public class SubArena : NetworkBusListener
                     //CustomLogger.Log($"Spawn enemy : {nextMobToSpawn.name}");
                     _currentBudget -= nextMobToSpawn.p_cost;
                     SpawnEnemy(nextMobToSpawn.p_prefab);
-                    NotifySubArenaUpdateObserverRpc(_gridReader.p_id);
+                    NotifySubArenaUpdateObserverRpc(
+                        _gridReader.p_id,
+                        _spawnedEnemies.Count/(float)_maxSpawnEnemy,
+                        _currentStateIndex);
                 }
             }
         }
@@ -277,8 +285,19 @@ public class SubArena : NetworkBusListener
 }
 
 [System.Serializable]
-public struct SpawningState
+public class SpawningState
 {
     [Tooltip("Duration is expressed in seconds")] public int p_stateDuration;
     public SubArenaStateSO p_state;
+    
+    public float p_totalWeight;
+
+    public void Initialize()
+    {
+        p_totalWeight = 0;
+        
+        foreach (MobSpawnSO spawnMob in p_state.p_spawnMobs)
+            p_totalWeight += spawnMob.p_spawnProba;
+    }
+    
 }

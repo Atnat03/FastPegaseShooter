@@ -115,7 +115,7 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""dad1ee24-e6b6-4aa0-a9d2-236507daf281"",
-                    ""path"": ""<Keyboard>/o"",
+                    ""path"": ""<Keyboard>/numpad3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
