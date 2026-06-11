@@ -48,11 +48,13 @@ public class DialoguesManager : NetworkBusListener
     }
     
     #endregion
-    
-    private void OnServerInitialized()
+
+    public override void OnStartNetwork()
     {
+        base.OnStartNetwork();
         ListenToEvent<OnDialogueStart>(StartDialogue);
-        
+        Debug.Log("OnServerInitialized");
+
         CleanDialogue();
     }
 
