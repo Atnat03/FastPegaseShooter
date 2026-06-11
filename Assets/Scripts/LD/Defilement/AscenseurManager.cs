@@ -21,14 +21,13 @@ public class AscenseurManager : NetworkBusListener
 
     public void LaunchElevator()
     {
-        int count = _partsList.Length;
+        float launchTime = Time.time; // référence commune
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < _partsList.Length; i++)
         {
             Ascenseur a = _partsList[i].GetComponent<Ascenseur>();
             _pool.Add(a);
-            
-            a?.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling);
+            a?.StartDescente(_spawnPoint.position, _endPoint.position, _durationTraveling, launchTime);
         }
     }
 }
