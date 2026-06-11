@@ -238,6 +238,9 @@ public class SubArena : NetworkBusListener
                     }
                 }
                 
+                if(!Application.isPlaying) return;
+                
+                
                 MobSpawnSO nextMobToSpawn = GetNextEnemyToSpawn();
 
                 //generating budget
