@@ -14,6 +14,8 @@ public class EnemyBulletVisuals : MonoBusListener, IPoolable
     private BulletTypes _bulletTypes;
 
     private EnemyBulletManager _enemyBulletManager;
+    
+    [SerializeField] private ParticleSystem _particleSystem;
 
 
     public void SetupVariables(Vector3 startPos, float spawnTime, bool useGravity, Vector3 direction, float speed, float bulletSize, int bulletId, BulletTypes bulletType, EnemyBulletManager EBM)
@@ -61,7 +63,10 @@ public class EnemyBulletVisuals : MonoBusListener, IPoolable
         }
     }
 
-    public void Spawn() { }
+    public void Spawn()
+    {
+        if(_particleSystem) _particleSystem.Play();
+    }
 
     public void ReturnToPool()
     {
@@ -73,7 +78,7 @@ public class EnemyBulletVisuals : MonoBusListener, IPoolable
 
     protected override void OnDestroy()
     {
-        InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
+        if(InstanceFinder.TimeManager) InstanceFinder.TimeManager.OnTick -= OnNetworkTick;
         base.OnDestroy();
     }
 }
