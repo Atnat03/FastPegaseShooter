@@ -37,6 +37,8 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
 
     protected void PathUpdateRequest()
     {
+        if (_enemyCore.p_isSpawning || _enemyCore.p_isDying) return;
+        
         if (!_isPathUpdateRequested && _targetModule.HasTarget())
         {
             if(!_enemyCore.p_pathRequester) return;
@@ -50,6 +52,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
 
     protected virtual void RecalculatePathConcrete()
     {
+        if (_enemyCore.p_isSpawning || _enemyCore.p_isDying) return;
         
         _enemyCore.p_gridReader.GetPath(
             transform.position, _targetModule.GetTargetPosition(), out _path);

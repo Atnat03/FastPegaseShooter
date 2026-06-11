@@ -128,6 +128,7 @@ public class SpawnZoneTutorial : NetworkBusListener
 
         UpdateGaugeObservers(_currentMobsInArena, _maxMobsInArena);
         
+        InvokeEvent(new OnEnemySpawnEvent());
         InstanceFinder.ServerManager.Spawn(enemy);
     }
 
