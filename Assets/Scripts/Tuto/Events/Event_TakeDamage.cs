@@ -7,10 +7,11 @@ namespace Tuto
         public override string DisplayName => "Taking Damage";
 
         public int damage = 10;
+        public int seuilDamage = 50;
         
         public override IEnumerator Execute()
         {
-            manager.TakeDamage(damage);
+            manager.TakeDamage(damage, seuilDamage);
             
             yield break;
         }

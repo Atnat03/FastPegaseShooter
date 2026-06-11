@@ -30,7 +30,8 @@ Material:
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
   m_LockedProperties: 
@@ -39,6 +40,10 @@ Material:
     m_TexEnvs:
     - _AORM:
         m_Texture: {fileID: 2800000, guid: 48276dd84616a8a4c8597f2260163c90, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Alpha:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColor:
@@ -108,8 +113,16 @@ Material:
     m_Ints: []
     m_Floats:
     - _AORMTriplanar_UV: 1
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
+    - _CastShadows: 1
+    - _Cull: 2
     - _DistanceMaskLow: 13
     - _DistanceMaskMid: 40
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _Emission_Power: 1
     - _HighTiling: 0.01
     - _Metalic_intensity: 1
@@ -118,13 +131,22 @@ Material:
     - _Opacity: 3.5
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Smothness_intensity: 1
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _Surface: 0
     - _Texture_Color_Activation_Base: 0
     - _Texture_Color_Activation_Low: 0
     - _Texture_Color_Activation_Mid: 1
+    - _Threshold: 0.7
     - _TilingAORMTriplanar: 0
     - _TilingLow_value1: 0.06
     - _TilingLow_value2: 0.06
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteControl: 0
     m_Colors:
     - _Color: {r: 0.03924884, g: 0.13221186, b: 0.39622638, a: 0}
     - _Emission_color: {r: 0, g: 0, b: 0, a: 1}

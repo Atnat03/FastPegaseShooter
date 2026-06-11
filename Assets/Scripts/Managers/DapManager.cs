@@ -68,28 +68,31 @@ public class DapManager : NetworkBusListener
 	}
 	public override void OnStartClient()
 	{
-		_dapPercentage.OnChange += OnDapChange;
-		
 		OnPercentageChange?.Invoke(_dapPercentage.Value);
 		
-		Cons.Print("Start client");
-		
-		if (!IsOwner)
+		if (!IsClientInitialized)
 			return;
-
+		
 		StartCoroutine(SetupCanvas());
 	}
 
 	private IEnumerator SetupCanvas()
 	{
-		yield return new WaitUntil(() => Camera.main != null);
+		yield return new WaitUntil(() =>
+		{
+			NetworkObject localObj = InstanceFinder.ClientManager.Connection?.FirstObject;
+			if (localObj == null) return false;
+			return localObj.GetComponentInChildren<FPSController>() != null;
+		});
 
-		Cons.Print($"Camera trouvée : {Camera.main.name}");
+		FPSController fps = InstanceFinder.ClientManager.Connection.FirstObject
+			.GetComponentInChildren<FPSController>();
+
+		Camera cam = fps.Camera.transform.GetChild(0).GetComponent<Camera>();
 
 		_globalCanva.renderMode = RenderMode.ScreenSpaceCamera;
-		Camera cam = InstanceFinder.ClientManager.Connection.FirstObject.GetComponentInChildren<FPSController>().Camera;
-
 		_globalCanva.worldCamera = cam;
+		_globalCanva.sortingLayerID = SortingLayer.NameToID("UI");
 	}
 	
 	private void OnPlayerSpawn(OnPlayerSpawnEvent data)
