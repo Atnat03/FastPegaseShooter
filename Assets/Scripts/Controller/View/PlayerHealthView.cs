@@ -31,6 +31,7 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private Camera _normalCamera;
 	[SerializeField] private Camera _deathCamera;
 	[SerializeField] private Transform[] _deathCameraOffsets;
+	private Coroutine _koCoroutine;
 	
 	[Header("Healing")]
 	[SerializeField] private LineRenderer _healingTrajectoryLine;
@@ -46,7 +47,9 @@ public class PlayerHealthView : MonoBehaviour
 	bool _isShowedWarning = false;
 	bool healLineComplete = false;
 
-	private float _healTargetFillAmount = 1;
+	private float _currentHealthFill;
+	private float _targetHealthFill;
+	private float _smoothedTarget;
 	
 	#endregion
 	
@@ -61,13 +64,17 @@ public class PlayerHealthView : MonoBehaviour
 		_healingTrajectoryLine.positionCount = 4;
 		_healingThrowPosObj = Instantiate(_healingThrowPosObj, Vector3.zero, Quaternion.identity);
 		_healingThrowPosObj.SetActive(false);
-		
 	}
 	
 	private void UpdateHealth(float targetFill)
 	{
-		_healTargetFillAmount = targetFill;
+		UpdateColors(targetFill);
 
+		_targetHealthFill = targetFill;
+	}
+
+	void UpdateColors(float targetFill)
+	{
 		if (targetFill > 0.5f)
 		{
 			_healthBar.material.SetColor("_Color", _colorBar[0]);
@@ -87,9 +94,7 @@ public class PlayerHealthView : MonoBehaviour
 			}
 		}
 	}
-
-	private Coroutine _koCoroutine;
-
+	
 	private void KoPlayerUI(bool state, float duration)
 	{
 		_deathCanva.gameObject.SetActive(state);
@@ -165,6 +170,10 @@ public class PlayerHealthView : MonoBehaviour
 
 	private void Update()
 	{
+		_smoothedTarget = Mathf.Lerp(_smoothedTarget, _targetHealthFill, Time.deltaTime * 15f);
+		_currentHealthFill = Mathf.MoveTowards(_currentHealthFill, _smoothedTarget, Time.deltaTime * _healthVisualFillingSpeed);
+		_healthBar.fillAmount = _currentHealthFill;
+
 		if (_healingTrajectoryLine.enabled && healLineComplete)
 		{
 			Vector3[] line = _playerHealth.HealThrowLine(out float distance);
@@ -172,7 +181,6 @@ public class PlayerHealthView : MonoBehaviour
 			_healingTrajectoryLine.SetPositions(line);
 			ShowHealSphereEffect(line[^1], distance * _playerHealth.healSizeEffectFactor + _playerHealth.minSize);
 		}
-		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _healTargetFillAmount, Time.deltaTime * _healthVisualFillingSpeed);
 	}
 
 	Coroutine showLineCoroutine;

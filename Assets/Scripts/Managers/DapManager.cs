@@ -69,14 +69,10 @@ public class DapManager : NetworkBusListener
 	public override void OnStartClient()
 	{
 		OnPercentageChange?.Invoke(_dapPercentage.Value);
-
-		Cons.Print("OnStartClient", ColorConsole.Orange);
-
+		
 		if (!IsClientInitialized)
 			return;
 		
-		Cons.Print("!IsOwner", ColorConsole.Orange);
-
 		StartCoroutine(SetupCanvas());
 	}
 
@@ -97,8 +93,6 @@ public class DapManager : NetworkBusListener
 		_globalCanva.renderMode = RenderMode.ScreenSpaceCamera;
 		_globalCanva.worldCamera = cam;
 		_globalCanva.sortingLayerID = SortingLayer.NameToID("UI");
-
-		Cons.Print($"Canvas setup OK : {cam.name}", ColorConsole.Orange);
 	}
 	
 	private void OnPlayerSpawn(OnPlayerSpawnEvent data)
