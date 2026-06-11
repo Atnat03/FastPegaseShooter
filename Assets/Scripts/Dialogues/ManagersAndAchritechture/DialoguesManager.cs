@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using FishNet.Object;
@@ -17,6 +18,7 @@ public class DialoguesManager : NetworkBusListener
     [Header("UI Elements")] 
     public Image speakerImage;
     public TextMeshProUGUI dialogueText;
+    public Image txtBackGround;
     public GameObject[] EverythingRelated;
 
     [Header("audio Elements")] 
@@ -28,6 +30,8 @@ public class DialoguesManager : NetworkBusListener
     private bool dialogueRunning;
     private Coroutine dialogueCoroutine;
     private DialogueListener selfColor;
+
+    private bool AdressedToMe(DialogueLine line) => (line.listener == DialogueListener.Both || line.listener == selfColor);
 
     
     #region Setup
@@ -59,8 +63,6 @@ public class DialoguesManager : NetworkBusListener
 
     void StartDialogue(OnDialogueStart data)
     {
-        Debug.Log("OnServerInitialized");
-
         if (dialogueRunning)
         {
             StopCoroutine(dialogueCoroutine);
@@ -79,8 +81,11 @@ public class DialoguesManager : NetworkBusListener
         }
         foreach (DialogueLine line in data.dialogueData.lines)
         {
-            DisplayLine(line);
-            yield return new WaitForSeconds(line.duration);
+            if (AdressedToMe(line))
+            {
+                DisplayLine(line);
+                yield return new WaitForSeconds(line.duration);
+            }
         }
 
         dialogueRunning = false;
@@ -89,21 +94,21 @@ public class DialoguesManager : NetworkBusListener
     
     void DisplayLine(DialogueLine line)
     {
-        if(!(line.listener == DialogueListener.Both || line.listener == selfColor)) return;
+        if(!AdressedToMe(line)) return;
 
         switch (line.speaker)
         {
             case DialogueSpeaker.IA :
                 speakerImage.sprite = IAIcon;
-                dialogueText.color = IAColor;
+                txtBackGround.color = IAColor;
                 break;
             case DialogueSpeaker.Red :
                 speakerImage.sprite = redIcon;
-                dialogueText.color = redColor;
+                txtBackGround.color = redColor;
                 break;
             case DialogueSpeaker.Blue :
                 speakerImage.sprite = blueIcon;
-                dialogueText.color = blueColor;
+                txtBackGround.color = blueColor;
                 break;
         }
         
