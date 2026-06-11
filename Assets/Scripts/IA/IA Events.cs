@@ -82,11 +82,13 @@ public struct OnEnemySpawnEvent
     {
         public Guid p_arenaID;
         public SubArenaGauge p_arenaGaugePrefab;
-
-        public OnSubArenaStartEvent(Guid arenaID, SubArenaGauge prefab)
+        public cardinalDirection p_cardinalDirection;
+            
+        public OnSubArenaStartEvent(Guid arenaID, SubArenaGauge prefab, cardinalDirection cardinalDirection)
         {
             p_arenaID = arenaID;
             p_arenaGaugePrefab = prefab;
+            p_cardinalDirection = cardinalDirection;
         }
     }
     public struct OnSubArenaUpdateEvent
@@ -94,13 +96,15 @@ public struct OnEnemySpawnEvent
         public Guid p_arenaID;
         public float p_overCrowdingPercent;
         public SubArenaStateSO p_state;
+        public cardinalDirection p_cardinalDirection;
         // public string p_arenaName;
 
-        public OnSubArenaUpdateEvent(Guid arenaID, float overCrowdingPercent, SubArenaStateSO state)
+        public OnSubArenaUpdateEvent(Guid arenaID, float overCrowdingPercent, SubArenaStateSO state, cardinalDirection cardinalDirection)
         {
             p_arenaID = arenaID;
             p_state = state;
             p_overCrowdingPercent = overCrowdingPercent;
+            p_cardinalDirection = cardinalDirection;
         }
     }
     public struct OnCorrosionEvent
@@ -111,6 +115,14 @@ public struct OnEnemySpawnEvent
         {
             p_corrosionDamage = damages;
         }
+    }
+
+    public enum cardinalDirection
+    {
+        North,
+        South,
+        East,
+        West
     }
 #endregion
 

@@ -7,5 +7,5 @@ public abstract class DialogueStarterGeneric<TEvent> : DialogueStarterParent
         ListenToEvent<TEvent>(OnEventTriggered);
     }
 
-    void OnEventTriggered(TEvent e) => PlayDialogue();
+    protected virtual void OnEventTriggered(TEvent e) => PlayDialogue();
 }
