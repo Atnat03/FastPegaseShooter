@@ -13,11 +13,12 @@ public class Ascenseur : MonoBusListener
     private Action<Ascenseur> _onAtDoor;
     protected float elapsed;
     private bool mustStop;
+    
+    private Vector3 _initialPos;
 
     void Start()
     {
         ListenToEvent<OnDapEvent>(e => StopElevator());
-        ListenToEvent<OnDoorAtHeight>(StopElevatorRightNow);
         OnLoop();
     }
     
@@ -26,6 +27,7 @@ public class Ascenseur : MonoBusListener
     {
         gameObject.SetActive(true);
         _elevatorGoing = true;
+        _initialPos = transform.position;
 
         float distance = Vector3.Distance(startPosition, endPosition);
         _railDir = (endPosition - startPosition).normalized;
@@ -44,29 +46,17 @@ public class Ascenseur : MonoBusListener
         _currentCoroutine = StartCoroutine(DescenteAscenseur(_localStart, localEnd, duration, launchTime, startElapsed));
     }
 
-    private bool IsAtDoorHeight(float elapsed , float duration)
-    {
-        return (!_elevatorGoing && (elapsed / duration < .462 && elapsed / duration > .4615)) ;
-    }
-
     private IEnumerator DescenteAscenseur(Vector3 localStart, Vector3 localEnd, float duration, float launchTime, float startElapsed)
     {
         //Toutes les tiles partent de la même base (=> le même temps initial)
         // on récupère le temps direct de AscenseurMAnager.cs
-        while (true)
+        while (_elevatorGoing)
         {
             elapsed = (Time.time - launchTime + startElapsed) % duration;
 
-            while (elapsed < duration)
+            while (elapsed < duration && _elevatorGoing)
             {
                 transform.position = Vector3.Lerp(localStart, localEnd, elapsed / duration);
-
-                if (!_elevatorGoing && (IsAtDoorHeight(elapsed, duration) || mustStop))
-                {
-                    InvokeEvent<OnDoorAtHeight>(new OnDoorAtHeight());
-                    OnAscenseurStop(duration);
-                    yield break;
-                }
 
                 yield return null;
                 elapsed = (Time.time - launchTime + startElapsed) % duration;
@@ -75,21 +65,16 @@ public class Ascenseur : MonoBusListener
             transform.position = localStart;
             OnLoop();
         }
+        OnAscenseurStop(duration);
+        transform.position = _initialPos;
     }
     
     private void StopElevator()
     {
         _elevatorGoing = false;
     }
-    
-    private void StopElevatorRightNow(OnDoorAtHeight e) => mustStop = true;
 
     protected virtual void OnLoop() { }
-    
-    protected virtual void OnAscenseurStop(float duration) {}
-}
 
-public struct OnDoorAtHeight
-{
-    
+    protected virtual void OnAscenseurStop(float duration) { }
 }

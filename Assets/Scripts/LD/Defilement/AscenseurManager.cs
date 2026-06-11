@@ -13,9 +13,7 @@ public class AscenseurManager : NetworkBusListener
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private Transform _endPoint;
     [SerializeField] private float _durationTraveling;
-
-    /*[Header("Events")] 
-    [SerializeField] private Transform _doorReference;*/
+    
     
     private List<Ascenseur> _pool = new();
 
