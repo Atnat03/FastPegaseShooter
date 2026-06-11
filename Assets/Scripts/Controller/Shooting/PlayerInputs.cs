@@ -20,6 +20,8 @@ namespace Controller
         private bool _canShoot = true;
         private bool shootingInputPressed;
 
+        private int _currentGunState = 0;
+
         private InputAction _shootAction;
         
         #endregion
@@ -143,15 +145,20 @@ namespace Controller
             if(_fps.IsFreeze) return;
 
             float scroll = obj.ReadValue<float>();
+            bool isMain = true;
             
             if (scroll > 0)
             {
-                _bridgePlayer.TryChangeMain(false);
+                _currentGunState--;
             }
             else if (scroll < 0)
             {
-                _bridgePlayer.TryChangeMain(true);
+                _currentGunState++;
             }
+
+            isMain = _currentGunState % 2 == 0;
+            
+            _bridgePlayer.TryChangeMain(isMain);
         }
         
         private void Dapping(InputAction.CallbackContext obj)
