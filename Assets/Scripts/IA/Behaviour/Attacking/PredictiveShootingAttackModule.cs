@@ -88,21 +88,6 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
             return false;
         }
 
-        return true;//HasLineOfSight(shootingPos, projectileDir);
-    }
-
-    bool HasLineOfSight(Vector3 shootingPos, Vector3 projectileDir)
-    {
-        Debug.DrawLine(shootingPos,shootingPos + projectileDir * _attackModuleSO.p_maxPlayerDistance, Color.red, _attackModuleSO.p_attackDelay);
-        
-        if (Physics.Raycast(shootingPos, projectileDir, out RaycastHit hit, _attackModuleSO.p_maxPlayerDistance, LayerMask.GetMask("Owner", "Other"), QueryTriggerInteraction.Ignore))
-        {
-            if (hit.collider.CompareTag("Player"))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return true;
     }
 }

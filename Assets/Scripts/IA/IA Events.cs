@@ -67,6 +67,11 @@ public struct OnEnemyDieEvent
     }
 }
 
+public struct OnEnemySpawnEvent
+{
+    
+}
+
 #region Sub Arena
     public struct OnDapEvent
     {
