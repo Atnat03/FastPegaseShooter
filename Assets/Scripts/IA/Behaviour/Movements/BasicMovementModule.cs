@@ -18,6 +18,12 @@ public class BasicMovementModule : EnemyMovementModule
     {
         if(_path.Count > 1)
         {
+            if (!_isWalking)
+            {
+                _isWalking = true;
+                p_onChangeMovement(_isWalking);
+            }
+            
             transform.position = Vector3.Lerp(_lastPos, _path[^2].position, _t);
             _t += Time.deltaTime * p_movementModuleSO.p_speed;
             if (_t >= 1)
@@ -29,6 +35,11 @@ public class BasicMovementModule : EnemyMovementModule
                     _lastPos = _path[^1].position;
                 }
             }
+        }
+        else if (_isWalking)
+        {
+            _isWalking = false;
+            p_onChangeMovement(_isWalking);
         }
     }
 }

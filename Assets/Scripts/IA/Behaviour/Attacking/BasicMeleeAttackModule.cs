@@ -23,6 +23,7 @@ public class BasicMeleeAttackModule : EnemyAttackModule
                     p_attacker = transform.GetComponent<NetworkObject>(),
                 });
                 p_onHitPlayer?.Invoke(player.ObjectId, _attackModuleSO.p_damage);
+                p_onAttack?.Invoke();
             }
         }
     }
