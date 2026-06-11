@@ -217,6 +217,11 @@ public class PlayerHealthView : MonoBehaviour
 		if(_healingTrajectoryLine.enabled == false) _healingThrowPosObj.SetActive(false);
 	}
 
+	private void OnHeal()
+	{
+		SoundManager.PlaySound(_soundsData, "Heal", _audioSource);
+	}
+
 	void HideGun()
 	{
 		gunSwitching.DesactivateAllMainGun();
@@ -239,6 +244,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnThrowKeyReleased += StopPreview;
 		_playerHealth.OnHealThrowLanding += ShowHealSphereEffect;
 		_playerHealth.OnHealCanceled += StopPreview;
+		_playerHealth.OnHeal += OnHeal;
 		
 		//Drone Throw
 		_droneThrower.OnThrowing += StopPreview;
@@ -250,6 +256,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnStartWarning -= StartWarning;
 		_playerHealth.OnKOPlayer -= KoPlayerUI;
 		_playerHealth.OnTakeDamage -= TakeDamageEffect;
+		_playerHealth.OnHeal -= OnHeal;
     
 		//Healing
 		_playerHealth.OnThrowingVisualActivation -= OnThrowingVisualActivation;
