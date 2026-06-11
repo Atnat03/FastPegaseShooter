@@ -14,15 +14,40 @@ public class DialoguesManager : NetworkBusListener
     public Sprite IAIcon;
     public Color IAColor;
 
-    [Header("UI Elements")] public Image speakerImage;
+    [Header("UI Elements")] 
+    public Image speakerImage;
     public TextMeshProUGUI dialogueText;
 
-    [Header("audio Elements")] public AudioSource audioSource;
+    [Header("audio Elements")] 
+    public AudioSource audioSource;
+
+    [Header("References")] 
+    private GunSwitching gunSwitch;
 
     private bool dialogueRunning;
     private Coroutine dialogueCoroutine;
     private DialogueListener selfColor;
 
+    
+    #region Setup
+    void OnEnable()
+    {
+        gunSwitch.OnSwapGun += OnSwapGun;
+    }
+
+    void OnDisable()
+    {
+        gunSwitch.OnSwapGun -= OnSwapGun;
+
+    }
+
+    private void OnSwapGun(bool isPos)
+    {
+        selfColor = isPos ? DialogueListener.Red : DialogueListener.Blue;
+    }
+    
+    #endregion
+    
     private void OnServerInitialized()
     {
         ListenToEvent<OnDialogueStart>(StartDialogue);
