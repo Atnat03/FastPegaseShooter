@@ -53,13 +53,14 @@ public class DialoguesManager : NetworkBusListener
     {
         base.OnStartNetwork();
         ListenToEvent<OnDialogueStart>(StartDialogue);
-        Debug.Log("OnServerInitialized");
 
         CleanDialogue();
     }
 
     void StartDialogue(OnDialogueStart data)
     {
+        Debug.Log("OnServerInitialized");
+
         if (dialogueRunning)
         {
             StopCoroutine(dialogueCoroutine);
