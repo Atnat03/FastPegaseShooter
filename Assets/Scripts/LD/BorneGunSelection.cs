@@ -10,130 +10,140 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class BorneGunSelection : NetworkBusListener
 {
-	#region Properties
+    #region Properties
 
-	#endregion
-
-
-	#region Variables
-
-	[Header("Zone")]
-	[SerializeField] private Vector3 _zoneSize;
-	[SerializeField] private Transform _zoneMesh;
-	[SerializeField] private bool _showGIZMOS = true;
-	private List<PlayerVisuelBridge> _playerList = new List<PlayerVisuelBridge>();
-	private BoxCollider _collider;
-	private readonly SyncVar<int> _numberPlayer = new SyncVar<int>(0);
-	private readonly SyncVar<bool> _canOpenSelect = new SyncVar<bool>(false);
-	
-	#endregion
+    #endregion
 
 
-	#region Fonctions
+    #region Variables
 
-	private void Awake()
-	{
-		_collider = GetComponent<BoxCollider>();
-		_collider.size = _zoneSize;
-		_zoneMesh.localScale = _zoneSize;
-	}
-	
-	public override void OnStartServer()
-	{
-		_numberPlayer.OnChange += OnNumberPlayerChange;
-	}
+    [Header("Zone")]
+    [SerializeField] private Vector3 _zoneSize;
+    [SerializeField] private Transform _zoneMesh;
+    [SerializeField] private bool _showGIZMOS = true;
+    private List<PlayerVisuelBridge> _playerList = new List<PlayerVisuelBridge>();
+    private BoxCollider _collider;
+    private readonly SyncVar<int> _numberPlayer = new SyncVar<int>(0);
+    private readonly SyncVar<bool> _canOpenSelect = new SyncVar<bool>(false);
+    
+    #endregion
 
-	public override void OnStartClient()
-	{
-		ListenToEvent<OnPlayerInteract>(PlayerInteract);
-	}
 
-	private void PlayerInteract(OnPlayerInteract data)
-	{
-		if (_canOpenSelect.Value)
-		{
-			if(IsServerInitialized)
-			{
-				AllPlayerInZoneObserversRpc();
-			}
-			else
-			{
-				AllPlayerInZoneServerRpc();
-			}
-		}
-	}
+    #region Fonctions
 
-	private void OnNumberPlayerChange(int prev, int next, bool asServer)
-	{
-		if (asServer)
-		{
-			if (next == InstanceFinder.ServerManager.Clients.Count)
-			{
+    private void Awake()
+    {
+        _collider = GetComponent<BoxCollider>();
+        _collider.size = _zoneSize;
+        
+        _zoneMesh.localScale = _zoneSize;
+    }
+    
+    public override void OnStartServer()
+    {
+        _numberPlayer.OnChange += OnNumberPlayerChange;
+    }
 
-				_canOpenSelect.Value = true;
-			}
-			else
-			{
-				_canOpenSelect.Value = false;
-			}
-			CanInteractToOpenObserversRpc(_canOpenSelect.Value);
-		}
-	}
+    public override void OnStartClient()
+    {
+        ListenToEvent<OnPlayerInteract>(PlayerInteract);
+    }
 
-	[ServerRpc]
-	private void AllPlayerInZoneServerRpc()
-	{
-		AllPlayerInZoneObserversRpc();
-	}
+    private void PlayerInteract(OnPlayerInteract data)
+    {
+        if (_canOpenSelect.Value)
+        {
+            if (IsServerInitialized)
+            {
+                AllPlayerInZoneObserversRpc();
+            }
+            else
+            {
+                AllPlayerInZoneServerRpc();
+            }
+        }
+    }
 
-	[ObserversRpc]
-	void AllPlayerInZoneObserversRpc()
-	{
-		Cons.Print("All player in zone", ColorConsole.Cyan);
-		InvokeEvent(new OnAllPlayerAtBorne());
-	}
+    private void OnNumberPlayerChange(int prev, int next, bool asServer)
+    {
 
-	[ObserversRpc]
-	void CanInteractToOpenObserversRpc(bool isOpen)
-	{
-		InvokeEvent(new OnAllPlayerCanSelectGun{p_open = isOpen});
-	}
-	
-	public void OnTriggerEnter(Collider other)
-	{
-		if (!IsServerInitialized) return;
-		
-		if (other.TryGetComponent(out PlayerVisuelBridge player))
-		{
-			_playerList.Add(player);
-			_numberPlayer.Value++;
-		}
-	}
-	
-	public void OnTriggerExit(Collider other)
-	{
-		if (!IsServerInitialized) return;
-		
-		if (other.TryGetComponent(out PlayerVisuelBridge player))
-		{
-			if(_playerList.Contains(player))
-			{
-				_playerList.Remove(player);
-				_numberPlayer.Value--;
-			}
-		}
-	}
+        if (asServer)
+        {
+            int totalClients = InstanceFinder.ServerManager.Clients.Count;
 
-	private void OnDrawGizmos()
-	{
-		if (_showGIZMOS)
-		{
-			Gizmos.color = Color.cornflowerBlue;
-			Gizmos.DrawWireCube(transform.position, _zoneSize);
-		}
-	}
+            if (next == totalClients)
+            {
+                _canOpenSelect.Value = true;
+            }
+            else
+            {
+                _canOpenSelect.Value = false;
+            }
 
-	#endregion
+            CanInteractToOpenObserversRpc(_canOpenSelect.Value);
+        }
+
+    }
+
+    [ServerRpc]
+    private void AllPlayerInZoneServerRpc()
+    {
+        AllPlayerInZoneObserversRpc();
+    }
+
+    [ObserversRpc]
+    void AllPlayerInZoneObserversRpc()
+    {
+        InvokeEvent(new OnAllPlayerAtBorne());
+    }
+
+    [ObserversRpc]
+    void CanInteractToOpenObserversRpc(bool isOpen)
+    {
+        InvokeEvent(new OnAllPlayerCanSelectGun { p_open = isOpen });
+    }
+    
+    public void OnTriggerEnter(Collider other)
+    {
+        if (!IsServerInitialized)
+        {
+            return;
+        }
+
+        if (other.TryGetComponent(out PlayerVisuelBridge player))
+        {
+            _playerList.Add(player);
+            _numberPlayer.Value++;
+        }
+    }
+    
+    public void OnTriggerExit(Collider other)
+    {
+        if (!IsServerInitialized)
+        {
+            return;
+        }
+        
+        if (other.TryGetComponent(out PlayerVisuelBridge player))
+        {
+            if (_playerList.Contains(player))
+            {
+                _playerList.Remove(player);
+                _numberPlayer.Value--;
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_showGIZMOS)
+        {
+            Gizmos.color = Color.cornflowerBlue;
+            Gizmos.DrawWireCube(transform.position, _zoneSize);
+        }
+    }
+
+    #endregion
 }
 
 public struct OnAllPlayerAtBorne
@@ -141,5 +151,5 @@ public struct OnAllPlayerAtBorne
 
 public struct OnAllPlayerCanSelectGun
 {
-	public bool p_open;
+    public bool p_open;
 }

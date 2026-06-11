@@ -13,19 +13,21 @@ public class Ascenseur : MonoBusListener
     private Action<Ascenseur> _onAtDoor;
     protected float elapsed;
     private bool mustStop;
+    
+    private Vector3 _initialPos;
 
     void Start()
     {
         ListenToEvent<OnDapEvent>(e => StopElevator());
-        ListenToEvent<OnDoorAtHeight>(StopElevatorRightNow);
         OnLoop();
     }
     
 
-    public void StartDescente(Vector3 startPosition, Vector3 endPosition, float duration)
+    public void StartDescente(Vector3 startPosition, Vector3 endPosition, float duration, float launchTime)
     {
         gameObject.SetActive(true);
         _elevatorGoing = true;
+        _initialPos = transform.position;
 
         float distance = Vector3.Distance(startPosition, endPosition);
         _railDir = (endPosition - startPosition).normalized;
@@ -41,55 +43,38 @@ public class Ascenseur : MonoBusListener
         float startElapsed = Mathf.Clamp01(progress) * duration;
 
         if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-        _currentCoroutine = StartCoroutine(DescenteAscenseur(_localStart, localEnd, duration, startElapsed));
+        _currentCoroutine = StartCoroutine(DescenteAscenseur(_localStart, localEnd, duration, launchTime, startElapsed));
     }
 
-    private bool IsAtDoorHeight(float elapsed , float duration)
+    private IEnumerator DescenteAscenseur(Vector3 localStart, Vector3 localEnd, float duration, float launchTime, float startElapsed)
     {
-        return (!_elevatorGoing && (elapsed / duration < .462 && elapsed / duration > .4615)) ;
-    }
-
-    private IEnumerator DescenteAscenseur(Vector3 localStart, Vector3 localEnd, float duration, float startElapsed)
-    {
-        elapsed = startElapsed;
-
-        while (true)
+        //Toutes les tiles partent de la même base (=> le même temps initial)
+        // on récupère le temps direct de AscenseurMAnager.cs
+        while (_elevatorGoing)
         {
-            // Move until end of rail, but stop mid-loop if elevator should stop AND we're at a floor
-            while (elapsed < duration)
+            elapsed = (Time.time - launchTime + startElapsed) % duration;
+
+            while (elapsed < duration && _elevatorGoing)
             {
-                elapsed += Time.deltaTime;
                 transform.position = Vector3.Lerp(localStart, localEnd, elapsed / duration);
 
-                if (!_elevatorGoing && (IsAtDoorHeight(elapsed, duration)|| mustStop))
-                {
-                    InvokeEvent<OnDoorAtHeight>(new OnDoorAtHeight());
-                    OnAscenseurStop(duration);
-                    yield break;
-                }
-
                 yield return null;
+                elapsed = (Time.time - launchTime + startElapsed) % duration;
             }
-            
-            elapsed = 0f;
+
             transform.position = localStart;
             OnLoop();
         }
+        OnAscenseurStop(duration);
+        transform.position = _initialPos;
     }
     
     private void StopElevator()
     {
         _elevatorGoing = false;
     }
-    
-    private void StopElevatorRightNow(OnDoorAtHeight e) => mustStop = true;
 
     protected virtual void OnLoop() { }
-    
-    protected virtual void OnAscenseurStop(float duration) {}
-}
 
-public struct OnDoorAtHeight
-{
-    
+    protected virtual void OnAscenseurStop(float duration) { }
 }

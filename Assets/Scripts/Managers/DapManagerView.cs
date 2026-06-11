@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using MyPrint;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class DapManagerView : MonoBusListener
 {
@@ -19,6 +21,7 @@ public class DapManagerView : MonoBusListener
 
     [Header("Dapping")]
     [SerializeField] private GameObject _dappingExplosion;
+    [SerializeField] private VideoPlayer _videoClipDap;
 
     private void OnEnable()
     {
@@ -37,12 +40,23 @@ public class DapManagerView : MonoBusListener
     private void Dapping(Vector3 pos)
     {
         Cons.Print("Dapping effect !! ");
-        
-        _dapNotification.SetActive(false);
 
-        Destroy(Instantiate(_dappingExplosion, pos, Quaternion.identity), 5f);
+        _dapNotification.SetActive(false);
+        
+        StartCoroutine(DappingCoroutine(pos));
     }
 
+    IEnumerator DappingCoroutine(Vector3 pos)
+    {
+        _videoClipDap.gameObject.SetActive(true);
+        
+        yield return new WaitForSeconds((float)_videoClipDap.clip.length);
+        
+        _videoClipDap.gameObject.SetActive(false);
+        
+        Destroy(Instantiate(_dappingExplosion, pos, Quaternion.identity), 5f);
+    }
+    
     private void UpdateMessages(int idMessage)
     {
         if (_textMessage == null)
