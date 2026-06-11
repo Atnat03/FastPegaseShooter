@@ -6,6 +6,7 @@ public class EnemyAttackModuleInspector : EnemyBehaviourModuleInspector
 {
     private SerializedProperty _targetModule;
     private SerializedProperty _attackModuleSO;
+    private SerializedProperty _shootingPos;
     
     
     protected override void OnEnable()
@@ -14,6 +15,7 @@ public class EnemyAttackModuleInspector : EnemyBehaviourModuleInspector
         
         _targetModule = serializedObject.FindProperty("_targetModule");
         _attackModuleSO = serializedObject.FindProperty("_attackModuleSO");
+        _shootingPos = serializedObject.FindProperty("_shootingPos");
     }
 
     protected override void DrawCustomFields()
@@ -29,6 +31,7 @@ public class EnemyAttackModuleInspector : EnemyBehaviourModuleInspector
                 gapLenght: 7));
 
         EditorGUILayout.PropertyField(_attackModuleSO);
+        EditorGUILayout.PropertyField(_shootingPos);
         
         Rect targetBlockRect = EditorUtilities.WrapInBlock(() =>
             {

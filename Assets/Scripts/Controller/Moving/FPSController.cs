@@ -265,8 +265,11 @@ public class FPSController : NetworkBusListener
 
     public Action OnFootstep;
     public Action OnJump;
-    public Action OnLanding;
+    public Action<float> OnLanding;
     public Action OnGrappling;
+    public Action OnSlide;
+    public Action OnEndSlide;
+    
     
     #endregion
     
@@ -893,7 +896,7 @@ public class FPSController : NetworkBusListener
         hasJumped = false;
         mustHeadTilt = false;
         
-        OnLanding?.Invoke();
+        OnLanding?.Invoke(rb.linearVelocity.y);
         
         StartCoroutine(CoyoteSlideCoroutine());
     }
@@ -1222,7 +1225,8 @@ public class FPSController : NetworkBusListener
         landingDirection *= slideSpeed;
         
         _playerAnimation.SetSlideAnim(true);
-
+        OnSlide?.Invoke();
+        
         Crouch();
         StartCoroutine(SlidingCoroutine());
     }
@@ -1301,6 +1305,8 @@ public class FPSController : NetworkBusListener
         UnCrouch();
         
         _playerAnimation.SetSlideAnim(false);
+        OnEndSlide?.Invoke();
+
         
         StartCoroutine(JustSlidedCoroutine());
         StartCoroutine(BringBackFOVCoroutine());
@@ -1497,6 +1503,8 @@ public class FPSController : NetworkBusListener
             ? Vector3.ProjectOnPlane(rb.linearVelocity, groundedHit.normal).normalized * rb.linearVelocity.magnitude
             : slopeDirection;
 
+        OnSlide?.Invoke();
+        
         Crouch();
     }
 
@@ -1548,6 +1556,7 @@ public class FPSController : NetworkBusListener
     void ExitSlopeSlidingState()
     {
         UnCrouch();
+        OnEndSlide?.Invoke();
     }
 
     void SlopeSlidingLateUpdate()

@@ -1269,6 +1269,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &911412141346737562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4273524860110514212}
+  m_Layer: 16
+  m_Name: shooting position
+  m_TagString: Untagged
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4273524860110514212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911412141346737562}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.85, z: -0.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5114691563083398563}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &913843217684619795
 GameObject:
   m_ObjectHideFlags: 0
@@ -1512,13 +1543,13 @@ MonoBehaviour:
   _hitMarkerParent: {fileID: 6229148892042676550}
   _textDmg: {fileID: 769879031349949937, guid: db53057fdd2066748b797f06e5df7027, type: 3}
   _textDmgCritique: {fileID: 331405803314854360, guid: 791d4dd1abaea8944971b453997068e9, type: 3}
-  _lifeBarParent: {fileID: 0}
+  _lifeBarParent: {fileID: 884038122550851737}
   _lifeTMP: {fileID: 4321466154369451237}
   _lifeBarImage: {fileID: 9084753728303076021}
-  _NoneAffinityLifeGradient:
+  _lifeGradient:
     serializedVersion: 2
-    key0: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
-    key1: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 1}
+    key0: {r: 0.33094516, g: 0.5838899, b: 0.6320754, a: 1}
+    key1: {r: 0.097588114, g: 0.39543644, b: 0.4811321, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -2862,7 +2893,7 @@ MonoBehaviour:
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
   - {fileID: -5091274446042719544}
-  - {fileID: 3338362503603711441}
+  - {fileID: 0}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects:
   - {fileID: 0}
@@ -3031,9 +3062,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd37eadeed8c574bba4e12cadbadf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _componentIndexCache: 1
-  _addedNetworkObject: {fileID: 990463738319832270}
-  _networkObjectCache: {fileID: 990463738319832270}
   _distanceMax: 100
   _scaleModifier: 1
   _scaleMap: {x: 2, y: 10}
@@ -4746,7 +4774,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 4273524860110514212}
   m_Father: {fileID: 7722317613084486832}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7477333178389888924
@@ -4774,7 +4803,7 @@ MonoBehaviour:
   _movementModule: {fileID: 684674022696784175}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
-  _coreSo: {fileID: 11400000, guid: 6f8a17989581e4948988ecb77a1abdd5, type: 2}
+  p_coreSo: {fileID: 0}
 --- !u!114 &2560679916755944934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4808,6 +4837,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 0}
   _targetModule: {fileID: 2913185895975382911}
   _attackModuleSO: {fileID: 11400000, guid: b9f048accdb1ebc4999e1a861c2ac908, type: 2}
+  _shootingPos: {fileID: 4273524860110514212}
   _predictiveShootingAttackModuleSO: {fileID: 11400000, guid: 9265b695656fcf44daef8cf14afc0927, type: 2}
 --- !u!136 &9193726911778594763
 CapsuleCollider:
@@ -7488,6 +7518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowMovementModule
   _movementModule: {fileID: 684674022696784175}
+  _rotationSpeed: 5
 --- !u!1 &7490047944979082169
 GameObject:
   m_ObjectHideFlags: 0

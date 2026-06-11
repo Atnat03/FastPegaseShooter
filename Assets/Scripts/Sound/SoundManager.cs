@@ -3,7 +3,7 @@ using FishNet.Object;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 
-public class SoundManager : NetworkBehaviour
+public class SoundManager : MonoBehaviour
 {
 	public static AudioClip GetAudioClip(SoundsDataSO data, string soundName)
 	{
@@ -47,6 +47,9 @@ public class SoundManager : NetworkBehaviour
 			case SoundType.Global: PlayGlobalSound(volume, c, source); break;
 		}
 	}
+
+	public static void StopSound(AudioSource source) => source.Stop();
+	
 
 	private static void PlayGlobalSound(float volume, AudioClip clip, AudioSource source)
 	{

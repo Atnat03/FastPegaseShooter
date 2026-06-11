@@ -7,10 +7,6 @@ using UnityEngine.UI;
 
 public class FPSControllerView : NetworkBusListener
 {
-	#region Properties
-
-	#endregion
-
 
 	#region Variables
 
@@ -47,6 +43,9 @@ public class FPSControllerView : NetworkBusListener
 
 		_fps.OnGrappling += Grappling;
 
+		_fps.OnSlide += BeginSlide;
+		_fps.OnEndSlide += EndSlide;
+		
 		_ping.OnPinging += Pinging;
 	}
 	
@@ -61,6 +60,9 @@ public class FPSControllerView : NetworkBusListener
 		_fps.OnLanding -= Landing;
 
 		_fps.OnGrappling -= Grappling;
+		
+		_fps.OnSlide -= BeginSlide;
+		_fps.OnEndSlide -= EndSlide;
 
 		_ping.OnPinging -= Pinging;
 	}
@@ -76,9 +78,9 @@ public class FPSControllerView : NetworkBusListener
 		SoundManager.PlaySound(_soundsDataFps, "Grapple", _audioSource);
 	}
 
-	private void Landing()
+	private void Landing(float verticalVelocity)
 	{
-		if (!_canSoundLand) return;
+		if (!_canSoundLand || verticalVelocity >-5f) return;
 		
 		PlaySound("Landing");
 		StartCoroutine(LandingSoundBuffer());
@@ -121,6 +123,16 @@ public class FPSControllerView : NetworkBusListener
 		_dashParticles.Play();
 	}
 
+	private void BeginSlide()
+	{
+		PlaySound("Slide");
+	}
+
+	private void EndSlide()
+	{
+		StopSound();
+	}
+
 	#region SFX
 	
 	private void PlaySound(string clip)
@@ -144,6 +156,29 @@ public class FPSControllerView : NetworkBusListener
 	private void PlaySoundObserversRpc(string clip)
 	{
 		SoundManager.PlaySound(_soundsDataFps, clip, _audioSource);
+	}
+
+	private void StopSound()
+	{
+		if (IsServerInitialized)
+		{
+			StopSoundServerRpc();
+		}else
+		{
+			StopSoundObserversRpc();
+		}
+	}
+
+	[ServerRpc]
+	private void StopSoundServerRpc()
+	{
+		StopSoundObserversRpc();
+	}
+
+	[ObserversRpc]
+	private void StopSoundObserversRpc()
+	{
+		SoundManager.StopSound(_audioSource);
 	}
 	
 	#endregion
