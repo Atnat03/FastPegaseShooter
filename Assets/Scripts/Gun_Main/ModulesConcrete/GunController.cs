@@ -50,7 +50,6 @@ namespace GunDecorator
         public Transform CurrentModelGun => currentModel;
         public bool IsChargeShooting => _chargedModule._isChargedShooting;
         
-
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;
         private IRecoilModule _recoilModule;
@@ -96,6 +95,10 @@ namespace GunDecorator
         [HideInInspector] public bool p_authorizedToShoot = true;
         
         PlayerAnimation _playerAnimation;
+        
+        [Header("TPS")]
+        [SerializeField] private ParticleSystem[] _normalMuzzleFlash;
+        [SerializeField] private ParticleSystem[] _chargedMuzzleFlash;
 
         private bool _isChargeShooting;
 
@@ -162,6 +165,16 @@ namespace GunDecorator
         private void Start() // pour du debug, a tej en build finale
         {
             playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
+
+            foreach (ParticleSystem s in _normalMuzzleFlash)
+            {
+                FPSController.SetLayerRecursively(s.gameObject, LayerMask.NameToLayer("Default"));
+            }
+            
+            foreach (ParticleSystem s in _chargedMuzzleFlash)
+            {
+                FPSController.SetLayerRecursively(s.gameObject, LayerMask.NameToLayer("Default"));
+            }
         }
 
         public void TryFire()
@@ -196,6 +209,7 @@ namespace GunDecorator
 
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
                 PlayMuzzleFlash();
+                PlayerTPSMuzzleFlash();
 
                 _animator?.SetTrigger("Shoot");
                 
@@ -214,6 +228,7 @@ namespace GunDecorator
                 p_authorizedToShoot = false;
                 s.TryShoot();
                 PlayMuzzleFlash();
+                PlayerTPSMuzzleFlash();
 
                 _recoilModule?.Recoil(currentModel.transform, s.FireRate, true);
                 _recoilModule?.SetIsRecoil(true);
@@ -303,6 +318,8 @@ namespace GunDecorator
         {
             _chargedModule?.StartChargedShoot();
             
+            PlayerTPSChargedMuzzleFlash();
+            
             _animator?.SetTrigger("ChargeShoot");
                 
             if(_animatorArm)
@@ -345,27 +362,7 @@ namespace GunDecorator
         {
             SoundManager.PlaySound(_soundData, sound, _source);
         }
-
         private void PlayMuzzleFlash()
-        {
-            if (IsServerInitialized)
-            {
-                PlayMuzzleFlashObserversRpc();
-            }
-            else
-            {
-                PlayMuzzleFlashServerRpc();
-            }
-        }
-
-        [ServerRpc(RequireOwnership = true)]
-        private void PlayMuzzleFlashServerRpc()
-        {
-            PlayMuzzleFlashObserversRpc();
-        }
-        
-        [ObserversRpc]
-        private void PlayMuzzleFlashObserversRpc()
         {
             if (p_particlesMuzzleFlash.Length < 2) 
                 return;
@@ -378,6 +375,52 @@ namespace GunDecorator
             {
                 p_particlesMuzzleFlash[1].Play();
             }
+        }
+
+        private void PlayerTPSMuzzleFlash()
+        {
+            PlayTPSVFXServerRpc(IsPositivePlayerCharge);
+        }
+
+        [ServerRpc]
+        private void PlayTPSVFXServerRpc(bool isPositive)
+        {
+            PlayTPSVFXObserverRpc(isPositive);
+        }
+        
+        [ObserversRpc]
+        private void PlayTPSVFXObserverRpc(bool isPositive)
+        {
+            if (_normalMuzzleFlash.Length < 2)
+                return;
+
+            if (isPositive)
+                _normalMuzzleFlash[0].Play();
+            else
+                _normalMuzzleFlash[1].Play();
+        }
+        
+        private void PlayerTPSChargedMuzzleFlash()
+        {
+            PlayTPSChargedVFXServerRpc(IsPositivePlayerCharge);
+        }
+
+        [ServerRpc]
+        private void PlayTPSChargedVFXServerRpc(bool isPositive)
+        {
+            PlayTPSVFXChargedObserverRpc(isPositive);
+        }
+        
+        [ObserversRpc]
+        private void PlayTPSVFXChargedObserverRpc(bool isPositive)
+        {
+            if (_chargedMuzzleFlash.Length < 2)
+                return;
+
+            if (isPositive)
+                _chargedMuzzleFlash[0].Play();
+            else
+                _chargedMuzzleFlash[1].Play();
         }
 
         public void StopReload() => _reloadModule.StopReload();
