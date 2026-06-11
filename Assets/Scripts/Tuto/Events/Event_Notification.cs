@@ -38,6 +38,8 @@ namespace Tuto
 
         public override IEnumerator Execute()
         {
+            Cons.Print("NOTIFICATION");
+            
             manager.AskForNotification(GetData());
 
             yield break;
