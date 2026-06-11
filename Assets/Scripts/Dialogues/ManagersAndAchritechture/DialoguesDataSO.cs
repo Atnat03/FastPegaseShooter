@@ -29,6 +29,6 @@ public class DialogueLine
     public DialogueListener listener;
     public AudioClip audioClip;
     public string text;
-    public float duration;
+    public float DelayBeforeNextLine;
     public float volume;
 }

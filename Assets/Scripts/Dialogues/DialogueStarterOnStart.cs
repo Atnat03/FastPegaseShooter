@@ -9,6 +9,4 @@ public class DialogueStarterOnStart : DialogueStarterParent
         base.OnStartNetwork();
         PlayDialogue();
     }
-
-
 }
