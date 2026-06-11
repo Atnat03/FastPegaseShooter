@@ -48,5 +48,25 @@ namespace Tuto
             OnUnlockCapa?.Invoke(data.capa, true);
             InvokeEvent(new OnCapacityUnlocked { capacity = data.capa });
         }
+
+        public bool IsCapaUnlock(Capacity_TUTO capa)
+        {
+            switch (capa)
+            {
+                case Capacity_TUTO.EnergyShoot:
+                    return _gunPlayer.p_unlockSwapEnergyLaser;
+                
+                case Capacity_TUTO.ChargedShoot:
+                    return _gunPlayer.p_unlockChargedShoot;
+                
+                case Capacity_TUTO.Drone:
+                    return _dronePlayer.p_unlockCapa;
+                
+                case Capacity_TUTO.Heal:
+                    return _healPlayer.p_unlockCapa;
+            }
+
+            return false;
+        }
     }
 }

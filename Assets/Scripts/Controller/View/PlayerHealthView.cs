@@ -21,6 +21,8 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private float _healthVisualFillingSpeed = 1;
 	[SerializeField] private Image _healthBar;
 	[SerializeField] private CanvasGroup _damagedImage;
+	[SerializeField] private Color[] _colorBar;
+	[SerializeField] private Color[] _colorBar2;
 	
 	[Header("Dead")]
 	[SerializeField] private GameObject _normalCanva;
@@ -63,7 +65,26 @@ public class PlayerHealthView : MonoBehaviour
 	
 	private void UpdateHealth(float targetFill)
 	{
-		_healTargetFillAmount = targetFill; 
+		_healTargetFillAmount = targetFill;
+
+		if (targetFill > 0.5f)
+		{
+			_healthBar.material.SetColor("_Color", _colorBar[0]);
+			_healthBar.material.SetColor("_Color2", _colorBar2[0]);
+		}
+		else if (targetFill is <= 0.5f and >= 0.25f)
+		{
+			_healthBar.material.SetColor("_Color", _colorBar[1]);
+			_healthBar.material.SetColor("_Color2", _colorBar2[1]);
+		}
+		else
+		{
+			if (targetFill < 0.25f)
+			{
+				_healthBar.material.SetColor("_Color", _colorBar[2]);
+				_healthBar.material.SetColor("_Color2", _colorBar2[2]);
+			}
+		}
 	}
 
 	private Coroutine _koCoroutine;
