@@ -102,20 +102,26 @@ MonoBehaviour:
     - rid: 5406076807428964495
     - rid: 5406076763678179428
     - rid: 5406076763678179435
+  - ScenarioName: SpawnOtherSide
+    trigger:
+      rid: 5406076807428964499
+    eventsList:
+    - rid: 5406076807428964500
+    - rid: 5406076807428964502
+    - rid: 5406076807428964501
   - ScenarioName: EndDrone
     trigger:
       rid: 5406076763678179431
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076763678179420
-    - rid: 5406076763678179432
     - rid: 5406076763678179433
+    - rid: 5406076840737767523
   - ScenarioName: Start ArenaFinal
     trigger:
       rid: 5406076763678179442
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076763678179432
     - rid: 5406076763678179420
     - rid: 5406076763678179443
     - rid: 5406076763678179444
@@ -123,6 +129,7 @@ MonoBehaviour:
     - rid: 5406076763678179446
     - rid: 5406076763678179447
     - rid: 5406076763678179448
+    - rid: 5406076840737767521
     - rid: 5406076763678179450
     - rid: 5406076763678179451
     - rid: 5406076763678179452
@@ -131,15 +138,7 @@ MonoBehaviour:
       rid: 5406076763678179455
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076763678179432
     - rid: 5406076763678179420
-  - ScenarioName: SpawnOtherSide
-    trigger:
-      rid: 5406076807428964499
-    eventsList:
-    - rid: 5406076807428964500
-    - rid: 5406076807428964502
-    - rid: 5406076807428964501
   references:
     version: 2
     RefIds:
@@ -317,7 +316,7 @@ MonoBehaviour:
     - rid: 5406076763678179420
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue ]'
+        _dialogue: '[Dialogue FINN]'
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -329,11 +328,6 @@ MonoBehaviour:
       type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         spawnZoneIndices: 05000000
-    - rid: 5406076763678179432
-      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        actionToDo: 1
-        doorIndex: 7
     - rid: 5406076763678179433
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -486,3 +480,13 @@ MonoBehaviour:
         _keyVoceline: test
         _duration: 3
         speaker: 2
+    - rid: 5406076840737767521
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 1
+        doorIndex: 7
+    - rid: 5406076840737767523
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 4
