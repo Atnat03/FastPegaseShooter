@@ -61,6 +61,7 @@ public class PlayerHealthView : MonoBehaviour
 		_healingTrajectoryLine.positionCount = 4;
 		_healingThrowPosObj = Instantiate(_healingThrowPosObj, Vector3.zero, Quaternion.identity);
 		_healingThrowPosObj.SetActive(false);
+		
 	}
 	
 	private void UpdateHealth(float targetFill)
@@ -103,6 +104,7 @@ public class PlayerHealthView : MonoBehaviour
 		if (state)
 		{
 			_koCoroutine = StartCoroutine(KoAnimation(duration));
+			SoundManager.PlaySound(_soundsData, "Death", _audioSource);
 		}
 		else
 		{
