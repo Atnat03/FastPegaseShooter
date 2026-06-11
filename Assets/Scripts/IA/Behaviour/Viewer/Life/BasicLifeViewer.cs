@@ -36,12 +36,14 @@ public class BasicLifeViewer : MonoBehaviour
         _enemyCore = _enemyLifeModule.gameObject.GetComponent<EnemyCore>();
         
         _enemyLifeModule.OnLifeUpdate += LifeUpdating;
-        _lifeBarImage.color = _lifeGradient.Evaluate(1f);
+        _enemyCore.OnDeath += OnDeath;
+        
 
+        _lifeBarImage.color = _lifeGradient.Evaluate(1f);
         if(_lifeBarParent) _lifeBarParent.SetActive(false);
         
     }
-    
+
     private void LifeUpdating(bool IsCritical, int dmg, int lifeAmount, int fullLife)
     {
         if(_lifeBarParent) _lifeBarParent.SetActive(true);
@@ -73,6 +75,10 @@ public class BasicLifeViewer : MonoBehaviour
             if (_hitMarker != null)
                 _hitMarker.SetText(_cumulatifDmg.ToString());
         }
+    }
+    private void OnDeath()
+    {
+       if(_lifeBarParent) _lifeBarParent.SetActive(false);
     }
 
     private void Update()

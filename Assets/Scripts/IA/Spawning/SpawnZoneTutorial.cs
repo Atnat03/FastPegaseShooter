@@ -127,6 +127,7 @@ public class SpawnZoneTutorial : NetworkBusListener
         enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
         
         InstanceFinder.ServerManager.Spawn(enemy);
+        InvokeEvent(new OnEnemySpawnEvent());
         
         _spawnedEnemySet.Add(enemyCore);
         _spawnedEnemies++;
