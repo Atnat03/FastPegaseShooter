@@ -11,9 +11,26 @@ public class DialogueStarterParent : NetworkBusListener
     [ContextMenu("Start dialogue")]
     protected void PlayDialogue() => StartCoroutine(Delay());
     
-    protected void PlayDialogue(int idx) => StartCoroutine(Delay(idx));
+    protected void PlayDialogue(int i) => StartCoroutine(Delay(i));
+    
+    protected void PlayDialogue(cardinalDirection idx) => StartCoroutine(Delay(idx));
 
-    IEnumerator Delay(int idx = 0)
+    IEnumerator Delay()
+    {
+        if (delay == 0) yield return new WaitForEndOfFrame();
+        else yield return new WaitForSeconds(delay);
+
+        InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = Dialogue[Random.Range(0, Dialogue.Length)] });
+    }
+    IEnumerator Delay(cardinalDirection idx)
+    {
+        if (delay == 0) yield return new WaitForEndOfFrame();
+        else yield return new WaitForSeconds(delay);
+
+        InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = Dialogue[(int)idx] });
+    }
+    
+    IEnumerator Delay(int idx)
     {
         if (delay == 0) yield return new WaitForEndOfFrame();
         else yield return new WaitForSeconds(delay);
