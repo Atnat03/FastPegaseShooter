@@ -18,11 +18,12 @@ MonoBehaviour:
       rid: 5406076833999618138
     eventsList:
     - rid: 5406076833999618139
+    - rid: 6001466780786884693
   - ScenarioName: Test2
     trigger:
       rid: 5406076833999618141
     eventsList:
-    - rid: 5406076833999618142
+    - rid: 6001466780786884694
   references:
     version: 2
     RefIds:
@@ -39,10 +40,17 @@ MonoBehaviour:
       type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         spawnZoneIndices: 04000000
-    - rid: 5406076833999618142
+    - rid: 6001466780786884693
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: aaa
+        _dialogue: activated
+        _keyVoceline: 
+        _duration: 3
+        speaker: 0
+    - rid: 6001466780786884694
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: fini
         _keyVoceline: 
         _duration: 3
         speaker: 0
