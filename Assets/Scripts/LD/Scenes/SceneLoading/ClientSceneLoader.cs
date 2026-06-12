@@ -44,7 +44,7 @@ public class ClientSceneLoader : NetworkBusListener
         Dictionary<int, NetworkConnection> clients = InstanceFinder.ServerManager.Clients;
         List<NetworkObject> nobs = new List<NetworkObject>();
 
-        foreach (var client in clients.Values)
+        foreach (NetworkConnection client in clients.Values)
         {
             if (client.FirstObject == null)
                 continue;

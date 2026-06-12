@@ -89,6 +89,8 @@ public class PlayerSelectGun : NetworkBusListener
 			IsOpen = true
 		});
 		
+		InvokeEvent(new OnOpenBorne{p_playerPositive = _gun.IsPositive});
+		
 		Cons.Print("Show UI", ColorConsole.Blue);
 		
 		_gun.DesactivateAllMainGun();
