@@ -10,7 +10,7 @@ using FishNet.Object;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ClientSceneLoader : MonoBusListener
+public class ClientSceneLoader : NetworkBusListener
 {
     [Header("Scene to load")]
     [SerializeField] private string targetSceneName = "MyScene";
@@ -33,7 +33,7 @@ public class ClientSceneLoader : MonoBusListener
             MovedNetworkObjects = GetAllPlayerNetworkObjects() // Déplace les joueurs
         };
 
-        InvokeEvent(new ForceStopEnemySpawn());
+        InvokeEvent(new OnSceneLoadingEvent());
         
         DespawnAllNetworkObject(playerObjects);
         InstanceFinder.SceneManager.LoadGlobalScenes(sld);
@@ -74,7 +74,7 @@ public class ClientSceneLoader : MonoBusListener
     }
 }
 
-public struct ForceStopEnemySpawn
+public struct OnSceneLoadingEvent
 {
     
 }

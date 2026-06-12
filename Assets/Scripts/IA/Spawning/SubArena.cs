@@ -14,6 +14,7 @@ public class SubArena : NetworkBusListener
     [SerializeField] private bool _zoneActivated;
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     [SerializeField] private SubArenaGauge _arenaGaugePrefab;
+    [SerializeField] private cardinalDirection _cardinalDirection;
     
     [Header("----- First Wave -----")]
     [SerializeField] private float spawnDelayFirstWave;
@@ -61,7 +62,7 @@ public class SubArena : NetworkBusListener
             }
         });
         
-        ListenToEvent<ForceStopEnemySpawn>(FSES =>
+        ListenToEvent<OnSceneLoadingEvent>(FSES =>
         {
             _zoneActivated = false;
         });
@@ -98,7 +99,8 @@ public class SubArena : NetworkBusListener
         EventBus.InvokeEvent(
             new OnSubArenaStartEvent(
                 arenaId,
-                _arenaGaugePrefab)
+                _arenaGaugePrefab,
+                _cardinalDirection)
             );
     }
     [ObserversRpc]
@@ -108,7 +110,9 @@ public class SubArena : NetworkBusListener
             new OnSubArenaUpdateEvent(
                 arenaId, 
                 overCrowdingPercent,
-                _spawningStates[stateIndex].p_state)
+                _spawningStates[stateIndex].p_state,
+                _cardinalDirection,
+                _spawnedEnemies.Count)
             );
     }
 
@@ -172,8 +176,14 @@ public class SubArena : NetworkBusListener
         
         _spawnedEnemies.Add(enemyCore);
         
-        InvokeEvent(new OnEnemySpawnEvent());
+        InvokeSpawnEnemyObserverRpc();
         InstanceFinder.ServerManager.Spawn(enemy);
+    }
+
+    [ObserversRpc]
+    void InvokeSpawnEnemyObserverRpc()
+    {
+        InvokeEvent(new OnEnemySpawnEvent());
     }
     Transform GetNextSpawnPoint()
     { 

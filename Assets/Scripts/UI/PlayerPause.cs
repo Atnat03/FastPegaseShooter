@@ -30,7 +30,8 @@ public class PlayerPause : NetworkBusListener
     
     private void UpdatePause(InputAction.CallbackContext obj)
     {
-        if (!CursorManager.CanPause()) return;
+        if (!_isPause && !CursorManager.CanPause())
+            return;
         
         UpdatePause();
     }

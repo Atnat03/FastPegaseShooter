@@ -1374,6 +1374,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324174890}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!224 &356830131 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7983779927188085198, guid: 5b18d37196fbdc84f9200dbd4fcaf704, type: 3}
+  m_PrefabInstance: {fileID: 991217105}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &475009460
 GameObject:
   m_ObjectHideFlags: 0
@@ -3248,10 +3253,6 @@ PrefabInstance:
       propertyPath: WasActiveDuringEdit
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4158365788060169807, guid: 5b18d37196fbdc84f9200dbd4fcaf704, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4962665897501859610, guid: 5b18d37196fbdc84f9200dbd4fcaf704, type: 3}
       propertyPath: m_LocalPosition.x
       value: -21.72891
@@ -3295,14 +3296,6 @@ PrefabInstance:
     - target: {fileID: 6268421669224681316, guid: 5b18d37196fbdc84f9200dbd4fcaf704, type: 3}
       propertyPath: m_Name
       value: Scene Essential
-      objectReference: {fileID: 0}
-    - target: {fileID: 7654079914589494334, guid: 5b18d37196fbdc84f9200dbd4fcaf704, type: 3}
-      propertyPath: m_SortingOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8417707263402946611, guid: 5b18d37196fbdc84f9200dbd4fcaf704, type: 3}
-      propertyPath: m_AspectRatio
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5636,6 +5629,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4953529426771351313, guid: ba85b86a964156d40a15ad2e5fe89b20, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7077,7 +7074,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 2138278727}
   _networkObjectCache: {fileID: 0}
-  _scenarioSequence: {fileID: 11400000, guid: fb8c5a1fed3cd094b8a632f0acf67f55, type: 2}
+  _scenarioSequence: {fileID: 11400000, guid: f1d6fb37f3cc4684f919127f4e3915cc, type: 2}
   _dapManager: {fileID: 1340816483}
   _sceneProxies:
   - {fileID: 1106216722}
@@ -7085,8 +7082,13 @@ MonoBehaviour:
   _sceneSpawnZones:
   - {fileID: 1077020518}
   - {fileID: 1959072304}
+  _dapBar: {fileID: 356830131}
   _audioSource: {fileID: 2138278728}
   _soundsData: {fileID: 11400000, guid: dc1ebd8ca14b2c14cad28e27686621e0, type: 2}
+  _maxScale: {x: 1.2, y: 1.2}
+  _scaleSpeed: 2
+  _angleJiggle: 5
+  _shakeSpeed: 10
 --- !u!114 &2138278727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7289,12 +7291,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Tuto.FillAmountBridge
   _ui: {fileID: 55575461}
   _image: {fileID: 611591436}
-  _maxScale: {x: 1.2, y: 1.2}
-  _scaleSpeed: 2
-  _durationScale: 1
-  _angleJiggle: 5
-  _shakeSpeed: 10
-  _durationJiggle: 1
 --- !u!1001 &6634984143752002792
 PrefabInstance:
   m_ObjectHideFlags: 0

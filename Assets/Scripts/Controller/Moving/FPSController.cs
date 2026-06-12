@@ -37,7 +37,8 @@ public class FPSController : NetworkBusListener
     [SerializeField] private GameObject _playerFPS;
     [SerializeField] public PlayerAnimation _playerAnimation;
     [SerializeField] public LineRenderer grappleLineRenderer;
-
+    [SerializeField] private ParticleSystem _deathSpawnParticleSystem;
+    
     [Header("parameters")] [Tooltip("empeche le smoothing de la camera au moment de l'atterissage")] [SerializeField]
     private bool landSnap = true;
 
@@ -1988,6 +1989,17 @@ public class FPSController : NetworkBusListener
     private void SetDeadServerRpc(bool value)
     {
         isDead.Value = value;
+        if (value)
+        {
+            _playerVisual.SetActive(false);
+        }
+        else
+        {
+            _playerVisual.SetActive(true);
+
+        }
+        
+        _deathSpawnParticleSystem?.Play();
     }
 
     #endregion
