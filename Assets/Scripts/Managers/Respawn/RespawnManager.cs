@@ -18,35 +18,13 @@ public class RespawnManager : NetworkBusListener
 
     public override void OnStartServer()
     {
-        ListenToEvent<OnPlayerDeathEvent>(OnPlayerDied);
         ListenToEvent<OnPlayerRespawnEvent>(OnPlayerRespawned);
-    }
-    
-    [Server]
-    private void OnPlayerDied(OnPlayerDeathEvent data)
-    {
-        _deadPlayerIds.Add(data.p_playerN.ObjectId);
-
-        int totalPlayers = ServerManager.Clients.Count;
-
-        if (_deadPlayerIds.Count >= totalPlayers && totalPlayers > 0)
-        {
-            _isGameOver.Value = true;
-            TriggerGameOverObserversRpc();
-        }
     }
 
     [Server]
     private void OnPlayerRespawned(OnPlayerRespawnEvent data)
     {
         _deadPlayerIds.Remove(data.p_playerN.ObjectId);
-    }
-
-    [ObserversRpc]
-    private void TriggerGameOverObserversRpc()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 
     public void Quit()

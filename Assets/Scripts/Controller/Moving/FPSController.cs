@@ -1988,6 +1988,15 @@ public class FPSController : NetworkBusListener
     private void SetDeadServerRpc(bool value)
     {
         isDead.Value = value;
+        if (value)
+        {
+            _playerVisual.SetActive(false);
+        }
+        else
+        {
+            _playerVisual.SetActive(true);
+
+        }
     }
 
     #endregion
