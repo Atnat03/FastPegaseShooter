@@ -19,6 +19,8 @@ namespace Tuto
         {
             bool dialogueEnded = false;
             
+            Cons.Print("DIALOGUE", ColorConsole.Orange);
+            
             manager.AskForDialogue(_duration, _dialogue, speaker, _keyVoceline, () => dialogueEnded = true);
             
             yield return new WaitUntil(() => dialogueEnded);

@@ -19,6 +19,7 @@ public class SubArenaGaugeView : MonoBusListener
             SubArenaGauge info = _idToInfos[OSASE.p_arenaID];
             
             info.p_gauge.fillAmount = 0;
+            info.p_enemyAmountTmp.text = "0";
         });
         
         ListenToEvent<OnSubArenaUpdateEvent>(OSAUE =>
@@ -34,6 +35,8 @@ public class SubArenaGaugeView : MonoBusListener
             if(info.p_icon) info.p_icon.sprite = OSAUE.p_state.p_icon;
             
             if(info.p_overCrowded) info.p_overCrowded.SetActive(OSAUE.p_overCrowdingPercent >= 1);
+            
+            if(info.p_enemyAmountTmp) info.p_enemyAmountTmp.text = OSAUE.p_aliveEnemies.ToString();
         });
         
         //clear all gauges

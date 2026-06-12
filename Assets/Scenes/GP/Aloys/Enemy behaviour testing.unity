@@ -1288,6 +1288,8 @@ MonoBehaviour:
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_coreSo: {fileID: 0}
+  p_isSpawning: 0
+  p_isDying: 0
 --- !u!1 &932571558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1650,7 +1652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
   <IsNested>k__BackingField: 0
-  WasActiveDuringEdit: 1
+  WasActiveDuringEdit: 0
   WasActiveDuringEdit_Set1: 1
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
@@ -1734,8 +1736,10 @@ MonoBehaviour:
   - {fileID: 1896252399}
   - {fileID: 20570170}
   _arenaGaugePrefab: {fileID: 4947851719586564028, guid: 91030e22bea37f948bea9694033f483c, type: 3}
+  _cardinalDirection: 0
   spawnDelayFirstWave: 0.5
   spawnMobsFirstWave:
+  - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
   _currentBudget: 0
   _spawningStates:

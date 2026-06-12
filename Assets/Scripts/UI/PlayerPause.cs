@@ -1,4 +1,5 @@
 using System;
+using MyPrint;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,6 +30,9 @@ public class PlayerPause : NetworkBusListener
     
     private void UpdatePause(InputAction.CallbackContext obj)
     {
+        if (!_isPause && !CursorManager.CanPause())
+            return;
+        
         UpdatePause();
     }
     

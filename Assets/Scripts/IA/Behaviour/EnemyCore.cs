@@ -20,6 +20,13 @@ public class EnemyCore : NetworkBusListener
 
     public EnemyCoreSO p_coreSo;
 
+    public Action OnSpawn;
+    public Action OnDeath;
+    public bool p_isSpawning = false;
+    public bool p_isDying = false;
+    
+    private float _spawnDeathTimer;
+
     
     public override void OnStartServer()
     {
@@ -55,6 +62,12 @@ public class EnemyCore : NetworkBusListener
                     module.p_onHitPlayer += scoreModule.OnDamageTaken;
             }
         }
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        OnSpawn?.Invoke();
     }
 
     public override void OnStopServer()
@@ -97,11 +110,38 @@ public class EnemyCore : NetworkBusListener
         p_gridReaderId = _readerId;
         p_pathRequester = pathfindingRequestManager;
         p_gridReader = pathfindingGridReader;
+        
+        p_isSpawning = true;
+        p_isDying = false;
     }
 
     private void OnNetworkTick()
     {
         float tickDelta = (float)InstanceFinder.TimeManager.TickDelta;
+        //Spawning
+        if (p_isSpawning)
+        {
+            _spawnDeathTimer += tickDelta;
+            if (_spawnDeathTimer >= p_coreSo.p_spawningTime)
+            {
+                _spawnDeathTimer = 0;
+                p_isSpawning = false;
+            }
+            return;
+        }
+        //Death
+        if (p_isDying)
+        {
+            _spawnDeathTimer += tickDelta;
+            if (_spawnDeathTimer >= p_coreSo.p_deathTime)
+            {
+                _spawnDeathTimer = 0;
+                p_isDying = false;
+                DespawnEnemy();
+            }
+            return;
+        }
+        
         foreach (EnemyAttackModule module in _attackingModules)
         {
             if (module != null)
@@ -128,8 +168,12 @@ public class EnemyCore : NetworkBusListener
         OnDapExplosion?.Invoke();
     }
 
+    [Server]
     public void KillEnemy(int playerObjectId, ChargeType charge)
     {
+        if(p_isDying) return;
+        p_isDying = true;
+        
         //if killed by dap wave
         if (charge == ChargeType.None)
         {
@@ -138,7 +182,6 @@ public class EnemyCore : NetworkBusListener
         }
         
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
-        
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !p_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
 
         PlayerDoKillObserversRpc(playerObjectId);
@@ -148,9 +191,18 @@ public class EnemyCore : NetworkBusListener
             AddEnergyWhenEnemyKillObserversRpc(playerObjectId, signedEnergyAmount);
         }
         
-        InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
+        InvokeDeathEvent();
     }
 
+    [Server]
+    public void DespawnEnemy()
+    {
+        InstanceFinder.ServerManager.Despawn(transform.root.gameObject);
+    }
+    
+    [ObserversRpc]
+    void InvokeDeathEvent() => OnDeath?.Invoke();
+    
     [ObserversRpc]
     private void AddEnergyWhenEnemyKillObserversRpc(int id, float value)
     {

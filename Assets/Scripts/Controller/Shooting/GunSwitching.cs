@@ -50,6 +50,7 @@ public class GunSwitching : NetworkBusListener
 	
 	//Actions
 	public Action<bool> OnSwapGun;
+	public Action OnNotMainGunChange;
 	
 	private IGun _currentMainIGun;
 	private ISurcharge _currentISurcharge;
@@ -99,6 +100,8 @@ public class GunSwitching : NetworkBusListener
 		
 		_shootEnergy.gameObject.SetActive(false);
 
+		ChangeGun(true);
+		
 		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
 	}
 
@@ -182,6 +185,16 @@ public class GunSwitching : NetworkBusListener
     
 		if (IsMainGun)
 			ActivateCurrentGun(_mainGunsList, next);
+	}
+
+	public void ChangeGun(bool isMain)
+	{
+		ChangeGunServerRpc(isMain);
+		
+		if (!isMain)
+			OnNotMainGunChange?.Invoke();
+		else
+			IGunMain?.SetReticule(_reticuleManager);
 	}
 	
 	[ServerRpc]
