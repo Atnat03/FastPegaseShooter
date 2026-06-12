@@ -971,6 +971,8 @@ public class FPSController : NetworkBusListener
             currentWallHit = leftSideHit;
             targetHeadTilt = -headtiltIntensity;
             previousWallRideSide = wallRideSide.leftSide;
+            
+            _playerAnimation.SetWallRideAnim(false);
         }
         else
         {
@@ -979,6 +981,8 @@ public class FPSController : NetworkBusListener
             currentWallHit = rightSideHit;
             targetHeadTilt = headtiltIntensity;
             previousWallRideSide = wallRideSide.rightSide;
+            
+            _playerAnimation.SetWallRideAnim(true);
         }
 
         if (Vector3.Dot(horizontalVelocity, wallRidingDirection) < 0 || (forwardWalllrideBeginning &&
@@ -1067,6 +1071,8 @@ public class FPSController : NetworkBusListener
 
     void ExitWallRidingState()
     { 
+        _playerAnimation.SetStopWallRideAnim();
+        
         wallRidingCoroutineRunning = false;
         if(wallRidingCoroutine != null)StopCoroutine(wallRidingCoroutine);
         cameraBackToDefaultCoroutine = StartCoroutine(CameraRollBackToDefaultCoroutine());
