@@ -32,15 +32,12 @@ public class ClientSceneLoader : MonoBusListener
             },
             MovedNetworkObjects = GetAllPlayerNetworkObjects() // Déplace les joueurs
         };
-
-        InvokeOnSceneLoadingObserverRpc();
         
         DespawnAllNetworkObject(playerObjects);
         InstanceFinder.SceneManager.LoadGlobalScenes(sld);
     }
-
-    [ObserversRpc]
-    void InvokeOnSceneLoadingObserverRpc() => InvokeEvent(new OnSceneLoadingEvent());
+    
+    public void InvokeOnSceneLoadingClientInfos() => InvokeEvent(new OnSceneLoadingEvent());
 
     private NetworkObject[] GetAllPlayerNetworkObjects()
     {
