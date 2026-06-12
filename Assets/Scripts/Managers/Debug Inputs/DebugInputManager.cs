@@ -30,7 +30,11 @@ public class DebugInputManager : MonoBehaviour
     {
         CustomLogger.CCErrorLog("This inputs needs to be replaced by OnDapEvent");
         
-        if(InstanceFinder.IsServerStarted) EventBus.InvokeEvent(new OnDapEvent());
+        if(InstanceFinder.IsServerStarted)
+        {
+            EventBus.InvokeEvent(new OnDapEvent());
+            EventBus.InvokeEvent(new AfterDapVideoEvent());
+        }
     }
 
     private void GetInvincible(InputAction.CallbackContext obj)

@@ -97,14 +97,15 @@ public struct OnEnemySpawnEvent
         public float p_overCrowdingPercent;
         public SubArenaStateSO p_state;
         public cardinalDirection p_cardinalDirection;
-        // public string p_arenaName;
+        public int p_aliveEnemies;
 
-        public OnSubArenaUpdateEvent(Guid arenaID, float overCrowdingPercent, SubArenaStateSO state, cardinalDirection cardinalDirection)
+        public OnSubArenaUpdateEvent(Guid arenaID, float overCrowdingPercent, SubArenaStateSO state, cardinalDirection cardinalDirection, int aliveEnemies)
         {
             p_arenaID = arenaID;
             p_state = state;
             p_overCrowdingPercent = overCrowdingPercent;
             p_cardinalDirection = cardinalDirection;
+            p_aliveEnemies = aliveEnemies;
         }
     }
     public struct OnCorrosionEvent

@@ -3,6 +3,7 @@ using System.Collections;
 using MyPrint;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GunSwitchingView : MonoBehaviour
 {
@@ -14,14 +15,24 @@ public class GunSwitchingView : MonoBehaviour
 	#region Variables
 
 	[SerializeField] private GunSwitching _gunSwitching;
-	
-	[Header("UI")]
-	[SerializeField] private TextMeshProUGUI _message;
-	[SerializeField] private string[] message;
 
-	private void OnMainGunChange(bool isMainGunActivated)
+	[Header("UI")] 
+	[SerializeField] private Sprite armGunSprite;
+	[SerializeField] private Image imageGun;
+
+	void OnEnable()
 	{
-		_message.text = isMainGunActivated ? message[0] : message[1];
+		_gunSwitching.OnNotMainGunChange += SetIcone;
+	}
+
+	private void OnDisable()
+	{
+		_gunSwitching.OnNotMainGunChange -= SetIcone;
+	}
+
+	private void SetIcone()
+	{
+		imageGun.sprite = armGunSprite;
 	}
 
 	#endregion 
