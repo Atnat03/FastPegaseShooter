@@ -26,18 +26,14 @@ MonoBehaviour:
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076746262118506
-    - rid: 5406076742743621903
-    - rid: 5406076671141347513
   - ScenarioName: Pre-SalleMonstres
     trigger:
       rid: 5406076671141347514
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076746262118507
-    - rid: 5406076671141347515
-    - rid: 5406076671141347516
-    - rid: 5406076671141347517
     - rid: 5406076746262118500
+    - rid: 5406076671141347515
   - ScenarioName: CloseDoor
     trigger:
       rid: 5406076671141347518
@@ -67,16 +63,15 @@ MonoBehaviour:
     - rid: 5406076763678179420
     - rid: 5406076786627313776
     - rid: 5406076786627313777
-    - rid: 5406076786627313778
     - rid: 5406076807428964460
     - rid: 5406076807428964492
+    - rid: 5406076786627313778
   - ScenarioName: UseHeal
     trigger:
       rid: 5406076761526239318
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076695212458148
-    - rid: 5406076761526239319
     - rid: 5406076761526239320
     - rid: 5406076761526239324
   - ScenarioName: EndPinata
@@ -113,7 +108,7 @@ MonoBehaviour:
       rid: 5406076763678179431
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076763678179420
+    - rid: 5406076854874407093
     - rid: 5406076763678179433
     - rid: 5406076840737767523
   - ScenarioName: Start ArenaFinal
@@ -122,7 +117,6 @@ MonoBehaviour:
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076840737767521
-    - rid: 5406076763678179420
     - rid: 5406076763678179443
     - rid: 5406076763678179444
     - rid: 5406076763678179445
@@ -150,11 +144,11 @@ MonoBehaviour:
     - rid: 5406076671141347504
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _durationToWait: 2
+        _durationToWait: 1
     - rid: 5406076671141347505
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: "C\u2019est qu\u2019elle commence bien cette mission..."
+        _dialogue: "Dialogue d\xE9but"
         _keyVoceline: test
         _duration: 2
         speaker: 1
@@ -163,13 +157,6 @@ MonoBehaviour:
       data:
         proxyIndex: 2
         mode: 0
-    - rid: 5406076671141347513
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: '[Dialogue Jump 2]'
-        _keyVoceline: test
-        _duration: 2
-        speaker: 0
     - rid: 5406076671141347514
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
@@ -180,17 +167,6 @@ MonoBehaviour:
       data:
         actionToDo: 0
         doorIndex: 2
-    - rid: 5406076671141347516
-      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _durationToWait: 1
-    - rid: 5406076671141347517
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: '[Dialogue Salle Monstre]'
-        _keyVoceline: test
-        _duration: 1
-        speaker: 2
     - rid: 5406076671141347518
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
@@ -204,14 +180,14 @@ MonoBehaviour:
     - rid: 5406076695212458148
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: "[Dialogue Bien jou\xE9 Energy Exchange]"
+        _dialogue: "Bien jou\xE9"
         _keyVoceline: test
         _duration: 3
         speaker: 2
     - rid: 5406076695212458154
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue Energy]'
+        _dialogue: "Echangez vous de l'\xE9nergie"
         _keyVoceline: test
         _duration: 3
         speaker: 2
@@ -222,10 +198,6 @@ MonoBehaviour:
         target: 0
         disableAction: 2
         duration: 0
-    - rid: 5406076742743621903
-      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _durationToWait: 0.2
     - rid: 5406076746262118500
       type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -246,7 +218,7 @@ MonoBehaviour:
     - rid: 5406076746262118506
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue Jump1]'
+        _dialogue: Double saut, dash, wallrun
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -261,10 +233,6 @@ MonoBehaviour:
       type: {class: Trigger_Heal, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
         _numberUseOfHealNeed: 1
-    - rid: 5406076761526239319
-      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _durationToWait: 0.2
     - rid: 5406076761526239320
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -305,7 +273,7 @@ MonoBehaviour:
     - rid: 5406076763678179420
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: "[Dialogue Fin S\xE9pa"
+        _dialogue: "Vous \xEAtes s\xE9par\xE9s"
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -340,7 +308,7 @@ MonoBehaviour:
     - rid: 5406076763678179444
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue UI Arena]'
+        _dialogue: "Voici la jauge d'ar\xE8ne"
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -353,7 +321,7 @@ MonoBehaviour:
     - rid: 5406076763678179446
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue UI Arena 2]'
+        _dialogue: "Si elle arrive \xE0 100%, vous prendrez des d\xE9g\xE2ts"
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -366,14 +334,14 @@ MonoBehaviour:
     - rid: 5406076763678179448
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue DAP]'
+        _dialogue: "Le spawn continue jusqu'\xE0 ce que vous utilisez le D.A.P."
         _keyVoceline: 
         _duration: 3
         speaker: 2
     - rid: 5406076763678179451
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue Lezgo]'
+        _dialogue: Spawn commence
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -389,7 +357,7 @@ MonoBehaviour:
     - rid: 5406076786627313773
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue Welldone exchange energy]'
+        _dialogue: "Bien jou\xE9"
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -406,7 +374,7 @@ MonoBehaviour:
     - rid: 5406076786627313777
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue Healez vous]'
+        _dialogue: Utilisez le heal
         _keyVoceline: 
         _duration: 3
         speaker: 0
@@ -432,7 +400,7 @@ MonoBehaviour:
     - rid: 5406076807428964495
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[GG Heal 2]'
+        _dialogue: "Bien jou\xE9. Maintenant bagarre"
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -451,7 +419,7 @@ MonoBehaviour:
     - rid: 5406076807428964502
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[GG, spawn other side]'
+        _dialogue: "Bien jou\xE9, bagarre de l'autre c\xF4t\xE9"
         _keyVoceline: test
         _duration: 3
         speaker: 2
@@ -459,7 +427,7 @@ MonoBehaviour:
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
         actionToDo: 1
-        doorIndex: 7
+        doorIndex: 6
     - rid: 5406076840737767523
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -492,10 +460,17 @@ MonoBehaviour:
     - rid: 5406076854874407009
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: FIIINN
+        _dialogue: Fin du tuto
         _keyVoceline: 
         _duration: 3
         speaker: 0
     - rid: 5406076854874407015
       type: {class: Trigger_Dapping, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data: 
+    - rid: 5406076854874407093
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: "Bien jou\xE9, porte ouvertes"
+        _keyVoceline: 
+        _duration: 3
+        speaker: 0

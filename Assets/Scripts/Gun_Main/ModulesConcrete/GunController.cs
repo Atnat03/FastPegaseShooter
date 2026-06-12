@@ -104,6 +104,8 @@ namespace GunDecorator
         private bool _isChargeShooting;
         private bool isDead = false;
 
+        private bool _hasAlreadyFriendlyFire = false;
+
         //Action
         public Action OnSetUp;
 
@@ -296,6 +298,16 @@ namespace GunDecorator
         public void ApplyDamage(GameObject target, int damage, bool isCritical, bool hadCharged)
         {
             if (target == null) return;
+
+            if(!_hasAlreadyFriendlyFire)
+            {
+                if (target.TryGetComponent(out PlayerVisuelBridge player))
+                {
+                    InvokeEvent(new OnFiendlyFire { isPositive = IsPositivePlayerCharge });
+                    _hasAlreadyFriendlyFire = true;
+                }
+            }
+            
             if (!target.TryGetComponent<IDamagable>(out var d)) return;
 
             bool crit = d.TakeDamage(OwnerId, damage, IsPositivePlayerCharge.ToChargeType(), isCritical);
