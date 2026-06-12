@@ -171,6 +171,7 @@ public class EnemyCore : NetworkBusListener
     [Server]
     public void KillEnemy(int playerObjectId, ChargeType charge)
     {
+        if(p_isDying) return;
         p_isDying = true;
         
         //if killed by dap wave

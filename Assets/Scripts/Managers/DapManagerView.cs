@@ -52,6 +52,12 @@ public class DapManagerView : MonoBusListener
         
         yield return new WaitForSeconds((float)_videoClipDap.clip.length);
         
+        AfterDapVideo(pos);
+    }
+
+    void AfterDapVideo(Vector3 pos)
+    {
+        InvokeEvent(new AfterDapVideoEvent());
         _videoClipDap.gameObject.SetActive(false);
         
         Destroy(Instantiate(_dappingExplosion, pos, Quaternion.identity), 5f);
@@ -76,3 +82,5 @@ public class DapManagerView : MonoBusListener
         _dapNotification.SetActive(fillAmount >= 1f);
     }
 }
+
+public struct AfterDapVideoEvent{}
