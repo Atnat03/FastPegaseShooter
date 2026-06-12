@@ -85,11 +85,13 @@ namespace Tuto
             baseValueReloadCapa = _playerEnergizedState._reloadCapacityValue;
 
             _playerEnergizedState._reloadCapacityValue = new float[] { 135, 135, 135 };
+            _playerEnergizedState._percentageFreeze = true;
         }
 
         public void ExitTuto()
         {
             _playerEnergizedState._reloadCapacityValue = baseValueReloadCapa;
+            _playerEnergizedState._percentageFreeze = false;
         }
     }
 }

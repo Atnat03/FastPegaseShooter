@@ -14,7 +14,7 @@ public class PlayerEnergizedState : NetworkBusListener
 	[SerializeField, Tooltip("0 = Tir chargé / 1 = Drone / 2 = Heal")] public float[] _reloadCapacityValue;
 
 	[Header("Test")] 
-	[SerializeField] private bool _percentageFreeze = false;
+	[SerializeField] public bool _percentageFreeze = false;
 	[SerializeField] private float _percentagePerSecondDecrease = 0.5f;
     
 	public Action<bool> OnEnergized;
