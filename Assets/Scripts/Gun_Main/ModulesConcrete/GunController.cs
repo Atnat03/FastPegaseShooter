@@ -164,22 +164,22 @@ namespace GunDecorator
         {
             if (currentModel.TryGetComponent(out Animator animator))
                 _animator = animator;
+            
+            if (!IsOwner)
+            {
+                foreach (ParticleSystem s in _normalMuzzleFlash)
+                    FPSController.SetLayerRecursively(s.gameObject, LayerMask.NameToLayer("Default"));
+
+                foreach (ParticleSystem s in _chargedMuzzleFlash)
+                    FPSController.SetLayerRecursively(s.gameObject, LayerMask.NameToLayer("Default"));
+            }
         }
 
         private void Start()
         {
             // pour du debug, a tej en build finale
             playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
-
-            foreach (ParticleSystem s in _normalMuzzleFlash)
-            {
-                FPSController.SetLayerRecursively(s.gameObject, LayerMask.NameToLayer("Default"));
-            }
             
-            foreach (ParticleSystem s in _chargedMuzzleFlash)
-            {
-                FPSController.SetLayerRecursively(s.gameObject, LayerMask.NameToLayer("Default"));
-            }
             //fin du debug
             
             ListenToEvent<OnPlayerDeathEvent>(data =>
