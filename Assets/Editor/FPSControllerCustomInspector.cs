@@ -46,6 +46,7 @@ public class FPSControllerCustomInspector : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerAnimation"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_playerFPS"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("grappleLineRenderer"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_deathSpawnParticleSystem"));
         }, ref showParameters);
 
         DrawSection("Parameters", new Color(0.8f, 0.9f, 1f), () =>
