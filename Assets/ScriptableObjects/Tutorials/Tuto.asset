@@ -134,7 +134,7 @@ MonoBehaviour:
     - rid: 5406076763678179452
   - ScenarioName: End Tuto
     trigger:
-      rid: 5406076763678179455
+      rid: 5406076854874407015
     eventsList:
     - rid: 5406076671141347504
     - rid: 5406076854874407008
@@ -150,7 +150,7 @@ MonoBehaviour:
     - rid: 5406076671141347504
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _durationToWait: 0.5
+        _durationToWait: 2
     - rid: 5406076671141347505
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -285,8 +285,8 @@ MonoBehaviour:
       data:
         notificationText: "Echangez-vous de l'\xE9nergie !"
         target: 2
-        disableAction: 2
-        duration: 1
+        disableAction: 0
+        duration: 3
     - rid: 5406076761526239334
       type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
@@ -381,10 +381,6 @@ MonoBehaviour:
       type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
         _indexSpawn: 06000000
-    - rid: 5406076763678179455
-      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data:
-        spawnZoneIndices: 06000000
     - rid: 5406076763678179481
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -500,3 +496,6 @@ MonoBehaviour:
         _keyVoceline: 
         _duration: 3
         speaker: 0
+    - rid: 5406076854874407015
+      type: {class: Trigger_Dapping, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data: 
