@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class DialogueStarterOnStart : DialogueStarterParent
 {
-    public override void OnStartNetwork()
+    public void Start()
     {
-        base.OnStartNetwork();
         PlayDialogue();
     }
 }
