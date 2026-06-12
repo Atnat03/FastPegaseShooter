@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialoguesManager : NetworkBusListener
+public class DialoguesManager : MonoBusListener
 {
     [Header("speakers")] public Sprite blueIcon;
     public Color blueColor;
@@ -53,9 +53,8 @@ public class DialoguesManager : NetworkBusListener
     
     #endregion
 
-    public override void OnStartNetwork()
+    public void Start()
     {
-        base.OnStartNetwork();
         ListenToEvent<OnDialogueStart>(StartDialogue);
 
         CleanDialogue();
