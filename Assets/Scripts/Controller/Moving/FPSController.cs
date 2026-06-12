@@ -1793,22 +1793,21 @@ public class FPSController : NetworkBusListener
 
             Vector3 normal = toPlayer.normalized;
 
-            // STEP  
-            Ray downRay = new Ray(closest + Vector3.up * 0.2f, Vector3.down);
+            // STEP
+            Vector3 stepCheckOrigin = closest + Vector3.up * (maxStepHeight + 0.05f);
+            Ray downRay = new Ray(stepCheckOrigin, Vector3.down);
 
-            if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.3f))
+            if (Vector3.Dot(velocity, -normal) <= 0) continue;
+
+            if (Physics.Raycast(downRay, out RaycastHit stepHit, maxStepHeight + 0.1f))
             {
-                if (Vector3.Dot(horizontalVelocity, stepHit.collider.ClosestPoint(playerFeet.position)) < 0.3)
+                float stepHeight = stepHit.point.y - playerFeet.position.y;
+
+                if (stepHeight > 0.01f && stepHeight <= maxStepHeight)
                 {
-                    float stepHeight = stepHit.point.y - stepHit.collider.ClosestPoint(playerFeet.position).y;
-
-                    if (stepHeight > 0 && stepHeight <= maxStepHeight)
-                    {
-                        rb.position += Vector3.up * (/*maxStepHeight -*/ stepHeight);
-                        continue;
-                    }
+                    rb.position += Vector3.up * (stepHeight + 0.05f);
+                    continue;
                 }
-
             }
 
             float slopeAngle = Vector3.Angle(normal, Vector3.up);
