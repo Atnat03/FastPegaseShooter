@@ -364,6 +364,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b20a3abf4e4c84478352347ee6e3079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RpcSceneLoading
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 247982057}
+  _networkObjectCache: {fileID: 0}
   targetSceneName: Scene Loading 2
 --- !u!114 &247982057
 MonoBehaviour:
@@ -669,6 +672,66 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91249709fce89eb47bc65da19706dd8c, type: 3}
+--- !u!1 &1280275751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1280275753}
+  - component: {fileID: 1280275752}
+  m_Layer: 0
+  m_Name: afterdaptriggerzone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1280275752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280275751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a48c2807ad051e4594d20f1a87591f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DapTriggerZone
+  _dapEventType: 1
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 441543560}
+        m_TargetAssemblyTypeName: UnityEngine.MeshRenderer, UnityEngine
+        m_MethodName: set_material
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2100000, guid: d7a16d105a39bf14ea39a0c5bee1031f, type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!4 &1280275753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280275751}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -22.7217, y: 0, z: 33.25868}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1353448649
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,3 +879,4 @@ SceneRoots:
   - {fileID: 247982055}
   - {fileID: 1952473832}
   - {fileID: 68492550}
+  - {fileID: 1280275753}
