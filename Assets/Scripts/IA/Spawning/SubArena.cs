@@ -57,7 +57,7 @@ public class SubArena : NetworkBusListener
                 NotifySubArenaUpdateObserverRpc(
                     _gridReader.p_id,
                     _spawnedEnemies.Count/(float)_maxSpawnEnemy,
-                    _currentStateIndex);
+                    _currentStateIndex, _spawnedEnemies.Count);
                 _spawnedEnemies.Remove(OEDE.p_enemy);
             }
         });
@@ -104,14 +104,15 @@ public class SubArena : NetworkBusListener
             );
     }
     [ObserversRpc]
-    void NotifySubArenaUpdateObserverRpc(Guid arenaId, float overCrowdingPercent, int stateIndex)
+    void NotifySubArenaUpdateObserverRpc(Guid arenaId, float overCrowdingPercent, int stateIndex, int enemyCount)
     {
         EventBus.InvokeEvent(
             new OnSubArenaUpdateEvent(
                 arenaId, 
                 overCrowdingPercent,
                 _spawningStates[stateIndex].p_state,
-                _cardinalDirection)
+                _cardinalDirection,
+                enemyCount)
             );
     }
 
@@ -135,7 +136,7 @@ public class SubArena : NetworkBusListener
         NotifySubArenaUpdateObserverRpc(
             _gridReader.p_id,
             _spawnedEnemies.Count/(float)_maxSpawnEnemy,
-            _currentStateIndex);
+            _currentStateIndex, _spawnedEnemies.Count);
         await SpawnFirstWave();
         await InfiniteSpawn();
     }
@@ -265,7 +266,7 @@ public class SubArena : NetworkBusListener
                         NotifySubArenaUpdateObserverRpc(
                             _gridReader.p_id,
                             _spawnedEnemies.Count/(float)_maxSpawnEnemy,
-                            _currentStateIndex);
+                            _currentStateIndex, _spawnedEnemies.Count);
                     }
                     
                     _currentBudget += _spawningStates[_currentStateIndex].p_state.p_budgetPerSecond;
@@ -284,7 +285,7 @@ public class SubArena : NetworkBusListener
                     NotifySubArenaUpdateObserverRpc(
                         _gridReader.p_id,
                         _spawnedEnemies.Count/(float)_maxSpawnEnemy,
-                        _currentStateIndex);
+                        _currentStateIndex, _spawnedEnemies.Count);
                 }
             }
         }

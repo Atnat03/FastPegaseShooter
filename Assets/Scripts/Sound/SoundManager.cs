@@ -20,7 +20,7 @@ public class SoundManager : MonoBehaviour
 		return clip[Random.Range(0, clip.Count)];
 	}
 	
-	public static void PlaySound(SoundsDataSO data, string soundName, AudioSource source)
+	public static void PlaySound(SoundsDataSO data, string soundName, AudioSource source, Transform parent = null)
 	{
 		List<AudioClip> clip = new List<AudioClip>();
 		float volume = 0.5f;
@@ -43,7 +43,7 @@ public class SoundManager : MonoBehaviour
 		
 		switch (t)
 		{
-			case SoundType.Spatial: PlaySpatialSound(volume, c, source); break;
+			case SoundType.Spatial: PlaySpatialSound(volume, c, source, parent); break;
 			case SoundType.Global: PlayGlobalSound(volume, c, source); break;
 		}
 	}
@@ -56,11 +56,11 @@ public class SoundManager : MonoBehaviour
 		source.PlayOneShot(clip, volume);
 	}
 
-	private static void PlaySpatialSound(float volume, AudioClip clip, AudioSource source)
+	private static void PlaySpatialSound(float volume, AudioClip clip, AudioSource source, Transform parent = null)
 	{
 		source.pitch = 1f;
 		source.volume = volume;
-		PlayClipAtPoint(clip, source.transform.position, source, source.transform);
+		PlayClipAtPoint(clip, source.transform.position, source, parent == null ? source.transform : parent);
 	}
 	
 	public static void PlayClipAtPoint(AudioClip clip, Vector3 position, AudioSource source, Transform parent = null)
