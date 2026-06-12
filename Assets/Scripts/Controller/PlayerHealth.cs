@@ -358,7 +358,7 @@ public class PlayerHealth : NetworkBusListener
     }
 
     [ServerRpc]
-    private void RequestTakeDamageServerRpc(int damage)
+    public void RequestTakeDamageServerRpc(int damage)
     {
         TakeDamage(new PlayerTakeDamageEvent
         {
