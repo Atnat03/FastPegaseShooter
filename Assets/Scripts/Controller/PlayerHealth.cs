@@ -482,6 +482,8 @@ public class PlayerHealth : NetworkBusListener
 
     private void Death()
     {
+        _gunSwitching.IGunMain.TryCancelShooting();
+        
         _currentHealth.Value = 0;
         _isDead.Value = true;
         _respawnTimer.Value = _timeToRespawn;
