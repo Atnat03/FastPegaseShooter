@@ -1,19 +1,40 @@
 using System;
+using System.Collections;
+using System.Threading.Tasks;
+using FishNet;
+using FishNet.Managing.Scened;
 using UnityEngine;
 
 public class LoadingScreen : MonoBusListener
 {
     [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private float _minimumLoadingTime = 1;
 
-    private void Awake()
+    private void OnEnable()
     {
-        ListenToEvent<OnSceneLoadingEvent>((OSLE) =>
-        {
-            loadingScreen.SetActive(true);
-        });
-        ListenToEvent<OnPlayerSpawnTPEvent>((OPSTPE) =>
-        {
-            loadingScreen.SetActive(false);
-        });
+        InstanceFinder.SceneManager.OnLoadStart += OnLoadStart;
+        InstanceFinder.SceneManager.OnLoadEnd += OnLoadEnd;
+    }
+
+    private void OnDisable()
+    {
+        InstanceFinder.SceneManager.OnLoadStart -= OnLoadStart;
+        InstanceFinder.SceneManager.OnLoadEnd -= OnLoadEnd;
+    }
+
+    private void OnLoadStart(SceneLoadStartEventArgs args)
+    {
+        loadingScreen.SetActive(true);
+    }
+
+    private void OnLoadEnd(SceneLoadEndEventArgs args)
+    {
+        StartCoroutine(HideLoading());
+    }
+
+    IEnumerator HideLoading()
+    {
+        yield return new WaitForSeconds(_minimumLoadingTime);
+        loadingScreen.SetActive(false);
     }
 }

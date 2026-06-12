@@ -10,7 +10,7 @@ using FishNet.Object;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ClientSceneLoader : MonoBusListener
+public class ClientSceneLoader : NetworkBusListener
 {
     [Header("Scene to load")]
     [SerializeField] private string targetSceneName = "MyScene";
@@ -32,12 +32,12 @@ public class ClientSceneLoader : MonoBusListener
             },
             MovedNetworkObjects = GetAllPlayerNetworkObjects() // Déplace les joueurs
         };
+
+        InvokeEvent(new OnSceneLoadingEvent());
         
         DespawnAllNetworkObject(playerObjects);
         InstanceFinder.SceneManager.LoadGlobalScenes(sld);
     }
-    
-    public void InvokeOnSceneLoadingClientInfos() => InvokeEvent(new OnSceneLoadingEvent());
 
     private NetworkObject[] GetAllPlayerNetworkObjects()
     {
