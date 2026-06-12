@@ -23,7 +23,7 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private CanvasGroup _damagedImage;
 	[SerializeField] private Color[] _colorBar;
 	[SerializeField] private Color[] _colorBar2;
-	[SerializeField] private GameObject _takeDamageUI;
+	[SerializeField] private CanvasGroup _takeDamageUI;
 	
 	[Header("Dead")]
 	[SerializeField] private GameObject _normalCanva;
@@ -156,7 +156,7 @@ public class PlayerHealthView : MonoBehaviour
 		float time = 0.5f;
 		float elapsedTime = 0f;
 
-		_takeDamageUI.SetActive(true);
+		_takeDamageUI.gameObject.SetActive(true);
 		
 		while (elapsedTime < time)
 		{
@@ -164,11 +164,12 @@ public class PlayerHealthView : MonoBehaviour
 
 			float t = elapsedTime / time;
 			_damagedImage.alpha = Mathf.Sin(t * Mathf.PI);
+			_takeDamageUI.alpha = Mathf.Sin(t * Mathf.PI);
 
 			yield return null;
 		}
 
-		_takeDamageUI.SetActive(false);
+		_takeDamageUI.gameObject.SetActive(false);
 		
 		_damagedImage.alpha = 0f;
 	}

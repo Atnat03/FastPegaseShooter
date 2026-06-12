@@ -46,7 +46,7 @@ public class ConnectionWithCode : MonoBehaviour
 
         Cons.Print("Server manager");
         _networkManager.ServerManager.StartConnection();
-
+        
         Cons.Print("Client manager");
             _networkManager.ClientManager.StartConnection();
 
