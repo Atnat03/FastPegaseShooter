@@ -189,6 +189,17 @@ public class PlayerCapacity : MonoBusListener
 		}
 	}
 
+	public void SetStartChargeCapacities(int numberCharge)
+	{
+		_tirChargeCapaData.p_currentNumberCapacity = numberCharge;
+		_droneCapaData.p_currentNumberCapacity = numberCharge;
+		_healCapaData.p_currentNumberCapacity = numberCharge;
+		
+		OnUseCapacity?.Invoke(_tirChargeCapaData);
+		OnUseCapacity?.Invoke(_droneCapaData);
+		OnUseCapacity?.Invoke(_healCapaData);
+	}
+	
 	#endregion
 }
 

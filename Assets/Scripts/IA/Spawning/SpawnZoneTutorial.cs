@@ -24,6 +24,7 @@ public class SpawnZoneTutorial : NetworkBusListener
     
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
     [SerializeField] private int _zoneIndex;
+    private int _currentSpawnZone = 0;
     
     private PathfindingGridReader _gridReader;
     private int _spawnedEnemies;
@@ -120,8 +121,10 @@ public class SpawnZoneTutorial : NetworkBusListener
             return;
         }
 
-        Vector3 position = GetValidSpawnPoint().position;
+        Vector3 position = _spawnPoints[_currentSpawnZone].position;
         GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
+
+        _currentSpawnZone = (_currentSpawnZone + 1) % _spawnPoints.Count;
         
         EnemyCore enemyCore = enemy.GetComponentInChildren<EnemyCore>();
         enemyCore.SetInfos(_gridReader.p_id, _pathfindingRequestManager, _gridReader);
@@ -229,9 +232,7 @@ public class SpawnZoneTutorial : NetworkBusListener
         _stopInfiniteSpawn = true;
         UpdateGaugeObservers(0, 0, false);
     }
-
-    Transform GetValidSpawnPoint() => _spawnPoints[Random.Range(0, _spawnPoints.Count)];
-
+    
     bool IsSpawnZoneComplete()
     {
         bool clear = _spawnedEnemySet.Count == 0 && _spawnWave.Count == 0;
