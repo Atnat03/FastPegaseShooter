@@ -3,6 +3,7 @@ using System.Collections;
 using FishNet.Object;
 using GunDecorator;
 using MyPrint;
+using ScriptableObjectsDefinitions;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -23,7 +24,11 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     [SerializeField] private GameObject _positiveExplosionVFX;
     [SerializeField] private GameObject _negativeExplosionVFX;
     
-    [Header("View")]    
+    [Header("Sound")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private SoundsDataSO _dataSound;
+    
+    [Header("View")]
     [SerializeField] private GameObject[] _models;
 
     private GameObject _vfx;
@@ -82,7 +87,8 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     {
         if (_vfx != null)
         {
-            Cons.Print("EXPLOSION", ColorConsole.Red);
+            SoundManager.PlaySound(_dataSound, "Explosion", _audioSource);
+            
             GameObject v = Instantiate(_vfx);
             v.transform.position = transform.position + transform.up * 0.1f;
             Destroy(v.gameObject, 3f);
