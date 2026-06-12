@@ -6,7 +6,8 @@ using UnityEngine;
 public class DialogueStarterParent : MonoBusListener
 {
     [SerializeField]
-    [Tooltip("si ca doit etre lié aux directions cardinales, il faut les mettre dans l'ordre nord, sud, est, ouest")]
+    [Tooltip("si ca doit etre lié aux directions cardinales, il faut les mettre dans l'ordre nord, sud, est, ouest . \n" +
+             "si c'est selon le joueur, il faut mettre d'abbord positif (rouge) puis negatif(bleu)")]
     private DialoguesDataSO[] Dialogue;
 
     [SerializeField] protected float delay;
@@ -35,7 +36,12 @@ public class DialogueStarterParent : MonoBusListener
     protected void PlayDialogue(cardinalDirection idx)
     {
         if (canBePlayed && !(playOnce && alreadyPlayed))StartCoroutine(Delay(idx));
-    } 
+    }
+
+    protected void PlayDialogue(bool isPositiv)
+    {
+        if (canBePlayed && !(playOnce && alreadyPlayed))StartCoroutine(Delay(isPositiv));
+    }
 
     IEnumerator Delay()
     {
@@ -70,6 +76,16 @@ public class DialogueStarterParent : MonoBusListener
         else yield return new WaitForSeconds(delay);
 
         InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = Dialogue[(int)idx] });
+        if (HaveCooldown)StartCoroutine(Cooldown());
+        alreadyPlayed = true;
+    }
+    
+    IEnumerator Delay(bool isPositiv)
+    {
+        if (delay == 0) yield return new WaitForEndOfFrame();
+        else yield return new WaitForSeconds(delay);
+
+        InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = isPositiv ? Dialogue[0] : Dialogue[1] });
         if (HaveCooldown)StartCoroutine(Cooldown());
         alreadyPlayed = true;
     }

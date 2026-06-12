@@ -32,12 +32,12 @@ public class ClientSceneLoader : MonoBusListener
             },
             MovedNetworkObjects = GetAllPlayerNetworkObjects() // Déplace les joueurs
         };
-
-        InvokeEvent(new ForceStopEnemySpawn());
         
         DespawnAllNetworkObject(playerObjects);
         InstanceFinder.SceneManager.LoadGlobalScenes(sld);
     }
+    
+    public void InvokeOnSceneLoadingClientInfos() => InvokeEvent(new OnSceneLoadingEvent());
 
     private NetworkObject[] GetAllPlayerNetworkObjects()
     {
@@ -74,7 +74,7 @@ public class ClientSceneLoader : MonoBusListener
     }
 }
 
-public struct ForceStopEnemySpawn
+public struct OnSceneLoadingEvent
 {
     
 }
