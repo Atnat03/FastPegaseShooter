@@ -11,8 +11,7 @@ public class PlayerEnergizedState : NetworkBusListener
     
 	[Header("Settings")] 
 	[SerializeField] private float _damageFactor = 1.5f;
-	[SerializeField, Tooltip("0 = Tir chargé / 1 = Drone / 2 = Heal")] 
-	private float[] _reloadCapacityValue;
+	[SerializeField, Tooltip("0 = Tir chargé / 1 = Drone / 2 = Heal")] public float[] _reloadCapacityValue;
 
 	[Header("Test")] 
 	[SerializeField] private bool _percentageFreeze = false;

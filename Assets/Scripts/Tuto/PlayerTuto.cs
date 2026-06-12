@@ -10,9 +10,13 @@ namespace Tuto
         [SerializeField] private GunBridgePlayer _gunPlayer;
         [SerializeField] private DroneThrower _dronePlayer;
         [SerializeField] private PlayerHealth _healPlayer;
+        [SerializeField] private PlayerEnergizedState _playerEnergizedState;
+        [SerializeField] private PlayerCapacity _playerCapacity;
 
         public Action<Capacity_TUTO, bool> OnUnlockCapa;
 
+        private float[] baseValueReloadCapa;
+        
         public override void OnStartNetwork()
         {
             ListenToEvent<OnUnlockCapa_TUTO>(UnlockCapa);
@@ -67,6 +71,25 @@ namespace Tuto
             }
 
             return false;
+        }
+        
+        public void EnterInTuto()
+        {
+            _playerCapacity.SetStartChargeCapacities(1);
+            
+            _gunPlayer.p_unlockSwapEnergyLaser = false;
+            _gunPlayer.p_unlockChargedShoot = false;
+            _healPlayer.p_unlockCapa = false;
+            _dronePlayer.p_unlockCapa = false;
+
+            baseValueReloadCapa = _playerEnergizedState._reloadCapacityValue;
+
+            _playerEnergizedState._reloadCapacityValue = new float[] { 135, 135, 135 };
+        }
+
+        public void ExitTuto()
+        {
+            _playerEnergizedState._reloadCapacityValue = baseValueReloadCapa;
         }
     }
 }
