@@ -2,6 +2,7 @@ using System;
 using FishNet;
 using FishNet.Object;
 using MyPrint;
+using ScriptableObjectsDefinitions;
 using UnityEngine;
 
 public class DroneView : NetworkBehaviour
@@ -15,7 +16,11 @@ public class DroneView : NetworkBehaviour
 	[Header("ApplysEffect")]
 	[SerializeField] private ParticleSystem[] _applyEffects;
 	private ParticleSystem _applyEffectAssigned;
-
+	
+	[Header("Sound")]
+	[SerializeField] private AudioSource _audioSource;
+	[SerializeField] private SoundsDataSO _soundsData;
+	
 	private RaycastHit hit;
 	
 	#endregion
@@ -45,6 +50,8 @@ public class DroneView : NetworkBehaviour
 	
 	private void UpdatePosition()
 	{
+		SoundManager.PlaySound(_soundsData, "ApplyEffect", _audioSource);
+		
 		if (Physics.Raycast(transform.position, Vector3.down, out hit, 1000, LayerMask.NameToLayer("Ground"), QueryTriggerInteraction.Ignore))
 		{
 			_applyEffectAssigned.transform.position = hit.point;

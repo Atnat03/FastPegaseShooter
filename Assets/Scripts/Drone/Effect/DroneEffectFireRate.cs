@@ -4,6 +4,7 @@ using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
+using ScriptableObjectsDefinitions;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -19,7 +20,6 @@ public class DroneEffectFireRate : DroneEffectParent
 	
 	[Header("Multiplicateur")]
 	[SerializeField] private float _fireRateMultiplicator = 2f;
-	
 	
 	#endregion
 

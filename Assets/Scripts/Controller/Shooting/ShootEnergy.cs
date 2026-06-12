@@ -7,10 +7,6 @@ using UnityEngine;
 
 public class ShootEnergy : NetworkBusListener
 {
-	#region Properties
-
-	#endregion
-	
 	#region Variables
 
 	[Header("References")] 
@@ -39,6 +35,7 @@ public class ShootEnergy : NetworkBusListener
 	public Action<int> CantThrowEnergy;
 	public Action<bool, Vector3> OnDetectBro;
 	public Action<bool, Vector3> OnLaserActivate;
+	public Action<bool> OnShoot;
 
 	#endregion
 	
@@ -61,7 +58,11 @@ public class ShootEnergy : NetworkBusListener
 	
 	public void TryShoot()
 	{
-		if (Time.time < _nextFireTime) return;
+		if (Time.time < _nextFireTime)
+		{
+			OnShoot?.Invoke(false);
+			return;
+		}
 		
 		if (_playerEnergy.CurrentEnergy <= 0)
 		{
@@ -80,7 +81,8 @@ public class ShootEnergy : NetworkBusListener
 		SetAimingState(true);
 		
 		_nextFireTime = Time.time + _fireRate;
-		
+		OnShoot?.Invoke(true);
+
 		ConsumeEnergyServerRpc();
 	}
 	
@@ -98,6 +100,7 @@ public class ShootEnergy : NetworkBusListener
 	public void TryCancelShoot()
 	{
 		SetAimingState(false);
+		OnShoot?.Invoke(false);
 	}
 	
 	Transform GetTarget()
