@@ -41,12 +41,22 @@ namespace Tuto
         [Header("LD Elements")]
         [SerializeField] private List<TriggerBoxBridge> _sceneProxies = new();
         [SerializeField] private List<SpawnZoneTutorial> _sceneSpawnZones = new();
+        [SerializeField] private Transform _dapBar;
         
         [Header("Sound")]
         [SerializeField] private AudioSource _audioSource;
         [SerializeField] private SoundsDataSO _soundsData;
 
         Dictionary<PlayerSide, NetworkObject> _playerList = new();
+        
+        [Header("Animation Bar Dap")]
+        [Header("Animation Settings")]
+        [SerializeField] private Vector2 _maxScale = new Vector2(1.2f, 1.2f);
+        [SerializeField] private float _scaleSpeed = 2f;
+
+        [Header("Shake Settings")]
+        [SerializeField] private float _angleJiggle = 5f;
+        [SerializeField] private float _shakeSpeed = 10f;
         
         //Actions
         public Action OnBothUseHeal;
@@ -63,6 +73,9 @@ namespace Tuto
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
             ListenToEvent<OnHealUsed_TUTO>(CheckHealUse);
             ListenToEvent<OnDapEvent>(DapUsed);
+            
+            defaultScale = _dapBar.localScale;
+            defaultRotation = _dapBar.localRotation;
         }
 
         private void CheckHealUse(OnHealUsed_TUTO data)
@@ -321,27 +334,16 @@ namespace Tuto
         #endregion
         
         #region Fill Amount
-
-        public void FillAmount(float maxAmount, float speed, bool activated, AnimationBar type)
-        {
-            if (IsServerInitialized)
-            {
-                AskForFillAmountObserversRpc(maxAmount, speed, activated, type);
-            }
-            else
-            {
-                AskForFillAmountServerRpc(maxAmount, speed, activated, type);
-            }
-        }
+        
 
         [ServerRpc]
-        private void AskForFillAmountServerRpc(float maxAmount, float speed, bool activated, AnimationBar type)
+        private void AskForFillAmountServerRpc(float maxAmount, float speed, bool activated)
         {
-            AskForFillAmountObserversRpc(maxAmount, speed, activated, type);
+            AskForFillAmountObserversRpc(maxAmount, speed, activated);
         }
 
         [ObserversRpc]
-        private void AskForFillAmountObserversRpc(float maxAmount, float speed, bool activated, AnimationBar type)
+        private void AskForFillAmountObserversRpc(float maxAmount, float speed, bool activated)
         {
             //SoundManager.PlaySound(_soundsData, keyVoceline, _audioSource);
             
@@ -350,9 +352,97 @@ namespace Tuto
                 activated = activated,
                 maxPercentage = maxAmount,
                 speed = speed,
-                type = type
             });
         }
+        public void FillAmount(float maxAmount, float speed, bool activated)
+        {
+            if (IsServerInitialized)
+                AskForFillAmountObserversRpc(maxAmount, speed, activated);
+            else
+                AskForFillAmountServerRpc(maxAmount, speed, activated);
+        }
+
+        public void AnimDapBar(AnimationBar type, float duration)
+        {
+            if (IsServerInitialized)
+                AnimDapBarObserversRpc(type, duration);
+            else
+                AnimDapBarServerRpc(type, duration);
+        }
+
+        [ServerRpc]
+        private void AnimDapBarServerRpc(AnimationBar type, float duration) 
+            => AnimDapBarObserversRpc(type, duration);
+
+        [ObserversRpc]
+        private void AnimDapBarObserversRpc(AnimationBar type, float duration)
+        {
+            PlayAnimation(new OnAnimDapBar_TUTO { type = type, duration = duration });
+        }
+        
+        #region DapAnimation
+        
+        private Coroutine currentAnimation;
+        private Vector3 defaultScale;
+        private Quaternion defaultRotation;
+        
+        private void StopCurrentAnimation()
+        {
+            if (currentAnimation != null)
+                StopCoroutine(currentAnimation);
+
+            _dapBar.localScale = defaultScale;
+            _dapBar.localRotation = defaultRotation;
+        }
+        
+        private void PlayAnimation(OnAnimDapBar_TUTO data)
+        {
+            StopCurrentAnimation();
+
+            switch (data.type)
+            {
+                case AnimationBar.Scale:
+                    currentAnimation = StartCoroutine(ScaleAnimation(data.duration));
+                    break;
+                case AnimationBar.Vibration:
+                    currentAnimation = StartCoroutine(VibrationAnimation(data.duration));
+                    break;
+            }
+        }
+        
+        private IEnumerator ScaleAnimation(float duration)
+        {
+            float t = 0;
+            Vector3 startScale = _dapBar.localScale;
+
+            while (t < duration)
+            {
+                t += Time.deltaTime;
+                float scale = 1f + Mathf.Sin(Time.time * _scaleSpeed) * (_maxScale.x - 1f);
+                _dapBar.localScale = new Vector3(scale, scale, 1f);
+                yield return null;
+            }
+
+            _dapBar.localScale = startScale;
+        }
+
+        private IEnumerator VibrationAnimation(float duration)
+        {
+            float t = 0;
+            Quaternion startRotation = _dapBar.localRotation;
+
+            while (t < duration)
+            {
+                t += Time.deltaTime;
+                float angle = Mathf.Sin(Time.time * _shakeSpeed) * _angleJiggle;
+                _dapBar.localRotation = Quaternion.Euler(0, 0, angle);
+                yield return null;
+            }
+
+            _dapBar.localRotation = startRotation;
+        }
+        
+        #endregion
 
         #endregion
         

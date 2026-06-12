@@ -17,7 +17,8 @@ MonoBehaviour:
     trigger:
       rid: 6001466733914489062
     eventsList:
-    - rid: 6001466773982150937
+    - rid: 6001466797542605010
+    - rid: 6001466797542605011
   references:
     version: 2
     RefIds:
@@ -26,8 +27,14 @@ MonoBehaviour:
       data:
         proxyIndex: 0
         mode: 1
-    - rid: 6001466773982150937
-      type: {class: Event_TakeDamage, ns: Tuto, asm: Assembly-CSharp}
+    - rid: 6001466797542605010
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
       data:
-        damage: 10
-        seuilDamage: 95
+        activated: 1
+        maxPercentage: 50
+        speedFill: 3
+    - rid: 6001466797542605011
+      type: {class: Event_AnimDapBar, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        animationType: 1
+        duration: 3
