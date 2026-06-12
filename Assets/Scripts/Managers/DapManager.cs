@@ -44,6 +44,14 @@ public class DapManager : NetworkBusListener
 	private List<Transform> _playerList = new List<Transform>();
 	
 	private HashSet<int> _playersReadyToDap = new();
+	private HashSet<int> _triggeredThresholds = new();
+	
+	[Header("Idle Detection")]
+	[SerializeField] private float _idleTimeToTrigger = 20f;
+
+	private float _lastChangeTime;
+	private float _lastValue;
+	private bool _idleTriggered;
 	
 	//Actions
 	public Action<float> OnPercentageChange;
@@ -65,6 +73,10 @@ public class DapManager : NetworkBusListener
 		_canDapping.OnChange += OnCanDappingChange;
 
 		_dapPercentage.Value = 0;
+		
+		_lastChangeTime = Time.time;
+		_lastValue = _dapPercentage.Value;
+		_idleTriggered = false;
 	}
 	public override void OnStartClient()
 	{
@@ -150,6 +162,27 @@ public class DapManager : NetworkBusListener
 		}
 	}
 	
+	private void CheckThresholds(float value)
+	{
+		float percent = (value / _maxEnergy) * 100f;
+
+		TryTriggerThreshold(25, percent);
+		TryTriggerThreshold(50, percent);
+		TryTriggerThreshold(75, percent);
+		TryTriggerThreshold(100, percent);
+	}
+
+	
+	private void TryTriggerThreshold(int threshold, float percent)
+	{
+		if (percent >= threshold && !_triggeredThresholds.Contains(threshold))
+		{
+			_triggeredThresholds.Add(threshold);
+
+			InvokeEvent(new OnDapReachPercentage{percentage = threshold});
+		}
+	}
+	
 	private void OnDapChange(float prev, float next, bool asServer)
 	{
 		if (_dapPercentage.Value >= _maxEnergy)
@@ -161,6 +194,15 @@ public class DapManager : NetworkBusListener
 		}
 		
 		UpdateUI(next);
+		
+		CheckThresholds(next);
+		
+		if (!Mathf.Approximately(next, _lastValue))
+		{
+			_lastValue = next;
+			_lastChangeTime = Time.time;
+			_idleTriggered = false;
+		}
 	}
 	
 	private void OnCanDappingChange(bool prev, bool next, bool asServer)
@@ -180,6 +222,8 @@ public class DapManager : NetworkBusListener
 		if (!IsServerInitialized) 
 			return;
 		
+		HandleIdleTimer();
+		
 		if (_playerList.Count < 2)
 			return;
 
@@ -197,6 +241,19 @@ public class DapManager : NetworkBusListener
 		float fillAmount = Mathf.Clamp01(energy / _maxEnergy);
 
 		OnPercentageChange?.Invoke(fillAmount);
+	}
+	
+	private void HandleIdleTimer()
+	{
+		if (_idleTriggered)
+			return;
+
+		if (Time.time - _lastChangeTime >= _idleTimeToTrigger)
+		{
+			_idleTriggered = true;
+			
+			InvokeEvent(new OnDapWaitTooLongWithoutChange());
+		}
 	}
 	
 	#endregion
