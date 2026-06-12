@@ -7,7 +7,6 @@ public class AscensseurIncrement : Ascenseur
     [SerializeField]private string baseTxt = "GR-0";
     [SerializeField]private TextMeshPro tmp;
     [SerializeField]private Animator animator;
-    [SerializeField]private bool isRight;
     
     protected override void OnLoop()
     {
@@ -17,13 +16,11 @@ public class AscensseurIncrement : Ascenseur
 
     protected override void OnAscenseurStop(float duration)
     { 
-        if (isRight)
+        base.OnAscenseurStop(duration);
+        
+        if (animator)
         {
-            if (elapsed / duration < .5 && elapsed / duration > .45)
-            {
-                Debug.Log(elapsed / duration);
-                animator.SetTrigger("Open");
-            }
+            animator.SetTrigger("Open");
         }
     }
 }
