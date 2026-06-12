@@ -540,9 +540,10 @@ public class PlayerHealth : NetworkBusListener
     [ObserversRpc]
     private void NotifyDeathRpc(NetworkObject playerN)
     {
+        _gunSwitching.IGunMain.TryCancelShooting();
+        
         InvokeEvent(new OnPlayerDeathEvent { p_playerN = playerN });
     }
-
 
     [ObserversRpc]
     private void ShowHealThrowObserverRpc(Vector3 landingPos, float scale, float duration)

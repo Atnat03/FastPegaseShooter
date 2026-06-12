@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using CustomConsole.Runtime.Logger;
+using ScriptableObjectsDefinitions;
 using UnityEngine;
 
 public class EnemyCoreViewer : MonoBehaviour
@@ -11,7 +12,10 @@ public class EnemyCoreViewer : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer _skinnedMeshRenderer;
     [SerializeField] private ParticleSystem _desintegrationParticles;
     [SerializeField] private GameObject _ballVFX;
-
+    
+    [SerializeField] private SoundsDataSO _soundData;
+    [SerializeField] private AudioSource _source;
+    
     private bool _deathTriggered;
 
     private void Awake()
@@ -46,6 +50,8 @@ public class EnemyCoreViewer : MonoBehaviour
             _deathTriggered) return;
         
         _deathTriggered = true;
+
+        SoundManager.PlaySound(_soundData, "Death", _source);
         
         Material mat = _skinnedMeshRenderer.sharedMaterials[0];
         if (!mat.name.EndsWith("(Instance)"))

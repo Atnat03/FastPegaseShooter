@@ -42,6 +42,14 @@ public class PlayerAnimation : NetworkBehaviour
 	public void SetSlideAnim(bool isSlide) => UpdateAnimationTriggerServerRpc(isSlide ? "Slide" : "StopSlide");
 	public void SetShootAnim() => UpdateAnimationTriggerServerRpc("Shoot");
 
+	public void SetWallRideAnim(bool isRight) => UpdateAnimationBoolServerRpc(isRight ? "WallRideR" : "WallRideL", true);
+
+	public void SetStopWallRideAnim()
+	{
+		UpdateAnimationBoolServerRpc("WallRideL", false);
+		UpdateAnimationBoolServerRpc("WallRideR", false);
+	}
+
 	public void ChangeAirState(bool isGrounded)
 	{
 		UpdateAnimationBoolServerRpc("Falling", !isGrounded);
