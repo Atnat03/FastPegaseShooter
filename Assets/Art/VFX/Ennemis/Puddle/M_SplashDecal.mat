@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_HealthBar
-  m_Shader: {fileID: -6465566751694194690, guid: 398895d908a161b498a19b0dad485220, type: 3}
+  m_Name: M_SplashDecal
+  m_Shader: {fileID: -6465566751694194690, guid: 3571477e87ff318428dbb3f63533a844, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -18,16 +18,13 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MASK:
-        m_Texture: {fileID: 2800000, guid: 4dd06753e272d404f802c16c2e262c18, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
+    - _Decal_Texture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -45,20 +42,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ColorMask: 15
-    - _SizeCell: 1.27
-    - _Speed: 0.5
-    - _SpeedVoronoi: 3
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UIMaskSoftnessX: 1
-    - _UIMaskSoftnessY: 1
+    - _FadeDistance: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
-    - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 1, g: 0.3019608, b: 0.2509804, a: 1}
-    - _Color2: {r: 0.98039216, g: 0.60784316, b: 0.56078434, a: 1}
+    - _Color: {r: 0.9254903, g: 0.8274511, b: 0.6980392, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!114 &3915645234367833904
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
