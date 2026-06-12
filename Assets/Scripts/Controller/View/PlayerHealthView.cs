@@ -31,6 +31,7 @@ public class PlayerHealthView : MonoBehaviour
 	[SerializeField] private Camera _normalCamera;
 	[SerializeField] private Camera _deathCamera;
 	[SerializeField] private Transform[] _deathCameraOffsets;
+	private Coroutine _koCoroutine;
 	
 	[Header("Healing")]
 	[SerializeField] private LineRenderer _healingTrajectoryLine;
@@ -46,7 +47,9 @@ public class PlayerHealthView : MonoBehaviour
 	bool _isShowedWarning = false;
 	bool healLineComplete = false;
 
-	private float _healTargetFillAmount = 1;
+	private float _currentHealthFill;
+	private float _targetHealthFill;
+	private float _smoothedTarget;
 	
 	#endregion
 	
@@ -65,8 +68,13 @@ public class PlayerHealthView : MonoBehaviour
 	
 	private void UpdateHealth(float targetFill)
 	{
-		_healTargetFillAmount = targetFill;
+		UpdateColors(targetFill);
 
+		_targetHealthFill = targetFill;
+	}
+
+	void UpdateColors(float targetFill)
+	{
 		if (targetFill > 0.5f)
 		{
 			_healthBar.material.SetColor("_Color", _colorBar[0]);
@@ -86,9 +94,7 @@ public class PlayerHealthView : MonoBehaviour
 			}
 		}
 	}
-
-	private Coroutine _koCoroutine;
-
+	
 	private void KoPlayerUI(bool state, float duration)
 	{
 		_deathCanva.gameObject.SetActive(state);
@@ -103,6 +109,7 @@ public class PlayerHealthView : MonoBehaviour
 		if (state)
 		{
 			_koCoroutine = StartCoroutine(KoAnimation(duration));
+			SoundManager.PlaySound(_soundsData, "Death", _audioSource);
 		}
 		else
 		{
@@ -163,6 +170,10 @@ public class PlayerHealthView : MonoBehaviour
 
 	private void Update()
 	{
+		_smoothedTarget = Mathf.Lerp(_smoothedTarget, _targetHealthFill, Time.deltaTime * 15f);
+		_currentHealthFill = Mathf.MoveTowards(_currentHealthFill, _smoothedTarget, Time.deltaTime * _healthVisualFillingSpeed);
+		_healthBar.fillAmount = _currentHealthFill;
+
 		if (_healingTrajectoryLine.enabled && healLineComplete)
 		{
 			Vector3[] line = _playerHealth.HealThrowLine(out float distance);
@@ -170,7 +181,6 @@ public class PlayerHealthView : MonoBehaviour
 			_healingTrajectoryLine.SetPositions(line);
 			ShowHealSphereEffect(line[^1], distance * _playerHealth.healSizeEffectFactor + _playerHealth.minSize);
 		}
-		_healthBar.fillAmount = Mathf.Lerp(_healthBar.fillAmount, _healTargetFillAmount, Time.deltaTime * _healthVisualFillingSpeed);
 	}
 
 	Coroutine showLineCoroutine;
@@ -215,6 +225,11 @@ public class PlayerHealthView : MonoBehaviour
 		if(_healingTrajectoryLine.enabled == false) _healingThrowPosObj.SetActive(false);
 	}
 
+	private void OnHeal()
+	{
+		SoundManager.PlaySound(_soundsData, "Heal", _audioSource);
+	}
+
 	void HideGun()
 	{
 		gunSwitching.DesactivateAllMainGun();
@@ -237,6 +252,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnThrowKeyReleased += StopPreview;
 		_playerHealth.OnHealThrowLanding += ShowHealSphereEffect;
 		_playerHealth.OnHealCanceled += StopPreview;
+		_playerHealth.OnHeal += OnHeal;
 		
 		//Drone Throw
 		_droneThrower.OnThrowing += StopPreview;
@@ -248,6 +264,7 @@ public class PlayerHealthView : MonoBehaviour
 		_playerHealth.OnStartWarning -= StartWarning;
 		_playerHealth.OnKOPlayer -= KoPlayerUI;
 		_playerHealth.OnTakeDamage -= TakeDamageEffect;
+		_playerHealth.OnHeal -= OnHeal;
     
 		//Healing
 		_playerHealth.OnThrowingVisualActivation -= OnThrowingVisualActivation;

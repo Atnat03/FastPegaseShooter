@@ -93,6 +93,7 @@ public class PlayerHealth : NetworkBusListener
     public Action OnStartWarning;
     public Action<bool, float> OnKOPlayer;
     public Action OnTakeDamage;
+    public Action OnHeal;
 
     public Action OnThrowingVisualActivation;
     public Action OnThrowing;
@@ -337,14 +338,23 @@ public class PlayerHealth : NetworkBusListener
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void RequestTakeDamageFromTutoServerRpc(int damage)
+    public void RequestTakeDamageFromTutoServerRpc(int damage, int seuil)
     {
-        TakeDamage(new PlayerTakeDamageEvent
+        int dmg = damage;
+
+        if (_currentHealth.Value - dmg < seuil)
         {
-            p_playerN = NetworkObject,
-            p_value = damage,
-            p_attacker = null
-        });
+            _currentHealth.Value = seuil;
+        }
+        else
+        {
+            TakeDamage(new PlayerTakeDamageEvent
+            {
+                p_playerN = NetworkObject,
+                p_value = damage,
+                p_attacker = null
+            });
+        }
     }
 
     [ServerRpc]
@@ -467,6 +477,7 @@ public class PlayerHealth : NetworkBusListener
             ? _healthBase
             : _currentHealth.Value + data.p_value;
         _currentHealth.Value = newHealth;
+        OnHeal?.Invoke();
     }
 
     private void Death()

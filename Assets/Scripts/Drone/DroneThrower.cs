@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
@@ -9,6 +10,8 @@ using UnityEngine;
 
 public class DroneThrower : NetworkBusListener
 {
+	public NetworkObject Bro => _bro.Value;
+	
 	#region Variables
 	
 	[SerializeField] private ArmBridgeAnimation _bridgeAnimation;
@@ -18,14 +21,14 @@ public class DroneThrower : NetworkBusListener
 	[Header("Throw")]
 	[SerializeField] private Drone _dronePrefab;
 	[SerializeField] private Transform _spawnPoint;
-
-	[Header("Detection Bro")]
-	private Transform _target = null;
 	
 	private float _currentChargeTime = 0f;
 	private bool _isCharging = false;
 	private bool _isCanceled = false;
 
+	private static readonly List<DroneThrower> Players = new();
+	private readonly SyncVar<NetworkObject> _bro = new(new SyncTypeSettings(WritePermission.ServerOnly, ReadPermission.Observers));
+	
 	private readonly SyncVar<bool> _canThrow = new(false);
 	
 	private Drone _currentDroneInTerrain = null;
@@ -39,6 +42,24 @@ public class DroneThrower : NetworkBusListener
 	#endregion
 	
 	#region Fonctions
+	
+	public override void OnStartServer()
+	{
+		base.OnStartServer();
+
+		Players.Add(this);
+
+		if (Players.Count == 2)
+		{
+			Players[0]._bro.Value = Players[1].NetworkObject;
+			Players[1]._bro.Value = Players[0].NetworkObject;
+		}
+	}
+
+	public override void OnStopServer()
+	{
+		Players.Remove(this);
+	}
 
 	public override void OnStartNetwork()
 	{
@@ -46,23 +67,16 @@ public class DroneThrower : NetworkBusListener
 		{
 			OnGetDrone?.Invoke();
 		}
-		
-		ListenToEvent<OnPlayerSpawnEvent>(SetTarget);
 	}
-
-	private void SetTarget(OnPlayerSpawnEvent data)
-	{
-		if (!IsOwner)
-		{
-			_target = data.Transform;
-		}
-	}
-
+	
 	public void TryThrowDrone()
 	{
 		if (_isCanceled) return;
-		if (_target == null) return;
-		if (_target == transform) return;
+		if (Bro == null)
+		{
+			Debug.LogWarning("Bro not assigned!");
+			return;
+		}
 		if (!_playerCapacity.CanDrone) return;
 		if (!p_unlockCapa) return;
 		
@@ -83,10 +97,9 @@ public class DroneThrower : NetworkBusListener
 		InvokeEvent(new OnDroneUsed_TUTO());
 		
 		_isCharging = false;
-		
-		NetworkObject targetNetObj = _target.GetComponent<NetworkObject>()
-		                             ?? _target.GetComponentInParent<NetworkObject>();
-		
+
+		NetworkObject targetNetObj = Bro;
+
 		if (_bridgeAnimation != null)
 		{
 			_bridgeAnimation.StartThrowDrone(targetNetObj);
@@ -99,6 +112,7 @@ public class DroneThrower : NetworkBusListener
 		}
 
 		OnThrowing?.Invoke();
+
 	}
 	
 	[ServerRpc]
