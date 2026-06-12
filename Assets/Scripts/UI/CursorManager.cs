@@ -56,6 +56,9 @@ public class CursorManager : MonoBehaviour
 
     public static bool CanPause()
     {
+        if (instance._states.Count == 0)
+            return true;
+        
         return instance._states.Peek().Equals(CursorState.Gameplay);
     }
 }

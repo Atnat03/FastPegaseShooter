@@ -137,7 +137,7 @@ public class PlayerCapacity : MonoBusListener
 	{
 		data.p_currentNumberCapacity
 			= Mathf.Clamp(
-				data.p_currentNumberCapacity - 1, 
+				data.p_currentNumberCapacity - 1,
 				0,
 				data.p_maxNumberCapacity);
 		

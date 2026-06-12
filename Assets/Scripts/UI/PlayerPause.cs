@@ -27,22 +27,11 @@ public class PlayerPause : NetworkBusListener
             panel.Init();
         }
     }
-    private void OnEnable()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
-        _playerInput.actions["Escape"].performed += UpdatePause;
-    }
-    
-    private void OnDisable()
-    {
-        _playerInput.actions["Escape"].performed -= UpdatePause;
-    }
     
     private void UpdatePause(InputAction.CallbackContext obj)
     {
-        //if (!CursorManager.CanPause()) return;
+        if (!_isPause && !CursorManager.CanPause())
+            return;
         
         UpdatePause();
     }
@@ -67,9 +56,21 @@ public class PlayerPause : NetworkBusListener
             Cursor.visible = false;
         }
         
-        InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
+        //InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
     }
     
     
+    private void OnEnable()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        _playerInput.actions["Escape"].performed += UpdatePause;
+    }
+    
+    private void OnDisable()
+    {
+        _playerInput.actions["Escape"].performed -= UpdatePause;
+    }
 
 }

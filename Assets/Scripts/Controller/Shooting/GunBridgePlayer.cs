@@ -27,6 +27,7 @@ namespace Controller
 
         public bool p_unlockSwapEnergyLaser = true;
         public bool p_unlockChargedShoot = true;
+        private bool p_isMainGun = true;
         
         public void InitializeWithGunId(int gunId)
         {
@@ -69,6 +70,7 @@ namespace Controller
             if (!_isInitialized) return;
             if (!_playerCapacity.CanChargedShoot) return;
             if (!p_unlockChargedShoot)return;
+            if (!p_isMainGun) return;
             
             InvokeEvent(new OnUseCapacity
             {
@@ -92,6 +94,7 @@ namespace Controller
             if (_gunSwitching.IsSwitching) return;
             if (!_isInitialized) return;
             if(CurrentGun.IsChargeShooting)return;
+            if (!p_isMainGun) return;
             
             CurrentGun.TryReload();
         }
@@ -101,19 +104,11 @@ namespace Controller
             if (!p_unlockSwapEnergyLaser)
                 return;
             
+            p_isMainGun = isMain;
+            
             InvokeEvent(new OnFireModeChanged_TUTO());
             
-            _gunSwitching.ChangeGunServerRpc(isMain);
-        }
-        
-        void SetLayerRecursively(GameObject obj, int newLayer)
-        {
-            obj.layer = newLayer;
-
-            foreach (Transform child in obj.transform)
-            {
-                SetLayerRecursively(child.gameObject, newLayer);
-            }
+            _gunSwitching.ChangeGun(isMain);
         }
     }
 
