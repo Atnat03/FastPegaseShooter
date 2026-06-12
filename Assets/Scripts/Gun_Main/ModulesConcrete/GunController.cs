@@ -9,6 +9,7 @@ using GunDecorator.ChargedModules;
 using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
+using Tuto.Triggers;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.VFX;
@@ -101,6 +102,7 @@ namespace GunDecorator
         [SerializeField] private ParticleSystem[] _chargedMuzzleFlash;
 
         private bool _isChargeShooting;
+        private bool isDead = false;
 
         //Action
         public Action OnSetUp;
@@ -121,6 +123,8 @@ namespace GunDecorator
         {
             if(_animator)
                 _animator.ResetTrigger("Reload");
+            
+
         }
 
         private void Awake()
@@ -162,8 +166,9 @@ namespace GunDecorator
                 _animator = animator;
         }
 
-        private void Start() // pour du debug, a tej en build finale
+        private void Start()
         {
+            // pour du debug, a tej en build finale
             playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
 
             foreach (ParticleSystem s in _normalMuzzleFlash)
@@ -175,6 +180,17 @@ namespace GunDecorator
             {
                 FPSController.SetLayerRecursively(s.gameObject, LayerMask.NameToLayer("Default"));
             }
+            //fin du debug
+            
+            ListenToEvent<OnPlayerDeathEvent>(data =>
+            {
+                if (data.p_playerN == transform.GetRootTransform().GetComponent<NetworkObject>()) SetDead(true);
+            });
+            
+            ListenToEvent<OnPlayerRespawnEvent>(data =>
+            {
+                if (data.p_playerN == transform.GetRootTransform().GetComponent<NetworkObject>()) SetDead(false);
+            });
         }
 
         public void TryFire()
@@ -221,7 +237,7 @@ namespace GunDecorator
 
         IEnumerator ShootingCoroutine(IShootModule s)
         {
-            while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading)
+            while (ShootingInputPressed && GetCurrentAmmo() > 0 && !_reloadModule.IsReloading && !isDead)
             {
                 _shootModule.SetFireRate(_fireRateMultiplier);
 
@@ -451,5 +467,11 @@ namespace GunDecorator
                 _animatorBall.gameObject.SetActive(state);
             }
         }
+
+        void SetDead(bool dead)
+        {
+            isDead = dead;
+            if(!dead)TryReload();
+        } 
     }
 }

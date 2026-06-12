@@ -1816,6 +1816,7 @@ MonoBehaviour:
   _playerFPS: {fileID: 7654427447990518306}
   _playerAnimation: {fileID: 1296988651901974220}
   grappleLineRenderer: {fileID: 7525644374583582116}
+  _deathSpawnParticleSystem: {fileID: 2849470077780423541}
   landSnap: 0
   dashVerticality: 0
   groundNeededToDashAgain: 0
@@ -5266,6 +5267,7 @@ Transform:
   m_Children:
   - {fileID: 1400761342311452599}
   - {fileID: 7375814737663399586}
+  - {fileID: 6591838286123801993}
   m_Father: {fileID: 6363322599526773559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3556170799771328248
@@ -5572,6 +5574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadingScreen
   loadingScreen: {fileID: 6788532825706946591}
+  _minimumLoadingTime: 1
 --- !u!1 &7010684394084671937
 GameObject:
   m_ObjectHideFlags: 0
@@ -6783,6 +6786,73 @@ Transform:
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 9027045949253901578, guid: 15d9aaa1facdedd4b93aa0af0efaa42b, type: 3}
   m_PrefabInstance: {fileID: 209374183692692686}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &655736950988309074
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2113718159364479104}
+    m_Modifications:
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.934
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7738221600511106201, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+      propertyPath: m_Name
+      value: VFX_BrobotGlitch
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+--- !u!198 &2849470077780423541 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3356022539917029671, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+  m_PrefabInstance: {fileID: 655736950988309074}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6591838286123801993 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5936673084160024539, guid: 45a587f9449b16e42b14365c65e61554, type: 3}
+  m_PrefabInstance: {fileID: 655736950988309074}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &759260682379569042
 PrefabInstance:
@@ -14676,6 +14746,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1792326860910464111}
     - target: {fileID: 2489144406978831582, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3016760523258233133, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
