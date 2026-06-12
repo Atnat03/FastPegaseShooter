@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using MyPrint;
+using ScriptableObjectsDefinitions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,8 @@ public class DapManagerView : MonoBusListener
     [Header("Dapping")]
     [SerializeField] private GameObject _dappingExplosion;
     [SerializeField] private VideoPlayer _videoClipDap;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private SoundsDataSO _dataSound;
 
     private void OnEnable()
     {
@@ -49,6 +52,8 @@ public class DapManagerView : MonoBusListener
     IEnumerator DappingCoroutine(Vector3 pos)
     {
         _videoClipDap.gameObject.SetActive(true);
+        
+        SoundManager.PlaySound(_dataSound, "Dap", _audioSource);
         
         yield return new WaitForSeconds((float)_videoClipDap.clip.length);
         
