@@ -75,12 +75,12 @@ namespace Tuto
         
         public void EnterInTuto()
         {
-            _playerCapacity.SetStartChargeCapacities(1);
-            
             _gunPlayer.p_unlockSwapEnergyLaser = false;
             _gunPlayer.p_unlockChargedShoot = false;
             _healPlayer.p_unlockCapa = false;
             _dronePlayer.p_unlockCapa = false;
+            
+            _playerCapacity.SetStartChargeCapacities(1);
 
             baseValueReloadCapa = _playerEnergizedState._reloadCapacityValue;
 
