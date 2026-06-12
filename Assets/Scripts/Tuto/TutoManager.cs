@@ -148,8 +148,11 @@ namespace Tuto
 
             trigger.Activate();
             trigger.OnActivated += Handler;
-            
+            Debug.Log("[TutoManager] WaitForTrigger — listening for OnActivated");
+
             yield return new WaitUntil(() => fired);
+
+            Debug.Log("[TutoManager] WaitForTrigger — trigger fired!");
             
             trigger.OnActivated -= Handler;
             
@@ -278,41 +281,41 @@ namespace Tuto
 
         #region TakeDamage
         
-        public void TakeDamage(int damage)
+        public void TakeDamage(int damage, int seuil)
         {
             if (IsServerInitialized)
             {
                 foreach (NetworkObject player in GetAllPlayers())
                 {
-                    SendDamageToPlayer(player, damage);
+                    SendDamageToPlayer(player, damage, seuil);
                 }
             }
             else
             {
-                TakeDamageServerRpc(damage);
+                TakeDamageServerRpc(damage, seuil);
             }
         }
 
         [ServerRpc]
-        private void TakeDamageServerRpc(int damage)
+        private void TakeDamageServerRpc(int damage, int seuil)
         {
             foreach (NetworkObject player in GetAllPlayers())
             {
-                SendDamageToPlayer(player, damage);
+                SendDamageToPlayer(player, damage, seuil);
             }
         }
         
-        private void SendDamageToPlayer(NetworkObject target, float damage)
+        private void SendDamageToPlayer(NetworkObject target, float damage, int seuil)
         {
             if (target == null) return;
 
-            TargetTakeDamageRpc(target.Owner, target, damage);
+            TargetTakeDamageRpc(target.Owner, target, damage, seuil);
         }
         
         [TargetRpc]
-        private void TargetTakeDamageRpc(NetworkConnection conn, NetworkObject target, float damage)
+        private void TargetTakeDamageRpc(NetworkConnection conn, NetworkObject target, float damage, int seuil)
         {
-            target.GetComponent<PlayerHealth>().RequestTakeDamageFromTutoServerRpc(Mathf.RoundToInt(damage));
+            target.GetComponent<PlayerHealth>().RequestTakeDamageFromTutoServerRpc(Mathf.RoundToInt(damage), seuil);
         }
 
         #endregion
