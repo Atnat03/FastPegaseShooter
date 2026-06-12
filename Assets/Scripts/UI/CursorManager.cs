@@ -53,4 +53,9 @@ public class CursorManager : MonoBehaviour
                 break;
         }
     }
+
+    public static bool CanPause()
+    {
+        return instance._states.Peek().Equals(CursorState.Gameplay);
+    }
 }
