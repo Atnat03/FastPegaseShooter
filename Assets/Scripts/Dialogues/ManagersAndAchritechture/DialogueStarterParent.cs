@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FishNet.Object;
 using UnityEngine;
 
-public class DialogueStarterParent : NetworkBusListener
+public class DialogueStarterParent : MonoBusListener
 {
     [SerializeField]
     [Tooltip("si ca doit etre lié aux directions cardinales, il faut les mettre dans l'ordre nord, sud, est, ouest")]
