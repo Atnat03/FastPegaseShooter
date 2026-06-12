@@ -52,3 +52,9 @@ public struct OnUnlockCapa_TUTO
 {
     public Capacity_TUTO capa;
 }
+
+public struct OnAnimDapBar_TUTO
+{
+    public AnimationBar type;
+    public float duration;
+}

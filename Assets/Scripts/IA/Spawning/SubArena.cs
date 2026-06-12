@@ -111,7 +111,8 @@ public class SubArena : NetworkBusListener
                 arenaId, 
                 overCrowdingPercent,
                 _spawningStates[stateIndex].p_state,
-                _cardinalDirection)
+                _cardinalDirection,
+                _spawnedEnemies.Count)
             );
     }
 

@@ -84,6 +84,11 @@ public class PlayerSelectGun : NetworkBusListener
 	{
 		if (!IsOwner) return;
 	
+		InvokeEvent(new OnGunSelectionStateChanged
+		{
+			IsOpen = true
+		});
+		
 		Cons.Print("Show UI", ColorConsole.Blue);
 		
 		_gun.DesactivateAllMainGun();
@@ -138,6 +143,11 @@ public class PlayerSelectGun : NetworkBusListener
 		_uiMain.SetActive(false);
 		_gun.ChangeCurrentGun_Main_ServerRpc(equipedGun);
 		_fps.IsFreeze = false;
+		
+		InvokeEvent(new OnGunSelectionStateChanged
+		{
+			IsOpen = false
+		});
 		
 		CursorManager.instance.PopState(_fps);
 	}
@@ -218,4 +228,9 @@ public class PlayerSelectGun : NetworkBusListener
 	}
 	
 	#endregion
+}
+
+public struct OnGunSelectionStateChanged
+{
+	public bool IsOpen;
 }
