@@ -78,15 +78,12 @@ MonoBehaviour:
     - rid: 5406076695212458148
     - rid: 5406076761526239319
     - rid: 5406076761526239320
-    - rid: 5406076761526239321
-    - rid: 5406076761526239322
     - rid: 5406076761526239324
   - ScenarioName: EndPinata
     trigger:
       rid: 5406076761526239331
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076761526239320
     - rid: 5406076761526239332
   - ScenarioName: HealezVous
     trigger:
@@ -102,6 +99,7 @@ MonoBehaviour:
     - rid: 5406076807428964495
     - rid: 5406076763678179428
     - rid: 5406076763678179435
+    - rid: 5406076854874407006
   - ScenarioName: SpawnOtherSide
     trigger:
       rid: 5406076807428964499
@@ -109,6 +107,7 @@ MonoBehaviour:
     - rid: 5406076807428964500
     - rid: 5406076807428964502
     - rid: 5406076807428964501
+    - rid: 5406076854874407007
   - ScenarioName: EndDrone
     trigger:
       rid: 5406076763678179431
@@ -122,6 +121,7 @@ MonoBehaviour:
       rid: 5406076763678179442
     eventsList:
     - rid: 5406076671141347504
+    - rid: 5406076840737767521
     - rid: 5406076763678179420
     - rid: 5406076763678179443
     - rid: 5406076763678179444
@@ -129,8 +129,7 @@ MonoBehaviour:
     - rid: 5406076763678179446
     - rid: 5406076763678179447
     - rid: 5406076763678179448
-    - rid: 5406076840737767521
-    - rid: 5406076763678179450
+    - rid: 5406076854874407001
     - rid: 5406076763678179451
     - rid: 5406076763678179452
   - ScenarioName: End Tuto
@@ -138,7 +137,8 @@ MonoBehaviour:
       rid: 5406076763678179455
     eventsList:
     - rid: 5406076671141347504
-    - rid: 5406076763678179420
+    - rid: 5406076854874407008
+    - rid: 5406076854874407009
   references:
     version: 2
     RefIds:
@@ -237,7 +237,7 @@ MonoBehaviour:
     - rid: 5406076746262118504
       type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
-        _percentToReach: 10
+        _percentToReach: 15
     - rid: 5406076746262118505
       type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -268,21 +268,10 @@ MonoBehaviour:
     - rid: 5406076761526239320
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[GG Pinata]'
+        _dialogue: Mobs en approche
         _keyVoceline: test
         _duration: 3
         speaker: 2
-    - rid: 5406076761526239321
-      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _durationToWait: 0.2
-    - rid: 5406076761526239322
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "[R\xE9action bleu]"
-        _keyVoceline: test
-        _duration: 3
-        speaker: 1
     - rid: 5406076761526239324
       type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -316,7 +305,7 @@ MonoBehaviour:
     - rid: 5406076763678179420
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _dialogue: '[Dialogue FINN]'
+        _dialogue: "[Dialogue Fin S\xE9pa"
         _keyVoceline: 
         _duration: 3
         speaker: 2
@@ -348,7 +337,6 @@ MonoBehaviour:
         activated: 1
         maxPercentage: 0
         speedFill: 3
-        animationType: 0
     - rid: 5406076763678179444
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -362,7 +350,6 @@ MonoBehaviour:
         activated: 1
         maxPercentage: 100
         speedFill: 3
-        animationType: 0
     - rid: 5406076763678179446
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -376,7 +363,6 @@ MonoBehaviour:
         activated: 1
         maxPercentage: 0
         speedFill: 3
-        animationType: 0
     - rid: 5406076763678179448
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -384,13 +370,6 @@ MonoBehaviour:
         _keyVoceline: 
         _duration: 3
         speaker: 2
-    - rid: 5406076763678179450
-      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        activated: 1
-        maxPercentage: 0
-        speedFill: 3
-        animationType: 1
     - rid: 5406076763678179451
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -426,8 +405,8 @@ MonoBehaviour:
     - rid: 5406076786627313776
       type: {class: Event_TakeDamage, ns: Tuto, asm: Assembly-CSharp}
       data:
-        damage: 50
-        seuilDamage: 50
+        damage: 60
+        seuilDamage: 25
     - rid: 5406076786627313777
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -490,3 +469,34 @@ MonoBehaviour:
       data:
         actionToDo: 0
         doorIndex: 4
+    - rid: 5406076854874407001
+      type: {class: Event_AnimDapBar, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        animationType: 1
+        duration: 1
+    - rid: 5406076854874407006
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Envoyez le drone avec A !
+        target: 1
+        disableAction: 3
+        duration: 1
+    - rid: 5406076854874407007
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Envoyez le drone avec A !
+        target: 0
+        disableAction: 3
+        duration: 1
+    - rid: 5406076854874407008
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 7
+    - rid: 5406076854874407009
+      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _dialogue: FIIINN
+        _keyVoceline: 
+        _duration: 3
+        speaker: 0

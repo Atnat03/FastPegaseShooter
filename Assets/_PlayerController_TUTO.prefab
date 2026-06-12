@@ -2953,6 +2953,7 @@ MonoBehaviour:
   _playerFPS: {fileID: 7654427447990518306}
   _playerAnimation: {fileID: 1296988651901974220}
   grappleLineRenderer: {fileID: 7525644374583582116}
+  _deathSpawnParticleSystem: {fileID: 0}
   landSnap: 0
   dashVerticality: 0
   groundNeededToDashAgain: 0
@@ -3232,7 +3233,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584204043892324251
+  _initializedTimestamp: -8584203431115207812
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -3248,7 +3249,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 10
+  <PrefabId>k__BackingField: 26
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 12910792227098983744
   SceneId: 0
@@ -3519,6 +3520,8 @@ MonoBehaviour:
   - {fileID: 1011476209413690496}
   - {fileID: 3853753555460904564}
   coinGunMesh: {fileID: 3256036062922672506}
+  equipButton: {fileID: 0}
+  equipButtonColors: []
 --- !u!114 &2632099118924709043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3540,7 +3543,7 @@ MonoBehaviour:
   - 135
   - 135
   - 135
-  _percentageFreeze: 0
+  _percentageFreeze: 1
   _percentagePerSecondDecrease: 0.5
 --- !u!114 &6914351051837942534
 MonoBehaviour:
@@ -9565,10 +9568,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunSwitchingView
   _gunSwitching: {fileID: 3154577241410043838}
-  _message: {fileID: 0}
-  message:
-  - Main gun
-  - Energy gun
+  armGunSprite: {fileID: 0}
+  imageGun: {fileID: 0}
 --- !u!1 &8173139695321356606
 GameObject:
   m_ObjectHideFlags: 0
