@@ -12,6 +12,7 @@ namespace Tuto
         [SerializeField] private PlayerHealth _healPlayer;
         [SerializeField] private PlayerEnergizedState _playerEnergizedState;
         [SerializeField] private PlayerCapacity _playerCapacity;
+        [SerializeField] private float respawnTUTO = 2;
 
         public Action<Capacity_TUTO, bool> OnUnlockCapa;
 
@@ -72,6 +73,8 @@ namespace Tuto
 
             return false;
         }
+
+        private float timeRespawnBase;
         
         public void EnterInTuto()
         {
@@ -86,12 +89,17 @@ namespace Tuto
 
             _playerEnergizedState._reloadCapacityValue = new float[] { 135, 135, 135 };
             _playerEnergizedState._percentageFreeze = true;
+
+            timeRespawnBase = _healPlayer._timeToRespawn;
+            timeRespawnBase = respawnTUTO;
         }
 
         public void ExitTuto()
         {
             _playerEnergizedState._reloadCapacityValue = baseValueReloadCapa;
             _playerEnergizedState._percentageFreeze = false;
+            
+            _healPlayer._timeToRespawn= timeRespawnBase;
         }
     }
 }

@@ -9,7 +9,6 @@ public class PlayerPositionCaster : NetworkBusListener
 {
     [SerializeField] private float _castingBeatDelay = 0.7f;
     [SerializeField] private float _castingPhysicalThreshold = 0.5f;
-    private Transform _playerTransform;
     private NetworkObject _networkObject;
     private Vector3 _playerPosition;
     
@@ -27,11 +26,10 @@ public class PlayerPositionCaster : NetworkBusListener
     public override void OnStartClient()
     {
         base.OnStartClient();
-        _playerTransform = transform;
-        _playerPosition = _playerTransform.position;
+        _playerPosition = transform.position;
         _networkObject = GetComponentInParent<NetworkObject>();
         
-        _playerPosition = _playerTransform.position;
+        _playerPosition = transform.position;
         PlayerPositionCastingServerRPC(_playerPosition, false);
         UpdateFakePositions();
     }
@@ -39,11 +37,11 @@ public class PlayerPositionCaster : NetworkBusListener
     private void FixedUpdate()
     {
         _castingBeatTimer += Time.fixedDeltaTime;
-        if (_playerTransform &&
-            ((_playerTransform.position - _playerPosition).sqrMagnitude > _castingPhysicalThreshold * _castingPhysicalThreshold) ||
+        if (transform &&
+            ((transform.position - _playerPosition).sqrMagnitude > _castingPhysicalThreshold * _castingPhysicalThreshold) ||
             _castingBeatTimer >= _castingBeatDelay)
         {
-            _playerPosition = _playerTransform.position;
+            _playerPosition = transform.position;
             PlayerPositionCastingServerRPC(_playerPosition, _castingBeatTimer >= _castingBeatDelay);
             _castingBeatTimer = 0;
             UpdateFakePositions();
