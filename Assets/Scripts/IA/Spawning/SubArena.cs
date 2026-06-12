@@ -62,7 +62,7 @@ public class SubArena : NetworkBusListener
             }
         });
         
-        ListenToEvent<ForceStopEnemySpawn>(FSES =>
+        ListenToEvent<OnSceneLoadingEvent>(FSES =>
         {
             _zoneActivated = false;
         });
