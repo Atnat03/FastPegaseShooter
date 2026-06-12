@@ -30,7 +30,7 @@ public class PlayerHealth : NetworkBusListener
     private readonly SyncVar<float> _respawnTimer = new SyncVar<float>(0);
 
     [SerializeField] private float _healthBase = 100;
-    [SerializeField] private float _timeToRespawn = 5;
+    [SerializeField] public float _timeToRespawn = 5;
     [SerializeField, Range(0f, 1f)] private float _critikStep = 0.5f;
     [SerializeField] private PlayerInput _playerInputAction;
     [SerializeField] private PlayerAnimation _playerAnimation;
