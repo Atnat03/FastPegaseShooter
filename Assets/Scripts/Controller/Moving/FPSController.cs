@@ -1996,7 +1996,7 @@ public class FPSController : NetworkBusListener
         else
         {
             _playerVisual.SetActive(true);
-
+            stateMachine.ChangeState(ControlerState.Idle);
         }
         
         _deathSpawnParticleSystem?.Play();
