@@ -13,6 +13,7 @@ namespace Tuto
         [SerializeField] private PlayerEnergizedState _playerEnergizedState;
         [SerializeField] private PlayerCapacity _playerCapacity;
         [SerializeField] private float respawnTUTO = 2;
+        [SerializeField] private bool _startWithCapa = false;
 
         public Action<Capacity_TUTO, bool> OnUnlockCapa;
 
@@ -25,6 +26,14 @@ namespace Tuto
 
         private void Start()
         {
+            if (!_startWithCapa)
+            {
+                _gunPlayer.p_unlockChargedShoot = false;
+                _gunPlayer.p_unlockChargedShoot = false;
+                _dronePlayer.p_unlockCapa = false;
+                _healPlayer.p_unlockCapa = false;
+            }
+            
             OnUnlockCapa?.Invoke(Capacity_TUTO.ChargedShoot, _gunPlayer.p_unlockChargedShoot);
             OnUnlockCapa?.Invoke(Capacity_TUTO.Heal, _healPlayer.p_unlockCapa);
             OnUnlockCapa?.Invoke(Capacity_TUTO.Drone, _dronePlayer.p_unlockCapa);
