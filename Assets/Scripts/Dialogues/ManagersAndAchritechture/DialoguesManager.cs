@@ -24,11 +24,16 @@ public class DialoguesManager : MonoBusListener
     [Header("References")] [SerializeField]
     private GunSwitching gunSwitch;
 
-    [Header("Juicy")] [SerializeField] private AnimationCurve iconsArrivalScale;
+    [Header("Juicy")] 
+    [SerializeField] private AnimationCurve iconsArrivalScale;
+    [SerializeField] private AnimationCurve iconsBounceHeight;
+    [SerializeField] private float iconsBounceHeightMultiplier;
+    [SerializeField] private AnimationCurve iconsBounceSpeed;
 
     private bool dialogueRunning;
     private Coroutine dialogueCoroutine;
     private DialogueListener selfColor;
+    private Vector3 speakerImageDefaultPosition;
 
     private bool AdressedToMe(DialogueLine line) =>
         (line.listener == DialogueListener.Both || line.listener == selfColor);
@@ -56,7 +61,7 @@ public class DialoguesManager : MonoBusListener
     public void Start()
     {
         ListenToEvent<OnDialogueStart>(StartDialogue);
-
+        speakerImageDefaultPosition = speakerImage.rectTransform.localPosition;
         CleanDialogue();
     }
 
@@ -97,10 +102,13 @@ public class DialoguesManager : MonoBusListener
                         txtBackGround.rectTransform.localScale =
                             Vector3.one * iconsArrivalScale.Evaluate((line.audioClip.length - elapsedTime)  / .2f);
                     }
+
                     else
                     {
-                        speakerImage.rectTransform.localScale = Vector3.one;
-                        txtBackGround.rectTransform.localScale = Vector3.one;
+                        speakerImage.rectTransform.localPosition = speakerImageDefaultPosition + new Vector3(0,
+                            Mathf.Abs(Mathf.Sin(iconsBounceSpeed.Evaluate(elapsedTime / line.audioClip.length) * elapsedTime * Mathf.PI)) *
+                            iconsBounceHeight.Evaluate(elapsedTime / line.audioClip.length) * iconsBounceHeightMultiplier
+                            , 0);
                     }
 
                     yield return new WaitForEndOfFrame();
