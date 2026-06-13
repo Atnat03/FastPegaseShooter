@@ -252,22 +252,31 @@ namespace Tuto
         #endregion
         
         #region DIALOGUE
-        public void AskForDialogue(float duration, string dialogue, Speaker speaker, string keyVoceline, Action onComplete = null)
+        public void AskForDialogue(float delayAfter, string dialogue, Speaker speaker, string keyVoceline, Action onComplete = null)
         {
+            float duration = delayAfter;
+            
+            if (SoundManager.GetAudioClip(_soundsData, keyVoceline))
+            {
+                duration += SoundManager.GetAudioClip(_soundsData, keyVoceline).length;
+            }
+            
             if (IsServerInitialized)
                 AskForDialogueObserversRpc(duration, dialogue, speaker, keyVoceline);
             else
                 AskForDialogueServerRpc(duration, dialogue, speaker, keyVoceline);
 
-            StartCoroutine(DialogueRoutine(duration, onComplete));
+            StartCoroutine(DialogueRoutine(duration, delayAfter, onComplete));
         }
 
-        private IEnumerator DialogueRoutine(float duration, Action onComplete)
+        private IEnumerator DialogueRoutine(float duration, float delayAfter, Action onComplete)
         {
             yield return new WaitForSeconds(duration);
-
             AskForDialogueEndObserversRpc();
-
+    
+            if (delayAfter > 0)
+                yield return new WaitForSeconds(delayAfter);
+    
             onComplete?.Invoke();
         }
 
@@ -280,7 +289,7 @@ namespace Tuto
         [ServerRpc]
         private void AskForDialogueServerRpc(float duration, string dialogue, Speaker speaker, string keyVoceline)
         {
-            AskForDialogueObserversRpc(duration,dialogue, speaker, keyVoceline);
+            AskForDialogueObserversRpc(duration, dialogue, speaker, keyVoceline);
         }
 
         [ObserversRpc]

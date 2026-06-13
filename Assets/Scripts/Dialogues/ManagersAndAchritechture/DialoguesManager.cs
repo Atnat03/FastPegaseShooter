@@ -24,11 +24,17 @@ public class DialoguesManager : MonoBusListener
     [Header("References")] [SerializeField]
     private GunSwitching gunSwitch;
 
-    [Header("Juicy")] [SerializeField] private AnimationCurve iconsArrivalScale;
+    [Header("Juicy")] 
+    [SerializeField] private AnimationCurve iconsArrivalScale;
+    [SerializeField] private float iconsBounceHeightMultiplier;
+    [SerializeField] private float iconsBounceSpeed;
 
     private bool dialogueRunning;
     private Coroutine dialogueCoroutine;
     private DialogueListener selfColor;
+    private Vector3 speakerImageDefaultPosition;
+    private float[] _audioSamples = new float[256];
+
 
     private bool AdressedToMe(DialogueLine line) =>
         (line.listener == DialogueListener.Both || line.listener == selfColor);
@@ -56,7 +62,7 @@ public class DialoguesManager : MonoBusListener
     public void Start()
     {
         ListenToEvent<OnDialogueStart>(StartDialogue);
-
+        speakerImageDefaultPosition = speakerImage.rectTransform.localPosition;
         CleanDialogue();
     }
 
@@ -97,10 +103,13 @@ public class DialoguesManager : MonoBusListener
                         txtBackGround.rectTransform.localScale =
                             Vector3.one * iconsArrivalScale.Evaluate((line.audioClip.length - elapsedTime)  / .2f);
                     }
+
                     else
                     {
-                        speakerImage.rectTransform.localScale = Vector3.one;
-                        txtBackGround.rectTransform.localScale = Vector3.one;
+                        float rms = GetRMS();
+                        speakerImage.rectTransform.localPosition = speakerImageDefaultPosition + new Vector3(0,
+                            Mathf.Abs(Mathf.Sin(iconsBounceSpeed * elapsedTime * Mathf.PI)) *
+                            rms * iconsBounceHeightMultiplier, 0);
                     }
 
                     yield return new WaitForEndOfFrame();
@@ -159,6 +168,15 @@ public class DialoguesManager : MonoBusListener
             go.SetActive(false);
         }
     }
+    
+    float GetRMS()
+    {
+        audioSource.GetOutputData(_audioSamples, 0);
+        float sum = 0f;
+        foreach (var s in _audioSamples) sum += s * s;
+        return Mathf.Sqrt(sum / _audioSamples.Length);
+    }
+
 }
 
 public struct OnDialogueStart
