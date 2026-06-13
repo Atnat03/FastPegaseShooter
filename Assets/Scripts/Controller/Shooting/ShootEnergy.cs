@@ -35,7 +35,6 @@ public class ShootEnergy : NetworkBusListener
 	public Action<int> CantThrowEnergy;
 	public Action<bool, Vector3> OnDetectBro;
 	public Action<bool, Vector3> OnLaserActivate;
-	public Action<bool> OnShoot;
 
 	#endregion
 	
@@ -60,7 +59,6 @@ public class ShootEnergy : NetworkBusListener
 	{
 		if (Time.time < _nextFireTime)
 		{
-			OnShoot?.Invoke(false);
 			return;
 		}
 		
@@ -81,7 +79,6 @@ public class ShootEnergy : NetworkBusListener
 		SetAimingState(true);
 		
 		_nextFireTime = Time.time + _fireRate;
-		OnShoot?.Invoke(true);
 
 		ConsumeEnergyServerRpc();
 	}
@@ -99,7 +96,6 @@ public class ShootEnergy : NetworkBusListener
 	public void TryCancelShoot()
 	{
 		SetAimingState(false);
-		OnShoot?.Invoke(false);
 	}
 	
 	Transform GetTarget()

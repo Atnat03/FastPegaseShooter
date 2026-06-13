@@ -24,6 +24,7 @@ public class ShootEnergyView : MonoBehaviour
 
 	[Header("DetectBro")] 
 	[SerializeField] private GameObject _uiTarget;
+	Animator _targetAnimator;
 	
 	[Header("Laser")]
 	[SerializeField] private GameObject[] _lasers;
@@ -39,6 +40,10 @@ public class ShootEnergyView : MonoBehaviour
 	private void Start()
 	{
 		_textCantThrow.gameObject.SetActive(false);
+		
+		_targetAnimator = _uiTarget.GetComponent<Animator>();
+		
+		SetUpColor(_gunSwitching.IsPositive);
 	}
 
 	private void OnEnable()
@@ -47,7 +52,6 @@ public class ShootEnergyView : MonoBehaviour
 		_shootEnergy.CantThrowEnergy += CantThrowEnergy;
 		_shootEnergy.OnDetectBro += DetectBro;
 		_shootEnergy.OnLaserActivate += ActivatedLaser;
-		_shootEnergy.OnShoot += ShowLaserShoot;
 	}
 
 	
@@ -57,19 +61,19 @@ public class ShootEnergyView : MonoBehaviour
 		_shootEnergy.CantThrowEnergy -= CantThrowEnergy;
 		_shootEnergy.OnDetectBro -= DetectBro;
 		_shootEnergy.OnLaserActivate -= ActivatedLaser;
-		_shootEnergy.OnShoot -= ShowLaserShoot;
 	}
 	
 
 	private void ActivatedLaser(bool isActive, Vector3 endPos)
 	{
+		_targetAnimator.SetBool("IsShooting", isActive);
+		_assignedLaser.gameObject.SetActive(isActive);
+		
 		if (isActive)
 		{
 			_targetLaserPos = endPos; // + Vector3.up;
 		}
 	}
-
-	private void ShowLaserShoot(bool isActive) => _assignedLaser.gameObject.SetActive(isActive);
 	
 
 	private void CantThrowEnergy(int index)
