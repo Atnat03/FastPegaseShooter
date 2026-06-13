@@ -22,6 +22,10 @@ namespace GunDecorator
         [Header("Kill")] 
         [SerializeField] private GameObject _killMarkerPrefab;
         GameObject _currentKillMarker = null;
+        
+        [Header("Audio Buffer")]
+        [SerializeField] private float _hitSoundCooldown = 0.05f;
+        private float _lastHitSoundTime;
 
         private void Start()
         {
@@ -51,9 +55,9 @@ namespace GunDecorator
             {
                 s.color = _hitMarkerColor;
             }
-            
-            SoundManager.PlaySound(_gunController._soundData, "HitMark", _gunController._source);
-            
+
+            TryPlayHitSound();
+
             Destroy(s.gameObject, 0.5f);
         }
 
@@ -64,10 +68,20 @@ namespace GunDecorator
             {
                 s.color = _hitMarkerCritiqueColor;
             }
-            
-            SoundManager.PlaySound(_gunController._soundData, "HitMark", _gunController._source);
-            
+
+            TryPlayHitSound();
+
             Destroy(s.gameObject, 0.5f);
+        }
+        
+        private void TryPlayHitSound()
+        {
+            if (Time.time - _lastHitSoundTime < _hitSoundCooldown)
+                return;
+
+            _lastHitSoundTime = Time.time;
+
+            SoundManager.PlaySound(_gunController._soundData, "HitMark", _gunController._source);
         }
         
         private void PlayerDoKill(OnPlayerDoKill data)

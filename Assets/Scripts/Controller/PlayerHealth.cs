@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Connection;
+using FishNet.Managing.Scened;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Managers;
@@ -43,6 +44,7 @@ public class PlayerHealth : NetworkBusListener
 
     private float _respawnTime;
     private bool _isInvincible = false;
+    private bool _isChangingScene = false;
 
     private bool IsInvincible
     {
@@ -87,6 +89,8 @@ public class PlayerHealth : NetworkBusListener
     private bool _canThrowHeal = true;
 
     public bool p_unlockCapa = true;
+
+    [SerializeField, Range(0, 1)] private float _percentageToTriggerDialogue = 0.3f;
 
     //Action
     public Action<float> OnUpdateHealth;
@@ -134,8 +138,29 @@ public class PlayerHealth : NetworkBusListener
         _playerZoneManager = FindAnyObjectByType<PlayerZoneManager>(); // pour du debug, a tej en build finale
 
         _respawnTime = Time.time;
+        
+        ListenToEvent<OnSceneLoadingEvent>((_) =>
+        {
+            _isChangingScene = true;
+            _currentHealth.Value = _healthBase;
+            _isDead.Value = false;
+            _respawnTimer.Value = 0;
+            _respawnTime = Time.time;
+        });
+
+        InstanceFinder.SceneManager.OnLoadEnd += (args) =>
+        {
+            if (!args.QueueData.AsServer) return;
+            _isChangingScene = false;
+        };
     }
 
+    private IEnumerator DelayedSceneReady()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _isChangingScene = false;
+    }
+    
     public override void OnStartClient()
     {
         _currentHealth.OnChange += OnHealthChange;
@@ -152,10 +177,32 @@ public class PlayerHealth : NetworkBusListener
                 if (!IsOwner) return;
 
                 Rigidbody rb = GetComponent<Rigidbody>();
+                rb.isKinematic = true;
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
                 rb.position = OwnerId == 0 ? OPSTE.p_spawnPositions[0] : OPSTE.p_spawnPositions[1];
                 transform.position = OwnerId == 0 ? OPSTE.p_spawnPositions[0] : OPSTE.p_spawnPositions[1];
+
+                // rb redevient non-kinematic après load — géré ici une seule fois
+                InstanceFinder.SceneManager.OnLoadEnd += OnSceneFullyLoaded;
+
+                void OnSceneFullyLoaded(SceneLoadEndEventArgs args)
+                {
+                    InstanceFinder.SceneManager.OnLoadEnd -= OnSceneFullyLoaded;
+                    if (rb != null)
+                        rb.isKinematic = false;
+                }
+            });
+
+            // Freeze le rb dès le début du chargement côté client
+            // MAIS nécessite que ClientSceneLoader propage l'event aux clients via ObserversRpc
+            ListenToEvent<OnSceneLoadingEvent>((_) =>
+            {
+                Rigidbody rb = GetComponent<Rigidbody>();
+                if (rb == null) return;
+                rb.isKinematic = true;
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             });
         }
 
@@ -307,12 +354,12 @@ public class PlayerHealth : NetworkBusListener
         //fin du debug
         
         if (data.p_playerN.ObjectId != NetworkObject.ObjectId) return;
-        if (IsDead || IsInvincible || invincible) return;
-
+        if (IsDead || IsInvincible || invincible || _isChangingScene) return;
+        
         float newHealth = _currentHealth.Value - data.p_value;
 
         ApplyVolumeDamagedEffectTargetRpc(Owner);
-
+        
         if (newHealth <= 0)
         {
             Death();
@@ -358,7 +405,7 @@ public class PlayerHealth : NetworkBusListener
     }
 
     [ServerRpc]
-    private void RequestTakeDamageServerRpc(int damage)
+    public void RequestTakeDamageServerRpc(int damage)
     {
         TakeDamage(new PlayerTakeDamageEvent
         {
@@ -518,10 +565,13 @@ public class PlayerHealth : NetworkBusListener
 
         if (rb != null)
         {
+            rb.isKinematic = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.position = respawnPos;
             transform.position = respawnPos;
+            
+            StartCoroutine(RestorePhysicsNextFrame(rb));
         }
         else
         {
@@ -529,6 +579,13 @@ public class PlayerHealth : NetworkBusListener
         }
 
         _gunSwitching.IGunMain.TryCancelShooting();
+    }
+    
+    private IEnumerator RestorePhysicsNextFrame(Rigidbody rb)
+    {
+        yield return null;
+        if (rb != null)
+            rb.isKinematic = false;
     }
 
     [ObserversRpc]
@@ -540,9 +597,11 @@ public class PlayerHealth : NetworkBusListener
     [ObserversRpc]
     private void NotifyDeathRpc(NetworkObject playerN)
     {
+        _gunSwitching.IGunMain.TryCancelShooting();
+        
         InvokeEvent(new OnPlayerDeathEvent { p_playerN = playerN });
+        InvokeEvent(new OnPlayerDie_Dialogue() { isPositive = _gunSwitching.IsPositive});
     }
-
 
     [ObserversRpc]
     private void ShowHealThrowObserverRpc(Vector3 landingPos, float scale, float duration)
@@ -566,6 +625,27 @@ public class PlayerHealth : NetworkBusListener
         else
         {
             _isCritik = false;
+        }
+
+        CheckPercentageHeal(next);
+    }
+
+    private bool _hastriggerDialogue = false;
+    
+    private void CheckPercentageHeal(float value)
+    {
+        if (value < _percentageToTriggerDialogue)
+        {
+            if(!_hastriggerDialogue)
+            {
+                _hastriggerDialogue = true;
+                InvokeEvent(new OnPlayerGoUnder_X_PV_Dialogue{isPositive = _gunSwitching.IsPositive});
+            }
+            
+        }
+        else
+        {
+            _hastriggerDialogue = false;
         }
     }
 

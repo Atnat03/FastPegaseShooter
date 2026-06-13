@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using FishNet;
 using FishNet.Object;
+using ScriptableObjectsDefinitions;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Core")]
 public class EnemyCore : NetworkBusListener
 {
+
     [SerializeField] private List<EnemyAttackModule> _attackingModules = new List<EnemyAttackModule>();
     [SerializeField] private List<EnemyLifeModule> _lifeModules = new List<EnemyLifeModule>();
     [SerializeField] private List<EnemyTargetModule> _targetingModules = new List<EnemyTargetModule>();

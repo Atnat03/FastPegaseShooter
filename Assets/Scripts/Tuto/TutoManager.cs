@@ -36,7 +36,7 @@ namespace Tuto
         [SerializeField] private ScenarioSO _scenarioSequence;
 
         [Header("References")] 
-        [SerializeField] private DapManager _dapManager;
+        private DapManager _dapManager;
         
         [Header("LD Elements")]
         [SerializeField] private List<TriggerBoxBridge> _sceneProxies = new();
@@ -64,6 +64,14 @@ namespace Tuto
         
         public override void OnStartNetwork()
         {
+            if (SceneEssentialSpawner.EssentialObject != null)
+            {
+                SpawnEssential(new OnSpawnEssential
+                {
+                    obj = SceneEssentialSpawner.EssentialObject
+                });
+            }
+            
             SetUpBridge();
             InitializeTriggers();
             
@@ -73,9 +81,19 @@ namespace Tuto
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
             ListenToEvent<OnHealUsed_TUTO>(CheckHealUse);
             ListenToEvent<OnDapEvent>(DapUsed);
+        }
+
+        private void SpawnEssential(OnSpawnEssential data)
+        {
+            _dapManager = data.obj.gameObject.GetComponentInChildren<DapManager>();
+
+            _dapBar = DapManagerScript._dapBarParent;
             
-            defaultScale = _dapBar.localScale;
-            defaultRotation = _dapBar.localRotation;
+            if(_dapBar != null)
+            {
+                defaultScale = _dapBar.localScale;
+                defaultRotation = _dapBar.localRotation;
+            }
         }
 
         private void CheckHealUse(OnHealUsed_TUTO data)
@@ -391,8 +409,11 @@ namespace Tuto
             if (currentAnimation != null)
                 StopCoroutine(currentAnimation);
 
-            _dapBar.localScale = defaultScale;
-            _dapBar.localRotation = defaultRotation;
+            if(_dapBar != null)
+            {
+                _dapBar.localScale = defaultScale;
+                _dapBar.localRotation = defaultRotation;
+            }
         }
         
         private void PlayAnimation(OnAnimDapBar_TUTO data)
@@ -412,6 +433,8 @@ namespace Tuto
         
         private IEnumerator ScaleAnimation(float duration)
         {
+            if (_dapBar == null) yield break;
+            
             float t = 0;
             Vector3 startScale = _dapBar.localScale;
 
@@ -428,6 +451,8 @@ namespace Tuto
 
         private IEnumerator VibrationAnimation(float duration)
         {
+            if (_dapBar == null) yield break;
+            
             float t = 0;
             Quaternion startRotation = _dapBar.localRotation;
 

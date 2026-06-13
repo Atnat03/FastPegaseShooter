@@ -7,6 +7,7 @@ using FishNet;
 using FishNet.Connection;
 using FishNet.Managing.Scened;
 using FishNet.Object;
+using Managers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,7 +20,7 @@ public class ClientSceneLoader : NetworkBusListener
     public void LoadSceneForAll()
     {
         if (!InstanceFinder.IsServerStarted) return;
-
+        
         NetworkObject[] playerObjects = GetAllPlayerNetworkObjects();
         
         SceneLoadData sld = new SceneLoadData(targetSceneName)
@@ -33,18 +34,25 @@ public class ClientSceneLoader : NetworkBusListener
             MovedNetworkObjects = GetAllPlayerNetworkObjects() // Déplace les joueurs
         };
 
+        NotifySceneLoadingObserversRpc();
         InvokeEvent(new OnSceneLoadingEvent());
-        
+
         DespawnAllNetworkObject(playerObjects);
         InstanceFinder.SceneManager.LoadGlobalScenes(sld);
     }
 
+    [ObserversRpc]
+    private void NotifySceneLoadingObserversRpc() 
+    {
+        InvokeEvent(new OnSceneLoadingEvent());
+    }
+    
     private NetworkObject[] GetAllPlayerNetworkObjects()
     {
         Dictionary<int, NetworkConnection> clients = InstanceFinder.ServerManager.Clients;
         List<NetworkObject> nobs = new List<NetworkObject>();
 
-        foreach (var client in clients.Values)
+        foreach (NetworkConnection client in clients.Values)
         {
             if (client.FirstObject == null)
                 continue;
