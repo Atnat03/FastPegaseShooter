@@ -96,7 +96,6 @@ public class ShootEnergy : NetworkBusListener
 		});
 	}
 	
-	
 	public void TryCancelShoot()
 	{
 		SetAimingState(false);

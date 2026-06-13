@@ -35,5 +35,10 @@ namespace Managers
 
             return _defaultPosition;
         }
+        
+        public void ClearPlayerData()
+        {
+            _playerData.Clear();
+        }
     }
 }
