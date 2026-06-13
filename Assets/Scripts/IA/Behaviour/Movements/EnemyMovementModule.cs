@@ -23,6 +23,8 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
     {
         base.InitialiseBehaviourModule(enemyCore);
         _targetModule.p_onTargetPositionUpdate += PathUpdateRequest;
+        
+        enemyCore.OnDeath += OnEnemyDeath;
     }
     public Vector3? GetNextTargetPosition() => _path.Count > 0 ? _path[^1].position : null;
 
@@ -52,6 +54,8 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
 
     protected virtual void RecalculatePathConcrete()
     {
+        if (this == null) return;
+        if (_enemyCore == null) return;
         if (_enemyCore.p_isSpawning || _enemyCore.p_isDying) return;
         
         _enemyCore.p_gridReader.GetPath(
@@ -66,5 +70,13 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         
         _path.RemoveAt(_path.Count-1);
     }
+
     protected abstract void MoveAlongPath();
+    
+    private void OnEnemyDeath()
+    {
+        _targetModule.p_onTargetPositionUpdate -= PathUpdateRequest;
+        _isPathUpdateRequested = false;
+        _path.Clear();
+    }
 }

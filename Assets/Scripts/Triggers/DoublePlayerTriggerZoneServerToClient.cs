@@ -32,6 +32,7 @@ public class DoublePlayerTriggerZoneServerToClient : NetworkBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerVisuelBridge PVB = other.GetComponent<PlayerVisuelBridge>();
+            if (PVB == null) return;
             if (!_enteredPlayers.Contains(PVB.OwnerId)) _enteredPlayers.Add(PVB.OwnerId);
             
             if(_forceActivationWithSinglePlayer || _enteredPlayers.Count > 1)

@@ -2907,9 +2907,11 @@ GameObject:
   - component: {fileID: 5186214992385971866}
   - component: {fileID: 6001049330751705710}
   - component: {fileID: 5287974535606811426}
+  - component: {fileID: 8650469061317854340}
+  - component: {fileID: 2398697482158164365}
   m_Layer: 0
   m_Name: Liquide
-  m_TagString: Untagged
+  m_TagString: Lave
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -2986,6 +2988,40 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8650469061317854340
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3329852360692317150}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2504004307993585693, guid: af9bcabb1c64e0c429a6dbf1b0679d53, type: 3}
+--- !u!114 &2398697482158164365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3329852360692317150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91dcdda2e616cd145b970427d8d6e428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Lave
 --- !u!1 &3429578582773222585
 GameObject:
   m_ObjectHideFlags: 0
@@ -7833,10 +7869,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5797233238933264672}
-  - component: {fileID: 4031703540991664229}
   m_Layer: 0
   m_Name: P_piscine_full
-  m_TagString: Lave
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -7861,27 +7896,6 @@ Transform:
   - {fileID: 8610009469820047899}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4031703540991664229
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5331497816920486633}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 41.190773, y: 3.0980606, z: 25.730345}
-  m_Center: {x: -0.46882248, y: 1.0490303, z: 0.023314476}
 --- !u!1 &5359608338598810652
 GameObject:
   m_ObjectHideFlags: 0

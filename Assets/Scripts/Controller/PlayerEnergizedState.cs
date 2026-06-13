@@ -25,13 +25,20 @@ public class PlayerEnergizedState : NetworkBusListener
 	public override void OnStartNetwork()
 	{
 		ListenToEvent<OnPlayerGetEnergized>(SetEnergizedPlayer);
+		ListenToEvent<OnResetEnergizedEvent>(OnReset);
 	}
-    
+	
+	private void OnReset(OnResetEnergizedEvent data)
+	{
+		StopAddingPercentage();
+		OnEnergized?.Invoke(false);
+		_gunSwitching.CurrentMainGun.SetDamage(1);
+	}
+	
 	private void SetEnergizedPlayer(OnPlayerGetEnergized data)
 	{
-		if (!IsOwner) return;
-		if (data.p_ownerId != OwnerId) return;
-
+		if (data.p_ownerId != -1 && data.p_ownerId != OwnerId) return;
+    
 		_gunSwitching.CurrentMainGun.SetDamage(data.p_state ? _damageFactor : 1);
 		OnEnergized?.Invoke(data.p_state);
 
@@ -57,15 +64,18 @@ public class PlayerEnergizedState : NetworkBusListener
 
 	void StopAddingPercentage()
 	{
-		if (_addPercentageCoroutineIncrease == null)
-			return;
+		if (_addPercentageCoroutineIncrease != null)
+		{
+			StopCoroutine(_addPercentageCoroutineIncrease);
+			_addPercentageCoroutineIncrease = null;
+		}
 
 		if (_addPercentageCoroutineDecrease != null)
-			return;
-    
-		StopCoroutine(_addPercentageCoroutineIncrease);
-		_addPercentageCoroutineIncrease = null;
-    
+		{
+			StopCoroutine(_addPercentageCoroutineDecrease);
+			_addPercentageCoroutineDecrease = null;
+		}
+
 		if (!_percentageFreeze)
 		{
 			_addPercentageCoroutineDecrease = StartCoroutine(AddPercentageLoop(-1 * _percentagePerSecondDecrease));
