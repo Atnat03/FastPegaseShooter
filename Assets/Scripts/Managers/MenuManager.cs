@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -14,12 +15,14 @@ public class MenuManager : MonoBehaviour
 	[SerializeField] private GameObject characters;
 	[SerializeField] private CanvasGroup fade;
 	[SerializeField] public int indexSceneGame = 0;
+
+	public UISound _sound;
 	
 	#endregion
 
 
 	#region Fonctions
-
+	
 	public void ClickOnPlay()
 	{
 		StartCoroutine(FadeOut());
@@ -43,6 +46,8 @@ public class MenuManager : MonoBehaviour
 		
 		fade.alpha = 1;
 		characters.SetActive(false);
+		
+		_sound.PlaySound("OpenCaptcha");
 		
 		capchat.SetActive(true);
 	}
