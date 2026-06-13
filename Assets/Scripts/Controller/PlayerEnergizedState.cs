@@ -30,11 +30,11 @@ public class PlayerEnergizedState : NetworkBusListener
 	
 	private void OnReset(OnResetEnergizedEvent data)
 	{
-		if (!IsOwner) return;
 		StopAddingPercentage();
 		OnEnergized?.Invoke(false);
+		_gunSwitching.CurrentMainGun.SetDamage(1);
 	}
-    
+	
 	private void SetEnergizedPlayer(OnPlayerGetEnergized data)
 	{
 		if (data.p_ownerId != -1 && data.p_ownerId != OwnerId) return;
