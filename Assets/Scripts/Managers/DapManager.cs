@@ -33,6 +33,7 @@ public class DapManager : NetworkBusListener
 
 	[Header("Bars Settings")]
 	[SerializeField] private float _maxEnergy = 100f;
+	[SerializeField] public Transform _dapBarParent;
 
 	[Header("Dap Settings")]
 	[SerializeField] private float _percentageGainPerSecond = 2;
