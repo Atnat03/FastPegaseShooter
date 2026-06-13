@@ -30,5 +30,5 @@ public class DialogueLine
     public AudioClip audioClip;
     public string text;
     public float DelayBeforeNextLine;
-    [Range(0,1)]public float volume = 1;
+    [Range(0,2)]public float volume = 1;
 }

@@ -9,11 +9,15 @@ public class SettingsPausePanelBehaviour : PausePanel
 {
     [SerializeField] PlayerPause _playerPause;
     [SerializeField] FPSController _fpsController;
+    [SerializeField] DialoguesManager _dialogueManager;
     [SerializeField] Slider _mouseSensitivitySlider;
     [SerializeField] TMP_Text _mouseSensitivityText;
     [SerializeField] float _mouseSensitivityMaxValue;
     [SerializeField] TMP_Dropdown _resolutionDropdown;
     [SerializeField] Toggle _fullscreenToggle;
+    [SerializeField] private Toggle _dialoguesActivated;
+    [SerializeField] private Slider _dialoguesAudioVolumeSlider;
+    [SerializeField] private TMP_Text _dialoguesAudioVolumeText;
     
     //sound temporary
     MusicManager _musicManager;
@@ -67,6 +71,16 @@ public class SettingsPausePanelBehaviour : PausePanel
         _musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 100) * 100;
         _musicVolumeText.text = _musicVolumeSlider.value.ToString("F0")  + "%";
         
+        //dialogues
+        bool dialoguesOn = PlayerPrefs.GetInt("dialoguesActivated", 1) == 1;
+        _dialoguesActivated.isOn = dialoguesOn;
+        ActivateDialogues(dialoguesOn);
+        
+        ChangeDialoguesVolume(PlayerPrefs.GetFloat("DialoguesVolume", 100));
+        _dialoguesAudioVolumeSlider.value = PlayerPrefs.GetFloat("DialoguesVolume", 100) * 100;
+        _dialoguesAudioVolumeText.text = _dialoguesAudioVolumeSlider.value.ToString("F0");
+        
+        
         ChangeResolution();
 
         InvokeEvent<OnPausePanelInit>(new OnPausePanelInit());
@@ -97,22 +111,40 @@ public class SettingsPausePanelBehaviour : PausePanel
     {
         _fpsController.mouseSensitivity = Mathf.Lerp(0, _mouseSensitivityMaxValue,
             _mouseSensitivitySlider.value / _mouseSensitivitySlider.maxValue);
-        _mouseSensitivityText.text = _mouseSensitivitySlider.value.ToString("F0");
+        _mouseSensitivityText.text = _mouseSensitivitySlider.value.ToString("F0")+ "%";
 
         PlayerPrefs.SetFloat("MouseSensitivity", _mouseSensitivitySlider.value);
         PlayerPrefs.Save();
     }
-
     
     public void ChangeMusicVolume() => ChangeMusicVolume(_musicVolumeSlider.value);
     void ChangeMusicVolume(float newVolume)
     {
         if(!_musicManager)return;
-        _musicVolumeText.text = newVolume.ToString("F0");
+        _musicVolumeText.text = newVolume.ToString("F0") + "%";
         newVolume /= 100;
         PlayerPrefs.SetFloat("MusicVolume", newVolume);
         _musicManager.SetVolume(newVolume);
-    } 
+    }
+
+
+    public void ActivateDialogues() => ActivateDialogues(_dialoguesActivated.isOn);
+    void ActivateDialogues(bool activate)
+    {
+        if (!_dialogueManager) return;
+        _dialogueManager.dialoguesActivated  = activate;
+        PlayerPrefs.SetInt("dialoguesActivated", _dialoguesActivated.isOn ? 1 : 0);
+    }
+
+    public void ChangeDialoguesVolume() => ChangeDialoguesVolume(_dialoguesAudioVolumeSlider.value);
+    void ChangeDialoguesVolume(float newVolume)
+    {
+        if (!_dialogueManager) return;
+        _dialoguesAudioVolumeText.text = newVolume.ToString("F0");
+        newVolume /= 100;
+        PlayerPrefs.SetFloat("DialoguesVolume", newVolume);
+        _dialogueManager.dialoguesAudioVolume = newVolume;
+    }
 
     public void QuitPanel() => gameObject.SetActive(false);
 
