@@ -36,7 +36,7 @@ public class DapManager : NetworkBusListener
 	[SerializeField] public Transform _dapBarParent;
 
 	[Header("Dap Settings")]
-	[SerializeField] private float _percentageGainPerSecond = 2;
+	[SerializeField, Tooltip("0 = Arene 1 / 1 = Arene 2 / 2 = Arene 3 / 3 = Tuto")] private float[] _percentageGainPerSecond;
 	[SerializeField] private float _distanceToDap = 10f;
 	
 	private readonly SyncVar<float> _dapPercentage = new(0);
@@ -147,6 +147,8 @@ public class DapManager : NetworkBusListener
 	[ObserversRpc]
 	private void DappingObserverRpc(Vector3 pos)
 	{
+		InvokeEvent(new OnResetEnergizedEvent());
+		
 		Cons.Print("DAPPING !!", ColorConsole.Orange);
 		
 		OnMessageUpdate?.Invoke(-1);
@@ -156,11 +158,26 @@ public class DapManager : NetworkBusListener
 
 	private void AddPercentage(OnAddDapPercentage data)
 	{
-		if (IsServerInitialized)
+		if (!IsServerInitialized)
+			return;
+
+		int sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+
+		int arenaIndex = sceneIndex switch
 		{
-			_dapPercentage.Value += _percentageGainPerSecond * data.p_ratio;
-			OnDapReachPercentage?.Invoke(GetPercentageDap);
-		}
+			2 => 0,
+			4 => 1,
+			6 => 2,
+			1 => 3,
+			_ => -1
+		};
+
+		if (arenaIndex < 0)
+			return;
+
+		_dapPercentage.Value += _percentageGainPerSecond[arenaIndex] * data.p_ratio;
+
+		OnDapReachPercentage?.Invoke(GetPercentageDap);
 	}
 	
 	private void CheckThresholds(float value)
