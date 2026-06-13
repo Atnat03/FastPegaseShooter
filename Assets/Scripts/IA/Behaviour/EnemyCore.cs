@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
@@ -186,7 +187,9 @@ public class EnemyCore : NetworkBusListener
         float signedEnergyAmount = GetSignedEnergyAmount(charge);
         EventBus.InvokeEvent(new OnEnemyDieEvent(this, !p_coreSo.p_dropXpOrb ? 0 : signedEnergyAmount));
 
-        PlayerDoKillObserversRpc(playerObjectId);
+        NetworkConnection killerConn = InstanceFinder.ServerManager.Clients[playerObjectId];
+        if (killerConn != null)
+            PlayerDoKillTargetRpc(killerConn, playerObjectId);     
         
         if (!p_coreSo.p_dropXpOrb)
         {
@@ -215,10 +218,10 @@ public class EnemyCore : NetworkBusListener
         });
     }
 
-    [ObserversRpc]
-    private void PlayerDoKillObserversRpc(int index)
+    [TargetRpc]
+    private void PlayerDoKillTargetRpc(NetworkConnection conn, int index)
     {
-        InvokeEvent(new OnPlayerDoKill{p_owerId = index});
+        InvokeEvent(new OnPlayerDoKill { p_owerId = index });
     }
     
     float GetSignedEnergyAmount(ChargeType charge)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using GameKit.Dependencies.Utilities;
 using UnityEngine;
@@ -294,6 +295,31 @@ public class SubArena : NetworkBusListener
             Debug.LogError(e);
             return;
         }
+    }
+    
+    // SubArena.cs
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestSubArenaStateServerRpc(NetworkConnection conn = null)
+    {
+        if (!_zoneActivated) return;
+    
+        NotifySubArenaStartTargetRpc(conn, _gridReader.p_id, _cardinalDirection);
+        NotifySubArenaUpdateTargetRpc(conn, _gridReader.p_id, 
+            _spawnedEnemies.Count / (float)_maxSpawnEnemy, 
+            _currentStateIndex, _spawnedEnemies.Count);
+    }
+
+    [TargetRpc]
+    void NotifySubArenaStartTargetRpc(NetworkConnection conn, Guid arenaId, cardinalDirection direction)
+    {
+        EventBus.InvokeEvent(new OnSubArenaStartEvent(arenaId, _arenaGaugePrefab, direction));
+    }
+
+    [TargetRpc]
+    void NotifySubArenaUpdateTargetRpc(NetworkConnection conn, Guid arenaId, float percent, int stateIndex, int enemyCount)
+    {
+        EventBus.InvokeEvent(new OnSubArenaUpdateEvent(arenaId, percent, 
+            _spawningStates[stateIndex].p_state, _cardinalDirection, enemyCount));
     }
     #endregion
 }

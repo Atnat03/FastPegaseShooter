@@ -50,6 +50,7 @@ namespace GunDecorator
         public IRecoilModule RecoilModule => _recoilModule;
         public Transform CurrentModelGun => currentModel;
         public bool IsChargeShooting => _chargedModule._isChargedShooting;
+        public bool IsReloading => _reloadModule.IsReloading; 
         
         private IShootModule _shootModule;
         private IReloadModule _reloadModule;

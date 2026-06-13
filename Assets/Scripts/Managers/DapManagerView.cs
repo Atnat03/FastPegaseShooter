@@ -47,6 +47,7 @@ public class DapManagerView : MonoBusListener
         Cons.Print("Dapping effect !! ");
 
         _dapNotification.SetActive(false);
+
         alreadyPlaySound = false;
         
         StartCoroutine(DappingCoroutine(pos));

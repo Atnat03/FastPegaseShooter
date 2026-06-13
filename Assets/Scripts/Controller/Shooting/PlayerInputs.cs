@@ -128,6 +128,7 @@ namespace Controller
             if (_playerHealth.IsDead) return;
             if(_fps.IsFreeze) return;
             if (!_canSwitch) return;
+            if (_bridgePlayer.CurrentGunController.IsReloading) return;
             
             _bridgePlayer.TryChangeMain(true);
             StartCoroutine(BufferScroll());
@@ -139,6 +140,7 @@ namespace Controller
             if (_playerHealth.IsDead) return;
             if(_fps.IsFreeze) return;
             if (!_canSwitch) return;
+            if (_bridgePlayer.CurrentGunController.IsReloading) return;
             
             _bridgePlayer.TryChangeMain(false);
             StartCoroutine(BufferScroll());
@@ -150,6 +152,7 @@ namespace Controller
             if (_playerHealth.IsDead) return;
             if(_fps.IsFreeze) return;
             if (!_canSwitch) return;
+            if (_bridgePlayer.CurrentGunController.IsReloading) return;
 
             float scroll = obj.ReadValue<float>();
             bool isMain = true;
