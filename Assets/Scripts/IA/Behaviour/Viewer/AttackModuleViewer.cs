@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using MyPrint;
 using UnityEngine;
 
 public class AttackModuleViewer : MonoBehaviour
@@ -15,6 +16,11 @@ public class AttackModuleViewer : MonoBehaviour
 
     private async void POnAttack()
     {
+        Cons.Print("C'est ic Aloys !!", ColorConsole.Red, ConsoleStyle.Bold);
+        
+        if (_particleSystem == null)
+            return;
+        
         _particleSystem.gameObject.SetActive(true);
         await Task.Delay((int)(_waitTime * 1000));
         _particleSystem.gameObject.SetActive(false);
