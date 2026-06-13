@@ -88,6 +88,8 @@ public class PlayerHealth : NetworkBusListener
 
     public bool p_unlockCapa = true;
 
+    [SerializeField, Range(0, 1)] private float _percentageToTriggerDialogue = 0.3f;
+
     //Action
     public Action<float> OnUpdateHealth;
     public Action OnStartWarning;
@@ -312,7 +314,7 @@ public class PlayerHealth : NetworkBusListener
         float newHealth = _currentHealth.Value - data.p_value;
 
         ApplyVolumeDamagedEffectTargetRpc(Owner);
-
+        
         if (newHealth <= 0)
         {
             Death();
@@ -543,6 +545,7 @@ public class PlayerHealth : NetworkBusListener
         _gunSwitching.IGunMain.TryCancelShooting();
         
         InvokeEvent(new OnPlayerDeathEvent { p_playerN = playerN });
+        InvokeEvent(new OnPlayerDie_Dialogue() { isPositive = _gunSwitching.IsPositive});
     }
 
     [ObserversRpc]
@@ -567,6 +570,27 @@ public class PlayerHealth : NetworkBusListener
         else
         {
             _isCritik = false;
+        }
+
+        CheckPercentageHeal(next);
+    }
+
+    private bool _hastriggerDialogue = false;
+    
+    private void CheckPercentageHeal(float value)
+    {
+        if (value < _percentageToTriggerDialogue)
+        {
+            if(!_hastriggerDialogue)
+            {
+                _hastriggerDialogue = true;
+                InvokeEvent(new OnPlayerGoUnder_X_PV_Dialogue{isPositive = _gunSwitching.IsPositive});
+            }
+            
+        }
+        else
+        {
+            _hastriggerDialogue = false;
         }
     }
 

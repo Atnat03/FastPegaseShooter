@@ -54,8 +54,12 @@ public class DapManagerView : MonoBusListener
         _videoClipDap.gameObject.SetActive(true);
         
         SoundManager.PlaySound(_dataSound, "Dap", _audioSource);
+
+        _dapManager.SetGlobalCanvaOrder(1000);
         
         yield return new WaitForSeconds((float)_videoClipDap.clip.length);
+        
+        _dapManager.SetGlobalCanvaOrder(2);
         
         AfterDapVideo(pos);
     }

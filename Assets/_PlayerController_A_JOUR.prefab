@@ -312,6 +312,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &3961050023182892889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2373,6 +2374,7 @@ MonoBehaviour:
     m_Bits: 192
   _healAmount: 35
   p_unlockCapa: 1
+  _percentageToTriggerDialogue: 0.3
   invincible: 0
 --- !u!114 &8101511114389266693
 MonoBehaviour:
@@ -2490,6 +2492,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _gun: {fileID: 3154577241410043838}
   _fps: {fileID: 1792326860910464111}
+  _canvas: {fileID: 7585343327431638934}
   _uiInput: {fileID: 4940829860452653103}
   _uiMain: {fileID: 6152812863526421996}
   _colorPlayer:
@@ -2590,6 +2593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b16da1e2b1939347a2cd8ca7e81ff72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCapacity
+  _gun: {fileID: 0}
   _tirChargeCapaData:
     p_capacity: 0
     p_currentNumberCapacity: 50
@@ -3986,6 +3990,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &8041650522221974858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4516,6 +4521,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &6154372736321769268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15495,6 +15501,11 @@ GameObject:
 --- !u!137 &7510647881172203167 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2293237526240090029, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+  m_PrefabInstance: {fileID: 8640183463756816690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!223 &7585343327431638934 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 2210304813493444260, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
   m_PrefabInstance: {fileID: 8640183463756816690}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7706770980869166161 stripped
