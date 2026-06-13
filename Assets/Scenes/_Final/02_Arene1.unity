@@ -222456,6 +222456,8 @@ GameObject:
   - component: {fileID: 1428403695}
   - component: {fileID: 1428403698}
   - component: {fileID: 1428403699}
+  - component: {fileID: 1428403700}
+  - component: {fileID: 1428403701}
   m_Layer: 0
   m_Name: Voiceline Player
   m_TagString: Untagged
@@ -222585,13 +222587,56 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428403692}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9bff7076c9c98a4a9ac24bf3d734825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterOnOpenBorne
   Dialogue:
+  - {fileID: 11400000, guid: 18cb3396d07e28c43bc0e28a11df97c0, type: 2}
   - {fileID: 11400000, guid: 29b67b24f3309e44cb3b3bc37de4d4c1, type: 2}
+  delay: 0
+  RandomLine: 0
+  HaveCooldown: 0
+  cooldownDuration: 0
+  playOnce: 0
+--- !u!114 &1428403700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428403692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6722cd25204544cb82c1e2075252a4a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterOnPlayerGoUnder_X_PV
+  Dialogue:
+  - {fileID: 11400000, guid: a1f1405d49875af469d480b757566c0b, type: 2}
+  - {fileID: 11400000, guid: 66648c84dcf6d15478a85ac0cb523bb2, type: 2}
+  delay: 0
+  RandomLine: 0
+  HaveCooldown: 1
+  cooldownDuration: 60
+  playOnce: 0
+--- !u!114 &1428403701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428403692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65358556fb797084785c359e49ee4036, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterOnSubArenaDangerous
+  Dialogue:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   delay: 0
   RandomLine: 0
   HaveCooldown: 0
