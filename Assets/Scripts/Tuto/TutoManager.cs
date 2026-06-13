@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -34,6 +35,7 @@ namespace Tuto
         public DapManager DapManagerScript => _dapManager;
         
         [SerializeField] private ScenarioSO _scenarioSequence;
+        [SerializeField] private Canvas _globalCanva;
 
         [Header("References")] 
         private DapManager _dapManager;
@@ -81,6 +83,33 @@ namespace Tuto
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
             ListenToEvent<OnHealUsed_TUTO>(CheckHealUse);
             ListenToEvent<OnDapEvent>(DapUsed);
+        }
+
+        public override void OnStartClient()
+        {
+            if (!IsClientInitialized)
+                return;
+		
+            StartCoroutine(SetupCanvas());
+        }
+
+        private IEnumerator SetupCanvas()
+        {
+            yield return new WaitUntil(() =>
+            {
+                NetworkObject localObj = InstanceFinder.ClientManager.Connection?.FirstObject;
+                if (localObj == null) return false;
+                return localObj.GetComponentInChildren<FPSController>() != null;
+            });
+
+            FPSController fps = InstanceFinder.ClientManager.Connection.FirstObject
+                .GetComponentInChildren<FPSController>();
+
+            Camera cam = fps.Camera.transform.GetChild(0).GetComponent<Camera>();
+
+            _globalCanva.renderMode = RenderMode.ScreenSpaceCamera;
+            _globalCanva.worldCamera = cam;
+            _globalCanva.sortingLayerID = SortingLayer.NameToID("UI");
         }
 
         private void SpawnEssential(OnSpawnEssential data)
