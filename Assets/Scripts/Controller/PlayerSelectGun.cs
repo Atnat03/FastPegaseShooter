@@ -38,6 +38,7 @@ public class PlayerSelectGun : NetworkBusListener
 	[SerializeField] private FPSController _fps;
 	
 	[Header("View")]
+	[SerializeField] private Canvas _canvas;
 	[SerializeField] private GameObject _uiInput;
 	[SerializeField] private GameObject _uiMain;
 
@@ -98,6 +99,8 @@ public class PlayerSelectGun : NetworkBusListener
 		
 		CursorManager.instance.PushState(CursorState.UI, _fps);
 
+		_canvas.sortingOrder = 10;
+		
 		_newIndexGun = _gun.CurrentMainGunIndex;
 		equipedGun = _newIndexGun;
 
@@ -150,6 +153,8 @@ public class PlayerSelectGun : NetworkBusListener
 		{
 			IsOpen = false
 		});
+		
+		_canvas.sortingOrder = 1;
 		
 		CursorManager.instance.PopState(_fps);
 	}

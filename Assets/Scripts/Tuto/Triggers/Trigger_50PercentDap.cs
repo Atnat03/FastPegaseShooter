@@ -16,7 +16,7 @@ namespace Tuto.Triggers
         {
             manager = tuto;
 
-            if(manager != null)
+            if(manager.DapManagerScript != null)
                 manager.DapManagerScript.OnDapReachPercentage += CheckDapPercentage;
         }
 
