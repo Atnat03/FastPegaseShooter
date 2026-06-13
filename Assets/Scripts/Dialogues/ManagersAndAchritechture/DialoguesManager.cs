@@ -7,6 +7,11 @@ using UnityEngine.UI;
 
 public class DialoguesManager : MonoBusListener
 {
+    [Header("parameters")] 
+    [HideInInspector] public bool dialoguesActivated;
+    [HideInInspector][Range(0,1)] public float dialoguesAudioVolume;
+    
+    
     [Header("speakers")] public Sprite blueIcon;
     public Color blueColor;
     public Sprite redIcon;
@@ -68,6 +73,7 @@ public class DialoguesManager : MonoBusListener
 
     void StartDialogue(OnDialogueStart data)
     {
+        if (!dialoguesActivated) return;
         if (dialogueRunning)
         {
             StopCoroutine(dialogueCoroutine);
@@ -128,6 +134,7 @@ public class DialoguesManager : MonoBusListener
     {
         if (!AdressedToMe(line)) return;
 
+        //rapport a l'Affichage
         foreach (GameObject go in EverythingRelated)
         {
             go.SetActive(true);
@@ -150,9 +157,11 @@ public class DialoguesManager : MonoBusListener
         }
         
         dialogueText.text = line.text;
+
+        //rapport a l'audioSource
         audioSource.Stop();
         audioSource.clip = line.audioClip;
-        audioSource.volume = line.volume;
+        audioSource.volume = line.volume * dialoguesAudioVolume;
         audioSource.Play();
     }
 

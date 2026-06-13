@@ -9,11 +9,15 @@ public class SettingsPausePanelBehaviour : PausePanel
 {
     [SerializeField] PlayerPause _playerPause;
     [SerializeField] FPSController _fpsController;
+    [SerializeField] DialoguesManager _dialogueManager;
     [SerializeField] Slider _mouseSensitivitySlider;
     [SerializeField] TMP_Text _mouseSensitivityText;
     [SerializeField] float _mouseSensitivityMaxValue;
     [SerializeField] TMP_Dropdown _resolutionDropdown;
     [SerializeField] Toggle _fullscreenToggle;
+    [SerializeField] private Toggle _dialoguesActivated;
+    [SerializeField] private Slider _dialoguesAudioVolumeSlider;
+    [SerializeField] private TMP_Text _dialoguesAudioVolumeText;
     
     //sound temporary
     MusicManager _musicManager;
