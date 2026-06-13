@@ -25,6 +25,14 @@ public class PlayerEnergizedState : NetworkBusListener
 	public override void OnStartNetwork()
 	{
 		ListenToEvent<OnPlayerGetEnergized>(SetEnergizedPlayer);
+		ListenToEvent<OnResetEnergizedEvent>(OnReset);
+	}
+	
+	private void OnReset(OnResetEnergizedEvent data)
+	{
+		if (!IsOwner) return;
+		StopAddingPercentage();
+		OnEnergized?.Invoke(false);
 	}
     
 	private void SetEnergizedPlayer(OnPlayerGetEnergized data)
@@ -57,15 +65,18 @@ public class PlayerEnergizedState : NetworkBusListener
 
 	void StopAddingPercentage()
 	{
-		if (_addPercentageCoroutineIncrease == null)
-			return;
+		if (_addPercentageCoroutineIncrease != null)
+		{
+			StopCoroutine(_addPercentageCoroutineIncrease);
+			_addPercentageCoroutineIncrease = null;
+		}
 
 		if (_addPercentageCoroutineDecrease != null)
-			return;
-    
-		StopCoroutine(_addPercentageCoroutineIncrease);
-		_addPercentageCoroutineIncrease = null;
-    
+		{
+			StopCoroutine(_addPercentageCoroutineDecrease);
+			_addPercentageCoroutineDecrease = null;
+		}
+
 		if (!_percentageFreeze)
 		{
 			_addPercentageCoroutineDecrease = StartCoroutine(AddPercentageLoop(-1 * _percentagePerSecondDecrease));
