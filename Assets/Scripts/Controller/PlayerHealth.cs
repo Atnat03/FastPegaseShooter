@@ -123,6 +123,7 @@ public class PlayerHealth : NetworkBusListener
         ListenToEvent<PlayerTakeDamageEvent>(TakeDamage);
         ListenToEvent<AddHealthToPlayer>(AddHealth);
         ListenToEvent<GetInvincibleEvent>(GetInvincible);
+        ListenToEvent<OnDapEvent>(DapEvent);
 
         InvokeEvent(new OnPlayerSpawnEvent
         {
@@ -154,6 +155,20 @@ public class PlayerHealth : NetworkBusListener
             _isChangingScene = false;
         };
     }
+    
+    private void DapEvent(OnDapEvent data)
+    {
+        StartCoroutine(GetInvincibleDuringDap());
+    }
+
+    IEnumerator GetInvincibleDuringDap()
+    {
+        _isInvincible = true;
+        
+        yield return new WaitForSeconds(2f);
+        
+        _isInvincible = false;
+    }
 
     private IEnumerator DelayedSceneReady()
     {
@@ -183,7 +198,6 @@ public class PlayerHealth : NetworkBusListener
                 rb.position = OwnerId == 0 ? OPSTE.p_spawnPositions[0] : OPSTE.p_spawnPositions[1];
                 transform.position = OwnerId == 0 ? OPSTE.p_spawnPositions[0] : OPSTE.p_spawnPositions[1];
 
-                // rb redevient non-kinematic après load — géré ici une seule fois
                 InstanceFinder.SceneManager.OnLoadEnd += OnSceneFullyLoaded;
 
                 void OnSceneFullyLoaded(SceneLoadEndEventArgs args)
@@ -194,8 +208,6 @@ public class PlayerHealth : NetworkBusListener
                 }
             });
 
-            // Freeze le rb dès le début du chargement côté client
-            // MAIS nécessite que ClientSceneLoader propage l'event aux clients via ObserversRpc
             ListenToEvent<OnSceneLoadingEvent>((_) =>
             {
                 Rigidbody rb = GetComponent<Rigidbody>();
@@ -204,6 +216,8 @@ public class PlayerHealth : NetworkBusListener
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             });
+            
+            OnUpdateHealth?.Invoke(_currentHealth.Value);
         }
 
         PlayerHealthManager.Instance?.Register(this);
@@ -333,8 +347,8 @@ public class PlayerHealth : NetworkBusListener
 
             InvokeEvent(new OnDataLog
             {
-                entityName = data.p_attacker.name,
-                EntityID = data.p_attacker ? data.p_attacker.ObjectId : -1,
+                entityName = data.p_attacker != null ? data.p_attacker.name : "Corrosion",
+                EntityID = data.p_attacker != null ? data.p_attacker.ObjectId : -1,
                 weapon = "ennemy_Shoot",
                 targetName = transform.GetRootTransform().gameObject.name,
                 targetID = data.p_playerN.ObjectId,

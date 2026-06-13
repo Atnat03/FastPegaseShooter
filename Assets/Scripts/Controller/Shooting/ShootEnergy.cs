@@ -178,7 +178,7 @@ public class ShootEnergy : NetworkBusListener
 			return;
 		}
 
-		if (!IsOwner) return;
+		//if (!IsOwner) return;
 
 		if (next && _target != null)
 		{
