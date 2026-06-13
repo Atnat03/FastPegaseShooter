@@ -123,6 +123,7 @@ public class PlayerHealth : NetworkBusListener
         ListenToEvent<PlayerTakeDamageEvent>(TakeDamage);
         ListenToEvent<AddHealthToPlayer>(AddHealth);
         ListenToEvent<GetInvincibleEvent>(GetInvincible);
+        ListenToEvent<OnDapEvent>(DapEvent);
 
         InvokeEvent(new OnPlayerSpawnEvent
         {
@@ -153,6 +154,20 @@ public class PlayerHealth : NetworkBusListener
             if (!args.QueueData.AsServer) return;
             _isChangingScene = false;
         };
+    }
+
+    private void DapEvent(OnDapEvent data)
+    {
+        StartCoroutine(GetInvincibleDuringDap());
+    }
+
+    IEnumerator GetInvincibleDuringDap()
+    {
+        _isInvincible = true;
+        
+        yield return new WaitForSeconds(2f);
+        
+        _isInvincible = false;
     }
 
     private IEnumerator DelayedSceneReady()
