@@ -37,12 +37,14 @@ public class GunSwitching : NetworkBusListener
 	[SerializeField] private DroneThrower _throwerDrone;
 	[SerializeField] private ReticulesManager _reticuleManager;
 	[SerializeField] private PlayerAnimation _playerAnimation;
+	[SerializeField] private Animator _animator;
 	
 	[Header("Settings")]
 	[SerializeField] private float _cooldownChangeMagnetic = 5f;
 	
 	private bool _forceEnergyMode;
 	private bool _canSwitch = true;
+	
 	[HideInInspector]public List<GunController> _mainGunsList;
 	[HideInInspector]public List<GameObject> _mainGunsListTPS;
 	
@@ -50,7 +52,7 @@ public class GunSwitching : NetworkBusListener
 	
 	//Actions
 	public Action<bool> OnSwapGun;
-	public Action OnNotMainGunChange;
+	public Action<bool> OnNotMainGunChange;
 	
 	private IGun _currentMainIGun;
 	private ISurcharge _currentISurcharge;
@@ -191,24 +193,23 @@ public class GunSwitching : NetworkBusListener
 	{
 		ChangeGunServerRpc(isMain);
 		
-		if (!isMain)
-			OnNotMainGunChange?.Invoke();
-		else
+		OnNotMainGunChange?.Invoke(isMain);
+		
+		if (isMain)
 			IGunMain?.SetReticule(_reticuleManager);
 	}
 	
 	[ServerRpc]
 	public void ChangeGunServerRpc(bool isMain)
 	{
-		SetGunModeObserversRpc(isMain);
-		//StartCoroutine(DelaySwitch(isMain));
+		StartCoroutine(DelaySwitch(isMain));
 	}
 
 	IEnumerator DelaySwitch(bool isMain)
 	{
 		PlayAnimationObserverRpc(isMain);
 		
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(0.1f);
 		
 		SetGunModeObserversRpc(isMain);
 	}
@@ -216,18 +217,7 @@ public class GunSwitching : NetworkBusListener
 	[ObserversRpc]
 	private void PlayAnimationObserverRpc(bool isMain)
 	{
-		Animator gun = CurrentMainGun._animator;
-		Animator arm = CurrentMainGun._animatorArm;
-
-		string trigger = isMain ? "Prendre" : "Retirer";
-		
-		Cons.Print("Switch : " + isMain, ColorConsole.Black);
-		
-		if(gun)
-			gun.SetTrigger(trigger);
-		
-		if(arm)
-			arm.SetTrigger(trigger);
+		_animator.SetTrigger("Change");
 	}
 
 	[ObserversRpc]

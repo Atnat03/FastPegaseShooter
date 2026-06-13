@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DialoguesDataSO", menuName = "DialoguesDataSO")]
+[CreateAssetMenu(fileName = "dialogue", menuName = "new Dialogue")]
 public class DialoguesDataSO : ScriptableObject
 {
     public List<DialogueLine> lines;
@@ -30,5 +30,5 @@ public class DialogueLine
     public AudioClip audioClip;
     public string text;
     public float DelayBeforeNextLine;
-    public float volume;
+    [Range(0,1)]public float volume = 1;
 }

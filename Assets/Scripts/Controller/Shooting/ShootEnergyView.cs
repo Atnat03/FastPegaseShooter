@@ -12,10 +12,6 @@ public class ShootEnergyView : MonoBehaviour
 	[SerializeField] private ShootEnergy _shootEnergy;
 	[SerializeField] private GunSwitching _gunSwitching;
 	
-	[Header("Model")]
-	[SerializeField] private MeshRenderer _modelRenderer;
-	[SerializeField] private Material[] _modelMaterial;
-	
 	[Header("Messages")]
 	[SerializeField] private TextMeshProUGUI _textCantThrow;
 	[SerializeField] private float _timeMessageStayOnScreen = 1;
@@ -24,6 +20,7 @@ public class ShootEnergyView : MonoBehaviour
 
 	[Header("DetectBro")] 
 	[SerializeField] private GameObject _uiTarget;
+	Animator _targetAnimator;
 	
 	[Header("Laser")]
 	[SerializeField] private GameObject[] _lasers;
@@ -39,6 +36,10 @@ public class ShootEnergyView : MonoBehaviour
 	private void Start()
 	{
 		_textCantThrow.gameObject.SetActive(false);
+		
+		_targetAnimator = _uiTarget.GetComponent<Animator>();
+		
+		SetUpColor(_gunSwitching.IsPositive);
 	}
 
 	private void OnEnable()
@@ -47,7 +48,6 @@ public class ShootEnergyView : MonoBehaviour
 		_shootEnergy.CantThrowEnergy += CantThrowEnergy;
 		_shootEnergy.OnDetectBro += DetectBro;
 		_shootEnergy.OnLaserActivate += ActivatedLaser;
-		_shootEnergy.OnShoot += ShowLaserShoot;
 	}
 
 	
@@ -57,19 +57,19 @@ public class ShootEnergyView : MonoBehaviour
 		_shootEnergy.CantThrowEnergy -= CantThrowEnergy;
 		_shootEnergy.OnDetectBro -= DetectBro;
 		_shootEnergy.OnLaserActivate -= ActivatedLaser;
-		_shootEnergy.OnShoot -= ShowLaserShoot;
 	}
 	
 
 	private void ActivatedLaser(bool isActive, Vector3 endPos)
 	{
+		_targetAnimator.SetBool("IsShooting", isActive);
+		_assignedLaser.gameObject.SetActive(isActive);
+		
 		if (isActive)
 		{
 			_targetLaserPos = endPos; // + Vector3.up;
 		}
 	}
-
-	private void ShowLaserShoot(bool isActive) => _assignedLaser.gameObject.SetActive(isActive);
 	
 
 	private void CantThrowEnergy(int index)
@@ -91,7 +91,6 @@ public class ShootEnergyView : MonoBehaviour
 	private void SetUpColor(bool isPositive)
 	{
 		Debug.Log("assigned color color is positiv ? :" + isPositive);
-		_modelRenderer.material = isPositive ? _modelMaterial[0] : _modelMaterial[1];
 		_assignedLaser = isPositive ? _lasers[0] : _lasers[1];
 	}
 	
