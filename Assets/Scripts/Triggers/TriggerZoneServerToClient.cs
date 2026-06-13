@@ -1,4 +1,3 @@
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
@@ -11,21 +10,39 @@ public class TriggerZoneServerToClient : NetworkBehaviour
     [SerializeField] private bool _activateOnce = true;
 
     private bool _activated;
+
     public void OnTriggerEnter(Collider other)
     {
-        if(!InstanceFinder.IsServerStarted) return;
-        if(_activateOnce && _activated) return;
-        
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player")) return;
+
+        if (IsServerInitialized)
         {
-            _activated = true;
-            _serverEvents?.Invoke();
-            TriggerActionObserverRpc();
+            TriggerOnServer();
+        }
+        else if (IsClientInitialized)
+        {
+            RequestTriggerServerRpc();
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestTriggerServerRpc()
+    {
+        TriggerOnServer();
+    }
+
+    [Server]
+    private void TriggerOnServer()
+    {
+        if (_activateOnce && _activated) return;
+
+        _activated = true;
+        _serverEvents?.Invoke();
+        TriggerActionObserverRpc();
+    }
+
     [ObserversRpc]
-    void TriggerActionObserverRpc()
+    private void TriggerActionObserverRpc()
     {
         _clientEvents?.Invoke();
     }
