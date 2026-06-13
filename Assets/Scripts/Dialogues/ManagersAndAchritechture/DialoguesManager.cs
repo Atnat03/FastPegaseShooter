@@ -26,14 +26,15 @@ public class DialoguesManager : MonoBusListener
 
     [Header("Juicy")] 
     [SerializeField] private AnimationCurve iconsArrivalScale;
-    [SerializeField] private AnimationCurve iconsBounceHeight;
     [SerializeField] private float iconsBounceHeightMultiplier;
-    [SerializeField] private AnimationCurve iconsBounceSpeed;
+    [SerializeField] private float iconsBounceSpeed;
 
     private bool dialogueRunning;
     private Coroutine dialogueCoroutine;
     private DialogueListener selfColor;
     private Vector3 speakerImageDefaultPosition;
+    private float[] _audioSamples = new float[256];
+
 
     private bool AdressedToMe(DialogueLine line) =>
         (line.listener == DialogueListener.Both || line.listener == selfColor);
@@ -105,10 +106,10 @@ public class DialoguesManager : MonoBusListener
 
                     else
                     {
+                        float rms = GetRMS();
                         speakerImage.rectTransform.localPosition = speakerImageDefaultPosition + new Vector3(0,
-                            Mathf.Abs(Mathf.Sin(iconsBounceSpeed.Evaluate(elapsedTime / line.audioClip.length) * elapsedTime * Mathf.PI)) *
-                            iconsBounceHeight.Evaluate(elapsedTime / line.audioClip.length) * iconsBounceHeightMultiplier
-                            , 0);
+                            Mathf.Abs(Mathf.Sin(iconsBounceSpeed * elapsedTime * Mathf.PI)) *
+                            rms * iconsBounceHeightMultiplier, 0);
                     }
 
                     yield return new WaitForEndOfFrame();
@@ -167,6 +168,15 @@ public class DialoguesManager : MonoBusListener
             go.SetActive(false);
         }
     }
+    
+    float GetRMS()
+    {
+        audioSource.GetOutputData(_audioSamples, 0);
+        float sum = 0f;
+        foreach (var s in _audioSamples) sum += s * s;
+        return Mathf.Sqrt(sum / _audioSamples.Length);
+    }
+
 }
 
 public struct OnDialogueStart
