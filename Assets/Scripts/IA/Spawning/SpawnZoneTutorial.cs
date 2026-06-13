@@ -236,8 +236,6 @@ public class SpawnZoneTutorial : NetworkBusListener
     bool IsSpawnZoneComplete()
     {
         bool clear = _spawnedEnemySet.Count == 0 && _spawnWave.Count == 0;
-
-        Debug.Log($"[Zone {_zoneIndex}] IsComplete check — enemies: {_spawnedEnemySet.Count}, wave remaining: {_spawnWave.Count}, result: {clear}");
         
         return clear;
     }
