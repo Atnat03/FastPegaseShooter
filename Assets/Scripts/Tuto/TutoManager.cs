@@ -64,6 +64,14 @@ namespace Tuto
         
         public override void OnStartNetwork()
         {
+            if (SceneEssentialSpawner.EssentialObject != null)
+            {
+                SpawnEssential(new OnSpawnEssential
+                {
+                    obj = SceneEssentialSpawner.EssentialObject
+                });
+            }
+            
             SetUpBridge();
             InitializeTriggers();
             
@@ -73,8 +81,13 @@ namespace Tuto
             ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
             ListenToEvent<OnHealUsed_TUTO>(CheckHealUse);
             ListenToEvent<OnDapEvent>(DapUsed);
-            
-            _dapManager = FindObjectOfType<DapManager>();
+        }
+
+        private void SpawnEssential(OnSpawnEssential data)
+        {
+            _dapManager = data.obj.gameObject.GetComponentInChildren<DapManager>();
+
+            _dapBar = DapManagerScript._dapBarParent;
             
             if(_dapBar != null)
             {

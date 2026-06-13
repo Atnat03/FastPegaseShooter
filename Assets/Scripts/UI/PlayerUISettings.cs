@@ -31,9 +31,13 @@ public class PlayerUISettings : NetworkBusListener
 
 	#region Fonctions
 
+	private void Start()
+	{
+		ApplyColor();
+	}
+	
 	public override void OnStartNetwork()
 	{
-		ListenToEvent<OnPlayerSetUp>(SetUp);
 		ListenToEvent<PlayUISound>(PlaySoundUI);
 	}
 
@@ -60,11 +64,11 @@ public class PlayerUISettings : NetworkBusListener
 			Debug.LogError("Key not found in sound data");
 		}
 	}
-
-	private void SetUp(OnPlayerSetUp data)
+	
+	private void ApplyColor()
 	{
-		Color c = data.isPositive ? _colorList[0] : _colorList[1];
-		
+		Color c = _gunSwitching.IsPositive ? _colorList[0] : _colorList[1];
+
 		foreach (Image image in _imageList)
 		{
 			image.color = c;
