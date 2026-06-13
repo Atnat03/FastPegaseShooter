@@ -6,6 +6,8 @@ public class DistanceAwareMovementModule : EnemyMovementModule
     [SerializeField] private DistanceAwareMovementModuleSO _distanceAwareModuleSO;
     protected override void MoveAlongPath()
     {
+        if (this == null || _path == null) return;
+        
         //cuts Execution if the enemy is close enough from the player
         if(_path.Count > 0 &&
            _targetModule.GetTargetSqrDistance(transform.position) >= _distanceAwareModuleSO.p_idealDistance*_distanceAwareModuleSO.p_idealDistance)

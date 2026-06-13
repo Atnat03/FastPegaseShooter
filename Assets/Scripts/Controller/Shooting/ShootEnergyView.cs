@@ -35,12 +35,16 @@ public class ShootEnergyView : MonoBehaviour
 	
 	#region Fonctions
 
-	private void Start()
+	private void Awake()
 	{
 		_textCantThrow.gameObject.SetActive(false);
-		
 		_targetAnimator = _uiTarget.GetComponent<Animator>();
-		
+    
+		_assignedLaser = _lasers[0];
+	}
+
+	private void Start()
+	{
 		SetUpColor(_gunSwitching.IsPositive);
 	}
 
@@ -64,6 +68,8 @@ public class ShootEnergyView : MonoBehaviour
 
 	private void ActivatedLaser(bool isActive, Vector3 endPos)
 	{
+		if (_assignedLaser == null) return;
+		
 		_targetAnimator.SetBool("IsShooting", isActive);
 		_assignedLaser.gameObject.SetActive(isActive);
 		
