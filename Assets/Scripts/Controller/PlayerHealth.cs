@@ -347,8 +347,8 @@ public class PlayerHealth : NetworkBusListener
 
             InvokeEvent(new OnDataLog
             {
-                entityName = data.p_attacker.name,
-                EntityID = data.p_attacker ? data.p_attacker.ObjectId : -1,
+                entityName = data.p_attacker != null ? data.p_attacker.name : "Corrosion",
+                EntityID = data.p_attacker != null ? data.p_attacker.ObjectId : -1,
                 weapon = "ennemy_Shoot",
                 targetName = transform.GetRootTransform().gameObject.name,
                 targetID = data.p_playerN.ObjectId,
