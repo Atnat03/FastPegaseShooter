@@ -16,6 +16,8 @@ namespace Controller
         public int GetCurrentAmmo => CurrentMainSurchargeGun.GetCurrentAmmo();
         private IGun CurrentGun => _gunSwitching.IGunMain;
         public ISurcharge CurrentMainSurchargeGun => _gunSwitching.ISurchargeMain;
+
+        public GunController CurrentGunController => _gunSwitching.CurrentMainGun;
         
         #endregion
         
