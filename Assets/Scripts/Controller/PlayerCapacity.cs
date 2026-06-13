@@ -126,6 +126,8 @@ public class PlayerCapacity : MonoBusListener
 			{
 				data.p_currentPercentageCapacity = 0;
 				data.p_currentNumberCapacity += 1;
+				
+				InvokeEvent(new PlayUISound{keySound = "GetCapa"});
 			}
 		}
 		else

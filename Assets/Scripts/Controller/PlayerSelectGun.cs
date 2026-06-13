@@ -91,6 +91,7 @@ public class PlayerSelectGun : NetworkBusListener
 		});
 		
 		InvokeEvent(new OnOpenBorne{p_playerPositive = _gun.IsPositive});
+		InvokeEvent(new PlayUISound{keySound = "OpenBorne"});
 		
 		Cons.Print("Show UI", ColorConsole.Blue);
 		
@@ -153,6 +154,8 @@ public class PlayerSelectGun : NetworkBusListener
 		{
 			IsOpen = false
 		});
+		
+		InvokeEvent(new PlayUISound{keySound = "Quit"});
 		
 		_canvas.sortingOrder = 1;
 		
