@@ -111,6 +111,8 @@ public class Captcha : MonoBehaviour
         
         wrongNotif.SetActive(true);
         
+        _menuManager._sound.PlaySound("Wrong");
+        
         yield return new WaitForSeconds(0.5f);
         
         wrongNotif.SetActive(false);
@@ -121,6 +123,8 @@ public class Captcha : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         
         goodNotif.SetActive(true);
+        
+        _menuManager._sound.PlaySound("Selected");
         
         yield return new WaitForSeconds(0.5f);
         

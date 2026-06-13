@@ -26,6 +26,8 @@ public class DapManagerView : MonoBusListener
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private SoundsDataSO _dataSound;
 
+    private bool alreadyPlaySound;
+
     private void OnEnable()
     {
         _dapManager.OnPercentageChange += UpdateUI;
@@ -45,6 +47,7 @@ public class DapManagerView : MonoBusListener
         Cons.Print("Dapping effect !! ");
 
         _dapNotification.SetActive(false);
+        alreadyPlaySound = false;
         
         StartCoroutine(DappingCoroutine(pos));
     }
@@ -54,8 +57,12 @@ public class DapManagerView : MonoBusListener
         _videoClipDap.gameObject.SetActive(true);
         
         SoundManager.PlaySound(_dataSound, "Dap", _audioSource);
+
+        _dapManager.SetGlobalCanvaOrder(1000);
         
         yield return new WaitForSeconds((float)_videoClipDap.clip.length);
+        
+        _dapManager.SetGlobalCanvaOrder(2);
         
         AfterDapVideo(pos);
     }
@@ -85,6 +92,12 @@ public class DapManagerView : MonoBusListener
         _textPercentage.text = Mathf.RoundToInt(fillAmount * 100f) + "%";
 
         _dapNotification.SetActive(fillAmount >= 1f);
+
+        if (_dapNotification.activeSelf && !alreadyPlaySound)
+        {
+            alreadyPlaySound = true;
+            InvokeEvent(new PlayUISound{keySound = "CanDap"});
+        }
     }
 }
 

@@ -256,5 +256,7 @@ public class DapManager : NetworkBusListener
 		}
 	}
 	
+	public void SetGlobalCanvaOrder(int order) => _globalCanva.sortingOrder = order;
+	
 	#endregion
 }
