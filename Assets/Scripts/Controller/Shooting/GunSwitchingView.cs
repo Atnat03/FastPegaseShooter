@@ -19,6 +19,7 @@ public class GunSwitchingView : MonoBehaviour
 	[Header("UI")] 
 	[SerializeField] private Sprite armGunSprite;
 	[SerializeField] private Image imageGun;
+	[SerializeField] private GameObject ammo;
 
 	void OnEnable()
 	{
@@ -30,9 +31,12 @@ public class GunSwitchingView : MonoBehaviour
 		_gunSwitching.OnNotMainGunChange -= SetIcone;
 	}
 
-	private void SetIcone()
+	private void SetIcone(bool isMain)
 	{
-		imageGun.sprite = armGunSprite;
+		if(!isMain) 
+			imageGun.sprite = armGunSprite;
+		
+		ammo.SetActive(isMain);
 	}
 
 	#endregion 

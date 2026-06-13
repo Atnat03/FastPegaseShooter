@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using FishNet.Object;
 using MyPrint;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,7 +20,8 @@ namespace Controller
         
         private bool _canShoot = true;
         private bool shootingInputPressed;
-
+        private bool _canSwitch = true;
+        
         private int _currentGunState = 0;
 
         private InputAction _shootAction;
@@ -125,8 +127,10 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(_fps.IsFreeze) return;
+            if (!_canSwitch) return;
             
             _bridgePlayer.TryChangeMain(true);
+            StartCoroutine(BufferScroll());
         }
         
         private void ChangeToEnergyGun(InputAction.CallbackContext obj)
@@ -134,8 +138,10 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(_fps.IsFreeze) return;
+            if (!_canSwitch) return;
             
             _bridgePlayer.TryChangeMain(false);
+            StartCoroutine(BufferScroll());
         }
         
         private void ChangeGunScroll(InputAction.CallbackContext obj)
@@ -143,6 +149,7 @@ namespace Controller
             if (!IsOwner) return;
             if (_playerHealth.IsDead) return;
             if(_fps.IsFreeze) return;
+            if (!_canSwitch) return;
 
             float scroll = obj.ReadValue<float>();
             bool isMain = true;
@@ -159,6 +166,15 @@ namespace Controller
             isMain = _currentGunState % 2 == 0;
             
             _bridgePlayer.TryChangeMain(isMain);
+
+            StartCoroutine(BufferScroll());
+        }
+
+        IEnumerator BufferScroll()
+        {
+            _canSwitch = false;
+            yield return new WaitForSeconds(0.2f);
+            _canSwitch = true;
         }
         
         private void Dapping(InputAction.CallbackContext obj)
