@@ -33,7 +33,7 @@ public class PlayerUISettings : NetworkBusListener
 
 	private void Start()
 	{
-		ApplyColor();
+		//ApplyColor();
 	}
 	
 	public override void OnStartNetwork()
