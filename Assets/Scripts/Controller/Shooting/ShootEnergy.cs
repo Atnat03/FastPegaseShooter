@@ -5,6 +5,8 @@ using FishNet.Object.Synchronizing;
 using MyPrint;
 using UnityEngine;
 
+public struct OnResetEnergizedEvent{}
+
 public class ShootEnergy : NetworkBusListener
 {
 	#region Variables
@@ -43,6 +45,11 @@ public class ShootEnergy : NetworkBusListener
 	public override void OnStartNetwork()
 	{
 		_isAiming.OnChange += OnAimingChange;
+		
+		ListenToEvent<OnResetEnergizedEvent>(_ =>
+		{
+			SetAimingState(false);
+		});
 	}
 
 	public override void OnStopNetwork()
@@ -171,7 +178,7 @@ public class ShootEnergy : NetworkBusListener
 			return;
 		}
 
-		if (!IsOwner) return;
+		//if (!IsOwner) return;
 
 		if (next && _target != null)
 		{

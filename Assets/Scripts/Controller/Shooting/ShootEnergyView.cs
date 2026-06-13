@@ -3,6 +3,7 @@ using System.Collections;
 using MyPrint;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShootEnergyView : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class ShootEnergyView : MonoBehaviour
 
 	[Header("DetectBro")] 
 	[SerializeField] private GameObject _uiTarget;
+	[SerializeField] private Image _imageTarget;
+	[SerializeField] private Color[] _targetColors;
 	Animator _targetAnimator;
 	
 	[Header("Laser")]
@@ -29,8 +32,7 @@ public class ShootEnergyView : MonoBehaviour
 	private Vector3 _targetLaserPos;
 
 	#endregion
-
-
+	
 	#region Fonctions
 
 	private void Start()
@@ -64,6 +66,8 @@ public class ShootEnergyView : MonoBehaviour
 	{
 		_targetAnimator.SetBool("IsShooting", isActive);
 		_assignedLaser.gameObject.SetActive(isActive);
+		
+		_imageTarget.color = isActive ? _targetColors[0] : _targetColors[1];
 		
 		if (isActive)
 		{

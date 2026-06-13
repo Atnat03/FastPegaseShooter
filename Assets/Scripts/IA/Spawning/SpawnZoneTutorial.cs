@@ -230,6 +230,8 @@ public class SpawnZoneTutorial : NetworkBusListener
     public void StopInfiniteWave(OnDapEvent data)
     {
         _stopInfiniteSpawn = true;
+        _corrosionActivated = false;
+        _spawnPaused = false;
         UpdateGaugeObservers(0, 0, false);
     }
     
