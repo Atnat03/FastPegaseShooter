@@ -12,10 +12,6 @@ public class ShootEnergyView : MonoBehaviour
 	[SerializeField] private ShootEnergy _shootEnergy;
 	[SerializeField] private GunSwitching _gunSwitching;
 	
-	[Header("Model")]
-	[SerializeField] private MeshRenderer _modelRenderer;
-	[SerializeField] private Material[] _modelMaterial;
-	
 	[Header("Messages")]
 	[SerializeField] private TextMeshProUGUI _textCantThrow;
 	[SerializeField] private float _timeMessageStayOnScreen = 1;
@@ -95,7 +91,6 @@ public class ShootEnergyView : MonoBehaviour
 	private void SetUpColor(bool isPositive)
 	{
 		Debug.Log("assigned color color is positiv ? :" + isPositive);
-		_modelRenderer.material = isPositive ? _modelMaterial[0] : _modelMaterial[1];
 		_assignedLaser = isPositive ? _lasers[0] : _lasers[1];
 	}
 	
