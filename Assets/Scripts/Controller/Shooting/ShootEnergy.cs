@@ -48,16 +48,32 @@ public class ShootEnergy : NetworkBusListener
 	public override void OnStartNetwork()
 	{
 		_isAiming.OnChange += OnAimingChange;
-		
+    
 		ListenToEvent<OnResetEnergizedEvent>(_ =>
 		{
 			_resetLock = true;
 			SetAimingState(false);
 			if (base.Owner.IsLocalClient)
 				ResetEnergizedServerRpc();
-    
-			StartCoroutine(UnlockAfterDelay());
+        
+			if (_unlockCoroutine != null) StopCoroutine(_unlockCoroutine);
+			_unlockCoroutine = StartCoroutine(UnlockAfterDelay());
 		});
+    
+		ListenToEvent<OnPlayerRespawnEvent>((_) =>
+		{
+			if (_unlockCoroutine != null) StopCoroutine(_unlockCoroutine);
+			_resetLock = false;
+		});
+	}
+
+	private Coroutine _unlockCoroutine;
+
+	IEnumerator UnlockAfterDelay()
+	{
+		yield return new WaitForSeconds(0.5f);
+		_resetLock = false;
+		_unlockCoroutine = null;
 	}
 
 	public override void OnStopNetwork()
@@ -76,12 +92,6 @@ public class ShootEnergy : NetworkBusListener
 		_isAiming.Value = false;
 		SendEnergyStateObserverRpc(_targetNetObj != null ? _targetNetObj.OwnerId : -1, false);
 		_targetNetObj = null;
-	}
-	
-	IEnumerator UnlockAfterDelay()
-	{
-		yield return new WaitForSeconds(0.5f);
-		_resetLock = false;
 	}
 
 	public void TryShoot()
