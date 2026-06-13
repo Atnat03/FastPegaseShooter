@@ -87,7 +87,7 @@ namespace Tuto
 
             baseValueReloadCapa = _playerEnergizedState._reloadCapacityValue;
 
-            _playerEnergizedState._reloadCapacityValue = new float[] { 135, 135, 135 };
+            _playerEnergizedState._reloadCapacityValue = new float[] { 150, 150, 150 };
             _playerEnergizedState._percentageFreeze = true;
 
             timeRespawnBase = _healPlayer._timeToRespawn;

@@ -43,6 +43,8 @@ public class PlayerCapacity : MonoBusListener
 
 	#region Variables
 
+	[SerializeField] private GunSwitching _gun;
+	
 	[Header("Tir chargé")] 
 	[SerializeField] private CapacityData _tirChargeCapaData;
 	
@@ -81,12 +83,15 @@ public class PlayerCapacity : MonoBusListener
 		{
 			case Capacity.ChargedShoot:
 				UseACapa(ref _tirChargeCapaData);
+				InvokeEvent(new OnUseChargedShoot_Dialogue{isPositive = _gun.IsPositive});
 				break;
 			case Capacity.Drone:
 				UseACapa(ref _droneCapaData);
+				InvokeEvent(new OnUseDrone_Dialogue{isPositive = _gun.IsPositive});
 				break;
 			case Capacity.Heal:
 				UseACapa(ref _healCapaData);
+				InvokeEvent(new OnUseHeal_Dialogue{isPositive = _gun.IsPositive});
 				break;
 		}
 	}
@@ -121,6 +126,8 @@ public class PlayerCapacity : MonoBusListener
 			{
 				data.p_currentPercentageCapacity = 0;
 				data.p_currentNumberCapacity += 1;
+				
+				InvokeEvent(new PlayUISound{keySound = "GetCapa"});
 			}
 		}
 		else
