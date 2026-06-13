@@ -30,6 +30,8 @@ public class ShootEnergyView : MonoBehaviour
 	[SerializeField] private Transform _laserSpawnPoint;
 	private GameObject _assignedLaser;
 	private Vector3 _targetLaserPos;
+	
+	private Coroutine _messageCoroutine;
 
 	#endregion
 	
@@ -80,15 +82,14 @@ public class ShootEnergyView : MonoBehaviour
 			_targetLaserPos = endPos; // + Vector3.up;
 		}
 	}
-	
 
 	private void CantThrowEnergy(int index)
 	{
-		if(!_textCantThrow.gameObject.activeSelf)
-		{
-			_textCantThrow.text = _messagesCantThrow[index];
-			StartCoroutine(MessageCantThrow());
-		}
+		if (_messageCoroutine != null)
+			StopCoroutine(_messageCoroutine);
+    
+		_textCantThrow.text = _messagesCantThrow[index];
+		_messageCoroutine = StartCoroutine(MessageCantThrow());
 	}
 
 	IEnumerator MessageCantThrow()
@@ -96,6 +97,7 @@ public class ShootEnergyView : MonoBehaviour
 		_textCantThrow.gameObject.SetActive(true);
 		yield return new WaitForSeconds(_timeMessageStayOnScreen);
 		_textCantThrow.gameObject.SetActive(false);
+		_messageCoroutine = null;
 	}
 
 	private void SetUpColor(bool isPositive)
