@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -32,7 +34,8 @@ public class ShootEnergy : NetworkBusListener
 	private readonly SyncVar<Vector3> _laserTargetPos = new SyncVar<Vector3>();
 
 	private float _nextFireTime = 0f;
-
+	private bool _resetLock = false;
+	
 	//Actions
 	public Action<int> CantThrowEnergy;
 	public Action<bool, Vector3> OnDetectBro;
@@ -48,7 +51,12 @@ public class ShootEnergy : NetworkBusListener
 		
 		ListenToEvent<OnResetEnergizedEvent>(_ =>
 		{
+			_resetLock = true;
 			SetAimingState(false);
+			if (base.Owner.IsLocalClient)
+				ResetEnergizedServerRpc();
+    
+			StartCoroutine(UnlockAfterDelay());
 		});
 	}
 
@@ -61,9 +69,25 @@ public class ShootEnergy : NetworkBusListener
 	{
 		OnDetectBro?.Invoke(false, Vector3.zero);
 	}
+
+	[ServerRpc]
+	private void ResetEnergizedServerRpc()
+	{
+		_isAiming.Value = false;
+		SendEnergyStateObserverRpc(_targetNetObj != null ? _targetNetObj.OwnerId : -1, false);
+		_targetNetObj = null;
+	}
 	
+	IEnumerator UnlockAfterDelay()
+	{
+		yield return new WaitForSeconds(0.5f);
+		_resetLock = false;
+	}
+
 	public void TryShoot()
 	{
+		if (_resetLock) return;
+		
 		if (Time.time < _nextFireTime)
 		{
 			return;
@@ -135,6 +159,12 @@ public class ShootEnergy : NetworkBusListener
 	private void Update()
 	{
 		if (!IsOwner) return;
+		
+		if (_resetLock)
+		{
+			OnDetectBro?.Invoke(false, Vector3.zero);
+			return;
+		}
 		
 		_target = GetTarget();
 		

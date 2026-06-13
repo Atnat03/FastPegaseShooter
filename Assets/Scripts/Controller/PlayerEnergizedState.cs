@@ -37,9 +37,8 @@ public class PlayerEnergizedState : NetworkBusListener
     
 	private void SetEnergizedPlayer(OnPlayerGetEnergized data)
 	{
-		if (!IsOwner) return;
-		if (data.p_ownerId != OwnerId) return;
-
+		if (data.p_ownerId != -1 && data.p_ownerId != OwnerId) return;
+    
 		_gunSwitching.CurrentMainGun.SetDamage(data.p_state ? _damageFactor : 1);
 		OnEnergized?.Invoke(data.p_state);
 
