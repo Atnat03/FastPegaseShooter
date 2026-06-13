@@ -196,10 +196,6 @@ public class GunSwitching : NetworkBusListener
 			if (CurrentMainGun.IsReloading)
 				return;
 		}
-		else
-		{
-			_shootEnergy.CantThrowEnergy?.Invoke(0);
-		}
 		
 		ChangeGunServerRpc(isMain);
 		
