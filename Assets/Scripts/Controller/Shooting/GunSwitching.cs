@@ -18,7 +18,7 @@ public class GunSwitching : NetworkBusListener
 	public ISurcharge ISurchargeMain => _currentISurcharge;
 	public ShootEnergy ShootEnergy => _shootEnergy;
 	public int CurrentMainGunIndex => _currentMainGun.Value;
-
+	
 	public bool IsSwitching => !_canSwitch;
 	
 	public bool IsPositive => _isPositiveChargedPlayer.Value;
@@ -191,6 +191,12 @@ public class GunSwitching : NetworkBusListener
 
 	public void ChangeGun(bool isMain)
 	{
+		if (!isMain)
+		{
+			if (CurrentMainGun.IsReloading)
+				return;
+		}
+		
 		ChangeGunServerRpc(isMain);
 		
 		OnNotMainGunChange?.Invoke(isMain);
