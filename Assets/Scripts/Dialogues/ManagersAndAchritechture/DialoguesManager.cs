@@ -74,16 +74,27 @@ public class DialoguesManager : MonoBusListener
     IEnumerator DisplayDialogue(OnDialogueStart data)
     {
         dialogueRunning = true;
-        foreach (GameObject go in EverythingRelated)
-        {
-            go.SetActive(true);
-        }
         foreach (DialogueLine line in data.dialogueData.lines)
         {
             if (AdressedToMe(line))
             {
                 DisplayLine(line);
-                yield return new WaitForSeconds(line.audioClip.length);
+                float elapsedTime = 0f;
+                while (elapsedTime < line.audioClip.length)
+                {
+                    elapsedTime += Time.deltaTime;
+                    if (elapsedTime < .1f)
+                    {
+                        speakerImage.rectTransform.localScale = Vector3.Lerp(speakerImage.rectTransform.localScale, Vector3.one, elapsedTime / .1f);
+                        txtBackGround.rectTransform.localScale = Vector3.Lerp(speakerImage.rectTransform.localScale, Vector3.one, elapsedTime / .1f);
+                    }
+                    else
+                    {
+                        speakerImage.rectTransform.localScale = Vector3.one;
+                        txtBackGround.rectTransform.localScale = Vector3.one;
+                    }
+                    yield return new WaitForEndOfFrame();
+                }
                 CleanDialogue();
                 yield return new WaitForSeconds(line.DelayBeforeNextLine);
             }
@@ -117,7 +128,8 @@ public class DialoguesManager : MonoBusListener
                 txtBackGround.color = blueColor;
                 break;
         }
-        
+        speakerImage.rectTransform.localScale = Vector3.zero;
+        txtBackGround.rectTransform.localScale = Vector3.zero;
         dialogueText.text = line.text;
         audioSource.Stop();
         audioSource.clip = line.audioClip;
