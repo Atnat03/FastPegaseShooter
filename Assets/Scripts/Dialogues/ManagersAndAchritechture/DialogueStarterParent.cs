@@ -18,7 +18,8 @@ public class DialogueStarterParent : MonoBusListener
     [SerializeField] bool playOnce = false;
 
 
-    private int currentLineIdx = 0;
+    private int currentLineIdxSpeaker1 = 0;
+    private  int currentLineIdxSpeaker2 = 1;
     private bool canBePlayed = true;
     private bool alreadyPlayed = false;
 
@@ -53,8 +54,8 @@ public class DialogueStarterParent : MonoBusListener
             InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = Dialogue[Random.Range(0, Dialogue.Length)] });
         else
         {
-            InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = Dialogue[currentLineIdx]});
-            currentLineIdx = currentLineIdx + 1 > Dialogue.Length - 1 ? 0 : currentLineIdx++;
+            InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = Dialogue[currentLineIdxSpeaker1]});
+            currentLineIdxSpeaker1 = currentLineIdxSpeaker1 + 1 > Dialogue.Length - 1 ? 0 : currentLineIdxSpeaker1++;
         }
         
         if (HaveCooldown)StartCoroutine(Cooldown());
@@ -85,9 +86,11 @@ public class DialogueStarterParent : MonoBusListener
         if (delay == 0) yield return new WaitForEndOfFrame();
         else yield return new WaitForSeconds(delay);
 
-        InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = isPositiv ? Dialogue[0] : Dialogue[1] });
+        InvokeEvent<OnDialogueStart>(new OnDialogueStart { dialogueData = isPositiv ? Dialogue[currentLineIdxSpeaker1] : Dialogue[1] });
         if (HaveCooldown)StartCoroutine(Cooldown());
         alreadyPlayed = true;
+        if(isPositiv)currentLineIdxSpeaker1 = currentLineIdxSpeaker1 + 2 > Dialogue.Length - 1 ? 0 : currentLineIdxSpeaker1+2;
+        else currentLineIdxSpeaker2 = currentLineIdxSpeaker2 + 2 > Dialogue.Length - 1 ? 0 : currentLineIdxSpeaker2+2;
     }
 
     IEnumerator Cooldown()
