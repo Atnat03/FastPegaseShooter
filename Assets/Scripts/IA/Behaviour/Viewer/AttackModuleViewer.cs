@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using MyPrint;
+using ScriptableObjectsDefinitions;
 using UnityEngine;
 
 public class AttackModuleViewer : MonoBehaviour
@@ -8,6 +9,10 @@ public class AttackModuleViewer : MonoBehaviour
     [SerializeField] private EnemyAttackModule _attackModule;
     [SerializeField] private float _waitTime;
     [SerializeField] private ParticleSystem _particleSystem;
+    
+    [Header("Sounds")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private SoundsDataSO _soundData;
 
     private void Awake()
     {
@@ -16,7 +21,8 @@ public class AttackModuleViewer : MonoBehaviour
 
     private async void POnAttack()
     {
-        Cons.Print("C'est ic Aloys !!", ColorConsole.Red, ConsoleStyle.Bold);
+        if(_audioSource && _soundData)
+            SoundManager.PlaySound(_soundData, "Attack", _audioSource);
         
         if (_particleSystem == null)
             return;
