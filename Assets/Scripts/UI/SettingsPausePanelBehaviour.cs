@@ -78,7 +78,7 @@ public class SettingsPausePanelBehaviour : PausePanel
         
         ChangeDialoguesVolume(PlayerPrefs.GetFloat("DialoguesVolume", 100));
         _dialoguesAudioVolumeSlider.value = PlayerPrefs.GetFloat("DialoguesVolume", 100) * 100;
-        _dialoguesAudioVolumeText.text = _dialoguesAudioVolumeSlider.value.ToString("F0");
+        _dialoguesAudioVolumeText.text = _dialoguesAudioVolumeSlider.value.ToString("F0") + "%";
         
         
         ChangeResolution();
@@ -140,7 +140,7 @@ public class SettingsPausePanelBehaviour : PausePanel
     void ChangeDialoguesVolume(float newVolume)
     {
         if (!_dialogueManager) return;
-        _dialoguesAudioVolumeText.text = newVolume.ToString("F0");
+        _dialoguesAudioVolumeText.text = newVolume.ToString("F0") + "%";
         newVolume /= 100;
         PlayerPrefs.SetFloat("DialoguesVolume", newVolume);
         _dialogueManager.dialoguesAudioVolume = newVolume;
