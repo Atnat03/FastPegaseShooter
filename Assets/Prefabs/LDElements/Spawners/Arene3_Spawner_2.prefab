@@ -115,7 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SubArena
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 431299012364443804}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 431299012364443804}
   _zoneActivated: 0
   _spawnPoints:
   - {fileID: 6400950982878989626}
@@ -129,6 +129,7 @@ MonoBehaviour:
   - {fileID: 1804558857250632540}
   - {fileID: 7276364778946193254}
   _arenaGaugePrefab: {fileID: 5869652286405861393, guid: 79b298f29666fdf46a556783a64c6358, type: 3}
+  _cardinalDirection: 0
   spawnDelayFirstWave: 0.9
   spawnMobsFirstWave:
   - {fileID: 11400000, guid: 591e7de2967bdfb448f7b5565d7f6601, type: 2}
@@ -180,7 +181,8 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
-  NetworkBehaviours: []
+  NetworkBehaviours:
+  - {fileID: -3803905668730861571}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -191,7 +193,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: 0
+  _initializedTimestamp: -8584201811423066518
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -207,15 +209,15 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 65535
+  <PrefabId>k__BackingField: 7
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 4543539906732307709
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0, w: 0}
-    Scale: {x: 0, y: 0, z: 0}
-    IsValid: 0
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    Scale: {x: 1, y: 1, z: 1}
+    IsValid: 1
 --- !u!1 &2426734625193879238
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,12 @@ GameObject:
   - component: {fileID: 8029633695087904043}
   - component: {fileID: 1791618673497747591}
   - component: {fileID: 8563098288663412458}
+  - component: {fileID: 6092390319991774849}
+  - component: {fileID: 5933998720876664445}
+  - component: {fileID: 3104568157588760662}
+  - component: {fileID: 1708208563343963717}
+  - component: {fileID: 4373297337428993229}
+  - component: {fileID: 1034006408474970982}
   m_Layer: 0
   m_Name: Voiceline Player Arena 1
   m_TagString: Untagged
@@ -144,15 +150,148 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1399764153478011286}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9bff7076c9c98a4a9ac24bf3d734825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterOnOpenBorne
   Dialogue:
+  - {fileID: 11400000, guid: 18cb3396d07e28c43bc0e28a11df97c0, type: 2}
   - {fileID: 11400000, guid: 29b67b24f3309e44cb3b3bc37de4d4c1, type: 2}
   delay: 0
   RandomLine: 0
   HaveCooldown: 0
   cooldownDuration: 0
+  playOnce: 1
+--- !u!114 &6092390319991774849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399764153478011286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6722cd25204544cb82c1e2075252a4a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterOnPlayerGoUnder_X_PV
+  Dialogue:
+  - {fileID: 11400000, guid: a1f1405d49875af469d480b757566c0b, type: 2}
+  - {fileID: 11400000, guid: 66648c84dcf6d15478a85ac0cb523bb2, type: 2}
+  - {fileID: 11400000, guid: a1f1405d49875af469d480b757566c0b, type: 2}
+  - {fileID: 11400000, guid: 5ab62ee2e7560e94da83926099ace678, type: 2}
+  delay: 0
+  RandomLine: 0
+  HaveCooldown: 1
+  cooldownDuration: 60
+  playOnce: 0
+--- !u!114 &5933998720876664445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399764153478011286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65358556fb797084785c359e49ee4036, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterOnSubArenaDangerous
+  Dialogue:
+  - {fileID: 11400000, guid: 89b6ed7d34549e74ea4d678cd3eca142, type: 2}
+  - {fileID: 11400000, guid: 138ceaa3b960eee408d8dff2e9d68074, type: 2}
+  - {fileID: 11400000, guid: 046cd04b53db1d64aa11266987ae0384, type: 2}
+  - {fileID: 11400000, guid: f182d34f4dde5a44bbfbbac3593a0d34, type: 2}
+  delay: 0
+  RandomLine: 0
+  HaveCooldown: 0
+  cooldownDuration: 0
+  playOnce: 0
+--- !u!114 &3104568157588760662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399764153478011286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495a8629bed71694fa312b0758748fca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterOnSubArenaCorosionStarted
+  Dialogue:
+  - {fileID: 11400000, guid: 564c195253920524fac75e85418ce2ce, type: 2}
+  - {fileID: 11400000, guid: b6f9778d37747b6428a0d12444e2fc3a, type: 2}
+  - {fileID: 11400000, guid: 67aa75ec4585957448c8db7d529e81b4, type: 2}
+  - {fileID: 11400000, guid: 2fd104c03faac5b4794c6eef0b84e09b, type: 2}
+  delay: 0
+  RandomLine: 0
+  HaveCooldown: 0
+  cooldownDuration: 0
+  playOnce: 0
+--- !u!114 &1708208563343963717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399764153478011286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff63639a7bb43adb6cb7eba3082759e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterOnPlayerDie
+  Dialogue:
+  - {fileID: 11400000, guid: efa25428a5fbd214485dfe77ba1bf581, type: 2}
+  - {fileID: 11400000, guid: 187dc0071e2ea3b42889f53f8a10a157, type: 2}
+  - {fileID: 11400000, guid: 9e8b31948678b464abc667641e759ae0, type: 2}
+  - {fileID: 11400000, guid: 264a3b0f54290f443891fb12e050c5d0, type: 2}
+  - {fileID: 11400000, guid: 2da23d36033eaa74e803be385f9b5dd9, type: 2}
+  - {fileID: 11400000, guid: 480e479d73e588145a23261a50974e2f, type: 2}
+  delay: 0
+  RandomLine: 0
+  HaveCooldown: 1
+  cooldownDuration: 40
+  playOnce: 0
+--- !u!114 &4373297337428993229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399764153478011286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf8d38713cb34283ae337a31a3c213c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterUseDrone
+  Dialogue:
+  - {fileID: 11400000, guid: 519ab6e34fd02d044aeb491929b29b0f, type: 2}
+  - {fileID: 11400000, guid: 2e1f5a6ffc32c7840875460805787bd4, type: 2}
+  delay: 0
+  RandomLine: 0
+  HaveCooldown: 1
+  cooldownDuration: 60
+  playOnce: 0
+--- !u!114 &1034006408474970982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399764153478011286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72aba30782f241eaa228a982548cd397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueStarterUseHeal
+  Dialogue:
+  - {fileID: 11400000, guid: c64e8866b4e87154696ca2e982313cf0, type: 2}
+  - {fileID: 11400000, guid: 77427a8d8b676bb4db43565fd0c11406, type: 2}
+  - {fileID: 11400000, guid: 4dd1f524cbca5c34a8c736336eb39290, type: 2}
+  - {fileID: 11400000, guid: 1162074cb975dca4ab2bd8988027abed, type: 2}
+  delay: 0
+  RandomLine: 0
+  HaveCooldown: 1
+  cooldownDuration: 30
   playOnce: 0

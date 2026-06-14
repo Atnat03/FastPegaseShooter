@@ -66,6 +66,8 @@ MonoBehaviour:
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_coreSo: {fileID: 11400000, guid: 98f518c862fe6014da11b5c8d513c88d, type: 2}
+  p_isSpawning: 0
+  p_isDying: 0
 --- !u!114 &3606228945024225633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,6 +659,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCoreViewer
   _enemyCore: {fileID: 3483502778561208304}
   _explosionVfx: {fileID: 725748389856807712, guid: 03f721bf7a42fa64f9a90fc0fdd87d46, type: 3}
+  _skinnedMeshRenderer: {fileID: 0}
+  _desintegrationParticles: {fileID: 0}
+  _ballVFX: {fileID: 0}
+  _soundData: {fileID: 0}
+  _source: {fileID: 0}
 --- !u!114 &4849121360662815793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -922,7 +929,6 @@ MonoBehaviour:
   - {fileID: 6358732866691996630}
   - {fileID: 7451949776551479878}
   - {fileID: 5440187924891563584}
-  - {fileID: 0}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -933,7 +939,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584210288549655847
+  _initializedTimestamp: -8584201811423066518
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -949,7 +955,7 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 13
+  <PrefabId>k__BackingField: 23
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 11065921587478753675
   SceneId: 0
