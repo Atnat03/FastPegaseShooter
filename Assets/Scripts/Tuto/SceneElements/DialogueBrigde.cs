@@ -12,6 +12,9 @@ public class DialogueBrigde : MonoBusListener
 	[SerializeField] private GameObject _ui;
 	[SerializeField] private Image _backGroundDialogue;
 	[SerializeField] private TextMeshProUGUI _dialogueText;
+	public Sprite RedRobotSprite;
+	public Sprite BlueRobotSprite;
+	public Sprite IASprite;
 
 	#endregion
 
@@ -30,7 +33,7 @@ public class DialogueBrigde : MonoBusListener
 	{
 		_ui.SetActive(true);
 		
-		_backGroundDialogue.color = GetColor(data.speaker);
+		_backGroundDialogue.sprite = GetSprite(data.speaker);
 		_dialogueText.text = data.dialogue;
 		
 	}
@@ -41,18 +44,18 @@ public class DialogueBrigde : MonoBusListener
 	}
 
 	
-	private Color GetColor(Speaker dataSpeaker)
+	private Sprite GetSprite(Speaker dataSpeaker)
 	{
 		switch (dataSpeaker)
 		{
 			case Speaker.Red:
-				return Color.red;
+				return RedRobotSprite;
 			case Speaker.Blue:
-				return Color.blue;
+				return BlueRobotSprite;
 			case Speaker.AI:
-				return Color.purple;
+				return IASprite;
 			default:
-				return Color.white;
+				return null;
 		}
 	}
 
