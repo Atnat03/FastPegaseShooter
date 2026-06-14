@@ -72,6 +72,10 @@ public class BorneGunSelection : NetworkBusListener
     [ServerRpc(RequireOwnership = false)]
     private void OpenForPlayerServerRpc(NetworkConnection conn)
     {
+        bool playerInZone = _playerList.Exists(p => p.GetComponent<NetworkObject>().Owner == conn);
+
+        if (!playerInZone) return;
+        
         OpenForPlayerTargetRpc(conn);
     }
 
@@ -121,6 +125,7 @@ public class BorneGunSelection : NetworkBusListener
     [TargetRpc]
     void ShowInputUITargetRpc(NetworkConnection conn, bool show)
     {
+        Cons.Print($"ShowInputUITargetRpc reçu : {show}", ColorConsole.Yellow);
         InvokeEvent(new OnAllPlayerCanSelectGun { p_open = show });
     }
     
