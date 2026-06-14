@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class FPSControllerView : NetworkBusListener
 {
-
 	#region Variables
 
 	[SerializeField] private FPSController _fps;
@@ -27,7 +26,6 @@ public class FPSControllerView : NetworkBusListener
 	private bool _canSoundLand = true;
 	
 	#endregion
-
 
 	#region Fonctions
 
@@ -155,7 +153,7 @@ public class FPSControllerView : NetworkBusListener
 	[ObserversRpc]
 	private void PlaySoundObserversRpc(string clip)
 	{
-		SoundManager.PlaySound(_soundsDataFps, clip, _audioSource);
+		SoundManager.PlaySound(_soundsDataFps, clip, _audioSource, transform);
 	}
 
 	private void StopSound()
