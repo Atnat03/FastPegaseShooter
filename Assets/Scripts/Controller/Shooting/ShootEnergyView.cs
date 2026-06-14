@@ -92,6 +92,12 @@ public class ShootEnergyView : MonoBehaviour
 
 	private void CantThrowEnergy(int index)
 	{
+		if(index == -1)
+		{
+			_textCantThrow.gameObject.SetActive(false);
+			return;
+		}
+		
 		if (_messageCoroutine != null)
 			StopCoroutine(_messageCoroutine);
     

@@ -47,7 +47,7 @@ public class PlayerPing : NetworkBehaviour
 		if (!IsOwner) return;
 		if (!_canPing) return;
 		
-		if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out RaycastHit hit))
+		if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out RaycastHit hit, 10000, ~LayerMask.NameToLayer("NotWallridable") ,QueryTriggerInteraction.Ignore))
 		{
 			_elapsedTime = _timerBetweenPing;
 
