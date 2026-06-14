@@ -100,7 +100,7 @@ public class BorneGunSelection : NetworkBusListener
             _playerList.Add(player);
             _numberPlayer.Value++;
         
-            NetworkConnection conn = player.GetComponent<NetworkObject>().Owner;
+            NetworkConnection conn = player.transform.root.GetComponent<NetworkObject>().Owner;
             ShowInputUITargetRpc(conn, true);
         }
     }
