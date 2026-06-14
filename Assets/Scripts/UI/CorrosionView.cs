@@ -30,6 +30,12 @@ public class CorrosionView : MonoBusListener
                 if(_corrodedArenaIDs.Count <= 0) HideCorrosionFeedback();
             }
         });
+        
+        ListenToEvent<OnPlayerSpawnTPEvent>(OPTPE =>
+        {
+            _corrodedArenaIDs.Clear();
+            HideCorrosionFeedback();
+        });
     }
 
     void ShowCorrosionFeedback()
