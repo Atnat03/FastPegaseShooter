@@ -8,6 +8,10 @@ public class EnemyAnimation : MonoBehaviour
     [SerializeField] private EnemyAttackModule _attackModule;
     [SerializeField] private Animator _animator;
 
+    [SerializeField] private Transform _enemyMeshTransform;
+    [SerializeField] private Vector3 _localRotationIdle;
+    [SerializeField] private Vector3 _localRotationWalk;
+
     private void Start()
     {
         if (_movementModule)
@@ -27,10 +31,12 @@ public class EnemyAnimation : MonoBehaviour
     public void ToIdle()
     {
         _animator.SetBool("IsWalking", false);
+        if(_enemyMeshTransform) _enemyMeshTransform.localRotation = Quaternion.Euler(_localRotationIdle);
     }
     public void ToWalk()
     {
         _animator.SetBool("IsWalking", true);
+        if(_enemyMeshTransform) _enemyMeshTransform.localRotation = Quaternion.Euler(_localRotationWalk);
     }
 
     public void Attack()
