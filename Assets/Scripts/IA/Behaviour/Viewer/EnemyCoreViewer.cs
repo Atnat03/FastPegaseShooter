@@ -20,8 +20,9 @@ public class EnemyCoreViewer : MonoBehaviour
     [Header("Shoot")]
     [SerializeField] private GameObject _ballVFX;
     
+    [Header("Sounds")]
+    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private SoundsDataSO _soundData;
-    [SerializeField] private AudioSource _source;
     
     private bool _deathTriggered;
 
@@ -52,6 +53,9 @@ public class EnemyCoreViewer : MonoBehaviour
         
         if(_ballVFX) _ballVFX.SetActive(false);
         if(_EnemySkinnedMeshRenderer) _EnemySkinnedMeshRenderer.gameObject.SetActive(false);
+        
+        if(_audioSource && _soundData)
+            SoundManager.PlaySound(_soundData, "Spawn", _audioSource);
         
         if(_SpawnParticle)
         {
@@ -101,7 +105,8 @@ public class EnemyCoreViewer : MonoBehaviour
         
         _deathTriggered = true;
 
-        SoundManager.PlaySound(_soundData, "Death", _source);
+        if(_audioSource && _soundData)
+            SoundManager.PlaySound(_soundData, "Death", _audioSource);
         
         Material mat = _EnemySkinnedMeshRenderer.sharedMaterials[0];
         if (!mat.name.EndsWith("(Instance)"))
