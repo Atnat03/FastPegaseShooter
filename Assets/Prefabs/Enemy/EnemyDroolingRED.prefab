@@ -63,6 +63,7 @@ MonoBehaviour:
   - {fileID: 5115469853629227165}
   - {fileID: 6358732866691996630}
   _movementModule: {fileID: 5440187924891563584}
+  _enemyCollider: {fileID: 321896222983232563}
   p_pathRequester: {fileID: 0}
   p_gridReader: {fileID: 0}
   p_coreSo: {fileID: 11400000, guid: 98f518c862fe6014da11b5c8d513c88d, type: 2}
@@ -586,6 +587,8 @@ GameObject:
   - component: {fileID: 7117578071730802966}
   - component: {fileID: 3098737630748483031}
   - component: {fileID: 4849121360662815793}
+  - component: {fileID: 2349644814006705793}
+  - component: {fileID: 4589377930339225270}
   m_Layer: 16
   m_Name: Viewers
   m_TagString: Untagged
@@ -627,8 +630,8 @@ MonoBehaviour:
   _EnemySkinnedMeshRenderer: {fileID: 5340788527226683721}
   _desintegrationParticles: {fileID: 1839366453617419113}
   _ballVFX: {fileID: 6705838124652796935}
-  _soundData: {fileID: 0}
-  _source: {fileID: 0}
+  _audioSource: {fileID: 4589377930339225270}
+  _soundData: {fileID: 11400000, guid: e8866cbd9b5971f4f8fdb082cac8abb9, type: 2}
 --- !u!114 &4849121360662815793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -682,6 +685,120 @@ MonoBehaviour:
   _lifeBarSecondImage: {fileID: 3089249457634062930}
   _fillSpeedBarBack: 5
   _timeBeforeSecondBarUpdate: 0.5
+--- !u!114 &2349644814006705793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415641791481666798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d5da548d37e474da836efa04ed3c76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackModuleViewer
+  _attackModule: {fileID: 7035927311638328519}
+  _waitTime: 0
+  _particleSystem: {fileID: 0}
+  _audioSource: {fileID: 4589377930339225270}
+  _soundData: {fileID: 11400000, guid: e8866cbd9b5971f4f8fdb082cac8abb9, type: 2}
+--- !u!82 &4589377930339225270
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415641791481666798}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4017797197468298173
 GameObject:
   m_ObjectHideFlags: 0
