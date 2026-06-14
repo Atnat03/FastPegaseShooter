@@ -498,6 +498,153 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1973914028992141588, guid: 67b4492f6256d3d4eb956ed2a71ee5b1, type: 3}
   m_PrefabInstance: {fileID: 3539433}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5974406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5974409}
+  - component: {fileID: 5974408}
+  - component: {fileID: 5974407}
+  m_Layer: 0
+  m_Name: MusiqueManage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &5974407
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5974406}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -7155444525913424373, guid: c0052657133585a43ae82691c23736a5, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.25
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &5974408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5974406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a33e7b2fd211990488a6fdcfe5975ef6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MusicManager
+  musicList:
+  - {fileID: 8300000, guid: deb8722f714644c4b8b766b717e3ad2b, type: 3}
+  audioSource: {fileID: 5974407}
+  fadeDuration: 2
+  volume: 1
+--- !u!4 &5974409
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5974406}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &6388041 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 485851285554083531, guid: 9bc73b6695bf8e04d83269c856a87449, type: 3}
@@ -6180,6 +6327,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 775665035}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -6227,14 +6382,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (18)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 775665035}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10884,6 +11031,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 3078304}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -10931,14 +11086,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (19)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 3078304}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17807,6 +17954,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 567460842}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -17854,14 +18009,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (24)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 567460842}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -25965,6 +26112,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 158137678}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -26012,14 +26167,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (14)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 158137678}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -36083,6 +36230,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1670186138}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -36130,14 +36285,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (20)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 1670186138}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -77616,6 +77763,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 155192760}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -77663,14 +77818,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (17)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 155192760}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -85405,7 +85552,7 @@ Transform:
   m_GameObject: {fileID: 927856531}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -119.75, y: -50, z: 0}
+  m_LocalPosition: {x: -119.75, y: -58, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -98893,6 +99040,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1489866350}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -98940,14 +99095,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (22)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 1489866350}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -117506,6 +117653,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10191388}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -117553,14 +117708,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (15)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 10191388}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -147078,6 +147225,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1985369478}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -147126,14 +147281,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_WagonSmall_Updated (23)
       objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 1985369478}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -147157,6 +147304,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 6949531}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -147204,14 +147359,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (21)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 6949531}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -155560,6 +155707,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 288746678}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -155607,14 +155762,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (16)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 288746678}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -200605,3 +200752,4 @@ SceneRoots:
   - {fileID: 1659904941}
   - {fileID: 1265106149}
   - {fileID: 1406387409}
+  - {fileID: 5974409}
