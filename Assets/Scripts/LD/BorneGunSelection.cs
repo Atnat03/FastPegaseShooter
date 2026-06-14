@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Controller;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MyPrint;
@@ -53,14 +54,7 @@ public class BorneGunSelection : NetworkBusListener
     {
         if (_canOpenSelect.Value)
         {
-            if (IsServerInitialized)
-            {
-                AllPlayerInZoneObserversRpc();
-            }
-            else
-            {
-                AllPlayerInZoneServerRpc();
-            }
+            OpenForPlayerServerRpc(data.p_connection);
         }
     }
 
@@ -74,14 +68,15 @@ public class BorneGunSelection : NetworkBusListener
         }
     }
 
-    [ServerRpc]
-    private void AllPlayerInZoneServerRpc()
+
+    [ServerRpc(RequireOwnership = false)]
+    private void OpenForPlayerServerRpc(NetworkConnection conn)
     {
-        AllPlayerInZoneObserversRpc();
+        OpenForPlayerTargetRpc(conn);
     }
 
-    [ObserversRpc]
-    void AllPlayerInZoneObserversRpc()
+    [TargetRpc]
+    void OpenForPlayerTargetRpc(NetworkConnection conn)
     {
         InvokeEvent(new OnAllPlayerAtBorne());
     }
@@ -94,35 +89,41 @@ public class BorneGunSelection : NetworkBusListener
     
     public void OnTriggerEnter(Collider other)
     {
-        if (!IsServerInitialized)
-        {
-            return;
-        }
+        if (!IsServerInitialized) return;
 
         if (other.TryGetComponent(out PlayerVisuelBridge player))
         {
             _playerList.Add(player);
             _numberPlayer.Value++;
+        
+            NetworkConnection conn = player.GetComponent<NetworkObject>().Owner;
+            ShowInputUITargetRpc(conn, true);
         }
     }
-    
+
     public void OnTriggerExit(Collider other)
     {
-        if (!IsServerInitialized)
-        {
-            return;
-        }
-        
+        if (!IsServerInitialized) return;
+    
         if (other.TryGetComponent(out PlayerVisuelBridge player))
         {
             if (_playerList.Contains(player))
             {
                 _playerList.Remove(player);
                 _numberPlayer.Value--;
+            
+                NetworkConnection conn = player.GetComponent<NetworkObject>().Owner;
+                ShowInputUITargetRpc(conn, false);
             }
         }
     }
-
+    
+    [TargetRpc]
+    void ShowInputUITargetRpc(NetworkConnection conn, bool show)
+    {
+        InvokeEvent(new OnAllPlayerCanSelectGun { p_open = show });
+    }
+    
     private void OnDrawGizmos()
     {
         if (_showGIZMOS)
