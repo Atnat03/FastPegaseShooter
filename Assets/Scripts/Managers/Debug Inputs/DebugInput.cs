@@ -125,6 +125,17 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""3b0ac947-8f9d-472c-bc9b-d3aa5c8420ee"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StopZoneSpawning"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""2be7f9bc-258d-4683-b4c2-8b0bc18da8d7"",
                     ""path"": ""<Keyboard>/numpad0"",
                     ""interactions"": """",
