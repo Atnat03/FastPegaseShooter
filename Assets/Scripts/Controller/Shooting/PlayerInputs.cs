@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using FishNet.Connection;
 using FishNet.Object;
 using MyPrint;
 using Unity.VisualScripting;
@@ -119,8 +120,7 @@ namespace Controller
             if (_playerHealth.IsDead) return;
             if(_fps.IsFreeze) return;
 
-            InvokeEvent(new OnPlayerInteract());
-        }
+            InvokeEvent(new OnPlayerInteract { p_connection = LocalConnection });        }
         
         private void ChangeToMainGun(InputAction.CallbackContext obj)
         {
@@ -246,6 +246,9 @@ namespace Controller
 
         #endregion
     }
-    
-    public struct OnPlayerInteract{}
+
+    public struct OnPlayerInteract
+    {
+        public NetworkConnection p_connection;
+    }
 }

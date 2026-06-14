@@ -75,6 +75,7 @@ public class DapManager : NetworkBusListener
         ListenToEvent<OnAddDapPercentage>(AddPercentage);
         ListenToEvent<OnPlayerSpawnEvent>(OnPlayerSpawn);
         ListenToEvent<OnAskForDapp>(AskForDapp);
+        ListenToEvent<OnEndGameStarted>(_ => _globalCanva.gameObject.SetActive(false));
 
         _dapPercentage.OnChange += OnDapChange;
         _canDapping.OnChange += OnCanDappingChange;

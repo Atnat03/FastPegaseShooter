@@ -51,11 +51,16 @@ public class EndGameManager : NetworkBusListener
 		yield return new WaitForSeconds(2);
 		
 		_cameraEnd.gameObject.SetActive(true);
+		_cameraEnd.depth = 100;
+		
+		InvokeEvent(new OnEndGameStarted());
 		
 		yield return new WaitForSeconds(5f);
 		
 		Cons.Print("End game !!", ColorConsole.Cyan);
 	}
-
+	
 	#endregion
 }
+
+public struct OnEndGameStarted {}
