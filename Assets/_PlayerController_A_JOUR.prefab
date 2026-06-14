@@ -966,7 +966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShootEnergyView
   _shootEnergy: {fileID: 5211221750857496501}
   _gunSwitching: {fileID: 3154577241410043838}
-  _playerEnergizedState: {fileID: 0}
+  _playerEnergizedState: {fileID: 2632099118924709043}
   _textCantThrow: {fileID: 2650941480714345369}
   _timeMessageStayOnScreen: 1
   _messagesCantThrow:
@@ -2350,6 +2350,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b16da1e2b1939347a2cd8ca7e81ff72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCapacity
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 7927807153383519047}
+  _networkObjectCache: {fileID: 0}
   _gun: {fileID: 0}
   _tirChargeCapaData:
     p_capacity: 0
@@ -5185,7 +5188,7 @@ Transform:
   m_GameObject: {fileID: 6972727970303002869}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5493,7 +5496,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6972727970303002869}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08d92fe6a69850c418ef5cd9ac580a39, type: 3}
   m_Name: 
@@ -5518,7 +5521,7 @@ MonoBehaviour:
   _canvas: {fileID: 7585343327431638934}
   _soundsData: {fileID: 11400000, guid: 398273cf6944ada4eba1b626c38c988c, type: 2}
   _source: {fileID: 4823317710188223472}
-  _loadingSceneUI: {fileID: 0}
+  _loadingSceneUI: {fileID: 228254234775821295}
   _gunSwitching: {fileID: 3154577241410043838}
   _imageToChangeList:
   - image: {fileID: 561156759908119395}
@@ -16255,6 +16258,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: PFB_HUD
       objectReference: {fileID: 0}
+    - target: {fileID: 1225833382958483898, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1225833382958483898, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1225833382958483898, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1230792630795903201, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -16515,6 +16530,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 8afcced121064b0408018f60ecaddd0c, type: 3}
+    - target: {fileID: 4767704505007552294, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767704505007552294, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767704505007552294, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4809134417184683473, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -16551,6 +16578,34 @@ PrefabInstance:
       propertyPath: '_reticules.Array.data[2]'
       value: 
       objectReference: {fileID: 5315282230989249539}
+    - target: {fileID: 5990368244534246059, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_fontSize
+      value: 26.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 5990368244534246059, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 19.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5990368244534246059, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6130560173862489154, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6130560173862489154, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6130560173862489154, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655724089000492365, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7475171054359648731, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -16562,6 +16617,22 @@ PrefabInstance:
     - target: {fileID: 7709414541307216328, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 81.07001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7933094004804062935, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 265.153
+      objectReference: {fileID: 0}
+    - target: {fileID: 7933094004804062935, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 39.796
+      objectReference: {fileID: 0}
+    - target: {fileID: 7933094004804062935, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7933094004804062935, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 92
       objectReference: {fileID: 0}
     - target: {fileID: 7979537263101574328, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
