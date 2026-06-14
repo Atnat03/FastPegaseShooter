@@ -12,6 +12,7 @@ public class ShootEnergyView : MonoBehaviour
 
 	[SerializeField] private ShootEnergy _shootEnergy;
 	[SerializeField] private GunSwitching _gunSwitching;
+	[SerializeField] private PlayerEnergizedState _playerEnergizedState;
 	
 	[Header("Messages")]
 	[SerializeField] private TextMeshProUGUI _textCantThrow;
@@ -27,9 +28,13 @@ public class ShootEnergyView : MonoBehaviour
 	
 	[Header("Laser")]
 	[SerializeField] private GameObject[] _lasers;
+	[SerializeField] private GameObject[] _lasersTPS;
 	[SerializeField] private Transform _laserSpawnPoint;
 	private GameObject _assignedLaser;
+	private GameObject _assignedLaserTPS;
 	private Vector3 _targetLaserPos;
+	
+	private Coroutine _messageCoroutine;
 
 	#endregion
 	
@@ -41,6 +46,7 @@ public class ShootEnergyView : MonoBehaviour
 		_targetAnimator = _uiTarget.GetComponent<Animator>();
     
 		_assignedLaser = _lasers[0];
+		_assignedLaserTPS = _lasersTPS[0];
 	}
 
 	private void Start()
@@ -54,6 +60,7 @@ public class ShootEnergyView : MonoBehaviour
 		_shootEnergy.CantThrowEnergy += CantThrowEnergy;
 		_shootEnergy.OnDetectBro += DetectBro;
 		_shootEnergy.OnLaserActivate += ActivatedLaser;
+		_shootEnergy.OnTPSLaserActivate += ActivatedLaserTPS;
 	}
 
 	
@@ -63,6 +70,7 @@ public class ShootEnergyView : MonoBehaviour
 		_shootEnergy.CantThrowEnergy -= CantThrowEnergy;
 		_shootEnergy.OnDetectBro -= DetectBro;
 		_shootEnergy.OnLaserActivate -= ActivatedLaser;
+		_shootEnergy.OnTPSLaserActivate -= ActivatedLaserTPS;
 	}
 	
 
@@ -72,6 +80,7 @@ public class ShootEnergyView : MonoBehaviour
 		
 		_targetAnimator.SetBool("IsShooting", isActive);
 		_assignedLaser.gameObject.SetActive(isActive);
+		_assignedLaserTPS.gameObject.SetActive(isActive);
 		
 		_imageTarget.color = isActive ? _targetColors[0] : _targetColors[1];
 		
@@ -80,15 +89,14 @@ public class ShootEnergyView : MonoBehaviour
 			_targetLaserPos = endPos; // + Vector3.up;
 		}
 	}
-	
 
 	private void CantThrowEnergy(int index)
 	{
-		if(!_textCantThrow.gameObject.activeSelf)
-		{
-			_textCantThrow.text = _messagesCantThrow[index];
-			StartCoroutine(MessageCantThrow());
-		}
+		if (_messageCoroutine != null)
+			StopCoroutine(_messageCoroutine);
+    
+		_textCantThrow.text = _messagesCantThrow[index];
+		_messageCoroutine = StartCoroutine(MessageCantThrow());
 	}
 
 	IEnumerator MessageCantThrow()
@@ -96,12 +104,13 @@ public class ShootEnergyView : MonoBehaviour
 		_textCantThrow.gameObject.SetActive(true);
 		yield return new WaitForSeconds(_timeMessageStayOnScreen);
 		_textCantThrow.gameObject.SetActive(false);
+		_messageCoroutine = null;
 	}
 
 	private void SetUpColor(bool isPositive)
 	{
-		Debug.Log("assigned color color is positiv ? :" + isPositive);
 		_assignedLaser = isPositive ? _lasers[0] : _lasers[1];
+		_assignedLaserTPS = isPositive ? _lasersTPS[0] : _lasersTPS[1];
 	}
 	
 	private void DetectBro(bool hasDetect, Vector3 pos)
@@ -114,14 +123,12 @@ public class ShootEnergyView : MonoBehaviour
 
 		_uiTarget.GetComponent<RectTransform>().localPosition = localPos;
 	}
-
-	/*private void Update()
+	
+	private void ActivatedLaserTPS(bool isActive)
 	{
-		if(_assignedLaser.gameObject.activeSelf)
-		{
-			_assignedLaser.transform.LookAt(_targetLaserPos);
-		}	
-	}*/
+		if (_assignedLaserTPS == null) return;
+		_assignedLaserTPS.gameObject.SetActive(isActive);
+	}
 
 	#endregion
 }
