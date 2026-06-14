@@ -230,10 +230,13 @@ namespace GunDecorator
                 PlayMuzzleFlash();
                 PlayerTPSMuzzleFlash();
 
-                _animator?.SetTrigger("Shoot");
-                
-                if(_animatorArm)
-                    _animatorArm?.SetTrigger("Shoot");
+                if (!_reloadModule.IsReloading)
+                {
+                    _animator?.SetTrigger("Shoot");
+            
+                    if(_animatorArm)
+                        _animatorArm?.SetTrigger("Shoot");
+                }
             }
         }
 
@@ -254,10 +257,13 @@ namespace GunDecorator
 
                 SetAmmo(GetCurrentAmmo() - 1, _infiniteAmmo);
 
-                _animator?.SetTrigger("Shoot");
-                
-                if(_animatorArm)
-                    _animatorArm?.SetTrigger("Shoot");
+                if (!_reloadModule.IsReloading)
+                {
+                    _animator?.SetTrigger("Shoot");
+            
+                    if(_animatorArm)
+                        _animatorArm?.SetTrigger("Shoot");
+                }
 
                 _playerAnimation.SetShootAnim();
                 
@@ -272,11 +278,6 @@ namespace GunDecorator
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
             _recoilModule?.SetIsRecoil(false);
-
-            _animator?.ResetTrigger("Shoot");
-
-            if (_animatorArm)
-                _animatorArm?.ResetTrigger("Shoot");
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;

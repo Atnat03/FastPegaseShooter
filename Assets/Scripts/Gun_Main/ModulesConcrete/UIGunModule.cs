@@ -53,6 +53,9 @@ public class UIGunModule : GunModule
 
 	private void OnNoiseChange(float ratio)
 	{
+		if (_reticules.Count <= 0)
+			return;
+		
 		foreach (ReticuleUI r in _reticules)
 		{
 			r.image.transform.localPosition = Vector3.Lerp(r.minPos, r.maxPos, ratio);
@@ -67,6 +70,9 @@ public class UIGunModule : GunModule
 	
 	private void StopCharging()
 	{
+		if (_reticules.Count <= 0)
+			return;
+		
 		foreach (ReticuleUI r in _reticules)
 		{
 			r.image.transform.localScale = r.minScale;
