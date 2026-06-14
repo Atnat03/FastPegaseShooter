@@ -21,7 +21,7 @@ public class BasicMovementModule : EnemyMovementModule
             if (!_isWalking)
             {
                 _isWalking = true;
-                p_onChangeMovement(_isWalking);
+                InvokeChangeMovement(_isWalking);
             }
             
             transform.position = Vector3.Lerp(_lastPos, _path[^2].position, _t);
@@ -39,7 +39,7 @@ public class BasicMovementModule : EnemyMovementModule
         else if (_isWalking)
         {
             _isWalking = false;
-            p_onChangeMovement(_isWalking);
+            InvokeChangeMovement(_isWalking);
         }
     }
 }

@@ -93,8 +93,6 @@ public class PlayerSelectGun : NetworkBusListener
 		InvokeEvent(new OnOpenBorne{p_playerPositive = _gun.IsPositive});
 		InvokeEvent(new PlayUISound{keySound = "OpenBorne"});
 		
-		Cons.Print("Show UI", ColorConsole.Blue);
-		
 		_gun.DesactivateAllMainGun();
 		_fps.IsFreeze = true;
 		
@@ -114,8 +112,6 @@ public class PlayerSelectGun : NetworkBusListener
 
 	private void CanSelectGun(OnAllPlayerCanSelectGun data)
 	{
-		Cons.Print($"CanSelectGun reçu : {data.p_open}, IsOwner : {IsOwner}", ColorConsole.Green);
-    
 		if (!IsOwner) return;
     
 		_uiInput.SetActive(data.p_open);
