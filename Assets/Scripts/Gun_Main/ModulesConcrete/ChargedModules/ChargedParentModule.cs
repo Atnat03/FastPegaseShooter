@@ -54,9 +54,18 @@ namespace GunDecorator.ChargedModules
         IEnumerator StartingCharging()
         {
             OnStartCharged?.Invoke();
+
+            _isChargedShooting = true;
             
             yield return new WaitForSeconds(_timeForCharging);
 
+            _isChargedShooting = false;
+            
+            InvokeEvent(new OnUseCapacity
+            {
+                p_capacityData = Capacity.ChargedShoot
+            });
+            
             TryShootCharging();
         }
 

@@ -73,12 +73,8 @@ namespace Controller
             if (!_playerCapacity.CanChargedShoot) return;
             if (!p_unlockChargedShoot)return;
             if (!p_isMainGun) return;
+            if (CurrentGun.IsChargeShooting) return;
             
-            InvokeEvent(new OnUseCapacity
-            {
-                p_capacityData = Capacity.ChargedShoot
-            });
-
             InvokeEvent(new OnDataLog
             {
                 entityName = transform.GetRootTransform().gameObject.name,

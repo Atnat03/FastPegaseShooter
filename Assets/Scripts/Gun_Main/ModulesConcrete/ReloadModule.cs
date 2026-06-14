@@ -61,14 +61,6 @@ namespace GunDecorator
                 StopCoroutine(p_reloadCoroutine);
                 p_reloadCoroutine = null;
                 _isReloading = false;
-                _gunController?._animator.ResetTrigger("Reload");
-                
-                if(_gunController?._animatorArm)
-                    _gunController?._animatorArm.ResetTrigger("Reload");
-                
-                if(_gunController?._animatorBall)
-                    _gunController?._animatorBall.ResetTrigger("Reload");
-                
                 _gunController?.OnEndReload?.Invoke();
             }
         }
@@ -84,14 +76,17 @@ namespace GunDecorator
             _gunController?.OnStartReload?.Invoke(reloadDuration);
             _gunController?.PlaySound("Reload");
             _isReloading = true;
+            
+            _gunController?._animator?.ResetTrigger("Shoot");
+            _gunController?._animatorArm?.ResetTrigger("Shoot");
 
-            yield return null;
-    
             _gunController?._animator?.SetTrigger("Reload");
             if (_gunController?._animatorArm)
                 _gunController._animatorArm.SetTrigger("Reload");
             if (_gunController?._animatorBall)
                 _gunController._animatorBall.SetTrigger("Reload");
+
+            yield return null;
 
             yield return new WaitForSeconds(reloadDuration);
 
