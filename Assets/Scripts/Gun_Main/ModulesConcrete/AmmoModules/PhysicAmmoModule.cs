@@ -146,6 +146,7 @@ namespace GunDecorator.AmmoModules
         void DespawnBullet(BulletPhysicBehaviour bullet)
         {
             bullet.OnCollision -= DespawnBullet;
+            StopAllCoroutines();
             _ammoPool.ReturnToPool(bullet);
         }
 
