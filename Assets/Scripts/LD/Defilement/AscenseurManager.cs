@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FishNet.Object;
 using UnityEngine;
 
@@ -13,12 +14,15 @@ public class AscenseurManager : NetworkBusListener
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private Transform _endPoint;
     [SerializeField] private float _durationTraveling;
+    [SerializeField] private int _launchDelay;
     
     
     private List<Ascenseur> _pool = new();
 
-    public void LaunchElevator()
+    public async void LaunchElevator()
     {
+        await Task.Delay(_launchDelay);
+        
         float launchTime = Time.time; // référence commune
 
         for (int i = 0; i < _partsList.Length; i++)
