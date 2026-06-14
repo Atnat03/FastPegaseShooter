@@ -9,6 +9,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public struct OnPlayerOk
+{
+	public int playerID;
+	public bool IsPositive;
+}
+
 public class GunSwitching : NetworkBusListener
 {
 	#region Properties
@@ -105,6 +111,12 @@ public class GunSwitching : NetworkBusListener
 		ChangeGun(true);
 		
 		OnSwapGun?.Invoke(_isPositiveChargedPlayer.Value);
+		
+		InvokeEvent(new OnPlayerOk
+		{
+			playerID = Owner.ClientId,
+			IsPositive = _isPositiveChargedPlayer.Value,
+		});
 	}
 
 	public void ActivateCurrentGun(List<GunController> list, int index)
