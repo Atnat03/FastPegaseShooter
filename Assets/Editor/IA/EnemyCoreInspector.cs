@@ -10,7 +10,7 @@ public class EnemyCoreInspector : Editor
     private SerializedProperty _targetModules;
     private SerializedProperty _movementModule;
     
-    private SerializedProperty _pinataType;    
+    //private SerializedProperty _enemyCollider;    
     
     private SerializedProperty scriptProperty;
 
@@ -29,7 +29,9 @@ public class EnemyCoreInspector : Editor
         _lifeModules = serializedObject.FindProperty("_lifeModules");
         _targetModules = serializedObject.FindProperty("_targetingModules");
         _movementModule = serializedObject.FindProperty("_movementModule");
-        _pinataType = serializedObject.FindProperty("_pinataType");
+        //_enemyCollider = serializedObject.FindProperty("_enemyCollider");
+        
+        
 
         _centeredTitleStyle = new GUIStyle
         {
@@ -102,6 +104,7 @@ public class EnemyCoreInspector : Editor
         GUILayout.Space(10);
         GUILayout.Label("Core Variables", _titleStyle);
         
+        EditorUtilities.Draw("_enemyCollider", serializedObject);
         EditorUtilities.Draw("p_coreSo", serializedObject);
         
         serializedObject.ApplyModifiedProperties();
