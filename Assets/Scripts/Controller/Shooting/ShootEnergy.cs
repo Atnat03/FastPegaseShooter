@@ -95,33 +95,39 @@ public class ShootEnergy : NetworkBusListener
 		_targetNetObj = null;
 	}
 
+	private bool _cantThrowMessageSent = false;
+	
 	public void TryShoot()
 	{
 		if (_resetLock) return;
-		
-		if (Time.time < _nextFireTime)
-		{
-			return;
-		}
-		
+    
+		if (Time.time < _nextFireTime) return;
+    
 		if (_playerEnergy.CurrentEnergy <= 0)
 		{
-			CantThrowEnergy?.Invoke(0);
+			if (!_cantThrowMessageSent)
+			{
+				CantThrowEnergy?.Invoke(0);
+				_cantThrowMessageSent = true;
+			}
 			SetAimingState(false);
 			return;
 		}
-		
+    
 		if (_target == null)
 		{
-			CantThrowEnergy?.Invoke(1);
+			if (!_cantThrowMessageSent)
+			{
+				CantThrowEnergy?.Invoke(1);
+				_cantThrowMessageSent = true;
+			}
 			SetAimingState(false);
 			return;
 		}
-		
+    
+		_cantThrowMessageSent = false;
 		SetAimingState(true);
-		
 		_nextFireTime = Time.time + _fireRate;
-
 		ConsumeEnergyServerRpc();
 	}
 	
@@ -137,6 +143,7 @@ public class ShootEnergy : NetworkBusListener
 	
 	public void TryCancelShoot()
 	{
+		_cantThrowMessageSent = false;
 		SetAimingState(false);
 	}
 	
@@ -206,7 +213,7 @@ public class ShootEnergy : NetworkBusListener
 	[ServerRpc]
 	private void SetAimingServerRpc(bool state, NetworkObject targetNetObj)
 	{
-		if (state)
+		if (targetNetObj != null)
 			_targetNetObj = targetNetObj;
     
 		_isAiming.Value = state;

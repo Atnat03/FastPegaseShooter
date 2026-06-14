@@ -30,6 +30,7 @@ public class DialoguesManager : MonoBusListener
     private GunSwitching gunSwitch;
 
     [Header("Juicy")] 
+    [SerializeField] private RectTransform animPrent;
     [SerializeField] private AnimationCurve iconsArrivalScale;
     [SerializeField] private float iconsBounceHeightMultiplier;
     [SerializeField] private float iconsBounceSpeed;
@@ -67,7 +68,7 @@ public class DialoguesManager : MonoBusListener
     public void Start()
     {
         ListenToEvent<OnDialogueStart>(StartDialogue);
-        speakerImageDefaultPosition = speakerImage.rectTransform.localPosition;
+        speakerImageDefaultPosition = animPrent.localPosition;
         CleanDialogue();
     }
 
@@ -97,14 +98,14 @@ public class DialoguesManager : MonoBusListener
                     elapsedTime += Time.deltaTime;
                     if (elapsedTime < .2f)
                     {
-                        speakerImage.rectTransform.localScale =
+                        animPrent.localScale =
                             Vector3.one * iconsArrivalScale.Evaluate(elapsedTime / .2f);
                         txtBackGround.rectTransform.localScale =
                             Vector3.one * iconsArrivalScale.Evaluate(elapsedTime / .2f);
                     }
                     else if (line.audioClip.length - elapsedTime < .2f)
                     {
-                        speakerImage.rectTransform.localScale =
+                        animPrent.localScale =
                             Vector3.one * iconsArrivalScale.Evaluate((line.audioClip.length - elapsedTime) / .2f);
                         txtBackGround.rectTransform.localScale =
                             Vector3.one * iconsArrivalScale.Evaluate((line.audioClip.length - elapsedTime)  / .2f);
@@ -113,7 +114,7 @@ public class DialoguesManager : MonoBusListener
                     else
                     {
                         float rms = GetRMS();
-                        speakerImage.rectTransform.localPosition = speakerImageDefaultPosition + new Vector3(0,
+                        animPrent.localPosition = speakerImageDefaultPosition + new Vector3(0,
                             Mathf.Abs(Mathf.Sin(iconsBounceSpeed * elapsedTime * Mathf.PI)) *
                             rms * iconsBounceHeightMultiplier, 0);
                     }

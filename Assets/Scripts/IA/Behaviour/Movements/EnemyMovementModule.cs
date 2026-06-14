@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
 
 //[AddComponentMenu("EnemyBehaviour/Movement")]
@@ -79,4 +80,7 @@ public abstract class EnemyMovementModule : EnemyBehaviourModule
         _isPathUpdateRequested = false;
         _path.Clear();
     }
+
+    [ObserversRpc]
+    protected void InvokeChangeMovement(bool isWalking) => p_onChangeMovement?.Invoke(isWalking);
 }
