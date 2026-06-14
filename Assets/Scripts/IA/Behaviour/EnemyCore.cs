@@ -14,6 +14,7 @@ public class EnemyCore : NetworkBusListener
     [SerializeField] private List<EnemyLifeModule> _lifeModules = new List<EnemyLifeModule>();
     [SerializeField] private List<EnemyTargetModule> _targetingModules = new List<EnemyTargetModule>();
     [SerializeField] private EnemyMovementModule _movementModule;
+    [SerializeField] private Collider _enemyCollider;
     
     public Guid p_gridReaderId;
     public PathfindingRequestManager p_pathRequester;
@@ -196,7 +197,7 @@ public class EnemyCore : NetworkBusListener
             AddEnergyWhenEnemyKillObserversRpc(playerObjectId, signedEnergyAmount);
         }
         
-        InvokeDeathEvent();
+        OnEnemyDeathObserverRpc();
     }
 
     [Server]
@@ -206,7 +207,11 @@ public class EnemyCore : NetworkBusListener
     }
     
     [ObserversRpc]
-    void InvokeDeathEvent() => OnDeath?.Invoke();
+    void OnEnemyDeathObserverRpc()
+    {
+        if(_enemyCollider) _enemyCollider.enabled = false;
+        OnDeath?.Invoke();
+    }
     
     [ObserversRpc]
     private void AddEnergyWhenEnemyKillObserversRpc(int id, float value)
