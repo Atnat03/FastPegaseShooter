@@ -6,5 +6,6 @@ public class DebugDapTrigger : MonoBusListener
     void OnTriggerEnter(Collider other)
     {
         InvokeEvent(new OnDapEvent());
+        InvokeEvent(new OnDappEventObserveurs());
     }
 }
