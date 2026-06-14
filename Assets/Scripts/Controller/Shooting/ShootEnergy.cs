@@ -206,7 +206,9 @@ public class ShootEnergy : NetworkBusListener
 	[ServerRpc]
 	private void SetAimingServerRpc(bool state, NetworkObject targetNetObj)
 	{
-		_targetNetObj = targetNetObj;
+		if (state)
+			_targetNetObj = targetNetObj;
+    
 		_isAiming.Value = state;
 	}
 	
@@ -216,6 +218,10 @@ public class ShootEnergy : NetworkBusListener
 		{
 			if (_targetNetObj != null)
 				SendEnergyStateObserverRpc(_targetNetObj.OwnerId, next);
+        
+			if (!next)
+				_targetNetObj = null;
+        
 			return;
 		}
 
