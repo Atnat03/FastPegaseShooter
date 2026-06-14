@@ -44,6 +44,8 @@ namespace GunDecorator.ChargedModules
 
         private void ApplyShoot()
         {
+            _ammoModule.SetDamage(_damageChargedMultiplicator);
+            
             for (int i = 0; i < _numberBulletInCharge; i++)
             {
                 Vector3 direction = 
@@ -63,6 +65,8 @@ namespace GunDecorator.ChargedModules
             }
 
             _gunController.PlaySound("Charged");
+            
+            _ammoModule.SetDamage(1);
             
             ResetCharging();
         }

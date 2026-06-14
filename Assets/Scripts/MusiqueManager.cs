@@ -14,8 +14,8 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private float fadeDuration = 2f;
 
-    [SerializeField] private float volume = 1f;
-
+    private float startVolume;
+    
     private void Start()
     {
         if (musicList.Count == 0 || audioSource == null)
@@ -24,6 +24,9 @@ public class MusicManager : MonoBehaviour
         int randomIndex = Random.Range(0, musicList.Count);
 
         audioSource.clip = musicList[randomIndex];
+        
+        startVolume = audioSource.volume;
+        
         audioSource.volume = 0f;
         audioSource.Play();
 
@@ -33,23 +36,23 @@ public class MusicManager : MonoBehaviour
     private IEnumerator FadeIn()
     {
         float elapsed = 0f;
-
+        
         while (elapsed < fadeDuration)
         {
             elapsed += Time.deltaTime;
-            audioSource.volume = Mathf.Lerp(0f, volume, elapsed / fadeDuration);
+            audioSource.volume = Mathf.Lerp(0f, startVolume, elapsed / fadeDuration);
             yield return null;
         }
 
-        audioSource.volume = volume;
+        audioSource.volume = startVolume;
     }
 
     public void SetVolume(float newVolume)
     {
-        volume = Mathf.Clamp01(newVolume);
+        startVolume = Mathf.Clamp01(newVolume);
 
         if (audioSource.isPlaying)
-            audioSource.volume = volume;
+            audioSource.volume = startVolume;
     }
 }
 

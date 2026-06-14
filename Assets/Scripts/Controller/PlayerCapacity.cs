@@ -22,6 +22,7 @@ public struct CapacityData
 
 public struct OnAddPercentageCapactity
 {
+	public int p_targetOwnerId;
 	public Capacity p_capacityData;
 	public float p_percentageValue;
 }
@@ -31,7 +32,7 @@ public struct OnUseCapacity
 	public Capacity p_capacityData;
 }
 
-public class PlayerCapacity : MonoBusListener
+public class PlayerCapacity : NetworkBusListener
 {
 	#region Properties
 
@@ -98,6 +99,8 @@ public class PlayerCapacity : MonoBusListener
 
 	void AddPercentage(OnAddPercentageCapactity data)
 	{
+		if (data.p_targetOwnerId != OwnerId) return;
+		
 		switch (data.p_capacityData)
 		{
 			case Capacity.ChargedShoot:
