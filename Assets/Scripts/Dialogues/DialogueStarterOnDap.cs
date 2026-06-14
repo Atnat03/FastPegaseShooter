@@ -1,1 +1,1 @@
-public class DialogueStarterOnDap       : DialogueStarterGeneric<OnDapEvent> {}
+public class DialogueStarterOnDap       : DialogueStarterGeneric<OnDappEventObserveurs> {}

@@ -8,6 +8,14 @@ public struct PlayUISound
 	public string keySound;
 }
 
+[Serializable]
+public struct ColorToChange
+{
+	public Image image;
+	public Color colorPositive;
+	public Color colorNegative;
+}
+
 public class PlayerUISettings : NetworkBusListener
 {
 	#region Properties
@@ -23,22 +31,17 @@ public class PlayerUISettings : NetworkBusListener
 	
 	[Header("Colors")]
 	[SerializeField] private GunSwitching _gunSwitching;
-	[SerializeField] private Image[] _imageList;
-	[SerializeField] private Color[] _colorList;
+	[SerializeField] private ColorToChange[] _imageToChangeList;
 	
 	#endregion
 
 
 	#region Fonctions
-
-	private void Start()
-	{
-		//ApplyColor();
-	}
 	
 	public override void OnStartNetwork()
 	{
 		ListenToEvent<PlayUISound>(PlaySoundUI);
+		ListenToEvent<OnPlayerOk>(ApplyColor);
 	}
 
 	private void PlaySoundUI(PlayUISound data)
@@ -65,13 +68,14 @@ public class PlayerUISettings : NetworkBusListener
 		}
 	}
 	
-	private void ApplyColor()
+	private void ApplyColor(OnPlayerOk playerData)
 	{
-		Color c = _gunSwitching.IsPositive ? _colorList[0] : _colorList[1];
-
-		foreach (Image image in _imageList)
+		if (playerData.playerID != Owner.ClientId)
+			return;
+		
+		foreach (ColorToChange data in _imageToChangeList)
 		{
-			image.color = c;
+			data.image.color = playerData.IsPositive ? data.colorPositive : data.colorNegative;
 		}
 	}
 
