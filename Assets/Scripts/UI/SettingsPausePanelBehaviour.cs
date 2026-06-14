@@ -76,7 +76,7 @@ public class SettingsPausePanelBehaviour : PausePanel
         _dialoguesActivated.isOn = dialoguesOn;
         ActivateDialogues(dialoguesOn);
         
-        ChangeDialoguesVolume(PlayerPrefs.GetFloat("DialoguesVolume", 100));
+        ChangeDialoguesVolume(PlayerPrefs.GetFloat("DialoguesVolume", 100) * 100);
         _dialoguesAudioVolumeSlider.value = PlayerPrefs.GetFloat("DialoguesVolume", 100) * 100;
         _dialoguesAudioVolumeText.text = _dialoguesAudioVolumeSlider.value.ToString("F0") + "%";
         
