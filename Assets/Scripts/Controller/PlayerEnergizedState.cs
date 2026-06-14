@@ -92,7 +92,8 @@ public class PlayerEnergizedState : NetworkBusListener
 				InvokeEvent(new OnAddPercentageCapactity
 				{
 					p_capacityData = capa,
-					p_percentageValue = _reloadCapacityValue[(int)capa] * Time.deltaTime * ratio
+					p_percentageValue = _reloadCapacityValue[(int)capa] * Time.deltaTime * ratio,
+					p_targetOwnerId = OwnerId
 				});
 				
 				if (ratio > 0)
