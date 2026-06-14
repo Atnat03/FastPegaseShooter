@@ -26,6 +26,8 @@ namespace GunDecorator.ChargedModules
         {
             base.TryShootCharging();
             
+            _ammoModule.SetDamage(_damageChargedMultiplicator);
+            
                 Cons.Print("Apply shoot : " + _posOffset.Length);
             for (int i = 0; i < _posOffset.Length; i++)
             {
@@ -41,6 +43,8 @@ namespace GunDecorator.ChargedModules
                 _gunController.RecoilModule.Recoil(_gunController.CurrentModelGun.transform, 0.25f, false, _recoilChargedMultiplier, _recoilX);
                 _gunController.RecoilModule?.SetIsRecoil(true);
             }
+            
+            _ammoModule.SetDamage(1);
             
             _gunController.PlaySound("Charged");
         }
