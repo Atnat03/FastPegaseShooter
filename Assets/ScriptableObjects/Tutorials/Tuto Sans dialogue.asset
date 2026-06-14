@@ -1,0 +1,311 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b19f28374c4eb2ba0a96b9d3b397bf, type: 3}
+  m_Name: Tuto Sans dialogue
+  m_EditorClassIdentifier: Assembly-CSharp::Tuto.ScenarioSO
+  _scenarioList:
+  - ScenarioName: StartDialogue
+    trigger:
+      rid: 5406076671141347503
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076879839166569
+  - ScenarioName: Pre-SalleMonstres
+    trigger:
+      rid: 5406076671141347514
+    eventsList:
+    - rid: 5406076746262118500
+    - rid: 5406076671141347515
+  - ScenarioName: CloseDoor
+    trigger:
+      rid: 5406076671141347518
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076671141347519
+  - ScenarioName: Mob Deads
+    trigger:
+      rid: 5406076746262118502
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076695212458155
+    - rid: 5406076807428964493
+  - ScenarioName: Well Done Energy
+    trigger:
+      rid: 5406076746262118504
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076746262118505
+  - ScenarioName: "SeparationD\xE9but"
+    trigger:
+      rid: 5406076786627313775
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076879839166598
+  - ScenarioName: UseHeal
+    trigger:
+      rid: 5406076761526239318
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076761526239324
+  - ScenarioName: EndPinata
+    trigger:
+      rid: 5406076761526239331
+    eventsList:
+    - rid: 5406076761526239332
+  - ScenarioName: HealezVous
+    trigger:
+      rid: 5406076761526239334
+    eventsList:
+    - rid: 5406076761526239335
+  - ScenarioName: DroneStart
+    trigger:
+      rid: 5406076763678179407
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076763678179428
+    - rid: 5406076763678179435
+    - rid: 5406076854874407006
+  - ScenarioName: EndDrone
+    trigger:
+      rid: 5406076763678179431
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076763678179433
+    - rid: 5406076840737767523
+  - ScenarioName: SpawnOtherSide
+    trigger:
+      rid: 5406076807428964499
+    eventsList:
+    - rid: 5406076807428964500
+    - rid: 5406076807428964501
+    - rid: 5406076854874407007
+  - ScenarioName: Start ArenaFinal
+    trigger:
+      rid: 5406076763678179442
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076840737767521
+    - rid: 5406076763678179443
+    - rid: 5406076763678179445
+    - rid: 5406076763678179447
+    - rid: 5406076854874407001
+    - rid: 5406076763678179452
+  - ScenarioName: End Tuto
+    trigger:
+      rid: 5406076854874407015
+    eventsList:
+    - rid: 5406076671141347504
+    - rid: 5406076854874407008
+  references:
+    version: 2
+    RefIds:
+    - rid: 5406076671141347503
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 1
+        mode: 0
+    - rid: 5406076671141347504
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 0.5
+    - rid: 5406076671141347514
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 3
+        mode: 0
+    - rid: 5406076671141347515
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 2
+    - rid: 5406076671141347518
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 4
+        mode: 0
+    - rid: 5406076671141347519
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 1
+        doorIndex: 2
+    - rid: 5406076695212458155
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Press 2 and exchange energy !
+        target: 0
+        disableAction: 2
+        duration: 0
+    - rid: 5406076746262118500
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 01000000
+    - rid: 5406076746262118502
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 01000000
+    - rid: 5406076746262118504
+      type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        _percentToReach: 10
+    - rid: 5406076746262118505
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 3
+    - rid: 5406076761526239318
+      type: {class: Trigger_Heal, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        _numberUseOfHealNeed: 1
+    - rid: 5406076761526239324
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 0200000003000000
+    - rid: 5406076761526239331
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 0200000003000000
+    - rid: 5406076761526239332
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Exchange energy !
+        target: 2
+        disableAction: 1
+        duration: 3
+    - rid: 5406076761526239334
+      type: {class: Trigger_50PercentDap, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        _percentToReach: 30
+    - rid: 5406076761526239335
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Heal yourself with F
+        target: 2
+        disableAction: 4
+        duration: 1
+    - rid: 5406076763678179407
+      type: {class: Trigger_Heal, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        _numberUseOfHealNeed: 2
+    - rid: 5406076763678179428
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 04000000
+    - rid: 5406076763678179431
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 05000000
+    - rid: 5406076763678179433
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 5
+    - rid: 5406076763678179435
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 2
+    - rid: 5406076763678179442
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 6
+        mode: 0
+    - rid: 5406076763678179443
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 0
+        speedFill: 3
+    - rid: 5406076763678179445
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 100
+        speedFill: 3
+    - rid: 5406076763678179447
+      type: {class: Event_ChangeFillAmount, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        activated: 1
+        maxPercentage: 0
+        speedFill: 3
+    - rid: 5406076763678179452
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 06000000
+    - rid: 5406076786627313775
+      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        proxyIndex: 5
+        mode: 0
+    - rid: 5406076807428964493
+      type: {class: Event_UnlockCapacity, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        capacityToUnlock: 0
+    - rid: 5406076807428964499
+      type: {class: Trigger_AllMobsDead, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data:
+        spawnZoneIndices: 04000000
+    - rid: 5406076807428964500
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 0.5
+    - rid: 5406076807428964501
+      type: {class: Event_StartSpawn, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _indexSpawn: 05000000
+    - rid: 5406076840737767521
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 1
+        doorIndex: 6
+    - rid: 5406076840737767523
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 4
+    - rid: 5406076854874407001
+      type: {class: Event_AnimDapBar, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        animationType: 1
+        duration: 1
+    - rid: 5406076854874407006
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Send your drone using A !
+        target: 1
+        disableAction: 3
+        duration: 1
+    - rid: 5406076854874407007
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Send your drone with A !
+        target: 0
+        disableAction: 3
+        duration: 1
+    - rid: 5406076854874407008
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 7
+    - rid: 5406076854874407015
+      type: {class: Trigger_Dapping, ns: Tuto.Triggers, asm: Assembly-CSharp}
+      data: 
+    - rid: 5406076879839166569
+      type: {class: Event_OpenDoor, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        actionToDo: 0
+        doorIndex: 1
+    - rid: 5406076879839166598
+      type: {class: Event_Notification, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        notificationText: Use F to heal yourself !
+        target: 2
+        disableAction: 4
+        duration: 1
