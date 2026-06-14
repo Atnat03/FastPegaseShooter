@@ -53,6 +53,9 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
         
         _models[0].SetActive(isPositive);
         _models[1].SetActive(!isPositive);
+        
+        _hasHit = false;
+        _lastPosition = transform.position;
     }
     
     void FixedUpdate()
@@ -127,9 +130,7 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     }
 
     public void Spawn()
-    {
-        _lastPosition = transform.position;
-    }
+    { }
 
     public void ReturnToPool()
     {
