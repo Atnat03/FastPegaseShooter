@@ -136,10 +136,10 @@ public class DapManager : NetworkBusListener
         if (_playersReadyToDap.Count >= 2)
         {
             Vector3 pos = (_playerList[0].position + _playerList[1].position) / 2f;
-            DappingObserverRpc(pos);
-
+    
             InvokeEvent(new OnDapEvent());
-
+            DappingObserverRpc(pos);
+    
             _dapPercentage.Value = 0;
             _canDapping.Value = false;
             _playersReadyToDap.Clear();

@@ -214,7 +214,10 @@ public class GunSwitching : NetworkBusListener
 		OnNotMainGunChange?.Invoke(isMain);
 		
 		if (isMain)
+		{
+			_shootEnergy.CantThrowEnergy?.Invoke(-1);
 			IGunMain?.SetReticule(_reticuleManager);
+		}
 	}
 	
 	[ServerRpc]

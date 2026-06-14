@@ -114,8 +114,10 @@ public class PlayerSelectGun : NetworkBusListener
 
 	private void CanSelectGun(OnAllPlayerCanSelectGun data)
 	{
+		Cons.Print($"CanSelectGun reçu : {data.p_open}, IsOwner : {IsOwner}", ColorConsole.Green);
+    
 		if (!IsOwner) return;
-		
+    
 		_uiInput.SetActive(data.p_open);
 	}
 
