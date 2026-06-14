@@ -66,23 +66,12 @@ public class BorneGunSelection : NetworkBusListener
 
     private void OnNumberPlayerChange(int prev, int next, bool asServer)
     {
-
         if (asServer)
         {
-            int totalClients = InstanceFinder.ServerManager.Clients.Count;
-
-            if (next == totalClients)
-            {
-                _canOpenSelect.Value = true;
-            }
-            else
-            {
-                _canOpenSelect.Value = false;
-            }
+            _canOpenSelect.Value = next > 0;
 
             CanInteractToOpenObserversRpc(_canOpenSelect.Value);
         }
-
     }
 
     [ServerRpc]
