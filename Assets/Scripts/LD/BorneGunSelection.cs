@@ -121,6 +121,7 @@ public class BorneGunSelection : NetworkBusListener
     [TargetRpc]
     void ShowInputUITargetRpc(NetworkConnection conn, bool show)
     {
+        Cons.Print($"ShowInputUITargetRpc reçu : {show}", ColorConsole.Yellow);
         InvokeEvent(new OnAllPlayerCanSelectGun { p_open = show });
     }
     
