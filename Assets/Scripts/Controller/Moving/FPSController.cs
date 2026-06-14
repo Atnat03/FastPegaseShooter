@@ -278,6 +278,9 @@ public class FPSController : NetworkBusListener
     {
         base.OnStartClient();
 
+        Debug.Log($"[FPSController] OnStartClient | IsOwner: {IsOwner} | IsHost: {IsHost} | OwnerId: {OwnerId}");
+
+        
         if (IsOwner)
         {
             SetUpLayer();

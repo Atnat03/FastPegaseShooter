@@ -40,6 +40,7 @@ public class ShootEnergy : NetworkBusListener
 	public Action<int> CantThrowEnergy;
 	public Action<bool, Vector3> OnDetectBro;
 	public Action<bool, Vector3> OnLaserActivate;
+	public Action<bool> OnTPSLaserActivate;
 
 	#endregion
 	
@@ -218,15 +219,20 @@ public class ShootEnergy : NetworkBusListener
 			return;
 		}
 
-		//if (!IsOwner) return;
-
-		if (next && _target != null)
+		if (IsOwner)
 		{
-			OnLaserActivate?.Invoke(true, _target.position);
+			if (next && _target != null)
+				OnLaserActivate?.Invoke(true, _target.position);
+			else
+				OnLaserActivate?.Invoke(false, Vector3.zero);
 		}
-		else
+
+		if (!IsOwner)
 		{
-			OnLaserActivate?.Invoke(false, Vector3.zero);
+			if (next)
+				OnTPSLaserActivate?.Invoke(true); 
+			else
+				OnTPSLaserActivate?.Invoke(false);
 		}
 	}
 
@@ -236,6 +242,7 @@ public class ShootEnergy : NetworkBusListener
 		InvokeEvent(new OnPlayerGetEnergized
 		{
 			p_ownerId = targetOwnerId,
+			p_shooterOwnerId = OwnerId,
 			p_state = state
 		});
 	}
@@ -246,5 +253,6 @@ public class ShootEnergy : NetworkBusListener
 public struct OnPlayerGetEnergized
 {
 	public int p_ownerId;
+	public int p_shooterOwnerId;
 	public bool p_state;
 }

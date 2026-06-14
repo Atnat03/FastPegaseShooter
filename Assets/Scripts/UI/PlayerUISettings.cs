@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using FishNet;
+using FishNet.Managing.Scened;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +9,14 @@ using UnityEngine.UI;
 public struct PlayUISound
 {
 	public string keySound;
+}
+
+[Serializable]
+public struct ColorToChange
+{
+	public Image image;
+	public Color colorPositive;
+	public Color colorNegative;
 }
 
 public class PlayerUISettings : NetworkBusListener
@@ -17,28 +28,49 @@ public class PlayerUISettings : NetworkBusListener
 
 	#region Variables
 
+	[SerializeField] private Canvas _canvas;
+	
 	[Header("Sound")]
 	[SerializeField] private SoundsDataSO _soundsData;
 	[SerializeField] private AudioSource _source;
 	
+	[Header("LoadingScene")]
+	[SerializeField] private GameObject _loadingSceneUI;
+	
 	[Header("Colors")]
 	[SerializeField] private GunSwitching _gunSwitching;
-	[SerializeField] private Image[] _imageList;
-	[SerializeField] private Color[] _colorList;
+	[SerializeField] private ColorToChange[] _imageToChangeList;
+
+	private int baseSortingCanvaLayer;
+	private bool _isLoading;
 	
 	#endregion
 
 
 	#region Fonctions
-
-	private void Start()
-	{
-		//ApplyColor();
-	}
 	
 	public override void OnStartNetwork()
 	{
 		ListenToEvent<PlayUISound>(PlaySoundUI);
+		ListenToEvent<OnPlayerOk>(ApplyColor);
+
+		baseSortingCanvaLayer = _canvas.sortingOrder;
+		
+		ListenToEvent<OnShowLoadingScreen>(_ =>
+		{
+			_isLoading = true;
+			_canvas.sortingOrder = 10;
+			_loadingSceneUI.SetActive(true);
+		});
+
+
+		InstanceFinder.SceneManager.OnLoadEnd += OnLoadEnd;
+	}
+	
+	public override void OnStopNetwork()
+	{
+		if (InstanceFinder.SceneManager != null)
+			InstanceFinder.SceneManager.OnLoadEnd -= OnLoadEnd;
 	}
 
 	private void PlaySoundUI(PlayUISound data)
@@ -65,14 +97,29 @@ public class PlayerUISettings : NetworkBusListener
 		}
 	}
 	
-	private void ApplyColor()
+	private void ApplyColor(OnPlayerOk playerData)
 	{
-		Color c = _gunSwitching.IsPositive ? _colorList[0] : _colorList[1];
-
-		foreach (Image image in _imageList)
+		if (playerData.playerID != Owner.ClientId)
+			return;
+		
+		foreach (ColorToChange data in _imageToChangeList)
 		{
-			image.color = c;
+			data.image.color = playerData.IsPositive ? data.colorPositive : data.colorNegative;
 		}
+	}
+	
+	private void OnLoadEnd(SceneLoadEndEventArgs args)
+	{
+		StartCoroutine(HideLoading());
+	}
+
+	private IEnumerator HideLoading()
+	{
+		yield return null;
+
+		_loadingSceneUI.SetActive(false);
+		_canvas.sortingOrder = baseSortingCanvaLayer;
+		_isLoading = false;
 	}
 
 	#endregion
