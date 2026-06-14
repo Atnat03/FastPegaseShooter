@@ -72,7 +72,7 @@ public class BorneGunSelection : NetworkBusListener
     [ServerRpc(RequireOwnership = false)]
     private void OpenForPlayerServerRpc(NetworkConnection conn)
     {
-        bool playerInZone = _playerList.Exists(p => p.GetComponent<NetworkObject>().Owner == conn);
+        bool playerInZone = _playerList.Exists(p => p.transform.root.GetComponent<NetworkObject>().Owner == conn);
 
         if (!playerInZone) return;
         
