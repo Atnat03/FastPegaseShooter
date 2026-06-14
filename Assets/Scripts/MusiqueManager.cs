@@ -4,29 +4,66 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MusicManager : MonoBehaviour
+{
+    [SerializeField] private List<AudioClip> musicList = new();
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private float fadeDuration = 2f;
+
+    [SerializeField] private float volume = 1f;
+
+    private void Start()
+    {
+        if (musicList.Count == 0 || audioSource == null)
+            return;
+
+        int randomIndex = Random.Range(0, musicList.Count);
+
+        audioSource.clip = musicList[randomIndex];
+        audioSource.volume = 0f;
+        audioSource.Play();
+
+        StartCoroutine(FadeIn());
+    }
+
+    private IEnumerator FadeIn()
+    {
+        float elapsed = 0f;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(0f, volume, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        audioSource.volume = volume;
+    }
+
+    public void SetVolume(float newVolume)
+    {
+        volume = Mathf.Clamp01(newVolume);
+
+        if (audioSource.isPlaying)
+            audioSource.volume = volume;
+    }
+}
+
+/*
 public class MusicManager : NetworkBusListener
 {
-
     [SerializeField] private List<AudioClip> _musicList = new();
-    [SerializeField] private AudioSource _sourceA;
-    [SerializeField] private AudioSource _sourceB;
+    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private float _fadeDuration = 2f;
 
-    private readonly SyncVar<int> _currentMusicIndex = new SyncVar<int>(-1);
-    private readonly SyncVar<double> _musicStartTime = new SyncVar<double>(0);
+    private readonly SyncVar<int> _currentMusicIndex = new(-1);
+    private readonly SyncVar<double> _musicStartTime = new(0);
 
-    private AudioSource _activeSource;
-    private AudioSource _inactiveSource;
-    private bool _isTransitioning = false;
-    
-    //temporary sound settings
-    private float volume; // clamp entre 0 et 1
-
-    private void Awake()
-    {
-        _activeSource = _sourceA;
-        _inactiveSource = _sourceB;
-    }
+    private float volume = 1f;
 
     public override void OnStartClient()
     {
@@ -36,13 +73,13 @@ public class MusicManager : NetworkBusListener
 
         if (_currentMusicIndex.Value >= 0)
             SyncToCurrentMusic();
-        
+
         ListenToEvent<OnPausePanelInit>(SendMusicManagerSignal);
     }
 
     void SendMusicManagerSignal(OnPausePanelInit data)
     {
-        InvokeEvent(new OnMusicManagerLinkage(){musicManager = this});
+        InvokeEvent(new OnMusicManagerLinkage { musicManager = this });
     }
 
     public override void OnStopClient()
@@ -56,7 +93,7 @@ public class MusicManager : NetworkBusListener
         base.OnStartServer();
         StartCoroutine(MusicLoop());
     }
-    
+
     private IEnumerator MusicLoop()
     {
         while (true)
@@ -64,34 +101,39 @@ public class MusicManager : NetworkBusListener
             int next = PickRandom(_currentMusicIndex.Value);
             PlayMusicOnAll(next);
 
-            float clipLength = _musicList[next].length;
-            yield return new WaitForSeconds(clipLength - _fadeDuration);
+            yield return new WaitForSeconds(_musicList[next].length);
         }
     }
 
     private int PickRandom(int exclude)
     {
-        if (_musicList.Count == 1) return 0;
+        if (_musicList.Count == 1)
+            return 0;
 
         int index;
-        do { index = Random.Range(0, _musicList.Count); }
+        do
+        {
+            index = Random.Range(0, _musicList.Count);
+        }
         while (index == exclude);
+
         return index;
     }
 
     private void PlayMusicOnAll(int index)
     {
         _currentMusicIndex.Value = index;
-        _musicStartTime.Value = (double)Time.time;
+        _musicStartTime.Value = Time.time;
+
         PlayMusicObserverRpc(index);
     }
-    
+
     [ObserversRpc]
     private void PlayMusicObserverRpc(int index)
     {
-        StartCoroutine(CrossFadeTo(index));
+        StartCoroutine(PlayWithFade(index));
     }
-    
+
     private void OnMusicIndexChanged(int prev, int next, bool asServer)
     {
         if (!asServer)
@@ -101,52 +143,53 @@ public class MusicManager : NetworkBusListener
     private void SyncToCurrentMusic()
     {
         int index = _currentMusicIndex.Value;
-        if (index < 0 || index >= _musicList.Count) return;
+        if (index < 0 || index >= _musicList.Count)
+            return;
 
         AudioClip clip = _musicList[index];
 
         double elapsed = Time.time - _musicStartTime.Value;
         float startOffset = Mathf.Clamp((float)elapsed, 0f, clip.length - 0.1f);
 
-        _activeSource.clip = clip;
-        _activeSource.time = startOffset;
-        _activeSource.volume = volume;
-        _activeSource.Play();
+        _audioSource.Stop();
+        _audioSource.clip = clip;
+        _audioSource.time = startOffset;
+        _audioSource.volume = 0f;
+        _audioSource.Play();
+
+        StartCoroutine(FadeIn());
     }
 
-
-    private IEnumerator CrossFadeTo(int index)
+    private IEnumerator PlayWithFade(int index)
     {
-        if (_isTransitioning) yield break;
-        _isTransitioning = true;
+        _audioSource.Stop();
+        _audioSource.clip = _musicList[index];
+        _audioSource.volume = 0f;
+        _audioSource.Play();
 
-        AudioClip nextClip = _musicList[index];
+        yield return FadeIn();
+    }
 
-        _inactiveSource.clip = nextClip;
-        _inactiveSource.volume = 0f;
-        _inactiveSource.Play();
-
+    private IEnumerator FadeIn()
+    {
         float elapsed = 0f;
-        float startVolume = _activeSource.volume;
 
         while (elapsed < _fadeDuration)
         {
             elapsed += Time.deltaTime;
-            float t = elapsed / _fadeDuration;
-
-            _activeSource.volume = Mathf.Lerp(startVolume, 0f, t);
-            _inactiveSource.volume = Mathf.Lerp(0f, volume, t);
-
+            _audioSource.volume = Mathf.Lerp(0f, volume, elapsed / _fadeDuration);
             yield return null;
         }
 
-        _activeSource.Stop();
-        _activeSource.volume = 0f;
-
-        (_activeSource, _inactiveSource) = (_inactiveSource, _activeSource);
-
-        _isTransitioning = false;
+        _audioSource.volume = volume;
     }
-    
-    public void SetVolume(float newVolume) => volume = newVolume;
+
+    public void SetVolume(float newVolume)
+    {
+        volume = Mathf.Clamp01(newVolume);
+
+        if (_audioSource.isPlaying)
+            _audioSource.volume = volume;
+    }
 }
+*/

@@ -11,27 +11,31 @@ using Managers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public struct OnShowLoadingScreen { }
+public struct OnHideLoadingScreen { }
+
 public class ClientSceneLoader : NetworkBusListener
 {
     [Header("Scene to load")]
     [SerializeField] private string targetSceneName = "MyScene";
-
     
     public void LoadSceneForAll()
     {
         if (!InstanceFinder.IsServerStarted) return;
+
+        StartLoadingUIObserverRpc();
         
         NetworkObject[] playerObjects = GetAllPlayerNetworkObjects();
         
         SceneLoadData sld = new SceneLoadData(targetSceneName)
         {
-            ReplaceScenes = ReplaceOption.All, // Garde l'ancienne scène active
+            ReplaceScenes = ReplaceOption.All,
             Options = new LoadOptions
             {
                 AllowStacking = false,
                 AutomaticallyUnload = true,
             },
-            MovedNetworkObjects = GetAllPlayerNetworkObjects() // Déplace les joueurs
+            MovedNetworkObjects = GetAllPlayerNetworkObjects() 
         };
 
         NotifySceneLoadingObserversRpc();
@@ -41,6 +45,12 @@ public class ClientSceneLoader : NetworkBusListener
         InstanceFinder.SceneManager.LoadGlobalScenes(sld);
     }
 
+    [ObserversRpc]
+    private void StartLoadingUIObserverRpc()
+    {
+        InvokeEvent(new OnShowLoadingScreen());
+    }
+    
     [ObserversRpc]
     private void NotifySceneLoadingObserversRpc() 
     {
