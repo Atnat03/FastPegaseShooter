@@ -527,6 +527,8 @@ MonoBehaviour:
   _reticuleID: 0
   playerZoneManager: {fileID: 0}
   p_authorizedToShoot: 1
+  _normalMuzzleFlash: []
+  _chargedMuzzleFlash: []
 --- !u!114 &3797048584812851494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,6 +762,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &3961050023182892889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -853,7 +856,10 @@ MonoBehaviour:
   _maxDistance: 2000
   _damages: 5
   _BulletSpeed: 50
-  _impactVFXData: {fileID: 2404491045474026505, guid: efa9ad9acd1fed041b2a4d1e8213ccd3, type: 3}
+  _impactVFXData:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isDistanceReduced: 0
   _factorReduceDamageByDistance: 1
 --- !u!114 &2051022591737503024
@@ -1656,13 +1662,6 @@ MonoBehaviour:
   _playerCapacity: {fileID: 6914351051837942534}
   _dronePrefab: {fileID: 377463757777460365, guid: f1c05ad0ae4860046b6a4cb55f69529a, type: 3}
   _spawnPoint: {fileID: 8380329674851811601}
-  _range: 5000
-  _aimAngle: 0.7
-  _targetLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  _camera: {fileID: 3061844143884342809}
-  _uiTarget: {fileID: 3595022601666599641}
   p_unlockCapa: 0
 --- !u!1 &418334527989560021
 GameObject:
@@ -4767,8 +4766,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4820546688801066226}
-  - {fileID: 8866055535642213153}
-  - {fileID: 7586234470166954955}
+  - {fileID: 501099486958642681}
+  - {fileID: 7543014889683350406}
   m_Father: {fileID: 2571651778359029525}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5211221750857496501
@@ -4810,19 +4809,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShootEnergyView
   _shootEnergy: {fileID: 5211221750857496501}
   _gunSwitching: {fileID: 3154577241410043838}
-  _modelRenderer: {fileID: 1361455030141006930}
-  _modelMaterial:
-  - {fileID: 2100000, guid: af5d4ed78663fd1429bcd1ec7c9146e1, type: 2}
-  - {fileID: 2100000, guid: 86a2c9f1bc149a54c894e2f0ef5744c7, type: 2}
   _textCantThrow: {fileID: 7480530444129687680}
   _timeMessageStayOnScreen: 1
   _messagesCantThrow:
   - "Vous n\u2019avez pas d\u2019\xE9nergie \xE0 transf\xE9rer"
   - "Veuillez viser votre co\xE9quipier"
   _uiTarget: {fileID: 9166772497666703919}
+  _imageTarget: {fileID: 0}
+  _targetColors: []
   _lasers:
-  - {fileID: 1441065196137934602}
-  - {fileID: 3931645164586145752}
+  - {fileID: 0}
+  - {fileID: 0}
   _laserSpawnPoint: {fileID: 8331709518480683228}
 --- !u!1 &1522084495554013918
 GameObject:
@@ -13401,6 +13398,7 @@ MonoBehaviour:
   _playerFPS: {fileID: 7654427447990518306}
   _playerAnimation: {fileID: 1296988651901974220}
   grappleLineRenderer: {fileID: 7525644374583582116}
+  _deathSpawnParticleSystem: {fileID: 0}
   landSnap: 0
   dashVerticality: 0
   groundNeededToDashAgain: 0
@@ -13789,6 +13787,7 @@ MonoBehaviour:
     m_Bits: 192
   _healAmount: 35
   p_unlockCapa: 0
+  _percentageToTriggerDialogue: 0.3
   invincible: 0
 --- !u!114 &8101511114389266693
 MonoBehaviour:
@@ -13906,12 +13905,28 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _gun: {fileID: 3154577241410043838}
   _fps: {fileID: 1792326860910464111}
+  _canvas: {fileID: 0}
   _uiInput: {fileID: 5287947843769632182}
-  _uiSelect: {fileID: 5869072246086258976}
-  _imageOutlineList:
-  - {fileID: 6403979704468826163}
-  - {fileID: 8288117457726997241}
-  - {fileID: 4975567972419820195}
+  _uiMain: {fileID: 0}
+  _colorPlayer: []
+  uiGunData: []
+  goNextButton: {fileID: 0}
+  goPreviousButton: {fileID: 0}
+  contourTopImage: {fileID: 0}
+  contourBotImage: {fileID: 0}
+  backgroundInfoImage: {fileID: 0}
+  contourInfoImage: {fileID: 0}
+  arrowDamageImageList: []
+  arrowFireRateImageList: []
+  gunStatContourImage: {fileID: 0}
+  gunInfoTextContourImage: {fileID: 0}
+  textInfoText: {fileID: 0}
+  gunNameImage: {fileID: 0}
+  playerMesh: {fileID: 0}
+  gunMeshList: []
+  coinGunMesh: {fileID: 0}
+  equipButton: {fileID: 0}
+  equipButtonColors: []
 --- !u!114 &2632099118924709043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13947,6 +13962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b16da1e2b1939347a2cd8ca7e81ff72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCapacity
+  _gun: {fileID: 0}
   _tirChargeCapaData:
     p_capacity: 0
     p_currentNumberCapacity: 1
@@ -13986,6 +14002,10 @@ MonoBehaviour:
   _gunPlayer: {fileID: 300968199624122896}
   _dronePlayer: {fileID: 931936587992237131}
   _healPlayer: {fileID: 5365301951764690734}
+  _playerEnergizedState: {fileID: 0}
+  _playerCapacity: {fileID: 0}
+  respawnTUTO: 2
+  _startWithCapa: 0
 --- !u!1 &2663657820374755588
 GameObject:
   m_ObjectHideFlags: 0
@@ -20895,6 +20915,8 @@ MonoBehaviour:
   _reticuleID: 1
   playerZoneManager: {fileID: 0}
   p_authorizedToShoot: 1
+  _normalMuzzleFlash: []
+  _chargedMuzzleFlash: []
 --- !u!114 &6500108499577103005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21103,6 +21125,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &8041650522221974858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21181,7 +21204,10 @@ MonoBehaviour:
   _maxDistance: 50
   _damages: 22
   _BulletSpeed: 2
-  _impactVFXData: {fileID: 8208715393216506349, guid: 711d7691352cacd42bb278dec4521f17, type: 3}
+  _impactVFXData:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isDistanceReduced: 0
   _factorReduceDamageByDistance: 1
 --- !u!114 &4693748091335889128
@@ -21684,6 +21710,8 @@ MonoBehaviour:
   _reticuleID: 1
   playerZoneManager: {fileID: 0}
   p_authorizedToShoot: 1
+  _normalMuzzleFlash: []
+  _chargedMuzzleFlash: []
 --- !u!114 &4108116853922842008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21917,6 +21945,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &6154372736321769268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25324,6 +25353,9 @@ MonoBehaviour:
   _healthVisualFillingSpeed: 4
   _healthBar: {fileID: 3134779535442495518}
   _damagedImage: {fileID: 8429352862573681573}
+  _colorBar: []
+  _colorBar2: []
+  _takeDamageUI: {fileID: 0}
   _normalCanva: {fileID: 4255987790164677789}
   _deathCanva: {fileID: 4168195006909438693}
   _deathTimer: {fileID: 5308597181428668573}
@@ -25495,6 +25527,7 @@ MonoBehaviour:
   _audioSource: {fileID: 4823317710188223472}
   _frequency: 15
   _dashCooldownImage: {fileID: 4517072716920338193}
+  _dashParticles: {fileID: 0}
 --- !u!114 &8824872197090131092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25509,6 +25542,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BroHealthView
   _broHealthBar: {fileID: 2773943906616942234}
   _fillSpeed: 5
+  _colorBar: []
+  _colorBar2: []
   _localPlayerHealth: {fileID: 5365301951764690734}
 --- !u!114 &3960452511176637144
 MonoBehaviour:
@@ -25537,15 +25572,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCapacityView
   _playerCapacity: {fileID: 6914351051837942534}
+  _playerTuto: {fileID: 0}
   _uiChargedShoot:
+    p_rootGO: {fileID: 0}
     p_currentImage: {fileID: 3090745708699314534}
     p_numberCapacityText: {fileID: 2684678891409757291}
     p_particleGetCharge: {fileID: 0}
   _uiDrone:
+    p_rootGO: {fileID: 0}
     p_currentImage: {fileID: 9019656515017828316}
     p_numberCapacityText: {fileID: 6740296731976269141}
     p_particleGetCharge: {fileID: 0}
   _uiHeal:
+    p_rootGO: {fileID: 0}
     p_currentImage: {fileID: 1170483584544442394}
     p_numberCapacityText: {fileID: 9048304954041532542}
     p_particleGetCharge: {fileID: 0}
@@ -32713,6 +32752,7 @@ MonoBehaviour:
   _throwerDrone: {fileID: 931936587992237131}
   _reticuleManager: {fileID: 8014742524321164357}
   _playerAnimation: {fileID: 0}
+  _animator: {fileID: 0}
   _cooldownChangeMagnetic: 3
   _mainGunsList: []
   _mainGunsListTPS: []
@@ -32787,10 +32827,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunSwitchingView
   _gunSwitching: {fileID: 3154577241410043838}
-  _message: {fileID: 7480530444129687680}
-  message:
-  - Main gun
-  - Energy gun
+  armGunSprite: {fileID: 0}
+  imageGun: {fileID: 0}
+  ammo: {fileID: 0}
 --- !u!1 &8215931252631250081
 GameObject:
   m_ObjectHideFlags: 0
@@ -35277,11 +35316,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   _playerPause: {fileID: 1046026421483071524}
   _fpsController: {fileID: 1792326860910464111}
+  _dialogueManager: {fileID: 0}
   _mouseSensitivitySlider: {fileID: 6011142488951285785}
   _mouseSensitivityText: {fileID: 3699241415305675495}
   _mouseSensitivityMaxValue: 0.5
   _resolutionDropdown: {fileID: 1549053111788427322}
   _fullscreenToggle: {fileID: 4140982164059371680}
+  _dialoguesActivated: {fileID: 0}
+  _dialoguesAudioVolumeSlider: {fileID: 0}
+  _dialoguesAudioVolumeText: {fileID: 0}
   _musicVolumeSlider: {fileID: 7723401585422002651}
   _musicVolumeText: {fileID: 2568056792434775294}
 --- !u!1 &9055498810558184100
@@ -36795,14 +36838,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcce1de30fa355d4b80a0e6f48a3ad1d, type: 3}
---- !u!1 &1441065196137934602 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4253444951827026239, guid: bcce1de30fa355d4b80a0e6f48a3ad1d, type: 3}
-  m_PrefabInstance: {fileID: 2952378441240870453}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8866055535642213153 stripped
+--- !u!4 &501099486958642681 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 6049031414634513684, guid: bcce1de30fa355d4b80a0e6f48a3ad1d, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3318229167528614860, guid: bcce1de30fa355d4b80a0e6f48a3ad1d, type: 3}
   m_PrefabInstance: {fileID: 2952378441240870453}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3338846471839876526
@@ -40337,14 +40375,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 210355575e65aaf47aa08150e33093a8, type: 3}
---- !u!1 &3931645164586145752 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6524217418749975850, guid: 210355575e65aaf47aa08150e33093a8, type: 3}
-  m_PrefabInstance: {fileID: 7789731326840015602}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7586234470166954955 stripped
+--- !u!4 &7543014889683350406 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 386490775944825145, guid: 210355575e65aaf47aa08150e33093a8, type: 3}
+  m_CorrespondingSourceObject: {fileID: 339040240356751732, guid: 210355575e65aaf47aa08150e33093a8, type: 3}
   m_PrefabInstance: {fileID: 7789731326840015602}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7821626959467536945

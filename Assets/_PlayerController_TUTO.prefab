@@ -357,6 +357,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &3961050023182892889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1766,19 +1767,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShootEnergyView
   _shootEnergy: {fileID: 5211221750857496501}
   _gunSwitching: {fileID: 3154577241410043838}
-  _modelRenderer: {fileID: 1361455030141006930}
-  _modelMaterial:
-  - {fileID: 2100000, guid: af5d4ed78663fd1429bcd1ec7c9146e1, type: 2}
-  - {fileID: 2100000, guid: 86a2c9f1bc149a54c894e2f0ef5744c7, type: 2}
   _textCantThrow: {fileID: 2650941480714345369}
   _timeMessageStayOnScreen: 1
   _messagesCantThrow:
   - "Vous n\u2019avez pas d\u2019\xE9nergie \xE0 transf\xE9rer"
   - "Veuillez viser votre co\xE9quipier"
   _uiTarget: {fileID: 1388979866133024291}
+  _imageTarget: {fileID: 0}
+  _targetColors: []
   _lasers:
-  - {fileID: 5540105963283463538}
-  - {fileID: 6611713194507707250}
+  - {fileID: 0}
+  - {fileID: 0}
   _laserSpawnPoint: {fileID: 8331709518480683228}
 --- !u!1 &1522084495554013918
 GameObject:
@@ -3342,6 +3341,7 @@ MonoBehaviour:
     m_Bits: 192
   _healAmount: 35
   p_unlockCapa: 0
+  _percentageToTriggerDialogue: 0.3
   invincible: 0
 --- !u!114 &8101511114389266693
 MonoBehaviour:
@@ -3459,6 +3459,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7927807153383519047}
   _gun: {fileID: 3154577241410043838}
   _fps: {fileID: 1792326860910464111}
+  _canvas: {fileID: 0}
   _uiInput: {fileID: 4940829860452653103}
   _uiMain: {fileID: 6918062237855715576}
   _colorPlayer:
@@ -3557,6 +3558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b16da1e2b1939347a2cd8ca7e81ff72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCapacity
+  _gun: {fileID: 0}
   _tirChargeCapaData:
     p_capacity: 0
     p_currentNumberCapacity: 1
@@ -3596,6 +3598,10 @@ MonoBehaviour:
   _gunPlayer: {fileID: 300968199624122896}
   _dronePlayer: {fileID: 931936587992237131}
   _healPlayer: {fileID: 5365301951764690734}
+  _playerEnergizedState: {fileID: 0}
+  _playerCapacity: {fileID: 0}
+  respawnTUTO: 2
+  _startWithCapa: 0
 --- !u!114 &4980713299031456386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3780,6 +3786,39 @@ Transform:
   - {fileID: 4649104663245379696}
   m_Father: {fileID: 4098783735463633369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2780147485068311200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 00cf9e97e9f4b8a44b1a768aa08a6615, type: 3}
+  m_PrefabInstance: {fileID: 3050195585794312177}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3305292228322222106}
+  - component: {fileID: 8208979109332634898}
+  - component: {fileID: 8125553132083800038}
+  m_Layer: 0
+  m_Name: 'Munition_ShotGun_Recharge (Missing Prefab with guid: 00cf9e97e9f4b8a44b1a768aa08a6615)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3305292228322222106
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 00cf9e97e9f4b8a44b1a768aa08a6615, type: 3}
+  m_PrefabInstance: {fileID: 3050195585794312177}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2780147485068311200}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.534155, y: 0.4622925, z: 0.45401466, w: 0.5429869}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 108.500435, y: 108.50044, z: 108.50045}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8241751295598233705}
+  m_LocalEulerAnglesHint: {x: -47.4068, y: -107.82233, z: 170.32861}
 --- !u!1 &2811233865256104695
 GameObject:
   m_ObjectHideFlags: 0
@@ -5607,6 +5646,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &8041650522221974858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6175,6 +6215,7 @@ MonoBehaviour:
   _hitMarkerCritiquePrefab: {fileID: 95671754885873977, guid: 9a7f416536aca8e42ae5cfcbfba9f5aa, type: 3}
   _hitMarkerCritiqueColor: {r: 0.7912464, g: 0, b: 1, a: 1}
   _killMarkerPrefab: {fileID: 1856462941756488059, guid: 85ee6cb1210d7e946a68f08eecddd139, type: 3}
+  _hitSoundCooldown: 0.05
 --- !u!114 &6154372736321769268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7349,8 +7390,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2600642578489846105}
-  - {fileID: 294489218993829729}
+  - {fileID: 6478880480446822273}
+  - {fileID: 432249353376220972}
   m_Father: {fileID: 4820546688801066226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6743737815264064232
@@ -7965,6 +8006,7 @@ MonoBehaviour:
   - {r: 0.56078434, g: 0.98039216, b: 0.7137255, a: 1}
   - {r: 0.98039216, g: 0.9372549, b: 0.56078434, a: 1}
   - {r: 0.98039216, g: 0.60784316, b: 0.56078434, a: 1}
+  _takeDamageUI: {fileID: 0}
   _normalCanva: {fileID: 7438235482765740885}
   _deathCanva: {fileID: 4168195006909438693}
   _deathTimer: {fileID: 5308597181428668573}
@@ -9494,6 +9536,7 @@ MonoBehaviour:
   _throwerDrone: {fileID: 931936587992237131}
   _reticuleManager: {fileID: 4149278709337640337}
   _playerAnimation: {fileID: 1296988651901974220}
+  _animator: {fileID: 0}
   _cooldownChangeMagnetic: 3
   _mainGunsList: []
   _mainGunsListTPS: []
@@ -9570,6 +9613,7 @@ MonoBehaviour:
   _gunSwitching: {fileID: 3154577241410043838}
   armGunSprite: {fileID: 0}
   imageGun: {fileID: 0}
+  ammo: {fileID: 0}
 --- !u!1 &8173139695321356606
 GameObject:
   m_ObjectHideFlags: 0
@@ -10440,14 +10484,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 210355575e65aaf47aa08150e33093a8, type: 3}
---- !u!4 &294489218993829729 stripped
+--- !u!4 &432249353376220972 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 386490775944825145, guid: 210355575e65aaf47aa08150e33093a8, type: 3}
-  m_PrefabInstance: {fileID: 93215712271089240}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6611713194507707250 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6524217418749975850, guid: 210355575e65aaf47aa08150e33093a8, type: 3}
+  m_CorrespondingSourceObject: {fileID: 339040240356751732, guid: 210355575e65aaf47aa08150e33093a8, type: 3}
   m_PrefabInstance: {fileID: 93215712271089240}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &209374183692692686
@@ -12104,11 +12143,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8125553132083800038}
   m_SourcePrefab: {fileID: 100100000, guid: 00cf9e97e9f4b8a44b1a768aa08a6615, type: 3}
---- !u!1 &2780147485068311200 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 00cf9e97e9f4b8a44b1a768aa08a6615, type: 3}
-  m_PrefabInstance: {fileID: 3050195585794312177}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8208979109332634898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12125,7 +12159,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7927807153383519047}
   _networkObjectCache: {fileID: 7927807153383519047}
   _renderer: {fileID: 0}
-  _rendererClassic: {fileID: 4437713696522673013}
+  _rendererClassic: {fileID: 0}
   _materialsList:
   - {fileID: 2100000, guid: 04cab9d7d88c15948a7914ad0e417f09, type: 2}
   - {fileID: 2100000, guid: 3199bf87767f8014c996fa7951745a81, type: 2}
@@ -12151,16 +12185,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!4 &3305292228322222106 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 00cf9e97e9f4b8a44b1a768aa08a6615, type: 3}
-  m_PrefabInstance: {fileID: 3050195585794312177}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4437713696522673013 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 00cf9e97e9f4b8a44b1a768aa08a6615, type: 3}
-  m_PrefabInstance: {fileID: 3050195585794312177}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3321570865817899716
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18728,14 +18752,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcce1de30fa355d4b80a0e6f48a3ad1d, type: 3}
---- !u!4 &2600642578489846105 stripped
+--- !u!4 &6478880480446822273 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 6049031414634513684, guid: bcce1de30fa355d4b80a0e6f48a3ad1d, type: 3}
-  m_PrefabInstance: {fileID: 8639360528954469453}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5540105963283463538 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4253444951827026239, guid: bcce1de30fa355d4b80a0e6f48a3ad1d, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3318229167528614860, guid: bcce1de30fa355d4b80a0e6f48a3ad1d, type: 3}
   m_PrefabInstance: {fileID: 8639360528954469453}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8640183463756816690
@@ -18875,13 +18894,29 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2456822345977431441, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: _initializedTimestamp
+      value: -8584202315715989737
+      objectReference: {fileID: 0}
+    - target: {fileID: 2456822345977431441, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: <IsNested>k__BackingField
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2456822345977431441, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: NetworkBehaviours.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2456822345977431441, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: <ComponentIndex>k__BackingField
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2456822345977431441, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2456822345977431441, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: 'NetworkBehaviours.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5582261503604642891}
     - target: {fileID: 2456822345977431441, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: InitializedParentNetworkBehaviour
       value: 
@@ -18902,6 +18937,10 @@ PrefabInstance:
       propertyPath: _addedNetworkObject
       value: 
       objectReference: {fileID: 7927807153383519047}
+    - target: {fileID: 4219930402516415865, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+      propertyPath: _componentIndexCache
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5153915741413501262, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
       propertyPath: _addedNetworkObject
       value: 
@@ -19154,6 +19193,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4478298075350847173, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
   m_PrefabInstance: {fileID: 8640183463756816690}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5582261503604642891 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4219930402516415865, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
+  m_PrefabInstance: {fileID: 8640183463756816690}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c8b63484741c94cb4c3f7c1225b07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!114 &5598014412699799249 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4204177768013950947, guid: 066b56f56610e1347852aae19920d3bf, type: 3}
