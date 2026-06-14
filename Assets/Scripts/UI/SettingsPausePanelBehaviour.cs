@@ -10,6 +10,7 @@ public class SettingsPausePanelBehaviour : PausePanel
     [SerializeField] PlayerPause _playerPause;
     [SerializeField] FPSController _fpsController;
     [SerializeField] DialoguesManager _dialogueManager;
+    [SerializeField] RectTransform crossair;
     [SerializeField] Slider _mouseSensitivitySlider;
     [SerializeField] TMP_Text _mouseSensitivityText;
     [SerializeField] float _mouseSensitivityMaxValue;
@@ -18,6 +19,8 @@ public class SettingsPausePanelBehaviour : PausePanel
     [SerializeField] private Toggle _dialoguesActivated;
     [SerializeField] private Slider _dialoguesAudioVolumeSlider;
     [SerializeField] private TMP_Text _dialoguesAudioVolumeText;
+    [SerializeField] private Slider _crossairSizeSlider;
+    [SerializeField] private TMP_Text _crossairSizeText;
     
     //sound temporary
     MusicManager _musicManager;
@@ -26,9 +29,12 @@ public class SettingsPausePanelBehaviour : PausePanel
 
     Resolution[] _resolutions;
     private List<Resolution> _selectedResolutions = new();
+    private Vector3 defaultCrossairScale;
 
     public override void Init()
     {
+        defaultCrossairScale = crossair.localScale;
+        
         ListenToEvent<OnMusicManagerLinkage>(OnMusicManagerSignal);
         
         _resolutions = Screen.resolutions;
@@ -79,6 +85,12 @@ public class SettingsPausePanelBehaviour : PausePanel
         ChangeDialoguesVolume(PlayerPrefs.GetFloat("DialoguesVolume", 100) * 100);
         _dialoguesAudioVolumeSlider.value = PlayerPrefs.GetFloat("DialoguesVolume", 100) * 100;
         _dialoguesAudioVolumeText.text = _dialoguesAudioVolumeSlider.value.ToString("F0") + "%";
+        
+        //crossair
+        float crossairSize = PlayerPrefs.GetFloat("CrossairSize", 100);
+        _crossairSizeSlider.value = crossairSize;
+        _crossairSizeText.text = _crossairSizeSlider.value.ToString("F0")+ "%";
+        crossair.localScale = defaultCrossairScale * (crossairSize / 100);
         
         
         ChangeResolution();
@@ -144,6 +156,16 @@ public class SettingsPausePanelBehaviour : PausePanel
         newVolume /= 100;
         PlayerPrefs.SetFloat("DialoguesVolume", newVolume);
         _dialogueManager.dialoguesAudioVolume = newVolume;
+    }
+
+    public void ChangeCrossairSize()=> ChangeCrossairSize(_crossairSizeSlider.value);
+    void ChangeCrossairSize(float newSize)
+    {
+        if (!crossair) return;
+        _crossairSizeText.text = newSize.ToString("F0") + "%";
+        newSize /= 100;
+        PlayerPrefs.SetFloat("CrossairSize", newSize);
+        crossair.localScale = defaultCrossairScale *  newSize;
     }
 
     public void QuitPanel() => gameObject.SetActive(false);
