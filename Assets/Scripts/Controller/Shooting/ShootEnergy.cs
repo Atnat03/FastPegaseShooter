@@ -236,6 +236,7 @@ public class ShootEnergy : NetworkBusListener
 		InvokeEvent(new OnPlayerGetEnergized
 		{
 			p_ownerId = targetOwnerId,
+			p_shooterOwnerId = OwnerId,
 			p_state = state
 		});
 	}
@@ -246,5 +247,6 @@ public class ShootEnergy : NetworkBusListener
 public struct OnPlayerGetEnergized
 {
 	public int p_ownerId;
+	public int p_shooterOwnerId;
 	public bool p_state;
 }
