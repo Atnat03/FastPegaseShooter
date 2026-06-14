@@ -12,7 +12,7 @@ public class DapTriggerZone : MonoBusListener
         switch (_dapEventType)
         {
             case DapEventType.OnDap:
-                ListenToEvent<OnDapEvent>((ODE) =>
+                ListenToEvent<OnDappEventObserveurs>((ODE) =>
                 {
                     _action.Invoke();
                 });
