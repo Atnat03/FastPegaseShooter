@@ -12,6 +12,8 @@ using MyPrint;
 
 public class ConnectionWithCode : MonoBehaviour
 {
+    public static string GameCode { get;private set; }
+    
     NetworkManager _networkManager;
 
     [Header("UI")]
@@ -51,12 +53,11 @@ public class ConnectionWithCode : MonoBehaviour
             _networkManager.ClientManager.StartConnection();
 
         string code = GetConnectionCode();
-//        Debug.Log("📒 Code de la partie : " + code);
 
         _codeTextUI.text = code;
+        GameCode = code;
 
         _connectedUI.SetActive(false);
-        _gameCodeUI.SetActive(true);
     }
 
     #endregion
