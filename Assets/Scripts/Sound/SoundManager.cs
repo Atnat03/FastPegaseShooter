@@ -47,6 +47,27 @@ public class SoundManager : MonoBehaviour
 			case SoundType.Global: PlayGlobalSound(volume, c, source); break;
 		}
 	}
+	
+	public static void PlaySoundGlobal(SoundsDataSO data, string soundName, AudioSource source)
+	{
+		List<AudioClip> clip = new List<AudioClip>();
+		float volume = 0.5f;
+
+		foreach (SoundData soundData in data.sounds)
+		{
+			if(soundData.soundName == soundName)
+			{
+				clip.Add(soundData.audioClip);
+				volume = soundData.volume;
+			}
+		}
+
+		if (clip.Count == 0)
+			return;
+		
+		AudioClip c = clip[Random.Range(0, clip.Count)];
+		PlayGlobalSound(volume, c, source);
+	}
 
 	public static void StopSound(AudioSource source) => source.Stop();
 	

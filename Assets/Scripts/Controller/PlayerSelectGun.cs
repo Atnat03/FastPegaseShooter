@@ -78,7 +78,6 @@ public class PlayerSelectGun : NetworkBusListener
 	public override void OnStartNetwork()
 	{
 		ListenToEvent<OnAllPlayerAtBorne>(OnShowUI);
-		ListenToEvent<OnAllPlayerCanSelectGun>(CanSelectGun);
 		
 		goNextButton.onClick.AddListener(SelectNextGun);
 		goPreviousButton.onClick.AddListener(SelectPreviousGun);
@@ -134,11 +133,11 @@ public class PlayerSelectGun : NetworkBusListener
 		_uiInput.SetActive(false);
 	}
 
-	private void CanSelectGun(OnAllPlayerCanSelectGun data)
+	public void CanSelectGun(bool state)
 	{
 		if (!IsOwner) return;
     
-		_uiInput.SetActive(data.p_open);
+		_uiInput.SetActive(state);
 	}
 
 	void SelectNextGun()
