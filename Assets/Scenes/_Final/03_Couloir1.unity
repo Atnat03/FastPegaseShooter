@@ -4815,6 +4815,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5682311579488047432, guid: e570a43ae6d2bed478b65a8ec6501757, type: 3}
   m_PrefabInstance: {fileID: 2039677829}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &52725014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 52725015}
+  - component: {fileID: 52725017}
+  - component: {fileID: 52725016}
+  m_Layer: 0
+  m_Name: SpawnZoneTrigger (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &52725015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52725014}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -101.61, y: -29.67, z: 1.1082172}
+  m_LocalScale: {x: 1, y: -0.0062338, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1659904941}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &52725016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52725014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 239c1ac205bf4a408f0dece164583f2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SpawnZone
+  _zoneId: 0
+--- !u!65 &52725017
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52725014}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 15, y: 20, z: 15}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &53244327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6131,6 +6198,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 775665035}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -6178,14 +6253,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (18)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 775665035}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10726,6 +10793,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 3078304}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -10773,14 +10848,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (19)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 3078304}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17596,6 +17663,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 567460842}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -17643,14 +17718,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (24)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 567460842}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -25570,6 +25637,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 158137678}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -25617,14 +25692,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (14)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 158137678}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -35579,6 +35646,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1670186138}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -35626,14 +35701,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (20)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 1670186138}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -75387,6 +75454,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 155192760}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -75434,14 +75509,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (17)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 155192760}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -96400,6 +96467,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1489866350}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -96447,14 +96522,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (22)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 1489866350}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -105634,7 +105701,7 @@ Transform:
   m_GameObject: {fileID: 1172677573}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -68.25, y: -28.837648, z: 3.6382198}
+  m_LocalPosition: {x: -65.94, y: -28.11, z: 6.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -114424,6 +114491,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10191388}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -114471,14 +114546,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (15)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 10191388}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -142701,6 +142768,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1985369478}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -142749,14 +142824,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_WagonSmall_Updated (23)
       objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 1985369478}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -142780,6 +142847,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 6949531}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -142827,14 +142902,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (21)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 6949531}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -144816,7 +144883,7 @@ Transform:
   m_GameObject: {fileID: 1582597716}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -68.25, y: -28.837648, z: 3.6382198}
+  m_LocalPosition: {x: -65.94, y: -28.11, z: 3.6382198}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -146587,25 +146654,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7234038531594974837, guid: 7ec4117487eb5c148866dafe07787d5f, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8372010748148911386, guid: 7ec4117487eb5c148866dafe07787d5f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 18e311ab0e05d1a40a34d2d19f52a8c1, type: 2}
     - target: {fileID: 8642521984856790142, guid: 7ec4117487eb5c148866dafe07787d5f, type: 3}
       propertyPath: m_Size.x
-      value: 1855.9076
+      value: 61251.945
       objectReference: {fileID: 0}
     - target: {fileID: 8642521984856790142, guid: 7ec4117487eb5c148866dafe07787d5f, type: 3}
       propertyPath: m_Size.y
-      value: 0.73114824
+      value: 4999.9995
       objectReference: {fileID: 0}
     - target: {fileID: 8642521984856790142, guid: 7ec4117487eb5c148866dafe07787d5f, type: 3}
       propertyPath: m_Center.x
-      value: -922.9538
+      value: -15626.007
       objectReference: {fileID: 0}
     - target: {fileID: 8642521984856790142, guid: 7ec4117487eb5c148866dafe07787d5f, type: 3}
       propertyPath: m_Center.y
-      value: -0.27818048
+      value: -0.2780899
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -150949,6 +151020,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2076387184}
     m_Modifications:
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 288746678}
+    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
+      propertyPath: m_VersionIndex
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 2406167450180584905, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -150996,14 +151075,6 @@ PrefabInstance:
     - target: {fileID: 6120945014316202528, guid: 0e80d739972739c4daa44a071bd32049, type: 3}
       propertyPath: m_Name
       value: P_WagonSmall_Updated (16)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 288746678}
-    - target: {fileID: 7728779617465475660, guid: b5550d23a7783984fa4fd44b860b6ee0, type: 3}
-      propertyPath: m_VersionIndex
-      value: 225
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -152526,6 +152597,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1875000427}
+  - {fileID: 52725015}
   - {fileID: 681076164}
   - {fileID: 1202319852}
   - {fileID: 717372649}
@@ -173335,7 +173407,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1889978120}
         m_TargetAssemblyTypeName: ClientSceneLoader, Assembly-CSharp
-        m_MethodName: InvokeOnSceneLoadingClientInfos
+        m_MethodName: LoadSceneForAll
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

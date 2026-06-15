@@ -11,7 +11,6 @@ public class DialoguesManager : MonoBusListener
     [HideInInspector] public bool dialoguesActivated;
     [HideInInspector][Range(0,1)] public float dialoguesAudioVolume;
     
-    
     [Header("speakers")] public Sprite blueIcon;
     public Color blueColor;
     public Sprite redIcon;
@@ -26,8 +25,8 @@ public class DialoguesManager : MonoBusListener
 
     [Header("audio Elements")] public AudioSource audioSource;
 
-    [Header("References")] [SerializeField]
-    private GunSwitching gunSwitch;
+    [Header("References")] 
+    [SerializeField] private GunSwitching gunSwitch;
 
     [Header("Juicy")] 
     [SerializeField] private RectTransform animPrent;
