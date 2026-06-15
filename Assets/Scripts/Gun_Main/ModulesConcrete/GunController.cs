@@ -68,6 +68,7 @@ namespace GunDecorator
 
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
+        public AudioSource _sourceLocal;
 
         [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
         public SoundsDataSO _soundData;
@@ -109,6 +110,9 @@ namespace GunDecorator
 
         private bool _hasAlreadyFriendlyFire = false;
         
+        private Vector3 _defaultModelLocalPos;
+        private Quaternion _defaultModelLocalRot;
+        
         //Action
         public Action OnSetUp;
 
@@ -123,12 +127,6 @@ namespace GunDecorator
         //Charging
         public Action<float> OnCharging;
         public Action OnStopCharging;
-
-        private void OnEnable()
-        {
-            if(_animator)
-                _animator.ResetTrigger("Reload");
-        }
 
         private void Awake()
         {
@@ -161,6 +159,9 @@ namespace GunDecorator
             }
             
             _playerAnimation = transform.root.GetComponentInChildren<PlayerAnimation>();
+            
+            _defaultModelLocalPos = currentModel.localPosition;
+            _defaultModelLocalRot = currentModel.localRotation;
         }
 
         public override void OnStartClient()
@@ -215,6 +216,8 @@ namespace GunDecorator
                 
                 _shootModule.SetFireRate(_fireRateMultiplier);
 
+                _reticuleAnimator?.SetBool("Shoot", true);
+                
                 if (IsFullAuto)
                 {
                     StartCoroutine(ShootingCoroutine(_shootModule));
@@ -236,8 +239,6 @@ namespace GunDecorator
             
                     if(_animatorArm)
                         _animatorArm?.SetTrigger("Shoot");
-                    
-                    _reticuleAnimator?.SetTrigger("Shoot");
                 }
             }
         }
@@ -265,8 +266,6 @@ namespace GunDecorator
             
                     if(_animatorArm)
                         _animatorArm?.SetTrigger("Shoot");
-                    
-                    _reticuleAnimator?.SetTrigger("Shoot");
                 }
 
                 _playerAnimation.SetShootAnim();
@@ -282,6 +281,8 @@ namespace GunDecorator
             ShootingInputPressed = false;
             _shootModule?.CancelShooting();
             _recoilModule?.SetIsRecoil(false);
+            
+            _reticuleAnimator?.SetBool("Shoot", false);
         }
 
         public int GetCurrentAmmo() => _reloadModule.CurrentAmmo;
@@ -353,16 +354,18 @@ namespace GunDecorator
             _chargedModule?.StartChargedShoot();
             
             PlayerTPSChargedMuzzleFlash();
-
-            if (!_reloadModule.IsReloading)
-            {
-                _animator?.SetTrigger("ChargeShoot");
-                
-                if(_animatorArm)
-                    _animatorArm?.SetTrigger("ChargeShoot");
             
-                _reticuleAnimator?.SetTrigger("ChargedShoot");
+            if(_animator)
+                _animator.SetTrigger("ChargeShoot");
+            else
+            {
+                Debug.LogError("Pas d'animator");
             }
+                
+            if(_animatorArm)
+                _animatorArm?.SetTrigger("ChargeShoot");
+            
+            _reticuleAnimator?.SetTrigger("ChargedShoot");
             
             _playerAnimation.SetShootAnim();
         }
@@ -385,7 +388,7 @@ namespace GunDecorator
 
             if (clip == null) return;
 
-            SoundManager.PlaySound(_soundData, sound, _source);
+            SoundManager.PlaySoundGlobal(_soundData, sound, _sourceLocal);
 
             PlaySoundServerRpc(sound);
         }
@@ -478,7 +481,18 @@ namespace GunDecorator
 
         public void ActivatedGun(bool state)
         {
+            if (state)
+            {
+                currentModel.localPosition = _defaultModelLocalPos;
+                currentModel.localRotation = _defaultModelLocalRot;
+            }
+            
             CurrentModelGun.gameObject.SetActive(state);
+            
+            if (state && _animator)
+            {
+                _animator.ResetTrigger("Reload");
+            }
             
             if (_animatorArm)
             {

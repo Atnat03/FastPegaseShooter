@@ -99,9 +99,8 @@ public class BorneGunSelection : NetworkBusListener
         {
             _playerList.Add(player);
             _numberPlayer.Value++;
-        
-            NetworkConnection conn = player.transform.root.GetComponent<NetworkObject>().Owner;
-            ShowInputUITargetRpc(conn, true);
+            
+            player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(true);
         }
     }
 
@@ -115,18 +114,10 @@ public class BorneGunSelection : NetworkBusListener
             {
                 _playerList.Remove(player);
                 _numberPlayer.Value--;
-            
-                NetworkConnection conn = player.GetComponent<NetworkObject>().Owner;
-                ShowInputUITargetRpc(conn, false);
+                
+                player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(false);
             }
         }
-    }
-    
-    [TargetRpc]
-    void ShowInputUITargetRpc(NetworkConnection conn, bool show)
-    {
-        Cons.Print($"ShowInputUITargetRpc reçu : {show}", ColorConsole.Yellow);
-        InvokeEvent(new OnAllPlayerCanSelectGun { p_open = show });
     }
     
     private void OnDrawGizmos()
