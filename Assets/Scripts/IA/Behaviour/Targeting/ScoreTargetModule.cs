@@ -133,7 +133,7 @@ public class ScoreTargetModule : EnemyTargetModule
         else 
             _playerAggroValue.Add(playerId, damages*_scoreTargetModuleSO.p_aggroPointPerDamageTaken);
     }
-
+    
     /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.orange;
