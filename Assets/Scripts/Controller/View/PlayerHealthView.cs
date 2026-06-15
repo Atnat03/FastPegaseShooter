@@ -65,6 +65,8 @@ public class PlayerHealthView : MonoBehaviour
 		_healingTrajectoryLine.positionCount = 4;
 		_healingThrowPosObj = Instantiate(_healingThrowPosObj, Vector3.zero, Quaternion.identity);
 		_healingThrowPosObj.SetActive(false);
+		
+		_healthBar.material = new Material(_healthBar.material);
 	}
 	
 	private void UpdateHealth(float targetFill)

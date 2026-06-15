@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -15,6 +16,11 @@ public class BroHealthView : MonoBehaviour
 
     private PlayerHealth _trackedAlly;
     private float _targetFill = 1f;
+
+    private void Start()
+    {
+        _broHealthBar.material = new Material(_broHealthBar.material);
+    }
 
     private void OnEnable()
     {
@@ -56,7 +62,7 @@ public class BroHealthView : MonoBehaviour
         if (hasAlly)
         {
             SubscribeAlly();
-            _targetFill = _trackedAlly.CurrentHealth / 100f;
+            _targetFill = _trackedAlly.CurrentHealth / _trackedAlly.MaxHealth;
         }
     }
 

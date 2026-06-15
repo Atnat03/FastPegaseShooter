@@ -10,44 +10,58 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
     public override void OnNetworkTick(float tickDelta)
     {
         base.OnNetworkTick(tickDelta);
-        if (_waitedTimeSinceAttack >= _attackModuleSO.p_attackDelay && _targetModule.HasTarget())
+
+        if (_waitedTimeSinceAttack < _attackModuleSO.p_attackDelay || !_targetModule.HasTarget())
+            return;
+
+        if (_targetModule.p_playerVisualBridge == null ||
+            _targetModule.p_playerVisualBridge.FPSController?.Rb == null ||
+            _shootingPos == null)
         {
-            Vector3 shootDir = Vector3.zero;
-            if (TryGetShootingDirection(
-                    _targetModule.p_playerVisualBridge.transform.position,
-                    _shootingPos.position,
-                    _targetModule.p_playerVisualBridge.FPSController.Rb.linearVelocity,
-                    _predictiveShootingAttackModuleSO.p_bulletSpeed, out Vector3 shootingDirection))
-            {
-                //CustomLogger.HighlightLog("Using predictive shoot");
-                shootDir = shootingDirection;
-            }
-            else
-            {
-                CustomLogger.CCErrorLog("Defaulted back to normal shoot");
-                Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
-                float length = delta.magnitude;
-                shootDir = delta / length;
-            }
-            
-            if(!CanAttack(_shootingPos.position, shootDir)) return;
-            _waitedTimeSinceAttack = 0;
-            
-            InvokeEvent(
-                new EnemyShootingEvent(
-                    _shootingPos.position, 
-                    shootDir, 
-                    _predictiveShootingAttackModuleSO.p_bulletSpeed, 
-                    _attackModuleSO.p_damage, 
-                    _predictiveShootingAttackModuleSO.p_bulletSize, 
-                    _attackModuleSO.p_bulletType,
-                    _predictiveShootingAttackModuleSO.p_maxBulletLifeTime, 
-                    this, 
-                    _attackModuleSO.p_projectileUseGravity,
-                    _predictiveShootingAttackModuleSO.p_bulletAmount, 
-                    _predictiveShootingAttackModuleSO.p_shootingSpreadAngle));
-            p_onAttack?.Invoke();
+            CustomLogger.CCErrorLog("PredictiveShooting: Missing player bridge or shooting position");
+            return;
         }
+
+        Vector3 shootDir = Vector3.zero;
+        bool usePredictive = TryGetShootingDirection(
+            _targetModule.p_playerVisualBridge.transform.position,
+            _shootingPos.position,
+            _targetModule.p_playerVisualBridge.FPSController.Rb.linearVelocity,
+            _predictiveShootingAttackModuleSO.p_bulletSpeed,
+            out Vector3 shootingDirection);
+
+        if (usePredictive)
+        {
+            shootDir = shootingDirection;
+        }
+        else
+        {
+            CustomLogger.CCErrorLog("Defaulted back to normal shoot");
+            Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
+            float length = delta.magnitude;
+            if (length < 0.001f) return;
+            shootDir = delta / length;
+        }
+
+        if (!CanAttack(_shootingPos.position, shootDir))
+            return;
+
+        _waitedTimeSinceAttack = 0f;
+
+        InvokeEvent(new EnemyShootingEvent(
+            _shootingPos.position,
+            shootDir,
+            _predictiveShootingAttackModuleSO.p_bulletSpeed,
+            _attackModuleSO.p_damage,
+            _predictiveShootingAttackModuleSO.p_bulletSize,
+            _attackModuleSO.p_bulletType,
+            _predictiveShootingAttackModuleSO.p_maxBulletLifeTime,
+            this,
+            _attackModuleSO.p_projectileUseGravity,
+            _predictiveShootingAttackModuleSO.p_bulletAmount,
+            _predictiveShootingAttackModuleSO.p_shootingSpreadAngle));
+
+        p_onAttack?.Invoke();
     }
 
     public bool TryGetShootingDirection(Vector3 playerPosition, Vector3 shootingPosition, Vector3 playerVelocity, float bulletSpeed, out Vector3 bulletDirection)
