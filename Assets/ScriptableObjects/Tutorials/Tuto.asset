@@ -17,7 +17,7 @@ MonoBehaviour:
     trigger:
       rid: 5406076671141347503
     eventsList:
-    - rid: 5406076671141347504
+    - rid: 5406076919860690945
     - rid: 5406076671141347505
     - rid: 5406076879839166546
     - rid: 5406076879839166547
@@ -27,13 +27,6 @@ MonoBehaviour:
     - rid: 5406076879839166554
     - rid: 5406076879839166569
     - rid: 5406076879839166555
-  - ScenarioName: DialogueJumps
-    trigger:
-      rid: 5406076671141347512
-    eventsList:
-    - rid: 5406076671141347504
-    - rid: 5406076746262118506
-    - rid: 5406076879839166570
   - ScenarioName: Pre-SalleMonstres
     trigger:
       rid: 5406076671141347514
@@ -49,13 +42,13 @@ MonoBehaviour:
     trigger:
       rid: 5406076671141347518
     eventsList:
-    - rid: 5406076671141347504
+    - rid: 5406076919860690946
     - rid: 5406076671141347519
   - ScenarioName: Mob Deads
     trigger:
       rid: 5406076746262118502
     eventsList:
-    - rid: 5406076671141347504
+    - rid: 5406076919860690947
     - rid: 5406076695212458154
     - rid: 5406076879839166576
     - rid: 5406076879839166577
@@ -76,7 +69,7 @@ MonoBehaviour:
     trigger:
       rid: 5406076786627313775
     eventsList:
-    - rid: 5406076671141347504
+    - rid: 5406076919860690950
     - rid: 5406076763678179420
     - rid: 5406076879839166590
     - rid: 5406076879839166591
@@ -143,7 +136,6 @@ MonoBehaviour:
     trigger:
       rid: 5406076763678179442
     eventsList:
-    - rid: 5406076671141347504
     - rid: 5406076840737767521
     - rid: 5406076763678179444
     - rid: 5406076763678179443
@@ -162,12 +154,12 @@ MonoBehaviour:
     trigger:
       rid: 5406076854874407015
     eventsList:
-    - rid: 5406076671141347504
+    - rid: 5406076919860690951
     - rid: 5406076854874407009
     - rid: 5406076879839166618
     - rid: 5406076879839166619
-    - rid: 5406076854874407008
     - rid: 5406076879839166620
+    - rid: 5406076854874407008
   references:
     version: 2
     RefIds:
@@ -179,7 +171,7 @@ MonoBehaviour:
     - rid: 5406076671141347504
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
       data:
-        _durationToWait: 4
+        _durationToWait: 1
     - rid: 5406076671141347505
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -187,11 +179,6 @@ MonoBehaviour:
         _keyVoceline: CrashIntro-1
         _delayAfter: 0
         speaker: 1
-    - rid: 5406076671141347512
-      type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
-      data:
-        proxyIndex: 2
-        mode: 0
     - rid: 5406076671141347514
       type: {class: Trigger_BoxCollider, ns: Tuto.Triggers, asm: Assembly-CSharp}
       data:
@@ -251,13 +238,6 @@ MonoBehaviour:
       data:
         actionToDo: 0
         doorIndex: 3
-    - rid: 5406076746262118506
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Protocole de v\xE9rification des capacit\xE9s, enclench\xE9."
-        _keyVoceline: Mouvementcheck-1
-        _delayAfter: 0
-        speaker: 2
     - rid: 5406076746262118507
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -537,13 +517,6 @@ MonoBehaviour:
       data:
         actionToDo: 0
         doorIndex: 1
-    - rid: 5406076879839166570
-      type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
-      data:
-        _dialogue: "Saut a\xE9rien, course murale et module d'impulsion disponibles."
-        _keyVoceline: Mouvementcheck-2
-        _delayAfter: 0
-        speaker: 2
     - rid: 5406076879839166571
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
@@ -805,3 +778,23 @@ MonoBehaviour:
         _keyVoceline: MissionStart-4
         _delayAfter: 0
         speaker: 0
+    - rid: 5406076919860690945
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 2
+    - rid: 5406076919860690946
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076919860690947
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076919860690950
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 1
+    - rid: 5406076919860690951
+      type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        _durationToWait: 4
