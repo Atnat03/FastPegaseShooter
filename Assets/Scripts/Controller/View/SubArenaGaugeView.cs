@@ -58,9 +58,9 @@ public class SubArenaGaugeView : MonoBusListener
         });
     }
     
-    private void Start()
+    /*private void Start()
     {
         foreach (SubArena arena in FindObjectsByType<SubArena>(FindObjectsSortMode.None))
             arena.RequestSubArenaStateServerRpc();
-    }
+    }*/
 }
