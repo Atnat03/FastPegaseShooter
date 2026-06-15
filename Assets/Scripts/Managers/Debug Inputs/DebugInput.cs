@@ -109,6 +109,15 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkipLevel"",
+                    ""type"": ""Button"",
+                    ""id"": ""ba08ae3f-b75f-4708-b8d9-12734fe7b94b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -144,6 +153,17 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
                     ""action"": ""GetInvincible"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c451b5e-85f0-4fbd-a43a-1d07674c2934"",
+                    ""path"": ""<Keyboard>/numpad4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipLevel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -154,6 +174,7 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_StopZoneSpawning = m_Debug.FindAction("StopZoneSpawning", throwIfNotFound: true);
         m_Debug_GetInvincible = m_Debug.FindAction("GetInvincible", throwIfNotFound: true);
+        m_Debug_SkipLevel = m_Debug.FindAction("SkipLevel", throwIfNotFound: true);
     }
 
     ~@DebugInput()
@@ -236,6 +257,7 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
     private List<IDebugActions> m_DebugActionsCallbackInterfaces = new List<IDebugActions>();
     private readonly InputAction m_Debug_StopZoneSpawning;
     private readonly InputAction m_Debug_GetInvincible;
+    private readonly InputAction m_Debug_SkipLevel;
     /// <summary>
     /// Provides access to input actions defined in input action map "Debug".
     /// </summary>
@@ -255,6 +277,10 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Debug/GetInvincible".
         /// </summary>
         public InputAction @GetInvincible => m_Wrapper.m_Debug_GetInvincible;
+        /// <summary>
+        /// Provides access to the underlying input action "Debug/SkipLevel".
+        /// </summary>
+        public InputAction @SkipLevel => m_Wrapper.m_Debug_SkipLevel;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -287,6 +313,9 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
             @GetInvincible.started += instance.OnGetInvincible;
             @GetInvincible.performed += instance.OnGetInvincible;
             @GetInvincible.canceled += instance.OnGetInvincible;
+            @SkipLevel.started += instance.OnSkipLevel;
+            @SkipLevel.performed += instance.OnSkipLevel;
+            @SkipLevel.canceled += instance.OnSkipLevel;
         }
 
         /// <summary>
@@ -304,6 +333,9 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
             @GetInvincible.started -= instance.OnGetInvincible;
             @GetInvincible.performed -= instance.OnGetInvincible;
             @GetInvincible.canceled -= instance.OnGetInvincible;
+            @SkipLevel.started -= instance.OnSkipLevel;
+            @SkipLevel.performed -= instance.OnSkipLevel;
+            @SkipLevel.canceled -= instance.OnSkipLevel;
         }
 
         /// <summary>
@@ -358,5 +390,12 @@ public partial class @DebugInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnGetInvincible(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SkipLevel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSkipLevel(InputAction.CallbackContext context);
     }
 }
