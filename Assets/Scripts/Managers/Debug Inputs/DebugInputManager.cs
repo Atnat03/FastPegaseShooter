@@ -17,12 +17,15 @@ public class DebugInputManager : MonoBehaviour
         _debugInput.Enable();
         _debugInput.Debug.StopZoneSpawning.started += StopZoneSpawningOnStarted;
         _debugInput.Debug.GetInvincible.performed += GetInvincible;
+        _debugInput.Debug.SkipLevel.performed += SkipLevel;
     }
 
     private void OnDisable()
     {
         _debugInput.Debug.StopZoneSpawning.started -= StopZoneSpawningOnStarted;
         _debugInput.Debug.GetInvincible.performed -= GetInvincible;
+        _debugInput.Debug.SkipLevel.performed -= SkipLevel;
+
         _debugInput.Disable();
     }
 
@@ -40,5 +43,10 @@ public class DebugInputManager : MonoBehaviour
     private void GetInvincible(InputAction.CallbackContext obj)
     {
         if(InstanceFinder.IsServerStarted) EventBus.InvokeEvent(new GetInvincibleEvent());
+    }
+
+    void SkipLevel(InputAction.CallbackContext obj)
+    {
+        FindAnyObjectByType<TriggerZoneServerToClient>().DebugSkipLevel();
     }
 }
