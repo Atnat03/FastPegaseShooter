@@ -5,6 +5,7 @@ using FishNet.Object;
 using MyPrint;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class EndGameManager : NetworkBusListener
 {
@@ -48,16 +49,14 @@ public class EndGameManager : NetworkBusListener
 
 	IEnumerator EndGame()
 	{
-		yield return new WaitForSeconds(2);
-		
-		_cameraEnd.gameObject.SetActive(true);
-		_cameraEnd.depth = 100;
+		yield return new WaitForSeconds(30);
 		
 		InvokeEvent(new OnEndGameStarted());
 		
-		yield return new WaitForSeconds(5f);
+		yield return new WaitForSeconds(8);
 		
-		Cons.Print("End game !!", ColorConsole.Cyan);
+		_cameraEnd.gameObject.SetActive(true);
+		_cameraEnd.depth = 100; 
 	}
 	
 	#endregion
