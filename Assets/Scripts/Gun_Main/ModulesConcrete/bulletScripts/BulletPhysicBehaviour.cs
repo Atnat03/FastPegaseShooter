@@ -90,10 +90,13 @@ public class BulletPhysicBehaviour : MonoBusListener, IAmmo, IPoolable
     {
         if (_vfx != null)
         {
-            SoundManager.PlaySound(_dataSound, "Explosion", _audioSource, _gunController.transform);
-            
             GameObject v = Instantiate(_vfx);
             v.transform.position = transform.position + transform.up * 0.1f;
+            
+            v.GetComponent<ParticleSystem>().Play();
+            
+            SoundManager.PlaySound(_dataSound, "Explosion", _audioSource, v.transform);
+            
             Destroy(v.gameObject, 3f);
         }
 

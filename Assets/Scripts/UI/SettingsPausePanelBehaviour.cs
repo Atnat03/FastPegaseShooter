@@ -37,6 +37,7 @@ public class SettingsPausePanelBehaviour : PausePanel
 
     public override void Init()
     {
+        base.Init();
         defaultCrossairScale = crossair.localScale;
         
         _resolutions = Screen.resolutions;
