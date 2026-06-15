@@ -66,7 +66,7 @@ public class SoundManager : MonoBehaviour
 			return;
 		
 		AudioClip c = clip[Random.Range(0, clip.Count)];
-		PlayGlobalSound(volume, c, source);
+		PlayGlobalSound(volume * 2f, c, source);
 	}
 
 	public static void StopSound(AudioSource source) => source.Stop();

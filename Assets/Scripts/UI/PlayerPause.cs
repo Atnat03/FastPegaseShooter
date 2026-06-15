@@ -3,6 +3,7 @@ using MyPrint;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public struct OnPauseEvent
 {
@@ -17,6 +18,12 @@ public class PlayerPause : NetworkBusListener
     [SerializeField] private FPSController _fpsController;
     [SerializeField] private TextMeshProUGUI _gameCode;
 
+    [SerializeField] private Material[] _matBackground;
+    [SerializeField] private Color[] _colorTitle;
+    [SerializeField] private Image _background;
+    [SerializeField] private Image _title;
+    
+
     private PausePanel _currentPausePanel;
 
     private bool _isPause = false;
@@ -26,6 +33,8 @@ public class PlayerPause : NetworkBusListener
         base.OnStartClient();
         if (!IsOwner) return;
 
+        ListenToEvent<OnPlayerOk>(SetUpColor);
+        
         if (IsServerInitialized)
         {
             _gameCode.text = ConnectionWithCode.GameCode;
@@ -39,6 +48,15 @@ public class PlayerPause : NetworkBusListener
         {
             panel.Init();
         }
+    }
+
+    private void SetUpColor(OnPlayerOk data)
+    {
+        if (data.playerID != Owner.ClientId)
+            return;
+        
+        _title.color = data.IsPositive ? _colorTitle[0] : _colorTitle[1];
+        _background.material =  data.IsPositive ? _matBackground[0] : _matBackground[1];
     }
 
     private void UpdatePause(InputAction.CallbackContext obj)

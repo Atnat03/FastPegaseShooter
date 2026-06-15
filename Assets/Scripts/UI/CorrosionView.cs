@@ -8,7 +8,7 @@ public class CorrosionView : MonoBusListener
     private HashSet<Guid> _corrodedArenaIDs = new HashSet<Guid>();
     private void Awake()
     {
-        ListenToEvent<OnDapEvent>(ODE =>
+        ListenToEvent<OnDappEventObserveurs>(ODE =>
         {
             _corrodedArenaIDs.Clear();
             HideCorrosionFeedback();
