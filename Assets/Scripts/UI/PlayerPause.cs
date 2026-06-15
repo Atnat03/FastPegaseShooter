@@ -17,6 +17,8 @@ public class PlayerPause : NetworkBusListener
     [SerializeField] private FPSController _fpsController;
     [SerializeField] private TextMeshProUGUI _gameCode;
     
+    private PausePanel _currentPausePanel;
+    
     private bool _isPause = false;
 
     public override void OnStartClient()
@@ -68,6 +70,13 @@ public class PlayerPause : NetworkBusListener
         }
         
         //InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
+    }
+
+    public void ChangePanel(PausePanel panel)
+    {
+        if(_currentPausePanel != null) _currentPausePanel.gameObject.SetActive(false);
+        _currentPausePanel = panel;
+        panel.gameObject.SetActive(true);
     }
     
     

@@ -12,11 +12,8 @@ public class Arena2TriggerAnimation : NetworkBusListener
 
     public void OnTriggerEnter(Collider other)
     {
-        CustomLogger.ImportantLog("arena2 0");
         if (!other.CompareTag("Player")) return;
-        CustomLogger.ImportantLog("arena2 0.5");
         if(!IsServerInitialized) return;
-        CustomLogger.ImportantLog("arena2 0.75");
 
         TriggerActionObserverRpc();
     }
@@ -24,7 +21,6 @@ public class Arena2TriggerAnimation : NetworkBusListener
     [ObserversRpc]
     private void TriggerActionObserverRpc()
     {
-        CustomLogger.ImportantLog("arena2 1");
         
         switch (_eventType)
         {
