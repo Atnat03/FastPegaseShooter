@@ -120,7 +120,6 @@ public class EnemyBulletManager : NetworkBusListener
     void SpawnVisualBulletObserverRPC(BulletsSpawningInfos BSI, float spawnTime)
     {
         //here spawn the visual bullet for feedback
-        //may use object pulling to reduce lag when instantiating GO
         foreach (BulletBasicInfos bulletInfo in BSI.p_bulletsInfos)
         {
             EnemyBulletVisuals newBullet = bulletPools[BSI.p_bulletType].Spawn(BSI.p_startPos, Quaternion.identity);//Instantiate(GetObjectFromType(BSI.p_bulletType), BSI.p_startPos, Quaternion.identity);
@@ -133,22 +132,6 @@ public class EnemyBulletManager : NetworkBusListener
     {
         bulletPools[bulletType].ReturnToPool(EBV);
     }
-
-    /*GameObject GetObjectFromType(BulletTypes type)
-    {
-        switch (type)
-        {
-            case BulletTypes.Normal:
-                return _normalBulletPrefab;
-            case BulletTypes.Viscous:
-                return _viscousBulletPrefab;
-            case BulletTypes.GooPuddle:
-                return _puddleBulletPrefab;
-            
-            default:
-                return _normalBulletPrefab;
-        }
-    }*/
 
     [ObserversRpc]
     void KillVisualBulletObserverRPC(int bulletId)
