@@ -1,4 +1,4 @@
-using System;
+ using System;
 using MyPrint;
 using TMPro;
 using UnityEngine;
@@ -136,7 +136,7 @@ public class PlayerSelectGun : NetworkBusListener
 	public void CanSelectGun(bool state)
 	{
 		if (!IsOwner) return;
-    
+		
 		_uiInput.SetActive(state);
 	}
 
@@ -213,7 +213,7 @@ public class PlayerSelectGun : NetworkBusListener
 
 		for (int i = 0; i < arrowDamageImageList.Length; i++)
 		{
-			if (i <= dataGun.numberArrowDamage)
+			if (i < dataGun.numberArrowDamage)
 			{
 				arrowDamageImageList[i].gameObject.SetActive(true);
 			}
@@ -225,7 +225,7 @@ public class PlayerSelectGun : NetworkBusListener
 		
 		for (int i = 0; i < arrowFireRateImageList.Length; i++)
 		{
-			if (i <= dataGun.numberArrowFireRate)
+			if (i < dataGun.numberArrowFireRate)
 			{
 				arrowFireRateImageList[i].gameObject.SetActive(true);
 			}

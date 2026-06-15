@@ -93,7 +93,6 @@ public class BorneGunSelection : NetworkBusListener
     
     public void OnTriggerEnter(Collider other)
     {
-
         if (other.TryGetComponent(out PlayerVisuelBridge player))
         {
             player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(true);
