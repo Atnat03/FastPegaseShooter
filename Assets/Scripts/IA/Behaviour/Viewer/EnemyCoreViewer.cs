@@ -1,6 +1,4 @@
-using System;
 using System.Threading.Tasks;
-using CustomConsole.Runtime.Logger;
 using ScriptableObjectsDefinitions;
 using UnityEngine;
 
@@ -84,7 +82,7 @@ public class EnemyCoreViewer : MonoBehaviour
                 ? _enemyCore.p_coreSo.p_spawningTime - _SpawnParticle.main.duration
                 : _enemyCore.p_coreSo.p_spawningTime;
             _SpawnParticleSkinnedMesh.gameObject.SetActive(true);
-            while (t < explosionTime)
+            while (t < explosionTime && _SpawnParticleSkinnedMesh)
             {
                 t += Time.deltaTime;
                 _SpawnParticleSkinnedMesh.sharedMaterials[0].SetFloat("_CHANGEMENT", t / explosionTime);
@@ -135,15 +133,18 @@ public class EnemyCoreViewer : MonoBehaviour
         }
         
         float t = 0;
-        while (t < _enemyCore.p_coreSo.p_deathTime)
+        while (t < _enemyCore.p_coreSo.p_deathTime && _EnemySkinnedMeshRenderer)
         {
             t+=Time.deltaTime;
             _EnemySkinnedMeshRenderer.sharedMaterials[0].SetFloat("_DESINTEGRATION", t/_enemyCore.p_coreSo.p_deathTime);
             _EnemySkinnedMeshRenderer.sharedMaterials[1].SetFloat("_DESINTEGRATION", t/_enemyCore.p_coreSo.p_deathTime);
             await Task.Yield();
         }
-        _EnemySkinnedMeshRenderer.sharedMaterials[0].SetFloat("_DESINTEGRATION", 1);
-        _EnemySkinnedMeshRenderer.sharedMaterials[1].SetFloat("_DESINTEGRATION", 1);
+        if(_EnemySkinnedMeshRenderer)
+        {
+            _EnemySkinnedMeshRenderer.sharedMaterials[0].SetFloat("_DESINTEGRATION", 1);
+            _EnemySkinnedMeshRenderer.sharedMaterials[1].SetFloat("_DESINTEGRATION", 1);
+        }
         
     }
 }

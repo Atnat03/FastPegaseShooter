@@ -44,7 +44,7 @@ public class LobShootingAttackModule : EnemyAttackModule
     float? GetLaunchingSpeed(Vector3 targetPosition)
     {
         float hDist = (_shootingPos.position - targetPosition).RemoveY().magnitude;
-        float vDist = targetPosition.y - (transform.position.y +_shootingPos.position.y);
+        float vDist = targetPosition.y - _shootingPos.position.y;
 
         float cosTheta = Mathf.Cos(_lobShootingAttackModuleSo.p_shootingAngle * Mathf.Deg2Rad);
         float tanTheta = Mathf.Tan(_lobShootingAttackModuleSo.p_shootingAngle * Mathf.Deg2Rad);
