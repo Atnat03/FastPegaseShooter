@@ -76,7 +76,7 @@ public class SettingsPausePanelBehaviour : PausePanel
         ChangeMusicVolume(PlayerPrefs.GetFloat("MusicVolume", 100));
         _musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 100) * 100;
         _musicVolumeText.text = _musicVolumeSlider.value.ToString("F0")  + "%";
-        audioMixer.SetFloat("Music", _musicVolumeSlider.value);
+        if (audioMixer.SetFloat("Music", Mathf.Lerp(-20,20,_musicVolumeSlider.value))) ;
 
         
         //dialogues
@@ -133,7 +133,8 @@ public class SettingsPausePanelBehaviour : PausePanel
         _musicVolumeText.text = newVolume.ToString("F0") + "%";
         newVolume /= 100;
         PlayerPrefs.SetFloat("MusicVolume", newVolume);
-        audioMixer.SetFloat("Music", newVolume);
+        if (audioMixer.SetFloat("Music", Mathf.Lerp(-20,20,newVolume))) ;
+        else Debug.LogError("Music does not exist");
     }
 
 
