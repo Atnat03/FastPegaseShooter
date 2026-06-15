@@ -2,6 +2,7 @@ using System;
 using MyPrint;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [Serializable]
@@ -67,6 +68,8 @@ public class PlayerSelectGun : NetworkBusListener
 	
 	private int _newIndexGun = 0;
 	private int equipedGun = 0;
+
+	private PlayerInput _playerInput;
 	
 	#endregion
 
@@ -79,6 +82,27 @@ public class PlayerSelectGun : NetworkBusListener
 		
 		goNextButton.onClick.AddListener(SelectNextGun);
 		goPreviousButton.onClick.AddListener(SelectPreviousGun);
+		
+		_playerInput = GetComponent<PlayerInput>();
+
+		if (_playerInput != null)
+		{
+			_playerInput.actions["Escape"].performed += ClosePannel;
+		}
+	}
+
+	public override void OnStopNetwork()
+	{
+		if (_playerInput != null)
+		{
+			_playerInput.actions["Escape"].performed -= ClosePannel;
+		}
+	}
+
+	private void ClosePannel(InputAction.CallbackContext obj)
+	{
+		if(_uiMain.activeSelf)
+			FinishSelection();
 	}
 
 	private void OnShowUI(OnAllPlayerAtBorne data)
