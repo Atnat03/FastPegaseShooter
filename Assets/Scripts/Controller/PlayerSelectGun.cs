@@ -187,6 +187,8 @@ public class PlayerSelectGun : NetworkBusListener
 	{
 		equipedGun = _newIndexGun;
 		equipButton.color = equipButtonColors[1];
+
+		FinishSelection();
 	}
 	
 	private void UpdateUI_Gun()

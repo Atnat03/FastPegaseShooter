@@ -16,26 +16,22 @@ public class ArmColorChange : NetworkBusListener
 	#endregion
 	
 	#region Fonctions
-
-	public override void OnStartNetwork()
-	{
-		int index = Owner.ClientId % _materialsList.Length;
-
-		if (_renderer != null)
-			_renderer.material = _materialsList[index];
-
-		if (_rendererClassic != null)
-			_rendererClassic.material = _materialsList[index];
-	}
 	
 	private void Awake()
 	{
-		ListenToEvent<OnPlayerSpawnEvent>(PlayerSpawn);
+		ListenToEvent<OnPlayerOk>(PlayerSpawn);
 	}
 	
-	private void PlayerSpawn(OnPlayerSpawnEvent data)
+	private void PlayerSpawn(OnPlayerOk data)
 	{
+		if(Owner.ClientId != data.playerID)
+			return;
+		
+		if (_renderer != null)
+			_renderer.material = _materialsList[data.IsPositive ? 0 : 1];
 
+		if (_rendererClassic != null)
+			_rendererClassic.material = _materialsList[data.IsPositive ? 0 : 1];
 	}
 
 	#endregion
