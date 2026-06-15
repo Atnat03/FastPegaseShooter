@@ -4815,6 +4815,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5682311579488047432, guid: e570a43ae6d2bed478b65a8ec6501757, type: 3}
   m_PrefabInstance: {fileID: 2039677829}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &52725014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 52725015}
+  - component: {fileID: 52725017}
+  - component: {fileID: 52725016}
+  m_Layer: 0
+  m_Name: SpawnZoneTrigger (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &52725015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52725014}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -101.61, y: -29.67, z: 1.1082172}
+  m_LocalScale: {x: 1, y: -0.0062338, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1659904941}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &52725016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52725014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 239c1ac205bf4a408f0dece164583f2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SpawnZone
+  _zoneId: 0
+--- !u!65 &52725017
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52725014}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 15, y: 20, z: 15}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &53244327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105634,7 +105701,7 @@ Transform:
   m_GameObject: {fileID: 1172677573}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -68.25, y: -28.837648, z: 3.6382198}
+  m_LocalPosition: {x: -65.94, y: -28.11, z: 6.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -144816,7 +144883,7 @@ Transform:
   m_GameObject: {fileID: 1582597716}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -68.25, y: -28.837648, z: 3.6382198}
+  m_LocalPosition: {x: -65.94, y: -28.11, z: 3.6382198}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -152530,6 +152597,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1875000427}
+  - {fileID: 52725015}
   - {fileID: 681076164}
   - {fileID: 1202319852}
   - {fileID: 717372649}
@@ -173339,7 +173407,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1889978120}
         m_TargetAssemblyTypeName: ClientSceneLoader, Assembly-CSharp
-        m_MethodName: InvokeOnSceneLoadingClientInfos
+        m_MethodName: LoadSceneForAll
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
