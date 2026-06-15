@@ -25,6 +25,19 @@ public class TriggerZoneServerToClient : NetworkBehaviour
         }
     }
 
+    public void DebugSkipLevel()
+    {
+        if (IsServerInitialized)
+        {
+            TriggerOnServer();
+        }
+        else if (IsClientInitialized)
+        {
+            RequestTriggerServerRpc();
+        }
+    }
+    
+
     [ServerRpc(RequireOwnership = false)]
     private void RequestTriggerServerRpc()
     {
