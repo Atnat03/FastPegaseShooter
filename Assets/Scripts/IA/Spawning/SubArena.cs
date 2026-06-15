@@ -55,11 +55,11 @@ public class SubArena : NetworkBusListener
         {
             if(_spawnedEnemies.Contains(OEDE.p_enemy))
             {
+                _spawnedEnemies.Remove(OEDE.p_enemy);
                 NotifySubArenaUpdateObserverRpc(
                     _gridReader.p_id,
                     _spawnedEnemies.Count/(float)_maxSpawnEnemy,
                     _currentStateIndex, _spawnedEnemies.Count);
-                _spawnedEnemies.Remove(OEDE.p_enemy);
             }
         });
         
@@ -179,6 +179,11 @@ public class SubArena : NetworkBusListener
         
         InvokeSpawnEnemyObserverRpc();
         InstanceFinder.ServerManager.Spawn(enemy);
+        
+        NotifySubArenaUpdateObserverRpc(
+            _gridReader.p_id,
+            _spawnedEnemies.Count/(float)_maxSpawnEnemy,
+            _currentStateIndex, _spawnedEnemies.Count);
     }
 
     [ObserversRpc]
@@ -283,10 +288,6 @@ public class SubArena : NetworkBusListener
                     //CustomLogger.Log($"Spawn enemy : {nextMobToSpawn.name}");
                     _currentBudget -= nextMobToSpawn.p_cost;
                     SpawnEnemy(nextMobToSpawn.p_prefab);
-                    NotifySubArenaUpdateObserverRpc(
-                        _gridReader.p_id,
-                        _spawnedEnemies.Count/(float)_maxSpawnEnemy,
-                        _currentStateIndex, _spawnedEnemies.Count);
                 }
             }
         }
