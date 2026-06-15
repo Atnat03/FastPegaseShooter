@@ -34,7 +34,7 @@ public abstract class PausePanel : MonoBusListener
     {
         foreach (RectTransform button in buttons)
         {
-            button.localPosition += new Vector3(-1000, 0, 0);
+            button.localPosition += new Vector3(-1920, 0, 0);
         }
         foreach (RectTransform button in buttons)
         {
