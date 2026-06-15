@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FishNet.Example.Scened;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SettingsPausePanelBehaviour : PausePanel
@@ -11,6 +12,7 @@ public class SettingsPausePanelBehaviour : PausePanel
     [SerializeField] FPSController _fpsController;
     [SerializeField] DialoguesManager _dialogueManager;
     [SerializeField] RectTransform crossair;
+    [SerializeField] AudioMixer audioMixer;
     [SerializeField] Slider _mouseSensitivitySlider;
     [SerializeField] TMP_Text _mouseSensitivityText;
     [SerializeField] float _mouseSensitivityMaxValue;
@@ -34,8 +36,6 @@ public class SettingsPausePanelBehaviour : PausePanel
     public override void Init()
     {
         defaultCrossairScale = crossair.localScale;
-        
-        ListenToEvent<OnMusicManagerLinkage>(OnMusicManagerSignal);
         
         _resolutions = Screen.resolutions;
         List<string> resolutionListString = new List<string>();
@@ -76,6 +76,8 @@ public class SettingsPausePanelBehaviour : PausePanel
         ChangeMusicVolume(PlayerPrefs.GetFloat("MusicVolume", 100));
         _musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 100) * 100;
         _musicVolumeText.text = _musicVolumeSlider.value.ToString("F0")  + "%";
+        audioMixer.SetFloat("Music", _musicVolumeSlider.value);
+
         
         //dialogues
         bool dialoguesOn = PlayerPrefs.GetInt("dialoguesActivated", 1) == 1;
@@ -97,11 +99,6 @@ public class SettingsPausePanelBehaviour : PausePanel
 
         InvokeEvent<OnPausePanelInit>(new OnPausePanelInit());
         gameObject.SetActive(false);
-    }
-
-    void OnMusicManagerSignal(OnMusicManagerLinkage data)
-    {
-        _musicManager = data.musicManager;
     }
 
     public override void OnPause(bool isPause)
@@ -132,11 +129,11 @@ public class SettingsPausePanelBehaviour : PausePanel
     public void ChangeMusicVolume() => ChangeMusicVolume(_musicVolumeSlider.value);
     void ChangeMusicVolume(float newVolume)
     {
-        if(!_musicManager)return;
+        if(!audioMixer)return;
         _musicVolumeText.text = newVolume.ToString("F0") + "%";
         newVolume /= 100;
         PlayerPrefs.SetFloat("MusicVolume", newVolume);
-        _musicManager.SetVolume(newVolume);
+        audioMixer.SetFloat("Music", newVolume);
     }
 
 
