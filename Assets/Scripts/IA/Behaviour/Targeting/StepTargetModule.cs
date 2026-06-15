@@ -1,3 +1,4 @@
+using FishNet.Connection;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Target/StepTargetModule")]
@@ -45,6 +46,8 @@ public class StepTargetModule : ScoreTargetModule
 
     public override Vector3 GetTargetPosition()
     {
+        if (p_playerVisualBridge == null) return transform.position;
+        
         if (_stepTargetModuleSO.p_doSwitchTargeting && _reachedFakeTarget)
         {
             return p_playerVisualBridge.FPSController.transform.position;
@@ -58,7 +61,17 @@ public class StepTargetModule : ScoreTargetModule
     }
     public override float GetTargetSqrDistance(Vector3 position)
     {
+        if (p_playerVisualBridge == null || p_playerVisualBridge.FPSController == null)
+            return float.MaxValue;
+        
         float dist = (p_playerVisualBridge.FPSController.transform.position - position).sqrMagnitude;
         return dist;
+    }
+    
+    public override bool HasTarget()
+    {
+        if (p_playerVisualBridge == null) return false;
+        if (p_playerVisualBridge.FPSController == null) return false;
+        return base.HasTarget();
     }
 }
