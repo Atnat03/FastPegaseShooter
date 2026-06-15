@@ -14,7 +14,6 @@ public class Arena2TriggerListener : MonoBusListener
         switch (_triggerType)
         {
             case TriggerType.Arena1:
-                CustomLogger.ImportantLog("arena2 2");
                 ListenToEvent<OnArena2FirstEvent>(e => _action?.Invoke());
                 break;
             case TriggerType.Arena2:

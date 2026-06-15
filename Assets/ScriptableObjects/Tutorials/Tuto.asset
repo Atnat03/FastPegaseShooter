@@ -107,7 +107,6 @@ MonoBehaviour:
     trigger:
       rid: 5406076763678179407
     eventsList:
-    - rid: 5406076671141347504
     - rid: 5406076807428964495
     - rid: 5406076879839166608
     - rid: 5406076763678179428
@@ -146,6 +145,7 @@ MonoBehaviour:
     - rid: 5406076763678179451
     - rid: 5406076879839166614
     - rid: 5406076879839166615
+    - rid: 5406076923868348565
     - rid: 5406076879839166616
     - rid: 5406076854874407001
     - rid: 5406076763678179452
@@ -757,21 +757,21 @@ MonoBehaviour:
         _dialogue: Bah, tu sais c'est pas comme si on devait se le taper au dessus
           de chaque mission hein...
         _keyVoceline: MissionStart-2
-        _delayAfter: 0
+        _delayAfter: -0.5
         speaker: 0
     - rid: 5406076879839166619
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
         _dialogue: "Vous pouvez d\xE9sormais commencer la mission."
         _keyVoceline: MissionStart-3
-        _delayAfter: 0
+        _delayAfter: -0.3
         speaker: 2
     - rid: 5406076879839166620
       type: {class: Event_Dialogue, ns: Tuto, asm: Assembly-CSharp}
       data:
         _dialogue: Bah yes, on a officiellement le droit de faire notre travail.
         _keyVoceline: MissionStart-4
-        _delayAfter: 0
+        _delayAfter: -0.3
         speaker: 0
     - rid: 5406076919860690945
       type: {class: Event_Wait, ns: Tuto, asm: Assembly-CSharp}
@@ -798,3 +798,8 @@ MonoBehaviour:
       data:
         actionToDo: 1
         doorIndex: 6
+    - rid: 5406076923868348565
+      type: {class: Event_AnimDapBar, ns: Tuto, asm: Assembly-CSharp}
+      data:
+        animationType: 2
+        duration: 1
