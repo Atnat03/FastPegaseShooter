@@ -37,7 +37,7 @@ namespace Tuto
         [SerializeField] private ScenarioSO _scenarioSequence;
         [SerializeField] private Canvas _globalCanva;
 
-        [Header("References")] 
+        [Header("References")]
         private DapManager _dapManager;
         
         [Header("LD Elements")]
@@ -300,7 +300,8 @@ namespace Tuto
             InvokeEvent(new OnDialogue_TUTO
             {
                 dialogue = dialogue,
-                speaker = speaker
+                speaker = speaker,
+                duration = duration
             });
         }
         
