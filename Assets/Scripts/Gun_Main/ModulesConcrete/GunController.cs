@@ -79,6 +79,8 @@ namespace GunDecorator
         public Animator _animatorArm;
         public Animator _animatorBall;
 
+        public Animator _reticuleAnimator;
+
         [SerializeField, Tooltip("Effet de tir du bout du canon de l'arme")]
         public ParticleSystem[] p_particlesMuzzleFlash;
 
@@ -106,7 +108,7 @@ namespace GunDecorator
         private bool isDead = false;
 
         private bool _hasAlreadyFriendlyFire = false;
-
+        
         //Action
         public Action OnSetUp;
 
@@ -126,8 +128,6 @@ namespace GunDecorator
         {
             if(_animator)
                 _animator.ResetTrigger("Reload");
-            
-
         }
 
         private void Awake()
@@ -236,6 +236,8 @@ namespace GunDecorator
             
                     if(_animatorArm)
                         _animatorArm?.SetTrigger("Shoot");
+                    
+                    _reticuleAnimator?.SetTrigger("Shoot");
                 }
             }
         }
@@ -263,6 +265,8 @@ namespace GunDecorator
             
                     if(_animatorArm)
                         _animatorArm?.SetTrigger("Shoot");
+                    
+                    _reticuleAnimator?.SetTrigger("Shoot");
                 }
 
                 _playerAnimation.SetShootAnim();
@@ -349,11 +353,16 @@ namespace GunDecorator
             _chargedModule?.StartChargedShoot();
             
             PlayerTPSChargedMuzzleFlash();
-            
-            _animator?.SetTrigger("ChargeShoot");
+
+            if (!_reloadModule.IsReloading)
+            {
+                _animator?.SetTrigger("ChargeShoot");
                 
-            if(_animatorArm)
-                _animatorArm?.SetTrigger("ChargeShoot");
+                if(_animatorArm)
+                    _animatorArm?.SetTrigger("ChargeShoot");
+            
+                _reticuleAnimator?.SetTrigger("ChargedShoot");
+            }
             
             _playerAnimation.SetShootAnim();
         }
