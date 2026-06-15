@@ -68,6 +68,7 @@ namespace GunDecorator
 
         [SerializeField, Tooltip("Audio Source de l'arme")]
         public AudioSource _source;
+        public AudioSource _sourceLocal;
 
         [SerializeField, Tooltip("Scriptable Object contenant les Audio Clip de l'arme (exemple dans le dossier Assets/SoudData)")]
         public SoundsDataSO _soundData;
@@ -387,7 +388,7 @@ namespace GunDecorator
 
             if (clip == null) return;
 
-            SoundManager.PlaySound(_soundData, sound, _source);
+            SoundManager.PlaySoundGlobal(_soundData, sound, _sourceLocal);
 
             PlaySoundServerRpc(sound);
         }

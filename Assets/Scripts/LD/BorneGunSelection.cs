@@ -93,40 +93,31 @@ public class BorneGunSelection : NetworkBusListener
     
     public void OnTriggerEnter(Collider other)
     {
-        if (!IsServerInitialized) return;
-
         if (other.TryGetComponent(out PlayerVisuelBridge player))
         {
+            player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(true);
+            
+            if (!IsServerInitialized) return;
+            
             _playerList.Add(player);
             _numberPlayer.Value++;
-        
-            NetworkConnection conn = player.transform.root.GetComponent<NetworkObject>().Owner;
-            ShowInputUITargetRpc(conn, true);
         }
     }
 
     public void OnTriggerExit(Collider other)
     {
-        if (!IsServerInitialized) return;
-    
         if (other.TryGetComponent(out PlayerVisuelBridge player))
         {
+            player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(false);
+
+            if (!IsServerInitialized) return;
+            
             if (_playerList.Contains(player))
             {
                 _playerList.Remove(player);
                 _numberPlayer.Value--;
-            
-                NetworkConnection conn = player.GetComponent<NetworkObject>().Owner;
-                ShowInputUITargetRpc(conn, false);
             }
         }
-    }
-    
-    [TargetRpc]
-    void ShowInputUITargetRpc(NetworkConnection conn, bool show)
-    {
-        Cons.Print($"ShowInputUITargetRpc reçu : {show}", ColorConsole.Yellow);
-        InvokeEvent(new OnAllPlayerCanSelectGun { p_open = show });
     }
     
     private void OnDrawGizmos()
