@@ -18,9 +18,12 @@ public class AscenseurManager : NetworkBusListener
     
     
     private List<Ascenseur> _pool = new();
+    private bool alreadyLaunched = false;
 
     public async void LaunchElevator()
     {
+        if (alreadyLaunched) return;
+        alreadyLaunched = true;
         await Task.Delay(_launchDelay);
         
         float launchTime = Time.time; // référence commune
