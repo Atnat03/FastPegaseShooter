@@ -1,18 +1,18 @@
-using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using UnityEngine;
 
 public class GenericTrigger : NetworkBusListener
 {
     [SerializeField] private int _triggerId;
-
+    [SerializeField] private bool _activateOnce = true;
+    
     private bool _activated;
-
+    
     public void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
-        if(!IsServerInitialized) return;
+        if (!other.CompareTag("Player") || !IsServerInitialized || (_activated && _activateOnce)) return;
 
+        _activated = true;
         TriggerActionObserverRpc();
     }
 
