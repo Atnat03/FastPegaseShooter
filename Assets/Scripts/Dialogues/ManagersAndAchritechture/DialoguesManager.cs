@@ -17,6 +17,8 @@ public class DialoguesManager : MonoBusListener
     public Color redColor;
     public Sprite IAIcon;
     public Color IAColor;
+    public Color IATextColor = Color.white;
+    public Color RobotsTextColor = Color.black;
 
     [Header("UI Elements")] public Image speakerImage;
     public TextMeshProUGUI dialogueText;
@@ -145,18 +147,23 @@ public class DialoguesManager : MonoBusListener
             case DialogueSpeaker.IA:
                 speakerImage.sprite = IAIcon;
                 txtBackGround.color = IAColor;
+                dialogueText.color = IATextColor;
                 break;
             case DialogueSpeaker.Red:
                 speakerImage.sprite = redIcon;
                 txtBackGround.color = redColor;
+                dialogueText.color = RobotsTextColor;
+
                 break;
             case DialogueSpeaker.Blue:
                 speakerImage.sprite = blueIcon;
                 txtBackGround.color = blueColor;
+                dialogueText.color = RobotsTextColor;
                 break;
         }
         
         dialogueText.text = line.text;
+        
 
         //rapport a l'audioSource
         audioSource.Stop();
