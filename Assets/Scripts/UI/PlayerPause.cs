@@ -1,5 +1,6 @@
 using System;
 using MyPrint;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,7 @@ public class PlayerPause : NetworkBusListener
     [SerializeField] private PausePanel[] _pauseUIPanels;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private FPSController _fpsController;
+    [SerializeField] private TextMeshProUGUI _gameCode;
     
     private bool _isPause = false;
 
@@ -21,6 +23,15 @@ public class PlayerPause : NetworkBusListener
     {
         base.OnStartClient();
         if (!IsOwner) return;
+
+        if (IsServerInitialized)
+        {
+            _gameCode.text = ConnectionWithCode.GameCode;
+        }
+        else
+        {
+            _gameCode.transform.parent.gameObject.SetActive(false);
+        }
 
         foreach (PausePanel panel in _pauseUIPanels)
         {
