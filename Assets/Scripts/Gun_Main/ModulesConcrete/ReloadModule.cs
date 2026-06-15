@@ -67,7 +67,7 @@ namespace GunDecorator
 
         public void Reload()
         {
-            if(p_reloadCoroutine == null)
+            if(p_reloadCoroutine == null && _currentAmmo < _magazineSize)
                 p_reloadCoroutine = StartCoroutine(ReloadCoroutine());
         }
 
@@ -79,6 +79,8 @@ namespace GunDecorator
             
             _gunController?._animator?.ResetTrigger("Shoot");
             _gunController?._animatorArm?.ResetTrigger("Shoot");
+            
+            yield return null;
 
             _gunController?._animator?.SetTrigger("Reload");
             if (_gunController?._animatorArm)
@@ -86,7 +88,6 @@ namespace GunDecorator
             if (_gunController?._animatorBall)
                 _gunController._animatorBall.SetTrigger("Reload");
 
-            yield return null;
 
             yield return new WaitForSeconds(reloadDuration);
 
