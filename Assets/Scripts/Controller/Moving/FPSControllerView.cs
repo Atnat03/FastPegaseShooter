@@ -14,6 +14,7 @@ public class FPSControllerView : NetworkBusListener
 	[SerializeField] private SoundsDataSO _soundsDataFps;
 	[SerializeField] private SoundsDataSO _soundsDataPing;
 	[SerializeField] private AudioSource _audioSource;
+	[SerializeField] private AudioSource _audioSourceLocal;
 
 	[Header("Footsteps")] 
 	[SerializeField] private float _frequency;
@@ -135,6 +136,8 @@ public class FPSControllerView : NetworkBusListener
 	
 	private void PlaySound(string clip)
 	{
+		SoundManager.PlaySoundGlobal(_soundsDataFps, clip, _audioSourceLocal);
+		
 		if (IsServerInitialized)
 		{
 			PlaySoundObserversRpc(clip);
@@ -150,7 +153,7 @@ public class FPSControllerView : NetworkBusListener
 		PlaySoundObserversRpc(clip);
 	}
 
-	[ObserversRpc]
+	[ObserversRpc(ExcludeOwner = true)]
 	private void PlaySoundObserversRpc(string clip)
 	{
 		SoundManager.PlaySound(_soundsDataFps, clip, _audioSource, transform);
