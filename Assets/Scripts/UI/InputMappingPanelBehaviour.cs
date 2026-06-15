@@ -4,6 +4,7 @@ public class InputMappingPanelBehaviour : PausePanel
 {
     public override void Init()
     { 
+        base.Init();
         gameObject.SetActive(false);
     }
 
