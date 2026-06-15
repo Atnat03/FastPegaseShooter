@@ -378,6 +378,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aee314f8eae5f646b6e911c17d62cfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugInputManager
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 2201437854264306698}
+  _networkObjectCache: {fileID: 0}
 --- !u!114 &7612577011346760552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -876,7 +879,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4158365788060169807}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 3484d41fd1f147749ac149a0a535ca23, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 3d77752abf0bf384187babd4f887a494, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -890,15 +893,17 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 1
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
+  m_TargetAudioSources:
+  - {fileID: 8280575278161272516}
+  m_DirectAudioVolumes:
+  - 1
   m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
-  m_Looping: 1
+  m_Looping: 0
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
@@ -914,8 +919,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 4551290964347448376, guid: c0052657133585a43ae82691c23736a5, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

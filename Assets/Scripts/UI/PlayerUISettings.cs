@@ -45,6 +45,8 @@ public class PlayerUISettings : NetworkBusListener
 	[SerializeField] private SpriteRenderer _pingSprite;
 	[SerializeField] private Color[] _pingColorList;
 
+	[SerializeField] private GameObject _fadeEndGame;
+
 	private int baseSortingCanvaLayer;
 	private bool _isLoading;
 	
@@ -55,8 +57,11 @@ public class PlayerUISettings : NetworkBusListener
 	
 	public override void OnStartNetwork()
 	{
+		_fadeEndGame.SetActive(false);
+		
 		ListenToEvent<PlayUISound>(PlaySoundUI);
 		ListenToEvent<OnPlayerOk>(ApplyColor);
+		ListenToEvent<OnEndGameStarted>(EndGameFade);
 
 		baseSortingCanvaLayer = _canvas.sortingOrder;
 		
@@ -133,6 +138,11 @@ public class PlayerUISettings : NetworkBusListener
 		_loadingSceneUI.SetActive(false);
 		_canvas.sortingOrder = baseSortingCanvaLayer;
 		_isLoading = false;
+	}
+
+	private void EndGameFade(OnEndGameStarted data)
+	{
+		_fadeEndGame.SetActive(true);
 	}
 
 	#endregion

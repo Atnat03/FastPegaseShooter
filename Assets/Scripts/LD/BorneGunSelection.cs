@@ -23,6 +23,8 @@ public class BorneGunSelection : NetworkBusListener
     [SerializeField] private Transform _zoneMesh;
     [SerializeField] private bool _showGIZMOS = true;
     private List<PlayerVisuelBridge> _playerList = new List<PlayerVisuelBridge>();
+    private readonly HashSet<NetworkConnection> _playersInZone = new();
+    
     private BoxCollider _collider;
     private readonly SyncVar<int> _numberPlayer = new SyncVar<int>(0);
     private readonly SyncVar<bool> _canOpenSelect = new SyncVar<bool>(false);
@@ -52,10 +54,7 @@ public class BorneGunSelection : NetworkBusListener
 
     private void PlayerInteract(OnPlayerInteract data)
     {
-        if (_canOpenSelect.Value)
-        {
-            OpenForPlayerServerRpc(data.p_connection);
-        }
+        OpenForPlayerServerRpc(data.p_connection);
     }
 
     private void OnNumberPlayerChange(int prev, int next, bool asServer)
@@ -72,9 +71,8 @@ public class BorneGunSelection : NetworkBusListener
     [ServerRpc(RequireOwnership = false)]
     private void OpenForPlayerServerRpc(NetworkConnection conn)
     {
-        bool playerInZone = _playerList.Exists(p => p.transform.root.GetComponent<NetworkObject>().Owner == conn);
-
-        if (!playerInZone) return;
+        if (!_playersInZone.Contains(conn))
+            return;
         
         OpenForPlayerTargetRpc(conn);
     }
@@ -99,8 +97,9 @@ public class BorneGunSelection : NetworkBusListener
             
             if (!IsServerInitialized) return;
             
-            _playerList.Add(player);
-            _numberPlayer.Value++;
+            _playersInZone.Add(
+                player.transform.root.GetComponent<NetworkObject>().Owner
+            );
         }
     }
 
@@ -112,11 +111,9 @@ public class BorneGunSelection : NetworkBusListener
 
             if (!IsServerInitialized) return;
             
-            if (_playerList.Contains(player))
-            {
-                _playerList.Remove(player);
-                _numberPlayer.Value--;
-            }
+            _playersInZone.Remove(
+                player.transform.root.GetComponent<NetworkObject>().Owner
+            );
         }
     }
     
