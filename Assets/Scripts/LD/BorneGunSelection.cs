@@ -93,29 +93,30 @@ public class BorneGunSelection : NetworkBusListener
     
     public void OnTriggerEnter(Collider other)
     {
-        if (!IsServerInitialized) return;
 
         if (other.TryGetComponent(out PlayerVisuelBridge player))
         {
+            player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(true);
+            
+            if (!IsServerInitialized) return;
+            
             _playerList.Add(player);
             _numberPlayer.Value++;
-            
-            player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(true);
         }
     }
 
     public void OnTriggerExit(Collider other)
     {
-        if (!IsServerInitialized) return;
-    
         if (other.TryGetComponent(out PlayerVisuelBridge player))
         {
+            player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(false);
+
+            if (!IsServerInitialized) return;
+            
             if (_playerList.Contains(player))
             {
                 _playerList.Remove(player);
                 _numberPlayer.Value--;
-                
-                player.transform.root.GetComponent<PlayerSelectGun>().CanSelectGun(false);
             }
         }
     }
