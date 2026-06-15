@@ -93,6 +93,8 @@ public class ConnectionWithCode : MonoBehaviour
         
         InstanceFinder.TransportManager.Transport.SetClientAddress(addressToUse);
         _networkManager.ClientManager.StartConnection();
+        
+        gameObject.SetActive(false);
     }
 
     #endregion
@@ -183,6 +185,8 @@ public class ConnectionWithCode : MonoBehaviour
         {
             _connectedUI.SetActive(false);
             _gameCodeUI.SetActive(true);
+            
+            gameObject.SetActive(false);
         }
     }
 
