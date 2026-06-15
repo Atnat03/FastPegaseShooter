@@ -18,7 +18,7 @@ public class PlayerHealth : NetworkBusListener
 
     public float CurrentHealth => _currentHealth.Value;
     public bool IsDead => _isDead.Value;
-
+    public float MaxHealth => _healthBase;
     public bool IsCritik => _isCritik;
     public int OwnerId => Owner.ClientId;
 
@@ -136,7 +136,7 @@ public class PlayerHealth : NetworkBusListener
         ListenToEvent<OnCorrosionEvent>(ApplyCorrosionDamage);
 
 
-        _playerZoneManager = FindAnyObjectByType<PlayerZoneManager>(); // pour du debug, a tej en build finale
+        _playerZoneManager = FindAnyObjectByType<PlayerZoneManager>();
 
         _respawnTime = Time.time;
         
@@ -432,7 +432,6 @@ public class PlayerHealth : NetworkBusListener
     private void ApplyVolumeDamagedEffectTargetRpc(NetworkConnection target)
     {
         OnTakeDamage?.Invoke();
-        OnUpdateHealth?.Invoke(1f);
     }
 
     [ServerRpc(RequireOwnership = false)]
