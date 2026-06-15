@@ -14,11 +14,13 @@ public struct CapacityUI
     public ParticleSystem p_particleGetCharge;
 }
 
-public class PlayerCapacityView : MonoBehaviour
+public class PlayerCapacityView : NetworkBusListener
 {
     [Header("References")]
     [SerializeField] private PlayerCapacity _playerCapacity;
     [SerializeField] private PlayerTuto _playerTuto;
+
+    [SerializeField] private Color[] _colorFill;
     
     [Header("Data capacity")]
     [SerializeField] private CapacityUI _uiChargedShoot;
@@ -31,12 +33,26 @@ public class PlayerCapacityView : MonoBehaviour
         _playerCapacity.OnUseCapacity += UseCapacity;
 
         _playerTuto.OnUnlockCapa += UnlockCapa;
+        
+        ListenToEvent<OnPlayerOk>(SetUpFillColor);
     }
 
     void OnDisable()
     {
         _playerCapacity.OnUpdateCapacity -= CheckUIToUpdate;
         _playerCapacity.OnUseCapacity -= UseCapacity;
+    }
+    
+    private void SetUpFillColor(OnPlayerOk data)
+    {
+        if(Owner.ClientId != data.playerID)
+            return;
+        
+        Color c = data.IsPositive ? _colorFill[0] : _colorFill[1];
+
+        _uiChargedShoot.p_currentImage.color = c;
+        _uiDrone.p_currentImage.color = c;
+        _uiHeal.p_currentImage.color = c;
     }
 
     private void CheckUIToUpdate(CapacityData data)
