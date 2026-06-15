@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FishNet.Object;
 using UnityEngine;
 
-public class AscenseurManager : NetworkBusListener
+public class AscenseurManager : MonoBusListener
 {
     [Header("Prefabs")]
     [SerializeField] private GameObject[] _partsList;

@@ -1,10 +1,11 @@
 using System;
 using CustomConsole.Runtime.Logger;
 using FishNet;
+using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DebugInputManager : MonoBehaviour
+public class DebugInputManager : NetworkBusListener
 {
     private DebugInput _debugInput;
     private void Awake()
@@ -37,7 +38,14 @@ public class DebugInputManager : MonoBehaviour
         {
             EventBus.InvokeEvent(new OnDapEvent());
             EventBus.InvokeEvent(new AfterDapVideoEvent());
+            DapObserver();
         }
+    }
+
+    [ObserversRpc]
+    void DapObserver()
+    {
+        InvokeEvent(new OnDappEventObserveurs());
     }
 
     private void GetInvincible(InputAction.CallbackContext obj)
