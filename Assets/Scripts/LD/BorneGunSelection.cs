@@ -112,11 +112,8 @@ public class BorneGunSelection : NetworkBusListener
 
             if (!IsServerInitialized) return;
             
-            if (_playerList.Contains(player))
-            {
-                _playerList.Remove(player);
-                _numberPlayer.Value--;
-            }
+            _playerList.Remove(player);
+            _numberPlayer.Value--;
         }
     }
     
