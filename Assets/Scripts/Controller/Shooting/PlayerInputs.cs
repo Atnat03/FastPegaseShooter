@@ -17,6 +17,7 @@ namespace Controller
         [SerializeField] private GunBridgePlayer _bridgePlayer;
         [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private DroneThrower _droneThrower;
+        [SerializeField] private PlayerCapacity _playerCapacity;
         private FPSController _fps;
         
         private bool _canShoot = true;
@@ -198,6 +199,19 @@ namespace Controller
             });
         }
         
+        private void UnlockCapa(InputAction.CallbackContext obj)
+        {
+            if (!IsOwner) return;
+            if (_playerHealth.IsDead) return;
+
+            _bridgePlayer.p_unlockChargedShoot = true;
+            _bridgePlayer.p_unlockChargedShoot = true;
+            _playerHealth.p_unlockCapa = true;
+            _droneThrower.p_unlockCapa = true;
+            
+            _playerCapacity.UnlockAllCapa();
+        }
+        
         void OnEnable()
         {
             _shootAction = _playerInputAction.actions["Shoot"];
@@ -220,6 +234,10 @@ namespace Controller
             
             //Interact
             _playerInputAction.actions["Grapple"].performed += Interact;
+            
+            //Debug Capa
+            _playerInputAction.actions["DebugUnlockCapa"].performed += UnlockCapa;
+
         }
 
         void OnDisable()
@@ -242,7 +260,11 @@ namespace Controller
             
             //Interact
             _playerInputAction.actions["Grapple"].performed -= Interact;
+            
+            //Debug Capa
+            _playerInputAction.actions["DebugUnlockCapa"].performed -= UnlockCapa;
         }
+
 
         #endregion
     }

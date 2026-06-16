@@ -39,7 +39,7 @@ public class PlayerCapacity : NetworkBusListener
 	public bool CanChargedShoot => _tirChargeCapaData.p_currentNumberCapacity > 0 && _canChargedShoot;
 	public bool CanDrone => _droneCapaData.p_currentNumberCapacity > 0 && _canDrone;
 	public bool CanHeal => _healCapaData.p_currentNumberCapacity > 0 && _canHeal;
-	
+
 	#endregion
 
 	#region Variables
@@ -199,15 +199,26 @@ public class PlayerCapacity : NetworkBusListener
 		}
 	}
 
-	public void SetStartChargeCapacities(int numberCharge)
+	public void SetStartChargeCapacities(int numberCharge = -1)
 	{
-		_tirChargeCapaData.p_currentNumberCapacity = numberCharge;
-		_droneCapaData.p_currentNumberCapacity = numberCharge;
-		_healCapaData.p_currentNumberCapacity = numberCharge;
+		_tirChargeCapaData.p_currentNumberCapacity = numberCharge == -1 ? _tirChargeCapaData.p_currentNumberCapacity + 1 : numberCharge;
+		_droneCapaData.p_currentNumberCapacity = numberCharge == -1 ? _droneCapaData.p_currentNumberCapacity + 1 : numberCharge;
+		_healCapaData.p_currentNumberCapacity = numberCharge == -1 ? _healCapaData.p_currentNumberCapacity + 1 : numberCharge;
 		
-		OnUseCapacity?.Invoke(_tirChargeCapaData);
-		OnUseCapacity?.Invoke(_droneCapaData);
-		OnUseCapacity?.Invoke(_healCapaData);
+		OnUpdateCapacity?.Invoke(_tirChargeCapaData);
+		OnUpdateCapacity?.Invoke(_droneCapaData);
+		OnUpdateCapacity?.Invoke(_healCapaData);
+	}
+
+	public void UnlockAllCapa()
+	{
+		Cons.Print("DEBUG - Unlock all capa + 1 charge");
+
+		_playerTuto.OnUnlockCapa(Capacity_TUTO.ChargedShoot, true);
+		_playerTuto.OnUnlockCapa(Capacity_TUTO.Heal, true);
+		_playerTuto.OnUnlockCapa(Capacity_TUTO.Drone, true);
+		
+		SetStartChargeCapacities(-1);
 	}
 	
 	#endregion
