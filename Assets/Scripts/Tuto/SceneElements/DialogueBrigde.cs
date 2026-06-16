@@ -59,6 +59,15 @@ public class DialogueBrigde : MonoBusListener
         
         _txtBackGround.color = _sousTitreBGColorList[(int)data.speaker];
 
+        if (data.speaker == Speaker.AI)
+        {
+            _dialogueText.color = Color.white;
+        }
+        else
+        {
+            _dialogueText.color = Color.black;
+        }
+
         dialogueCoroutine = StartCoroutine(PlayDialogueAnimation(data.duration));
     }
 
