@@ -27,7 +27,8 @@ public abstract class PausePanel : MonoBusListener
 
     public virtual void OnPanelDeselected()
     {
-        StopCoroutine(buttonsCoroutine);
+        if(buttonsCoroutine != null)
+            StopCoroutine(buttonsCoroutine);
     }
 
     IEnumerator ButtonsArrivalCoroutine()
@@ -41,6 +42,8 @@ public abstract class PausePanel : MonoBusListener
             StartCoroutine(ButtonArrivalCoroutine(button, button.localPosition  ,  buttonPositions[button]));
             yield return new WaitForSeconds(0.2f);
         }
+
+        buttonsCoroutine = null;
     }
 
     IEnumerator ButtonArrivalCoroutine(RectTransform button,Vector3 startpos, Vector3 endpos)

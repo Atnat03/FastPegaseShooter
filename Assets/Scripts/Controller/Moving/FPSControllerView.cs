@@ -136,7 +136,7 @@ public class FPSControllerView : NetworkBusListener
 	
 	private void PlaySound(string clip)
 	{
-		SoundManager.PlaySoundGlobal(_soundsDataFps, clip, _audioSourceLocal);
+		//SoundManager.PlaySoundGlobal(_soundsDataFps, clip, _audioSourceLocal);
 		
 		if (IsServerInitialized)
 		{
@@ -153,7 +153,7 @@ public class FPSControllerView : NetworkBusListener
 		PlaySoundObserversRpc(clip);
 	}
 
-	[ObserversRpc(ExcludeOwner = true)]
+	[ObserversRpc]
 	private void PlaySoundObserversRpc(string clip)
 	{
 		SoundManager.PlaySound(_soundsDataFps, clip, _audioSource, transform);
