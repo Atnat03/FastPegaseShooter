@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using FishNet.Example.Scened;
 using TMPro;
@@ -184,7 +185,11 @@ public class SettingsPausePanelBehaviour : PausePanel
         crossair.localScale = defaultCrossairScale *  newSize;
     }
 
-    public void QuitPanel() => gameObject.SetActive(false);
+    public void QuitPanel()
+    {
+        gameObject.SetActive(false);   
+    }
+
 
     [ContextMenu("ResetAllPlayerPrefs")]
     public void ResetSetting()

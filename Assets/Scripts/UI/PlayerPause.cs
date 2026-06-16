@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using MyPrint;
 using TMPro;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class PlayerPause : NetworkBusListener
     [SerializeField] private FPSController _fpsController;
     [SerializeField] private TextMeshProUGUI _gameCode;
 
+    [SerializeField] private Animator _pannelAnimator;
     [SerializeField] private Material[] _matBackground;
     [SerializeField] private Color[] _colorTitle;
     [SerializeField] private Image _background;
@@ -73,9 +75,16 @@ public class PlayerPause : NetworkBusListener
 
         _isPause = !_isPause;
 
-        foreach (PausePanel panel in _pauseUIPanels)
+        if (!_isPause)
         {
-            panel.OnPause(_isPause);
+            StartCoroutine(Wait());
+        }
+        else
+        {
+            foreach (PausePanel panel in _pauseUIPanels)
+            {
+                panel.OnPause(true);
+            }
         }
 
         if (_isPause)
@@ -90,6 +99,18 @@ public class PlayerPause : NetworkBusListener
         //InvokeEvent(new OnPauseEvent{p_isPause = _isPause});
     }
 
+    IEnumerator Wait()
+    {
+        _pannelAnimator.SetTrigger("Close");
+        
+        yield return new WaitForSeconds(0.3f);
+        
+        foreach (PausePanel panel in _pauseUIPanels)
+        {
+            panel.OnPause(false);
+        }
+    }
+    
     public void ChangePanel(PausePanel panel)
     {
         if (_currentPausePanel != null)
