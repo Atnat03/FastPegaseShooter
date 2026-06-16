@@ -66,6 +66,12 @@ public class ShootEnergy : NetworkBusListener
 			if (_unlockCoroutine != null) StopCoroutine(_unlockCoroutine);
 			_resetLock = false;
 		});
+		
+		ListenToEvent<OnSceneLoadingEvent>((_) =>
+		{
+			if (_unlockCoroutine != null) StopCoroutine(_unlockCoroutine);
+			_resetLock = false;
+		});
 	}
 
 	private Coroutine _unlockCoroutine;

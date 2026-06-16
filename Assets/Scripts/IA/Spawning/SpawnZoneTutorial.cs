@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using CustomConsole.Runtime.Logger;
 using FishNet;
@@ -44,6 +45,8 @@ public class SpawnZoneTutorial : NetworkBusListener
     [SerializeField] private int _maxMobsInArena = 10;
     [SerializeField] private int _corrosionDelay_Miliss = 500;
     [SerializeField] private int _corrosionDamage = 5;
+    
+    private CancellationTokenSource _corrosionCts;
     
     private int  _currentMobsInArena;
     private bool _spawnPaused;
@@ -151,11 +154,21 @@ public class SpawnZoneTutorial : NetworkBusListener
 
     async Task ApplyCorrosion()
     {
-        while (_corrosionActivated)
+        _corrosionCts = new CancellationTokenSource();
+    
+        try
         {
-            await Task.Delay(_corrosionDelay_Miliss);
-
-            EventBus.InvokeEvent(new OnCorrosionEvent(_corrosionDamage));
+            while (_corrosionActivated)
+            {
+                await Task.Delay(_corrosionDelay_Miliss, _corrosionCts.Token);
+            
+                if (!_corrosionActivated) break;
+            
+                EventBus.InvokeEvent(new OnCorrosionEvent(_corrosionDamage));
+            }
+        }
+        catch (OperationCanceledException)
+        {
         }
     }
 
@@ -232,6 +245,10 @@ public class SpawnZoneTutorial : NetworkBusListener
         _stopInfiniteSpawn = true;
         _corrosionActivated = false;
         _spawnPaused = false;
+    
+        _corrosionCts?.Cancel();
+        _corrosionCts = null;
+    
         UpdateGaugeObservers(0, 0, false);
     }
     

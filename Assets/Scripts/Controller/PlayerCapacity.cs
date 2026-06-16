@@ -217,6 +217,7 @@ public class PlayerCapacity : NetworkBusListener
 		_playerTuto.OnUnlockCapa(Capacity_TUTO.ChargedShoot, true);
 		_playerTuto.OnUnlockCapa(Capacity_TUTO.Heal, true);
 		_playerTuto.OnUnlockCapa(Capacity_TUTO.Drone, true);
+		_playerTuto.OnUnlockCapa(Capacity_TUTO.EnergyShoot, true);
 		
 		SetStartChargeCapacities(-1);
 	}
