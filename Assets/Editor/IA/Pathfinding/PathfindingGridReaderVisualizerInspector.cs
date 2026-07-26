@@ -1,4 +1,3 @@
-using CustomConsole.Runtime.Logger;
 using UnityEditor;
 using UnityEngine;
 

@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using CustomConsole.Runtime.Logger;
 using UnityEditor;
 using UnityEngine;
 
@@ -167,7 +165,7 @@ public class PathfindingGridCreator : EditorWindow
         {
             if(boundsVertices.Count < 3)
             {
-                CustomLogger.CCErrorLog("Bounding box size is less than 3");
+                Debug.LogError("Bounding box size is less than 3");
                 GUILayout.EndHorizontal();
                 return;
             }
@@ -189,7 +187,7 @@ public class PathfindingGridCreator : EditorWindow
 
             if (nodes.Count <= 0)
             {
-                CustomLogger.CCErrorLog("Error when clearing graph");
+                Debug.LogError("Error when clearing graph");
                 return;
             }
             
@@ -325,7 +323,7 @@ public class PathfindingGridCreator : EditorWindow
             }
             EditorUtility.SetDirty(asset);
             AssetDatabase.SaveAssets();
-            CustomLogger.ImportantLog($"Created asset at : {relativePath}");
+            Debug.Log($"Created asset at : {relativePath}");
         }
     }
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Connection;
 using FishNet.Managing.Scened;
@@ -11,6 +10,7 @@ using FishNet.Object.Synchronizing;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerHealth : NetworkBusListener
 {
@@ -362,7 +362,7 @@ public class PlayerHealth : NetworkBusListener
         }
         catch (Exception e)
         {
-            CustomLogger.CCErrorLog(e.Message);
+            Debug.LogException(e);
         }
 
         //fin du debug
@@ -734,7 +734,7 @@ public class PlayerHealth : NetworkBusListener
     void GetInvincible(GetInvincibleEvent evt)
     {
         invincible = !invincible;
-        CustomLogger.ImportantLog($"get  invincible = {invincible}");
+        Debug.Log($"get  invincible = {invincible}");
     } 
 }
 

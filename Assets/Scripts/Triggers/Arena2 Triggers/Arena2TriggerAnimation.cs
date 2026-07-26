@@ -1,8 +1,5 @@
-using CustomConsole.Runtime.Logger;
-using FishNet;
 using FishNet.Object;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Arena2TriggerAnimation : NetworkBusListener
 {

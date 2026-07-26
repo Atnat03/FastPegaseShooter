@@ -1,15 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Connection;
 using FishNet.Managing.Scened;
 using FishNet.Object;
-using Managers;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public struct OnShowLoadingScreen { }
 public struct OnHideLoadingScreen { }

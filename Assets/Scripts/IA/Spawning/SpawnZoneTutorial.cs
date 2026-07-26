@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
-using MyPrint;
 using Tuto;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PathfindingGridReader))]
 public class SpawnZoneTutorial : NetworkBusListener

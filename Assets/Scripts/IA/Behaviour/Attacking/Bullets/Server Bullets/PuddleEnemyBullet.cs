@@ -1,4 +1,3 @@
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
@@ -18,7 +17,6 @@ public class PuddleEnemyBullet : EnemyBullet
             _damageDelay = LSAModule._lobShootingAttackModuleSo.p_splashDamageDelay;
         else
         {
-            CustomLogger.CCErrorLog("Could not load LSAModule, delay defaulted back to 1 secondes");
             _damageDelay = 1;
         }
     }

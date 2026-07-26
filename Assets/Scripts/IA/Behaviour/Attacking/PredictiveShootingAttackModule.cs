@@ -1,4 +1,3 @@
-using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Attack/PredictiveShootAttackModule")]
@@ -18,7 +17,6 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
             _targetModule.p_playerVisualBridge.FPSController?.Rb == null ||
             _shootingPos == null)
         {
-            CustomLogger.CCErrorLog("PredictiveShooting: Missing player bridge or shooting position");
             return;
         }
 
@@ -36,7 +34,6 @@ public class PredictiveShootingAttackModule : EnemyAttackModule
         }
         else
         {
-            CustomLogger.CCErrorLog("Defaulted back to normal shoot");
             Vector3 delta = _targetModule.GetTargetPosition() - transform.position;
             float length = delta.magnitude;
             if (length < 0.001f) return;

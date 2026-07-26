@@ -1,8 +1,5 @@
-using System;
-using CustomConsole.Runtime.Logger;
 using FishNet;
 using FishNet.Object;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DebugInputManager : NetworkBusListener
@@ -32,8 +29,6 @@ public class DebugInputManager : NetworkBusListener
 
     private void StopZoneSpawningOnStarted(InputAction.CallbackContext obj)
     {
-        CustomLogger.CCErrorLog("This inputs needs to be replaced by OnDapEvent");
-        
         if(InstanceFinder.IsServerStarted)
         {
             EventBus.InvokeEvent(new OnDapEvent());

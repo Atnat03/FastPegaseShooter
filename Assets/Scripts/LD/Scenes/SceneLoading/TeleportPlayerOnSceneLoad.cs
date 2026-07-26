@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using CustomConsole.Runtime.Logger;
-using FishNet;
 using UnityEngine;
 
 public class TeleportPlayerOnSceneLoad : MonoBusListener

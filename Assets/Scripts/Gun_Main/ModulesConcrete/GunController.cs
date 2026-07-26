@@ -2,17 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using CustomConsole.Runtime.Logger;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GunDecorator.ChargedModules;
 using Managers;
 using MyPrint;
 using ScriptableObjectsDefinitions;
-using Tuto.Triggers;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
-using UnityEngine.VFX;
 
 public interface IGun
 {

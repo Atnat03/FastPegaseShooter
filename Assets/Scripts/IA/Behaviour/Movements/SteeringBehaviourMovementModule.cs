@@ -1,4 +1,3 @@
-using CustomConsole.Runtime.Logger;
 using UnityEngine;
 
 [AddComponentMenu("EnemyBehaviour/Movement/SteeringBehaviourMovementModule")]
@@ -55,7 +54,6 @@ public class SteeringBehaviourMovementModule : EnemyMovementModule
 
     protected override void MoveAlongPath()
     {
-        CustomLogger.CCErrorLog("SteeringBehaviourMovementModule is deprecated, please do not use this movement module");
         return;
         
         if(_path.Count >= 1)
